@@ -43,8 +43,6 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
     修改标识：Senparc - 20180531
     修改描述：v0.1.0 移植 BrowserUtility
 
-
-
 ----------------------------------------------------------------*/
 
 using System.Web;
