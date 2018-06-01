@@ -173,7 +173,6 @@
 
   <ItemGroup>
     <Folder Include="Cache\" />
-    <Folder Include="Helpers\" />
   </ItemGroup>
 
 
