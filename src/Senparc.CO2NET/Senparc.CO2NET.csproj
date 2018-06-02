@@ -173,6 +173,7 @@
 
   <ItemGroup>
     <Folder Include="Utilities\Cache\" />
+    <Folder Include="Threads\" />
   </ItemGroup>
 
 
