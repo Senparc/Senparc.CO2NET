@@ -85,7 +85,7 @@ namespace Senparc.CO2NET.Helpers
             //    new WeixinJsonConventer(data.GetType(), jsonSetting),
             //});
             //jsonString = jsSerializer.Serialize(data);
-            return Newtonsoft.Json.JsonConvert.SerializeObject(data, new WeiXinJsonSetting(jsonSetting));
+            return Newtonsoft.Json.JsonConvert.SerializeObject(data, new JsonSettingWrap(jsonSetting));
 #else
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {

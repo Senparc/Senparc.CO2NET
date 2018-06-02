@@ -40,6 +40,7 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.StreamUtility
 {
