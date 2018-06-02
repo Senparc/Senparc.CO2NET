@@ -42,7 +42,9 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
     ----  split from Senparc.Weixin/Helpers/Conventers/WeixinJsonConventer.cs.cs  ----
 
     修改标识：Senparc - 20180602
-    修改描述：v0.1.0 移植 JsonSetting
+    修改描述：v0.1.0 1、移植 JsonSetting
+                     2、重命名 WeixinJsonContractResolver 为 JsonContractResolver
+                     3、重命名 WeiXinJsonSetting 为 JsonSettingWrap
 
 ----------------------------------------------------------------*/
 
@@ -239,17 +241,17 @@ namespace Senparc.CO2NET.Helpers.Serializers
     //    }
 
 #if NET35 || NET40 || NET45
-    public class WeiXinJsonSetting : JsonSerializerSettings
+    public class JsonSettingWrap : JsonSerializerSettings
     {
-        public WeiXinJsonSetting() { }
+        public JsonSettingWrap() { }
 
-        public WeiXinJsonSetting(JsonSetting jsonSetting)
+        public JsonSettingWrap(JsonSetting jsonSetting)
         {
             if (jsonSetting == null)
             {
                 jsonSetting = new JsonSetting();
             }
-            ContractResolver = new WeiXinJsonContractResolver(jsonSetting.IgnoreNulls, jsonSetting.PropertiesToIgnoreNull, jsonSetting.TypesToIgnoreNull);
+            ContractResolver = new JsonContractResolver(jsonSetting.IgnoreNulls, jsonSetting.PropertiesToIgnoreNull, jsonSetting.TypesToIgnoreNull);
         }
         /// <summary>
         /// JSON 输出设置 构造函数  优先级： ignoreNulls < propertiesToIgnoreNull < typesToIgnoreNull
@@ -257,9 +259,9 @@ namespace Senparc.CO2NET.Helpers.Serializers
         /// <param name="ignoreNulls">是否忽略具有IJsonIgnoreNull接口，且为Null值的属性。如果为true，符合此条件的属性将不会出现在Json字符串中</param>
         /// <param name="propertiesToIgnoreNull">需要特殊忽略null值的属性名称</param>
         /// <param name="typesToIgnoreNull">指定类型（Class，非Interface）下的为null属性不生成到Json中</param>
-        public WeiXinJsonSetting(bool ignoreNulls = false, List<string> propertiesToIgnoreNull = null, List<Type> typesToIgnoreNull = null)
+        public JsonSettingWrap(bool ignoreNulls = false, List<string> propertiesToIgnoreNull = null, List<Type> typesToIgnoreNull = null)
         {
-            ContractResolver = new WeiXinJsonContractResolver(ignoreNulls, propertiesToIgnoreNull, typesToIgnoreNull);
+            ContractResolver = new JsonContractResolver(ignoreNulls, propertiesToIgnoreNull, typesToIgnoreNull);
         }
 
     }
