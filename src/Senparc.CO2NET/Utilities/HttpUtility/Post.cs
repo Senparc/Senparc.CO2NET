@@ -106,7 +106,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 发起Post请求
+        /// 发起Post请求，可包含文件流
         /// </summary>
         /// <typeparam name="T">返回数据类型（Json对应的实体）</typeparam>
         /// <param name="url">请求Url</param>
@@ -224,7 +224,7 @@ namespace Senparc.CO2NET.HttpUtility
 
 
         /// <summary>
-        /// 【异步方法】PostGetJson的异步版本
+        /// 【异步方法】发起Post请求，可包含文件流
         /// </summary>
         /// <typeparam name="T">返回数据类型（Json对应的实体）</typeparam>
         /// <param name="url">请求Url</param>
