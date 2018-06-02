@@ -75,7 +75,7 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="data">需要生成JSON字符串的数据</param>
         /// <param name="jsonSetting">JSON输出设置</param>
         /// <returns></returns>
-        public string GetJsonString(object data, JsonSetting jsonSetting = null)
+        public static string GetJsonString(object data, JsonSetting jsonSetting = null)
         {
             string jsonString;
 #if NET35 || NET40 || NET45
@@ -108,14 +108,15 @@ namespace Senparc.CO2NET.Helpers
         /// <typeparam name="T">反序列化对象类型</typeparam>
         /// <param name="jsonString">JSON字符串</param>
         /// <returns></returns>
-        public T GetObject<T>(string jsonString)
+        public static T GetObject<T>(string jsonString)
         {
-#if NET35 || NET40 || NET45
-            JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
-            return jsSerializer.Deserialize<T>(jsonString);
-#else
             return (T)Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString, typeof(T));
-#endif
+            //#if NET35 || NET40 || NET45
+            //            JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
+            //            return jsSerializer.Deserialize<T>(jsonString);
+            //#else
+            //            return (T)Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString, typeof(T));
+            //#endif
 
         }
     }
