@@ -477,7 +477,7 @@ namespace Senparc.CO2NET.HttpUtility
 
                 hc.Dispose();//关闭HttpContent（StreamContent）
             }
-            catch (WeixinException ex)
+            catch (BaseException ex)
             {
             }
 
@@ -603,7 +603,7 @@ namespace Senparc.CO2NET.HttpUtility
 
                 hc.Dispose();//关闭HttpContent（StreamContent）
             }
-            catch (WeixinException ex)
+            catch (BaseException ex)
             {
             }
 
