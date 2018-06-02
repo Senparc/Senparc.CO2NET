@@ -54,7 +54,7 @@ namespace Senparc.CO2NET.Cache
         /// <summary>
         /// 所有数据集合的列表
         /// </summary>
-        internal static IDictionary<string, object> LocalObjectCache { get; set; }
+        public static IDictionary<string, object> LocalObjectCache { get; set; }
 
         static LocalObjectCacheHelper()
         {
