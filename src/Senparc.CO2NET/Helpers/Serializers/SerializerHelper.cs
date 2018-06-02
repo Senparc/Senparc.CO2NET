@@ -37,6 +37,7 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 
 
 
+using Senparc.CO2NET.Helpers.Serializers;
 using System.Globalization;
 using System.Text.RegularExpressions;
 #if NET35 || NET40 || NET45

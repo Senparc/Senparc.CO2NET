@@ -263,7 +263,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
         }
 
     }
-    public class WeiXinJsonContractResolver : DefaultContractResolver
+    public class JsonContractResolver : DefaultContractResolver
     {
         /// <summary>
         /// 是否忽略当前类型以及具有IJsonIgnoreNull接口，且为Null值的属性。如果为true，符合此条件的属性将不会出现在Json字符串中
@@ -283,7 +283,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
         /// <param name="ignoreNulls">是否忽略当前类型以及具有IJsonIgnoreNull接口，且为Null值的属性。如果为true，符合此条件的属性将不会出现在Json字符串中</param>
         /// <param name="propertiesToIgnoreNull">需要特殊忽略null值的属性名称</param>
         /// <param name="typesToIgnoreNull">指定类型（Class，非Interface）下的为null属性不生成到Json中</param>
-        public WeiXinJsonContractResolver(bool ignoreNulls = false, List<string> propertiesToIgnoreNull = null, List<Type> typesToIgnoreNull = null)
+        public JsonContractResolver(bool ignoreNulls = false, List<string> propertiesToIgnoreNull = null, List<Type> typesToIgnoreNull = null)
         {
             IgnoreNulls = ignoreNulls;
             PropertiesToIgnoreNull = propertiesToIgnoreNull;
