@@ -172,7 +172,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Cache\" />
+    <Folder Include="Utilities\Cache\" />
   </ItemGroup>
 
 

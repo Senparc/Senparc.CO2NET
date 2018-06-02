@@ -45,7 +45,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Senparc.CO2NET.Helpers.StringHelper
+namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
     /// ASCII字典排序
@@ -63,7 +63,6 @@ namespace Senparc.CO2NET.Helpers.StringHelper
 
         public int Compare(object x, object y)
         {
-
 #if NET35 || NET40 || NET45
             byte[] xBytes = System.Text.Encoding.Default.GetBytes(x.ToString());
             byte[] yBytes = System.Text.Encoding.Default.GetBytes(y.ToString());

@@ -27,6 +27,13 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
     
     创建标识：Senparc - 20150419
     
+
+    ----  CO2NET   ----
+    ----  split from Senparc.Weixin/Utilities/StreamUtility/StreamUtility.cs  ----
+
+    修改标识：Senparc - 20180602
+    修改描述：v0.1.0 移植 StreamUtility
+
 ----------------------------------------------------------------*/
 
 
@@ -35,7 +42,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Senparc.Weixin.StreamUtility
+namespace Senparc.CO2NET.StreamUtility
 {
     /// <summary>
     /// 流工具类

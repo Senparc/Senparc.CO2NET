@@ -44,7 +44,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Senparc.CO2NET.Helpers.Entity
+namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
     /// 实体帮助类
