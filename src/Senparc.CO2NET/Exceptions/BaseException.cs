@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Senparc.CO2NET.Trace;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Senparc.CO2NET.Exceptions
     /// 异常基类
     /// </summary>
 #if NET35 || NET40 || NET45
-    public class BaseException :  ApplicationException
+    public class BaseException : ApplicationException
 #else
     public class BaseException : Exception
 #endif
@@ -31,7 +32,7 @@ namespace Senparc.CO2NET.Exceptions
             if (!logged)
             {
                 //WeixinTrace.Log(string.Format("WeixinException（{0}）：{1}", this.GetType().Name, message));
-                //WeixinTrace.WeixinExceptionLog(this);
+                SenparcTrace.BaseExceptionLog(this);
             }
         }
     }

@@ -37,7 +37,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Senparc.Weixin.Containers;
+//using Senparc.CO2NET.Containers;
 
 namespace Senparc.CO2NET.Cache
 {

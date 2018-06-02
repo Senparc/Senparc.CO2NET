@@ -37,6 +37,7 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 
 
 
+using Senparc.CO2NET.Trace;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -102,7 +103,7 @@ namespace Senparc.CO2NET.Cache
                 }
                 catch (Exception ex)
                 {
-                    WeixinTrace.Log("本地同步锁发生异常：" + ex.Message);
+                    SenparcTrace.Log("本地同步锁发生异常：" + ex.Message);
                     getLock = false;
                 }
 
