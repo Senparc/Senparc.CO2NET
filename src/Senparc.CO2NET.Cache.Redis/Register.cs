@@ -37,7 +37,7 @@ namespace Senparc.CO2NET.Cache.Redis
             IBaseObjectCacheStrategy objectCacheStrategy = redisObjectCacheStrategyInstance(redisConfigurationString);
             if (objectCacheStrategy != null)
             {
-                ContainerCacheStrategyFactory.RegisterWeixinObjectCacheStrategy(() => objectCacheStrategy);//Redis
+                CacheStrategyFactory.RegisterObjectCacheStrategy(() => objectCacheStrategy);//Redis
             }
 
             return registerService;
