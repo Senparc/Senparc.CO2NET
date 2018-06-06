@@ -79,7 +79,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
         #endregion
 
-        public ConnectionMultiplexer _client;
+        public ConnectionMultiplexer Client { get; set; }
         protected IDatabase _cache;
 
         static RedisObjectCacheStrategy()
@@ -103,8 +103,8 @@ namespace Senparc.CO2NET.Cache.Redis
         /// </summary>
         public RedisObjectCacheStrategy()
         {
-            _client = RedisManager.Manager;
-            _cache = _client.GetDatabase();
+            Client = RedisManager.Manager;
+            _cache = Client.GetDatabase();
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// </summary>
         ~RedisObjectCacheStrategy()
         {
-            _client.Dispose();//释放
+            Client.Dispose();//释放
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Senparc.CO2NET.Cache.Redis
         protected IServer GetServer()
         {
             //https://github.com/StackExchange/StackExchange.Redis/blob/master/Docs/KeysScan.md
-            var server = _client.GetServer(_client.GetEndPoints()[0]);
+            var server = Client.GetServer(Client.GetEndPoints()[0]);
             return server;
         }
 
