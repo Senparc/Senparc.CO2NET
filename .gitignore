@@ -9,3 +9,11 @@
 /src/BuildOutPut
 /src/.vs/Senparc.CO2NET/DesignTimeBuild/.dtbcache
 /src/Senparc.CO2NET.Tests/obj
+/src/Senparc.CO2NET.Cache.Memcached/.vs/Senparc.Weixin.Cache.Memcached/v15
+/src/Senparc.CO2NET.Cache.Memcached/bin/Debug
+/src/Senparc.CO2NET.Cache.Memcached/obj
+/src/Senparc.CO2NET.Cache.Memcached/packages
+/src/Senparc.CO2NET.Cache.Redis/.vs/Senparc.Weixin.Cache.Redis/v15
+/src/Senparc.CO2NET.Cache.Redis/bin/Debug
+/src/Senparc.CO2NET.Cache.Redis/obj
+/src/Senparc.CO2NET.Cache.Redis/packages

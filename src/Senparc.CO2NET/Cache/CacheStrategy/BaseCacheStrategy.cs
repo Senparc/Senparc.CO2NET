@@ -46,6 +46,11 @@ namespace Senparc.CO2NET.Cache
     public abstract class BaseCacheStrategy : IBaseCacheStrategy
     {
         /// <summary>
+        /// 默认下级命名空间
+        /// </summary>
+        public virtual string ChildNamespace { get; set; }
+
+        /// <summary>
         /// 获取拼装后的FinalKey
         /// </summary>
         /// <param name="key">键</param>
@@ -53,7 +58,7 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
         public virtual string GetFinalKey(string key, bool isFullKey = false)
         {
-            return isFullKey ? key : String.Format("SenparcWeixin:{0}:{1}", Config.DefaultCacheNamespace, key);
+            return isFullKey ? key : String.Format("Senparc:{0}:{1}:{2}", ChildNamespace, Config.DefaultCacheNamespace, key);
         }
 
         /// <summary>
