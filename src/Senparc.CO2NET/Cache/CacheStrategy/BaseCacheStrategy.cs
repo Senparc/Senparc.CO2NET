@@ -27,6 +27,12 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 
     创建标识：Senparc - 20160813 v4.7.7 
 
+
+    --CO2NET--
+
+    修改标识：Senparc - 20180606
+    修改描述：GetFinalKey() 方法添加虚方法关键字
+
  ----------------------------------------------------------------*/
 
 
@@ -45,7 +51,7 @@ namespace Senparc.CO2NET.Cache
         /// <param name="key">键</param>
         /// <param name="isFullKey">是否已经是经过拼接的FullKey</param>
         /// <returns></returns>
-        public string GetFinalKey(string key, bool isFullKey = false)
+        public virtual string GetFinalKey(string key, bool isFullKey = false)
         {
             return isFullKey ? key : String.Format("SenparcWeixin:{0}:{1}", Config.DefaultCacheNamespace, key);
         }
