@@ -2,7 +2,7 @@
     Copyright (C) 2018 Senparc
 
     文件名：Register.cs
-    文件功能描述：Senparc.Weixin.Cache.Redis 快捷注册流程
+    文件功能描述：Senparc.CO2NET.Cache.Redis 快捷注册流程
 
 
     创建标识：Senparc - 20180222
@@ -16,7 +16,7 @@
 using Senparc.Weixin.RegisterServices;
 using System;
 
-namespace Senparc.Weixin.Cache.Redis
+namespace Senparc.CO2NET.Cache.Redis
 {
     public static class Register
     {

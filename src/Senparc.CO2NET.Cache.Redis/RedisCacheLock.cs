@@ -36,7 +36,7 @@ using System;
 using Redlock.CSharp;
 using Senparc.CO2NET.Cache;
 
-namespace Senparc.Weixin.Cache.Redis
+namespace Senparc.CO2NET.Cache.Redis
 {
     public class RedisCacheLock : BaseCacheLock
     {

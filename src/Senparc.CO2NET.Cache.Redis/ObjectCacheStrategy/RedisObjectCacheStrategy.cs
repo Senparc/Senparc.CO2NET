@@ -41,7 +41,7 @@ using Senparc.CO2NET.MessageQueue;
 using Senparc.CO2NET.Cache;
 using StackExchange.Redis;
 
-namespace Senparc.Weixin.Cache.Redis
+namespace Senparc.CO2NET.Cache.Redis
 {
     /// <summary>
     /// Redis的Object类型容器缓存（Key为String类型）

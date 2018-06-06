@@ -49,7 +49,7 @@ using Senparc.Weixin.Helpers;
 using StackExchange.Redis;
 
 
-namespace Senparc.Weixin.Cache.Redis
+namespace Senparc.CO2NET.Cache.Redis
 {
     /// <summary>
     /// Redis容器缓存策略

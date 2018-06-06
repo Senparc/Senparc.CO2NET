@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 
-namespace Senparc.Weixin.Cache.Redis
+namespace Senparc.CO2NET.Cache.Redis
 {
     /// <summary>
     /// RedisUtils

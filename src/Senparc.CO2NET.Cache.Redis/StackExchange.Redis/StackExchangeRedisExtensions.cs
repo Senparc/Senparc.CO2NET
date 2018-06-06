@@ -24,7 +24,7 @@ using Senparc.Weixin.Helpers;
 //using System.Runtime.Serialization.Formatters.Binary;
 //#endif
 
-namespace Senparc.Weixin.Cache.Redis
+namespace Senparc.CO2NET.Cache.Redis
 {
     /// <summary>
     ///  StackExchangeRedis 扩展
