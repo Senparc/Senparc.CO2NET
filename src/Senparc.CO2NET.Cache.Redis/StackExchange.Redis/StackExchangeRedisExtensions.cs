@@ -18,7 +18,7 @@ using System.Linq;
 //using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
-using Senparc.Weixin.Helpers;
+using Senparc.CO2NET.Helpers;
 
 //#if !NETSTANDARD1_6
 //using System.Runtime.Serialization.Formatters.Binary;

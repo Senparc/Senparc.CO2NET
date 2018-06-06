@@ -35,8 +35,7 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Senparc.Weixin.Containers;
-using Senparc.Weixin.Helpers;
+using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.MessageQueue;
 using Senparc.CO2NET.Cache;
 using StackExchange.Redis;
@@ -46,7 +45,7 @@ namespace Senparc.CO2NET.Cache.Redis
     /// <summary>
     /// Redis的Object类型容器缓存（Key为String类型）
     /// </summary>
-    public class RedisObjectCacheStrategy : BaseCacheStrategy, IWeixinObjectCacheStrategy
+    public class RedisObjectCacheStrategy : BaseCacheStrategy, IBaseObjectCacheStrategy
     //where TContainerBag : class, IBaseContainerBag, new()
     {
         /// <summary>
@@ -151,14 +150,14 @@ namespace Senparc.CO2NET.Cache.Redis
             return hashKeyAndField;
         }
 
-        #region 实现 IObjectCacheStrategy 接口
+        #region 实现 IBaseObjectCacheStrategy 接口
 
         //public string CacheSetKey { get; set; }
 
-        public IContainerCacheStrategy ContainerCacheStrategy
-        {
-            get { return RedisContainerCacheStrategy.Instance; }
-        }
+        //public IContainerCacheStrategy ContainerCacheStrategy
+        //{
+        //    get { return RedisContainerCacheStrategy.Instance; }
+        //}
 
 
         /// <summary>
@@ -197,47 +196,47 @@ namespace Senparc.CO2NET.Cache.Redis
             return value;
         }
 
-        public IDictionary<string, TBag> GetAll<TBag>() where TBag : IBaseContainerBag
-        {
-            #region 旧方法（没有使用Hash之前）
+        //public IDictionary<string, TBag> GetAll<TBag>() where TBag : IBaseContainerBag
+        //{
+        //    #region 旧方法（没有使用Hash之前）
 
-            //var itemCacheKey = ContainerHelper.GetItemCacheKey(typeof(TBag), "*");   
-            ////var keyPattern = string.Format("*{0}", itemCacheKey);
-            //var keyPattern = GetFinalKey(itemCacheKey);
+        //    //var itemCacheKey = ContainerHelper.GetItemCacheKey(typeof(TBag), "*");   
+        //    ////var keyPattern = string.Format("*{0}", itemCacheKey);
+        //    //var keyPattern = GetFinalKey(itemCacheKey);
 
-            //var keys = GetServer().Keys(pattern: keyPattern);
-            //var dic = new Dictionary<string, TBag>();
-            //foreach (var redisKey in keys)
-            //{
-            //    try
-            //    {
-            //        var bag = Get(redisKey, true);
-            //        dic[redisKey] = (TBag)bag;
-            //    }
-            //    catch (Exception)
-            //    {
+        //    //var keys = GetServer().Keys(pattern: keyPattern);
+        //    //var dic = new Dictionary<string, TBag>();
+        //    //foreach (var redisKey in keys)
+        //    //{
+        //    //    try
+        //    //    {
+        //    //        var bag = Get(redisKey, true);
+        //    //        dic[redisKey] = (TBag)bag;
+        //    //    }
+        //    //    catch (Exception)
+        //    //    {
 
-            //    }
+        //    //    }
 
-            //}
+        //    //}
 
-            #endregion
+        //    #endregion
 
-            var key = ContainerHelper.GetItemCacheKey(typeof(TBag), "");
-            key = key.Substring(0, key.Length - 1);//去掉:号
-            key = GetFinalKey(key);//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]可配置）
+        //    var key = ContainerHelper.GetItemCacheKey(typeof(TBag), "");
+        //    key = key.Substring(0, key.Length - 1);//去掉:号
+        //    key = GetFinalKey(key);//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]可配置）
 
-            var list = _cache.HashGetAll(key);
-            var dic = new Dictionary<string, TBag>();
+        //    var list = _cache.HashGetAll(key);
+        //    var dic = new Dictionary<string, TBag>();
 
-            foreach (var hashEntry in list)
-            {
-                var fullKey = key + ":" + hashEntry.Name;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
-                dic[fullKey] = StackExchangeRedisExtensions.Deserialize<TBag>(hashEntry.Value);
-            }
+        //    foreach (var hashEntry in list)
+        //    {
+        //        var fullKey = key + ":" + hashEntry.Name;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
+        //        dic[fullKey] = StackExchangeRedisExtensions.Deserialize<TBag>(hashEntry.Value);
+        //    }
 
-            return dic;
-        }
+        //    return dic;
+        //}
 
         /// <summary>
         /// 注意：此方法获取的object为直接储存在缓存中，序列化之后的Value

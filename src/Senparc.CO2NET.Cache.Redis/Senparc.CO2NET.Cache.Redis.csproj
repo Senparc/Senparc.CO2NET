@@ -154,7 +154,6 @@
   </ItemGroup>-->
 
   <ItemGroup>
-    <Compile Remove="ContainerCacheStrategy\RedisContainerCacheStrategy.RedisUtils.cs" />
     <Compile Remove="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 
@@ -169,8 +168,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
-    <ProjectReference Include="..\Senparc.CO2NET.Cache.Redis.RedLock\redlock-cs\src\Senparc.CO2NET.Cache.Redis.RedLock.vs2017.csproj" />
+    <ProjectReference Include="..\Senparc.CO2NET.Cache.Redis.RedLock\redlock-cs\src\Senparc.CO2NET.Cache.Redis.RedLock.csproj" />
+    <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
   </ItemGroup>
-
 </Project>
