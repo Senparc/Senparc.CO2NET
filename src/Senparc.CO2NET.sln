@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.Redis.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.Redis", "Senparc.CO2NET.Cache.Redis\Senparc.CO2NET.Cache.Redis.csproj", "{854A4F0D-B34F-460F-BD33-4AAD4ADF97A4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.Memcached", "Senparc.CO2NET.Cache.Memcached\Senparc.CO2NET.Cache.Memcached.csproj", "{E44E024B-3C5D-4B37-8FAF-611F4DEEBA71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{854A4F0D-B34F-460F-BD33-4AAD4ADF97A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{854A4F0D-B34F-460F-BD33-4AAD4ADF97A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{854A4F0D-B34F-460F-BD33-4AAD4ADF97A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E44E024B-3C5D-4B37-8FAF-611F4DEEBA71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E44E024B-3C5D-4B37-8FAF-611F4DEEBA71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E44E024B-3C5D-4B37-8FAF-611F4DEEBA71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E44E024B-3C5D-4B37-8FAF-611F4DEEBA71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{056D9E3D-1B27-43B2-9376-7DEF22DC0DC9} = {577DD010-AF7A-4113-9AEA-4BD6244D5318}
 		{854A4F0D-B34F-460F-BD33-4AAD4ADF97A4} = {577DD010-AF7A-4113-9AEA-4BD6244D5318}
+		{E44E024B-3C5D-4B37-8FAF-611F4DEEBA71} = {577DD010-AF7A-4113-9AEA-4BD6244D5318}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {796B18F2-8DBB-4792-881F-4C5A81E1F2DB}

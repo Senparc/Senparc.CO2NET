@@ -2,7 +2,7 @@
     Copyright (C) 2018 Senparc
 
     文件名：Register.cs
-    文件功能描述：Senparc.Weixin.Memcached.Redis 快捷注册流程
+    文件功能描述：Senparc.CO2NET.Memcached.Redis 快捷注册流程
 
 
     创建标识：Senparc - 20180222
@@ -14,9 +14,9 @@
 
 using System;
 using System.Collections.Generic;
-using Senparc.Weixin.RegisterServices;
+using Senparc.CO2NET.RegisterServices;
 
-namespace Senparc.Weixin.Cache.Memcached
+namespace Senparc.CO2NET.Cache.Memcached
 {
     public static class Register
     {
@@ -30,15 +30,15 @@ namespace Senparc.Weixin.Cache.Memcached
         /// <returns></returns>
         public static IRegisterService RegisterCacheMemcached(this IRegisterService registerService,
             Dictionary<string, int> memcachedConfig,
-            Func<Dictionary<string, int>, IWeixinObjectCacheStrategy> memcachedObjectCacheStrategyInstance)
+            Func<Dictionary<string, int>, IBaseObjectCacheStrategy> memcachedObjectCacheStrategyInstance)
         {
             MemcachedObjectCacheStrategy.RegisterServerList(memcachedConfig);
 
             //此处先执行一次委托，直接在下方注册结果，提高每次调用的执行效率
-            IWeixinObjectCacheStrategy objectCacheStrategy = memcachedObjectCacheStrategyInstance(memcachedConfig);
+            IBaseObjectCacheStrategy objectCacheStrategy = memcachedObjectCacheStrategyInstance(memcachedConfig);
             if (objectCacheStrategy != null)
             {
-                ContainerCacheStrategyFactory.RegisterWeixinObjectCacheStrategy(() => objectCacheStrategy);//Memcached
+                CacheStrategyFactory.RegisterObjectCacheStrategy(() => objectCacheStrategy);//Memcached
             }
 
             return registerService;

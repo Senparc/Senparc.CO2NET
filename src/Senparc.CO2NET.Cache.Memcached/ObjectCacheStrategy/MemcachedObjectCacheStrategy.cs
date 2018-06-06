@@ -33,9 +33,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 #endif
 
-namespace Senparc.Weixin.Cache.Memcached
+namespace Senparc.CO2NET.Cache.Memcached
 {
-    public class MemcachedObjectCacheStrategy : BaseCacheStrategy, IWeixinObjectCacheStrategy
+    public class MemcachedObjectCacheStrategy : BaseCacheStrategy, IBaseObjectCacheStrategy
     {
         internal MemcachedClient _cache;
         private MemcachedClientConfiguration _config;
@@ -68,7 +68,7 @@ namespace Senparc.Weixin.Cache.Memcached
 
 
         //静态LocalCacheStrategy
-        public static IWeixinObjectCacheStrategy Instance
+        public static IBaseObjectCacheStrategy Instance
         {
             get
             {
@@ -186,10 +186,10 @@ namespace Senparc.Weixin.Cache.Memcached
 
         #region IContainerCacheStrategy 成员
 
-        public IContainerCacheStrategy ContainerCacheStrategy
-        {
-            get { return MemcachedContainerStrategy.Instance; }
-        }
+        //public IContainerCacheStrategy ContainerCacheStrategy
+        //{
+        //    get { return MemcachedContainerStrategy.Instance; }
+        //}
 
         public void InsertToCache(string key, object value)//TODO:添加Timeout参数
         {

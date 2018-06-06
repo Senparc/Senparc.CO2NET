@@ -3,12 +3,12 @@
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
     <Version>2.0.0</Version>
-    <AssemblyName>Senparc.Weixin.Cache.Memcached</AssemblyName>
-    <RootNamespace>Senparc.Weixin.Cache.Memcached</RootNamespace>
+    <AssemblyName>Senparc.CO2NET.Cache.Memcached</AssemblyName>
+    <RootNamespace>Senparc.CO2NET.Cache.Memcached</RootNamespace>
     
     <Description>微信公众账号 - Memcached 模块
 
-Senparc.Weixin SDK 开源项目：
+Senparc.CO2NET SDK 开源项目：
 https://github.com/JeffreySu/WeiXinMPSDK</Description>
     <Copyright>Senparc Copyright © 2004~2018</Copyright>
     <PackageTags>微信,weixin,公众号,WeChat,Senparc,盛派,SDK,C#,JSSDK,微信支付,分布式,小程序,Cache,Memcached</PackageTags>
@@ -19,7 +19,7 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
     <Owners>Senparc</Owners>
     <PackageLicenseUrl>https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md</PackageLicenseUrl>
     <ProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</ProjectUrl>
-    <Title>Senparc.Weixin.Cache.Memcached.dll</Title>
+    <Title>Senparc.CO2NET.Cache.Memcached.dll</Title>
     
     <Summary>微信公众号SDK for C#</Summary>
     <PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
@@ -60,22 +60,22 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
 
       v1.5.5 发布支持 .net core 2.1 的正式版
 
-      v2.0.0 引入 Senparc.CO2NET，支持 Senparc.Weixin v5.0
+      v2.0.0 引入 Senparc.CO2NET，支持 Senparc.CO2NET v5.0
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/JeffreySu/WeiXinMPSDK</RepositoryUrl>
-    <!--<Product>Senparc.Weixin.Cache.Memcached.dll</Product>-->
+    <!--<Product>Senparc.CO2NET.Cache.Memcached.dll</Product>-->
 
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>..\..\Senparc.Weixin.MP.BuildOutPut</OutputPath>
+    <OutputPath>..\..\BuildOutPut</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\Senparc.Weixin.MP.BuildOutPut</OutputPath>
+    <OutputPath>..\..\BuildOutPut</OutputPath>
     <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-    <DocumentationFile>..\..\Senparc.Weixin.MP.BuildOutPut\Senparc.Weixin.Cache.Memcached.XML</DocumentationFile>
+    <DocumentationFile>..\..\BuildOutPut\Senparc.CO2NET.Cache.Memcached.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
@@ -83,43 +83,43 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
   </PropertyGroup>
 
   <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
-    <OutputPath>..\..\Senparc.Weixin.MP.BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\Senparc.Weixin.MP.BuildOutPut\netstandard1.6\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <OutputPath>..\..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\..\BuildOutPut\netstandard1.6\Senparc.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>-->
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
-    <OutputPath>..\..\Senparc.Weixin.MP.BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\Senparc.Weixin.MP.BuildOutPut\net45\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <OutputPath>..\..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\..\BuildOutPut\net45\Senparc.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>
 
 
 
   <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
-    <OutputPath>..\..\Senparc.Weixin.MP.BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\Senparc.Weixin.MP.BuildOutPut\netstandard1.6\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <OutputPath>..\..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\..\BuildOutPut\netstandard1.6\Senparc.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>-->
 
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <OutputPath>..\..\Senparc.Weixin.MP.BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\Senparc.Weixin.MP.BuildOutPut\netstandard2.0\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <OutputPath>..\..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\..\BuildOutPut\netstandard2.0\Senparc.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>
 
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.0|AnyCPU'">
-    <OutputPath>..\..\Senparc.Weixin.MP.BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\Senparc.Weixin.MP.BuildOutPut\netcoreapp2.0\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <OutputPath>..\..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\..\BuildOutPut\netcoreapp2.0\Senparc.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>
 
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.1|AnyCPU'">
-    <OutputPath>..\..\Senparc.Weixin.MP.BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\Senparc.Weixin.MP.BuildOutPut\netcoreapp2.1\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <OutputPath>..\..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\..\BuildOutPut\netcoreapp2.1\Senparc.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>
 
   <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
-    <OutputPath>..\..\Senparc.Weixin.MP.BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\Senparc.Weixin.MP.BuildOutPut\net461\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <OutputPath>..\..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\..\BuildOutPut\net461\Senparc.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>-->
 
 
@@ -220,7 +220,7 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Senparc.Weixin\Senparc.Weixin\Senparc.Weixin.vs2017.csproj" />
+    <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">

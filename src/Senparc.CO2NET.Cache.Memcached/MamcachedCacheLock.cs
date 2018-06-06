@@ -20,8 +20,9 @@ using System;
 using System.Threading;
 using Enyim.Caching.Memcached;
 using Senparc.CO2NET.Cache;
+using Senparc.CO2NET.Trace;
 
-namespace Senparc.Weixin.Cache.Memcached
+namespace Senparc.CO2NET.Cache.Memcached
 {
     public class MemcachedCacheLock : BaseCacheLock
     {
@@ -88,7 +89,7 @@ namespace Senparc.Weixin.Cache.Memcached
                 }
                 catch (Exception ex)
                 {
-                    WeixinTrace.Log("Memcached同步锁发生异常：" + ex.Message);
+                    SenparcTrace.Log("Memcached同步锁发生异常：" + ex.Message);
                     return false;
                 }
             }

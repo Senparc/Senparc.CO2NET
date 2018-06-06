@@ -20,7 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Enyim.Caching.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Senparc.Weixin.Cache.Memcached;
+using Senparc.CO2NET.Cache.Memcached;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -35,7 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddSenparcMemcached(this IServiceCollection services, Action<MemcachedClientOptions> setupAction)
         {
             services.AddSingleton<MemcachedObjectCacheStrategy, MemcachedObjectCacheStrategy>();
-            services.AddSingleton<MemcachedContainerStrategy, MemcachedContainerStrategy>();
+            //services.AddSingleton<MemcachedContainerStrategy, MemcachedContainerStrategy>();
             return services.AddEnyimMemcached(setupAction);
         }
     }
