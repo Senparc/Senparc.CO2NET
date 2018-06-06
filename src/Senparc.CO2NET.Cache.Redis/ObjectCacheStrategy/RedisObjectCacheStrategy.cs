@@ -79,7 +79,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
         #endregion
 
-        internal ConnectionMultiplexer _client;
+        public ConnectionMultiplexer _client;
         protected IDatabase _cache;
 
         static RedisObjectCacheStrategy()
