@@ -36,7 +36,7 @@ namespace Senparc.CO2NET.RegisterServices
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <returns></returns>
-        public static IServiceCollection AddSenparcWeixinGlobalServices(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddSenparcGlobalServices(this IServiceCollection serviceCollection)
         {
             RegisterService.GlobalServiceCollection = serviceCollection;
             return serviceCollection;
