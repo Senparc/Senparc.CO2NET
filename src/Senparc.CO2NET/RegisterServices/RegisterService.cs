@@ -12,17 +12,11 @@
 
 ----------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 #if NETCOREAPP2_0 || NETCOREAPP2_1
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Hosting;
-//using Senparc.CO2NET.Entities;
 #endif
 
 namespace Senparc.CO2NET.RegisterServices
