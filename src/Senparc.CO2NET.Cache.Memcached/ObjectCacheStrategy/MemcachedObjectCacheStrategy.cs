@@ -37,7 +37,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 {
     public class MemcachedObjectCacheStrategy : BaseCacheStrategy, IBaseObjectCacheStrategy
     {
-        internal MemcachedClient _cache;
+        public MemcachedClient Cache { get; set; }
         private MemcachedClientConfiguration _config;
         private static Dictionary<string, int> _serverlist;// = SiteConfig.MemcachedAddresss; TODO:全局注册配置
 
@@ -60,9 +60,9 @@ namespace Senparc.CO2NET.Cache.Memcached
         {
             _config = GetMemcachedClientConfiguration();
 #if NET45 || NET461
-            _cache = new MemcachedClient(_config);
+            Cache = new MemcachedClient(_config);
 #else
-            _cache = new MemcachedClient(null, _config);
+            Cache = new MemcachedClient(null, _config);
 #endif
         }
 
@@ -201,7 +201,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             var cacheKey = GetFinalKey(key);
 
             //TODO：加了绝对过期时间就会立即失效（再次获取后为null），memcache低版本的bug
-            _cache.Store(StoreMode.Set, cacheKey, value, DateTime.Now.AddDays(1));
+            Cache.Store(StoreMode.Set, cacheKey, value, DateTime.Now.AddDays(1));
         }
 
         public virtual void RemoveFromCache(string key, bool isFullKey = false)
@@ -211,7 +211,7 @@ namespace Senparc.CO2NET.Cache.Memcached
                 return;
             }
             var cacheKey = GetFinalKey(key, isFullKey);
-            _cache.Remove(cacheKey);
+            Cache.Remove(cacheKey);
         }
 
         public virtual object Get(string key, bool isFullKey = false)
@@ -222,7 +222,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             }
 
             var cacheKey = GetFinalKey(key, isFullKey);
-            return _cache.Get<object>(cacheKey);
+            return Cache.Get<object>(cacheKey);
         }
 
         public virtual IDictionary<string, object> GetAll()
@@ -234,7 +234,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         {
             var cacheKey = GetFinalKey(key, isFullKey);
             object value;
-            if (_cache.TryGet(cacheKey, out value))
+            if (Cache.TryGet(cacheKey, out value))
             {
                 return true;
             }
@@ -249,7 +249,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         public virtual void Update(string key, object value, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
-            _cache.Store(StoreMode.Set, cacheKey, value, DateTime.Now.AddDays(1));
+            Cache.Store(StoreMode.Set, cacheKey, value, DateTime.Now.AddDays(1));
         }
 
         #endregion

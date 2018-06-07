@@ -68,7 +68,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             {
                 try
                 {
-                    if (_mamcachedStrategy._cache.Store(StoreMode.Add, key, new object(), new TimeSpan(0, 0, 10)))
+                    if (_mamcachedStrategy.Cache.Store(StoreMode.Add, key, new object(), new TimeSpan(0, 0, 10)))
                     {
                         return true;//取得锁 
                     }
@@ -100,7 +100,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         public override void UnLock(string resourceName)
         {
             var key = _mamcachedStrategy.GetFinalKey(resourceName);
-            _mamcachedStrategy._cache.Remove(key);
+            _mamcachedStrategy.Cache.Remove(key);
         }
     }
 }
