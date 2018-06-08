@@ -177,6 +177,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Entities\BaiduMap\" />
+    <Folder Include="Entities\GoogleMap\" />
     <Folder Include="Utilities\Cache\" />
   </ItemGroup>
 
