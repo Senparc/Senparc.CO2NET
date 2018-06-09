@@ -15,6 +15,10 @@ namespace Senparc.CO2NET.Cache
         /// 唯一名称（建议使用GUID）
         /// </summary>
         string IdentityName { get; }
+
+        /// <summary>
+        /// 预的名称
+        /// </summary>
         string DomainName { get; }
     }
 }

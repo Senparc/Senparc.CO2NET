@@ -74,7 +74,6 @@ namespace Senparc.CO2NET.Cache
 
         #endregion
 
-
         #region 单例
 
         ///<summary>
@@ -192,6 +191,7 @@ namespace Senparc.CO2NET.Cache
         #endregion
 
         #region ICacheLock
+
         public override ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
             return new LocalCacheLock(this, resourceName, key, retryCount, retryDelay);

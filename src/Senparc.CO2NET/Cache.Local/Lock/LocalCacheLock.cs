@@ -49,8 +49,8 @@ namespace Senparc.CO2NET.Cache
     /// </summary>
     public class LocalCacheLock : BaseCacheLock
     {
-        private IBaseCacheStrategy _localStrategy;
-        public LocalCacheLock(IBaseCacheStrategy strategy, string resourceName, string key,
+        private LocalObjectCacheStrategy _localStrategy;
+        public LocalCacheLock(LocalObjectCacheStrategy strategy, string resourceName, string key,
             int? retryCount = null, TimeSpan? retryDelay = null)
             : base(strategy, resourceName, key, retryCount ?? 0, retryDelay ?? TimeSpan.FromMilliseconds(10))
         {

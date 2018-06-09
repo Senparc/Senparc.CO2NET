@@ -42,12 +42,12 @@ namespace Senparc.CO2NET.Cache
     public abstract class BaseCacheLock : ICacheLock
     {
         protected string _resourceName;
-        protected IBaseCacheStrategy _cacheStrategy;
+        protected IBaseCacheLock _cacheStrategy;
         protected int _retryCount;
         protected TimeSpan _retryDelay;
         public bool LockSuccessful { get; set; }
 
-        protected BaseCacheLock(IBaseCacheStrategy strategy, string resourceName, string key, int retryCount, TimeSpan retryDelay)
+        protected BaseCacheLock(IBaseCacheLock strategy, string resourceName, string key, int retryCount, TimeSpan retryDelay)
         {
             _cacheStrategy = strategy;
             _resourceName = resourceName + key;/*加上Key可以针对某个AppId加锁*/

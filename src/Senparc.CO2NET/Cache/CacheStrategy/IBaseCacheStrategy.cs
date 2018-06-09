@@ -44,7 +44,7 @@ namespace Senparc.CO2NET.Cache
     /// <summary>
     /// 最底层的缓存策略接口
     /// </summary>
-    public interface IBaseCacheStrategy
+    public interface IBaseCacheLock
     {
         ///// <summary>
         ///// 整个Cache集合的Key
@@ -65,7 +65,7 @@ namespace Senparc.CO2NET.Cache
     /// <summary>
     /// 公共缓存策略接口
     /// </summary>
-    public interface IBaseCacheStrategy<TKey, TValue> : IBaseCacheStrategy
+    public interface IBaseCacheStrategy<TKey, TValue> /*: IBaseCacheLock*/
     //where TValue : class
     {
         /// <summary>
