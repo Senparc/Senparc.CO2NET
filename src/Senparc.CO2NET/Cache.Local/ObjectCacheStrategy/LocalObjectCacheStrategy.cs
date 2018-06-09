@@ -74,14 +74,15 @@ namespace Senparc.CO2NET.Cache
 
         #endregion
 
+
         #region 单例
 
-        /// <summary>
+        ///<summary>
         /// LocalCacheStrategy的构造函数
-        /// </summary>
-        //LocalObjectCacheStrategy()
-        //{
-        //}
+        ///</summary>
+        LocalObjectCacheStrategy()
+        {
+        }
 
         //静态LocalCacheStrategy
         public static LocalObjectCacheStrategy Instance
@@ -91,6 +92,7 @@ namespace Senparc.CO2NET.Cache
                 return Nested.instance;//返回Nested类中的静态成员instance
             }
         }
+
 
         class Nested
         {

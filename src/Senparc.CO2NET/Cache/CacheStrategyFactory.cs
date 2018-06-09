@@ -44,8 +44,9 @@ namespace Senparc.CO2NET.Cache
             ObjectCacheStrateFunc = func;
         }
 
+
         /// <summary>
-        /// 如果
+        /// 获取全局缓存策略
         /// </summary>
         /// <returns></returns>
         public static IBaseObjectCacheStrategy GetObjectCacheStrategyInstance()
@@ -61,6 +62,19 @@ namespace Senparc.CO2NET.Cache
                 var instance = ObjectCacheStrateFunc();// ?? LocalObjectCacheStrategy.Instance;
                 return instance;
             }
+        }
+
+
+
+            /// <summary>
+            /// 获取指定领域缓存的换存策略
+            /// </summary>
+            /// <param name="extensionCacheStrategyType">实现IExtensionCacheStrategy接口的缓存策略类型</param>
+            /// <returns></returns>
+        public static IBaseObjectCacheStrategy GetExtensionCacheStrategyInstance(IDomainExtensionCacheStrategy domainExtensionCacheStrategy)
+        {
+            var currentObjectCacheStragety = GetObjectCacheStrategyInstance();
+
         }
 
         //public static void RegisterContainerCacheStrategy(Func<IContainerCacheStrategy> func)

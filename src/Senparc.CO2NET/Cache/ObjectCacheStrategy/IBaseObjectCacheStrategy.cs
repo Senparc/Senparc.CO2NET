@@ -31,5 +31,10 @@ namespace Senparc.CO2NET.Cache
     public interface IBaseObjectCacheStrategy : IBaseCacheStrategy<string, object>
     {
         //IContainerCacheStrategy ContainerCacheStrategy { get; }
+
+        /// <summary>
+        /// 注册的扩展缓存策略
+        /// </summary>
+        //Dictionary<IExtensionCacheStrategy, IBaseObjectCacheStrategy> ExtensionCacheStratety { get; set; }
     }
 }
