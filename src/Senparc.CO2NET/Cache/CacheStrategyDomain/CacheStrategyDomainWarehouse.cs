@@ -1,4 +1,5 @@
-﻿using Senparc.CO2NET.Trace;
+﻿using Senparc.CO2NET.Extensions;
+using Senparc.CO2NET.Trace;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace Senparc.CO2NET.Cache
         /// <summary>
         /// 扩展缓存策略所使用的底层缓存策略（如RedisCacheStrategy）
         /// </summary>
-        public Func<IBaseObjectCacheStrategy> BaseObjectCacheStrategy { get { return DomainExtensionCacheStrategy.CacheStragety; } }
+        public Func<IBaseObjectCacheStrategy> BaseObjectCacheStrategy { get { return DomainExtensionCacheStrategy.BaseCacheStrategy; } }
 
 
         /// <summary>
@@ -38,18 +39,17 @@ namespace Senparc.CO2NET.Cache
     /// <summary>
     /// 某一个领域内的缓存策略集合
     /// </summary>
-    internal class CacheStrategyDomainMappingCollection : Dictionary<IDomainExtensionCacheStrategy, CacheStrategyDomainMappingItem>
+    internal class CacheStrategyDomainMappingCollection : Dictionary<IBaseObjectCacheStrategy, CacheStrategyDomainMappingItem>
     {
         /// <summary>
         /// 添加或更新缓存策略映射
         /// </summary>
         /// <param name="domainCacheStrategy"></param>
         /// <param name="item"></param>
-        public void AddOrUpdate(IDomainExtensionCacheStrategy domainCacheStrategy,
-            CacheStrategyDomainMappingItem item)
+        public void AddOrUpdate(CacheStrategyDomainMappingItem item)
         {
             var cacheStrategy = item.BaseObjectCacheStrategy();
-            base[domainCacheStrategy] = item;
+            base[cacheStrategy] = item;
         }
     }
 
@@ -88,30 +88,31 @@ namespace Senparc.CO2NET.Cache
         /// 注册领域缓存
         /// </summary>
         /// <param name="domainCacheStrategy"></param>
-        public static void RegisterCacheStragetyDomain(IDomainExtensionCacheStrategy domainCacheStrategy)
+        public static void RegisterCacheStrategyDomain(IDomainExtensionCacheStrategy domainCacheStrategy)
         {
             var identityName = domainCacheStrategy.CacheStrategyDomain.IdentityName;
             var mappingCollection = GetMappingCollection(identityName);
             var mappingItem = new CacheStrategyDomainMappingItem(domainCacheStrategy);
         }
 
-        public static IDomainExtensionCacheStrategy GetDomainExtensionCacheStrategy(IDomainExtensionCacheStrategy domainCacheStrategy)
+        public static IDomainExtensionCacheStrategy GetDomainExtensionCacheStrategy(IBaseObjectCacheStrategy baseObjectCacheStrategy,
+            ICacheStrategyDomain cacheStrategyDomain)
         {
-            var identityName = domainCacheStrategy.CacheStrategyDomain.IdentityName;
-            var mappingCollection = GetMappingCollection(identityName);
-            if (mappingCollection.ContainsKey(domainCacheStrategy))
+            var identityName = cacheStrategyDomain.IdentityName;
+            var mappingCollection = GetMappingCollection(identityName);//当前扩展缓存可能已经注册的所有基础缓存
+
+            if (mappingCollection.ContainsKey(baseObjectCacheStrategy))
             {
-                var item = mappingCollection[domainCacheStrategy];
+                var item = mappingCollection[baseObjectCacheStrategy];
+                return item.DomainExtensionCacheStrategy;
             }
             else
             {
                 //未注册，默认情况下使用本地缓存策略（应急）
-                SenparcTrace.BaseExceptionLog(new Exceptions.BaseException("当前扩展缓存策略没有进行注册：" + domainCacheStrategy.GetType()));
-
+                var ex = new Exceptions.BaseException("当前扩展缓存策略没有进行注册，CacheStrategyDomain：{0}，IBaseObjectCacheStrategy：{1}".FormatWith(cacheStrategyDomain.GetType(), baseObjectCacheStrategy.GetType()));
+                SenparcTrace.BaseExceptionLog(ex);
+                throw ex;
             }
         }
-
-
-
     }
 }
