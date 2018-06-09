@@ -328,5 +328,13 @@ namespace Senparc.CO2NET.Cache.Redis
             return new RedisCacheLock(this, resourceName, key, retryCount, retryDelay);
         }
 
+
+        /// <summary>
+        /// _cache.HashGetAll()
+        /// </summary>
+        public HashEntry[] HashGetAll(string key)
+        {
+            return _cache.HashGetAll(key);
+        }
     }
 }
