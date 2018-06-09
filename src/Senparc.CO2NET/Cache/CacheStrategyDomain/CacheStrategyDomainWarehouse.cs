@@ -91,8 +91,10 @@ namespace Senparc.CO2NET.Cache
         public static void RegisterCacheStrategyDomain(IDomainExtensionCacheStrategy domainCacheStrategy)
         {
             var identityName = domainCacheStrategy.CacheStrategyDomain.IdentityName;
+            var cacheStrategy = domainCacheStrategy.BaseCacheStrategy();
             var mappingCollection = GetMappingCollection(identityName);
             var mappingItem = new CacheStrategyDomainMappingItem(domainCacheStrategy);
+            mappingCollection[cacheStrategy] = mappingItem;
         }
 
         public static IDomainExtensionCacheStrategy GetDomainExtensionCacheStrategy(IBaseObjectCacheStrategy baseObjectCacheStrategy,
