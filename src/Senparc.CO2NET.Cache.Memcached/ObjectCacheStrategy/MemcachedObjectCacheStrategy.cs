@@ -183,7 +183,6 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         #endregion
 
-
         #region IContainerCacheStrategy 成员
 
         //public IContainerCacheStrategy ContainerCacheStrategy
@@ -258,6 +257,18 @@ namespace Senparc.CO2NET.Cache.Memcached
         public override ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
             return new MemcachedCacheLock(this, resourceName, key, retryCount, retryDelay);
+        }
+
+        /// <summary>
+        /// Cache.TryGet(key, out value);
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool TryGet(string key, out object value, bool isFullKey = false)
+        {
+            var cacheKey = GetFinalKey(key, isFullKey);
+            return Cache.TryGet(key, out value);
         }
     }
 }
