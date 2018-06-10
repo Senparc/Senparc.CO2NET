@@ -60,7 +60,7 @@ namespace Senparc.CO2NET.Cache
             {
                 //自定义类型
                 var instance = ObjectCacheStrateFunc();// ?? LocalObjectCacheStrategy.Instance;
-                return instance;
+                return instance ?? LocalObjectCacheStrategy.Instance;//确保有值，防止委托内结果仍然为null
             }
         }
 
@@ -75,7 +75,7 @@ namespace Senparc.CO2NET.Cache
         public static IDomainExtensionCacheStrategy GetExtensionCacheStrategyInstance(ICacheStrategyDomain cacheStrategyDomain)
         {
             var currentObjectCacheStrategy = GetObjectCacheStrategyInstance();
-            var domianExtensionCacheStrategy = CacheStrategyDomainWarehouse.GetDomainExtensionCacheStrategy(currentObjectCacheStrategy,cacheStrategyDomain);
+            var domianExtensionCacheStrategy = CacheStrategyDomainWarehouse.GetDomainExtensionCacheStrategy(currentObjectCacheStrategy, cacheStrategyDomain);
             return domianExtensionCacheStrategy;
         }
 
