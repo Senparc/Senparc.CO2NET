@@ -63,6 +63,7 @@ namespace Senparc.CO2NET.Threads
             {
                 if (AsynThreadCollection.Count == 0)
                 {
+                    //队列线程
                     {
                         SenparcMessageQueueThreadUtility senparcMessageQueue = new SenparcMessageQueueThreadUtility();
                         Thread senparcMessageQueueThread = new Thread(senparcMessageQueue.Run) { Name = "SenparcMessageQueue" };
