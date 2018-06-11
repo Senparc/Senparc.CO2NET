@@ -60,6 +60,15 @@ namespace Senparc.CO2NET.Cache.Redis
 
         #region 单例
 
+        /// <summary>
+        /// Redis 缓存策略
+        /// </summary>
+        RedisObjectCacheStrategy()
+        {
+            Client = RedisManager.Manager;
+            _cache = Client.GetDatabase();
+        }
+
         //静态SearchCache
         public static RedisObjectCacheStrategy Instance
         {
@@ -85,8 +94,11 @@ namespace Senparc.CO2NET.Cache.Redis
 
         static RedisObjectCacheStrategy()
         {
+            //全局初始化一次，测试结果为319ms
+
             var manager = RedisManager.Manager;
             var cache = manager.GetDatabase();
+       
 
             var testKey = Guid.NewGuid().ToString();
             var testValue = Guid.NewGuid().ToString();
@@ -99,14 +111,7 @@ namespace Senparc.CO2NET.Cache.Redis
             cache.StringSet(testKey, (string)null);
         }
 
-        /// <summary>
-        /// Redis 缓存策略
-        /// </summary>
-        public RedisObjectCacheStrategy()
-        {
-            Client = RedisManager.Manager;
-            _cache = Client.GetDatabase();
-        }
+
 
         /// <summary>
         /// Redis 缓存策略析构函数，用于 _client 资源回收
@@ -280,7 +285,6 @@ namespace Senparc.CO2NET.Cache.Redis
             //var cacheKey = GetFinalKey(key);
             var hashKeyAndField = this.GetHashKeyAndField(key);
 
-
             //if (value is IDictionary)
             //{
             //    //Dictionary类型
@@ -289,9 +293,9 @@ namespace Senparc.CO2NET.Cache.Redis
             //_cache.StringSet(cacheKey, value.Serialize());
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, value.Serialize());
             _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
-#if DEBUG
-            var value1 = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);//正常情况下可以得到 //_cache.GetValue(cacheKey);
-#endif
+//#if DEBUG
+//            var value1 = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);//正常情况下可以得到 //_cache.GetValue(cacheKey);
+//#endif
         }
 
         public void RemoveFromCache(string key, bool isFullKey = false)
@@ -320,8 +324,11 @@ namespace Senparc.CO2NET.Cache.Redis
 
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, value.Serialize());
 
+            var dt1 = DateTime.Now;
             _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
-      
+            var dt2 = DateTime.Now;
+
+            SenparcTrace.SendCustomLog("Redis set效率记录", (dt2 - dt1).TotalMilliseconds + "ms");
         }
 
         #endregion

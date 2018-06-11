@@ -28,6 +28,7 @@ namespace Senparc.CO2NET.Cache
     public class CacheStrategyFactory
     {
         internal static Func<IBaseObjectCacheStrategy> ObjectCacheStrateFunc;
+        internal static IBaseObjectCacheStrategy ObjectCacheStrate;
         //internal static IBaseCacheStrategy<TKey, TValue> GetContainerCacheStrategy<TKey, TValue>()
         //    where TKey : class
         //    where TValue : class
@@ -42,6 +43,7 @@ namespace Senparc.CO2NET.Cache
         public static void RegisterObjectCacheStrategy(Func<IBaseObjectCacheStrategy> func)
         {
             ObjectCacheStrateFunc = func;
+            ObjectCacheStrate = func();//提前运行一次，否则第一次运行开销比较大（400毫秒以上）
         }
 
 
@@ -59,7 +61,14 @@ namespace Senparc.CO2NET.Cache
             else
             {
                 //自定义类型
+                var dts1 = DateTime.Now;
+
+
                 var instance = ObjectCacheStrateFunc();// ?? LocalObjectCacheStrategy.Instance;
+
+                var dts2 = DateTime.Now;
+                Console.WriteLine("RedisObjectCacheStrategy()构造函数时间(ms):" + (dts2 - dts1).TotalMilliseconds);
+
                 //if (instance == null)
                 //{
                 //    return LocalObjectCacheStrategy.Instance;//确保有值，防止委托内结果仍然为null

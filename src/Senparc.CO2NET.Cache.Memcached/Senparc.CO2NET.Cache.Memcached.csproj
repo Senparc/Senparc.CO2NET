@@ -63,6 +63,7 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
       v2.0.0 引入 Senparc.CO2NET，支持 Senparc.CO2NET v5.0
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/JeffreySu/WeiXinMPSDK</RepositoryUrl>
+    <Configurations>Debug;Release;Test</Configurations>
     <!--<Product>Senparc.CO2NET.Cache.Memcached.dll</Product>-->
 
   </PropertyGroup>
