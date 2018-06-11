@@ -39,6 +39,7 @@ using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.MessageQueue;
 using Senparc.CO2NET.Cache;
 using StackExchange.Redis;
+using Senparc.CO2NET.Trace;
 
 namespace Senparc.CO2NET.Cache.Redis
 {
@@ -318,7 +319,9 @@ namespace Senparc.CO2NET.Cache.Redis
             //_cache.StringSet(cacheKey, value.Serialize());
 
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, value.Serialize());
+
             _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
+      
         }
 
         #endregion

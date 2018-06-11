@@ -60,15 +60,13 @@ namespace Senparc.CO2NET.Cache
             {
                 //自定义类型
                 var instance = ObjectCacheStrateFunc();// ?? LocalObjectCacheStrategy.Instance;
-                if (instance == null)
-                {
-                    return LocalObjectCacheStrategy.Instance;//确保有值，防止委托内结果仍然为null
-                }
+                //if (instance == null)
+                //{
+                //    return LocalObjectCacheStrategy.Instance;//确保有值，防止委托内结果仍然为null
+                //}
                 return instance;
             }
         }
-
-
 
         /// <summary>
         /// 获取指定领域缓存的换存策略
