@@ -40,7 +40,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 
-            Console.WriteLine($"SetTest单条测试耗时：{(DateTime.Now-dt).TotalMilliseconds}ms");
+            Console.WriteLine($"SetTest单条测试耗时：{(DateTime.Now - dt).TotalMilliseconds}ms");
         }
 
         [TestMethod]
@@ -63,24 +63,24 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             var finishCount = 0;
             for (int i = 0; i < threadCount; i++)
             {
-                var thread = new Thread(()=> {
-
-
+                var thread = new Thread(() =>
+                {
                     CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
+
+
+                    var dtx = DateTime.Now;
                     var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
 
-                    
 
                     var dt = DateTime.Now;
-                    var dtx = DateTime.Now;
-                    cacheStrategy.InsertToCache("RedisTest_"+dt.Ticks, new ContainerBag()
+                    cacheStrategy.InsertToCache("RedisTest_" + dt.Ticks, new ContainerBag()
                     {
                         Key = "123",
-                        Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                        Name = "hi",
                         AddTime = dt
                     });//37ms
 
-                    var obj = cacheStrategy.Get("RedisTest_"+ dt.Ticks);//14-25ms
+                    var obj = cacheStrategy.Get("RedisTest_" + dt.Ticks);//14-25ms
                     Assert.IsNotNull(obj);
                     Assert.IsInstanceOfType(obj, typeof(RedisValue));
                     //Console.WriteLine(obj);
@@ -89,20 +89,81 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                     Assert.IsNotNull(containerBag);
                     Assert.AreEqual(dt.Ticks, containerBag.AddTime.Ticks);
 
-                    Console.WriteLine($"Thread内单条测试耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
 
+                    Console.WriteLine($"Thread内单条测试耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
 
                     finishCount++;
                 });
                 thread.Start();
             }
 
-            while (finishCount< threadCount)
+            while (finishCount < threadCount)
             {
                 //等待
             }
 
             Console.WriteLine($"EfficiencyTest总测试时间：{(DateTime.Now - dt1).TotalMilliseconds}ms");
+        }
+
+        [TestMethod]
+        public void StackExchangeRedisExtensionsTest()
+        {
+            Action action = () => {
+                var newObj = new ContainerBag()
+                {
+                    Key = Guid.NewGuid().ToString(),
+                    Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                    AddTime = DateTime.Now
+                };
+                var dtx = DateTime.Now;
+                var serializedObj = StackExchangeRedisExtensions.Serialize(newObj);
+                Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+
+                dtx = DateTime.Now;
+                var containerBag = StackExchangeRedisExtensions.Deserialize<ContainerBag>((RedisValue)serializedObj);//11ms
+                Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+
+                Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
+                Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
+            };
+
+            Console.WriteLine("开始同步测试");
+            for (int i = 0; i < 10; i++)
+            {
+                action();
+            }
+
+            Console.WriteLine("开始异步测试");
+            var threadCount = 10;
+            var finishCount = 0;
+            for (int i = 0; i < threadCount; i++)
+            {
+                var thread = new Thread(()=> {
+                    var newObj = new ContainerBag()
+                    {
+                        Key = Guid.NewGuid().ToString(),
+                        Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                        AddTime = DateTime.Now
+                    };
+                    var dtx = DateTime.Now;
+                    var serializedObj = StackExchangeRedisExtensions.Serialize(newObj);
+                    Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+
+                    dtx = DateTime.Now;
+                    var containerBag = StackExchangeRedisExtensions.Deserialize<ContainerBag>((RedisValue)serializedObj);//11ms
+                    Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+
+                    Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
+                    Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
+                    finishCount++;
+                });
+                thread.Start();
+            }
+
+            while (finishCount < threadCount)
+            {
+                //等待
+            }
         }
     }
 }
