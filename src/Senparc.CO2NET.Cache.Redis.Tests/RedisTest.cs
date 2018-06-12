@@ -1,3 +1,6 @@
+using MessagePack;
+using MessagePack.Formatters;
+using MessagePack.Resolvers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StackExchange.Redis;
 using System;
@@ -5,10 +8,15 @@ using System.Threading;
 
 namespace Senparc.CO2NET.Cache.Redis.Tests
 {
+    [MessagePackObject(keyAsPropertyName:true)]
     public class ContainerBag
     {
+        [Key(0)]
         public string Key { get; set; }
+        [Key(1)]
         public string Name { get; set; }
+        [Key(2)]
+        //[MessagePackFormatter(typeof(DateTimeFormatter))]
         public DateTime AddTime { get; set; }
     }
 
@@ -108,7 +116,41 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
         [TestMethod]
         public void StackExchangeRedisExtensionsTest()
         {
-            Action action = () => {
+            Console.WriteLine("开始异步测试");
+            var threadCount = 10;
+            var finishCount = 0;
+            for (int i = 0; i < threadCount; i++)
+            {
+                var thread = new Thread(() => {
+                    var newObj = new ContainerBag()
+                    {
+                        Key = Guid.NewGuid().ToString(),
+                        Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                        AddTime = DateTime.Now
+                    };
+                    var dtx = DateTime.Now;
+                    var serializedObj = StackExchangeRedisExtensions.Serialize(newObj);
+                    Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+
+                    dtx = DateTime.Now;
+                    var containerBag = StackExchangeRedisExtensions.Deserialize<ContainerBag>((RedisValue)serializedObj);//11ms
+                    Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+
+                    Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
+                    Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
+                    finishCount++;
+                });
+                thread.Start();
+            }
+
+            while (finishCount < threadCount)
+            {
+                //等待
+            }
+
+
+            Action action = () =>
+            {
                 var newObj = new ContainerBag()
                 {
                     Key = Guid.NewGuid().ToString(),
@@ -133,27 +175,48 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                 action();
             }
 
+        }
+
+        [TestMethod]
+        public void MessagePackTest()
+        {
+            //    CompositeResolver.RegisterAndSetAsDefault(
+            //new[] { TypelessFormatter.Instance },
+            //new[] { NativeDateTimeResolver.Instance, ContractlessStandardResolver.Instance });
+
+            CompositeResolver.RegisterAndSetAsDefault(
+    // Resolve DateTime first
+    MessagePack.Resolvers.NativeDateTimeResolver.Instance,
+    MessagePack.Resolvers.StandardResolver.Instance,
+       MessagePack.Resolvers.BuiltinResolver.Instance,
+                // use PrimitiveObjectResolver
+                PrimitiveObjectResolver.Instance
+);
+
             Console.WriteLine("开始异步测试");
             var threadCount = 10;
             var finishCount = 0;
             for (int i = 0; i < threadCount; i++)
             {
-                var thread = new Thread(()=> {
+                var thread = new Thread(() => {
                     var newObj = new ContainerBag()
                     {
                         Key = Guid.NewGuid().ToString(),
                         Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
                         AddTime = DateTime.Now
                     };
+
                     var dtx = DateTime.Now;
-                    var serializedObj = StackExchangeRedisExtensions.Serialize(newObj);
-                    Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                    var serializedObj = MessagePackSerializer.Serialize(newObj/*, NativeDateTimeResolver.Instance*/);
+                    Console.WriteLine($"MessagePackSerializer.Serialize 耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
 
                     dtx = DateTime.Now;
-                    var containerBag = StackExchangeRedisExtensions.Deserialize<ContainerBag>((RedisValue)serializedObj);//11ms
-                    Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                    var containerBag = MessagePackSerializer.Deserialize<ContainerBag>(serializedObj);//11ms
+                    Console.WriteLine($"MessagePackSerializer.Deserialize 耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
 
-                    Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
+                    Console.WriteLine(containerBag.AddTime);
+
+                    //Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
                     Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
                     finishCount++;
                 });
