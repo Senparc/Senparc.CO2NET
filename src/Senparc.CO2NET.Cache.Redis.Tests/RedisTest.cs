@@ -184,14 +184,14 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             //new[] { TypelessFormatter.Instance },
             //new[] { NativeDateTimeResolver.Instance, ContractlessStandardResolver.Instance });
 
-            CompositeResolver.RegisterAndSetAsDefault(
-    // Resolve DateTime first
-    MessagePack.Resolvers.NativeDateTimeResolver.Instance,
-    MessagePack.Resolvers.StandardResolver.Instance,
-       MessagePack.Resolvers.BuiltinResolver.Instance,
-                // use PrimitiveObjectResolver
-                PrimitiveObjectResolver.Instance
-);
+//            CompositeResolver.RegisterAndSetAsDefault(
+//    // Resolve DateTime first
+//    MessagePack.Resolvers.NativeDateTimeResolver.Instance,
+//    MessagePack.Resolvers.StandardResolver.Instance,
+//       MessagePack.Resolvers.BuiltinResolver.Instance,
+//                // use PrimitiveObjectResolver
+//                PrimitiveObjectResolver.Instance
+//);
 
             Console.WriteLine("开始异步测试");
             var threadCount = 10;
@@ -203,7 +203,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                     {
                         Key = Guid.NewGuid().ToString(),
                         Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
-                        AddTime = DateTime.Now
+                        AddTime = DateTime.Now.ToUniversalTime()
                     };
 
                     var dtx = DateTime.Now;
@@ -214,7 +214,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                     var containerBag = MessagePackSerializer.Deserialize<ContainerBag>(serializedObj);//11ms
                     Console.WriteLine($"MessagePackSerializer.Deserialize 耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
 
-                    Console.WriteLine(containerBag.AddTime);
+                    Console.WriteLine(containerBag.AddTime.ToUniversalTime());
 
                     //Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
                     Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
