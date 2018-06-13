@@ -66,7 +66,7 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
         public static T DeserializeFromCache<T>(this string value)
         {
-            var cacheWarpper = (CacheWrapper<T>)Newtonsoft.Json.JsonConvert.DeserializeObject(value, typeof(CacheWrapper<T>));
+            var cacheWarpper = Newtonsoft.Json.JsonConvert.DeserializeObject<CacheWrapper<T>>(value);
             return cacheWarpper.Object;
         }
     }
