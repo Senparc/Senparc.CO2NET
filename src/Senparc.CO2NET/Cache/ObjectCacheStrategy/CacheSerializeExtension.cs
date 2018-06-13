@@ -6,7 +6,11 @@ using System.Text;
 
 namespace Senparc.CO2NET.Cache
 {
-    public class CacheWrapper<T>
+    /// <summary>
+    /// 用于提供给缓存储存的封装对象，包含了对象类型（Type）信息
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    sealed internal class CacheWrapper<T>
     {
         public Type Type { get; set; }
         public T Object { get; set; }
@@ -18,7 +22,9 @@ namespace Senparc.CO2NET.Cache
         }
     }
 
-
+    /// <summary>
+    /// 缓存序列化扩展方法，所以缓存的序列化、反序列化过程必须使用这里的方法统一读写
+    /// </summary>
     public static class CacheSerializeExtension
     {
         /// <summary>
@@ -38,22 +44,22 @@ namespace Senparc.CO2NET.Cache
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static object DeserializeToCache(this string value)
+        public static object DeserializeFromCache(this string value)
         {
-            var cacheWarpper = (CacheWrapper<object>)Newtonsoft.Json.JsonConvert.DeserializeObject(value,typeof(CacheWrapper<object>));
-            var obj = Newtonsoft.Json.JsonConvert.DeserializeObject(cacheWarpper.Object.ToJson(),cacheWarpper.Type);
+            var cacheWarpper = (CacheWrapper<object>)Newtonsoft.Json.JsonConvert.DeserializeObject(value, typeof(CacheWrapper<object>));
+            var obj = Newtonsoft.Json.JsonConvert.DeserializeObject(cacheWarpper.Object.ToJson(), cacheWarpper.Type);
             return obj;
         }
 
         /// <summary>
-        /// 从缓存对象反序列化到实例
+        /// 从缓存对象反序列化到实例（效率更高，推荐）
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static T DeserializeToCache<T>(this string value)
+        public static T DeserializeFromCache<T>(this string value)
         {
-            var cacheWarpper = (CacheWrapper<T>)Newtonsoft.Json.JsonConvert.DeserializeObject(value, typeof(CacheWrapper<object>));
+            var cacheWarpper = (CacheWrapper<T>)Newtonsoft.Json.JsonConvert.DeserializeObject(value, typeof(CacheWrapper<T>));
             return cacheWarpper.Object;
         }
     }

@@ -120,91 +120,91 @@ namespace Senparc.CO2NET.Helpers
             //#endif
         }
 
-        #region 序列化对象 - byte[]
+//        #region 序列化对象 - byte[]
 
-        #region 二进制实体对象
-        /// <summary>
-        /// 序列化对象（二进制实体对象）
-        /// </summary>
-        /// <param name="o"></param>
-        /// <returns></returns>
-        public static byte[] BinarySerialize(this object o)
-        {
-            if (o == null)
-            {
-                return null;
-            }
+//        #region 二进制实体对象
+//        /// <summary>
+//        /// 序列化对象（二进制实体对象）
+//        /// </summary>
+//        /// <param name="o"></param>
+//        /// <returns></returns>
+//        public static byte[] BinarySerialize(this object o)
+//        {
+//            if (o == null)
+//            {
+//                return null;
+//            }
 
-#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-            ////二进制序列化方案
-            //using (MemoryStream memoryStream = new MemoryStream())
-            //{
+//#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+//            ////二进制序列化方案
+//            //using (MemoryStream memoryStream = new MemoryStream())
+//            //{
 
-            //    ProtoBuf.Serializer.Serialize(memoryStream, o);
-            //    byte[] objectDataAsStream = memoryStream.ToArray();
-            //    return objectDataAsStream;
-            //}
+//            //    ProtoBuf.Serializer.Serialize(memoryStream, o);
+//            //    byte[] objectDataAsStream = memoryStream.ToArray();
+//            //    return objectDataAsStream;
+//            //}
 
-            BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
-            return binaryConverter.Serialize(o);
-#else
-            #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
-            //二进制序列化方案
-            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                binaryFormatter.Serialize(memoryStream, o);
-                byte[] objectDataAsStream = memoryStream.ToArray();
-                return objectDataAsStream;
-            }
-            #endregion
-#endif
+//            BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
+//            return binaryConverter.Serialize(o);
+//#else
+//            #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
+//            //二进制序列化方案
+//            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+//            using (MemoryStream memoryStream = new MemoryStream())
+//            {
+//                binaryFormatter.Serialize(memoryStream, o);
+//                byte[] objectDataAsStream = memoryStream.ToArray();
+//                return objectDataAsStream;
+//            }
+//            #endregion
+//#endif
 
-            //使用JSON序列化，会在Get()方法反序列化到IContainerBag的过程中出错
-            //JSON序列化方案
-            //SerializerHelper serializerHelper = new SerializerHelper();
-            //var jsonSetting = serializerHelper.GetJsonString(o);
-            //return Encoding.UTF8.GetBytes(jsonSetting);
-        }
+//            //使用JSON序列化，会在Get()方法反序列化到IContainerBag的过程中出错
+//            //JSON序列化方案
+//            //SerializerHelper serializerHelper = new SerializerHelper();
+//            //var jsonSetting = serializerHelper.GetJsonString(o);
+//            //return Encoding.UTF8.GetBytes(jsonSetting);
+//        }
 
-        /// <summary>
-        /// 反序列化对象（二进制实体对象）
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        public static T BinaryDeserialize<T>(this byte[] stream)
-        {
-            if (stream == null)
-            {
-                return default(T);
-            }
+//        /// <summary>
+//        /// 反序列化对象（二进制实体对象）
+//        /// </summary>
+//        /// <typeparam name="T"></typeparam>
+//        /// <param name="stream"></param>
+//        /// <returns></returns>
+//        public static T BinaryDeserialize<T>(this byte[] stream)
+//        {
+//            if (stream == null)
+//            {
+//                return default(T);
+//            }
 
-#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-            ////二进制序列化方案
-            //using (MemoryStream memoryStream = new MemoryStream(stream))
-            //{
-            //    T result = ProtoBuf.Serializer.Deserialize<T>(memoryStream);
-            //    return result;
-            //}
+//#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+//            ////二进制序列化方案
+//            //using (MemoryStream memoryStream = new MemoryStream(stream))
+//            //{
+//            //    T result = ProtoBuf.Serializer.Deserialize<T>(memoryStream);
+//            //    return result;
+//            //}
 
-            BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
-            return binaryConverter.Deserialize<T>(stream);
+//            BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
+//            return binaryConverter.Deserialize<T>(stream);
 
-#else
-            #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
-            //二进制序列化方案
-            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            using (MemoryStream memoryStream = new MemoryStream(stream))
-            {
-                T result = (T)binaryFormatter.Deserialize(memoryStream);
-                return result;
-            }
-            #endregion
-#endif
-        }
-        #endregion
+//#else
+//            #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
+//            //二进制序列化方案
+//            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+//            using (MemoryStream memoryStream = new MemoryStream(stream))
+//            {
+//                T result = (T)binaryFormatter.Deserialize(memoryStream);
+//                return result;
+//            }
+//            #endregion
+//#endif
+//        }
+//        #endregion
 
-        #endregion
+//        #endregion
     }
 }

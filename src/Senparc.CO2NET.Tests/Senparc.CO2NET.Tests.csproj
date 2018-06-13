@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Cache\ObjectCacheStrategy\" />
-  </ItemGroup>
-
 </Project>

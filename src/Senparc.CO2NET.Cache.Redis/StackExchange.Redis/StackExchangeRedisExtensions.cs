@@ -59,96 +59,96 @@ namespace Senparc.CO2NET.Cache.Redis
         //    AzureredisDb.Cache.StringSet(key, Serialize(value));
         //}
 
-//        /// <summary>
-//        /// 序列化对象
-//        /// </summary>
-//        /// <param name="o"></param>
-//        /// <returns></returns>
-//        public static byte[] Serialize(this object o)
-//        {
-//            if (o == null)
-//            {
-//                return null;
-//            }
+        /// <summary>
+        /// 序列化对象
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public static byte[] Serialize(this object o)
+        {
+            if (o == null)
+            {
+                return null;
+            }
 
-//            var dtx = DateTime.Now;
+            var dtx = DateTime.Now;
 
-//#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-//            ////二进制序列化方案
-//            //using (MemoryStream memoryStream = new MemoryStream())
-//            //{
+#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+            ////二进制序列化方案
+            //using (MemoryStream memoryStream = new MemoryStream())
+            //{
 
-//            //    ProtoBuf.Serializer.Serialize(memoryStream, o);
-//            //    byte[] objectDataAsStream = memoryStream.ToArray();
-//            //    return objectDataAsStream;
-//            //}
+            //    ProtoBuf.Serializer.Serialize(memoryStream, o);
+            //    byte[] objectDataAsStream = memoryStream.ToArray();
+            //    return objectDataAsStream;
+            //}
 
-//            BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
-//            return binaryConverter.Serialize(o);
-//#else
-//            #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
-//            //二进制序列化方案
-//            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-//            using (MemoryStream memoryStream = new MemoryStream())
-//            {
-//                binaryFormatter.Serialize(memoryStream, o);
-//                byte[] objectDataAsStream = memoryStream.ToArray();
-//                return objectDataAsStream;
-//            }
-//            #endregion
-//#endif
+            BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
+            return binaryConverter.Serialize(o);
+#else
+            #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
+            //二进制序列化方案
+            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                binaryFormatter.Serialize(memoryStream, o);
+                byte[] objectDataAsStream = memoryStream.ToArray();
+                return objectDataAsStream;
+            }
+            #endregion
+#endif
 
-//            Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
-
-
-//            //使用JSON序列化，会在Get()方法反序列化到IContainerBag的过程中出错
-//            //JSON序列化方案
-//            //SerializerHelper serializerHelper = new SerializerHelper();
-//            //var jsonSetting = serializerHelper.GetJsonString(o);
-//            //return Encoding.UTF8.GetBytes(jsonSetting);
-//        }
-
-//        /// <summary>
-//        /// 反序列化对象
-//        /// </summary>
-//        /// <typeparam name="T"></typeparam>
-//        /// <param name="stream"></param>
-//        /// <returns></returns>
-//        public static T Deserialize<T>(this byte[] stream)
-//        {
-//            if (stream == null)
-//            {
-//                return default(T);
-//            }
-
-//#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-//            ////二进制序列化方案
-//            //using (MemoryStream memoryStream = new MemoryStream(stream))
-//            //{
-//            //    T result = ProtoBuf.Serializer.Deserialize<T>(memoryStream);
-//            //    return result;
-//            //}
-
-//            BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
-//            return binaryConverter.Deserialize<T>(stream);
-
-//#else
-//            #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
-//            //二进制序列化方案
-//            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-//            using (MemoryStream memoryStream = new MemoryStream(stream))
-//            {
-//                T result = (T)binaryFormatter.Deserialize(memoryStream);
-//                return result;
-//            }
-//            #endregion
-//#endif
+            Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
 
 
-//            //JSON序列化方案
-//            //SerializerHelper serializerHelper = new SerializerHelper();
-//            //T result = serializerHelper.GetObject<T>(Encoding.UTF8.GetString(stream));
-//            //return result;
-//        }
+            //使用JSON序列化，会在Get()方法反序列化到IContainerBag的过程中出错
+            //JSON序列化方案
+            //SerializerHelper serializerHelper = new SerializerHelper();
+            //var jsonSetting = serializerHelper.GetJsonString(o);
+            //return Encoding.UTF8.GetBytes(jsonSetting);
+        }
+
+        /// <summary>
+        /// 反序列化对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static T Deserialize<T>(this byte[] stream)
+        {
+            if (stream == null)
+            {
+                return default(T);
+            }
+
+#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+            ////二进制序列化方案
+            //using (MemoryStream memoryStream = new MemoryStream(stream))
+            //{
+            //    T result = ProtoBuf.Serializer.Deserialize<T>(memoryStream);
+            //    return result;
+            //}
+
+            BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
+            return binaryConverter.Deserialize<T>(stream);
+
+#else
+            #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
+            //二进制序列化方案
+            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            using (MemoryStream memoryStream = new MemoryStream(stream))
+            {
+                T result = (T)binaryFormatter.Deserialize(memoryStream);
+                return result;
+            }
+            #endregion
+#endif
+
+
+            //JSON序列化方案
+            //SerializerHelper serializerHelper = new SerializerHelper();
+            //T result = serializerHelper.GetObject<T>(Encoding.UTF8.GetString(stream));
+            //return result;
+        }
     }
 }
