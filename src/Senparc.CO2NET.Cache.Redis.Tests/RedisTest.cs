@@ -41,10 +41,10 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
             var obj = cacheStrategy.Get("RedisTest");
             Assert.IsNotNull(obj);
-            Assert.IsInstanceOfType(obj, typeof(RedisValue));
+            Assert.IsInstanceOfType(obj, typeof(ContainerBag));
             //Console.WriteLine(obj);
 
-            var containerBag = StackExchangeRedisExtensions.Deserialize<ContainerBag>((RedisValue)obj);
+            var containerBag = obj as ContainerBag;
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 

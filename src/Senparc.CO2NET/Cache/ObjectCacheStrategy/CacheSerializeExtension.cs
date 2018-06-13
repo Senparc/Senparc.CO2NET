@@ -18,7 +18,14 @@ namespace Senparc.CO2NET.Cache
         public CacheWrapper(T obj)
         {
             this.Object = obj;
-            this.Type = typeof(T);
+            if (obj == null)
+            {
+                this.Type = typeof(object);//TODO：最好也应该要确定类型
+            }
+            else
+            {
+                this.Type = obj.GetType();
+            }
         }
     }
 
