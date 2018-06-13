@@ -98,7 +98,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
             var manager = RedisManager.Manager;
             var cache = manager.GetDatabase();
-       
+
 
             var testKey = Guid.NewGuid().ToString();
             var testValue = Guid.NewGuid().ToString();
@@ -199,6 +199,10 @@ namespace Senparc.CO2NET.Cache.Redis
 
             //var value = _cache.StringGet(cacheKey);
             var value = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);
+            if (value.HasValue)
+            {
+                return value.ToString().DeserializeFromCache();
+            }
             return value;
         }
 
@@ -261,7 +265,7 @@ namespace Senparc.CO2NET.Cache.Redis
                 foreach (var hashEntry in list)
                 {
                     var fullKey = redisKey.ToString() + ":" + hashEntry.Name;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
-                    dic[fullKey] = hashEntry.Value;
+                    dic[fullKey] = hashEntry.Value.ToString().DeserializeFromCache();
                 }
             }
             return dic;
@@ -297,7 +301,7 @@ namespace Senparc.CO2NET.Cache.Redis
             //StackExchangeRedisExtensions.Serialize效率非常差
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
 
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+            var json = value.SerializeToCache();
             _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, json);
 
             //#if DEBUG
@@ -333,7 +337,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
             //StackExchangeRedisExtensions.Serialize效率非常差
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+            var json = value.SerializeToCache();
             _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, json);
         }
 
