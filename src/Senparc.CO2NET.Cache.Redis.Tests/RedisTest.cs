@@ -35,7 +35,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             cacheStrategy.InsertToCache("RedisTest", new ContainerBag()
             {
                 Key = "123",
-                Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                Name = "",// Newtonsoft.Json.JsonConvert.SerializeObject(this),
                 AddTime = dt
             });
 
@@ -48,7 +48,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 
-            Console.WriteLine($"SetTest单条测试耗时：{(DateTime.Now - dt).TotalMilliseconds}ms");
+            Console.WriteLine($"SetTest单条测试耗时（使用CacheWrapper)：{(DateTime.Now - dt).TotalMilliseconds}ms");
         }
 
         [TestMethod]
@@ -60,7 +60,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                 SetTest();
             }
 
-            Console.WriteLine($"EfficiencyTest总测试时间：{(DateTime.Now - dt1).TotalMilliseconds}ms");
+            Console.WriteLine($"EfficiencyTest总测试时间（使用CacheWrapper)：{(DateTime.Now - dt1).TotalMilliseconds}ms");
         }
 
         [TestMethod]
@@ -117,7 +117,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
         public void StackExchangeRedisExtensionsTest()
         {
             Console.WriteLine("开始异步测试");
-            var threadCount = 10;
+            var threadCount = 100;
             var finishCount = 0;
             for (int i = 0; i < threadCount; i++)
             {

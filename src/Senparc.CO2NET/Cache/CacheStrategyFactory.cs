@@ -61,13 +61,7 @@ namespace Senparc.CO2NET.Cache
             else
             {
                 //自定义类型
-                var dts1 = DateTime.Now;
-
-
                 var instance = ObjectCacheStrateFunc();// ?? LocalObjectCacheStrategy.Instance;
-
-                var dts2 = DateTime.Now;
-                Console.WriteLine("RedisObjectCacheStrategy()构造函数时间(ms):" + (dts2 - dts1).TotalMilliseconds);
 
                 //if (instance == null)
                 //{
