@@ -23,7 +23,7 @@ namespace Senparc.CO2NET.Cache
     }
 
     /// <summary>
-    /// 缓存序列化扩展方法，所以缓存的序列化、反序列化过程必须使用这里的方法统一读写
+    /// 缓存序列化扩展方法，所有（分布式）缓存的序列化、反序列化过程必须使用这里的方法统一读写
     /// </summary>
     public static class CacheSerializeExtension
     {

@@ -201,7 +201,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 
             //TODO：加了绝对过期时间就会立即失效（再次获取后为null），memcache低版本的bug
 
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+            var json = value.SerializeToCache();
             Cache.Store(StoreMode.Set, cacheKey, json, DateTime.Now.AddDays(1));
         }
 
@@ -223,7 +223,9 @@ namespace Senparc.CO2NET.Cache.Memcached
             }
 
             var cacheKey = GetFinalKey(key, isFullKey);
-            return Cache.Get<object>(cacheKey);
+            var json = Cache.Get<string>(cacheKey);
+            var obj = json.DeserializeFromCache();
+            return obj;
         }
 
         public virtual IDictionary<string, object> GetAll()
@@ -250,7 +252,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         public virtual void Update(string key, object value, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+            var json = value.SerializeToCache();
             Cache.Store(StoreMode.Set, cacheKey, json, DateTime.Now.AddDays(1));
         }
 
@@ -271,7 +273,14 @@ namespace Senparc.CO2NET.Cache.Memcached
         public bool TryGet(string key, out object value, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
-            return Cache.TryGet(key, out value);
+            object json;
+            if (Cache.TryGet(key, out json)) {
+                value = (json as string).DeserializeFromCache();
+                return true;
+            }
+
+            value = null;
+            return false;
         }
     }
 }
