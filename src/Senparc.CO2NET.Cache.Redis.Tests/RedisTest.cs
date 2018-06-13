@@ -228,5 +228,58 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                 //等待
             }
         }
+
+
+        [TestMethod]
+        public void NewtonsoftTest()
+        {
+            //    CompositeResolver.RegisterAndSetAsDefault(
+            //new[] { TypelessFormatter.Instance },
+            //new[] { NativeDateTimeResolver.Instance, ContractlessStandardResolver.Instance });
+
+            //            CompositeResolver.RegisterAndSetAsDefault(
+            //    // Resolve DateTime first
+            //    MessagePack.Resolvers.NativeDateTimeResolver.Instance,
+            //    MessagePack.Resolvers.StandardResolver.Instance,
+            //       MessagePack.Resolvers.BuiltinResolver.Instance,
+            //                // use PrimitiveObjectResolver
+            //                PrimitiveObjectResolver.Instance
+            //);
+
+            Console.WriteLine("开始异步测试");
+            var threadCount = 50;
+            var finishCount = 0;
+            for (int i = 0; i < threadCount; i++)
+            {
+                var thread = new Thread(() => {
+                    var newObj = new ContainerBag()
+                    {
+                        Key = Guid.NewGuid().ToString(),
+                        Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                        AddTime = DateTime.Now.ToUniversalTime()
+                    };
+
+                    var dtx = DateTime.Now;
+                    var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(newObj);
+                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.SerializeObject 耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+
+                    dtx = DateTime.Now;
+                    var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<ContainerBag>(serializedObj);//11ms
+                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.DeserializeObject 耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+
+                    Console.WriteLine(containerBag.AddTime.ToUniversalTime());
+
+                    //Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
+                    Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
+                    finishCount++;
+                });
+                thread.Start();
+            }
+
+            while (finishCount < threadCount)
+            {
+                //等待
+            }
+        }
     }
 }
