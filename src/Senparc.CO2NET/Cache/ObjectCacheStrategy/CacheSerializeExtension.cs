@@ -1,10 +1,24 @@
-﻿using System;
+﻿using Senparc.CO2NET.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Senparc.CO2NET.Cache
 {
+    public class CacheWrapper<T>
+    {
+        public Type Type { get; set; }
+        public T Object { get; set; }
+
+        public CacheWrapper(T obj)
+        {
+            this.Object = obj;
+            this.Type = typeof(T);
+        }
+    }
+
+
     public static class CacheSerializeExtension
     {
         /// <summary>
@@ -12,9 +26,10 @@ namespace Senparc.CO2NET.Cache
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static object SerializeToCache(this object obj)
+        public static string SerializeToCache<T>(this T obj)
         {
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            var cacheWarpper = new CacheWrapper<T>(obj);
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(cacheWarpper);
             return json;
         }
 
@@ -25,8 +40,9 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
         public static object DeserializeToCache(this string value)
         {
-            var json = Newtonsoft.Json.JsonConvert.DeserializeObject(value);
-            return json;
+            var cacheWarpper = (CacheWrapper<object>)Newtonsoft.Json.JsonConvert.DeserializeObject(value,typeof(CacheWrapper<object>));
+            var obj = Newtonsoft.Json.JsonConvert.DeserializeObject(cacheWarpper.Object.ToJson(),cacheWarpper.Type);
+            return obj;
         }
 
         /// <summary>
@@ -37,8 +53,8 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
         public static T DeserializeToCache<T>(this string value)
         {
-            var obj = (T)Newtonsoft.Json.JsonConvert.DeserializeObject(value, typeof(T));
-            return obj;
+            var cacheWarpper = (CacheWrapper<T>)Newtonsoft.Json.JsonConvert.DeserializeObject(value, typeof(CacheWrapper<object>));
+            return cacheWarpper.Object;
         }
     }
 }
