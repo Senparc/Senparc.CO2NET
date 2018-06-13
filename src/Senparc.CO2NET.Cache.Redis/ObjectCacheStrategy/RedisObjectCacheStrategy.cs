@@ -295,7 +295,10 @@ namespace Senparc.CO2NET.Cache.Redis
 
 
             //StackExchangeRedisExtensions.Serialize效率非常差
-            _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
+            //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
+
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+            _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, json);
 
             //#if DEBUG
             //            var value1 = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);//正常情况下可以得到 //_cache.GetValue(cacheKey);
@@ -328,11 +331,10 @@ namespace Senparc.CO2NET.Cache.Redis
 
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, value.Serialize());
 
-            var dt1 = DateTime.Now;
-            _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
-            var dt2 = DateTime.Now;
-
-            SenparcTrace.SendCustomLog("Redis set效率记录", (dt2 - dt1).TotalMilliseconds + "ms");
+            //StackExchangeRedisExtensions.Serialize效率非常差
+            //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+            _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, json);
         }
 
         #endregion

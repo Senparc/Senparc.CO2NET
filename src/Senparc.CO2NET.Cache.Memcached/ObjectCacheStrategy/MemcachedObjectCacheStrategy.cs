@@ -200,7 +200,9 @@ namespace Senparc.CO2NET.Cache.Memcached
             var cacheKey = GetFinalKey(key);
 
             //TODO：加了绝对过期时间就会立即失效（再次获取后为null），memcache低版本的bug
-            Cache.Store(StoreMode.Set, cacheKey, value, DateTime.Now.AddDays(1));
+
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+            Cache.Store(StoreMode.Set, cacheKey, json, DateTime.Now.AddDays(1));
         }
 
         public virtual void RemoveFromCache(string key, bool isFullKey = false)
@@ -248,7 +250,8 @@ namespace Senparc.CO2NET.Cache.Memcached
         public virtual void Update(string key, object value, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
-            Cache.Store(StoreMode.Set, cacheKey, value, DateTime.Now.AddDays(1));
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+            Cache.Store(StoreMode.Set, cacheKey, json, DateTime.Now.AddDays(1));
         }
 
         #endregion
