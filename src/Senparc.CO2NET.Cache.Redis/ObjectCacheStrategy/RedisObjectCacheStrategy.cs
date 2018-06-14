@@ -206,6 +206,34 @@ namespace Senparc.CO2NET.Cache.Redis
             return value;
         }
 
+        public T Get<T>(string key, bool isFullKey = false)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return default(T);
+            }
+
+            if (!CheckExisted(key, isFullKey))
+            {
+                return default(T);
+                //InsertToCache(key, new ContainerItemCollection());
+            }
+
+            //var cacheKey = GetFinalKey(key, isFullKey);
+            var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
+
+            //var value = _cache.StringGet(cacheKey);
+            var value = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);
+            if (value.HasValue)
+            {
+                return value.ToString().DeserializeFromCache<T>();
+            }
+
+            return default(T);
+        }
+
+
+
         //public IDictionary<string, TBag> GetAll<TBag>() where TBag : IBaseContainerBag
         //{
         //    #region 旧方法（没有使用Hash之前）

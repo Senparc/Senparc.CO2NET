@@ -100,6 +100,14 @@ namespace Senparc.CO2NET.Cache
         TValue Get(TKey key, bool isFullKey = false);
 
         /// <summary>
+        /// 返回指定缓存键的对象，并强制指定类型
+        /// </summary>
+        /// <param name="key">缓存键</param>
+        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <returns></returns>
+        T Get<T>(TKey key, bool isFullKey = false);
+
+        /// <summary>
         /// 获取所有缓存信息集合
         /// </summary>
         /// <returns></returns>

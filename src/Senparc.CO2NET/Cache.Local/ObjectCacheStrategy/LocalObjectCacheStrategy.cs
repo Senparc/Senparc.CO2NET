@@ -147,6 +147,29 @@ namespace Senparc.CO2NET.Cache
             return _cache[cacheKey];
         }
 
+        /// <summary>
+        /// 返回指定缓存键的对象，并强制指定类型
+        /// </summary>
+        /// <param name="key">缓存键</param>
+        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <returns></returns>
+        public T Get<T>(string key, bool isFullKey = false)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return default(T);
+            }
+
+            if (!CheckExisted(key, isFullKey))
+            {
+                return default(T);
+                //InsertToCache(key, new ContainerItemCollection());
+            }
+
+            var cacheKey = GetFinalKey(key, isFullKey);
+            return (T)_cache[cacheKey];
+        }
+
         //public IDictionary<string, TBag> GetAll<TBag>() where TBag : IBaseContainerBag
         //{
         //    var dic = new Dictionary<string, TBag>();

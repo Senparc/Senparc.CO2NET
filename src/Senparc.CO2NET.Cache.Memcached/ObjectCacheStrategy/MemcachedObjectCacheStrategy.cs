@@ -228,6 +228,21 @@ namespace Senparc.CO2NET.Cache.Memcached
             return obj;
         }
 
+
+        public virtual T Get<T>(string key, bool isFullKey = false)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return default(T);
+            }
+
+            var cacheKey = GetFinalKey(key, isFullKey);
+            var json = Cache.Get<string>(cacheKey);
+            var obj = json.DeserializeFromCache<T>();
+            return obj;
+        }
+
+
         public virtual IDictionary<string, object> GetAll()
         {
             throw new NotImplementedException();

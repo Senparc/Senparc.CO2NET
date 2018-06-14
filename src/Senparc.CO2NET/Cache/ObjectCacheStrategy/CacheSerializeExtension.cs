@@ -34,6 +34,48 @@ namespace Senparc.CO2NET.Cache
     /// </summary>
     public static class CacheSerializeExtension
     {
+        #region CacheWrapper方案（效率比直接序列化低3-5倍，但也在可以接受范围内，和二进制序列化基本打平，好处是可以自动识别类型
+
+        ///// <summary>
+        ///// 序列化到缓存可用的对象
+        ///// </summary>
+        ///// <param name="obj"></param>
+        ///// <returns></returns>
+        //public static string SerializeToCache<T>(this T obj)
+        //{
+        //    var cacheWarpper = new CacheWrapper<T>(obj);
+        //    var json = Newtonsoft.Json.JsonConvert.SerializeObject(cacheWarpper);
+        //    return json;
+        //}
+
+        ///// <summary>
+        ///// 从缓存对象反序列化到实例
+        ///// </summary>
+        ///// <param name="value"></param>
+        ///// <returns></returns>
+        //public static object DeserializeFromCache(this string value)
+        //{
+        //    var cacheWarpper = (CacheWrapper<object>)Newtonsoft.Json.JsonConvert.DeserializeObject(value, typeof(CacheWrapper<object>));
+        //    var obj = Newtonsoft.Json.JsonConvert.DeserializeObject(cacheWarpper.Object.ToJson(), cacheWarpper.Type);
+        //    return obj;
+        //}
+
+        ///// <summary>
+        ///// 从缓存对象反序列化到实例（效率更高，推荐）
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="value"></param>
+        ///// <returns></returns>
+        //public static T DeserializeFromCache<T>(this string value)
+        //{
+        //    var cacheWarpper = Newtonsoft.Json.JsonConvert.DeserializeObject<CacheWrapper<T>>(value);
+        //    return cacheWarpper.Object;
+        //}
+
+        #endregion
+
+        #region 直接JSON序列化方案
+
         /// <summary>
         /// 序列化到缓存可用的对象
         /// </summary>
@@ -41,8 +83,7 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
         public static string SerializeToCache<T>(this T obj)
         {
-            var cacheWarpper = new CacheWrapper<T>(obj);
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(cacheWarpper);
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             return json;
         }
 
@@ -51,10 +92,9 @@ namespace Senparc.CO2NET.Cache
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static object DeserializeFromCache(this string value)
+        public static object DeserializeFromCache(this string value, Type type = null)
         {
-            var cacheWarpper = (CacheWrapper<object>)Newtonsoft.Json.JsonConvert.DeserializeObject(value, typeof(CacheWrapper<object>));
-            var obj = Newtonsoft.Json.JsonConvert.DeserializeObject(cacheWarpper.Object.ToJson(), cacheWarpper.Type);
+            var obj = Newtonsoft.Json.JsonConvert.DeserializeObject(value, type);
             return obj;
         }
 
@@ -66,8 +106,11 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
         public static T DeserializeFromCache<T>(this string value)
         {
-            var cacheWarpper = Newtonsoft.Json.JsonConvert.DeserializeObject<CacheWrapper<T>>(value);
-            return cacheWarpper.Object;
+            var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(value);
+            return obj;
         }
+
+
+        #endregion
     }
 }
