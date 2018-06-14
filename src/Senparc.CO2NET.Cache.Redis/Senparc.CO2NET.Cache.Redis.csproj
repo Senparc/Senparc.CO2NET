@@ -14,7 +14,7 @@
       https://github.com/JeffreySu/WeiXinMPSDK
     </Description>
     <Copyright>Senparc Copyright © 2004~2018</Copyright>
-    <PackageTags>微信,weixin,公众号,WeChat,Senparc,盛派,SDK,C#,JSSDK,微信支付,分布式,小程序,Cache,Redis</PackageTags>
+    <PackageTags>微信,weixin,公众号,WeChat,Senparc,盛派,SDK,C#,JSSDK,微信支付,分布式,小程序,Cache,Redis,CO2NET</PackageTags>
 
 
     <Authors>Jeffrey Su</Authors>
@@ -83,7 +83,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>..\..\BuildOutPut</OutputPath>
+    <OutputPath>..\BuildOutPut</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
 
@@ -91,7 +91,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>..\..\BuildOutPut</OutputPath>
     <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-    <DocumentationFile>..\..\BuildOutPut\Senparc.CO2NET.Cache.Redis.XML</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.Cache.Redis.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
@@ -100,29 +100,29 @@
 
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
-    <OutputPath>..\..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\BuildOutPut\net45\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\net45\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
-    <OutputPath>..\..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\BuildOutPut\net461\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\net461\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <OutputPath>..\..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.0|AnyCPU'">
-    <OutputPath>..\..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\BuildOutPut\netcoreapp2.0\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netcoreapp2.0\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
   </PropertyGroup>
 
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.1|AnyCPU'">
-    <OutputPath>..\..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\BuildOutPut\netcoreapp2.1\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netcoreapp2.1\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
   </PropertyGroup>
 
   <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.6|AnyCPU'">
