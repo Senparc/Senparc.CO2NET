@@ -26,3 +26,4 @@ obj/*
 /src/Senparc.CO2NET.Cache.Redis.Tests/bin/Test/netcoreapp2.1
 /src/Senparc.CO2NET.Cache.Memcached/bin/Test
 /src/Senparc.CO2NET.Tests/bin/Test/netcoreapp2.1
+/BuildOutPut
