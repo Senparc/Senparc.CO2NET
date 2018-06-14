@@ -190,7 +190,15 @@ namespace Senparc.CO2NET.Cache.Memcached
         //    get { return MemcachedContainerStrategy.Instance; }
         //}
 
-        public void InsertToCache(string key, object value)//TODO:添加Timeout参数
+
+        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
+        public void InsertToCache(string key, object value)
+        {
+            Set(key, value);
+        }
+
+
+        public void Set(string key, object value)//TODO:添加Timeout参数
         {
             if (string.IsNullOrEmpty(key) || value == null)
             {

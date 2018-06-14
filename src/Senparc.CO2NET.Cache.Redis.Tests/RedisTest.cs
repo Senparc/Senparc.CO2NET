@@ -32,14 +32,14 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
 
             var dt = DateTime.Now;
-            cacheStrategy.InsertToCache("RedisTest", new ContainerBag()
+            cacheStrategy.Set("RedisTest", new ContainerBag()
             {
                 Key = "123",
                 Name = "",// Newtonsoft.Json.JsonConvert.SerializeObject(this),
                 AddTime = dt
             });
 
-            var obj = cacheStrategy.Get("RedisTest");
+            var obj = cacheStrategy.Get<ContainerBag>("RedisTest");
             Assert.IsNotNull(obj);
             Assert.IsInstanceOfType(obj, typeof(ContainerBag));
             //Console.WriteLine(obj);
@@ -48,7 +48,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 
-            Console.WriteLine($"SetTest单条测试耗时（使用CacheWrapper)：{(DateTime.Now - dt).TotalMilliseconds}ms");
+            Console.WriteLine($"SetTest单条测试耗时：{(DateTime.Now - dt).TotalMilliseconds}ms");
         }
 
         [TestMethod]
@@ -81,7 +81,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
 
                     var dt = DateTime.Now;
-                    cacheStrategy.InsertToCache("RedisTest_" + dt.Ticks, new ContainerBag()
+                    cacheStrategy.Set("RedisTest_" + dt.Ticks, new ContainerBag()
                     {
                         Key = "123",
                         Name = "hi",
