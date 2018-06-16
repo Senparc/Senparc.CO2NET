@@ -33,7 +33,7 @@ namespace Senparc.CO2NET.Cache.Lock
             Console.WriteLine("测试Threads");
 
             List<Thread> list = new List<Thread>();
-            int[] runThreads = {0};
+            int[] runThreads = { 0 };
 
             for (int i = 0; i < 100; i++)
             {
@@ -81,18 +81,21 @@ namespace Senparc.CO2NET.Cache.Lock
             {
                 var redisConfiguration = "localhost:6379";
                 RedisManager.ConfigurationOption = redisConfiguration;
-               CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//Redis
+                CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//Redis
             }
+
+            Console.WriteLine($"使用川村策略：{CacheStrategyFactory.GetObjectCacheStrategyInstance()}");
 
             Random rnd = new Random();
             var threadsCount = 20M;
-            int sleepMillionSeconds = 100;
+            int sleepMillionSeconds = 200;//数字越大，每个线程占用时间越长，直至超时
 
             //初步估计需要重试时间
             var differentLocksCount = (2 /*appId*/* 2 /*resource*/) /* = diffrent locks count */;
             var runCycle = threadsCount / differentLocksCount /* = Run Cycle*/;
             var hopedTotalTime = runCycle * (sleepMillionSeconds + 100) /* = Hoped Total Time */;
-            var randomRetryDelay = (20 / 2) /*random retry delay*/;
+            var retryDelay = 20; /* = retryDelayCycle MillionSeconds */
+            var randomRetryDelay = (retryDelay / 2) /*random retry delay*/;
             var retryTimes = 50;// hopedTotalTime / randomRetryDelay; /* = maxium retry times */;//此数字可以调整（根据测试结果逐步缩小，可以看到会有失败的锁产生）
 
             Console.WriteLine("sleepMillionSeconds:{0}ms", sleepMillionSeconds);
@@ -101,11 +104,12 @@ namespace Senparc.CO2NET.Cache.Lock
             Console.WriteLine("hopedTotalTime:{0}ms", hopedTotalTime);
             Console.WriteLine("randomRetryDelay:{0}ms", randomRetryDelay);
             Console.WriteLine("retryTimes:{0}", retryTimes);
+            Console.WriteLine("randomLockTime（可能的Lock超时时间）:{0}ms", randomRetryDelay * retryTimes);
             Console.WriteLine("=====================");
 
             List<Thread> list = new List<Thread>();
-            int[] runThreads = {0};
-
+            int[] runThreads = { 0 };
+            DateTime dt0 = DateTime.Today;
             for (int i = 0; i < (int)threadsCount; i++)
             {
                 runThreads[0]++;
@@ -116,26 +120,29 @@ namespace Senparc.CO2NET.Cache.Lock
                     var resourceName = "Test-" + rnd.Next(0, 2);//调整这里的随机数，可以改变锁的个数
                     var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();//每次重新获取实例（因为单例模式，所以其实是同一个）
 
-                    Console.WriteLine("线程 {0} / {1} : {2} 进入，准备尝试锁。Cache实例：{3}", Thread.CurrentThread.GetHashCode(), resourceName, appId,cache.GetHashCode());
+                    Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 进入，准备尝试锁。Cache实例：{cache.GetHashCode()}");
 
                     DateTime dt1 = DateTime.Now;
-                    using (var cacheLock = cache.BeginCacheLock(resourceName, appId, (int)retryTimes, new TimeSpan(0, 0, 0, 0, 20)))
+                    using (var cacheLock = cache.BeginCacheLock(resourceName, appId, (int)retryTimes, TimeSpan.FromMilliseconds(retryDelay)))
                     {
                         var result = cacheLock.LockSuccessful
                             ? "成功"
                             : "【失败！】";
+                        result += " | TTL：" + cacheLock.GetTotalTtl(retryTimes, TimeSpan.FromMilliseconds(retryDelay)) + "ms";
 
-                        Console.WriteLine("线程 {0} / {1} : {2} 进入锁，等待时间：{3}ms，获得锁结果：{4}", Thread.CurrentThread.GetHashCode(), resourceName, appId, (DateTime.Now - dt1).TotalMilliseconds, result);
+                        Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 进入锁，等待时间：{(DateTime.Now - dt1).TotalMilliseconds} / {(DateTime.Now - dt0).TotalMilliseconds}ms，获得锁结果：{result}");
 
                         Thread.Sleep(sleepMillionSeconds);
                     }
-                    Console.WriteLine("线程 {0} / {1} : {2} 释放锁（{3}ms）", Thread.CurrentThread.GetHashCode(), resourceName, appId, (DateTime.Now - dt1).TotalMilliseconds);
+                    Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 释放锁（{(DateTime.Now - dt1).TotalMilliseconds}ms）");
                     runThreads[0]--;
                 });
                 list.Add(thread);
             }
 
+            
             var dtAll1 = DateTime.Now;
+            dt0 = DateTime.Now;
 
             list.ForEach(z => z.Start());
 
