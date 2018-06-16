@@ -19,6 +19,7 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 #endregion Apache License Version 2.0
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Senparc.CO2NET.Cache.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,11 +32,40 @@ namespace Senparc.CO2NET.Cache.Tests
     public class CacheStrategyFactoryTests
     {
         [TestMethod()]
-        public void RegisterContainerCacheStrategyTest()
+        public void RegisterObjectCacheStrategyTest()
         {
-            Console.WriteLine("不注册");
+            //Console.WriteLine("不注册");
 
-            // {
+
+            {
+                //不注册，使用默认
+
+                //还原默认缓存状态
+                CacheStrategyFactory.RegisterObjectCacheStrategy(null);
+
+                var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+                //默认为本地缓存
+                Assert.IsInstanceOfType(cache, typeof(LocalObjectCacheStrategy));
+            }
+
+            {
+                //注册指定缓存
+
+                CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
+
+                var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+                Assert.IsInstanceOfType(cache, typeof(RedisObjectCacheStrategy));
+
+                CacheStrategyFactory.RegisterObjectCacheStrategy(() => LocalObjectCacheStrategy.Instance);
+                cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+                Assert.IsInstanceOfType(cache, typeof(LocalObjectCacheStrategy));
+
+                CacheStrategyFactory.RegisterObjectCacheStrategy(null);
+                cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+                Assert.IsInstanceOfType(cache, typeof(LocalObjectCacheStrategy));
+            }
+
+            //{
             //    //不注册，使用默认
             //    var c1 = TestContainer1.GetCollectionList();
             //    Console.WriteLine(c1.Count);//0

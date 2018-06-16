@@ -13,6 +13,9 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
         [TestMethod]
         public void RegisterAndGetTest()
         {
+            //»¹Ô­Ä¬ÈÏ»º´æ×´Ì¬
+            CacheStrategyFactory.RegisterObjectCacheStrategy(()=>LocalObjectCacheStrategy.Instance);
+
             //×¢²á
             CacheStrategyDomainWarehouse.RegisterCacheStrategyDomain(TestCacheStrategy.Instance);
 
