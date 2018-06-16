@@ -74,7 +74,6 @@ namespace Senparc.CO2NET.Cache
         /// <summary>
         /// 获取指定领域缓存的换存策略
         /// </summary>
-        /// <param name="extensionCacheStrategyType">实现IExtensionCacheStrategy接口的缓存策略类型</param>
         /// <param name="cacheStrategyDomain">领域缓存信息（需要为单例）CacheStrategyDomain</param>
         /// <returns></returns>
         public static IDomainExtensionCacheStrategy GetExtensionCacheStrategyInstance(ICacheStrategyDomain cacheStrategyDomain)
