@@ -72,7 +72,7 @@ namespace Senparc.CO2NET.Cache.Lock
              *             3、出现死锁；
              *             4、某线程始终无法获得锁（超时或一直运行）
              *             
-             * 注意：超时导致的失败可能是由于设置的最大等待时间现对于测试的Thread.sleep太短。
+             * 注意：超时导致的失败可能是由于设置的最大等待时间相对于测试的Thread.Sleep(sleepMillionSeconds)太短。
              */
 
             bool useRedis = true;

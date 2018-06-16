@@ -64,11 +64,12 @@ namespace Senparc.CO2NET.Cache.Memcached
         public override bool Lock(string resourceName, int retryCount, TimeSpan retryDelay)
         {
             var key = _mamcachedStrategy.GetFinalKey(resourceName);
-            var successfull = RetryLock(key, retryCount /*暂时不限制*/, retryDelay, () =>
+            var successfull = RetryLock(key, retryCount, retryDelay, () =>
             {
                 try
                 {
-                    if (_mamcachedStrategy.Cache.Store(StoreMode.Add, key, new object(), new TimeSpan(0, 0, 10)))
+                    var ttl = base.GetTotalTtl(retryCount, retryDelay);
+                    if (_mamcachedStrategy.Cache.Store(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl)))
                     {
                         return true;//取得锁 
                     }
