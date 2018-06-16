@@ -52,7 +52,7 @@ namespace Senparc.CO2NET.Cache
         /// <param name="resourceName">资源名称，即锁的标识，实际值为IBaseCacheStrategy接口中的 BeginCacheLock() 方法中的 [resourceName.key]</param>
         bool Lock(string resourceName);
 
-        /// <summary>
+                /// <summary>
         /// 开始锁，并设置重试条件
         /// </summary>
         /// <param name="resourceName">资源名称，即锁的标识，实际值为IBaseCacheStrategy接口中的 BeginCacheLock() 方法中的 [resourceName.key]</param>
@@ -68,5 +68,13 @@ namespace Senparc.CO2NET.Cache
         /// </summary>
         /// <param name="resourceName">需要释放锁的 Key，即锁的标识，实际值为IBaseCacheStrategy接口中的 BeginCacheLock() 方法中的 [resourceName.key]资源名称，和 Lock() 方法中的 resourceName 对应</param>
         void UnLock(string resourceName);
+
+        /// <summary>
+        /// 获取最长锁定时间（锁最长生命周期）
+        /// </summary>
+        /// <param name="retryCount">重试次数，</param>
+        /// <param name="retryDelay">最小锁定时间周期</param>
+        /// <returns>单位：Milliseconds，毫秒</returns>
+        double GetTotalTtl(int retryCount, TimeSpan retryDelay);
     }
 }

@@ -72,6 +72,20 @@ namespace Senparc.CO2NET.Cache
             return this;
         }
 
+        /// <summary>
+        /// 获取最长锁定时间（锁最长生命周期）
+        /// </summary>
+        /// <param name="retryCount">重试次数，</param>
+        /// <param name="retryDelay">最小锁定时间周期</param>
+        /// <returns>单位：Milliseconds，毫秒</returns>
+        public double GetTotalTtl(int retryCount, TimeSpan retryDelay)
+        {
+            var ttl = (retryDelay.TotalMilliseconds > 0 ? retryDelay.TotalMilliseconds : 10)
+                  *
+                 (retryCount > 0 ? retryCount : 10);
+            return ttl;
+        }
+
         public void Dispose()
         {
             UnLock(_resourceName);
