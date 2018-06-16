@@ -60,24 +60,35 @@ namespace Senparc.CO2NET.Tests.Helpers
         [TestMethod]
         public void AESEncryptTest()
         {
-            //加密
-            var inputBytes = Encoding.UTF8.GetBytes(encypStr);
-            var iv = Encoding.UTF8.GetBytes("SENPARC_IV;SENPA");//16字节
             var key = "SENPARC_KEY";
-            //var inputString = Convert.ToBase64String(inputBytes);
-            //Console.WriteLine($"inputString：{inputString}");
+            {
+                //加密-CBC
+                var inputBytes = Encoding.UTF8.GetBytes(encypStr);
+                var iv = Encoding.UTF8.GetBytes("SENPARC_IV;SENPA");//16字节
 
-            var encryptResult = Convert.ToBase64String(EncryptHelper.AESEncrypt(inputBytes, iv, key));
-            Console.WriteLine("Result:" + encryptResult);
-            Assert.AreEqual("Q0l9E//huAwYXzYmxMWusw==", encryptResult);
-
-            //解密
-            inputBytes = Convert.FromBase64String(encryptResult);
-            var decryptResult = Encoding.UTF8.GetString(EncryptHelper.AESDecrypt(inputBytes, iv, key));
-            Assert.AreEqual(encypStr, decryptResult);
+                var encryptResult = Convert.ToBase64String(EncryptHelper.AESEncrypt(inputBytes, iv, key));
+                Console.WriteLine("Result:" + encryptResult);
+                Assert.AreEqual("Q0l9E//huAwYXzYmxMWusw==", encryptResult);
 
 
-            //Assert.AreEqual("U2FsdGVkX1/ZyXf7WU3LYGTAwpx0U3UvGxAtS8I+EUs=", result);
+                //解密-CBC
+                inputBytes = Convert.FromBase64String(encryptResult);
+                var decryptResult = Encoding.UTF8.GetString(EncryptHelper.AESDecrypt(inputBytes, iv, key));
+                Assert.AreEqual(encypStr, decryptResult);
+
+            }
+
+            {
+                //加密-CEB
+                var encryptResult = EncryptHelper.AESEncrypt(encypStr, key);
+                Assert.AreEqual("raQCWEp5ngocSs5R8srxkg==", encryptResult);
+
+                //解密-CEB
+                var cebResult = EncryptHelper.AESDecrypt(encryptResult, key);
+                Assert.AreEqual(encypStr, cebResult);
+            }
+
+
         }
 
 

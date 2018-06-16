@@ -92,29 +92,29 @@ namespace Senparc.CO2NET.Helpers
         #region 弃用算法
 
 
-//        /// <summary>
-//        /// 签名算法
-//        /// </summary>
-//        /// <param name="str"></param>
-//        /// <returns></returns>
-//        public static string GetSha1(string str)
-//        {
-//            //建立SHA1对象
-//#if NET45
-//            SHA1 sha = new SHA1CryptoServiceProvider();
-//#else
-//            SHA1 sha = SHA1.Create();
-//#endif
+        //        /// <summary>
+        //        /// 签名算法
+        //        /// </summary>
+        //        /// <param name="str"></param>
+        //        /// <returns></returns>
+        //        public static string GetSha1(string str)
+        //        {
+        //            //建立SHA1对象
+        //#if NET45
+        //            SHA1 sha = new SHA1CryptoServiceProvider();
+        //#else
+        //            SHA1 sha = SHA1.Create();
+        //#endif
 
-//            //将mystr转换成byte[] 
-//            ASCIIEncoding enc = new ASCIIEncoding();
-//            byte[] dataToHash = enc.GetBytes(str);
-//            //Hash运算
-//            byte[] dataHashed = sha.ComputeHash(dataToHash);
-//            //将运算结果转换成string
-//            string hash = BitConverter.ToString(dataHashed).Replace("-", "");
-//            return hash;
-//        }
+        //            //将mystr转换成byte[] 
+        //            ASCIIEncoding enc = new ASCIIEncoding();
+        //            byte[] dataToHash = enc.GetBytes(str);
+        //            //Hash运算
+        //            byte[] dataHashed = sha.ComputeHash(dataToHash);
+        //            //将运算结果转换成string
+        //            string hash = BitConverter.ToString(dataHashed).Replace("-", "");
+        //            return hash;
+        //        }
 
         #endregion
 
@@ -225,7 +225,7 @@ namespace Senparc.CO2NET.Helpers
 
         #endregion
 
-        #region AES
+        #region AES - CBC
 
         /// <summary>
         /// AES加密（默认为CBC模式）
@@ -248,7 +248,7 @@ namespace Senparc.CO2NET.Helpers
             des.Key = Encoding.UTF8.GetBytes(strKey.PadRight(32));
             des.IV = iv;
 
-            Console.WriteLine(des.Mode);
+            //Console.WriteLine(des.Mode);//CBC
 
             using (MemoryStream ms = new MemoryStream())
             {
@@ -297,25 +297,60 @@ namespace Senparc.CO2NET.Helpers
                         }
 
                         decryptBytes = originalMemory.ToArray();
+
+                        #region 废弃的方法
+
                         //cs.Read(decryptBytes, 0, decryptBytes.Length);
                         ////cs.Close();
                         ////ms.Close();
+
+                        #endregion
                     }
                 }
             }
             return decryptBytes;
         }
+        #endregion
+
+
+        #region AES - CEB
+
+        /// <summary>
+        ///  AES 加密（无向量，CEB模式，秘钥长度=128）
+        /// </summary>
+        /// <param name="str">明文（待加密）</param>
+        /// <param name="key">密文</param>
+        /// <returns></returns>
+        public static string AESEncrypt(string str, string key)
+        {
+            if (string.IsNullOrEmpty(str)) return null;
+            Byte[] toEncryptArray = Encoding.UTF8.GetBytes(str);
+            byte[] bKey = new byte[32];
+            Array.Copy(Encoding.UTF8.GetBytes(key.PadRight(bKey.Length)), bKey, bKey.Length);
+
+            RijndaelManaged rm = new RijndaelManaged
+            {
+                Key = bKey,
+                Mode = CipherMode.ECB,
+                Padding = PaddingMode.PKCS7,
+                KeySize = 128
+            };
+
+            ICryptoTransform cTransform = rm.CreateEncryptor();
+            Byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+        }
 
         /// <summary>  
-        /// AES解密(无向量，CEB模式)  
+        /// AES 解密（无向量，CEB模式，秘钥长度=128）
         /// </summary>  
         /// <param name="data">被加密的明文（注意：为Base64编码）</param>  
         /// <param name="key">密钥</param>  
         /// <returns>明文</returns>  
-        public static string AESDecrypt(String data, String key)
+        public static string AESDecrypt(string data, string key)
         {
-            Byte[] encryptedBytes = Convert.FromBase64String(data);
-            Byte[] bKey = new Byte[32];
+            byte[] encryptedBytes = Convert.FromBase64String(data);
+            byte[] bKey = new byte[32];
             Array.Copy(Encoding.UTF8.GetBytes(key.PadRight(bKey.Length)), bKey, bKey.Length);
 
             MemoryStream mStream = new MemoryStream(encryptedBytes);
