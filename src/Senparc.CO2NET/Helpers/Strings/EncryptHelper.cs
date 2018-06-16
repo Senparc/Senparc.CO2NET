@@ -228,7 +228,7 @@ namespace Senparc.CO2NET.Helpers
         #region AES
 
         /// <summary>
-        /// AES加密
+        /// AES加密（默认为CBC模式）
         /// </summary>
         /// <param name="inputdata">输入的数据</param>
         /// <param name="iv">向量</param>
@@ -245,8 +245,11 @@ namespace Senparc.CO2NET.Helpers
 
             byte[] inputByteArray = inputdata;//得到需要加密的字节数组       
                                               //设置密钥及密钥向量
-            des.Key = Encoding.UTF8.GetBytes(strKey.Substring(0, 32));
+            des.Key = Encoding.UTF8.GetBytes(strKey.PadRight(32));
             des.IV = iv;
+
+            Console.WriteLine(des.Mode);
+
             using (MemoryStream ms = new MemoryStream())
             {
                 using (CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(), CryptoStreamMode.Write))
@@ -263,13 +266,13 @@ namespace Senparc.CO2NET.Helpers
 
 
         /// <summary>
-        /// AES解密
+        /// AES解密（默认为CBC模式）
         /// </summary>
         /// <param name="inputdata">输入的数据</param>
         /// <param name="iv">向量</param>
         /// <param name="strKey">key</param>
         /// <returns></returns>
-        public static byte[] AESDecrypt(byte[] inputdata, byte[] iv, byte[] strKey)
+        public static byte[] AESDecrypt(byte[] inputdata, byte[] iv, string strKey)
         {
 #if NET35 || NET40 || NET45
             SymmetricAlgorithm des = Rijndael.Create();
@@ -277,23 +280,34 @@ namespace Senparc.CO2NET.Helpers
             SymmetricAlgorithm des = Aes.Create();
 #endif
 
-            des.Key = strKey;//Encoding.UTF8.GetBytes(strKey);//.Substring(0, 7)
+            des.Key = Encoding.UTF8.GetBytes(strKey.PadRight(32));
             des.IV = iv;
-            byte[] decryptBytes = new byte[inputdata.Length];
+            byte[] decryptBytes = null;// new byte[inputdata.Length];
             using (MemoryStream ms = new MemoryStream(inputdata))
             {
                 using (CryptoStream cs = new CryptoStream(ms, des.CreateDecryptor(), CryptoStreamMode.Read))
                 {
-                    cs.Read(decryptBytes, 0, decryptBytes.Length);
-                    //cs.Close();
-                    //ms.Close();
+                    using (MemoryStream originalMemory = new MemoryStream())
+                    {
+                        Byte[] Buffer = new Byte[1024];
+                        Int32 readBytes = 0;
+                        while ((readBytes = cs.Read(Buffer, 0, Buffer.Length)) > 0)
+                        {
+                            originalMemory.Write(Buffer, 0, readBytes);
+                        }
+
+                        decryptBytes = originalMemory.ToArray();
+                        //cs.Read(decryptBytes, 0, decryptBytes.Length);
+                        ////cs.Close();
+                        ////ms.Close();
+                    }
                 }
             }
             return decryptBytes;
         }
 
         /// <summary>  
-        /// AES解密(无向量)  
+        /// AES解密(无向量，CEB模式)  
         /// </summary>  
         /// <param name="data">被加密的明文（注意：为Base64编码）</param>  
         /// <param name="key">密钥</param>  

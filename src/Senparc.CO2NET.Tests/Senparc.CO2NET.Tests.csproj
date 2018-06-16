@@ -20,7 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\Entities\" />
+    <Folder Include="Helpers\Extensions\" />
+    <Folder Include="Helpers\GPS\" />
+    <Folder Include="Helpers\Reflections\" />
   </ItemGroup>
 
 </Project>
