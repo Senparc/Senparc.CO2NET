@@ -212,10 +212,10 @@ namespace Senparc.CO2NET.Cache
             _cache[cacheKey] = value;
         }
 
-        public void UpdateContainerBag(string key, object bag, bool isFullKey = false)
-        {
-            Update(key, bag, isFullKey);
-        }
+        //public void UpdateContainerBag(string key, object bag, bool isFullKey = false)
+        //{
+        //    Update(key, bag, isFullKey);
+        //}
 
         #endregion
 

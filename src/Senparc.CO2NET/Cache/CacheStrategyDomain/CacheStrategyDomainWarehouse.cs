@@ -27,7 +27,6 @@ namespace Senparc.CO2NET.Cache
         /// 构造函数
         /// </summary>
         /// <param name="domainExtensionCacheStrategy">扩展缓存策略（例如RedisContainerCacheStrategy）</param>
-        /// <param name="baseObjectCacheStrategy">扩展缓存策略所使用的底层缓存策略（如RedisCacheStrategy）</param>
         public CacheStrategyDomainMappingItem(IDomainExtensionCacheStrategy domainExtensionCacheStrategy)
         {
             DomainExtensionCacheStrategy = domainExtensionCacheStrategy;
@@ -97,6 +96,12 @@ namespace Senparc.CO2NET.Cache
             mappingCollection[cacheStrategy] = mappingItem;
         }
 
+        /// <summary>
+        /// 获取领域缓存（指定特定 的IBaseObjectCacheStrategy 缓存策略对象）
+        /// </summary>
+        /// <param name="baseObjectCacheStrategy">IBaseObjectCacheStrategy 缓存策略对象</param>
+        /// <param name="cacheStrategyDomain">缓存领域</param>
+        /// <returns></returns>
         public static IDomainExtensionCacheStrategy GetDomainExtensionCacheStrategy(IBaseObjectCacheStrategy baseObjectCacheStrategy,
             ICacheStrategyDomain cacheStrategyDomain)
         {

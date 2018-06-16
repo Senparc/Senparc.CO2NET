@@ -52,7 +52,7 @@ namespace Senparc.CO2NET.Cache.Lock
             list.ForEach(z => z.Start());
             while (runThreads[0] > 0)
             {
-                Thread.Sleep(100);
+                //Thread.Sleep(100);
             }
             var dt4 = DateTime.Now;
             Console.WriteLine("Working Threads Count:{0}", 1000 * 20 / (dt4 - dt3).TotalMilliseconds);

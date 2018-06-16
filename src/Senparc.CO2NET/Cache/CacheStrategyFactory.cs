@@ -43,7 +43,11 @@ namespace Senparc.CO2NET.Cache
         public static void RegisterObjectCacheStrategy(Func<IBaseObjectCacheStrategy> func)
         {
             ObjectCacheStrateFunc = func;
-            ObjectCacheStrate = func();//提前运行一次，否则第一次运行开销比较大（400毫秒以上）
+
+            if (func!=null)
+            {
+                ObjectCacheStrate = func();//提前运行一次，否则第一次运行开销比较大（400毫秒以上）
+            }
         }
 
 

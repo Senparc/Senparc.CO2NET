@@ -63,55 +63,55 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Console.WriteLine($"EfficiencyTest总测试时间（使用CacheWrapper)：{(DateTime.Now - dt1).TotalMilliseconds}ms");
         }
 
-        [TestMethod]
-        public void ThreadsEfficiencyTest()
-        {
-            var dt1 = DateTime.Now;
-            var threadCount = 10;
-            var finishCount = 0;
-            for (int i = 0; i < threadCount; i++)
-            {
-                var thread = new Thread(() =>
-                {
-                    CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
+        //[TestMethod]
+        //public void ThreadsEfficiencyTest()
+        //{
+        //    var dt1 = DateTime.Now;
+        //    var threadCount = 10;
+        //    var finishCount = 0;
+        //    for (int i = 0; i < threadCount; i++)
+        //    {
+        //        var thread = new Thread(() =>
+        //        {
+        //            CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
 
 
-                    var dtx = DateTime.Now;
-                    var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+        //            var dtx = DateTime.Now;
+        //            var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
 
 
-                    var dt = DateTime.Now;
-                    cacheStrategy.Set("RedisTest_" + dt.Ticks, new ContainerBag()
-                    {
-                        Key = "123",
-                        Name = "hi",
-                        AddTime = dt
-                    });//37ms
+        //            var dt = DateTime.Now;
+        //            cacheStrategy.Set("RedisTest_" + dt.Ticks, new ContainerBag()
+        //            {
+        //                Key = "123",
+        //                Name = "hi",
+        //                AddTime = dt
+        //            });//37ms
 
-                    var obj = cacheStrategy.Get("RedisTest_" + dt.Ticks);//14-25ms
-                    Assert.IsNotNull(obj);
-                    Assert.IsInstanceOfType(obj, typeof(RedisValue));
-                    //Console.WriteLine(obj);
+        //            var obj = cacheStrategy.Get("RedisTest_" + dt.Ticks);//14-25ms
+        //            Assert.IsNotNull(obj);
+        //            Assert.IsInstanceOfType(obj, typeof(RedisValue));
+        //            //Console.WriteLine(obj);
 
-                    var containerBag = StackExchangeRedisExtensions.Deserialize<ContainerBag>((RedisValue)obj);//11ms
-                    Assert.IsNotNull(containerBag);
-                    Assert.AreEqual(dt.Ticks, containerBag.AddTime.Ticks);
+        //            var containerBag = StackExchangeRedisExtensions.Deserialize<ContainerBag>((RedisValue)obj);//11ms
+        //            Assert.IsNotNull(containerBag);
+        //            Assert.AreEqual(dt.Ticks, containerBag.AddTime.Ticks);
 
 
-                    Console.WriteLine($"Thread内单条测试耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+        //            Console.WriteLine($"Thread内单条测试耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
 
-                    finishCount++;
-                });
-                thread.Start();
-            }
+        //            finishCount++;
+        //        });
+        //        thread.Start();
+        //    }
 
-            while (finishCount < threadCount)
-            {
-                //等待
-            }
+        //    while (finishCount < threadCount)
+        //    {
+        //        //等待
+        //    }
 
-            Console.WriteLine($"EfficiencyTest总测试时间：{(DateTime.Now - dt1).TotalMilliseconds}ms");
-        }
+        //    Console.WriteLine($"EfficiencyTest总测试时间：{(DateTime.Now - dt1).TotalMilliseconds}ms");
+        //}
 
         [TestMethod]
         public void StackExchangeRedisExtensionsTest()

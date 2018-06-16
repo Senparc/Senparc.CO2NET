@@ -1,0 +1,39 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Senparc.CO2NET.Cache;
+using System;
+
+namespace Senparc.CO2NET.Tests.Cache.Local.Lock
+{
+    [TestClass]
+    public class LocalCacheLockTests
+    {
+        [TestMethod]
+        public void LocalCacheLockTest()
+        {
+            var resourceName = "TestLocalCacheLock";
+            var key = "test";
+            int retryCount = 10;
+            var retryDelay = TimeSpan.FromMilliseconds(20);
+
+            using (var localCacheLock = new LocalCacheLock(LocalObjectCacheStrategy.Instance, resourceName, key, retryCount, retryDelay))
+            {
+                //注意：常规情况下这里不能使用相同的 resourceName + key 组合，否则会造成死锁！！
+
+                var dt0 = DateTime.Now;
+                Console.WriteLine($"锁定开始：{dt0}");
+                while ((DateTime.Now - dt0).TotalMilliseconds < retryCount * retryDelay.TotalMilliseconds + 1000)
+                {
+                    //确保足够的过期时间
+                }
+
+                Console.WriteLine($"localCacheLock.LockSuccessful：{localCacheLock.LockSuccessful}");
+
+                using (var localCacheLock2 = new LocalCacheLock(LocalObjectCacheStrategy.Instance, resourceName, key, retryCount, retryDelay))
+                {
+                    Console.WriteLine($"localCacheLock2.LockSuccessful：{localCacheLock2.LockSuccessful}");
+                }
+
+            }
+        }
+    }
+}

@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Cache.Local\" />
+    <Folder Include="Helpers\Entities\" />
   </ItemGroup>
 
 </Project>
