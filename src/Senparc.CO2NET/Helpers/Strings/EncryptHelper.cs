@@ -295,7 +295,7 @@ namespace Senparc.CO2NET.Helpers
         /// <summary>  
         /// AES解密(无向量)  
         /// </summary>  
-        /// <param name="data">被加密的明文</param>  
+        /// <param name="data">被加密的明文（注意：为Base64编码）</param>  
         /// <param name="key">密钥</param>  
         /// <returns>明文</returns>  
         public static string AESDecrypt(String data, String key)
