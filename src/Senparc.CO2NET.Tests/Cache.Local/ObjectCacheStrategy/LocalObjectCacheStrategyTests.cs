@@ -20,9 +20,14 @@ namespace Senparc.CO2NET.Tests.Cache.Local
         [TestMethod]
         public void CacheLockTest()
         {
+            var cache = LocalObjectCacheStrategy.Instance;
+            using (var cacheLock = cache.BeginCacheLock("SenparcTest", "CacheLockTest", 1, TimeSpan.FromMilliseconds(10)))
+            {
+                //查找内存中的对象
 
+
+            }
         }
-
 
         /// <summary>
         /// 所有 BaseObjectCacheStrategy 接口测试
@@ -93,7 +98,7 @@ namespace Senparc.CO2NET.Tests.Cache.Local
             var removedRessult = cache.Get<TestCustomObject>(objKey);
             Assert.IsNull(removedRessult);
 
-           var newCount = cache.GetCount();
+            var newCount = cache.GetCount();
             Assert.AreEqual(count - 2, newCount);//移除两项的计数
         }
     }
