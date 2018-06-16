@@ -97,6 +97,12 @@ namespace Senparc.CO2NET.Cache
             mappingCollection[cacheStrategy] = mappingItem;
         }
 
+        /// <summary>
+        /// 获取领域缓存
+        /// </summary>
+        /// <param name="baseObjectCacheStrategy">IBaseObjectCacheStrategy 缓存策略对象</param>
+        /// <param name="cacheStrategyDomain">缓存领域</param>
+        /// <returns></returns>
         public static IDomainExtensionCacheStrategy GetDomainExtensionCacheStrategy(IBaseObjectCacheStrategy baseObjectCacheStrategy,
             ICacheStrategyDomain cacheStrategyDomain)
         {
