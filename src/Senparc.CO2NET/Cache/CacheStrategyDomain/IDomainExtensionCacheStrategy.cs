@@ -17,7 +17,7 @@ namespace Senparc.CO2NET.Cache
         ICacheStrategyDomain CacheStrategyDomain { get; }
 
         /// <summary>
-        ///  建议定义为 private
+        /// 使用的基础缓存策略
         /// </summary>
         Func<IBaseObjectCacheStrategy> BaseCacheStrategy { get; }
 
