@@ -323,22 +323,48 @@ namespace Senparc.CO2NET.Helpers
         /// <returns></returns>
         public static string AESEncrypt(string str, string key)
         {
-            if (string.IsNullOrEmpty(str)) return null;
-            Byte[] toEncryptArray = Encoding.UTF8.GetBytes(str);
-            byte[] bKey = new byte[32];
-            Array.Copy(Encoding.UTF8.GetBytes(key.PadRight(bKey.Length)), bKey, bKey.Length);
+            //if (string.IsNullOrEmpty(str)) return null;
+            //Byte[] toEncryptArray = Encoding.UTF8.GetBytes(str);
+            //byte[] bKey = new byte[32];
+            //Array.Copy(Encoding.UTF8.GetBytes(key.PadRight(bKey.Length)), bKey, bKey.Length);
 
-            RijndaelManaged rm = new RijndaelManaged
+            //RijndaelManaged rm = new RijndaelManaged
+            //{
+            //    Key = bKey,
+            //    Mode = CipherMode.ECB,
+            //    Padding = PaddingMode.PKCS7,
+            //    KeySize = 128
+            //};
+
+            //ICryptoTransform cTransform = rm.CreateEncryptor();
+            //Byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+            //return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+
+#if NET35 || NET40 || NET45
+            SymmetricAlgorithm des = Rijndael.Create();
+#else
+            SymmetricAlgorithm des = Aes.Create();
+#endif
+
+            byte[] inputByteArray = Encoding.UTF8.GetBytes(str);
+            des.Key = Encoding.UTF8.GetBytes(key.PadRight(32));
+            des.Mode = CipherMode.ECB;
+            des.Padding = PaddingMode.PKCS7;
+            des.KeySize = 128;
+
+            using (MemoryStream ms = new MemoryStream())
             {
-                Key = bKey,
-                Mode = CipherMode.ECB,
-                Padding = PaddingMode.PKCS7,
-                KeySize = 128
-            };
+                using (CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(inputByteArray, 0, inputByteArray.Length);
+                    cs.FlushFinalBlock();
+                    byte[] cipherBytes = ms.ToArray();//得到加密后的字节数组   
+                    //cs.Close();
+                    //ms.Close();
+                    return Convert.ToBase64String(cipherBytes);
+                }
+            }
 
-            ICryptoTransform cTransform = rm.CreateEncryptor();
-            Byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
         }
 
         /// <summary>  
