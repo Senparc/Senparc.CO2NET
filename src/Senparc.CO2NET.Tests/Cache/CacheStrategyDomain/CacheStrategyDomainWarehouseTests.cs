@@ -17,7 +17,7 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
             CacheStrategyFactory.RegisterObjectCacheStrategy(()=>LocalObjectCacheStrategy.Instance);
 
             //×¢²á
-            CacheStrategyDomainWarehouse.RegisterCacheStrategyDomain(TestCacheStrategy.Instance);
+            CacheStrategyDomainWarehouse.RegisterCacheStrategyDomain(TestExtensionCacheStrategy.Instance);
 
             //»ñÈ¡
 
@@ -26,7 +26,7 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
             var testCacheStrategy = CacheStrategyDomainWarehouse
                 .GetDomainExtensionCacheStrategy(objectCache, new TestCacheDomain());
 
-            Assert.IsInstanceOfType(testCacheStrategy, typeof(TestCacheStrategy));
+            Assert.IsInstanceOfType(testCacheStrategy, typeof(TestExtensionCacheStrategy));
 
             var baseCache = testCacheStrategy.BaseCacheStrategy();
             Assert.IsInstanceOfType(baseCache, objectCache.GetType());
@@ -37,7 +37,7 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
             baseCache.Set("TestCache", testStr);
 
             //¶ÁÈ¡
-            var result = (testCacheStrategy as TestCacheStrategy).GetTestCache("TestCache");
+            var result = (testCacheStrategy as TestExtensionCacheStrategy).GetTestCache("TestCache");
             Assert.AreEqual(testStr, result);
         }
     }

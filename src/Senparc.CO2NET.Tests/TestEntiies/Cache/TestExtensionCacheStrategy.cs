@@ -8,19 +8,19 @@ namespace Senparc.CO2NET.Tests.TestEntiies
     /// <summary>
     /// 测试用的扩展缓存策略（默认使用本地缓存，可以修改）
     /// </summary>
-    public class TestCacheStrategy : IDomainExtensionCacheStrategy
+    public class TestExtensionCacheStrategy : IDomainExtensionCacheStrategy
     {
         #region 单例
 
         ///<summary>
         /// LocalCacheStrategy的构造函数
         ///</summary>
-        TestCacheStrategy()
+        TestExtensionCacheStrategy()
         {
         }
 
         //静态LocalCacheStrategy
-        public static TestCacheStrategy Instance
+        public static TestExtensionCacheStrategy Instance
         {
             get
             {
@@ -35,7 +35,7 @@ namespace Senparc.CO2NET.Tests.TestEntiies
             {
             }
             //将instance设为一个初始化的LocalCacheStrategy新实例
-            internal static readonly TestCacheStrategy instance = new TestCacheStrategy();
+            internal static readonly TestExtensionCacheStrategy instance = new TestExtensionCacheStrategy();
         }
 
 
@@ -46,7 +46,7 @@ namespace Senparc.CO2NET.Tests.TestEntiies
         public ICacheStrategyDomain CacheStrategyDomain => new TestCacheDomain();
 
         //所使用的基础缓存策略（也可以在委托内动态调整，但是不建议。）
-        public Func<IBaseObjectCacheStrategy> BaseCacheStrategy => 
+        public Func<IBaseObjectCacheStrategy> BaseCacheStrategy =>
             () => LocalObjectCacheStrategy.Instance;//默认使用本地缓存
 
         /// <summary>
