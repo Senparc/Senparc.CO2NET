@@ -15,6 +15,7 @@ namespace Senparc.CO2NET.Tests.Helpers
             Assert.IsNotNull(stream);
             Assert.IsTrue(stream.Length > 0);
             Console.WriteLine(stream.Length);
+            Assert.AreEqual(117025, stream.Length);//只对当前Logo.jpg有效
         }
     }
 }
