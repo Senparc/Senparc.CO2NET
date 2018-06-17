@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Senparc.CO2NET.Tests.TestEntiies
+namespace Senparc.CO2NET.Tests.TestEntities
 {
     /// <summary>
     /// 测试用的扩展缓存策略（默认使用本地缓存，可以修改）

@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Cache;
-using Senparc.CO2NET.Tests.TestEntiies;
+using Senparc.CO2NET.Tests.TestEntities;
 using System;
 
 namespace Senparc.CO2NET.Tests.Cache.Local

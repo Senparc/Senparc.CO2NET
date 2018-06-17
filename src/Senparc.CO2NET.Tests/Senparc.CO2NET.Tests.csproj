@@ -20,8 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\Extensions\" />
-    <Folder Include="Helpers\GPS\" />
     <Folder Include="Helpers\Reflections\" />
   </ItemGroup>
 

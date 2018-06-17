@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Senparc.CO2NET.Tests.TestEntiies
+namespace Senparc.CO2NET.Tests.TestEntities
 {
     /// <summary>
     /// 测试用的自定义对象
