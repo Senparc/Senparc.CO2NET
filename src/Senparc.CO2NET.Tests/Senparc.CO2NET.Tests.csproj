@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\Reflections\" />
+    <Folder Include="Helpers\新文件夹\" />
   </ItemGroup>
 
 </Project>
