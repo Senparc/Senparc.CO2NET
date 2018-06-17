@@ -12,17 +12,21 @@ namespace Senparc.CO2NET.Tests.Helpers
         public void CreateInstanceTest()
         {
             var obj = ReflectionHelper.CreateInstance<TestCustomObject>("Senparc.CO2NET.Tests.TestEntities.TestCustomObject", "Senparc.CO2NET.Tests");
-            Assert.IsNull(obj);
+            Assert.IsNotNull(obj);
             Assert.IsInstanceOfType(obj, typeof(TestCustomObject));
+            Assert.AreEqual(DateTime.Today, (obj as TestCustomObject).AddTime.Date);
         }
 
         [TestMethod]
         public void CreateInstanceTest2()
         {
             var obj = ReflectionHelper.CreateInstance<TestCustomObject>("Senparc.CO2NET.Tests", "Senparc.CO2NET.Tests.TestEntities", "TestCustomObject");
-            Assert.IsNull(obj);
+            Assert.IsNotNull(obj);
             Assert.IsInstanceOfType(obj, typeof(TestCustomObject));
+            Assert.AreEqual(DateTime.Today, (obj as TestCustomObject).AddTime.Date);
         }
+
+
 
     }
 }
