@@ -47,7 +47,7 @@ namespace Senparc.CO2NET.Helpers
     public static class GoogleMapHelper
     {
         /// <summary>
-        /// 获取谷歌今天静态地图Url。API介绍：https://developers.google.com/maps/documentation/staticmaps/?hl=zh-CN
+        /// 获取谷歌静态地图Url。API介绍：https://developers.google.com/maps/documentation/staticmaps/?hl=zh-CN
         /// </summary>
         /// <returns></returns>
         public static string GetGoogleStaticMap(int scale,  IList<GoogleMapMarkers> markersList, string size = "640x640")
