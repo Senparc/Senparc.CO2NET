@@ -6,7 +6,7 @@ using Senparc.CO2NET.Helpers.Serializers;
 namespace Senparc.CO2NET.Tests.Helpers
 {
     [TestClass]
-    public class SerializerHelperTests
+    public partial class SerializerHelperTests
     {
         [TestMethod]
         public void DecodeUnicodeTest()
@@ -19,6 +19,10 @@ namespace Senparc.CO2NET.Tests.Helpers
             Assert.IsTrue(result.Length > 0);
 
             //TODO:需要更多条件的测试内容
+
+            //TODO:有重写方法需要测试
         }
+
+
     }
 }
