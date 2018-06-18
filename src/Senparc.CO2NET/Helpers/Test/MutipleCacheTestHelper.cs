@@ -62,17 +62,18 @@ namespace Senparc.CO2NET.Helpers
             foreach (var cacheType in cacheTypes)
             {
                 var assabmleName = cacheType == CacheType.Local
-                    ? "Senparc.Weixin"
-                    : "Senparc.Weixin.Cache." + cacheType.ToString();
+                    ? "Senparc.CO2NET"
+                    : "Senparc.CO2NET.Cache." + cacheType.ToString();
 
                 var nameSpace = cacheType == CacheType.Local
-                                    ? "Senparc.Weixin.Cache"
-                                    : "Senparc.Weixin.Cache." + cacheType.ToString();
+                                    ? "Senparc.CO2NET.Cache"
+                                    : "Senparc.CO2NET.Cache." + cacheType.ToString();
 
                 var className = cacheType.ToString() + "ObjectCacheStrategy";
 
-                var cacheInstance = ReflectionHelper.CreateInstance<IBaseObjectCacheStrategy>(assabmleName, nameSpace,
-                    className);
+
+                var cacheInstance = ReflectionHelper.GetStaticMember(assabmleName, nameSpace,
+                    className, "Instance"/*获取单例的属性*/) as IBaseObjectCacheStrategy;
 
                 cacheStrategies.Add(cacheInstance);
 

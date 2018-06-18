@@ -17,6 +17,8 @@ namespace Senparc.CO2NET.Tests.TestEntities
         ///</summary>
         TestExtensionCacheStrategy()
         {
+            //向底层缓存注册当前缓存策略
+            CacheStrategyDomainWarehouse.RegisterCacheStrategyDomain(this);
         }
 
         //静态LocalCacheStrategy
