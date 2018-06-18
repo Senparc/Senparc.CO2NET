@@ -46,10 +46,10 @@ using System.Text;
 
 namespace Senparc.CO2NET.CacheUtility
 {
-    /// <summary>
-    /// 缓存工具类
-    /// </summary>
-    public class CacheUtility
-    {
-    }
+    ///// <summary>
+    ///// 缓存工具类
+    ///// </summary>
+    //public class CacheUtility
+    //{
+    //}
 }
