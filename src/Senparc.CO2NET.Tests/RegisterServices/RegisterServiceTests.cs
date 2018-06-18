@@ -18,7 +18,7 @@ namespace Senparc.CO2NET.Tests.RegisterServices
             Senparc.CO2NET.Config.IsDebug = !isDebug;//故意换成相反值
 
             var mockEnv = new Mock<IHostingEnvironment>();
-            mockEnv.Setup(z => z.ContentRootPath).Returns(() =>Path.GetFullPath("..\\..\\..\\"));
+            mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath );
             RegisterService.Start(mockEnv.Object, isDebug);
 
             Console.WriteLine(Senparc.CO2NET.Config.RootDictionaryPath);

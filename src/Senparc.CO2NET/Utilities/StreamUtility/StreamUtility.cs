@@ -42,7 +42,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Senparc.CO2NET.StreamUtility
+namespace Senparc.CO2NET.Utilities
 {
     /// <summary>
     /// 流工具类

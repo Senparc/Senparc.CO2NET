@@ -51,7 +51,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace Senparc.CO2NET.XmlUtility
+namespace Senparc.CO2NET.Utilities
 {
     /// <summary>
     /// XML 工具类
@@ -78,7 +78,7 @@ namespace Senparc.CO2NET.XmlUtility
             }
             catch (Exception e)
             {
-
+                Console.WriteLine(e.Message);
                 return null;
             }
         }

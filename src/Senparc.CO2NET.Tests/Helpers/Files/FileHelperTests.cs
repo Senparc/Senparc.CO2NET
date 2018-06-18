@@ -11,7 +11,7 @@ namespace Senparc.CO2NET.Tests.Helpers
         [TestMethod]
         public void GetFileStreamTest()
         {
-            var fileName = "..\\..\\..\\TestEntities\\Logo.jpg";
+            var fileName = UnitTestHelper.RootPath + "TestEntities\\Logo.jpg";
             var stream = FileHelper.GetFileStream(fileName);
             Assert.IsNotNull(stream);
             Assert.IsTrue(stream.Length > 0);
@@ -23,7 +23,7 @@ namespace Senparc.CO2NET.Tests.Helpers
         public void DownLoadFileFromUrlTest()
         {
             var url = "https://sdk.weixin.senparc.com//images/v2/ewm_01.png";
-            var savePath = $"..\\..\\..\\TestEntities\\download-{DateTime.Now.ToString("yyyyMMdd-HHmmss")}.jpg";
+            var savePath = UnitTestHelper.RootPath + $"TestEntities\\download-{DateTime.Now.ToString("yyyyMMdd-HHmmss")}.jpg";
 
             FileHelper.DownLoadFileFromUrl(url, savePath);
 
