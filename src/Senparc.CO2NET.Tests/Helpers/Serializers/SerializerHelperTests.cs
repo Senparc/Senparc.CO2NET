@@ -11,7 +11,7 @@ namespace Senparc.CO2NET.Tests.Helpers
         [TestMethod]
         public void DecodeUnicodeTest()
         {
-            var input = "\u7B2C01\u96C6";
+            var input = "\\u7B2C01\\u96C6";
             var result = SerializerHelper.DecodeUnicode(input);
             
             Console.WriteLine(result);
