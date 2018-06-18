@@ -7,10 +7,11 @@ using Senparc.CO2NET.Helpers.Serializers;
 
 namespace Senparc.CO2NET.Tests.Helpers
 {
-    public partial class SerializerHelperTests
+    [TestClass]
+    public  class SerializerHelperJsonTests
     {
-        #region 微信JSON的忽略null、特定值值、特定属性测试
-        [TestMethod()]
+        #region 复杂条件下的序列化测试：忽略null、特定值值、特定属性测试（微信接口中尤其重要）
+        [TestMethod]
         public void GetJsonStringTest_Null()
         {
             var obj =
@@ -37,7 +38,7 @@ namespace Senparc.CO2NET.Tests.Helpers
 
             {
                 //不进行任何设置，返回原始JSON
-                var json = SerializerHelper.GetJsonString(obj, jsonSetting:null);
+                var json = SerializerHelper.GetJsonString(obj, jsonSetting: null);
                 Console.WriteLine(json);
                 var exceptedJson = "{\"X\":{\"A\":\"Jeffrey\",\"B\":31,\"C\":null,\"ElementClassA\":{\"A\":\"Jeffrey\",\"B\":null,\"RootClass\":null},\"ElementClassB\":null,\"ElementClass2\":null},\"Y\":{\"O\":\"0\",\"Z\":null}}";
                 Assert.AreEqual(exceptedJson, json);
@@ -197,9 +198,77 @@ namespace Senparc.CO2NET.Tests.Helpers
         #endregion
 
 
+        #region 复杂（嵌套类型）反序列化测试
+
+        [TestMethod]
+        public void GetObjectTest()
+        {
+            var json = "{\"A\":\"Jeffrey\",\"B\":31,\"ElementClassA\":{\"A\":\"Jeffrey\"}}";
+            var result = SerializerHelper.GetObject<RootClass>(json);
+            Assert.IsNotNull(result);
+
+            Assert.AreEqual("Jeffrey", result.A);
+            Assert.AreEqual(31, result.B);
+            Assert.IsNotNull(result.ElementClassA);
+            Assert.AreEqual("Jeffrey", result.ElementClassA.A);
+            Assert.IsNull(result.ElementClassA.B);
+            Assert.IsNull(result.ElementClassB);
+            Assert.IsNull(result.ElementClass2);
+        }
+
+        #endregion
+
+
+        #region 简单序列化/反序列化测试
+
+        [TestMethod]
+        public void Simple_GetJsonStringTest()
+        {
+            var data = new Data()
+            {
+                Id = 1,
+                Name = "Senparc",
+                DateTime = new DateTime(2018, 6, 18, 14, 50, 30, 897, DateTimeKind.Local)
+            };
+            string json = SerializerHelper.GetJsonString(data);
+            Console.WriteLine(json);
+            Assert.AreEqual("{\"Id\":1,\"Name\":\"Senparc\",\"DateTime\":\"2018-06-18T14:50:30.897+08:00\"}", json);
+        }
+
+
+        [TestMethod]
+        public void Simple_GetObjectTest()
+        {
+            var data = new Data()
+            {
+                Id = 1,
+                Name = "Senparc",
+                DateTime = new DateTime(2018, 6, 18, 14, 50, 30, 897, DateTimeKind.Local)
+            };
+            string json = "{\"Id\":1,\"Name\":\"Senparc\",\"DateTime\":\"2018-06-18T14:50:30.897+08:00\"}";
+                var obj = SerializerHelper.GetObject<Data>(json);
+
+            Assert.IsNotNull(obj);
+            Assert.AreEqual(1, obj.Id);
+            Assert.AreEqual("Senparc", obj.Name);
+            Assert.AreEqual(new DateTime(2018, 6, 18, 14, 50, 30, 897, DateTimeKind.Local), obj.DateTime);
+        }
+
+
+        [Serializable]
+        public class Data
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public DateTime DateTime { get; set; }
+        }
+
+
+        #endregion
+
         #region ExpandoObject类型转换测试
 
-        [TestMethod()]
+        [TestMethod]
         public void GetJsonStringTest_Expando()
         {
             dynamic test = new ExpandoObject();
@@ -216,81 +285,5 @@ namespace Senparc.CO2NET.Tests.Helpers
         }
 
         #endregion
-
-
-        #region 常规序列化、反序列化
-
-        [Serializable]
-        public class Data
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-        }
-
-        [TestMethod()]
-        public void GetJsonStringTest()
-        {
-            var data = new Data()
-            {
-                Id = 1,
-                Name = "Senparc"
-            };
-            string json = SerializerHelper.GetJsonString(data);
-            Assert.AreEqual("{\"Id\":1,\"Name\":\"Senparc\"}", json);
-            Console.WriteLine(json);
-        }
-
-
-        #endregion
-
-        [TestMethod()]
-        public void GetObjectTest()
-        {
-            string json = "{\"Id\":1,\"Name\":\"Senparc\"}";
-            Data data = SerializerHelper.GetObject<Data>(json);
-
-            Assert.AreEqual(1, data.Id);
-            Assert.AreEqual("Senparc", data.Name);
-        }
-
-        #region JsonSetting 测试
-
-        [Serializable]
-        public class WeixinData
-        {
-            public int Id { get; set; }
-            public string UserName { get; set; }
-            public string Note { get; set; }
-            public string Sign { get; set; }
-            public Sex Sex { get; set; }
-        }
-
-
-        [TestMethod]
-        public void JsonSettingTest()
-        {
-            var weixinData = new WeixinData()
-            {
-                Id = 1,
-                UserName = "JeffreySu",
-                Note = null,
-                Sign = null,
-                Sex = Sex.男
-            };
-
-            //string json = js.GetJsonString(weixinData);
-            //Console.WriteLine(json);
-
-            //JsonSetting jsonSetting = new JsonSetting(true);
-            //string json2 = js.GetJsonString(weixinData, jsonSetting);
-            //Console.WriteLine(json2);
-
-            JsonSetting jsonSetting3 = new JsonSetting(true, new List<string>() { "Note" });
-            string json3 = SerializerHelper.GetJsonString(weixinData, jsonSetting3);
-            Console.WriteLine(json3);
-        }
-
-        #endregion
-
     }
 }
