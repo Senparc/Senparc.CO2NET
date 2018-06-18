@@ -78,7 +78,7 @@ namespace Senparc.CO2NET.Utilities
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(e);
                 return null;
             }
         }
