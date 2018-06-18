@@ -42,6 +42,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Text;
 #if NET35 || NET40 || NET45
 using System.Web.Script.Serialization;
 #else
@@ -56,50 +57,7 @@ namespace Senparc.CO2NET.Helpers
     /// </summary>
     public static class SerializerHelper
     {
-        /// <summary>
-        /// unicode解码
-        /// </summary>
-        /// <param name="match"></param>
-        /// <returns></returns>
-        public static string DecodeUnicode(string str)
-        {
-            string outStr = "";
-            if (!string.IsNullOrEmpty(str))
-            {
-                string[] strlist = str.Replace("\\", "").Split('u');
-                try
-                {
-                    for (int i = 1; i < strlist.Length; i++)
-                    {
-                        //将unicode字符转为10进制整数，然后转为char中文字符
-                        outStr += (char)int.Parse(strlist[i], System.Globalization.NumberStyles.HexNumber);
-                    }
-                }
-                catch (FormatException ex)
-                {
-                    outStr = ex.Message;
-                }
-            }
-            return outStr;
-        }
-
-        /// <summary>
-        /// unicode解码
-        /// </summary>
-        /// <param name="match"></param>
-        /// <returns></returns>
-        public static string DecodeUnicode(Match match)
-        {
-            //Unicode码对照表：http://www.cnblogs.com/whiteyun/archive/2010/07/06/1772218.html
-
-            if (!match.Success)
-            {
-                return null;
-            }
-
-            char outStr = (char)int.Parse(match.Value.Remove(0, 2), NumberStyles.HexNumber);
-            return new string(outStr, 1);
-        }
+        #region JSON
 
         /// <summary>
         /// 将对象转为JSON字符串（进行Json输出配置）
@@ -224,5 +182,77 @@ namespace Senparc.CO2NET.Helpers
         //        #endregion
 
         //        #endregion
+
+        #endregion
+
+        #region Unicode
+
+        /// <summary>
+        /// 将字符串转为Unicode
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string EncodeUnicode(string str)
+        {
+            char[] charbuffers = str.ToCharArray();
+            byte[] buffer;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < charbuffers.Length; i++)
+            {
+                buffer = System.Text.Encoding.Unicode.GetBytes(charbuffers[i].ToString());
+                sb.Append(String.Format("\\u{0:X2}{1:X2}", buffer[1], buffer[0]));
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// unicode解码
+        /// </summary>
+        /// <param name="unicodeStr">unicode编码字符串</param>
+        /// <returns></returns>
+        public static string DecodeUnicode(string unicodeStr)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(unicodeStr))
+            {
+                string[] strlist = unicodeStr.Replace("\\", "").Split('u');
+                try
+                {
+                    for (int i = 1; i < strlist.Length; i++)
+                    {
+                        //将unicode字符转为10进制整数，然后转为char中文字符
+                        sb.Append((char)int.Parse(strlist[i], System.Globalization.NumberStyles.HexNumber));
+                    }
+                }
+                catch (FormatException ex)
+                {
+                    sb.Append("||出错：" + ex.Message);
+                }
+            }
+            return sb.ToString();
+        }
+
+
+        //TODO：需要优化Match匹配条件后，可以启用
+        ///// <summary>
+        ///// unicode解码
+        ///// </summary>
+        ///// <param name="match"></param>
+        ///// <returns></returns>
+        //public static string DecodeUnicode(Match match)
+        //{
+        //    //Unicode码对照表：http://www.cnblogs.com/whiteyun/archive/2010/07/06/1772218.html
+
+        //    if (!match.Success)
+        //    {
+        //        return null;
+        //    }
+
+        //    char outStr = (char)int.Parse(match.Value.Remove(0, 2), NumberStyles.HexNumber);
+        //    return new string(outStr, 1);
+        //}
+
+
+        #endregion
     }
 }
