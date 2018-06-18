@@ -1,5 +1,6 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.Tests.TestEntities;
 
@@ -27,6 +28,12 @@ namespace Senparc.CO2NET.Tests.Helpers
         }
 
 
-
+        [TestMethod]
+        public void CreateStaticMemberTest()
+        {
+            var obj = ReflectionHelper.GetStaticMember("Senparc.CO2NET", "Senparc.CO2NET.Cache", "LocalObjectCacheStrategy", "Instance");
+            Assert.IsNotNull(obj);
+            Assert.IsInstanceOfType(obj, typeof(LocalObjectCacheStrategy));
+        }
     }
 }
