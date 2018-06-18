@@ -18,8 +18,6 @@ namespace Senparc.CO2NET.Tests.Utilities
         [TestMethod]
         public void DeserializeTest()
         {
-
-
             var result = XmlUtility.Deserialize<TestCustomObject>(xml) as TestCustomObject;
             Assert.IsNotNull(result);
             Assert.AreEqual(666, result.Id);
