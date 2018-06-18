@@ -1,6 +1,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.MessageQueue;
+using Senparc.CO2NET.Threads;
 
 namespace Senparc.CO2NET.Tests.MessageQueue
 {
@@ -47,7 +48,7 @@ namespace Senparc.CO2NET.Tests.MessageQueue
             smq.Remove("ToRemove");
 
             //Æô¶¯Ïß³Ì
-            Threads.ThreadUtility.Register();
+            ThreadUtility.Register();
 
             while (smq.GetCount() > 0)
             {
