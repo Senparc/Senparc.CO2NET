@@ -36,7 +36,16 @@ namespace Senparc.CO2NET.Tests.Helpers
             DateTime dt1 = DateTime.Now;
 
             {
-                //不忽略任何属性（添加已经忽略特性的属性除外）
+                //不进行任何设置，返回原始JSON
+                var json = SerializerHelper.GetJsonString(obj, jsonSetting:null);
+                Console.WriteLine(json);
+                var exceptedJson = "{\"X\":{\"A\":\"Jeffrey\",\"B\":31,\"C\":null,\"ElementClassA\":{\"A\":\"Jeffrey\",\"B\":null,\"RootClass\":null},\"ElementClassB\":null,\"ElementClass2\":null},\"Y\":{\"O\":\"0\",\"Z\":null}}";
+                Assert.AreEqual(exceptedJson, json);
+            }
+
+
+            {
+                //不忽略任何属性
                 var json = SerializerHelper.GetJsonString(obj, new JsonSetting(false));
                 Console.WriteLine(json);
                 var exceptedJson = "{\"X\":{\"A\":\"Jeffrey\",\"B\":31,\"ElementClassA\":{\"A\":\"Jeffrey\",\"B\":null,\"RootClass\":null},\"ElementClassB\":null,\"ElementClass2\":null},\"Y\":{\"O\":\"0\",\"Z\":null}}";
@@ -79,7 +88,7 @@ namespace Senparc.CO2NET.Tests.Helpers
             }
 
             {
-                //忽略特定值测试（忽略）
+                //忽略特定值测试（忽略特定值，以及忽略null）
                 var obj4 = new RootClass()
                 {
                     A = "IGNORE",//会被忽略
@@ -96,7 +105,24 @@ namespace Senparc.CO2NET.Tests.Helpers
             }
 
             {
-                //忽略特定值测试（不忽略）
+                //忽略特定值测试（只忽略特定值，不忽略null）
+                var obj4 = new RootClass()
+                {
+                    A = "IGNORE",//会被忽略
+                    B = 31,
+                    C = null,
+                    ElementClassA = null,
+                    ElementClassB = null,
+                    ElementClass2 = null
+                };
+                var json = SerializerHelper.GetJsonString(obj4, new JsonSetting(false));//Z属性会被忽略
+                Console.WriteLine(json);
+                var exceptedJson = "{\"B\":31,\"ElementClassA\":null,\"ElementClassB\":null,\"ElementClass2\":null}";
+                Assert.AreEqual(exceptedJson, json);
+            }
+
+            {
+                //忽略特定值测试（不匹配，因此不忽略）
                 var obj4 = new RootClass()
                 {
                     A = "DO NET IGNORE",//不会被忽略

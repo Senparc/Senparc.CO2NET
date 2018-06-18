@@ -247,11 +247,15 @@ namespace Senparc.CO2NET.Helpers.Serializers
 
         public JsonSettingWrap(JsonSetting jsonSetting)
         {
-            if (jsonSetting == null)
+            if (jsonSetting != null)
             {
-                jsonSetting = new JsonSetting();
+                //如果为null则不进行特殊处理
+                ContractResolver = new JsonContractResolver(jsonSetting.IgnoreNulls, jsonSetting.PropertiesToIgnoreNull, jsonSetting.TypesToIgnoreNull);
             }
-            ContractResolver = new JsonContractResolver(jsonSetting.IgnoreNulls, jsonSetting.PropertiesToIgnoreNull, jsonSetting.TypesToIgnoreNull);
+            //else
+            //{
+            //    jsonSetting = new JsonSetting();
+            //}
         }
 
         /// <summary>

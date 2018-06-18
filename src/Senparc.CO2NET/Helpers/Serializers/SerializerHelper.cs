@@ -102,33 +102,20 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 将对象转为JSON字符串
+        /// 将对象转为JSON字符串（进行Json输出配置）
         /// </summary>
         /// <param name="data">需要生成JSON字符串的数据</param>
         /// <param name="jsonSetting">JSON输出设置</param>
         /// <returns></returns>
         public static string GetJsonString(object data, JsonSetting jsonSetting = null)
         {
-            string jsonString;
-#if true || NET35 || NET40 || NET45
-            //JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
-            //jsSerializer.RegisterConverters(new JavaScriptConverter[]
-            //{
-            //    new WeixinJsonConventer(data.GetType(), jsonSetting),
-            //});
-            //jsonString = jsSerializer.Serialize(data);
+
             return Newtonsoft.Json.JsonConvert.SerializeObject(data, new JsonSettingWrap(jsonSetting));
-#else
-            JsonSerializerSettings settings = new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-            };
 
-            jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(data, settings);
-#endif
-
+            //TODO：视情况启用
 
             //解码Unicode，也可以通过设置App.Config（Web.Config）设置来做，这里只是暂时弥补一下，用到的地方不多
+            string jsonString;
             MatchEvaluator evaluator = new MatchEvaluator(DecodeUnicode);
             var json = Regex.Replace(jsonString, @"\\u[0123456789abcdef]{4}", evaluator);//或：[\\u007f-\\uffff]，\对应为\u000a，但一般情况下会保持\
             return json;
