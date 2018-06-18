@@ -76,11 +76,11 @@ namespace Senparc.CO2NET.Utilities
             var userAgentHeader = httpRequest.Headers["User-Agent"];
             if (userAgentHeader.Count > 0)
             {
-                userAgent = userAgentHeader[0].ToUpper();
+                userAgent = userAgentHeader[0];//.ToUpper();
             }
 #else
             string userAgent = httpRequest.UserAgent != null
-                                ? httpRequest.UserAgent.ToUpper()
+                                ? httpRequest.UserAgent//.ToUpper()
                                 : null;
 #endif
             return userAgent;
