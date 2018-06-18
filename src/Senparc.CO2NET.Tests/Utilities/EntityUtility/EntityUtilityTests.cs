@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Senparc.CO2NET.Tests.TestEntities;
 using Senparc.CO2NET.Utilities;
 
 namespace Senparc.CO2NET.Tests.Utilities
@@ -42,6 +44,22 @@ namespace Senparc.CO2NET.Tests.Utilities
 
             var doubleResult = EntityUtility.ConvertTo<double>("1234567890123456.123456");
             Assert.AreEqual(1234567890123456.123456, doubleResult);
+
+        }
+
+        [TestMethod]
+        public void FillSystemTypeTest()
+        {
+            var obj = new TestCustomObject();
+            var prop = typeof(TestCustomObject).GetProperties().FirstOrDefault(z=>z.Name=="Id");
+            EntityUtility.FillSystemType(obj, prop, "666");
+            Assert.AreEqual(666, obj.Id);
+
+            obj.Markers = 100;
+            prop = typeof(TestCustomObject).GetProperties().FirstOrDefault(z => z.Name == "Markers");
+            EntityUtility.FillSystemType(obj, prop, "");
+            Assert.AreEqual(null, obj.Markers);
+
 
         }
     }
