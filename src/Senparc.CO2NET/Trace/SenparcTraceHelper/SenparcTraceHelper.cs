@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Senparc.CO2NET.Trace
 {
-    public class SenparcTraceHelper
-    {
+    //public class SenparcTraceHelper
+    //{
          
-    }
+    //}
 }

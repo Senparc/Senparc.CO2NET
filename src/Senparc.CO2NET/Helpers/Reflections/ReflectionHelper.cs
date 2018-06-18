@@ -79,7 +79,10 @@ namespace Senparc.CO2NET.Helpers
                 string fullName = nameSpace + "." + className;//命名空间.类型名
                                                               //此为第一种写法
 #if NETSTANDARD1_6 || NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-                object ect = Assembly.Load(new AssemblyName(assemblyName)).CreateInstance(fullName);//加载程序集，创建程序集里面的 命名空间.类型名 实例s
+                //object ect = Assembly.Load(new AssemblyName(assemblyName)).CreateInstance(fullName);//加载程序集，创建程序集里面的 命名空间.类型名 实例s
+
+                //.net core 2.1这种方法也已经支持
+                object ect = Assembly.Load(assemblyName).CreateInstance(fullName);//加载程序集，创建程序集里面的 命名空间.类型名 实例s
 #else
                 object ect = Assembly.Load(assemblyName).CreateInstance(fullName);//加载程序集，创建程序集里面的 命名空间.类型名 实例
 #endif
@@ -90,10 +93,38 @@ namespace Senparc.CO2NET.Helpers
                 //object obj = Activator.CreateInstance(o, true);//根据类型创建实例
                 //return (T)obj;//类型转换并返回
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 //发生异常，返回类型的默认值
                 return default(T);
+            }
+        }
+
+        /// <summary>
+        /// 获取静态类属性
+        /// </summary>
+        /// <typeparam name="T">要创建对象的类型</typeparam>
+        /// <param name="assemblyName">类型所在程序集名称</param>
+        /// <param name="nameSpace">类型所在命名空间</param>
+        /// <param name="className">类型名</param>
+        /// <param name="memberName">属性名称（忽略大小写）</param>
+        /// <returns></returns>
+        public static object GetStaticMember(string assemblyName, string nameSpace, string className,string memberName)
+        {
+            try
+            {
+                string fullName = nameSpace + "." + className;//命名空间.类型名
+                string path = fullName + "," + assemblyName;//命名空间.类型名,程序集
+                var type = Type.GetType(path);
+                PropertyInfo[] props = type.GetProperties();
+                var prop = props.FirstOrDefault(z => z.Name.Equals(memberName, StringComparison.OrdinalIgnoreCase));
+                return prop.GetValue(null,null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
             }
         }
     }

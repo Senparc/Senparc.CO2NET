@@ -249,7 +249,8 @@ namespace Senparc.CO2NET.Trace
         #region 日志记录
 
         /// <summary>
-        /// 记录日志（建议使用SendXXLog()方法，以符合统一的记录规则）
+        /// <para>记录日志（建议使用SendXXLog()方法，以符合统一的记录规则）</para>
+        /// <para>注意：直接调用此方法不会记录到log文件中，而是输出到系统日志中</para>
         /// </summary>
         /// <param name="message">日志内容</param>
         public static void Log(string message)

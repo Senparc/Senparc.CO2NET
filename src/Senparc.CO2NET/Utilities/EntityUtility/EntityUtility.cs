@@ -37,7 +37,7 @@ using System.Reflection;
 using System.Text;
 using Senparc.CO2NET.Helpers;
 
-namespace Senparc.CO2NET.EntityUtility
+namespace Senparc.CO2NET.Utilities
 {
     /// <summary>
     /// 实体工具类
