@@ -110,7 +110,7 @@ namespace Senparc.CO2NET.Helpers
         public static string GetJsonString(object data, JsonSetting jsonSetting = null)
         {
             string jsonString;
-#if NET35 || NET40 || NET45
+#if true || NET35 || NET40 || NET45
             //JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
             //jsSerializer.RegisterConverters(new JavaScriptConverter[]
             //{
