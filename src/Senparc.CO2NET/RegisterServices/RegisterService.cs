@@ -10,6 +10,10 @@
     修改标识：Senparc - 20180517
     修改描述：完善 .net core 注册流程
 
+    修改标识：Senparc - 20180517
+    修改描述：v0.1.1 修复 RegisterService.Start() 的 isDebug 设置始终为 true 的问题
+
+
 ----------------------------------------------------------------*/
 
 
@@ -56,7 +60,7 @@ namespace Senparc.CO2NET.RegisterServices
         public static RegisterService Start(IHostingEnvironment env,bool isDebug)
         {
             //Senparc.CO2NET SDK 配置
-            Senparc.CO2NET.Config.IsDebug = true;
+            Senparc.CO2NET.Config.IsDebug = isDebug;
 
             //提供网站根目录
             if (env.ContentRootPath != null)
