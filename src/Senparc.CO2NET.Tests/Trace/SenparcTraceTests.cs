@@ -12,7 +12,7 @@ namespace Senparc.CO2NET.Tests.Trace
     [TestClass]
     public class SenparcTraceTests
     {
-        public static string _logFilePath => Path.Combine(UnitTestHelper.RootPath, "App_Data", "SenparcTraceLog", $"SenparcTrace-{DateTime.Now.ToString("yyyyMMdd")}.log");
+        public static string LogFilePath => Path.Combine(UnitTestHelper.RootPath, "App_Data", "SenparcTraceLog", $"SenparcTrace-{DateTime.Now.ToString("yyyyMMdd")}.log");
 
 
         public SenparcTraceTests()
@@ -42,7 +42,7 @@ namespace Senparc.CO2NET.Tests.Trace
         {
             var keyword = Guid.NewGuid().ToString();//随机字符串
             SenparcTrace.SendCustomLog("标题", $"添加Log：{keyword}");
-            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(_logFilePath, "标题", keyword));
+            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, "标题", keyword));
         }
 
 
@@ -52,7 +52,7 @@ namespace Senparc.CO2NET.Tests.Trace
             var url = "http://www.senparc.com";
             var result = Guid.NewGuid().ToString();//随机字符串
             SenparcTrace.SendApiLog(url, result);
-            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(_logFilePath, url, result));
+            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, url, result));
         }
 
 
@@ -62,7 +62,7 @@ namespace Senparc.CO2NET.Tests.Trace
             var url = "http://www.senparc.com";
             var data = Guid.NewGuid().ToString();//随机字符串
             SenparcTrace.SendApiLog(url, data);
-            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(_logFilePath, url, data));
+            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, url, data));
         }
 
 
@@ -74,7 +74,7 @@ namespace Senparc.CO2NET.Tests.Trace
             var ex = new BaseException("测试异常：" + keyword);
             //Log会记录两次，第一次是在BaseException初始化的时候会调用此方法
             SenparcTrace.BaseExceptionLog(ex);
-            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(_logFilePath, "测试异常", keyword));
+            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, "测试异常", keyword));
         }
 
         [TestMethod]
@@ -85,7 +85,7 @@ namespace Senparc.CO2NET.Tests.Trace
 
             var keyword = Guid.NewGuid().ToString();//随机字符串
             SenparcTrace.SendCustomLog("测试OnLogFuncTest", keyword);
-            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(_logFilePath, keyword));
+            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, keyword));
             Assert.AreEqual(1, onlogCount);
         }
 
@@ -100,7 +100,7 @@ namespace Senparc.CO2NET.Tests.Trace
             var ex = new BaseException("测试异常：" + keyword);
             //Log会记录两次，第一次是在BaseException初始化的时候会调用此方法
             SenparcTrace.BaseExceptionLog(ex);
-            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(_logFilePath, keyword));
+            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, keyword));
             Assert.AreEqual(2, onlogCount);
         }
 

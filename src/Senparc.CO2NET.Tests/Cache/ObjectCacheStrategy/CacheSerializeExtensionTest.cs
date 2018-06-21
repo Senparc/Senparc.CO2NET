@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 
-namespace Senparc.CO2NET.Tests
+namespace Senparc.CO2NET.Tests.Cache
 {
     [TestClass]
     public class CacheSerializeExtensionTest
