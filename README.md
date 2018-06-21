@@ -11,3 +11,5 @@ Senparc.CO2NET 是一个支持 .NET Framework 和 .NET Core 的公共基础扩�
 持续更新中，预计第一个版本将于2018年6月底上线，请关注本项目进展！
 
 本项目后期将会配备完整的文档，如果大家迫不及待想要尝试，可以打开解决方案文件，参考单元测试项目（Senparc.CO2NET.Tests），每一个方法都能找到对应的用法，本项目完整指之一就是将单元测试代码覆盖率做到100%。
+
+[抢先预览（2017年6月15日版本）](http://study.163.com/course/courseLearn.htm?courseId=1004873017&share=2&shareId=400000000353002#/learn/video?lessonId=1052874494&courseId=1004873017)
