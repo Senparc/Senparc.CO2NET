@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Memcached</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Memcached</RootNamespace>
     
@@ -65,7 +65,7 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
       ======== CO2NET 移植 ========
 
       v1.0.0 重构 Memcached 缓存策略
-
+      v1.0.1 支持 CO2NET v0.1.1
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
