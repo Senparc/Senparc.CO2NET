@@ -243,7 +243,10 @@ namespace Senparc.CO2NET.Helpers.Serializers
 #if true || NET35 || NET40 || NET45
     public class JsonSettingWrap : JsonSerializerSettings
     {
-        public JsonSettingWrap() { }
+        public JsonSettingWrap() : this(null)
+        {
+
+        }
 
         public JsonSettingWrap(JsonSetting jsonSetting)
         {
