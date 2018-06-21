@@ -1,0 +1,8 @@
+language: csharp
+solution:  ./src/Senparc.CO2NET.sln
+scripts:
+  - xbuild /p:Configuration=Release ./src/Senparc.CO2NET.sln
+  
+install:
+ - nuget install Newtonsoft.Json -Version 11.0.2
+ - nuget restore ./src/Senparc.CO2NET.sln
