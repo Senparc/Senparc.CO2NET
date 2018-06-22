@@ -1,8 +1,34 @@
 language: csharp
 solution:  ./src/Senparc.CO2NET.sln
-scripts:
-  - xbuild /p:Configuration=Release ./src/Senparc.CO2NET.sln
-  
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode8.3
+      mono: none
+      dotnet: 2.1.0
+    - os: linux
+      dist: trusty
+      mono: none
+      dotnet: 2.1.0
+
 install:
- - nuget install Newtonsoft.Json -Version 11.0.2
- - nuget restore ./src/Senparc.CO2NET.sln
+  - ulimit -n 2048
+  - dotnet restore
+  - nuget restore ./src/Senparc.CO2NET.sln
+  - nuget install Newtonsoft.Json -Version 11.0.2
+script:
+  - ulimit -n 2048
+  - xbuild /p:Configuration=Release ./src/Senparc.CO2NET.sln
+#  - dotnet test ./Tests/UnitTests/UnitTests.csproj
+
+
+
+#language: csharp
+
+#solution:  ./src/Senparc.CO2NET.sln
+#scripts:
+#  - xbuild /p:Configuration=Release ./src/Senparc.CO2NET.sln
+  
+#install:
+# - nuget install Newtonsoft.Json -Version 11.0.2
+# - nuget restore ./src/Senparc.CO2NET.sln
