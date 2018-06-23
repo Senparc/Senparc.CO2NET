@@ -27,6 +27,10 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 
     创建标识：Senparc - 20160808（v4.6.0）
 
+    
+    修改标识：Senparc - 20180623
+    修改描述：v0.1.3 添加 EntityUtility.FillSystemType<>()方法对 Int32[] 和 Int64[] 的处理
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -112,8 +116,14 @@ namespace Senparc.CO2NET.Utilities
                     case "Int32":
                         setValue = value.ConvertTo<int>();
                         break;
+                    case "Int32[]":
+                        setValue = Array.ConvertAll(value.ConvertTo<string>().Split(','), int.Parse);
+                        break;
                     case "Int64":
                         setValue = value.ConvertTo<long>();
+                        break;
+                    case "Int64[]":
+                        setValue = Array.ConvertAll(value.ConvertTo<string>().Split(','), long.Parse);
                         break;
                     case "Double":
                         setValue = value.ConvertTo<double>();

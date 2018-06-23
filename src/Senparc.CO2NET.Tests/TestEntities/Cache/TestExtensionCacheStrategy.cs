@@ -60,5 +60,10 @@ namespace Senparc.CO2NET.Tests.TestEntities
         {
             return BaseCacheStrategy().Get(key).ToString();
         }
+
+        public void RegisterCacheStrategyDomain(IDomainExtensionCacheStrategy extensionCacheStrategy)
+        {
+            CacheStrategyDomainWarehouse.RegisterCacheStrategyDomain(extensionCacheStrategy);//对于可以重用的方法，可以考虑做一个基类
+        }
     }
 }
