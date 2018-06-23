@@ -15,7 +15,7 @@ matrix:
  #     dotnet: 2.1.300
 
 install:
-  - dotnet restore
+#  - dotnet restore
   - nuget restore ./src/Senparc.CO2NET.sln
   - nuget install Newtonsoft.Json -Version 11.0.2
 
