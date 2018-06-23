@@ -21,6 +21,7 @@ install:
 
 script:
   - dotnet --info
+  - cd ./src/
   - dotnet build
   # Run a new console app
   #- x#build /p:Configuration=Release ./src/Senparc.CO2NET.sln
