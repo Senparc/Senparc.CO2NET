@@ -21,8 +21,9 @@ install:
 
 script:
   - dotnet --info
+  - dotnet build
   # Run a new console app
-  - xbuild /p:Configuration=Release ./src/Senparc.CO2NET.sln
+  #- xbuild /p:Configuration=Release ./src/Senparc.CO2NET.sln
 
 #language: csharp
 
