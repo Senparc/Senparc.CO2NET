@@ -15,4 +15,4 @@ Senparc.CO2NET 是一个支持 .NET Framework 和 .NET Core 的公共基础扩�
 ## 视频预告介绍
 [抢先预览（2017年6月15日）](http://study.163.com/course/courseLearn.htm?courseId=1004873017&share=2&shareId=400000000353002#/learn/video?lessonId=1052874494&courseId=1004873017)
 
-[使用 CO2NET 初始化微信项目及普通项目（2017年6月15日）](http://study.163.com/course/courseLearn.htm?courseId=1004873017&share=2&shareId=400000000353002#/learn/video?lessonId=1052903157&courseId=1004873017)
+[使用 CO2NET 初始化微信项目及普通项目（2017年6月22日）](http://study.163.com/course/courseLearn.htm?courseId=1004873017&share=2&shareId=400000000353002#/learn/video?lessonId=1052903157&courseId=1004873017)
