@@ -15,6 +15,9 @@ namespace Senparc.CO2NET.Tests.TestEntities
         public DateTime AddTime { get; set; }
 
         public int? Markers { get; set; }
+        public long[] ArrLong { get; set; }
+        public int[] ArrInt { get; set; }
+
 
         public TestCustomObject()
         {
