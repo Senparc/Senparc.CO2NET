@@ -26,7 +26,6 @@ using System.Threading.Tasks;
 #if NETCOREAPP2_0 || NETCOREAPP2_1
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 #endif
 
 namespace Senparc.CO2NET.RegisterServices

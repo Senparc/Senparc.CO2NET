@@ -10,6 +10,9 @@
     修改标识：Senparc - 20180516
     修改描述：优化 RegisterService
 
+    修改标识：Senparc - 20180704
+    修改描述：v0.1.6.1 添加 Register.UseSenparcGlobal() 方法
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -56,6 +59,19 @@ namespace Senparc.CO2NET
         public static IRegisterService RegisterTraceLog(this IRegisterService registerService, Action action)
         {
             action();
+            return registerService;
+        }
+
+        /// <summary>
+        /// 开始 Senparc.Weixin SDK 初始化参数流程
+        /// </summary>
+        /// <param name="registerService"></param>
+        /// <param name="senparcSetting"></param>
+        /// <returns></returns>
+        public static IRegisterService UseSenparcGlobal(this IRegisterService registerService, SenparcSetting senparcSetting)
+        {
+            //Senparc.CO2NET 配置
+            Senparc.CO2NET.Config.SenparcSetting = senparcSetting;
             return registerService;
         }
     }
