@@ -75,7 +75,6 @@ namespace Senparc.CO2NET.Tests.Helpers
                 inputBytes = Convert.FromBase64String(encryptResult);
                 var decryptResult = Encoding.UTF8.GetString(EncryptHelper.AESDecrypt(inputBytes, iv, key));
                 Assert.AreEqual(encypStr, decryptResult);
-
             }
 
             {

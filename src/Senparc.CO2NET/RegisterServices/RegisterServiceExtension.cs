@@ -10,6 +10,11 @@
     修改标识：Senparc - 20180531
     修改描述：v4.22.2 修改 AddSenparcWeixinGlobalServices() 方法命名
     
+    ----  CO2NET   ----
+
+    修改标识：Senparc - 20180704
+    修改描述：v0.1.5 RegisterServiceExtension.AddSenparcGlobalServices() 方法可自动获取 SenparcSetting 全局设置
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -19,7 +24,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 #if NETCOREAPP2_0 || NETCOREAPP2_1
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 #endif
 
 namespace Senparc.CO2NET.RegisterServices
@@ -30,15 +37,21 @@ namespace Senparc.CO2NET.RegisterServices
     public static class RegisterServiceExtension
     {
 #if NETCOREAPP2_0 || NETCOREAPP2_1
-
         /// <summary>
         /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程
         /// </summary>
-        /// <param name="serviceCollection"></param>
+        /// <param name="serviceCollection">IServiceCollection</param>
+        /// <param name="configuration">IConfiguration</param>
         /// <returns></returns>
-        public static IServiceCollection AddSenparcGlobalServices(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddSenparcGlobalServices(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             RegisterService.GlobalServiceCollection = serviceCollection;
+            serviceCollection.Configure<SenparcSetting>(configuration.GetSection("SenparcSetting"));
+
+            /*
+             * 
+             */
+
             return serviceCollection;
         }
 #endif

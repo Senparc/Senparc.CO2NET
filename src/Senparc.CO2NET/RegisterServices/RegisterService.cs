@@ -54,13 +54,13 @@ namespace Senparc.CO2NET.RegisterServices
         /// 开始 Senparc.CO2NET SDK 初始化参数流程（.NET Core）
         /// </summary>
         /// <param name="env"></param>
-        /// <param name="senparcWeixinSetting"></param>
-        /// <param name="isDebug"></param>
+        /// <param name="senparcSetting"></param>
         /// <returns></returns>
-        public static RegisterService Start(IHostingEnvironment env,bool isDebug)
+        public static RegisterService Start(IHostingEnvironment env, SenparcSetting senparcSetting)
         {
             //Senparc.CO2NET SDK 配置
-            Senparc.CO2NET.Config.IsDebug = isDebug;
+            //Senparc.CO2NET.Config.IsDebug = isDebug;
+            Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
 
             //提供网站根目录
             if (env.ContentRootPath != null)
@@ -72,6 +72,17 @@ namespace Senparc.CO2NET.RegisterServices
 
             //如果不注册此线程，则AccessToken、JsTicket等都无法使用SDK自动储存和管理。
             register.RegisterThreads();//默认把线程注册好
+
+
+            try
+            {
+
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
 
             return register;
         }
