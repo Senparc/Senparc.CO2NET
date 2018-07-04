@@ -34,6 +34,9 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
     修改标识：Senparc - 201806021
     修改描述：v0.1.2 为 DefaultCacheNamespace 设置默认值
    
+    修改标识：Senparc - 20180704
+    修改描述：v0.1.4 添加 SenparcSetting 全局配置属性
+   
 ----------------------------------------------------------------*/
 
 
@@ -44,7 +47,12 @@ namespace Senparc.CO2NET
     /// </summary>
     public class Config
     {
-        private static bool _isDebug = false;//TODO:需要考虑分布式的情况，后期需要储存在缓存中
+
+        /// <summary>
+        /// <para>全局配置</para>
+        /// <para>在 startup.cs 中运行 RegisterServiceExtension.AddSenparcGlobalServices() 即可自动注入</para>
+        /// </summary>
+        public static SenparcSetting SenparcSetting { get; set; } = new SenparcSetting();//TODO:需要考虑分布式的情况，后期需要储存在缓存中
 
         /// <summary>
         /// 指定是否是Debug状态，如果是，系统会自动输出日志
@@ -53,11 +61,11 @@ namespace Senparc.CO2NET
         {
             get
             {
-                return _isDebug;
+                return SenparcSetting.IsDebug;
             }
             set
             {
-                _isDebug = value;
+                SenparcSetting.IsDebug = value;
 
                 //if (_isDebug)
                 //{
@@ -82,8 +90,6 @@ namespace Senparc.CO2NET
         public static int MaxJsonLength = int.MaxValue;//TODO:需要考虑分布式的情况，后期需要储存在缓存中
 
 
-        public static string _defaultCacheNamespace = "DefaultCache";
-
         /// <summary>
         /// 默认缓存键的第一级命名空间，默认值：DefaultCache
         /// </summary>
@@ -91,11 +97,11 @@ namespace Senparc.CO2NET
         {
             get
             {
-                return _defaultCacheNamespace ?? "DefaultCache";
+                return SenparcSetting.DefaultCacheNamespace ?? "DefaultCache";
             }
             set
             {
-                _defaultCacheNamespace = value;
+                SenparcSetting.DefaultCacheNamespace = value;
             }
         }
 

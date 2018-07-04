@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net35;net40;net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
-    <Version>0.1.3</Version>
+    <Version>0.1.5.1</Version>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -30,10 +30,12 @@
       v0.1.1 优化代码，单元测试接近100%覆盖
       v0.1.2 添加 IDomainExtensionCacheStrategy.RegisterCacheStrategyDomain() 方法
       v0.1.3 添加 EntityUtility.FillSystemType()方法对 Int32[] 和 Int64[] 的处理
+      v0.1.4 添加 SenparcSetting 全局配置属性
+      v0.1.5 RegisterServiceExtension.AddSenparcGlobalServices() 方法可自动获取 SenparcSetting 全局设置
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
-    
+
   </PropertyGroup>
 
 
@@ -166,6 +168,7 @@
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
@@ -176,6 +179,7 @@
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
