@@ -49,7 +49,12 @@ namespace Senparc.CO2NET.RegisterServices
             serviceCollection.Configure<SenparcSetting>(configuration.GetSection("SenparcSetting"));
 
             /*
-             * 
+             * appsettings.json 中添加节点：
+ //CO2NET 设置
+  "SenparcSetting": {
+    "IsDebug": true,
+    "DefaultCacheNamespace": "DefaultCache"
+  },
              */
 
             return serviceCollection;
