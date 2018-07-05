@@ -19,7 +19,7 @@ namespace Senparc.CO2NET.Tests.RegisterServices
 
             var mockEnv = new Mock<IHostingEnvironment>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath );
-            RegisterService.Start(mockEnv.Object, isDebug);
+            RegisterService.Start(mockEnv.Object, new SenparcSetting() { IsDebug = isDebug });
 
             Console.WriteLine(Senparc.CO2NET.Config.RootDictionaryPath);
             Assert.IsTrue(Senparc.CO2NET.Config.RootDictionaryPath.Length > 0);

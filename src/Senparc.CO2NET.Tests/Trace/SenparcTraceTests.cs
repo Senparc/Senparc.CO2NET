@@ -20,7 +20,7 @@ namespace Senparc.CO2NET.Tests.Trace
             //注册
             var mockEnv = new Mock<IHostingEnvironment>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
-            RegisterService.Start(mockEnv.Object, true);
+            RegisterService.Start(mockEnv.Object, new SenparcSetting() { IsDebug = true });
 
             //删除日志文件
             //File.Delete(_logFilePath);
