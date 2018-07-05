@@ -10,11 +10,12 @@ namespace Senparc.CO2NET.Tests
     //[TestClass]
     public class BaseTest
     {
-        public BaseTest() {
+        public BaseTest()
+        {
             //зЂВс
             var mockEnv = new Mock<IHostingEnvironment>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
-            RegisterService.Start(mockEnv.Object, true);
+            RegisterService.Start(mockEnv.Object, new SenparcSetting() { IsDebug = true });
         }
     }
 }

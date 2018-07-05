@@ -34,6 +34,9 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
     修改标识：Senparc - 20180602
     修改描述：v0.1.0 移植 ReflectionHelper
 
+    修改标识：Senparc - 20180602
+    修改描述：v0.1.6.2 扩展 ReflectionHelper.GetStaticMember() 方法
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -104,7 +107,6 @@ namespace Senparc.CO2NET.Helpers
         /// <summary>
         /// 获取静态类属性
         /// </summary>
-        /// <typeparam name="T">要创建对象的类型</typeparam>
         /// <param name="assemblyName">类型所在程序集名称</param>
         /// <param name="nameSpace">类型所在命名空间</param>
         /// <param name="className">类型名</param>
@@ -120,6 +122,27 @@ namespace Senparc.CO2NET.Helpers
                 PropertyInfo[] props = type.GetProperties();
                 var prop = props.FirstOrDefault(z => z.Name.Equals(memberName, StringComparison.OrdinalIgnoreCase));
                 return prop.GetValue(null,null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取静态类属性
+        /// </summary>
+        /// <param name="type">类型</param>
+        /// <param name="memberName">属性名称（忽略大小写）</param>
+        /// <returns></returns>
+        public static object GetStaticMember(Type type, string memberName)
+        {
+            try
+            {
+                PropertyInfo[] props = type.GetProperties();
+                var prop = props.FirstOrDefault(z => z.Name.Equals(memberName, StringComparison.OrdinalIgnoreCase));
+                return prop.GetValue(null, null);
             }
             catch (Exception ex)
             {

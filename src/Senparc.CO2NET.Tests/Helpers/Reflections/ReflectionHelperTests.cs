@@ -35,5 +35,15 @@ namespace Senparc.CO2NET.Tests.Helpers
             Assert.IsNotNull(obj);
             Assert.IsInstanceOfType(obj, typeof(LocalObjectCacheStrategy));
         }
+
+
+        [TestMethod]
+        public void CreateStaticMemberByTypeTest()
+        {
+            var type = typeof(LocalObjectCacheStrategy);
+            var obj = ReflectionHelper.GetStaticMember(type, "Instance");
+            Assert.IsNotNull(obj);
+            Assert.IsInstanceOfType(obj, typeof(LocalObjectCacheStrategy));
+        }
     }
 }
