@@ -53,7 +53,7 @@ namespace Senparc.CO2NET.RegisterServices
         /// <summary>
         /// 开始 Senparc.CO2NET SDK 初始化参数流程（.NET Core）
         /// </summary>
-        /// <param name="env"></param>
+        /// <param name="env">IHostingEnvironment，控制台程序可以输入null，</param>
         /// <param name="senparcSetting"></param>
         /// <returns></returns>
         public static RegisterService Start(IHostingEnvironment env, SenparcSetting senparcSetting)
@@ -63,7 +63,7 @@ namespace Senparc.CO2NET.RegisterServices
             Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
 
             //提供网站根目录
-            if (env.ContentRootPath != null)
+            if (env != null && env.ContentRootPath != null)
             {
                 Senparc.CO2NET.Config.RootDictionaryPath = env.ContentRootPath;
             }
