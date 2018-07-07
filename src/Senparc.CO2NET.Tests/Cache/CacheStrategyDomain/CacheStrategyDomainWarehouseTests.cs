@@ -2,19 +2,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Tests.TestEntities;
 using System;
+using System.Collections.Generic;
 
 namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
 {
 
 
     [TestClass]
-    public class CacheStrategyDomainWarehouseTests
+    public class CacheStrategyDomainWarehouseTests: BaseTest
     {
         [TestMethod]
         public void RegisterAndGetTest()
         {
             //还原默认缓存状态
-            CacheStrategyFactory.RegisterObjectCacheStrategy(()=>LocalObjectCacheStrategy.Instance);
+            CacheStrategyFactory.RegisterObjectCacheStrategy(() => LocalObjectCacheStrategy.Instance);
 
             //注册
             CacheStrategyDomainWarehouse.RegisterCacheStrategyDomain(TestExtensionCacheStrategy.Instance);
@@ -39,6 +40,43 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
             //读取
             var result = (testCacheStrategy as TestExtensionCacheStrategy).GetTestCache("TestCache");
             Assert.AreEqual(testStr, result);
+        }
+
+        [TestMethod]
+        public void AutoScanDomainCacheStrategyTest()
+        {
+            Config.IsDebug = true;
+            {
+                Console.WriteLine("全局自动扫描");
+                var addedTypes = CacheStrategyDomainWarehouse.AutoScanDomainCacheStrategy(true, null);
+                addedTypes.ForEach(z => Console.WriteLine(z));
+                Assert.IsTrue(addedTypes.Count > 0);
+                Assert.IsTrue(addedTypes.Contains(typeof(TestExtensionCacheStrategy)));
+                //自动扫描程序集：81个，注册总用时：205.7718ms - 598.7549ms
+            }
+            {
+                Console.WriteLine("不自动扫描");//
+                var addedTypes = CacheStrategyDomainWarehouse.AutoScanDomainCacheStrategy(false, null);
+                addedTypes.ForEach(z => Console.WriteLine(z));
+                Assert.IsTrue(addedTypes.Count == 0);
+                //注册总用时：0.0021ms
+            }
+
+            {
+                Console.WriteLine("手动指定");
+                Func<IList<IDomainExtensionCacheStrategy>> func = () =>
+                {
+                    var list = new List<IDomainExtensionCacheStrategy>();
+                    list.Add(TestExtensionCacheStrategy.Instance);
+                    return list;
+                };
+
+                var addedTypes = CacheStrategyDomainWarehouse.AutoScanDomainCacheStrategy(false, func);
+                addedTypes.ForEach(z => Console.WriteLine(z));
+                Assert.IsTrue(addedTypes.Count > 0);
+                Assert.IsTrue(addedTypes.Contains(typeof(TestExtensionCacheStrategy)));
+                //注册总用时：0.574ms
+            }
         }
     }
 }
