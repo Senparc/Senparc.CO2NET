@@ -36,6 +36,10 @@
       v0.1.6.1 添加 Register.UseSenparcGlobal() 方法
       v0.1.7 扩展 ReflectionHelper.GetStaticMember() 方法
       v0.1.8 .net core 下的 RegisterService.Start() 方法中，env 可以传入 null，以便在控制台等环境中完成注册
+      v0.1.9
+      1、RegisterService 取消 public 的构造函数，统一使用 RegisterService.Start() 初始化
+      2、重构 Register.UseSenparcGlobal() 方法，承担扩展缓存扫描功能
+      3、添加 UnregisteredDomainCacheStrategyException 异常类型
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
