@@ -18,6 +18,11 @@
 using System;
 using Senparc.CO2NET.Threads;
 using Senparc.CO2NET.RegisterServices;
+using Senparc.CO2NET.Cache;
+using System.Collections.Generic;
+using System.Linq;
+using Senparc.CO2NET.Helpers;
+using Senparc.CO2NET.Extensions;
 
 namespace Senparc.CO2NET
 {
@@ -67,11 +72,80 @@ namespace Senparc.CO2NET
         /// </summary>
         /// <param name="registerService"></param>
         /// <param name="senparcSetting"></param>
+        /// <param name="extensionCacheStrategiesFunc"><para>需要注册的扩展缓存策略</para>
+        /// <para>（LocalContainerCacheStrategy、RedisContainerCacheStrategy、MemcacheContainerCacheStrategy已经自动注册），</para>
+        /// <para>如果设置为 null（注意：不适委托返回 null，是整个委托参数为 null），则自动使用反射扫描所有可能存在的扩展缓存策略</para></param>
+        /// <param name="autoScanExtensionCacheStrategies">是否自动扫描全局的扩展缓存（会增加系统启动时间）</param>
         /// <returns></returns>
-        public static IRegisterService UseSenparcGlobal(this IRegisterService registerService, SenparcSetting senparcSetting)
+        public static IRegisterService UseSenparcGlobal(this IRegisterService registerService, SenparcSetting senparcSetting, Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null, bool autoScanExtensionCacheStrategies = false)
         {
             //Senparc.CO2NET 配置
-            Senparc.CO2NET.Config.SenparcSetting = senparcSetting;
+
+            Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
+
+
+            DateTime dt1 = DateTime.Now;
+
+            var cacheTypes = "";//所有注册的扩展缓存
+
+            if (extensionCacheStrategiesFunc != null)
+            {
+                var containerCacheStrategies = extensionCacheStrategiesFunc();
+                if (containerCacheStrategies != null)
+                {
+                    foreach (var cacheStrategy in containerCacheStrategies)
+                    {
+                        var exCache = cacheStrategy;//确保能运行到就行，会自动注册
+                        cacheTypes += "\r\n" + exCache.GetType();
+                    }
+                }
+            }
+
+            var scanTypesCount = 0;
+            if (autoScanExtensionCacheStrategies)
+            {
+                //查找所有扩展缓存
+                var types = AppDomain.CurrentDomain.GetAssemblies()
+                            .SelectMany(a =>
+                            {
+                                try
+                                {
+                                    scanTypesCount++;
+                                    var aTypes = a.GetTypes();
+                                    return aTypes.Where(t => !t.IsAbstract &&/* !officialTypes.Contains(t) &&*/ t.GetInterfaces().Contains(typeof(IDomainExtensionCacheStrategy)));
+                                }
+                                catch (Exception ex)
+                                {
+                                    Trace.SenparcTrace.SendCustomLog("UseSenparcGlobal() 自动扫描程序集异常：" + a.FullName, ex.ToString());
+                                    return new List<Type>();//不能 return null
+                                }
+                            });
+
+                if (types != null)
+                {
+                    foreach (var type in types)
+                    {
+                        if (type == null)
+                        {
+                            continue;
+                        }
+                        try
+                        {
+                            var exCache = ReflectionHelper.GetStaticMember(type, "Instance");
+                            cacheTypes += "\r\n" + type;//由于数量不多，这里使用String，不使用StringBuilder
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.SenparcTrace.BaseExceptionLog(new Exceptions.BaseException(ex.Message, ex));
+                        }
+                    }
+                }
+            }
+
+            DateTime dt2 = DateTime.Now;
+            var exCacheLog = "注册总用时：{0}ms\r\n自动扫描程序集：{1}个\r\n扩展缓存：{2}".FormatWith((dt2 - dt1).TotalMilliseconds, scanTypesCount, cacheTypes);
+            Trace.SenparcTrace.SendCustomLog("自动注册扩展缓存完成", exCacheLog);
+
             return registerService;
         }
     }
