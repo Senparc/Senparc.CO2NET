@@ -14,7 +14,8 @@
     修改描述：v0.1.1 修复 RegisterService.Start() 的 isDebug 设置始终为 true 的问题
 
     修改标识：Senparc - 20180517
-    修改描述：v0.1.9 RegisterService 取消 public 的构造函数，统一使用 RegisterService.Start() 初始化
+    修改描述：v0.1.9 1、RegisterService 取消 public 的构造函数，统一使用 RegisterService.Start() 初始化
+                     2、.net framework 和 .net core 版本统一强制在构造函数中要求提供 SenparcSetting 参数
 
 ----------------------------------------------------------------*/
 
@@ -40,6 +41,13 @@ namespace Senparc.CO2NET.RegisterServices
     /// </summary>
     public class RegisterService : IRegisterService
     {
+        //private RegisterService() : this(null) { }
+
+        private RegisterService(SenparcSetting senparcSetting)
+        {
+            //Senparc.CO2NET SDK 配置
+            Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
+        }
 
 #if NETCOREAPP2_0 || NETCOREAPP2_1
         /// <summary>
@@ -51,14 +59,6 @@ namespace Senparc.CO2NET.RegisterServices
         /// 单个实例引用全局的 ServiceCollection
         /// </summary>
         public IServiceCollection ServiceCollection => GlobalServiceCollection;
-
-        private RegisterService() : this(null) { }
-
-        private RegisterService(SenparcSetting senparcSetting)
-        {
-            //Senparc.CO2NET SDK 配置
-            Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
-        }
 
         /// <summary>
         /// 开始 Senparc.CO2NET SDK 初始化参数流程（.NET Core）
@@ -88,9 +88,9 @@ namespace Senparc.CO2NET.RegisterServices
         /// 开始 Senparc.CO2NET SDK 初始化参数流程
         /// </summary>
         /// <returns></returns>
-        public static RegisterService Start()
+        public static RegisterService Start(SenparcSetting senparcSetting)
         {
-            var register = new RegisterService();
+            var register = new RegisterService(senparcSetting);
 
             //如果不注册此线程，则AccessToken、JsTicket等都无法使用SDK自动储存和管理。
             register.RegisterThreads();//默认把线程注册好
