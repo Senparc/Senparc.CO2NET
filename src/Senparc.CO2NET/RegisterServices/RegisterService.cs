@@ -13,6 +13,8 @@
     修改标识：Senparc - 20180517
     修改描述：v0.1.1 修复 RegisterService.Start() 的 isDebug 设置始终为 true 的问题
 
+    修改标识：Senparc - 20180517
+    修改描述：v0.1.9 RegisterService 取消 public 的构造函数，统一使用 RegisterService.Start() 初始化
 
 ----------------------------------------------------------------*/
 
@@ -49,6 +51,10 @@ namespace Senparc.CO2NET.RegisterServices
         /// 单个实例引用全局的 ServiceCollection
         /// </summary>
         public IServiceCollection ServiceCollection => GlobalServiceCollection;
+
+
+        private RegisterService()
+        { }
 
         /// <summary>
         /// 开始 Senparc.CO2NET SDK 初始化参数流程（.NET Core）
