@@ -1,8 +1,17 @@
-﻿using Senparc.CO2NET.Trace;
+﻿/*----------------------------------------------------------------
+    Copyright(C) 2018 Senparc
+
+    文件名：BaseException.cs
+    文件功能描述：异常基类
+
+
+    创建标识：Senparc - 20180602
+
+----------------------------------------------------------------*/
+
+using Senparc.CO2NET.Trace;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 
 namespace Senparc.CO2NET.Exceptions
 {
@@ -15,6 +24,11 @@ namespace Senparc.CO2NET.Exceptions
     public class BaseException : Exception
 #endif
     {
+        /// <summary>
+        /// BaseException 构造函数
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="logged"></param>
         public BaseException(string message, bool logged = false)
             : this(message, null, logged)
         {

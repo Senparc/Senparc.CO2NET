@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.RegisterServices;
+using Senparc.CO2NET.Tests.TestEntities;
 using Senparc.CO2NET.Tests.Trace;
 using Senparc.CO2NET.Threads;
 using Senparc.CO2NET.Trace;
@@ -31,9 +33,9 @@ namespace Senparc.CO2NET.Tests
         }
 
         [TestMethod]
-        public void RegisterThreads()
+        public void RegisterThreadsTest()
         {
-            var registerService = new RegisterService();
+            var registerService = RegisterService.Start(null, new SenparcSetting(true));
             Register.RegisterThreads(registerService);
 
             Assert.IsTrue(ThreadUtility.AsynThreadCollection.Count > 0);
@@ -44,7 +46,7 @@ namespace Senparc.CO2NET.Tests
         [TestMethod]
         public void RegisterTraceLogTest()
         {
-            var registerService = new RegisterService();
+            var registerService = RegisterService.Start(null, new SenparcSetting(true));
             Register.RegisterTraceLog(registerService, RegisterTraceLogAction);
             Assert.IsTrue(registerTraceLogActionRun);
         }
@@ -66,5 +68,28 @@ namespace Senparc.CO2NET.Tests
 
         #endregion
 
-   }
+
+        [TestMethod]
+        public void UseSenparcGlobalTest()
+        {
+            IRegisterService registerService = RegisterService.Start(null, new SenparcSetting(true));
+            registerService.UseSenparcGlobal(true, null);
+
+            Assert.IsNotNull(Config.SenparcSetting);
+            Assert.AreEqual(true, Config.SenparcSetting.IsDebug);
+            Assert.AreEqual(true, Config.IsDebug);
+
+            //²âÊÔ»º´æ×¢²á¹ý³Ì
+
+            Func<IList<IDomainExtensionCacheStrategy>> func = () =>
+            {
+                var list = new List<IDomainExtensionCacheStrategy>();
+                list.Add(TestExtensionCacheStrategy.Instance);
+                return list;
+            };
+
+            registerService.UseSenparcGlobal(false, func);
+
+        }
+    }
 }
