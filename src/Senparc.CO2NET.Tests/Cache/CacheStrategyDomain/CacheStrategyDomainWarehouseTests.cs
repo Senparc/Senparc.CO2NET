@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Cache;
+using Senparc.CO2NET.Exceptions;
 using Senparc.CO2NET.Tests.TestEntities;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
 
 
     [TestClass]
-    public class CacheStrategyDomainWarehouseTests: BaseTest
+    public class CacheStrategyDomainWarehouseTests : BaseTest
     {
         [TestMethod]
         public void RegisterAndGetTest()
@@ -40,6 +41,36 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
             //读取
             var result = (testCacheStrategy as TestExtensionCacheStrategy).GetTestCache("TestCache");
             Assert.AreEqual(testStr, result);
+        }
+
+        [TestMethod]
+        public void ClearRegisteredDomainExtensionCacheStrategiesTest()
+        {
+            //添加领域缓存
+            CacheStrategyDomainWarehouse.RegisterCacheStrategyDomain(TestExtensionCacheStrategy.Instance);
+            var objectCache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+
+            var testCacheStrategy = CacheStrategyDomainWarehouse
+             .GetDomainExtensionCacheStrategy(objectCache, new TestCacheDomain());
+
+            Assert.IsInstanceOfType(testCacheStrategy, typeof(TestExtensionCacheStrategy));
+
+            //清除领域缓存
+            CacheStrategyDomainWarehouse.ClearRegisteredDomainExtensionCacheStrategies();
+            try
+            {
+                testCacheStrategy = CacheStrategyDomainWarehouse
+                                .GetDomainExtensionCacheStrategy(objectCache, new TestCacheDomain());
+            }
+            catch (UnregisteredDomainCacheStrategyException ex)
+            {
+                Console.WriteLine("以下异常抛出才是正确的\r\n========\r\n");
+                Console.WriteLine(ex);//未注册
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
         }
 
         [TestMethod]

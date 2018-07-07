@@ -52,9 +52,13 @@ namespace Senparc.CO2NET.RegisterServices
         /// </summary>
         public IServiceCollection ServiceCollection => GlobalServiceCollection;
 
+        private RegisterService() : this(null) { }
 
-        private RegisterService()
-        { }
+        private RegisterService(SenparcSetting senparcSetting)
+        {
+            //Senparc.CO2NET SDK 配置
+            Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
+        }
 
         /// <summary>
         /// 开始 Senparc.CO2NET SDK 初始化参数流程（.NET Core）
@@ -64,9 +68,6 @@ namespace Senparc.CO2NET.RegisterServices
         /// <returns></returns>
         public static RegisterService Start(IHostingEnvironment env, SenparcSetting senparcSetting)
         {
-            //Senparc.CO2NET SDK 配置
-            //Senparc.CO2NET.Config.IsDebug = isDebug;
-            Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
 
             //提供网站根目录
             if (env != null && env.ContentRootPath != null)
@@ -74,7 +75,7 @@ namespace Senparc.CO2NET.RegisterServices
                 Senparc.CO2NET.Config.RootDictionaryPath = env.ContentRootPath;
             }
 
-            var register = new RegisterService();
+            var register = new RegisterService(senparcSetting);
 
             //如果不注册此线程，则AccessToken、JsTicket等都无法使用SDK自动储存和管理。
             register.RegisterThreads();//默认把线程注册好

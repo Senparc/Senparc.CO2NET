@@ -8,7 +8,7 @@
     创建标识：Senparc - 20180609
 
     修改标识：Senparc - 20180707
-    修改描述：添加 AutoScanDomainCacheStrategy() 方法
+    修改描述：添加 AutoScanDomainCacheStrategy()、ClearRegisteredDomainExtensionCacheStrategies() 方法
 
 ----------------------------------------------------------------*/
 
@@ -128,10 +128,18 @@ namespace Senparc.CO2NET.Cache
             else
             {
                 //未注册，默认情况下使用本地缓存策略（应急）
-                var ex = new Exceptions.BaseException("当前扩展缓存策略没有进行注册，CacheStrategyDomain：{0}，IBaseObjectCacheStrategy：{1}".FormatWith(cacheStrategyDomain.GetType(), baseObjectCacheStrategy.GetType()));
+                var ex = new Exceptions.UnregisteredDomainCacheStrategyException(cacheStrategyDomain.GetType(), baseObjectCacheStrategy.GetType());
                 SenparcTrace.BaseExceptionLog(ex);
                 throw ex;
             }
+        }
+
+        /// <summary>
+        /// 清空所有已经祖册的领域缓存对象
+        /// </summary>
+        public static void ClearRegisteredDomainExtensionCacheStrategies()
+        {
+            _extensionCacheStrategyInstance.Clear();
         }
 
         /// <summary>
@@ -161,7 +169,7 @@ namespace Senparc.CO2NET.Cache
                         var cacheType = exCache.GetType();
                         cacheTypes += "\r\n" + cacheType;
                         addedTypes.Add(cacheType);
-                                            }
+                    }
                 }
             }
 
