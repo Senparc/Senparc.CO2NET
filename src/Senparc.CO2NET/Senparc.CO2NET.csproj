@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net35;net40;net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
-    <Version>0.1.9.1</Version>
+    <Version>0.1.11</Version>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -40,8 +40,10 @@
       1、RegisterService 取消 public 的构造函数，统一使用 RegisterService.Start() 初始化
       2、重构 Register.UseSenparcGlobal() 方法，承担扩展缓存扫描功能
       3、添加 UnregisteredDomainCacheStrategyException 异常类型
-      v0.1.9.1 .net framework 和 .net core 版本统一强制在构造函数中要求提供 SenparcSetting 参数
-    </PackageReleaseNotes>
+      4、 .net framework 和 .net core 版本统一强制在构造函数中要求提供 SenparcSetting 参数
+      v0.1.10 调整 SenparcSetting 参数，将分布式缓存连接信息归入到 SenparcSetting 中
+      v0.1.11 提供 SenparcSetting.BuildFromWebConfig() 方法
+ </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
 
@@ -125,6 +127,7 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
@@ -137,6 +140,7 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
@@ -149,6 +153,7 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
