@@ -72,7 +72,7 @@ namespace Senparc.CO2NET
 
 #if !NETCOREAPP2_0 && !NETCOREAPP2_1 && !NETSTANDARD2_0
         /// <summary>
-        /// 从 Web.Config 文件自动生成 SenparcWeixinSetting
+        /// 从 Web.Config 文件自动生成 SenparcSetting
         /// </summary>
         /// <param name="isDebug">设置微信的 Debug 状态 </param>
         /// <returns></returns>
