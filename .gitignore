@@ -32,3 +32,6 @@ obj/*
 /src/Senparc.CO2NET.Tests/App_Data/SenparcTraceLog/*.log
 /src/Senparc.CO2NET.Tests/TestEntities/download-*.jpg
 /Sample/.vs/Senparc.CO2NET.Sample/v15
+/Sample/Senparc.CO2NET.Sample.netcore/obj
+/Sample/Senparc.CO2NET.Sample.netcore/bin/Debug/netcoreapp2.1
+/Sample/.vs/config

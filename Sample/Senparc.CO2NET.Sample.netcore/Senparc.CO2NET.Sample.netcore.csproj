@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.Memcached\Senparc.CO2NET.Cache.Memcached.csproj" />
+    <ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.Redis\Senparc.CO2NET.Cache.Redis.csproj" />
+    <ProjectReference Include="..\..\src\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+  </ItemGroup>
+
+</Project>

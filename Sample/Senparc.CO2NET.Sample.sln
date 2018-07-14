@@ -21,6 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{118ECC07
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.Redis.Tests", "..\src\Senparc.CO2NET.Cache.Redis.Tests\Senparc.CO2NET.Cache.Redis.Tests.csproj", "{BE38FE20-928D-46EF-B17B-8CB4BC401389}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{A9F634CC-7806-44B9-9768-4DAE13B669D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.CO2NET.Sample.netcore", "Senparc.CO2NET.Sample.netcore\Senparc.CO2NET.Sample.netcore.csproj", "{74C776E1-B2CF-4213-8200-A3E344B8D2D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +64,12 @@ Global
 		{BE38FE20-928D-46EF-B17B-8CB4BC401389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE38FE20-928D-46EF-B17B-8CB4BC401389}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{BE38FE20-928D-46EF-B17B-8CB4BC401389}.Test|Any CPU.Build.0 = Test|Any CPU
+		{74C776E1-B2CF-4213-8200-A3E344B8D2D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74C776E1-B2CF-4213-8200-A3E344B8D2D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74C776E1-B2CF-4213-8200-A3E344B8D2D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74C776E1-B2CF-4213-8200-A3E344B8D2D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74C776E1-B2CF-4213-8200-A3E344B8D2D7}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{74C776E1-B2CF-4213-8200-A3E344B8D2D7}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +82,7 @@ Global
 		{854A4F0D-B34F-460F-BD33-4AAD4ADF97A4} = {577DD010-AF7A-4113-9AEA-4BD6244D5318}
 		{E44E024B-3C5D-4B37-8FAF-611F4DEEBA71} = {577DD010-AF7A-4113-9AEA-4BD6244D5318}
 		{BE38FE20-928D-46EF-B17B-8CB4BC401389} = {118ECC07-977C-42ED-A452-8934C8632261}
+		{74C776E1-B2CF-4213-8200-A3E344B8D2D7} = {A9F634CC-7806-44B9-9768-4DAE13B669D5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {796B18F2-8DBB-4792-881F-4C5A81E1F2DB}
