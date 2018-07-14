@@ -53,7 +53,7 @@ namespace Senparc.CO2NET.Cache.Redis
     /// <summary>
     /// Redis的Object类型容器缓存（Key为String类型）
     /// </summary>
-    public class RedisHashSetObjectCacheStrategy : RedisBaseObjectCacheStrategy
+    public class RedisHashSetObjectCacheStrategy : BaseRedisObjectCacheStrategy
     //where TContainerBag : class, IBaseContainerBag, new()
     {
         /// <summary>
@@ -271,13 +271,26 @@ namespace Senparc.CO2NET.Cache.Redis
             return count;
         }
 
+        /// <summary>
+        /// 插入对象。注意：过期时间对 HashSet 无效！
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="expiry"></param>
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
-        public override void InsertToCache(string key, object value)
+        public override void InsertToCache(string key, object value, TimeSpan? expiry = null)
         {
-            Set(key, value);
+            Set(key, value,false, expiry);
         }
 
-        public override void Set(string key, object value)
+        /// <summary>
+        /// 设置对象。注意：过期时间对 HashSet 无效！
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="isFullKey"></param>
+        /// <param name="expiry"></param>
+        public override void Set(string key, object value, bool isFullKey = false, TimeSpan? expiry = null)
         {
             if (string.IsNullOrEmpty(key) || value == null)
             {
@@ -285,7 +298,7 @@ namespace Senparc.CO2NET.Cache.Redis
             }
 
             //var cacheKey = GetFinalKey(key);
-            var hashKeyAndField = this.GetHashKeyAndField(key);
+            var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
 
             //if (value is IDictionary)
             //{
@@ -322,10 +335,17 @@ namespace Senparc.CO2NET.Cache.Redis
             _cache.HashDelete(hashKeyAndField.Key, hashKeyAndField.Field);//删除项
         }
 
-        public override void Update(string key, object value, bool isFullKey = false)
+        /// <summary>
+        /// 更新对象。注意：过期时间对 HashSet 无效！
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="isFullKey"></param>
+        /// <param name="expiry"></param>
+        public override void Update(string key, object value, bool isFullKey = false,TimeSpan? expiry = null)
         {
             //var cacheKey = GetFinalKey(key, isFullKey);
-            var hashKeyAndField = this.GetHashKeyAndField(key);
+            var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
 
             //value.Key = cacheKey;//储存最终的键
 

@@ -30,6 +30,11 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
     修改标识：Senparc - 20170205
     修改描述：v0.2.0 重构分布式锁
 
+    --CO2NET--
+
+    修改标识：Senparc - 20180714
+    修改描述：v3.0.0 改为 Key-Value 实现
+
  ----------------------------------------------------------------*/
 
 using System;
@@ -44,9 +49,9 @@ using Senparc.CO2NET.Trace;
 namespace Senparc.CO2NET.Cache.Redis
 {
     /// <summary>
-    /// Redis的Object类型容器缓存（Key为String类型）
+    /// Redis的Object类型容器缓存（Key为String类型），Key-Value 类型储存
     /// </summary>
-    public class RedisObjectCacheStrategy : RedisBaseObjectCacheStrategy
+    public class RedisObjectCacheStrategy : BaseRedisObjectCacheStrategy
     {
         #region 单例
 
@@ -148,50 +153,6 @@ namespace Senparc.CO2NET.Cache.Redis
             return default(T);
         }
 
-
-
-        //public IDictionary<string, TBag> GetAll<TBag>() where TBag : IBaseContainerBag
-        //{
-        //    #region 旧方法（没有使用Hash之前）
-
-        //    //var itemCacheKey = ContainerHelper.GetItemCacheKey(typeof(TBag), "*");   
-        //    ////var keyPattern = string.Format("*{0}", itemCacheKey);
-        //    //var keyPattern = GetFinalKey(itemCacheKey);
-
-        //    //var keys = GetServer().Keys(pattern: keyPattern);
-        //    //var dic = new Dictionary<string, TBag>();
-        //    //foreach (var redisKey in keys)
-        //    //{
-        //    //    try
-        //    //    {
-        //    //        var bag = Get(redisKey, true);
-        //    //        dic[redisKey] = (TBag)bag;
-        //    //    }
-        //    //    catch (Exception)
-        //    //    {
-
-        //    //    }
-
-        //    //}
-
-        //    #endregion
-
-        //    var key = ContainerHelper.GetItemCacheKey(typeof(TBag), "");
-        //    key = key.Substring(0, key.Length - 1);//去掉:号
-        //    key = GetFinalKey(key);//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]可配置）
-
-        //    var list = _cache.HashGetAll(key);
-        //    var dic = new Dictionary<string, TBag>();
-
-        //    foreach (var hashEntry in list)
-        //    {
-        //        var fullKey = key + ":" + hashEntry.Name;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
-        //        dic[fullKey] = StackExchangeRedisExtensions.Deserialize<TBag>(hashEntry.Value);
-        //    }
-
-        //    return dic;
-        //}
-
         /// <summary>
         /// 注意：此方法获取的object为直接储存在缓存中，序列化之后的Value
         /// </summary>
@@ -201,16 +162,10 @@ namespace Senparc.CO2NET.Cache.Redis
             var keyPrefix = GetFinalKey("");//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]可配置）
             var dic = new Dictionary<string, object>();
 
-            var hashKeys = GetServer().Keys(pattern: keyPrefix + "*");
-            foreach (var redisKey in hashKeys)
+            var keys = GetServer().Keys(pattern: keyPrefix + "*");
+            foreach (var redisKey in keys)
             {
-                var list = _cache.HashGetAll(redisKey);
-
-                foreach (var hashEntry in list)
-                {
-                    var fullKey = redisKey.ToString() + ":" + hashEntry.Name;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
-                    dic[fullKey] = hashEntry.Value.ToString().DeserializeFromCache();
-                }
+                dic[redisKey] = Get(redisKey, true);
             }
             return dic;
         }
@@ -224,34 +179,22 @@ namespace Senparc.CO2NET.Cache.Redis
         }
 
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
-        public override void InsertToCache(string key, object value)
+        public override void InsertToCache(string key, object value, TimeSpan? expiry = null)
         {
-            Set(key, value);
+            Set(key, value, false, expiry);
         }
 
-        public override void Set(string key, object value)
+        public override void Set(string key, object value, bool isFullKey = false, TimeSpan? expiry = null)
         {
             if (string.IsNullOrEmpty(key) || value == null)
             {
                 return;
             }
 
-            var cacheKey = GetFinalKey(key);
-
-            //if (value is IDictionary)
-            //{
-            //    //Dictionary类型
-            //}
-
-            //_cache.StringSet(cacheKey, value.Serialize());
-            //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, value.Serialize());
-
-
-            //StackExchangeRedisExtensions.Serialize效率非常差
-            //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
+            var cacheKey = GetFinalKey(key, isFullKey);
 
             var json = value.SerializeToCache();
-            _cache.StringSet(cacheKey, json);
+            _cache.StringSet(cacheKey, json, expiry);
         }
 
         public override void RemoveFromCache(string key, bool isFullKey = false)
@@ -267,35 +210,15 @@ namespace Senparc.CO2NET.Cache.Redis
             _cache.KeyDelete(cacheKey);//删除键
         }
 
-        public override void Update(string key, object value, bool isFullKey = false)
+        public override void Update(string key, object value, bool isFullKey = false, TimeSpan? expiry = null)
         {
-            var cacheKey = GetFinalKey(key, isFullKey);
-
-            //value.Key = cacheKey;//储存最终的键
-
-            //_cache.StringSet(cacheKey, value.Serialize());
-
-            //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, value.Serialize());
-
-            //StackExchangeRedisExtensions.Serialize效率非常差
-            //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
-            var json = value.SerializeToCache();
-            _cache.StringSet(cacheKey, json);
+            Set(key, value, isFullKey, expiry);
         }
         #endregion
 
         public override ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
             return new RedisCacheLock(this, resourceName, key, retryCount, retryDelay);
-        }
-
-
-        /// <summary>
-        /// _cache.HashGetAll()
-        /// </summary>
-        public HashEntry[] HashGetAll(string key)
-        {
-            return _cache.HashGetAll(key);
         }
     }
 }
