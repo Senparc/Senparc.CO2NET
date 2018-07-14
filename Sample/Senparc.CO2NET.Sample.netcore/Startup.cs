@@ -101,7 +101,7 @@ namespace Senparc.CO2NET.Sample.netcore
             #region 缓存配置（按需）
 
             //当同一个分布式缓存同时服务于多个网站（应用程序池）时，可以使用命名空间将其隔离（非必须）
-            register.ChangeDefaultCacheNamespace("DefaultCO2NETCache");
+            register.ChangeDefaultCacheNamespace("CO2NETCache.netcore");
 
             //配置全局使用Redis缓存（按需，独立）
             var redisConfigurationStr = senparcSetting.Value.Cache_Redis_Configuration;
@@ -206,5 +206,7 @@ namespace Senparc.CO2NET.Sample.netcore
 
             return exContainerCacheStrategies;
         }
+
+
     }
 }
