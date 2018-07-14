@@ -236,7 +236,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 
             //TODO：加了绝对过期时间就会立即失效（再次获取后为null），memcache低版本的bug
 
-            var newKey = StoreKey ? CheckExisted(cacheKey, true) : false;
+            var newKey = StoreKey ? !CheckExisted(cacheKey, true) : false;
 
             var json = value.SerializeToCache();
             if (expiry.HasValue)
