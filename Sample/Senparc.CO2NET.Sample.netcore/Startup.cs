@@ -206,5 +206,7 @@ namespace Senparc.CO2NET.Sample.netcore
 
             return exContainerCacheStrategies;
         }
+
+
     }
 }

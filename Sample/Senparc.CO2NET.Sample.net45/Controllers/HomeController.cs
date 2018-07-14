@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Senparc.CO2NET.Cache;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,6 +11,14 @@ namespace Senparc.CO2NET.Sample.net45.Controllers
     {
         public ActionResult Index()
         {
+            var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+            var count = cache.Get<int>("IndexTest");
+            count++;
+            cache.Set("IndexTest", count);
+
+            ViewData["IndexTest"] = count;
+            ViewData["CacheType"] = cache.GetType();
+
             return View();
         }
 

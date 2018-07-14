@@ -38,3 +38,4 @@ obj/*
 /Sample/packages
 /Sample/Senparc.CO2NET.Sample.net45/bin
 /Sample/Senparc.CO2NET.Sample.net45/obj/Debug
+/Sample/Senparc.CO2NET.Sample.net45/App_Data/SenparcTraceLog

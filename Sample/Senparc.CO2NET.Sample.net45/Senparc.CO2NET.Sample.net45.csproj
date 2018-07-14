@@ -211,6 +211,20 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.Memcached\Senparc.CO2NET.Cache.Memcached.csproj">
+      <Project>{e44e024b-3c5d-4b37-8faf-611f4deeba71}</Project>
+      <Name>Senparc.CO2NET.Cache.Memcached</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.Redis\Senparc.CO2NET.Cache.Redis.csproj">
+      <Project>{854a4f0d-b34f-460f-bd33-4aad4adf97a4}</Project>
+      <Name>Senparc.CO2NET.Cache.Redis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Senparc.CO2NET\Senparc.CO2NET.csproj">
+      <Project>{8b66b7fb-6918-4d21-9c31-98eacf3264c8}</Project>
+      <Name>Senparc.CO2NET</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
