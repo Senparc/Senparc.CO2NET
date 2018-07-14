@@ -36,13 +36,19 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
  ----------------------------------------------------------------*/
 
 
-
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using Senparc.CO2NET.Cache;
+#if NET35 || NET40 || NET45
+using System.Web;
+#else
+using Microsoft.Extensions.Caching.Memory;
+#endif
+
 
 namespace Senparc.CO2NET.Cache
 {
@@ -51,26 +57,63 @@ namespace Senparc.CO2NET.Cache
     /// </summary>
     public static class LocalObjectCacheHelper
     {
+#if NET35 || NET40 || NET45
         /// <summary>
         /// 所有数据集合的列表
         /// </summary>
-        public static IDictionary<string, object> LocalObjectCache { get; set; }
+        public static System.Web.Caching.Cache LocalObjectCache { get; set; }
 
         static LocalObjectCacheHelper()
         {
-            LocalObjectCache = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            LocalObjectCache = System.Web.HttpRuntime.Cache;
         }
+#else
+        /// <summary>
+        /// 所有数据集合的列表
+        /// </summary>
+        public static IMemoryCache LocalObjectCache { get; set; }
+
+        /// <summary>
+        /// .NET Core 的 MemoryCache 不提供便利所有项目的方法，因此这里做一个储存Key的地方
+        /// </summary>
+        public static Dictionary<string, DateTime> Keys { get; set; }
+
+        static LocalObjectCacheHelper()
+        {
+            Keys = new Dictionary<string, DateTime>();
+#if NETSTANDARD2_0
+            LocalObjectCache = new MemoryCache(new MemoryCacheOptions());
+#else
+            LocalObjectCache = SenparcDI.GetService<IMemoryCache>();
+#endif
+        }
+
+        /// <summary>
+        /// 获取储存Keys信息的缓存键
+        /// </summary>
+        /// <param name="cacheStrategy"></param>
+        /// <returns></returns>
+        public static string GetKeyStoreKey(BaseCacheStrategy cacheStrategy)
+        {
+            var keyStoreFinalKey = cacheStrategy.GetFinalKey("CO2NET_KEY_STORE");
+            return keyStoreFinalKey;
+        }
+#endif
     }
 
     /// <summary>
     /// 本地容器缓存策略
     /// </summary>
     public class LocalObjectCacheStrategy : BaseCacheStrategy, IBaseObjectCacheStrategy
-    //where TContainerBag : class, IBaseContainerBag, new()
     {
         #region 数据源
 
-        private IDictionary<string, object> _cache = LocalObjectCacheHelper.LocalObjectCache;
+#if NET35 || NET40 || NET45
+        private System.Web.Caching.Cache _cache = LocalObjectCacheHelper.LocalObjectCache;
+#else
+        private IMemoryCache _cache = LocalObjectCacheHelper.LocalObjectCache;
+
+#endif
 
         #endregion
 
@@ -113,27 +156,70 @@ namespace Senparc.CO2NET.Cache
         //}
 
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
-        public void InsertToCache(string key, object value)
+        public void InsertToCache(string key, object value, TimeSpan? expiry = null)
         {
-            Set(key, value);
+            Set(key, value, false, expiry);
         }
 
-        public void Set(string key, object value)
+        public void Set(string key, object value, bool isFullKey = false, TimeSpan? expiry = null)
         {
             if (key == null || value == null)
             {
                 return;
             }
 
-            var finalKey = base.GetFinalKey(key);
+            var finalKey = base.GetFinalKey(key, isFullKey);
 
+#if NET35 || NET40 || NET45
             _cache[finalKey] = value;
+#else
+            var newKey = CheckExisted(finalKey, true);
+
+            if (expiry.HasValue)
+            {
+                _cache.Set(finalKey, value, expiry.Value);
+            }
+            else
+            {
+                _cache.Set(finalKey, value);
+            }
+
+            //由于MemoryCache不支持遍历Keys，所以需要单独储存
+            if (newKey)
+            {
+                var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
+                List<string> keys;
+                if (!CheckExisted(keyStoreFinalKey, true))
+                {
+                    keys = new List<string>();
+                }
+                else
+                {
+                    keys = _cache.Get<List<string>>(keyStoreFinalKey);
+                }
+                keys.Add(finalKey);
+                _cache.Set(keyStoreFinalKey, keys);
+            }
+
+#endif
         }
 
         public void RemoveFromCache(string key, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
             _cache.Remove(cacheKey);
+
+#if !NET35 && !NET40 && !NET45
+            //移除key
+            var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
+            if (CheckExisted(keyStoreFinalKey, true))
+            {
+                var keys = _cache.Get<List<string>>(keyStoreFinalKey);
+                keys.Remove(cacheKey);
+                _cache.Set(keyStoreFinalKey, keys);
+            }
+#endif
+
         }
 
         public object Get(string key, bool isFullKey = false)
@@ -150,7 +236,12 @@ namespace Senparc.CO2NET.Cache
             }
 
             var cacheKey = GetFinalKey(key, isFullKey);
+
+#if NET35 || NET40 || NET45
             return _cache[cacheKey];
+#else
+            return _cache.Get(cacheKey);
+#endif
         }
 
         /// <summary>
@@ -173,7 +264,12 @@ namespace Senparc.CO2NET.Cache
             }
 
             var cacheKey = GetFinalKey(key, isFullKey);
+
+#if NET35 || NET40 || NET45
             return (T)_cache[cacheKey];
+#else
+            return _cache.Get<T>(cacheKey);
+#endif
         }
 
         //public IDictionary<string, TBag> GetAll<TBag>() where TBag : IBaseContainerBag
@@ -192,24 +288,61 @@ namespace Senparc.CO2NET.Cache
 
         public IDictionary<string, object> GetAll()
         {
-            return _cache;
+            IDictionary<string, object> data = new Dictionary<string, object>();
+#if NET35 || NET40 || NET45
+            IDictionaryEnumerator cacheEnum = System.Web.HttpRuntime.Cache.GetEnumerator();
+
+            while (cacheEnum.MoveNext())
+            {
+                data[cacheEnum.Key as string] = cacheEnum.Value;
+            }
+#else
+            //获取所有Key
+            var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
+            if (CheckExisted(keyStoreFinalKey, true))
+            {
+                var keys = _cache.Get<List<string>>(keyStoreFinalKey);
+                foreach (var key in keys)
+                {
+                    data[key] = Get(key, true);
+                }
+            }
+#endif
+            return data;
+
         }
 
         public bool CheckExisted(string key, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
-            return _cache.ContainsKey(cacheKey);
+#if NET35 || NET40 || NET45
+            return _cache.Get(cacheKey) != null;
+#else
+            return _cache.Get(cacheKey) != null;
+#endif
         }
 
         public long GetCount()
         {
+#if NET35 || NET40 || NET45
             return _cache.Count;
+#else
+            var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
+            if (CheckExisted(keyStoreFinalKey, true))
+            {
+                var keys = _cache.Get<List<string>>(keyStoreFinalKey);
+                return keys.Count;
+            }
+            else
+            {
+                return 0;
+            }
+#endif
         }
 
-        public void Update(string key, object value, bool isFullKey = false)
+        public void Update(string key, object value, bool isFullKey = false, TimeSpan? expiry = null)
         {
-            var cacheKey = GetFinalKey(key, isFullKey);
-            _cache[cacheKey] = value;
+            Set(key, value, isFullKey, expiry);
         }
 
         //public void UpdateContainerBag(string key, object bag, bool isFullKey = false)

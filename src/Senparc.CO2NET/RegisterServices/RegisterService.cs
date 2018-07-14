@@ -50,15 +50,11 @@ namespace Senparc.CO2NET.RegisterServices
         }
 
 #if NETCOREAPP2_0 || NETCOREAPP2_1
-        /// <summary>
-        /// 全局 ServiceCollection
-        /// </summary>
-        public static IServiceCollection GlobalServiceCollection { get; set; }
 
         /// <summary>
         /// 单个实例引用全局的 ServiceCollection
         /// </summary>
-        public IServiceCollection ServiceCollection => GlobalServiceCollection;
+        public IServiceCollection ServiceCollection => SenparcDI.GlobalServiceCollection;
 
         /// <summary>
         /// 开始 Senparc.CO2NET SDK 初始化参数流程（.NET Core）

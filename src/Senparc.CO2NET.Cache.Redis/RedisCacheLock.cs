@@ -43,9 +43,9 @@ namespace Senparc.CO2NET.Cache.Redis
         private Redlock.CSharp.Redlock _dlm;
         private Lock _lockObject;
 
-        private RedisObjectCacheStrategy _redisStrategy;
+        private BaseRedisObjectCacheStrategy _redisStrategy;
 
-        public RedisCacheLock(RedisObjectCacheStrategy strategy, string resourceName, string key, int retryCount, TimeSpan retryDelay)
+        public RedisCacheLock(BaseRedisObjectCacheStrategy strategy, string resourceName, string key, int retryCount, TimeSpan retryDelay)
             : base(strategy, resourceName, key, retryCount, retryDelay)
         {
             _redisStrategy = strategy;

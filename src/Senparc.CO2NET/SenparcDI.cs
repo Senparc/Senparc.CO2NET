@@ -1,0 +1,61 @@
+﻿
+/*----------------------------------------------------------------
+    Copyright (C) 2018 Senparc
+
+    文件名：SenparcDI.cs
+    文件功能描述：针对 .NET Core 的依赖注入扩展类
+
+    创建标识：Senparc - 20180714
+
+----------------------------------------------------------------*/
+
+#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Senparc.CO2NET
+{
+    /// <summary>
+    /// 针对 .NET Core 的依赖注入扩展类
+    /// </summary>
+    public static class SenparcDI
+    {
+        /// <summary>
+        /// 全局 ServiceCollection
+        /// </summary>
+        public static IServiceCollection GlobalServiceCollection { get; set; }
+
+
+        /// <summary>
+        /// 创建一个新的 ServiceCollection 对象
+        /// </summary>
+        /// <returns></returns>
+        public static IServiceCollection GetServiceCollection()
+        {
+            return GlobalServiceCollection;
+        }
+
+#if NETCOREAPP2_0 || NETCOREAPP2_1
+
+        /// <summary>
+        /// 获取 ServiceProvider
+        /// </summary>
+        /// <returns></returns>
+        public static ServiceProvider GetServiceProvider()
+        {
+            return GetServiceCollection().BuildServiceProvider();
+        }
+
+        /// <summary>
+        /// 使用 .net core 默认的 DI 方法获得实例
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T GetService<T>()
+        {
+            return GetServiceProvider().GetService<T>();
+        }
+#endif
+
+    }
+}
+#endif

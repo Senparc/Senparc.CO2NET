@@ -44,7 +44,7 @@ namespace Senparc.CO2NET.RegisterServices
         /// <returns></returns>
         public static IServiceCollection AddSenparcGlobalServices(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
-            RegisterService.GlobalServiceCollection = serviceCollection;
+            SenparcDI.GlobalServiceCollection = serviceCollection;
             serviceCollection.Configure<SenparcSetting>(configuration.GetSection("SenparcSetting"));
 
             /*

@@ -43,7 +43,7 @@ namespace Senparc.CO2NET.Cache
     /// <summary>
     /// 泛型缓存策略基类
     /// </summary>
-    public abstract class BaseCacheStrategy : IBaseCacheLock
+    public abstract class BaseCacheStrategy : IBaseCacheStrategy
     {
         ///// <summary>
         ///// 默认下级命名空间

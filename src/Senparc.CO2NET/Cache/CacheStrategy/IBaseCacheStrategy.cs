@@ -30,21 +30,24 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
     修改标识：Senparc - 20160812
     修改描述：v4.7.4  解决Container无法注册的问题
 
+    --CO2NET--
+    
+    修改标识：Senparc - 20180714
+    修改描述：v4.7.4  解决Container无法注册的问题
+
+
  ----------------------------------------------------------------*/
 
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-//using Senparc.CO2NET.Containers;
 
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
     /// 最底层的缓存策略接口
     /// </summary>
-    public interface IBaseCacheLock
+    public interface IBaseCacheStrategy
     {
         ///// <summary>
         ///// 整个Cache集合的Key
@@ -82,15 +85,18 @@ namespace Senparc.CO2NET.Cache
         /// </summary>
         /// <param name="key">缓存键</param>
         /// <param name="value">缓存值</param>
+        /// <param name="expiry">过期时间</param>
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
-        void InsertToCache(TKey key, TValue value);
+        void InsertToCache(TKey key, TValue value, TimeSpan? expiry = null);
 
         /// <summary>
         /// 添加指定ID的对象
         /// </summary>
         /// <param name="key">缓存键</param>
         /// <param name="value">缓存值</param>
-        void Set(TKey key, TValue value);
+        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="expiry">过期时间</param>
+        void Set(TKey key, TValue value, bool isFullKey = false, TimeSpan? expiry = null);
 
         /// <summary>
         /// 移除指定缓存键的对象
@@ -141,6 +147,7 @@ namespace Senparc.CO2NET.Cache
         /// <param name="key">缓存键</param>
         /// <param name="value">缓存值</param>
         /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
-        void Update(TKey key, TValue value, bool isFullKey = false);
+        /// <param name="expiry">过期时间</param>
+        void Update(TKey key, TValue value, bool isFullKey = false, TimeSpan? expiry = null);
     }
 }
