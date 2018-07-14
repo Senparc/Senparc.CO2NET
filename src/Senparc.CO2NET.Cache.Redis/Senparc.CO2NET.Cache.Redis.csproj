@@ -81,6 +81,9 @@
       v2.0.3 支持 CO2NET v0.1.3
       v2.0.5 支持 CO2NET v0.1.5
       v2.0.9 支持 CO2NET v0.1.9
+      v3.0.0 
+      1、分离 HashSet 和 Key-Value 两种不同格式的缓存：RedisHashSetObjectCacheStrategy 以及 RedisObjectCacheStrategy
+      2、提供缓存过期新策略
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>

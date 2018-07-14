@@ -30,6 +30,13 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
     修改标识：Senparc - 20170205
     修改描述：v0.2.0 重构分布式锁
 
+    修改标识：Senparc - 20170205
+    修改描述： v3.0.0 RedisObjectCacheStrategy 重命名为 RedisHashSetObjectCacheStrategy，分离 HashSet 数据结构
+      1、分离 HashSet 和 Key-Value 两种不同格式的缓存：RedisHashSetObjectCacheStrategy 以及 RedisObjectCacheStrategy
+      2、提供缓存过期新策略
+
+
+
  ----------------------------------------------------------------*/
 
 using System;
@@ -46,7 +53,7 @@ namespace Senparc.CO2NET.Cache.Redis
     /// <summary>
     /// Redis的Object类型容器缓存（Key为String类型）
     /// </summary>
-    public class RedisObjectCacheStrategy : BaseCacheStrategy, IRedisObjectCacheStrategy
+    public class RedisHashSetObjectCacheStrategy : BaseCacheStrategy, IRedisObjectCacheStrategy
     //where TContainerBag : class, IBaseContainerBag, new()
     {
         /// <summary>
@@ -63,14 +70,14 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <summary>
         /// Redis 缓存策略
         /// </summary>
-        RedisObjectCacheStrategy()
+        RedisHashSetObjectCacheStrategy()
         {
             Client = RedisManager.Manager;
             _cache = Client.GetDatabase();
         }
 
         //静态SearchCache
-        public static RedisObjectCacheStrategy Instance
+        public static RedisHashSetObjectCacheStrategy Instance
         {
             get
             {
@@ -84,7 +91,7 @@ namespace Senparc.CO2NET.Cache.Redis
             {
             }
             //将instance设为一个初始化的BaseCacheStrategy新实例
-            internal static readonly RedisObjectCacheStrategy instance = new RedisObjectCacheStrategy();
+            internal static readonly RedisHashSetObjectCacheStrategy instance = new RedisHashSetObjectCacheStrategy();
         }
 
         #endregion
@@ -92,7 +99,7 @@ namespace Senparc.CO2NET.Cache.Redis
         public ConnectionMultiplexer Client { get; set; }
         protected IDatabase _cache;
 
-        static RedisObjectCacheStrategy()
+        static RedisHashSetObjectCacheStrategy()
         {
             //全局初始化一次，测试结果为319ms
 
@@ -116,7 +123,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <summary>
         /// Redis 缓存策略析构函数，用于 _client 资源回收
         /// </summary>
-        ~RedisObjectCacheStrategy()
+        ~RedisHashSetObjectCacheStrategy()
         {
             Client.Dispose();//释放
         }
