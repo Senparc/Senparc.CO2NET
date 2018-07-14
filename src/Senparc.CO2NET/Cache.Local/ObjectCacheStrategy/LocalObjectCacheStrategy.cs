@@ -38,6 +38,7 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -51,6 +52,17 @@ namespace Senparc.CO2NET.Cache
     /// </summary>
     public static class LocalObjectCacheHelper
     {
+#if NET35 || NET40 || NET45
+        /// <summary>
+        /// 所有数据集合的列表
+        /// </summary>
+        public static System.Web.Caching.Cache LocalObjectCache { get; set; }
+
+        static LocalObjectCacheHelper()
+        {
+            LocalObjectCache = System.Web.HttpRuntime.Cache;
+        }
+#else
         /// <summary>
         /// 所有数据集合的列表
         /// </summary>
@@ -60,17 +72,22 @@ namespace Senparc.CO2NET.Cache
         {
             LocalObjectCache = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         }
+#endif
     }
 
     /// <summary>
     /// 本地容器缓存策略
     /// </summary>
     public class LocalObjectCacheStrategy : BaseCacheStrategy, IBaseObjectCacheStrategy
-    //where TContainerBag : class, IBaseContainerBag, new()
     {
         #region 数据源
 
+#if NET35 || NET40 || NET45
+        private System.Web.Caching.Cache _cache = LocalObjectCacheHelper.LocalObjectCache;
+#else
         private IDictionary<string, object> _cache = LocalObjectCacheHelper.LocalObjectCache;
+
+#endif
 
         #endregion
 
@@ -127,7 +144,10 @@ namespace Senparc.CO2NET.Cache
 
             var finalKey = base.GetFinalKey(key);
 
+#if NET35 || NET40 || NET45
             _cache[finalKey] = value;
+#else
+#endif
         }
 
         public void RemoveFromCache(string key, bool isFullKey = false)
@@ -192,13 +212,29 @@ namespace Senparc.CO2NET.Cache
 
         public IDictionary<string, object> GetAll()
         {
-            return _cache;
+            IDictionary<string, object> data = new Dictionary<string, object>();
+#if NET35 || NET40 || NET45
+            IDictionaryEnumerator cacheEnum = System.Web.HttpRuntime.Cache.GetEnumerator();
+
+            while (cacheEnum.MoveNext())
+            {
+                data[cacheEnum.Key as string] = cacheEnum.Value;
+            }
+            return data;
+#else
+         return _cache;
+#endif
+
         }
 
         public bool CheckExisted(string key, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
+#if NET35 || NET40 || NET45
+            return _cache.Get(cacheKey) != null;
+#else
             return _cache.ContainsKey(cacheKey);
+#endif
         }
 
         public long GetCount()
@@ -217,16 +253,16 @@ namespace Senparc.CO2NET.Cache
         //    Update(key, bag, isFullKey);
         //}
 
-        #endregion
+#endregion
 
-        #region ICacheLock
+#region ICacheLock
 
         public override ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
             return new LocalCacheLock(this, resourceName, key, retryCount, retryDelay);
         }
 
-        #endregion
+#endregion
 
     }
 }
