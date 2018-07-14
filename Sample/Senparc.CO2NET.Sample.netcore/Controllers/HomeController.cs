@@ -12,6 +12,8 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
     {
         public IActionResult Index()
         {
+
+
             return View();
         }
 
