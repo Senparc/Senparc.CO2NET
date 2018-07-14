@@ -17,12 +17,13 @@ namespace Senparc.CO2NET.Tests
     {
         public SenparcDITests()
         {
-            BaseTest.RegisterServiceCollection();
+            //BaseTest.RegisterServiceCollection();
         }
 
         [TestMethod]
         public void GetServiceTest()
         {
+            BaseTest.RegisterServiceCollection();
             var memcache = SenparcDI.GetService<IMemoryCache>();
             Assert.IsNotNull(memcache);
             Console.WriteLine($"memcache HashCode：{memcache.GetHashCode()}");
