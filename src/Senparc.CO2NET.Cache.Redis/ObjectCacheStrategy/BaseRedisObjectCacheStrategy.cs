@@ -63,8 +63,8 @@ namespace Senparc.CO2NET.Cache.Redis
 
 
 
-        public abstract void InsertToCache(string key, object value);
-        public abstract void Set(string key, object value);
+        public abstract void InsertToCache(string key, object value, TimeSpan? expiry = null);
+        public abstract void Set(string key, object value, bool isFullKey = false, TimeSpan? expiry = null);
 
         public abstract void RemoveFromCache(string key, bool isFullKey = false);
 
@@ -78,6 +78,6 @@ namespace Senparc.CO2NET.Cache.Redis
 
         public abstract long GetCount();
 
-        public abstract void Update(string key, object value, bool isFullKey = false);
+        public abstract void Update(string key, object value, bool isFullKey = false, TimeSpan? expiry = null);
     }
 }

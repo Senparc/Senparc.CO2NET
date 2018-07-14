@@ -17,9 +17,6 @@
     修改描述：v0.1.9 1、RegisterService 取消 public 的构造函数，统一使用 RegisterService.Start() 初始化
                      2、.net framework 和 .net core 版本统一强制在构造函数中要求提供 SenparcSetting 参数
 
-    修改标识：Senparc - 20180714
-    修改描述：v0.2.0 添加 GetServiceCollection()、GetServiceProvider()、GetService<T>() 方法
-
 ----------------------------------------------------------------*/
 
 
@@ -53,15 +50,11 @@ namespace Senparc.CO2NET.RegisterServices
         }
 
 #if NETCOREAPP2_0 || NETCOREAPP2_1
-        /// <summary>
-        /// 全局 ServiceCollection
-        /// </summary>
-        public static IServiceCollection GlobalServiceCollection { get; set; }
 
         /// <summary>
         /// 单个实例引用全局的 ServiceCollection
         /// </summary>
-        public IServiceCollection ServiceCollection => GlobalServiceCollection;
+        public IServiceCollection ServiceCollection => SenparcDI.GlobalServiceCollection;
 
         /// <summary>
         /// 开始 Senparc.CO2NET SDK 初始化参数流程（.NET Core）
@@ -84,34 +77,6 @@ namespace Senparc.CO2NET.RegisterServices
             register.RegisterThreads();//默认把线程注册好
 
             return register;
-        }
-
-        /// <summary>
-        /// 创建一个新的 ServiceCollection 对象
-        /// </summary>
-        /// <returns></returns>
-        public static IServiceCollection GetServiceCollection()
-        {
-            return GlobalServiceCollection;
-        }
-
-        /// <summary>
-        /// 获取 ServiceProvider
-        /// </summary>
-        /// <returns></returns>
-        public static ServiceProvider GetServiceProvider()
-        {
-            return GetServiceCollection().BuildServiceProvider();
-        }
-
-        /// <summary>
-        /// 使用 .net core 默认的 DI 方法获得实例
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static T GetService<T>()
-        {
-            return GetServiceProvider().GetService<T>();
         }
 
 #else

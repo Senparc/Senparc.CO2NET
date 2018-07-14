@@ -1,13 +1,21 @@
 ﻿
-#if NETCOREAPP2_0 || NETCOREAPP2_1
-using Microsoft.AspNetCore.Hosting;
+/*----------------------------------------------------------------
+    Copyright (C) 2018 Senparc
+
+    文件名：SenparcDI.cs
+    文件功能描述：针对 .NET Core 的依赖注入扩展类
+
+    创建标识：Senparc - 20180714
+
+----------------------------------------------------------------*/
+
+#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Senparc.CO2NET
 {
     /// <summary>
-    /// 针对 .NET Core 的依赖注入扩赞类
+    /// 针对 .NET Core 的依赖注入扩展类
     /// </summary>
     public static class SenparcDI
     {
@@ -25,6 +33,8 @@ namespace Senparc.CO2NET
         {
             return GlobalServiceCollection;
         }
+
+#if NETCOREAPP2_0 || NETCOREAPP2_1
 
         /// <summary>
         /// 获取 ServiceProvider
@@ -44,6 +54,8 @@ namespace Senparc.CO2NET
         {
             return GetServiceProvider().GetService<T>();
         }
+#endif
+
     }
 }
 #endif
