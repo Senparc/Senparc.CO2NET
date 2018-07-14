@@ -53,7 +53,7 @@ namespace Senparc.CO2NET.Cache.Redis
     /// <summary>
     /// Redis的Object类型容器缓存（Key为String类型）
     /// </summary>
-    public class RedisHashSetObjectCacheStrategy : BaseCacheStrategy, IRedisObjectCacheStrategy
+    public class RedisHashSetObjectCacheStrategy : RedisBaseObjectCacheStrategy
     //where TContainerBag : class, IBaseContainerBag, new()
     {
         /// <summary>
@@ -70,10 +70,9 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <summary>
         /// Redis 缓存策略
         /// </summary>
-        RedisHashSetObjectCacheStrategy()
+        RedisHashSetObjectCacheStrategy() : base()
         {
-            Client = RedisManager.Manager;
-            _cache = Client.GetDatabase();
+
         }
 
         //静态SearchCache
@@ -96,48 +95,6 @@ namespace Senparc.CO2NET.Cache.Redis
 
         #endregion
 
-        public ConnectionMultiplexer Client { get; set; }
-        protected IDatabase _cache;
-
-        static RedisHashSetObjectCacheStrategy()
-        {
-            //全局初始化一次，测试结果为319ms
-
-            var manager = RedisManager.Manager;
-            var cache = manager.GetDatabase();
-
-
-            var testKey = Guid.NewGuid().ToString();
-            var testValue = Guid.NewGuid().ToString();
-            cache.StringSet(testKey, testValue);
-            var storeValue = cache.StringGet(testKey);
-            if (storeValue != testValue)
-            {
-                throw new Exception("RedisStrategy失效，没有计入缓存！");
-            }
-            cache.StringSet(testKey, (string)null);
-        }
-
-
-
-        /// <summary>
-        /// Redis 缓存策略析构函数，用于 _client 资源回收
-        /// </summary>
-        ~RedisHashSetObjectCacheStrategy()
-        {
-            Client.Dispose();//释放
-        }
-
-        /// <summary>
-        /// 获取 Server 对象
-        /// </summary>
-        /// <returns></returns>
-        protected IServer GetServer()
-        {
-            //https://github.com/StackExchange/StackExchange.Redis/blob/master/Docs/KeysScan.md
-            var server = Client.GetServer(Client.GetEndPoints()[0]);
-            return server;
-        }
 
         /// <summary>
         /// 获取Hash储存的Key和Field
@@ -179,7 +136,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <param name="key"></param>
         /// <param name="isFullKey">是否已经是完整的Key</param>
         /// <returns></returns>
-        public bool CheckExisted(string key, bool isFullKey = false)
+        public override bool CheckExisted(string key, bool isFullKey = false)
         {
             //var cacheKey = GetFinalKey(key, isFullKey);
             var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
@@ -188,7 +145,7 @@ namespace Senparc.CO2NET.Cache.Redis
             return _cache.HashExists(hashKeyAndField.Key, hashKeyAndField.Field);
         }
 
-        public object Get(string key, bool isFullKey = false)
+        public override object Get(string key, bool isFullKey = false)
         {
             if (string.IsNullOrEmpty(key))
             {
@@ -213,7 +170,7 @@ namespace Senparc.CO2NET.Cache.Redis
             return value;
         }
 
-        public T Get<T>(string key, bool isFullKey = false)
+        public override T Get<T>(string key, bool isFullKey = false)
         {
             if (string.IsNullOrEmpty(key))
             {
@@ -287,7 +244,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// 注意：此方法获取的object为直接储存在缓存中，序列化之后的Value
         /// </summary>
         /// <returns></returns>
-        public IDictionary<string, object> GetAll()
+        public override IDictionary<string, object> GetAll()
         {
             var keyPrefix = GetFinalKey("");//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]可配置）
             var dic = new Dictionary<string, object>();
@@ -307,7 +264,7 @@ namespace Senparc.CO2NET.Cache.Redis
         }
 
 
-        public long GetCount()
+        public override long GetCount()
         {
             var keyPattern = GetFinalKey("*");//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]         
             var count = GetServer().Keys(pattern: keyPattern).Count();
@@ -315,12 +272,12 @@ namespace Senparc.CO2NET.Cache.Redis
         }
 
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
-        public void InsertToCache(string key, object value)
+        public override void InsertToCache(string key, object value)
         {
             Set(key, value);
         }
 
-        public void Set(string key, object value)
+        public override void Set(string key, object value)
         {
             if (string.IsNullOrEmpty(key) || value == null)
             {
@@ -350,7 +307,7 @@ namespace Senparc.CO2NET.Cache.Redis
             //#endif
         }
 
-        public void RemoveFromCache(string key, bool isFullKey = false)
+        public override void RemoveFromCache(string key, bool isFullKey = false)
         {
             if (string.IsNullOrEmpty(key))
             {
@@ -365,7 +322,7 @@ namespace Senparc.CO2NET.Cache.Redis
             _cache.HashDelete(hashKeyAndField.Key, hashKeyAndField.Field);//删除项
         }
 
-        public void Update(string key, object value, bool isFullKey = false)
+        public override void Update(string key, object value, bool isFullKey = false)
         {
             //var cacheKey = GetFinalKey(key, isFullKey);
             var hashKeyAndField = this.GetHashKeyAndField(key);
