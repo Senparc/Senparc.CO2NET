@@ -38,7 +38,7 @@ namespace Senparc.CO2NET.Sample.net45
 
                  // 当同一个分布式缓存同时服务于多个网站（应用程序池）时，可以使用命名空间将其隔离（非必须）
                  // 也可以在 senparcSetting.DefaultCacheNamespace 属性上进行设置
-                 .ChangeDefaultCacheNamespace("DefaultCO2NETCache")
+                 .ChangeDefaultCacheNamespace("CO2NETCache.net45")
 
                  //配置Redis缓存
                  .RegisterCacheRedis(
