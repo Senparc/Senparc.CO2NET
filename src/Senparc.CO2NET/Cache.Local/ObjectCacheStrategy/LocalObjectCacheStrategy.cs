@@ -113,12 +113,12 @@ namespace Senparc.CO2NET.Cache
         //}
 
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
-        public void InsertToCache(string key, object value)
+        public void InsertToCache(string key, object value, TimeSpan? expiry = null)
         {
-            Set(key, value);
+            Set(key, value, expiry);
         }
 
-        public void Set(string key, object value)
+        public void Set(string key, object value, TimeSpan? expiry = null)
         {
             if (key == null || value == null)
             {
