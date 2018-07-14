@@ -12,6 +12,13 @@
 
     修改标识：Senparc - 20170205
     修改描述：v1.3.0 core下，MemcachedObjectCacheStrategy.GetMemcachedClientConfiguration()方法添加注入参数
+  
+    --CO2NET--
+
+    修改标识：Senparc - 20180714
+    修改描述：v3.0.0 1、提供过期缓存策略
+                     2、实现 MemcachedObjectCacheStrategy.GetAll() 和 Count() 方法
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -42,6 +49,14 @@ namespace Senparc.CO2NET.Cache.Memcached
         private static Dictionary<string, int> _serverlist;// = SiteConfig.MemcachedAddresss; TODO:全局注册配置
 
         /// <summary>
+        /// <para>是否需要储存所有的缓存键</para>
+        /// <para>工作原理：由于 Enyim.Caching 不支持遍历缓存键，因此当前类扩展了对所有缓存键同步储存的功能，开启后，将可以使用 GetAll() 和 Count() 方法。</para>
+        /// <para>注意：1、由于储存和同步过程会产生性能消耗，在极低延时的需求下请谨慎使用！</para>
+        /// <para>2、关闭期间的所有 Key 将不会同步，因此请在项目启动的第一时间决定是否启用，以免出现只记录部分 Key 的情况！</para>
+        /// </summary>
+        public static bool StoreKey { get; set; }
+
+        /// <summary>
         /// 注册列表
         /// </summary>
         /// <param name="serverlist">Key：服务器地址（通常为IP），Value：端口</param>
@@ -50,16 +65,15 @@ namespace Senparc.CO2NET.Cache.Memcached
             _serverlist = serverlist;
         }
 
-
         #region 单例
 
         /// <summary>
         /// LocalCacheStrategy的构造函数
         /// </summary>
-        public MemcachedObjectCacheStrategy(/*ILoggerFactory loggerFactory, IOptions<MemcachedClientOptions> optionsAccessor*/)
+        MemcachedObjectCacheStrategy(/*ILoggerFactory loggerFactory, IOptions<MemcachedClientOptions> optionsAccessor*/)
         {
             _config = GetMemcachedClientConfiguration();
-#if NET45 || NET461
+#if NET45 //|| NET461
             Cache = new MemcachedClient(_config);
 #else
             Cache = new MemcachedClient(null, _config);
@@ -118,6 +132,8 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         static MemcachedObjectCacheStrategy()
         {
+            StoreKey = false;
+
             // //初始化memcache服务器池
             //SockIOPool pool = SockIOPool.GetInstance();
             ////设置Memcache池连接点服务器端。
@@ -183,6 +199,17 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         #endregion
 
+        /// <summary>
+        /// 获取储存Keys信息的缓存键
+        /// </summary>
+        /// <param name="cacheStrategy"></param>
+        /// <returns></returns>
+        public static string GetKeyStoreKey(BaseCacheStrategy cacheStrategy)
+        {
+            var keyStoreFinalKey = cacheStrategy.GetFinalKey("CO2NET_KEY_STORE");
+            return keyStoreFinalKey;
+        }
+
         #region IContainerCacheStrategy 成员
 
         //public IContainerCacheStrategy ContainerCacheStrategy
@@ -192,25 +219,53 @@ namespace Senparc.CO2NET.Cache.Memcached
 
 
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
-        public void InsertToCache(string key, object value)
+        public void InsertToCache(string key, object value, TimeSpan? expiry = null)
         {
-            Set(key, value);
+            Set(key, value, false, expiry);
         }
 
 
-        public void Set(string key, object value)//TODO:添加Timeout参数
+        public void Set(string key, object value, bool isFullKey = false, TimeSpan? expiry = null)
         {
             if (string.IsNullOrEmpty(key) || value == null)
             {
                 return;
             }
 
-            var cacheKey = GetFinalKey(key);
+            var cacheKey = GetFinalKey(key, isFullKey);
 
             //TODO：加了绝对过期时间就会立即失效（再次获取后为null），memcache低版本的bug
 
+            var newKey = StoreKey ? CheckExisted(cacheKey, true) : false;
+
             var json = value.SerializeToCache();
-            Cache.Store(StoreMode.Set, cacheKey, json, DateTime.Now.AddDays(1));
+            if (expiry.HasValue)
+            {
+                Cache.Store(StoreMode.Set, cacheKey, json, expiry.Value);
+            }
+            else
+            {
+                Cache.Store(StoreMode.Set, cacheKey, json);
+            }
+
+
+            //由于 Enyim.Caching 不支持遍历Keys，所以需要单独储存
+            if (newKey)
+            {
+                var keyStoreFinalKey = MemcachedObjectCacheStrategy.GetKeyStoreKey(this);
+                List<string> keys;
+                if (!CheckExisted(keyStoreFinalKey, true))
+                {
+                    keys = new List<string>();
+                }
+                else
+                {
+                    keys = Get<List<string>>(keyStoreFinalKey, true);
+                }
+                keys.Add(cacheKey);
+                Cache.Store(StoreMode.Set, keyStoreFinalKey, keys.SerializeToCache());
+            }
+
         }
 
         public virtual void RemoveFromCache(string key, bool isFullKey = false)
@@ -221,6 +276,18 @@ namespace Senparc.CO2NET.Cache.Memcached
             }
             var cacheKey = GetFinalKey(key, isFullKey);
             Cache.Remove(cacheKey);
+
+            if (StoreKey)
+            {
+                //移除key
+                var keyStoreFinalKey = MemcachedObjectCacheStrategy.GetKeyStoreKey(this);
+                if (CheckExisted(keyStoreFinalKey, true))
+                {
+                    var keys = Get<List<string>>(keyStoreFinalKey, true);
+                    keys.Remove(cacheKey);
+                    Cache.Store(StoreMode.Set, keyStoreFinalKey, keys.SerializeToCache());
+                }
+            }
         }
 
         public virtual object Get(string key, bool isFullKey = false)
@@ -253,7 +320,23 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         public virtual IDictionary<string, object> GetAll()
         {
-            throw new NotImplementedException();
+            IDictionary<string, object> data = new Dictionary<string, object>();
+
+            if (StoreKey)
+            {
+                //获取所有Key
+                var keyStoreFinalKey = MemcachedObjectCacheStrategy.GetKeyStoreKey(this);
+                if (CheckExisted(keyStoreFinalKey, true))
+                {
+                    var keys = Get<List<string>>(keyStoreFinalKey, true);
+                    foreach (var key in keys)
+                    {
+                        data[key] = Get(key, true);
+                    }
+                }
+            }
+
+            return data;
         }
 
         public virtual bool CheckExisted(string key, bool isFullKey = false)
@@ -269,14 +352,21 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         public virtual long GetCount()
         {
-            throw new NotImplementedException();//TODO:需要定义二级缓存键，从池中获取
+            var keyStoreFinalKey = MemcachedObjectCacheStrategy.GetKeyStoreKey(this);
+            if (StoreKey && CheckExisted(keyStoreFinalKey, true))
+            {
+                var keys = Get<List<string>>(keyStoreFinalKey, true);
+                return keys.Count;
+            }
+            else
+            {
+                return 0;
+            }
         }
 
-        public virtual void Update(string key, object value, bool isFullKey = false)
+        public virtual void Update(string key, object value, bool isFullKey = false, TimeSpan? expiry = null)
         {
-            var cacheKey = GetFinalKey(key, isFullKey);
-            var json = value.SerializeToCache();
-            Cache.Store(StoreMode.Set, cacheKey, json, DateTime.Now.AddDays(1));
+            Set(key, value, isFullKey, expiry);
         }
 
         #endregion
@@ -297,7 +387,8 @@ namespace Senparc.CO2NET.Cache.Memcached
         {
             var cacheKey = GetFinalKey(key, isFullKey);
             object json;
-            if (Cache.TryGet(key, out json)) {
+            if (Cache.TryGet(key, out json))
+            {
                 value = (json as string).DeserializeFromCache();
                 return true;
             }

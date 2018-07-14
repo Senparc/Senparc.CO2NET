@@ -87,6 +87,17 @@ namespace Senparc.CO2NET.Cache
             LocalObjectCache = SenparcDI.GetService<IMemoryCache>();
 #endif
         }
+
+        /// <summary>
+        /// 获取储存Keys信息的缓存键
+        /// </summary>
+        /// <param name="cacheStrategy"></param>
+        /// <returns></returns>
+        public static string GetKeyStoreKey(BaseCacheStrategy cacheStrategy)
+        {
+            var keyStoreFinalKey = cacheStrategy.GetFinalKey("CO2NET_KEY_STORE");
+            return keyStoreFinalKey;
+        }
 #endif
     }
 
@@ -176,7 +187,7 @@ namespace Senparc.CO2NET.Cache
             //由于MemoryCache不支持遍历Keys，所以需要单独储存
             if (newKey)
             {
-                var keyStoreFinalKey = base.GetFinalKey("CO2NET_KEY_STORE");
+                var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
                 List<string> keys;
                 if (!CheckExisted(keyStoreFinalKey, true))
                 {
@@ -200,7 +211,7 @@ namespace Senparc.CO2NET.Cache
 
 #if !NET35 && !NET40 && !NET45
             //移除key
-            var keyStoreFinalKey = base.GetFinalKey("CO2NET_KEY_STORE");
+            var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
             if (CheckExisted(keyStoreFinalKey, true))
             {
                 var keys = _cache.Get<List<string>>(keyStoreFinalKey);
@@ -287,7 +298,7 @@ namespace Senparc.CO2NET.Cache
             }
 #else
             //获取所有Key
-            var keyStoreFinalKey = base.GetFinalKey("CO2NET_KEY_STORE");
+            var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
             if (CheckExisted(keyStoreFinalKey, true))
             {
                 var keys = _cache.Get<List<string>>(keyStoreFinalKey);
@@ -316,7 +327,7 @@ namespace Senparc.CO2NET.Cache
 #if NET35 || NET40 || NET45
             return _cache.Count;
 #else
-            var keyStoreFinalKey = base.GetFinalKey("CO2NET_KEY_STORE");
+            var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
             if (CheckExisted(keyStoreFinalKey, true))
             {
                 var keys = _cache.Get<List<string>>(keyStoreFinalKey);
