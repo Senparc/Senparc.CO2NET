@@ -280,7 +280,7 @@ namespace Senparc.CO2NET.Cache.Redis
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
         public override void InsertToCache(string key, object value, TimeSpan? expiry = null)
         {
-            Set(key, value,false, expiry);
+            Set(key, value, expiry, false);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <param name="value"></param>
         /// <param name="isFullKey"></param>
         /// <param name="expiry"></param>
-        public override void Set(string key, object value, bool isFullKey = false, TimeSpan? expiry = null)
+        public override void Set(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
             if (string.IsNullOrEmpty(key) || value == null)
             {
@@ -342,21 +342,9 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <param name="value"></param>
         /// <param name="isFullKey"></param>
         /// <param name="expiry"></param>
-        public override void Update(string key, object value, bool isFullKey = false,TimeSpan? expiry = null)
+        public override void Update(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
-            //var cacheKey = GetFinalKey(key, isFullKey);
-            var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
-
-            //value.Key = cacheKey;//储存最终的键
-
-            //_cache.StringSet(cacheKey, value.Serialize());
-
-            //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, value.Serialize());
-
-            //StackExchangeRedisExtensions.Serialize效率非常差
-            //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
-            var json = value.SerializeToCache();
-            _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, json);
+            Set(key, value, expiry, isFullKey);
         }
 
         #endregion

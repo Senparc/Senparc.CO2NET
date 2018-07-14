@@ -158,10 +158,10 @@ namespace Senparc.CO2NET.Cache
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
         public void InsertToCache(string key, object value, TimeSpan? expiry = null)
         {
-            Set(key, value, false, expiry);
+            Set(key, value, expiry, false);
         }
 
-        public void Set(string key, object value, bool isFullKey = false, TimeSpan? expiry = null)
+        public void Set(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
             if (key == null || value == null)
             {
@@ -340,9 +340,9 @@ namespace Senparc.CO2NET.Cache
 #endif
         }
 
-        public void Update(string key, object value, bool isFullKey = false, TimeSpan? expiry = null)
+        public void Update(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
-            Set(key, value, isFullKey, expiry);
+            Set(key, value, expiry, isFullKey);
         }
 
         //public void UpdateContainerBag(string key, object bag, bool isFullKey = false)
