@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Tests.TestEntities;
@@ -8,6 +10,11 @@ namespace Senparc.CO2NET.Tests.Cache.Local
     [TestClass]
     public class LocalObjectCacheStrategyTests
     {
+        public LocalObjectCacheStrategyTests()
+        {
+            BaseTest.RegisterServiceCollection();
+        }
+
         [TestMethod]
         public void SingletonTest()
         {
@@ -35,6 +42,7 @@ namespace Senparc.CO2NET.Tests.Cache.Local
         [TestMethod]
         public void InterfaceTest()
         {
+
             var cache = LocalObjectCacheStrategy.Instance;
             var key = "LocalObjectCacheStrategyInterfaceTest";
             var value = DateTime.Now.ToString();

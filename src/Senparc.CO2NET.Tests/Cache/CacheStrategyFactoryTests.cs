@@ -18,8 +18,13 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 ----------------------------------------------------------------*/
 #endregion Apache License Version 2.0
 
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using Senparc.CO2NET.Cache.Redis;
+using Senparc.CO2NET.RegisterServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +36,15 @@ namespace Senparc.CO2NET.Cache.Tests
     [TestClass()]
     public class CacheStrategyFactoryTests
     {
+        public CacheStrategyFactoryTests()
+        {
+            //注册
+            var serviceCollection = new ServiceCollection();
+            var configBuilder = new ConfigurationBuilder();
+            var config = configBuilder.Build();
+            serviceCollection.AddSenparcGlobalServices(config);
+        }
+
         [TestMethod()]
         public void RegisterObjectCacheStrategyTest()
         {

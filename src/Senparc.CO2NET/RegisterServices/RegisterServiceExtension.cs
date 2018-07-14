@@ -37,7 +37,7 @@ namespace Senparc.CO2NET.RegisterServices
     {
 #if NETCOREAPP2_0 || NETCOREAPP2_1
         /// <summary>
-        /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程
+        /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程（必须）
         /// </summary>
         /// <param name="serviceCollection">IServiceCollection</param>
         /// <param name="configuration">IConfiguration</param>

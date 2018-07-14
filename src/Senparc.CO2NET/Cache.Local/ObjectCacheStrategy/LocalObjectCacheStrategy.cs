@@ -68,27 +68,36 @@ namespace Senparc.CO2NET.Cache
             LocalObjectCache = System.Web.HttpRuntime.Cache;
         }
 #else
+
+        private static IMemoryCache _localObjectCache;
+
         /// <summary>
         /// 所有数据集合的列表
         /// </summary>
-        public static IMemoryCache LocalObjectCache { get; set; }
+        public static IMemoryCache LocalObjectCache
+        {
+            get
+            {
+                if (_localObjectCache == null)
+                {
+#if NETSTANDARD2_0
+                    _localObjectCache = new MemoryCache(new MemoryCacheOptions());
+#else
+                    _localObjectCache = SenparcDI.GetService<IMemoryCache>();
+#endif
+                }
+                return _localObjectCache;
+            }
+        }
 
         /// <summary>
         /// .NET Core 的 MemoryCache 不提供便利所有项目的方法，因此这里做一个储存Key的地方
         /// </summary>
-        public static Dictionary<string, DateTime> Keys { get; set; }
+        public static Dictionary<string, DateTime> Keys { get; set; } = new Dictionary<string, DateTime>();
 
         static LocalObjectCacheHelper()
         {
-            Keys = new Dictionary<string, DateTime>();
-#if NETSTANDARD2_0
-            LocalObjectCache = new MemoryCache(new MemoryCacheOptions());
-#else
-            LocalObjectCache = SenparcDI.GetService<IMemoryCache>();
 
-            Console.WriteLine($"LocalObjectCache HashCode：{LocalObjectCache.GetHashCode()}");
-
-#endif
         }
 
         /// <summary>
@@ -176,7 +185,7 @@ namespace Senparc.CO2NET.Cache
 #if NET35 || NET40 || NET45
             _cache[finalKey] = value;
 #else
-            var newKey = CheckExisted(finalKey, true);
+            var newKey = !CheckExisted(finalKey, true);
 
             if (expiry.HasValue)
             {
@@ -304,7 +313,7 @@ namespace Senparc.CO2NET.Cache
         public bool CheckExisted(string key, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
-           
+
 #if NET35 || NET40 || NET45
             return _cache.Get(cacheKey) != null;
 #else

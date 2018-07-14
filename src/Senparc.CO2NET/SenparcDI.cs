@@ -24,7 +24,6 @@ namespace Senparc.CO2NET
         /// </summary>
         public static IServiceCollection GlobalServiceCollection { get; set; }
 
-
         /// <summary>
         /// 创建一个新的 ServiceCollection 对象
         /// </summary>
@@ -35,6 +34,7 @@ namespace Senparc.CO2NET
         }
 
 #if NETCOREAPP2_0 || NETCOREAPP2_1
+        public static ServiceProvider GlobalServiceProvider { get; set; }
 
         /// <summary>
         /// 获取 ServiceProvider
@@ -42,7 +42,12 @@ namespace Senparc.CO2NET
         /// <returns></returns>
         public static ServiceProvider GetServiceProvider()
         {
-            return GetServiceCollection().BuildServiceProvider();
+            if (GlobalServiceProvider == null)
+            {
+                //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
+                GlobalServiceProvider = GetServiceCollection().BuildServiceProvider();
+            }
+            return GlobalServiceProvider;
         }
 
         /// <summary>

@@ -17,17 +17,7 @@ namespace Senparc.CO2NET.Tests
     {
         public SenparcDITests()
         {
-            //注册
-            var mockEnv = new Mock<IHostingEnvironment>();
-            mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
-            RegisterService.Start(mockEnv.Object, new SenparcSetting() { IsDebug = true });
-
-
-            var serviceCollection = new ServiceCollection();
-            var configBuilder = new ConfigurationBuilder();
-            var config = configBuilder.Build();
-            serviceCollection.AddSenparcGlobalServices(config);
-            serviceCollection.AddMemoryCache();//使用内存缓存
+            BaseTest.RegisterServiceCollection();
         }
 
         [TestMethod]
@@ -36,20 +26,33 @@ namespace Senparc.CO2NET.Tests
             var memcache = SenparcDI.GetService<IMemoryCache>();
             Assert.IsNotNull(memcache);
             Console.WriteLine($"memcache HashCode：{memcache.GetHashCode()}");
-            memcache = SenparcDI.GetService<IMemoryCache>();
-            Console.WriteLine($"memcache 2 HashCode：{memcache.GetHashCode()}");
 
             var key = Guid.NewGuid().ToString();
             var dt = DateTime.Now;
             memcache.Set(key, dt);//直接使用缓存
 
+            var memcache2 = SenparcDI.GetService<IMemoryCache>();
+            Console.WriteLine($"memcache 2 HashCode：{memcache2.GetHashCode()}");
+
+            Assert.AreEqual(memcache.GetHashCode(), memcache2.GetHashCode());//同一个全局对象
+
+            var obj0 = memcache2.Get(key);
+            Assert.IsNotNull(obj0);
+            Assert.AreEqual(dt, obj0);
+
             //使用本地缓存测试
             CacheStrategyFactory.RegisterObjectCacheStrategy(() => LocalObjectCacheStrategy.Instance);
             var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
 
-            var obj = cache.Get(key, true);//使用缓存策略获取
-            Assert.IsNotNull(obj);
-            Assert.AreEqual(dt, obj);
+            var obj1 = cache.Get(key, true);//使用缓存策略获取
+            Assert.IsNotNull(obj1);
+            Assert.AreEqual(dt, obj1);
+
+            var obj2 = cache.Get<DateTime>(key, true);//获取明确类型对象
+            Assert.IsNotNull(obj2);
+            Assert.AreEqual(dt, obj2);
+
+            Assert.AreEqual(obj0.GetHashCode(), obj2.GetHashCode());
         }
     }
 }
