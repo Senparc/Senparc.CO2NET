@@ -13,11 +13,13 @@ namespace Senparc.CO2NET.Tests.Cache
 
 
     [TestClass]
-    public class CacheExpireTest:BaseTest
+    public class CacheExpireTest : BaseTest
     {
         [TestMethod]
         public void ExpireTest()
         {
+            BaseTest.RegisterServiceCollection();
+
             var caches = new IBaseObjectCacheStrategy[] {
                 LocalObjectCacheStrategy.Instance,
                 RedisObjectCacheStrategy.Instance,

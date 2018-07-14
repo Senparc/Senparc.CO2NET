@@ -12,7 +12,7 @@ namespace Senparc.CO2NET.Tests.Cache.Local
     {
         public LocalObjectCacheStrategyTests()
         {
-            BaseTest.RegisterServiceCollection();
+            //BaseTest.RegisterServiceCollection();
         }
 
         [TestMethod]
@@ -42,6 +42,7 @@ namespace Senparc.CO2NET.Tests.Cache.Local
         [TestMethod]
         public void InterfaceTest()
         {
+            BaseTest.RegisterServiceCollection();
 
             var cache = LocalObjectCacheStrategy.Instance;
             var key = "LocalObjectCacheStrategyInterfaceTest";
