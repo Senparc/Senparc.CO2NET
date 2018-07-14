@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Sample.netcore.Models;
 
 namespace Senparc.CO2NET.Sample.netcore.Controllers
@@ -11,8 +12,14 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
     public class HomeController : Controller
     {
         public IActionResult Index()
-        {
+        { 
+            var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+            var count = cache.Get<int>("IndexTest");
+            count++;
+            cache.Set("IndexTest", count);
 
+            ViewData["IndexTest"] = count;
+            ViewData["CacheType"] = cache.GetType();
 
             return View();
         }
