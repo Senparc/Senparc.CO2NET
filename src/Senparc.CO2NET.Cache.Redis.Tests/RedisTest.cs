@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Senparc.CO2NET.Cache.Redis.Tests
 {
-    [MessagePackObject(keyAsPropertyName:true)]
+    [MessagePackObject(keyAsPropertyName: true)]
     public class ContainerBag
     {
         [Key(0)]
@@ -50,6 +50,36 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
             Console.WriteLine($"SetTest单条测试耗时：{(DateTime.Now - dt).TotalMilliseconds}ms");
         }
+
+        [TestMethod]
+        public void ExpiryTest()
+        {
+            RedisManager.ConfigurationOption = "localhost:6379";
+            CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
+            var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+            var dt = DateTime.Now;
+            var key = $"RedisTest-{DateTime.Now.Ticks}";
+            cacheStrategy.Set(key, new ContainerBag()
+            {
+                Key = "123",
+                Name = "",// Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                AddTime = dt
+            }, TimeSpan.FromSeconds(1));
+
+            var entity = cacheStrategy.Get(key);
+            Assert.IsNotNull(entity);
+
+            var strongEntity = cacheStrategy.Get<ContainerBag>(key);
+            Assert.IsNotNull(strongEntity);
+            Assert.AreEqual(dt, strongEntity.AddTime);
+
+            Thread.Sleep(1000);//让缓存过期
+            entity = cacheStrategy.Get(key);
+            Assert.IsNull(entity);
+
+        }
+
+        #region 性能相关测试
 
         [TestMethod]
         public void EfficiencyTest()
@@ -121,7 +151,8 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             var finishCount = 0;
             for (int i = 0; i < threadCount; i++)
             {
-                var thread = new Thread(() => {
+                var thread = new Thread(() =>
+                {
                     var newObj = new ContainerBag()
                     {
                         Key = Guid.NewGuid().ToString(),
@@ -184,21 +215,22 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             //new[] { TypelessFormatter.Instance },
             //new[] { NativeDateTimeResolver.Instance, ContractlessStandardResolver.Instance });
 
-//            CompositeResolver.RegisterAndSetAsDefault(
-//    // Resolve DateTime first
-//    MessagePack.Resolvers.NativeDateTimeResolver.Instance,
-//    MessagePack.Resolvers.StandardResolver.Instance,
-//       MessagePack.Resolvers.BuiltinResolver.Instance,
-//                // use PrimitiveObjectResolver
-//                PrimitiveObjectResolver.Instance
-//);
+            //            CompositeResolver.RegisterAndSetAsDefault(
+            //    // Resolve DateTime first
+            //    MessagePack.Resolvers.NativeDateTimeResolver.Instance,
+            //    MessagePack.Resolvers.StandardResolver.Instance,
+            //       MessagePack.Resolvers.BuiltinResolver.Instance,
+            //                // use PrimitiveObjectResolver
+            //                PrimitiveObjectResolver.Instance
+            //);
 
             Console.WriteLine("开始异步测试");
             var threadCount = 10;
             var finishCount = 0;
             for (int i = 0; i < threadCount; i++)
             {
-                var thread = new Thread(() => {
+                var thread = new Thread(() =>
+                {
                     var newObj = new ContainerBag()
                     {
                         Key = Guid.NewGuid().ToString(),
@@ -251,7 +283,8 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             var finishCount = 0;
             for (int i = 0; i < threadCount; i++)
             {
-                var thread = new Thread(() => {
+                var thread = new Thread(() =>
+                {
                     var newObj = new ContainerBag()
                     {
                         Key = Guid.NewGuid().ToString(),
@@ -281,5 +314,8 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                 //等待
             }
         }
+
+        #endregion
+
     }
 }

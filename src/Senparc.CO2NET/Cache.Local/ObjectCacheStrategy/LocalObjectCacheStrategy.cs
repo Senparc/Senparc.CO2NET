@@ -85,6 +85,9 @@ namespace Senparc.CO2NET.Cache
             LocalObjectCache = new MemoryCache(new MemoryCacheOptions());
 #else
             LocalObjectCache = SenparcDI.GetService<IMemoryCache>();
+
+            Console.WriteLine($"LocalObjectCache HashCode：{LocalObjectCache.GetHashCode()}");
+
 #endif
         }
 
@@ -272,20 +275,6 @@ namespace Senparc.CO2NET.Cache
 #endif
         }
 
-        //public IDictionary<string, TBag> GetAll<TBag>() where TBag : IBaseContainerBag
-        //{
-        //    var dic = new Dictionary<string, TBag>();
-        //    var cacheList = GetAll();
-        //    foreach (var baseContainerBag in cacheList)
-        //    {
-        //        if (baseContainerBag.Value is TBag)
-        //        {
-        //            dic[baseContainerBag.Key] = (TBag)baseContainerBag.Value;
-        //        }
-        //    }
-        //    return dic;
-        //}
-
         public IDictionary<string, object> GetAll()
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
@@ -315,6 +304,7 @@ namespace Senparc.CO2NET.Cache
         public bool CheckExisted(string key, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
+           
 #if NET35 || NET40 || NET45
             return _cache.Get(cacheKey) != null;
 #else
