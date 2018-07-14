@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Senparc.CO2NET.RegisterServices;
@@ -11,6 +13,28 @@ namespace Senparc.CO2NET.Tests
     public class BaseTest
     {
         public BaseTest()
+        {
+            RegisterServiceCollection();
+
+            RegisterServiceStart();
+        }
+
+        /// <summary>
+        /// ×¢²á IServiceCollection ºÍ MemoryCache
+        /// </summary>
+        public static void RegisterServiceCollection()
+        {
+            var serviceCollection = new ServiceCollection();
+            var configBuilder = new ConfigurationBuilder();
+            var config = configBuilder.Build();
+            serviceCollection.AddSenparcGlobalServices(config);
+            serviceCollection.AddMemoryCache();//Ê¹ÓÃÄÚ´æ»º´æ
+        }
+
+        /// <summary>
+        /// ×¢²á RegisterService.Start()
+        /// </summary>
+        public static void RegisterServiceStart()
         {
             //×¢²á
             var mockEnv = new Mock<IHostingEnvironment>();

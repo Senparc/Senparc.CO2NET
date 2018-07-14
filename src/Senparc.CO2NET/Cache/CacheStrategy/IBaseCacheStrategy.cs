@@ -96,7 +96,7 @@ namespace Senparc.CO2NET.Cache
         /// <param name="value">缓存值</param>
         /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
         /// <param name="expiry">过期时间</param>
-        void Set(TKey key, TValue value, bool isFullKey = false, TimeSpan? expiry = null);
+        void Set(TKey key, TValue value, TimeSpan? expiry = null, bool isFullKey = false);
 
         /// <summary>
         /// 移除指定缓存键的对象
@@ -148,6 +148,6 @@ namespace Senparc.CO2NET.Cache
         /// <param name="value">缓存值</param>
         /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
         /// <param name="expiry">过期时间</param>
-        void Update(TKey key, TValue value, bool isFullKey = false, TimeSpan? expiry = null);
+        void Update(TKey key, TValue value, TimeSpan? expiry = null, bool isFullKey = false);
     }
 }
