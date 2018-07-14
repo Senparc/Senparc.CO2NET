@@ -47,17 +47,7 @@ namespace Senparc.CO2NET.Cache.Redis
     /// Redis的Object类型容器缓存（Key为String类型）
     /// </summary>
     public class RedisObjectCacheStrategy : RedisBaseObjectCacheStrategy
-    //where TContainerBag : class, IBaseContainerBag, new()
     {
-        /// <summary>
-        /// Hash储存的Key和Field集合
-        /// </summary>
-        protected class HashKeyAndField
-        {
-            public string Key { get; set; }
-            public string Field { get; set; }
-        }
-
         #region 单例
 
         /// <summary>
@@ -89,41 +79,6 @@ namespace Senparc.CO2NET.Cache.Redis
         #endregion
 
 
-        /// <summary>
-        /// 获取 Server 对象
-        /// </summary>
-        /// <returns></returns>
-        protected IServer GetServer()
-        {
-            //https://github.com/StackExchange/StackExchange.Redis/blob/master/Docs/KeysScan.md
-            var server = Client.GetServer(Client.GetEndPoints()[0]);
-            return server;
-        }
-
-        /// <summary>
-        /// 获取Hash储存的Key和Field
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="isFullKey"></param>
-        /// <returns></returns>
-        protected HashKeyAndField GetHashKeyAndField(string key, bool isFullKey = false)
-        {
-            var finalFullKey = base.GetFinalKey(key, isFullKey);
-            var index = finalFullKey.LastIndexOf(":");
-
-            if (index == -1)
-            {
-                index = 0;
-            }
-
-            var hashKeyAndField = new HashKeyAndField()
-            {
-                Key = finalFullKey.Substring(0, index),
-                Field = finalFullKey.Substring(index + 1/*排除:号*/, finalFullKey.Length - index - 1)
-            };
-            return hashKeyAndField;
-        }
-
         #region 实现 IBaseObjectCacheStrategy 接口
 
         //public string CacheSetKey { get; set; }
@@ -143,11 +98,8 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <returns></returns>
         public override bool CheckExisted(string key, bool isFullKey = false)
         {
-            //var cacheKey = GetFinalKey(key, isFullKey);
-            var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
-
-            //return _cache.KeyExists(cacheKey);
-            return _cache.HashExists(hashKeyAndField.Key, hashKeyAndField.Field);
+            var cacheKey = GetFinalKey(key, isFullKey);
+            return _cache.KeyExists(cacheKey);
         }
 
         public override object Get(string key, bool isFullKey = false)
@@ -160,14 +112,11 @@ namespace Senparc.CO2NET.Cache.Redis
             if (!CheckExisted(key, isFullKey))
             {
                 return null;
-                //InsertToCache(key, new ContainerItemCollection());
             }
 
-            //var cacheKey = GetFinalKey(key, isFullKey);
-            var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
+            var cacheKey = GetFinalKey(key, isFullKey);
 
-            //var value = _cache.StringGet(cacheKey);
-            var value = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);
+            var value = _cache.StringGet(cacheKey);
             if (value.HasValue)
             {
                 return value.ToString().DeserializeFromCache();
@@ -188,11 +137,9 @@ namespace Senparc.CO2NET.Cache.Redis
                 //InsertToCache(key, new ContainerItemCollection());
             }
 
-            //var cacheKey = GetFinalKey(key, isFullKey);
-            var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
+            var cacheKey = GetFinalKey(key, isFullKey);
 
-            //var value = _cache.StringGet(cacheKey);
-            var value = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);
+            var value = _cache.StringGet(cacheKey);
             if (value.HasValue)
             {
                 return value.ToString().DeserializeFromCache<T>();
@@ -289,8 +236,7 @@ namespace Senparc.CO2NET.Cache.Redis
                 return;
             }
 
-            //var cacheKey = GetFinalKey(key);
-            var hashKeyAndField = this.GetHashKeyAndField(key);
+            var cacheKey = GetFinalKey(key);
 
             //if (value is IDictionary)
             //{
@@ -305,11 +251,7 @@ namespace Senparc.CO2NET.Cache.Redis
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
 
             var json = value.SerializeToCache();
-            _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, json);
-
-            //#if DEBUG
-            //            var value1 = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);//正常情况下可以得到 //_cache.GetValue(cacheKey);
-            //#endif
+            _cache.StringSet(cacheKey, json);
         }
 
         public override void RemoveFromCache(string key, bool isFullKey = false)
@@ -319,18 +261,15 @@ namespace Senparc.CO2NET.Cache.Redis
                 return;
             }
 
-            //var cacheKey = GetFinalKey(key, isFullKey);
-            var hashKeyAndField = this.GetHashKeyAndField(key);
+            var cacheKey = GetFinalKey(key, isFullKey);
 
             SenparcMessageQueue.OperateQueue();//延迟缓存立即生效
-            //_cache.KeyDelete(cacheKey);//删除键
-            _cache.HashDelete(hashKeyAndField.Key, hashKeyAndField.Field);//删除项
+            _cache.KeyDelete(cacheKey);//删除键
         }
 
         public override void Update(string key, object value, bool isFullKey = false)
         {
-            //var cacheKey = GetFinalKey(key, isFullKey);
-            var hashKeyAndField = this.GetHashKeyAndField(key);
+            var cacheKey = GetFinalKey(key, isFullKey);
 
             //value.Key = cacheKey;//储存最终的键
 
@@ -341,7 +280,7 @@ namespace Senparc.CO2NET.Cache.Redis
             //StackExchangeRedisExtensions.Serialize效率非常差
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
             var json = value.SerializeToCache();
-            _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, json);
+            _cache.StringSet(cacheKey, json);
         }
         #endregion
 
