@@ -42,3 +42,4 @@ obj/*
 /Sample/Senparc.CO2NET.Sample.netcore/App_Data/SenparcTraceLog
 /Sample/.vs/Senparc.CO2NET.Sample/DesignTimeBuild
 /Sample/Senparc.CO2NET.Sample.net45/obj/Release
+*.user
