@@ -377,7 +377,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
             //TypesToIgnoreNull特定类型字段为Null时不序列化
             if (TypesToIgnoreNull.Contains(property.PropertyType))
             {
-                Console.WriteLine("忽略null值：" + property.PropertyType);
+                //Console.WriteLine("忽略null值：" + property.PropertyType);
                 property.NullValueHandling = NullValueHandling.Ignore;//这样设置无效
 
                 var t = member.DeclaringType;
@@ -394,8 +394,8 @@ namespace Senparc.CO2NET.Helpers.Serializers
 
                     //return value != (ignoreValue as JsonSetting.IgnoreValueAttribute).Value;
 
-                    Console.WriteLine("TypesToIgnoreNull Value：" + value);
-                    Console.WriteLine("TypesToIgnoreNull Value is null：" + (value == null));
+                    //Console.WriteLine("TypesToIgnoreNull Value：" + value);
+                    //Console.WriteLine("TypesToIgnoreNull Value is null：" + (value == null));
 
                     return value != null;
                 };
