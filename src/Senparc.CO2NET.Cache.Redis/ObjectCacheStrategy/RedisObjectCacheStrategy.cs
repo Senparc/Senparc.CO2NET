@@ -35,6 +35,9 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
     修改标识：Senparc - 20180714
     修改描述：v3.0.0 改为 Key-Value 实现
 
+    修改标识：Senparc - 20180715
+    修改描述：v3.0.1 添加 GetAllByPrefix() 方法
+
  ----------------------------------------------------------------*/
 
 using System;
@@ -219,6 +222,27 @@ namespace Senparc.CO2NET.Cache.Redis
         public override ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
             return new RedisCacheLock(this, resourceName, key, retryCount, retryDelay);
+        }
+
+
+        /// <summary>
+        /// 根据 key 的前缀获取对象列表
+        /// </summary>
+        public IList<T> GetAllByPrefix<T>(string key)
+        {
+            var keyPattern = GetFinalKey("*");//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]         
+            var keys = GetServer().Keys(pattern: keyPattern);
+            List<T> list = new List<T>();
+            foreach (var fullKey in keys)
+            {
+                var obj = Get<T>(fullKey, true);
+                if (obj != null)
+                {
+                    list.Add(obj);
+                }
+            }
+
+            return list;
         }
     }
 }
