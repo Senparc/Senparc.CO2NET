@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net35;net40;net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
-    <Version>0.2.2</Version>
+    <Version>0.2.3</Version>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -46,6 +46,8 @@
 
       v0.2.0 缓存策略提供超时设置接口
       v0.2.1 “当前扩展缓存策略没有进行注册”异常信息提供更加详细的缓存类型信息
+      v0.2.2 RequestExtension 添加对 NETSTANDARD2_0 的支持
+      v0.2.3 优化 RequestExtension.AbsoluteUri() 方法的参数输出
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
