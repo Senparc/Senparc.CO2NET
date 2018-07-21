@@ -125,10 +125,26 @@ namespace Microsoft.AspNetCore.Http
         /// <returns></returns>
         public static string AbsoluteUri(this HttpRequest request)
         {
+            string schemeUpper = request.Scheme.ToUpper();//协议（大写）
+            var host = request.Host.Host;
+            var port = request.Host.Port ?? -1;//端口（.NET Core 中有可能会出现null）
+            string portSetting = null;//Url中的端口部分
+            if (port == -1 || //这个条件只有在 .net core 中， Host.Port == null 的情况下才会发生
+                (schemeUpper == "HTTP" && port == 80) ||
+                (schemeUpper == "HTTPS" && port == 443))
+            {
+                portSetting = "";//使用默认值
+            }
+            else
+            {
+                portSetting = ":" + port;//添加端口
+            }
+
             var absoluteUri = string.Concat(
                           request.Scheme,
                           "://",
-                          request.Host.ToUriComponent(),//会包含端口号
+                          host,//不包含端口号
+                          portSetting,//端口号
                           request.PathBase.ToUriComponent(),
                           request.Path.ToUriComponent(),
                           request.QueryString.ToUriComponent());
