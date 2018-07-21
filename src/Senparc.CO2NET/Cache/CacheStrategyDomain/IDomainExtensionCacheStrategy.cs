@@ -6,7 +6,7 @@ using System.Text;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// <para>领域扩展（非CO2NET级别的缓存策略）接口，例如作为 LocalContainerCacheStrategy 的接口</para>
+    /// 领域扩展（非 CO2NET 级别的缓存策略）接口，例如作为 LocalContainerCacheStrategy 的接口
     /// <para>注意：实现此接口的类必须使用单例模式！</para>
     /// </summary>
     public interface IDomainExtensionCacheStrategy
