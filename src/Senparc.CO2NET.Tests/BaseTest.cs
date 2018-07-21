@@ -12,6 +12,8 @@ namespace Senparc.CO2NET.Tests
     //[TestClass]
     public class BaseTest
     {
+        protected static IRegisterService registerService;
+
         public BaseTest()
         {
             RegisterServiceCollection();
@@ -39,7 +41,8 @@ namespace Senparc.CO2NET.Tests
             //зЂВс
             var mockEnv = new Mock<IHostingEnvironment>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
-            RegisterService.Start(mockEnv.Object, new SenparcSetting() { IsDebug = true });
+            registerService = RegisterService.Start(mockEnv.Object, new SenparcSetting() { IsDebug = true })
+                .UseSenparcGlobal();
         }
     }
 }

@@ -199,7 +199,7 @@ namespace Senparc.CO2NET.Helpers
                 //使用指定编码
                 return GetMD5(encypStr, Encoding.GetEncoding(charset));
             }
-            catch (Exception ex)
+            catch
             {
                 //使用UTF-8编码
                 return GetMD5("utf-8", Encoding.GetEncoding(charset));

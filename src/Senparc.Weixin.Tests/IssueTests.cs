@@ -1,5 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Extensions;
+using Senparc.CO2NET.RegisterServices;
+using Senparc.CO2NET.Tests;
+using Senparc.Weixin.Exceptions;
 using Senparc.Weixin.MP;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs.Card;
@@ -9,18 +12,22 @@ using System;
 namespace Senparc.Weixin.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class IssueTests:BaseTest
     {
+        public IssueTests() {
+            BaseTest.registerService.UseSenparcWeixin(new Entities.SenparcWeixinSetting());
+        }
+
         /// <summary>
         /// 测试问题 https://github.com/JeffreySu/WeiXinMPSDK/issues/1305
         /// </summary>
         [TestMethod]
-        public void Test()
+        public void ConvertTest()
         {
             try
             {
-                var appId = "wxe273c3a02e09ff8c";
-                var appSecret = "631f30445f640e1a870f1ef79aa543bd";
+                var appId = "";
+                var appSecret = "";
                 var accessToken = AccessTokenContainer.TryGetAccessToken(appId, appSecret);
 
                 Card_GrouponData data1 = new Card_GrouponData()
@@ -29,7 +36,7 @@ namespace Senparc.Weixin.Tests
                     deal_detail = "测试"
                 };
 
-                //这个位置报错**
+                //这个位置报错
                 var result1 = CardApi.CreateCard(accessToken, data1);
 
                 var data = new Card_MemberCardData()
@@ -38,7 +45,7 @@ namespace Senparc.Weixin.Tests
                     supply_bonus = true,
                     supply_balance = false,
                     prerogative = "123123",
-                    bind_old_card_url = "www.daidu.com",
+                    bind_old_card_url = "www.senparc.com",
                     wx_activate = true
                 };
 
@@ -48,15 +55,15 @@ namespace Senparc.Weixin.Tests
             }
             catch (Exception ex)
             {
-
-                throw;
+                //这里如果刨除微信层面的异常，说明之前发送阶段已经测试通过
+                Assert.IsInstanceOfType(ex, typeof(WeixinException));
             }
 
         }
 
         protected Card_BaseInfoBase _BaseInfo = new Card_BaseInfoBase()
         {
-            logo_url = "http:\\www.supadmin.cn/uploads/allimg/120216/1_120216214725_1.jpg",
+            logo_url = "https://weixin.senparc.com/Content/Images/2015/logo-weixin.png",
             brand_name = "海底捞",
             code_type = Card_CodeType.CODE_TYPE_TEXT,
             title = "132 元双人火锅套餐",
