@@ -17,8 +17,7 @@ namespace Senparc.CO2NET.Tests.Extensions
         public void AbsoluteUriTest()
         {
             var mockRequest = new Mock<HttpRequest>();
-            mockRequest.Setup(r => r.Scheme).Returns("http");
-            mockRequest.Setup(r => r.Host).Returns(new HostString("www.senparc.com", 80));
+
             mockRequest.Setup(r => r.PathBase).Returns("");
             mockRequest.Setup(r => r.Path).Returns("/Home/Index/");
 
@@ -41,9 +40,10 @@ namespace Senparc.CO2NET.Tests.Extensions
             mockRequest.Object.QueryString.Add("g", "7");
             Console.WriteLine(mockRequest.Object.QueryString);//测试中无法输出QueryString，真实环境可以
 
+            mockRequest.Setup(r => r.Scheme).Returns("http");
+            mockRequest.Setup(r => r.Host).Returns(new HostString("www.senparc.com", 80));
             var result = mockRequest.Object.AbsoluteUri();
             Console.WriteLine(result);
-
             Assert.AreEqual("http://www.senparc.com/Home/Index/", result);
 
             mockRequest.Setup(r => r.Scheme).Returns("https");
