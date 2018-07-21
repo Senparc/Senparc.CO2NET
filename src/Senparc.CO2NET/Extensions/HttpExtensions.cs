@@ -27,9 +27,12 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 
     创建标识：Senparc - 20180526
 
+    修改标识：Senparc - 20180721
+    修改描述：v0.2.2  添加对 NETSTANDARD2_0 的支持
+
 ----------------------------------------------------------------*/
 
-#if NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
 
 using Microsoft.AspNetCore.Http.Features;
 using System;
@@ -47,6 +50,11 @@ namespace Microsoft.AspNetCore.Http
     {
         private const string NullIpAddress = "::1";
 
+        /// <summary>
+        /// 是否是本地请求
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
         public static bool IsLocal(this HttpRequest req)
         {
             var connection = req.HttpContext.Connection;
@@ -120,7 +128,7 @@ namespace Microsoft.AspNetCore.Http
             var absoluteUri = string.Concat(
                           request.Scheme,
                           "://",
-                          request.Host.ToUriComponent(),
+                          request.Host.ToUriComponent(),//会包含端口号
                           request.PathBase.ToUriComponent(),
                           request.Path.ToUriComponent(),
                           request.QueryString.ToUriComponent());
