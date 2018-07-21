@@ -1,4 +1,38 @@
-﻿using Senparc.CO2NET.Cache;
+﻿#region Apache License Version 2.0
+/*----------------------------------------------------------------
+
+Copyright 2018 Jeffrey Su & Suzhou Senparc Network Technology Co.,Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the
+License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the specific language governing permissions
+and limitations under the License.
+
+Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
+
+----------------------------------------------------------------*/
+#endregion Apache License Version 2.0
+
+/*----------------------------------------------------------------
+    Copyright (C) 2018 Senparc
+  
+    文件名：SenparcTrace.cs
+    文件功能描述：Senparc.CO2NET 日志记录
+    
+    
+    创建标识：Senparc - 20180602
+ 
+    修改标识：Senparc - 20180721
+    修改描述：v0.2.1 增加 SenparcTrace.BaseExceptionLog(Exception ex) 重写方法
+----------------------------------------------------------------*/
+
+
+using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -10,6 +44,9 @@ using System.Threading;
 
 namespace Senparc.CO2NET.Trace
 {
+    /// <summary>
+    /// Senparc.CO2NET 日志记录
+    /// </summary>
     public class SenparcTrace
     {
         /// <summary>
@@ -324,6 +361,16 @@ namespace Senparc.CO2NET.Trace
         #endregion
 
         #region BaseException
+
+
+        /// <summary>
+        /// WeixinException 日志
+        /// </summary>
+        /// <param name="ex"></param>
+        public static void BaseExceptionLog(Exception ex)
+        {
+            BaseExceptionLog(new BaseException(ex.Message, ex));
+        }
 
         /// <summary>
         /// WeixinException 日志
