@@ -314,7 +314,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
         {
             var property = base.CreateProperty(member, memberSerialization);
 
-#if false && NET45
+#if NET45
             //IgnoreNull标注的字段根据IgnoreNulls设定是否序列化
             var ignoreNull = member.GetCustomAttribute<JsonSetting.IgnoreNullAttribute>();
             if (ignoreNull != null || IgnoreNulls)
