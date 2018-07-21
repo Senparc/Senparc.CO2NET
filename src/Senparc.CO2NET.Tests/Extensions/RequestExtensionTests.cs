@@ -34,13 +34,12 @@ namespace Senparc.CO2NET.Tests.Extensions
                      new KeyValuePair<string,StringValues>("f","6")
             }));
 
-
             mockRequest.Setup(r => r.Query).Returns(qc);
-            mockRequest.Setup(r => r.QueryString).Returns(q);
+            //mockRequest.Setup(r => r.QueryString).Returns(q);
 
             Console.WriteLine(mockRequest.Object.QueryString);
             mockRequest.Object.QueryString.Add("g", "7");
-            Console.WriteLine(mockRequest.Object.QueryString);
+            Console.WriteLine(mockRequest.Object.QueryString);//测试中无法输出QueryString，真实环境可以
 
             var result = mockRequest.Object.AbsoluteUri();
             Console.WriteLine(result);
@@ -51,6 +50,10 @@ namespace Senparc.CO2NET.Tests.Extensions
             mockRequest.Setup(r => r.Host).Returns(new HostString("www.senparc.com", 443));
             result = mockRequest.Object.AbsoluteUri();
             Assert.AreEqual("https://www.senparc.com/Home/Index/", result);
+
+            mockRequest.Setup(r => r.Host).Returns(new HostString("www.senparc.com", 1443));
+            result = mockRequest.Object.AbsoluteUri();
+            Assert.AreEqual("https://www.senparc.com:1443/Home/Index/", result);
 
         }
     }
