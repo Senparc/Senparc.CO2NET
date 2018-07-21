@@ -25,6 +25,10 @@ using System.Text;
 
 namespace Senparc.CO2NET.Cache
 {
+    /// <summary>
+    /// 缓存策略工厂。
+    /// <para>缓存策略的注册（立即启用）和当前缓存策略获取</para>
+    /// </summary>
     public class CacheStrategyFactory
     {
         internal static Func<IBaseObjectCacheStrategy> ObjectCacheStrateFunc;
@@ -37,9 +41,9 @@ namespace Senparc.CO2NET.Cache
         //}
 
         /// <summary>
-        /// 注册当前全局环境下的缓存策略
+        /// 注册当前全局环境下的缓存策略，并立即启用。
         /// </summary>
-        /// <param name="func">如果为null，将使用默认的本地缓存策略（LocalObjectCacheStrategy.Instance）</param>
+        /// <param name="func">如果为 null，将使用默认的本地缓存策略（LocalObjectCacheStrategy.Instance）</param>
         public static void RegisterObjectCacheStrategy(Func<IBaseObjectCacheStrategy> func)
         {
             ObjectCacheStrateFunc = func;

@@ -64,7 +64,6 @@ namespace Senparc.CO2NET.Cache
         }
     }
 
-
     /// <summary>
     /// 领域缓存仓库
     /// </summary>
