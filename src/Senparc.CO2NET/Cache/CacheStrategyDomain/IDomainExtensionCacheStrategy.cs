@@ -24,7 +24,7 @@ namespace Senparc.CO2NET.Cache
         /// <summary>
         /// 向底层缓存注册当前缓存策略
         /// </summary>
-        /// <param name="containerCacheStrategy"></param>
+        /// <param name="extensionCacheStrategy">扩展缓存策略实例</param>
         void RegisterCacheStrategyDomain(IDomainExtensionCacheStrategy extensionCacheStrategy);
     }
 }
