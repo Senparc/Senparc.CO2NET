@@ -27,9 +27,12 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 
     创建标识：Senparc - 20180526
 
+    修改标识：Senparc - 20180721
+    修改描述：v0.2.2  添加对 NETSTANDARD2_0 的支持
+
 ----------------------------------------------------------------*/
 
-#if NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
 
 using Microsoft.AspNetCore.Http.Features;
 using System;
@@ -47,6 +50,11 @@ namespace Microsoft.AspNetCore.Http
     {
         private const string NullIpAddress = "::1";
 
+        /// <summary>
+        /// 是否是本地请求
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
         public static bool IsLocal(this HttpRequest req)
         {
             var connection = req.HttpContext.Connection;
@@ -117,10 +125,26 @@ namespace Microsoft.AspNetCore.Http
         /// <returns></returns>
         public static string AbsoluteUri(this HttpRequest request)
         {
+            string schemeUpper = request.Scheme.ToUpper();//协议（大写）
+            var host = request.Host.Host;
+            var port = request.Host.Port ?? -1;//端口（.NET Core 中有可能会出现null）
+            string portSetting = null;//Url中的端口部分
+            if (port == -1 || //这个条件只有在 .net core 中， Host.Port == null 的情况下才会发生
+                (schemeUpper == "HTTP" && port == 80) ||
+                (schemeUpper == "HTTPS" && port == 443))
+            {
+                portSetting = "";//使用默认值
+            }
+            else
+            {
+                portSetting = ":" + port;//添加端口
+            }
+
             var absoluteUri = string.Concat(
                           request.Scheme,
                           "://",
-                          request.Host.ToUriComponent(),
+                          host,//不包含端口号
+                          portSetting,//端口号
                           request.PathBase.ToUriComponent(),
                           request.Path.ToUriComponent(),
                           request.QueryString.ToUriComponent());
