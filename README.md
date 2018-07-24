@@ -3,7 +3,6 @@
 # Senparc.CO2NET
 
 [![Build status](https://ci.appveyor.com/api/projects/status/uqhyn9i2x5r300dq/branch/master?svg=true)](https://ci.appveyor.com/project/JeffreySu/senparc-co2net/branch/master)
-
 [![NuGet](https://img.shields.io/nuget/dt/Senparc.CO2NET.svg)](https://www.nuget.org/packages/Senparc.CO2NET)
 
 Senparc.CO2NET 是一个支持 .NET Framework 和 .NET Core 的公共基础扩展库，包含常规开发所需要的基础帮助类。
