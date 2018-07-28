@@ -43,6 +43,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using Senparc.CO2NET.Cache;
+using Senparc.CO2NET.Exceptions;
 #if NET35 || NET40 || NET45
 using System.Web;
 #else
@@ -84,6 +85,11 @@ namespace Senparc.CO2NET.Cache
                     _localObjectCache = new MemoryCache(new MemoryCacheOptions());
 #else
                     _localObjectCache = SenparcDI.GetService<IMemoryCache>();
+
+                    if (_localObjectCache == null)
+                    {
+                        throw new CacheException("IMemoryCache 依赖注入未设置！请在 Startup.cs 中使用 serviceCollection.AddMemoryCache() 进行设置！");
+                    }
 #endif
                 }
                 return _localObjectCache;

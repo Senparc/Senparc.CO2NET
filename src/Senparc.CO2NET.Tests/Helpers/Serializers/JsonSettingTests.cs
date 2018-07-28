@@ -46,6 +46,22 @@ namespace Senparc.CO2NET.Tests.Helpers
             Console.WriteLine(json3);
         }
 
+        [TestMethod]
+        public void NullAndEmptyTest()
+        {
+            JsonSetting jsonSetting = new JsonSetting(true);
+            var data = new { scene = (string)null, page = "pages/websocket/websocket", width = 100, line_color = "red", is_hyaline = true };
+            var json = SerializerHelper.GetJsonString(data, jsonSetting);
+            Console.WriteLine(json);
+            Assert.AreEqual("{\"page\":\"pages/websocket/websocket\",\"width\":100,\"line_color\":\"red\",\"is_hyaline\":true}", json);
+
+            //²âÊÔ¿Õ×Ö·û´®
+             data = new { scene = "", page = "pages/websocket/websocket", width = 100, line_color = "red", is_hyaline = true };
+            json = SerializerHelper.GetJsonString(data, jsonSetting);
+            Console.WriteLine(json);
+            Assert.AreEqual("{\"scene\":\"\",\"page\":\"pages/websocket/websocket\",\"width\":100,\"line_color\":\"red\",\"is_hyaline\":true}", json);
+        }
+
         #endregion
     }
 }
