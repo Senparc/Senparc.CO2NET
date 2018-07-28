@@ -88,7 +88,7 @@ namespace Senparc.CO2NET.Cache
 
                     if (_localObjectCache == null)
                     {
-                        throw new BaseException("IMemoryCache 依赖注入未设置！请在 Startup.cs 中使用 serviceCollection.AddMemoryCache() 进行设置！")
+                        throw new CacheException("IMemoryCache 依赖注入未设置！请在 Startup.cs 中使用 serviceCollection.AddMemoryCache() 进行设置！");
                     }
 #endif
                 }
