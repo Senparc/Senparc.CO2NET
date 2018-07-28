@@ -53,13 +53,13 @@ namespace Senparc.CO2NET.Tests.Helpers
             var data = new { scene = (string)null, page = "pages/websocket/websocket", width = 100, line_color = "red", is_hyaline = true };
             var json = SerializerHelper.GetJsonString(data, jsonSetting);
             Console.WriteLine(json);
-            Assert.AreEqual("{\"page\":\"pages websocket/websocket\",\"width\":100,\"line_color\":\"red\",\"is_hyaline\":true}", json);
+            Assert.AreEqual("{\"page\":\"pages/websocket/websocket\",\"width\":100,\"line_color\":\"red\",\"is_hyaline\":true}", json);
 
             //²âÊÔ¿Õ×Ö·û´®
              data = new { scene = "", page = "pages/websocket/websocket", width = 100, line_color = "red", is_hyaline = true };
             json = SerializerHelper.GetJsonString(data, jsonSetting);
             Console.WriteLine(json);
-            Assert.AreEqual("{\"page\":\"scene\":\"\",\"pages/websocket/websocket\",\"width\":100,\"line_color\":\"red\",\"is_hyaline\":true}", json);
+            Assert.AreEqual("{\"scene\":\"\",\"page\":\"pages/websocket/websocket\",\"width\":100,\"line_color\":\"red\",\"is_hyaline\":true}", json);
         }
 
         #endregion
