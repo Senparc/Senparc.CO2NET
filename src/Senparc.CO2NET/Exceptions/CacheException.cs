@@ -9,6 +9,8 @@
 
 ----------------------------------------------------------------*/
 
+using System;
+
 namespace Senparc.CO2NET.Exceptions
 {
     /// <summary>
@@ -20,7 +22,9 @@ namespace Senparc.CO2NET.Exceptions
         /// 缓存异常构造函数
         /// </summary>
         /// <param name="message"></param>
-        public CacheException(string message) : base(message, false)
+        /// <param name="inner"></param>
+        /// <param name="logged"></param>
+        public CacheException(string message, Exception inner = null, bool logged = false) : base(message, inner, logged)
         {
         }
     }

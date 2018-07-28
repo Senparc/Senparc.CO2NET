@@ -23,15 +23,17 @@ namespace Senparc.CO2NET.Exceptions
     /// <summary>
     /// 领域缓存未注册异常
     /// </summary>
-    public class UnregisteredDomainCacheStrategyException : BaseException
+    public class UnregisteredDomainCacheStrategyException : CacheException
     {
+
+
         /// <summary>
         /// UnregisteredDomainCacheStrategyException 构造函数
         /// </summary>
         /// <param name="domainCacheStrategyType"></param>
         /// <param name="objectCacheStrategyType"></param>
         public UnregisteredDomainCacheStrategyException(Type domainCacheStrategyType, Type objectCacheStrategyType)
-            : base($"当前扩展缓存策略没有进行注册：{domainCacheStrategyType.ToString()}，{objectCacheStrategyType.ToString()}", true)
+            : base($"当前扩展缓存策略没有进行注册：{domainCacheStrategyType.ToString()}，{objectCacheStrategyType.ToString()}", null, true)
         {
             Trace.SenparcTrace.SendCustomLog("当前扩展缓存策略没有进行注册",
                 $"当前扩展缓存策略没有进行注册，CacheStrategyDomain：{domainCacheStrategyType.ToString()}，IBaseObjectCacheStrategy：{objectCacheStrategyType.ToString()}");
