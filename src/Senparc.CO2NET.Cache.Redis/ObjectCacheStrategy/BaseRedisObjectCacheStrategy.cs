@@ -41,7 +41,6 @@ namespace Senparc.CO2NET.Cache.Redis
                 RedisManager.ConfigurationOption = Config.SenparcSetting.Cache_Redis_Configuration;
             }
 
-
             //全局初始化一次，测试结果为319ms
 
             //以下为测试代码
