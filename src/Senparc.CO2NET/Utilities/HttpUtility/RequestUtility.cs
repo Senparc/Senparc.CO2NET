@@ -13,7 +13,7 @@ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF 
 either express or implied. See the License for the specific language governing permissions
 and limitations under the License.
 
-Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
+Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 ----------------------------------------------------------------*/
 #endregion Apache License Version 2.0
@@ -309,19 +309,6 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
 
         #region 只需要使用同步的方法
-
-
-        ///// <summary>
-        ///// 请求是否发起自微信客户端的浏览器
-        ///// </summary>
-        ///// <param name="httpContext"></param>
-        ///// <returns></returns>
-        //[Obsolete("请使用Senparc.Weixin.BrowserUtility.BrowserUtility.SideInWeixinBrowser()方法")]
-        //public static bool IsWeixinClientRequest(this HttpContext httpContext)
-        //{
-        //    return !string.IsNullOrEmpty(httpContext.Request.UserAgent) &&
-        //           httpContext.Request.UserAgent.Contains("MicroMessenger");
-        //}
 
         /// <summary>
         /// 组装QueryString的方法

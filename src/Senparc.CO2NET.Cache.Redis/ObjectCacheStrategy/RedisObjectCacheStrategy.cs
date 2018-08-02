@@ -13,7 +13,7 @@ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF 
 either express or implied. See the License for the specific language governing permissions
 and limitations under the License.
 
-Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
+Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 ----------------------------------------------------------------*/
 #endregion Apache License Version 2.0
@@ -162,7 +162,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <returns></returns>
         public override IDictionary<string, object> GetAll()
         {
-            var keyPrefix = GetFinalKey("");//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]可配置）
+            var keyPrefix = GetFinalKey("");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
             var dic = new Dictionary<string, object>();
 
             var keys = GetServer().Keys(pattern: keyPrefix + "*");
@@ -176,7 +176,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
         public override long GetCount()
         {
-            var keyPattern = GetFinalKey("*");//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]         
+            var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
             var count = GetServer().Keys(pattern: keyPattern).Count();
             return count;
         }
@@ -230,7 +230,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// </summary>
         public IList<T> GetAllByPrefix<T>(string key)
         {
-            var keyPattern = GetFinalKey("*");//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]         
+            var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
             var keys = GetServer().Keys(pattern: keyPattern);
             List<T> list = new List<T>();
             foreach (var fullKey in keys)

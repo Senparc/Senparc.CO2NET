@@ -13,7 +13,7 @@ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF 
 either express or implied. See the License for the specific language governing permissions
 and limitations under the License.
 
-Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
+Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 ----------------------------------------------------------------*/
 #endregion Apache License Version 2.0
@@ -226,7 +226,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
         //    var key = ContainerHelper.GetItemCacheKey(typeof(TBag), "");
         //    key = key.Substring(0, key.Length - 1);//去掉:号
-        //    key = GetFinalKey(key);//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]可配置）
+        //    key = GetFinalKey(key);//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
 
         //    var list = _cache.HashGetAll(key);
         //    var dic = new Dictionary<string, TBag>();
@@ -246,7 +246,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <returns></returns>
         public override IDictionary<string, object> GetAll()
         {
-            var keyPrefix = GetFinalKey("");//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]可配置）
+            var keyPrefix = GetFinalKey("");//Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
             var dic = new Dictionary<string, object>();
 
             var hashKeys = GetServer().Keys(pattern: keyPrefix + "*");
@@ -266,7 +266,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
         public override long GetCount()
         {
-            var keyPattern = GetFinalKey("*");//获取带SenparcWeixin:DefaultCache:前缀的Key（[DefaultCache]         
+            var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
             var count = GetServer().Keys(pattern: keyPattern).Count();
             return count;
         }
@@ -277,7 +277,6 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="expiry"></param>
-        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
         public override void InsertToCache(string key, object value, TimeSpan? expiry = null)
         {
             Set(key, value, expiry, false);
