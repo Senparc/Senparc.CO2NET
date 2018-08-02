@@ -75,7 +75,11 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
       1、提供过期缓存策略
       2、实现 MemcachedObjectCacheStrategy.GetAll() 和 Count() 方法
       
-      v3.1.0 Memcached 缓存服务连接信息实现从 Config.SenparcSetting 自动获取信息并注册）
+      v3.1.0
+      1、Register.RegisterCacheMemcached 标记为过期
+      2、新增 Register.SetConfigurationOption() 方法
+      3、新增 Register.UseMemcachedNow() 方法  
+      4、Memcached 缓存服务连接信息实现从 Config.SenparcSetting 自动获取信息并注册
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>

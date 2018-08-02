@@ -91,7 +91,9 @@ namespace Senparc.CO2NET.Cache.Memcached
         static MemcachedObjectCacheStrategy()
         {
             //自动注册连接字符串信息
-            if (!string.IsNullOrEmpty(Config.SenparcSetting.Cache_Memcached_Configuration) && Config.SenparcSetting.Cache_Memcached_Configuration != "Memcached配置")
+            if ((_serverlist == null || _serverlist.Count == 0) &&
+                !string.IsNullOrEmpty(Config.SenparcSetting.Cache_Memcached_Configuration)
+                && Config.SenparcSetting.Cache_Memcached_Configuration != "Memcached配置")
             {
                 RegisterServerList(Config.SenparcSetting.Cache_Memcached_Configuration);
             }
