@@ -193,7 +193,9 @@ namespace Senparc.CO2NET.Cache.Memcached
 #if NET45 //|| NET461
             Cache = new MemcachedClient(_config);
 #else
-            Cache = new MemcachedClient(null, _config);
+            var provider = SenparcDI.GetServiceProvider();
+            ILoggerFactory loggerFactory = provider.GetService<ILoggerFactory>();
+            Cache = new MemcachedClient(loggerFactory, _config);
 #endif
         }
 
