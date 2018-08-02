@@ -14,6 +14,7 @@ using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Cache.Redis;
 using Senparc.CO2NET.Cache.Memcached;
 using Senparc.CO2NET.RegisterServices;
+using Microsoft.Extensions.Logging;
 
 namespace Senparc.CO2NET.Sample.netcore
 {
@@ -40,21 +41,11 @@ namespace Senparc.CO2NET.Sample.netcore
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddMemoryCache();//使用本地缓需要添加
+            services.Add(ServiceDescriptor.Singleton(typeof(ILogger<>), typeof(Logger<>)));//使用 Memcached 或 Logger 需要添加
 
-            //Senparc.CO2NET 全局注册
+
+            //Senparc.CO2NET 全局注册（必须）
             services.AddSenparcGlobalServices(Configuration);
-
-            #region Senparc.CO2NET Memcached 配置（按需）
-
-            //添加Memcached配置（按需）
-            services.AddSenparcMemcached(options =>
-            {
-                options.AddServer("memcached", 11211);
-                //options.AddPlainTextAuthenticator("", "usename", "password");
-            });
-
-            #endregion
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

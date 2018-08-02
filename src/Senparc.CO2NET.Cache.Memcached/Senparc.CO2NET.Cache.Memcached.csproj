@@ -187,6 +187,7 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
     <PackageReference Include="EnyimMemcachedCore">
       <Version>2.0.2</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
@@ -197,6 +198,7 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
     <PackageReference Include="EnyimMemcachedCore">
       <Version>2.0.2</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
@@ -207,6 +209,7 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
     <PackageReference Include="EnyimMemcachedCore">
       <Version>2.1.0.7</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.0" />
   </ItemGroup>
 
   <!--<ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
@@ -243,9 +246,4 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
     <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection">
-      <Version>2.0.0</Version>
-    </PackageReference>
-  </ItemGroup>
 </Project>

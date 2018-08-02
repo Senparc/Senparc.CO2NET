@@ -28,16 +28,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Enyim.Caching;
 using Enyim.Caching.Configuration;
 using Enyim.Caching.Memcached;
-using Senparc.CO2NET.Cache;
+using Senparc.CO2NET.Exceptions;
 
-#if NET45 || NET461
-
-#else
+#if !NET45
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
@@ -79,9 +75,32 @@ namespace Senparc.CO2NET.Cache.Memcached
                 var servers = configurationString.Split(';');
                 foreach (var server in servers)
                 {
-                    var serverData = server.Split(':');
-                    dic[serverData[0]] = int.Parse(serverData[1]);
+                    try
+                    {
+                        var serverData = server.Split(':');
+                        dic[serverData[0]] = int.Parse(serverData[1]);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Senparc.CO2NET.Trace.SenparcTrace.BaseExceptionLog(new CacheException(ex.Message, ex));
+                    }
                 }
+
+#if !NET45
+                if (dic.Count() > 0)
+                {
+                    SenparcDI.GetServiceCollection().AddSenparcMemcached(options =>
+                    {
+                        foreach (var item in dic)
+                        {
+                            options.AddServer(item.Key, item.Value);
+                        }
+                    });
+                }
+#endif
+
+
                 RegisterServerList(dic);
             }
         }
@@ -201,7 +220,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         #region 配置
 
-#if NET45 || NET461
+#if NET45
         private static MemcachedClientConfiguration GetMemcachedClientConfiguration()
 #else
         private static MemcachedClientConfiguration GetMemcachedClientConfiguration(/*ILoggerFactory loggerFactory, IOptions<MemcachedClientOptions> optionsAccessor*/)
@@ -209,7 +228,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         {
             //每次都要新建
 
-#if NET45 || NET461
+#if NET45
             var config = new MemcachedClientConfiguration();
             foreach (var server in _serverlist)
             {
@@ -218,8 +237,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             config.Protocol = MemcachedProtocol.Binary;
 
 #else
-            var services = new ServiceCollection();
-            var provider = services.BuildServiceProvider();
+            var provider = SenparcDI.GetServiceProvider();
             ILoggerFactory loggerFactory = provider.GetService<ILoggerFactory>();
             IOptions<MemcachedClientOptions> optionsAccessor = provider.GetService<IOptions<MemcachedClientOptions>>();
 
