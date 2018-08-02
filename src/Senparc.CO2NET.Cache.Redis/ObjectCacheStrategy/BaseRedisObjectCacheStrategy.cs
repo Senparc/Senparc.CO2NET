@@ -36,7 +36,9 @@ namespace Senparc.CO2NET.Cache.Redis
         static BaseRedisObjectCacheStrategy()
         {
             //自动注册连接字符串信息
-            if (!string.IsNullOrEmpty(Config.SenparcSetting.Cache_Redis_Configuration) && Config.SenparcSetting.Cache_Redis_Configuration!= "Redis配置")
+            if (string.IsNullOrEmpty(RedisManager.ConfigurationOption) &&
+                !string.IsNullOrEmpty(Config.SenparcSetting.Cache_Redis_Configuration) &&
+                Config.SenparcSetting.Cache_Redis_Configuration != "Redis配置")
             {
                 RedisManager.ConfigurationOption = Config.SenparcSetting.Cache_Redis_Configuration;
             }

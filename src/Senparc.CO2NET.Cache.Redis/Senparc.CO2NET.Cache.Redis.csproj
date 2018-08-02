@@ -86,7 +86,12 @@
       1、分离 HashSet 和 Key-Value 两种不同格式的缓存：RedisHashSetObjectCacheStrategy 以及 RedisObjectCacheStrategy
       2、提供缓存过期新策略
 
-      v3.1.0 Redis 缓存服务连接信息实现从 Config.SenparcSetting 自动获取信息并注册）
+      v3.1.0
+      1、Register.RegisterCacheRedis 标记为过期
+      2、新增 Register.SetConfigurationOption() 方法
+      3、新增 Register.UseKeyValueRedisNow() 方法
+      4、新增 Register.UseHashRedisNow() 方法CO2NET.Cache.Memcached：
+      5、Redis 缓存服务连接信息实现从 Config.SenparcSetting 自动获取信息并注册）
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
