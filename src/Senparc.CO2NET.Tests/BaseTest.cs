@@ -30,8 +30,6 @@ namespace Senparc.CO2NET.Tests
             var configBuilder = new ConfigurationBuilder();
             var config = configBuilder.Build();
             serviceCollection.AddSenparcGlobalServices(config);
-
-            
             serviceCollection.AddMemoryCache();//Ê¹ÓÃÄÚ´æ»º´æ
         }
 

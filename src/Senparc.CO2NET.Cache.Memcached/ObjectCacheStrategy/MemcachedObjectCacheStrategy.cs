@@ -56,6 +56,16 @@ namespace Senparc.CO2NET.Cache.Memcached
         /// </summary>
         public static bool StoreKey { get; set; }
 
+        static MemcachedObjectCacheStrategy()
+        {
+
+            //自动注册连接字符串信息
+            if (!string.IsNullOrEmpty(Config.SenparcSetting.Cache_Memcached_Configuration) && Config.SenparcSetting.Cache_Memcached_Configuration != "Memcached配置")
+            {
+                RegisterServerList(Config.SenparcSetting.Cache_Memcached_Configuration);
+            }
+        }
+
         /// <summary>
         /// 注册列表
         /// </summary>
@@ -63,6 +73,25 @@ namespace Senparc.CO2NET.Cache.Memcached
         public static void RegisterServerList(Dictionary<string, int> serverlist)
         {
             _serverlist = serverlist;
+        }
+
+        /// <summary>
+        /// 注册列表
+        /// </summary>
+        /// <param name="serverlist">Key：服务器地址（通常为IP），Value：端口</param>
+        public static void RegisterServerList(string configurationString)
+        {
+            if (!string.IsNullOrEmpty(configurationString))
+            {
+                var dic = new Dictionary<string, int>();
+                var servers = configurationString.Split(';');
+                foreach (var server in servers)
+                {
+                    var serverData = server.Split(':');
+                    dic[serverData[0]] = int.Parse(serverData[1]);
+                }
+                RegisterServerList(dic);
+            }
         }
 
         #region 单例
