@@ -19,6 +19,9 @@
     修改描述：v3.0.0 1、提供过期缓存策略
                      2、实现 MemcachedObjectCacheStrategy.GetAll() 和 Count() 方法
 
+    修改标识：Senparc - 20180802
+    修改描述：v3.1.0 Memcached 缓存服务连接信息实现从 Config.SenparcSetting 自动获取信息并注册）
+
 ----------------------------------------------------------------*/
 
 using System;
