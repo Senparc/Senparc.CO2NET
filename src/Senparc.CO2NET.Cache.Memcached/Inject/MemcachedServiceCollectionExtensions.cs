@@ -13,14 +13,14 @@
 #if NET45 || NET461
 
 #else
+using Enyim.Caching.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Senparc.CO2NET.Cache.Memcached;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Enyim.Caching.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Senparc.CO2NET.Cache.Memcached;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

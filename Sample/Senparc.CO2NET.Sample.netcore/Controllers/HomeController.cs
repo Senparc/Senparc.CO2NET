@@ -12,7 +12,7 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
     public class HomeController : Controller
     {
         public IActionResult Index()
-        { 
+        {
             var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var count = cache.Get<int>("IndexTest");
             count++;
