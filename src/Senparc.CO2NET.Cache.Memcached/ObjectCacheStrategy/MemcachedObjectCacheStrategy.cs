@@ -59,17 +59,6 @@ namespace Senparc.CO2NET.Cache.Memcached
         /// </summary>
         public static bool StoreKey { get; set; }
 
-        static MemcachedObjectCacheStrategy()
-        {
-
-            //自动注册连接字符串信息
-            if (!string.IsNullOrEmpty(Config.SenparcSetting.Cache_Memcached_Configuration) && Config.SenparcSetting.Cache_Memcached_Configuration != "Memcached配置")
-            {
-                RegisterServerList(Config.SenparcSetting.Cache_Memcached_Configuration);
-            }
-        }
-
-        /// <summary>
         /// 注册列表
         /// </summary>
         /// <param name="serverlist">Key：服务器地址（通常为IP），Value：端口</param>
@@ -98,6 +87,81 @@ namespace Senparc.CO2NET.Cache.Memcached
         }
 
         #region 单例
+
+        static MemcachedObjectCacheStrategy()
+        {
+            //自动注册连接字符串信息
+            if (!string.IsNullOrEmpty(Config.SenparcSetting.Cache_Memcached_Configuration) && Config.SenparcSetting.Cache_Memcached_Configuration != "Memcached配置")
+            {
+                RegisterServerList(Config.SenparcSetting.Cache_Memcached_Configuration);
+            }
+
+            StoreKey = false;
+
+
+            // //初始化memcache服务器池
+            //SockIOPool pool = SockIOPool.GetInstance();
+            ////设置Memcache池连接点服务器端。
+            //pool.SetServers(serverlist);
+            ////其他参数根据需要进行配置
+
+            //pool.InitConnections = 3;
+            //pool.MinConnections = 3;
+            //pool.MaxConnections = 5;
+
+            //pool.SocketConnectTimeout = 1000;
+            //pool.SocketTimeout = 3000;
+
+            //pool.MaintenanceSleep = 30;
+            //pool.Failover = true;
+
+            //pool.Nagle = false;
+            //pool.Initialize();
+
+            //cache = new MemcachedClient();
+            //cache.EnableCompression = false;
+
+            #region 内部为测试代码，因为调用RegisterServerList()静态方法前会先执行此静态构造函数，此时_serverlist还没有被初始化，故会出错
+
+            //            try
+            //            {
+            //                //config.Authentication.Type = typeof(PlainTextAuthenticator);
+            //                //config.Authentication.Parameters["userName"] = "username";
+            //                //config.Authentication.Parameters["password"] = "password";
+            //                //config.Authentication.Parameters["zone"] = "zone";//domain?   ——Jeffrey 2015.10.20
+            //                DateTime dt1 = DateTime.Now;
+            //                var config = GetMemcachedClientConfiguration();
+            //                //var cache = new MemcachedClient(config);'
+
+
+            //#if NET45 || NET461
+            //                var cache = new MemcachedClient(config);
+            //#else
+            //                var cache = new MemcachedClient(null, config);
+            //#endif
+
+            //                var testKey = Guid.NewGuid().ToString();
+            //                var testValue = Guid.NewGuid().ToString();
+            //                cache.Store(StoreMode.Set, testKey, testValue);
+            //                var storeValue = cache.Get(testKey);
+            //                if (storeValue as string != testValue)
+            //                {
+            //                    throw new Exception("MemcachedStrategy失效，没有计入缓存！");
+            //                }
+            //                cache.Remove(testKey);
+            //                DateTime dt2 = DateTime.Now;
+
+            //                WeixinTrace.Log(string.Format("MemcachedStrategy正常启用，启动及测试耗时：{0}ms", (dt2 - dt1).TotalMilliseconds));
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                //TODO:记录是同日志
+            //                WeixinTrace.Log(string.Format("MemcachedStrategy静态构造函数异常：{0}", ex.Message));
+            //            }
+
+            #endregion
+        }
+
 
         /// <summary>
         /// LocalCacheStrategy的构造函数
@@ -162,72 +226,6 @@ namespace Senparc.CO2NET.Cache.Memcached
             return config;
         }
 
-        static MemcachedObjectCacheStrategy()
-        {
-            StoreKey = false;
-
-            // //初始化memcache服务器池
-            //SockIOPool pool = SockIOPool.GetInstance();
-            ////设置Memcache池连接点服务器端。
-            //pool.SetServers(serverlist);
-            ////其他参数根据需要进行配置
-
-            //pool.InitConnections = 3;
-            //pool.MinConnections = 3;
-            //pool.MaxConnections = 5;
-
-            //pool.SocketConnectTimeout = 1000;
-            //pool.SocketTimeout = 3000;
-
-            //pool.MaintenanceSleep = 30;
-            //pool.Failover = true;
-
-            //pool.Nagle = false;
-            //pool.Initialize();
-
-            //cache = new MemcachedClient();
-            //cache.EnableCompression = false;
-
-            #region 内部为测试代码，因为调用RegisterServerList()静态方法前会先执行此静态构造函数，此时_serverlist还没有被初始化，故会出错
-
-            //            try
-            //            {
-            //                //config.Authentication.Type = typeof(PlainTextAuthenticator);
-            //                //config.Authentication.Parameters["userName"] = "username";
-            //                //config.Authentication.Parameters["password"] = "password";
-            //                //config.Authentication.Parameters["zone"] = "zone";//domain?   ——Jeffrey 2015.10.20
-            //                DateTime dt1 = DateTime.Now;
-            //                var config = GetMemcachedClientConfiguration();
-            //                //var cache = new MemcachedClient(config);'
-
-
-            //#if NET45 || NET461
-            //                var cache = new MemcachedClient(config);
-            //#else
-            //                var cache = new MemcachedClient(null, config);
-            //#endif
-
-            //                var testKey = Guid.NewGuid().ToString();
-            //                var testValue = Guid.NewGuid().ToString();
-            //                cache.Store(StoreMode.Set, testKey, testValue);
-            //                var storeValue = cache.Get(testKey);
-            //                if (storeValue as string != testValue)
-            //                {
-            //                    throw new Exception("MemcachedStrategy失效，没有计入缓存！");
-            //                }
-            //                cache.Remove(testKey);
-            //                DateTime dt2 = DateTime.Now;
-
-            //                WeixinTrace.Log(string.Format("MemcachedStrategy正常启用，启动及测试耗时：{0}ms", (dt2 - dt1).TotalMilliseconds));
-            //            }
-            //            catch (Exception ex)
-            //            {
-            //                //TODO:记录是同日志
-            //                WeixinTrace.Log(string.Format("MemcachedStrategy静态构造函数异常：{0}", ex.Message));
-            //            }
-
-            #endregion
-        }
 
         #endregion
 
