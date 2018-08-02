@@ -32,33 +32,67 @@ namespace Senparc.CO2NET.Sample.net45
 
             //CO2NET 全局注册，必须！！
             IRegisterService register = RegisterService.Start(senparcSetting)
-                                          .UseSenparcGlobal(false, () => GetExCacheStrategies(senparcSetting)) //这里没有 ; 下面接着写
+                                          .UseSenparcGlobal(false, () => GetExCacheStrategies(senparcSetting));
 
-            #region 注册分自定义（分布式）缓存策略（按需，如果需要，必须放在第一个）
+            #region 全局缓存配置（按需）
 
-                 // 当同一个分布式缓存同时服务于多个网站（应用程序池）时，可以使用命名空间将其隔离（非必须）
-                 // 也可以在 senparcSetting.DefaultCacheNamespace 属性上进行设置
-                 .ChangeDefaultCacheNamespace("CO2NETCache.net45")
+            //当同一个分布式缓存同时服务于多个网站（应用程序池）时，可以使用命名空间将其隔离（非必须）
+            register.ChangeDefaultCacheNamespace("CO2NETCache.net45");
 
-                 //配置Redis缓存
-                 .RegisterCacheRedis(
-                     senparcSetting.Cache_Redis_Configuration,
-                     redisConfiguration => (!string.IsNullOrEmpty(redisConfiguration) && redisConfiguration != "Redis配置")
-                                          ? RedisObjectCacheStrategy.Instance
-                                          : null)
+            #region 配置和使用 Redis
 
-                 //配置Memcached缓存
-                 .RegisterCacheMemcached(
-                     new Dictionary<string, int>() {/* { "localhost", 9101 }*/ },
-                     memcachedConfig => (memcachedConfig != null && memcachedConfig.Count > 0)
-                                         ? MemcachedObjectCacheStrategy.Instance
-                                         : null)
+            //配置全局使用Redis缓存（按需，独立）
+            var redisConfigurationStr = senparcSetting.Cache_Redis_Configuration;
+            var useRedis = !string.IsNullOrEmpty(redisConfigurationStr) && redisConfigurationStr != "Redis配置";
+            if (useRedis)//这里为了方便不同环境的开发者进行配置，做成了判断的方式，实际开发环境一般是确定的，这里的if条件可以忽略
+            {
+                /* 说明：
+                 * 1、Redis 的连接字符串信息会从 Config.SenparcSetting.Cache_Redis_Configuration 自动获取并注册，如不需要修改，下方方法可以忽略
+                /* 2、如需手动修改，可以通过下方 SetConfigurationOption 方法手动设置 Redis 链接信息（仅修改配置，不立即启用）
+                 */
+                Senparc.CO2NET.Cache.Redis.Register.SetConfigurationOption(redisConfigurationStr);
+
+                //以下会立即将全局缓存设置为 Redis
+                Senparc.CO2NET.Cache.Redis.Register.UseKeyValueRedisNow();//键值对缓存策略（推荐）
+                //Senparc.CO2NET.Cache.Redis.Register.UseHashRedisNow();//HashSet储存格式的缓存策略
+
+                //也可以通过以下方式自定义当前需要启用的缓存策略
+                //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//键值对
+                //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisHashSetObjectCacheStrategy.Instance);//HashSet
+            }
+            //如果这里不进行Redis缓存启用，则目前还是默认使用内存缓存 
+
+            #endregion
+
+            #region 配置和使用 Memcached
+
+            //配置Memcached缓存（按需，独立）
+            var memcachedConfigurationStr = senparcSetting.Cache_Memcached_Configuration;
+            var useMemcached = !string.IsNullOrEmpty(memcachedConfigurationStr) && memcachedConfigurationStr != "Memcached配置";
+
+            if (useMemcached) //这里为了方便不同环境的开发者进行配置，做成了判断的方式，实际开发环境一般是确定的，这里的if条件可以忽略
+            {
+                /* 说明：
+                * 1、Memcached 的连接字符串信息会从 Config.SenparcSetting.Cache_Memcached_Configuration 自动获取并注册，如不需要修改，下方方法可以忽略
+               /* 2、如需手动修改，可以通过下方 SetConfigurationOption 方法手动设置 Memcached 链接信息（仅修改配置，不立即启用）
+                */
+                Senparc.CO2NET.Cache.Memcached.Register.SetConfigurationOption(redisConfigurationStr);
+
+                //以下会立即将全局缓存设置为 Memcached
+                Senparc.CO2NET.Cache.Memcached.Register.UseMemcachedNow();
+
+                //也可以通过以下方式自定义当前需要启用的缓存策略
+                CacheStrategyFactory.RegisterObjectCacheStrategy(() => MemcachedObjectCacheStrategy.Instance);
+            }
+
+            #endregion
+
 
             #endregion
 
             #region 注册日志（按需，建议）
 
-                 .RegisterTraceLog(ConfigTraceLog);//配置TraceLog
+            register.RegisterTraceLog(ConfigTraceLog);//配置TraceLog
 
             #endregion
 

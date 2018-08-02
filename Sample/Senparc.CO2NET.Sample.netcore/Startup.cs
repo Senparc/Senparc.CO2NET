@@ -80,17 +80,11 @@ namespace Senparc.CO2NET.Sample.netcore
             //如果需要自动扫描自定义扩展缓存，可以这样使用：
             //register.UseSenparcGlobal(true);
             //如果需要指定自定义扩展缓存，可以这样用：
-            //register.UseSenparcGlobal(false, GetExCacheStrategies);
+            //register.UseSenparcGlobal(false, GetExCacheStrategies(senparcSetting.Value));
 
             #region CO2NET 全局配置
 
-            #region 注册线程，在 RegisterService.Start() 中已经自动注册，此处也可以省略，仅作演示
-
-            register.RegisterThreads();  //启动线程，RegisterThreads()也可以省略，在RegisterService.Start()中已经自动注册
-
-            #endregion
-
-            #region 缓存配置（按需）
+            #region 全局缓存配置（按需）
 
             //当同一个分布式缓存同时服务于多个网站（应用程序池）时，可以使用命名空间将其隔离（非必须）
             register.ChangeDefaultCacheNamespace("CO2NETCache.netcore");
