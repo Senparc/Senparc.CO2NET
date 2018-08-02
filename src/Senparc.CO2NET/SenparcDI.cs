@@ -7,6 +7,10 @@
 
     创建标识：Senparc - 20180714
 
+
+    修改标识：Senparc - 20180802
+    修改描述：v3.1.0 提供当前类中的方法对 netstandard2.0 的完整支持
+
 ----------------------------------------------------------------*/
 
 #if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
@@ -33,7 +37,6 @@ namespace Senparc.CO2NET
             return GlobalServiceCollection;
         }
 
-#if NETCOREAPP2_0 || NETCOREAPP2_1
         public static ServiceProvider GlobalServiceProvider { get; set; }
 
         /// <summary>
@@ -59,7 +62,6 @@ namespace Senparc.CO2NET
         {
             return GetServiceProvider().GetService<T>();
         }
-#endif
 
     }
 }
