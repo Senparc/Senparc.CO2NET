@@ -39,9 +39,10 @@ namespace Senparc.CO2NET.Sample.netcore
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddMemoryCache();//使用本地缓存必须添加
+            services.AddMemoryCache();//使用本地缓需要添加
 
-            services.AddSenparcGlobalServices(Configuration);//Senparc.CO2NET 全局注册
+            //Senparc.CO2NET 全局注册
+            services.AddSenparcGlobalServices(Configuration);
 
             #region Senparc.CO2NET Memcached 配置（按需）
 
@@ -86,9 +87,9 @@ namespace Senparc.CO2NET.Sample.netcore
                                                         .UseSenparcGlobal(false, () => GetExCacheStrategies(senparcSetting.Value));
 
             //如果需要自动扫描自定义扩展缓存，可以这样使用：
-            //register.UseSenparcWeixin(true);
+            //register.UseSenparcGlobal(true);
             //如果需要指定自定义扩展缓存，可以这样用：
-            //register.UseSenparcWeixin(false, GetExCacheStrategies);
+            //register.UseSenparcGlobal(false, GetExCacheStrategies);
 
             #region CO2NET 全局配置
 
@@ -103,36 +104,55 @@ namespace Senparc.CO2NET.Sample.netcore
             //当同一个分布式缓存同时服务于多个网站（应用程序池）时，可以使用命名空间将其隔离（非必须）
             register.ChangeDefaultCacheNamespace("CO2NETCache.netcore");
 
+            #region 配置和使用 Redis
+
             //配置全局使用Redis缓存（按需，独立）
             var redisConfigurationStr = senparcSetting.Value.Cache_Redis_Configuration;
             var useRedis = !string.IsNullOrEmpty(redisConfigurationStr) && redisConfigurationStr != "Redis配置";
-            if (useRedis)//这里为了方便不同环境的开发者进行配置，做成了判断的方式，实际开发环境一般是确定的
+            if (useRedis)//这里为了方便不同环境的开发者进行配置，做成了判断的方式，实际开发环境一般是确定的，这里的if条件可以忽略
             {
-                //设置Redis链接信息，并在全局立即启用Redis缓存。
-                register.RegisterCacheRedis(redisConfigurationStr, redisConfiguration => RedisObjectCacheStrategy.Instance);
+                /* 说明：
+                 * 1、Redis 的连接字符串信息会从 Config.SenparcSetting.Cache_Redis_Configuration 自动获取并注册，如不需要修改，下方方法可以忽略
+                /* 2、如需手动修改，可以通过下方 SetConfigurationOption 方法手动设置 Redis 链接信息（仅修改配置，不立即启用）
+                 */
+                Senparc.CO2NET.Cache.Redis.Register.SetConfigurationOption(redisConfigurationStr);
 
-                //此外还可以通过这种方式修改 Redis 链接信息（不立即启用）：
-                //RedisManager.ConfigurationOption = redisConfigurationStr;
+                //以下会立即将全局缓存设置为 Redis
+                Senparc.CO2NET.Cache.Redis.Register.UseKeyValueRedisNow();//键值对缓存策略（推荐）
+                //Senparc.CO2NET.Cache.Redis.Register.UseHashRedisNow();//HashSet储存格式的缓存策略
 
-                //以下会立即将全局缓存设置为Redis（不修改配置）。
-                //如果要使用其他缓存，同样可以在任意地方使用这个方法，修改 RedisObjectCacheStrategy 为其他缓存策略
-                //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
+                //也可以通过以下方式自定义当前需要启用的缓存策略
+                //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//键值对
+                //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisHashSetObjectCacheStrategy.Instance);//HashSet
             }
             //如果这里不进行Redis缓存启用，则目前还是默认使用内存缓存 
 
+            #endregion
+
+            #region 配置和使用 Memcached
 
             //配置Memcached缓存（按需，独立）
-            //这里配置的是 CO2NET 的 Memcached 缓存（如果执行了下面的 app.UseSenparcWeixinCacheMemcached()，
-            //会自动包含本步骤，这一步注册可以忽略）
-            var useMemcached = false;
-            app.UseWhen(h => useMemcached, a =>
+            var memcachedConfigurationStr = senparcSetting.Value.Cache_Memcached_Configuration;
+            var useMemcached = !string.IsNullOrEmpty(memcachedConfigurationStr) && memcachedConfigurationStr != "Memcached配置";
+
+            if (useMemcached) //这里为了方便不同环境的开发者进行配置，做成了判断的方式，实际开发环境一般是确定的，这里的if条件可以忽略
             {
-                a.UseEnyimMemcached();
-                //确保Memcached连接可用后，启用下面的做法：
-                //var memcachedConnStr = senparcSetting.Value.Cache_Memcached_Configuration;
-                //var memcachedConnDic = new Dictionary<string, int>() {/*进行配置 { "localhost", 9101 }*/ };//可以由 memcachedConnStr 分割得到，或直接填写
-                //register.RegisterCacheMemcached(memcachedConnDic, memcachedConfig => MemcachedObjectCacheStrategy.Instance);
-            });
+                app.UseEnyimMemcached();
+
+                /* 说明：
+                * 1、Memcached 的连接字符串信息会从 Config.SenparcSetting.Cache_Memcached_Configuration 自动获取并注册，如不需要修改，下方方法可以忽略
+               /* 2、如需手动修改，可以通过下方 SetConfigurationOption 方法手动设置 Memcached 链接信息（仅修改配置，不立即启用）
+                */
+                Senparc.CO2NET.Cache.Memcached.Register.SetConfigurationOption(redisConfigurationStr);
+
+                //以下会立即将全局缓存设置为 Memcached
+                Senparc.CO2NET.Cache.Memcached.Register.UseMemcachedNow();
+
+                //也可以通过以下方式自定义当前需要启用的缓存策略
+                CacheStrategyFactory.RegisterObjectCacheStrategy(() => MemcachedObjectCacheStrategy.Instance);
+            }
+
+            #endregion
 
 
             #endregion
