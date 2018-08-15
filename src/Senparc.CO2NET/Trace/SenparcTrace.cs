@@ -13,7 +13,7 @@ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF 
 either express or implied. See the License for the specific language governing permissions
 and limitations under the License.
 
-Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
+Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 ----------------------------------------------------------------*/
 #endregion Apache License Version 2.0
@@ -61,7 +61,7 @@ namespace Senparc.CO2NET.Trace
         /// <summary>
         /// 统一日志锁名称
         /// </summary>
-        const string LockName = "WeixinTraceLock";
+        const string LockName = "SenparcTraceLock";
 
         /// <summary>
         /// Senparc.Weixin全局统一的缓存策略
@@ -81,7 +81,7 @@ namespace Senparc.CO2NET.Trace
         public static Action<BaseException> OnBaseExceptionFunc;
 
         /// <summary>
-        /// 执行所有日志记录操作时执行的任务（发生在Senparc.Weixin记录日志之后）
+        /// 执行所有日志记录操作时执行的任务（发生在记录日志之后）
         /// </summary>
         public static Action OnLogFunc;
 
@@ -364,7 +364,7 @@ namespace Senparc.CO2NET.Trace
 
 
         /// <summary>
-        /// WeixinException 日志
+        /// BaseException 日志
         /// </summary>
         /// <param name="ex"></param>
         public static void BaseExceptionLog(Exception ex)
@@ -373,7 +373,7 @@ namespace Senparc.CO2NET.Trace
         }
 
         /// <summary>
-        /// WeixinException 日志
+        /// BaseException 日志
         /// </summary>
         /// <param name="ex"></param>
         public static void BaseExceptionLog(BaseException ex)

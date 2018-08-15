@@ -13,7 +13,7 @@ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF 
 either express or implied. See the License for the specific language governing permissions
 and limitations under the License.
 
-Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
+Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 ----------------------------------------------------------------*/
 #endregion Apache License Version 2.0
@@ -125,7 +125,7 @@ namespace Senparc.CO2NET.HttpUtility
         {
             string returnText = RequestUtility.HttpPost(url, cookieContainer, fileStream, null, null, encoding, cer, useAjax, timeOut, checkValidationResult);
 
-            //WeixinTrace.SendApiLog(url, returnText);
+            //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
 
             var result = SerializerHelper.GetObject<T>(returnText);
@@ -150,7 +150,7 @@ namespace Senparc.CO2NET.HttpUtility
         {
             string returnText = RequestUtility.HttpPost(url, cookieContainer, formData, encoding, cer, useAjax, timeOut);
 
-            //WeixinTrace.SendApiLog(url, returnText);
+            //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
 
             var result = SerializerHelper.GetObject<T>(returnText);
@@ -243,7 +243,7 @@ namespace Senparc.CO2NET.HttpUtility
         {
             string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, fileStream, null, null, encoding, cer, useAjax, timeOut, checkValidationResult);
 
-            //WeixinTrace.SendApiLog(url, returnText);
+            //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
 
             var result = SerializerHelper.GetObject<T>(returnText);
@@ -269,7 +269,7 @@ namespace Senparc.CO2NET.HttpUtility
         {
             string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, formData, encoding, cer, useAjax, timeOut);
             
-            //WeixinTrace.SendApiLog(url, returnText);
+            //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
 
             var result = SerializerHelper.GetObject<T>(returnText);

@@ -57,7 +57,7 @@ namespace Senparc.CO2NET.Tests
         {
             registerTraceLogActionRun = true;
 
-            SenparcTrace.SendCustomLog("Test系统日志", "Test系统启动");//只在Senparc.Weixin.Config.IsDebug = true的情况下生效
+            SenparcTrace.SendCustomLog("Test系统日志", "Test系统启动");//只在Senparc.CO2NET.Config.IsDebug = true的情况下生效
 
             //自定义日志记录回调
             SenparcTrace.OnLogFunc = () =>

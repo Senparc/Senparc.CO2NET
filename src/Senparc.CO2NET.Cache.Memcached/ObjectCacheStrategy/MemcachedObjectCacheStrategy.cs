@@ -172,12 +172,12 @@ namespace Senparc.CO2NET.Cache.Memcached
             //                cache.Remove(testKey);
             //                DateTime dt2 = DateTime.Now;
 
-            //                WeixinTrace.Log(string.Format("MemcachedStrategy正常启用，启动及测试耗时：{0}ms", (dt2 - dt1).TotalMilliseconds));
+            //                SenparcTrace.Log(string.Format("MemcachedStrategy正常启用，启动及测试耗时：{0}ms", (dt2 - dt1).TotalMilliseconds));
             //            }
             //            catch (Exception ex)
             //            {
             //                //TODO:记录是同日志
-            //                WeixinTrace.Log(string.Format("MemcachedStrategy静态构造函数异常：{0}", ex.Message));
+            //                SenparcTrace.Log(string.Format("MemcachedStrategy静态构造函数异常：{0}", ex.Message));
             //            }
 
             #endregion

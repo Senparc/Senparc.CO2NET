@@ -13,7 +13,7 @@ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF 
 either express or implied. See the License for the specific language governing permissions
 and limitations under the License.
 
-Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
+Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 ----------------------------------------------------------------*/
 #endregion Apache License Version 2.0
@@ -36,6 +36,9 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 
     修改标识：Senparc - 20180601
     修改描述：v0.1.0 移植 DateTimeHelper
+ 
+    修改标识：Senparc - 20180802
+    修改描述：v0.2.6 增加 GetUnixDateTime() 方法，标记过期 GetWeixinDateTime() 方法
 
 ----------------------------------------------------------------*/
 
@@ -75,7 +78,18 @@ namespace Senparc.CO2NET.Helpers
         /// </summary>
         /// <param name="dateTime">时间</param>
         /// <returns></returns>
+        [Obsolete("请使用 GetUnixDateTime(dateTime) 方法")]
         public static long GetWeixinDateTime(DateTime dateTime)
+        {
+            return GetUnixDateTime(dateTime);
+        }
+
+        /// <summary>
+        /// 获取Unix时间戳
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static long GetUnixDateTime(DateTime dateTime)
         {
             return (long)(dateTime.ToUniversalTime() - BaseTime).TotalSeconds;
         }

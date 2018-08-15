@@ -2,7 +2,7 @@
     Copyright (C) 2018 Senparc
 
     文件名：Register.cs
-    文件功能描述：Senparc.Weixin 快捷注册流程（包括Thread、TraceLog等）
+    文件功能描述：Senparc.CO2NET 快捷注册流程（包括Thread、TraceLog等）
 
 
     创建标识：Senparc - 20180222
@@ -72,7 +72,7 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// 开始 Senparc.Weixin SDK 初始化参数流程
+        /// 开始 Senparc.CO2NET 初始化参数流程
         /// </summary>
         /// <param name="registerService"></param>
         /// <param name="autoScanExtensionCacheStrategies">是否自动扫描全局的扩展缓存（会增加系统启动时间）</param>

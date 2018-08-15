@@ -83,6 +83,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
 
 
+        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
         public abstract void InsertToCache(string key, object value, TimeSpan? expiry = null);
         public abstract void Set(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
 
