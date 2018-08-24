@@ -9,7 +9,10 @@
 
 
     修改标识：Senparc - 20180802
-    修改描述：v3.1.0 提供当前类中的方法对 netstandard2.0 的完整支持
+    修改描述：v0.2.5 提供当前类中的方法对 netstandard2.0 的完整支持
+
+    修改标识：pengweiqhca - 20180802
+    修改描述：v0.2.8 添加 SenparcDI.GetIServiceProvider() 方法，以支持其他依赖注入框架
 
 ----------------------------------------------------------------*/
 
@@ -40,6 +43,7 @@ namespace Senparc.CO2NET
             return GlobalServiceCollection;
         }
 
+        
         [Obsolete("Please use GlobalIServiceProvider")]
         public static ServiceProvider GlobalServiceProvider
         {
