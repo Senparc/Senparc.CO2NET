@@ -24,6 +24,8 @@ namespace Senparc.CO2NET.Tests
         public void GetServiceTest()
         {
             BaseTest.RegisterServiceCollection();
+            BaseTest.RegisterServiceStart(true);
+
             var memcache = SenparcDI.GetService<IMemoryCache>();
             Assert.IsNotNull(memcache);
             Console.WriteLine($"memcache HashCode：{memcache.GetHashCode()}");

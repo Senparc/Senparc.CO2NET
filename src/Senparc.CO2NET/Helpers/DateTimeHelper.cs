@@ -52,7 +52,10 @@ namespace Senparc.CO2NET.Helpers
     /// </summary>
     public class DateTimeHelper
     {
-        public readonly static DateTime BaseTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);//Unix起始时间
+        /// <summary>
+        /// Unix起始时间
+        /// </summary>
+        public readonly static DateTime BaseTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         /// <summary>
         /// 转换微信DateTime时间到C#时间

@@ -36,13 +36,13 @@ namespace Senparc.CO2NET.Tests
         /// <summary>
         /// зЂВс RegisterService.Start()
         /// </summary>
-        public static void RegisterServiceStart()
+        public static void RegisterServiceStart(bool autoScanExtensionCacheStrategies=false)
         {
             //зЂВс
             var mockEnv = new Mock<IHostingEnvironment>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
             registerService = RegisterService.Start(mockEnv.Object, new SenparcSetting() { IsDebug = true })
-                .UseSenparcGlobal();
+                .UseSenparcGlobal(autoScanExtensionCacheStrategies);
         }
     }
 }

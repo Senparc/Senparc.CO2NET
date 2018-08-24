@@ -216,8 +216,8 @@ namespace Senparc.CO2NET.Cache
             }
 
             DateTime dt2 = DateTime.Now;
-            var exCacheLog = "注册总用时：{0}ms\r\n自动扫描程序集：{1}个\r\n扩展缓存：{2}".FormatWith((dt2 - dt1).TotalMilliseconds, scanTypesCount, cacheTypes);
-            Trace.SenparcTrace.SendCustomLog("自动注册扩展缓存完成", exCacheLog);
+            //var exCacheLog = "注册总用时：{0}ms\r\n自动扫描程序集：{1}个\r\n扩展缓存：{2}".FormatWith((dt2 - dt1).TotalMilliseconds, scanTypesCount, cacheTypes);
+            //Trace.SenparcTrace.SendCustomLog("自动注册扩展缓存完成", exCacheLog);
 
             return addedTypes;
         }

@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Sample.netco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.CO2NET.Sample.net45", "Senparc.CO2NET.Sample.net45\Senparc.CO2NET.Sample.net45.csproj", "{0904EEDD-F2F0-4C43-9A2F-D76078B0E2CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.CO2NET.Cache.Memcached.Tests", "..\src\Senparc.CO2NET.Cache.Memcached.Tests\Senparc.CO2NET.Cache.Memcached.Tests.csproj", "{0014D962-7E93-4906-A22E-30A5D2786D64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.Memcached.Tests", "..\src\Senparc.CO2NET.Cache.Memcached.Tests\Senparc.CO2NET.Cache.Memcached.Tests.csproj", "{0014D962-7E93-4906-A22E-30A5D2786D64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,7 +83,6 @@ Global
 		{0014D962-7E93-4906-A22E-30A5D2786D64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0014D962-7E93-4906-A22E-30A5D2786D64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0014D962-7E93-4906-A22E-30A5D2786D64}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0014D962-7E93-4906-A22E-30A5D2786D64}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0014D962-7E93-4906-A22E-30A5D2786D64}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{0014D962-7E93-4906-A22E-30A5D2786D64}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection

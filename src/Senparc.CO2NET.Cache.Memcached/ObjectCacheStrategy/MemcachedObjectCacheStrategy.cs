@@ -12,7 +12,7 @@
 
     修改标识：Senparc - 20170205
     修改描述：v1.3.0 core下，MemcachedObjectCacheStrategy.GetMemcachedClientConfiguration()方法添加注入参数
-  
+
     --CO2NET--
 
     修改标识：Senparc - 20180714
@@ -66,7 +66,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         /// <summary>
         /// 注册列表
         /// </summary>
-        /// <param name="serverlist">Key：服务器地址（通常为IP），Value：端口</param>
+        /// <param name="configurationString">连接字符串</param>
         public static void RegisterServerList(string configurationString)
         {
             if (!string.IsNullOrEmpty(configurationString))
@@ -193,7 +193,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 #if NET45 //|| NET461
             Cache = new MemcachedClient(_config);
 #else
-            var provider = SenparcDI.GetServiceProvider();
+            var provider = SenparcDI.GetIServiceProvider();
             ILoggerFactory loggerFactory = provider.GetService<ILoggerFactory>();
             Cache = new MemcachedClient(loggerFactory, _config);
 #endif
@@ -239,7 +239,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             config.Protocol = MemcachedProtocol.Binary;
 
 #else
-            var provider = SenparcDI.GetServiceProvider();
+            var provider = SenparcDI.GetIServiceProvider();
             ILoggerFactory loggerFactory = provider.GetService<ILoggerFactory>();
             IOptions<MemcachedClientOptions> optionsAccessor = provider.GetService<IOptions<MemcachedClientOptions>>();
 
