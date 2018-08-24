@@ -14,6 +14,7 @@
 ----------------------------------------------------------------*/
 
 #if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+using System;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Senparc.CO2NET
@@ -23,6 +24,8 @@ namespace Senparc.CO2NET
     /// </summary>
     public static class SenparcDI
     {
+        private static ServiceProvider _globalServiceProvider;
+
         /// <summary>
         /// 全局 ServiceCollection
         /// </summary>
@@ -37,12 +40,23 @@ namespace Senparc.CO2NET
             return GlobalServiceCollection;
         }
 
-        public static ServiceProvider GlobalServiceProvider { get; set; }
+        [Obsolete("Please use GlobalIServiceProvider")]
+        public static ServiceProvider GlobalServiceProvider
+        {
+            get => _globalServiceProvider;
+            set
+            {
+                GlobalIServiceProvider = value;
+                _globalServiceProvider = value;
+            }
+        }
+        public static IServiceProvider GlobalIServiceProvider { get; set; }
 
         /// <summary>
         /// 获取 ServiceProvider
         /// </summary>
         /// <returns></returns>
+        [Obsolete("Please use GetIServiceProvider")]
         public static ServiceProvider GetServiceProvider()
         {
             if (GlobalServiceProvider == null)
@@ -54,15 +68,29 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
+        /// 获取 ServiceProvider
+        /// </summary>
+        /// <returns></returns>
+        public static IServiceProvider GetIServiceProvider()
+        {
+            if (GlobalIServiceProvider == null)
+            {
+                //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
+                GlobalIServiceProvider = GetServiceCollection().BuildServiceProvider();
+            }
+            return GlobalIServiceProvider;
+        }
+
+
+        /// <summary>
         /// 使用 .net core 默认的 DI 方法获得实例
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static T GetService<T>()
         {
-            return GetServiceProvider().GetService<T>();
+            return GetIServiceProvider().GetService<T>();
         }
-
     }
 }
 #endif
