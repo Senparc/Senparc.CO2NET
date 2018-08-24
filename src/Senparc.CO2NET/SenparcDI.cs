@@ -55,6 +55,12 @@ namespace Senparc.CO2NET
                 _globalServiceProvider = value;
             }
         }
+
+        private static object _globalIServiceProviderLock = new object();
+
+        /// <summary>
+        /// 全局 IServiceCollection 对象
+        /// </summary>
         public static IServiceProvider GlobalIServiceProvider { get; set; }
 
         /// <summary>
@@ -80,9 +86,8 @@ namespace Senparc.CO2NET
         {
             if (GlobalIServiceProvider == null)
             {
-                var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
                 //加锁确保唯一
-                using (cache.BeginCacheLock("Senparc.CO2NET.SenparcDI", "GetIServiceProvider"))
+                lock (_globalIServiceProviderLock)
                 {
                     if (GlobalIServiceProvider == null)
                     {
