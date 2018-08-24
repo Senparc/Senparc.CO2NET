@@ -19,6 +19,7 @@
 #if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.CO2NET.Cache;
 
 namespace Senparc.CO2NET
 {
@@ -43,7 +44,7 @@ namespace Senparc.CO2NET
             return GlobalServiceCollection;
         }
 
-        
+
         [Obsolete("Please use GlobalIServiceProvider")]
         public static ServiceProvider GlobalServiceProvider
         {
@@ -79,8 +80,17 @@ namespace Senparc.CO2NET
         {
             if (GlobalIServiceProvider == null)
             {
-                //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
-                GlobalIServiceProvider = GetServiceCollection().BuildServiceProvider();
+                var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+                //加锁确保唯一
+                using (cache.BeginCacheLock("Senparc.CO2NET.SenparcDI", "GetIServiceProvider"))
+                {
+                    if (GlobalIServiceProvider == null)
+                    {
+                        //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
+                        GlobalIServiceProvider = GetServiceCollection().BuildServiceProvider();
+                    }
+                }
+
             }
             return GlobalIServiceProvider;
         }

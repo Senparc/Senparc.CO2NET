@@ -66,7 +66,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         /// <summary>
         /// 注册列表
         /// </summary>
-        /// <param name="serverlist">Key：服务器地址（通常为IP），Value：端口</param>
+        /// <param name="configurationString">连接字符串</param>
         public static void RegisterServerList(string configurationString)
         {
             if (!string.IsNullOrEmpty(configurationString))
