@@ -7,7 +7,7 @@
 
 | 名称    |        DLL          |  Nuget                                                                                | 支持 .NET 版本 
 |---------|---------------------|---------------------------------------------------------------------------------------|--------------------------------------
-| CO2NET | Senparc.CO2NET.dll   | [![Senparc.CO2NET][1.1]][1.2]<br>[![Senparc.Weixin][nuget-img-base]][nuget-url-base]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
+| CO2NET | Senparc.CO2NET.dll   | [![Senparc.CO2NET][1.1]][1.2]    [![Senparc.Weixin][nuget-img-base]][nuget-url-base]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
 
 
 [1.1]: https://img.shields.io/nuget/v/Senparc.CO2NET.svg?style=flat
