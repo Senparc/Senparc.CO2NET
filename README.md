@@ -36,7 +36,7 @@ Senparc.CO2NET 是一个支持 .NET Framework 和 .NET Core 的公共基础扩�
 
 开发者可以直接使用 CO2NET 为项目提供公共基础方法，免去重复准备和维护公共代码的痛苦。未来，Senparc.CO2NET 完善之后也将作为 [Senparc.Weixin SDK](https://github.com/JeffreySu/WeiXinMPSDK) 等 Senparc 系列产品的的基础库。
 
-持续更新中，预计第一个版本将于2018年6月底上线，请关注本项目进展！
+目前发布的已经是稳定版，持续更新中，请关注本项目进展！
 
 本项目后期将会配备完整的文档，如果大家迫不及待想要尝试，可以打开解决方案文件，参考单元测试项目（Senparc.CO2NET.Tests），每一个方法都能找到对应的用法，本项目完整指之一就是将单元测试代码覆盖率做到100%。
 
