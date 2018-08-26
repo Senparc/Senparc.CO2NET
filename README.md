@@ -40,7 +40,7 @@ Senparc.CO2NET 已经作为 [Senparc.Weixin SDK](https://github.com/JeffreySu/We
 
 ## 如何使用 Nuget 安装？
 
-* 微信小程序 Nuget 地址：https://www.nuget.org/packages/Senparc.CO2NET
+* CO2NET Nuget 地址：https://www.nuget.org/packages/Senparc.CO2NET
 * 命令：
 ```
 PM> Install-Package Senparc.CO2NET
