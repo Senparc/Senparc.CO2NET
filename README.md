@@ -50,7 +50,9 @@ PM> Install-Package Senparc.CO2NET
 
 目前发布的已经是稳定版，持续更新中，您可关注本项目进展！
 
-本项目后期将会配备完整的文档，如果大家迫不及待想要尝试，可以打开解决方案文件，参考单元测试项目（Senparc.CO2NET.Tests），每一个方法都能找到对应的用法，本项目完整指之一就是将单元测试代码覆盖率做到接近100%。
+程序集在线文档：<a href="http://doc.weixin.senparc.com/html/G_Senparc_CO2NET.htm" target="_blank">http://doc.weixin.senparc.com/html/G_Senparc_CO2NET.htm</a>
+
+本项目后期将会配备更加完整的文档，如果大家迫不及待想要尝试，可以打开解决方案文件，参考单元测试项目（Senparc.CO2NET.Tests），每一个方法都能找到对应的用法，本项目完整指之一就是将单元测试代码覆盖率做到接近100%。
 
 ## 视频预告介绍
 [抢先预览（2017年6月15日）](http://study.163.com/course/courseLearn.htm?courseId=1004873017&share=2&shareId=400000000353002#/learn/video?lessonId=1052874494&courseId=1004873017)
