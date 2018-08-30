@@ -53,7 +53,6 @@ namespace Senparc.CO2NET
         #endregion
 
 
-
         /// <summary>
         /// SenparcSetting 构造函数
         /// </summary>
