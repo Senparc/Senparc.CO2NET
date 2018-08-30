@@ -124,9 +124,11 @@ namespace Senparc.CO2NET
                 {
 #if NET35 || NET40 || NET45 || NETSTANDARD2_0
                     var appPath = AppDomain.CurrentDomain.BaseDirectory;
+
                     if (Regex.Match(appPath, @"\\$", RegexOptions.Compiled).Success)
                     {
-                        _rootDictionaryPath = appPath.Substring(0, appPath.Length - 1);
+                        _rootDictionaryPath = appPath;//我们
+                        //_rootDictionaryPath = appPath.Substring(0, appPath.Length - 1);
 
                     }
 #else
