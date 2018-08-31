@@ -33,6 +33,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20180526
     修改描述：v4.22.0-rc1 使用 Newtonsoft.Json 进行序列化
 
+    修改标识：Senparc - 20180526
+    修改描述：v0.2.9 添加 SerializerHelper.GetObject(this string jsonString, Type type) 方法
+
 ----------------------------------------------------------------*/
 
 
@@ -94,6 +97,17 @@ namespace Senparc.CO2NET.Helpers
             //#else
             //            return (T)Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString, typeof(T));
             //#endif
+        }
+
+        /// <summary>
+        /// 反序列化到对象
+        /// </summary>
+        /// <param name="jsonString">JSON字符串</param>
+        /// <param name="type">反序列化类型</param>
+        /// <returns></returns>
+        public static object GetObject(this string jsonString, Type type)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString, type);
         }
 
         //        #region 序列化对象 - byte[]
