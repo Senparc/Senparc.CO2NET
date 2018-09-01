@@ -1,7 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#region Apache License Version 2.0
+/*----------------------------------------------------------------
+
+Copyright 2018 Jeffrey Su & Suzhou Senparc Network Technology Co.,Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the
+License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the specific language governing permissions
+and limitations under the License.
+
+Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
+
+----------------------------------------------------------------*/
+#endregion Apache License Version 2.0
+
+/*----------------------------------------------------------------
+    Copyright (C) 2018 Senparc
+    
+    文件名：ObjectExtensions.cs
+    文件功能描述：对象扩展类
+    
+    
+    创建标识：Senparc - 20180602
+    
+    修改标识：Senparc - 20180901
+    修改描述：v0.2.10 ObjectExtensions.ToJson() 方法提供 indented 方法，支持缩进格式
+
+    修改标识：Senparc - 20160722
+    修改描述：v4.11.5 修复WeixinJsonConventer.Serialize中的错误。感谢 @jiehanlin
+    
+    修改标识：Senparc - 20180526
+    修改描述：v4.22.0-rc1 将 JsonSetting 继承 JsonSerializerSettings，使用 Newtonsoft.Json 进行序列化
+    
+
+    ----  CO2NET   ----
+    ----  split from Senparc.Weixin/Helpers/Conventers/WeixinJsonConventer.cs.cs  ----
+
+    修改标识：Senparc - 20180602
+    修改描述：v0.1.0 1、移植 JsonSetting
+                     2、重命名 WeixinJsonContractResolver 为 JsonContractResolver
+                     3、重命名 WeiXinJsonSetting 为 JsonSettingWrap
+
+    修改标识：Senparc - 20180721
+    修改描述：v0.2.1 优化序列化特性识别
+
+----------------------------------------------------------------*/
 
 namespace Senparc.CO2NET.Extensions
 {
@@ -14,10 +61,11 @@ namespace Senparc.CO2NET.Extensions
         /// 把数据转换为Json格式（使用Newtonsoft.Json.dll）
         /// </summary>
         /// <param name="data">数据</param>
+        /// <param name="indented">是否使用缩进格式</param>
         /// <returns></returns>
-        public static string ToJson(this object data)
+        public static string ToJson(this object data, bool indented = false)
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(data);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented);
         }
 
         /// <summary>
