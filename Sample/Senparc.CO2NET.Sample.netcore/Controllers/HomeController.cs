@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Senparc.CO2NET.Cache;
+using Senparc.CO2NET.HttpUtility;
 using Senparc.CO2NET.Sample.netcore.Models;
 
 namespace Senparc.CO2NET.Sample.netcore.Controllers
@@ -37,6 +38,27 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
 
             return View();
         }
+
+        #region Post 方法测试
+
+        /// <summary>
+        /// Post方法测试
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult PostTest()
+        {
+         var result =   RequestUtility.HttpPost("https://localhost:44335/Home/PostTest", formData: new Dictionary<string, string>() { { "code", "12335aaa" } });
+            return Content(result);
+        }
+
+
+        [HttpPost]
+        public IActionResult PostTest(string code)
+        {
+            return Content(DateTime.Now + "," + code);
+        }
+        #endregion
 
         public IActionResult Privacy()
         {

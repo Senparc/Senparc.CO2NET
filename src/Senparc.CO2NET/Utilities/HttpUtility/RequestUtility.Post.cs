@@ -204,11 +204,12 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="useAjax"></param>
         /// <param name="timeOut"></param>
         /// <param name="checkValidationResult"></param>
+        /// <param name="contentType"></param>
         /// <returns></returns>
         public static HttpClient HttpPost_Common_NetCore(string url, out HttpContent hc, CookieContainer cookieContainer = null,
             Stream postStream = null, Dictionary<string, string> fileDictionary = null, string refererUrl = null,
             Encoding encoding = null, X509Certificate2 cer = null, bool useAjax = false, int timeOut = Config.TIME_OUT,
-            bool checkValidationResult = false)
+            bool checkValidationResult = false,string contentType= "text/xml")
         {
             var handler = new HttpClientHandler()
             {
@@ -237,6 +238,7 @@ namespace Senparc.CO2NET.HttpUtility
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
             {
+                contentType = "multipart/form-data";
 
                 //通过表单上传文件
                 string boundary = "----" + DateTime.Now.Ticks.ToString("x");
@@ -281,9 +283,14 @@ namespace Senparc.CO2NET.HttpUtility
             }
             else
             {
+                if (postStream.Length>0)
+                {
+                    contentType = "application/x-www-form-urlencoded";
+                }
+
                 hc = new StreamContent(postStream);
 
-                hc.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
+                hc.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 
                 //使用Url格式Form表单Post提交的时候才使用application/x-www-form-urlencoded
                 //去掉注释以测试Request.Body为空的情况
@@ -331,7 +338,9 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
         /// <param name="refererUrl"></param>
         /// <returns></returns>
-        public static string HttpPost(string url, CookieContainer cookieContainer = null, Stream postStream = null, Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null, X509Certificate2 cer = null, bool useAjax = false, int timeOut = Config.TIME_OUT, bool checkValidationResult = false)
+        public static string HttpPost(string url, CookieContainer cookieContainer = null, Stream postStream = null, 
+            Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null, 
+            X509Certificate2 cer = null, bool useAjax = false, int timeOut = Config.TIME_OUT, bool checkValidationResult = false)
         {
             if (cookieContainer == null)
             {
