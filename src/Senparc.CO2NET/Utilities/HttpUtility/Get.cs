@@ -140,6 +140,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// </summary>
         /// <param name="url">需要下载文件的Url</param>
         /// <param name="filePathName">保存文件的路径，如果下载文件包含文件名，按照文件名储存，否则将分配Ticks随机文件名</param>
+        /// <param name="timeOut">超时时间</param>
         /// <returns></returns>
         public static string Download(string url, string filePathName, int timeOut = 999)
         {
@@ -274,14 +275,16 @@ namespace Senparc.CO2NET.HttpUtility
         /// 【异步方法】从Url下载，并保存到指定目录
         /// </summary>
         /// <param name="url">需要下载文件的Url</param>
-        /// <param name="filePathName"></param>
+        /// <param name="filePathName">保存文件的路径，如果下载文件包含文件名，按照文件名储存，否则将分配Ticks随机文件名</param>
+        /// <param name="timeOut">超时时间</param>
         /// <returns></returns>
-        public static async Task<string> DownloadAsync(string url, string filePathName)
+        public static async Task<string> DownloadAsync(string url, string filePathName, int timeOut = Config.TIME_OUT)
         {
             var dir = Path.GetDirectoryName(filePathName) ?? "/";
             Directory.CreateDirectory(dir);
 
             System.Net.Http.HttpClient httpClient = new HttpClient();
+            httpClient.Timeout = TimeSpan.FromMilliseconds(timeOut);
             using (var responseMessage = await httpClient.GetAsync(url))
             {
                 if (responseMessage.StatusCode == HttpStatusCode.OK)
