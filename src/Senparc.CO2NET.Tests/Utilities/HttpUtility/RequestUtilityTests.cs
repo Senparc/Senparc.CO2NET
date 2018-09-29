@@ -54,7 +54,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             stream.Seek(0, SeekOrigin.Begin);
 
             var cookieContainer = new CookieContainer();
-            var url = "http://localhost:65395/ForTest/PostTest";//使用.NET 4.5的Sample
+            var url = "https://localhost:44335/ForTest/PostTest";//使用.NET 4.5的Sample
             var result = RequestUtility.HttpPost(url,
                 cookieContainer, stream, useAjax: true);
 
@@ -74,7 +74,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             stream.Seek(0, SeekOrigin.Begin);
 
             var cookieContainer = new CookieContainer();
-            var url = "http://localhost:65395/ForTest/PostTest";//使用.NET 4.5的Sample
+            var url = "https://localhost:44335/ForTest/PostTest";//使用.NET 4.5的Sample
             var result = RequestUtility.HttpResponsePost(url,
                 cookieContainer, stream, useAjax: true);
 
@@ -83,7 +83,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             var resultString = result.Result.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             Console.WriteLine("resultString:{0}", resultString);
 #endif
-            var cookie = cookieContainer.GetCookies(new Uri("http://localhost:65395"));
+            var cookie = cookieContainer.GetCookies(new Uri("https://localhost:44335"));
             Console.WriteLine("TestCookie：{0}", cookie["TestCookie"]);
         }
 

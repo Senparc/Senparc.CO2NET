@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Utilities\HttpUtility\GetTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="appsettings.json" />
   </ItemGroup>
 
