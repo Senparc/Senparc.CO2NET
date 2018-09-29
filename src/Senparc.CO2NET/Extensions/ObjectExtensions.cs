@@ -65,7 +65,7 @@ namespace Senparc.CO2NET.Extensions
         /// <returns></returns>
         public static string ToJson(this object data, bool indented = false)
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(data, indented ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None);
         }
 
         /// <summary>

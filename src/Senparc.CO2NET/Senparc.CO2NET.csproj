@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net35;net40;net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
-    <Version>0.2.13</Version>
+    <Version>0.2.14</Version>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -61,6 +61,7 @@
       2、添加 SerializerHelper.GetObject(this string jsonString, Type type) 方法
       v0.2.10 ObjectExtensions.ToJson() 方法提供 indented 方法，支持缩进格式
       v0.2.11 修复 .NET Core 下模拟表单 Post 参数无效的问题
+      v0.2.14 ToJson() 方法优化
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
