@@ -89,7 +89,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="postDataDictionary">需要Post的键值对（name,value）</param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
-        public static T PostFileGetJson<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null, 
+        public static T PostFileGetJson<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null,
             Dictionary<string, string> postDataDictionary = null,
             Encoding encoding = null, X509Certificate2 cer = null, bool useAjax = false,
             Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
@@ -98,7 +98,7 @@ namespace Senparc.CO2NET.HttpUtility
             {
                 postDataDictionary.FillFormDataStream(ms); //填充formData
 
-                string returnText = RequestUtility.HttpPost(url, cookieContainer, ms, fileDictionary, null, encoding, cer, useAjax, timeOut);
+                string returnText = RequestUtility.HttpPost(url, cookieContainer, ms, fileDictionary, null, encoding, cer, useAjax, null, timeOut);
 
                 afterReturnText?.Invoke(url, returnText);
 
@@ -125,7 +125,7 @@ namespace Senparc.CO2NET.HttpUtility
             bool useAjax = false, bool checkValidationResult = false, Action<string, string> afterReturnText = null,
             int timeOut = Config.TIME_OUT)
         {
-            string returnText = RequestUtility.HttpPost(url, cookieContainer, fileStream, null, null, encoding, cer, useAjax, timeOut, checkValidationResult);
+            string returnText = RequestUtility.HttpPost(url, cookieContainer, fileStream, null, null, encoding, cer, useAjax, null, timeOut, checkValidationResult);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -150,7 +150,7 @@ namespace Senparc.CO2NET.HttpUtility
         public static T PostGetJson<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
             X509Certificate2 cer = null, bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
-            string returnText = RequestUtility.HttpPost(url, cookieContainer, formData, encoding, cer, useAjax, timeOut);
+            string returnText = RequestUtility.HttpPost(url, cookieContainer, formData, encoding, cer, useAjax, null, timeOut);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -193,7 +193,7 @@ namespace Senparc.CO2NET.HttpUtility
 
 #if !NET35 && !NET40
         #region 异步方法
-   
+
         /// <summary>
         /// 【异步方法】发起Post请求，可上传文件
         /// </summary>
@@ -215,7 +215,7 @@ namespace Senparc.CO2NET.HttpUtility
             using (MemoryStream ms = new MemoryStream())
             {
                 postDataDictionary.FillFormDataStream(ms); //填充formData
-                string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, ms, fileDictionary, null, encoding, cer, useAjax, timeOut);
+                string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, ms, fileDictionary, null, encoding, cer, useAjax, null, timeOut);
 
                 afterReturnText?.Invoke(url, returnText);
 
@@ -243,7 +243,7 @@ namespace Senparc.CO2NET.HttpUtility
             bool useAjax = false, bool checkValidationResult = false, Action<string, string> afterReturnText = null,
             int timeOut = Config.TIME_OUT)
         {
-            string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, fileStream, null, null, encoding, cer, useAjax, timeOut, checkValidationResult);
+            string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, fileStream, null, null, encoding, cer, useAjax, null, timeOut, checkValidationResult);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -269,7 +269,7 @@ namespace Senparc.CO2NET.HttpUtility
         public static async Task<T> PostGetJsonAsync<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
             X509Certificate2 cer = null, bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
-            string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, formData, encoding, cer, useAjax, timeOut);
+            string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, formData, encoding, cer, useAjax, null, timeOut);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -277,10 +277,6 @@ namespace Senparc.CO2NET.HttpUtility
             var result = SerializerHelper.GetObject<T>(returnText);
             return result;
         }
-
-      
-
-
 
         /// <summary>
         /// 【异步方法】使用Post方法上传数据并下载文件或结果

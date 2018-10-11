@@ -82,7 +82,7 @@ namespace Senparc.CO2NET.HttpUtility
                 request.CookieContainer = cookieContainer;
             }
 
-            HttpClientHeader(request, refererUrl, useAjax, timeOut);//设置头信息
+            HttpClientHeader(request, refererUrl, useAjax, null, timeOut);//设置头信息
 
             return request;
         }
@@ -112,7 +112,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             HttpClient httpClient = new HttpClient(handler);
-            HttpClientHeader(httpClient, refererUrl, useAjax, timeOut);
+            HttpClientHeader(httpClient, refererUrl, useAjax, null, timeOut);
 
             return httpClient;
         }

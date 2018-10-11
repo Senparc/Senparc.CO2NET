@@ -47,6 +47,12 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20180518
     修改描述：v4.21.0 支持 .NET Core 2.1.0-rc1-final 添加编译条件
 
+    -- CO2NET --
+
+    修改标识：Senparc - 20181009
+    修改描述：v0.2.15 Post 方法添加 headerAddition参数
+
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -172,8 +178,9 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="request"></param>
         /// <param name="refererUrl"></param>
         /// <param name="useAjax">是否使用Ajax</param>
+        /// <param name="headerAddition">header附加信息</param>
         /// <param name="timeOut"></param>
-        private static void HttpClientHeader(HttpWebRequest request, string refererUrl, bool useAjax, int timeOut)
+        private static void HttpClientHeader(HttpWebRequest request, string refererUrl, bool useAjax,Dictionary<string,string> headerAddition, int timeOut)
         {
             request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
             request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36";
@@ -189,6 +196,15 @@ namespace Senparc.CO2NET.HttpUtility
             {
                 request.Headers.Add("X-Requested-With", "XMLHttpRequest");
             }
+
+            if (headerAddition != null)
+            {
+                foreach (var item in headerAddition)
+                {
+                    request.Headers.Add(item.Key, item.Value);
+                }
+            }
+
         }
 #else //NETSTANDARD1_6 || NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
 
@@ -235,8 +251,9 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="client"></param>
         /// <param name="refererUrl"></param>
         /// <param name="useAjax">是否使用Ajax</param>
+        /// <param name="headerAddition">header附加信息</param>
         /// <param name="timeOut"></param>
-        private static void HttpClientHeader(HttpClient client, string refererUrl, bool useAjax, int timeOut)
+        private static void HttpClientHeader(HttpClient client, string refererUrl, bool useAjax, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xhtml+xml"));
@@ -265,6 +282,14 @@ namespace Senparc.CO2NET.HttpUtility
             if (useAjax)
             {
                 client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
+            }
+
+            if (headerAddition != null)
+            {
+                foreach (var item in headerAddition)
+                {
+                    client.DefaultRequestHeaders.Add(item.Key, item.Value);
+                }
             }
         }
 
