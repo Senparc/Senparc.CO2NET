@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{437FAC93-D41D-48C4-9E64-DD96C1A0CD8F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Senparc.Common.SDK</RootNamespace>
+    <AssemblyName>Senparc.Common.SDK</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\Sample\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\Sample\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\Sample\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\Sample\packages\NPOI.2.3.0\lib\net40\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\Sample\packages\NPOI.2.3.0\lib\net40\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\Sample\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\Sample\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\CmdHelper.cs" />
+    <Compile Include="Common\CommonHelper.cs" />
+    <Compile Include="Common\ConvertHelper.cs" />
+    <Compile Include="Common\PinyinHelper.cs" />
+    <Compile Include="Common\RandomHelper.cs" />
+    <Compile Include="Common\RMBHelper.cs" />
+    <Compile Include="Common\SqlFilterHelper.cs" />
+    <Compile Include="Common\StringHelper.cs" />
+    <Compile Include="Common\SysHelper.cs" />
+    <Compile Include="Config\ConfigHelper.cs" />
+    <Compile Include="Data\DataHelper.cs" />
+    <Compile Include="Data\HashtableHelper.cs" />
+    <Compile Include="DateTime\DateTime2Unix.cs" />
+    <Compile Include="DateTime\DateTimeHelper.cs" />
+    <Compile Include="DebugLog\LogFactory.cs" />
+    <Compile Include="DebugLog\LogHelper.cs" />
+    <Compile Include="Document\Excel\DeriveExcel.cs" />
+    <Compile Include="Document\Excel\ExcelBaseHelper.cs" />
+    <Compile Include="Document\Excel\ImportExcel.cs" />
+    <Compile Include="Document\Word\DeriveWord.cs" />
+    <Compile Include="Extension\IManageProvider.cs" />
+    <Compile Include="Extension\IManageUser.cs" />
+    <Compile Include="Extension\ManageProvider.cs" />
+    <Compile Include="Extension\Permission\PermissionMode.cs" />
+    <Compile Include="File\DirFileHelper.cs" />
+    <Compile Include="File\FileDateSorter.cs" />
+    <Compile Include="File\FileDownHelper.cs" />
+    <Compile Include="File\GZipHelper.cs" />
+    <Compile Include="File\INIFileHelper.cs" />
+    <Compile Include="File\ReadHelper.cs" />
+    <Compile Include="File\SizeHelper.cs" />
+    <Compile Include="File\UploadHelper.cs" />
+    <Compile Include="Http\HttpHelper.cs" />
+    <Compile Include="Http\NetHelper.cs" />
+    <Compile Include="Http\RequestHelper.cs" />
+    <Compile Include="Json\JsonHelper.cs" />
+    <Compile Include="Json\JsonMessage.cs" />
+    <Compile Include="Model\Condition.cs" />
+    <Compile Include="Model\GridPage.cs" />
+    <Compile Include="Model\JqGridColumn.cs" />
+    <Compile Include="Model\JqGridParam.cs" />
+    <Compile Include="Model\TreeJson.cs" />
+    <Compile Include="Security\DESEncrypt.cs" />
+    <Compile Include="Security\Md5Helper.cs" />
+    <Compile Include="System\Message_CN.Designer.cs" />
+    <Compile Include="System\SystemUtil.cs" />
+    <Compile Include="Web\CookieHelper.cs" />
+    <Compile Include="Web\IPScanerHelper.cs" />
+    <Compile Include="Web\SessionHelper.cs" />
+    <Compile Include="Xml\XMLHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="System\Message_CN.resx" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
