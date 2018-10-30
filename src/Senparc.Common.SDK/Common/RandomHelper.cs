@@ -22,6 +22,7 @@ namespace Senparc.Common.SDK
         private Random _random;
 
         #region 构造函数
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -30,9 +31,11 @@ namespace Senparc.Common.SDK
             //为随机数对象赋值
             this._random = new Random();
         }
+
         #endregion
 
         #region 生成一个指定范围的随机整数
+
         /// <summary>
         /// 生成一个指定范围的随机整数，该随机数范围包括最小值，但不包括最大值
         /// </summary>
@@ -42,9 +45,11 @@ namespace Senparc.Common.SDK
         {
             return this._random.Next(minNum, maxNum);
         }
+
         #endregion
 
         #region 生成一个0.0到1.0的随机小数
+
         /// <summary>
         /// 生成一个0.0到1.0的随机小数
         /// </summary>
@@ -52,9 +57,11 @@ namespace Senparc.Common.SDK
         {
             return this._random.NextDouble();
         }
+
         #endregion
 
         #region 对一个数组进行随机排序
+
         /// <summary>
         /// 对一个数组进行随机排序
         /// </summary>
@@ -83,6 +90,7 @@ namespace Senparc.Common.SDK
                 arr[randomNum2] = temp;
             }
         }
+
         #endregion
     }
 }

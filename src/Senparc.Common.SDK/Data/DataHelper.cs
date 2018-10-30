@@ -25,6 +25,7 @@ namespace Senparc.Common.SDK
     public class DataHelper
     {
         #region IList如何转成List<T>
+
         /// <summary>
         /// IList如何转成List<T>
         /// </summary>
@@ -37,9 +38,11 @@ namespace Senparc.Common.SDK
             list.CopyTo(array, 0);
             return new List<T>(array);
         }
+
         #endregion
 
         #region DataTable根据条件过滤表的内容
+
         /// <summary>
         /// 根据条件过滤表的内容
         /// </summary>
@@ -71,9 +74,11 @@ namespace Senparc.Common.SDK
                 return null;
             }
         }
+
         #endregion
 
         #region 检查DataTable 是否有数据行
+
         /// <summary>
         /// 检查DataTable 是否有数据行
         /// </summary>
@@ -86,9 +91,11 @@ namespace Senparc.Common.SDK
 
             return true;
         }
+
         #endregion
 
         #region DataTable 转 DataTableToHashtable
+
         /// <summary>
         /// DataTable 转 DataTableToHashtable
         /// </summary>
@@ -107,9 +114,11 @@ namespace Senparc.Common.SDK
             }
             return ht;
         }
+
         #endregion
 
         #region List转换DataTable
+
         /// <summary>
         /// 将泛类型集合List类转换成DataTable
         /// </summary>
@@ -151,9 +160,11 @@ namespace Senparc.Common.SDK
             }
             return dt;
         }
+
         #endregion
 
         #region DataTable/DataSet 转 XML
+
         /// <summary>
         /// DataTable 转 XML
         /// </summary>
@@ -172,6 +183,7 @@ namespace Senparc.Common.SDK
             }
             return String.Empty;
         }
+
         /// <summary>
         /// DataSet 转 XML
         /// </summary>
@@ -187,6 +199,7 @@ namespace Senparc.Common.SDK
             }
             return String.Empty;
         }
+
         #endregion
     }
 }

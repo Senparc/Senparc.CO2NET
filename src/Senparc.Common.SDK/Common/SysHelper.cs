@@ -23,19 +23,20 @@ namespace Senparc.Common.SDK
     public static class SysHelper
     {
         #region 获取文件相对路径映射的物理路径
+
         /// <summary>
         /// 获取文件相对路径映射的物理路径
         /// </summary>
         /// <param name="virtualPath">文件的相对路径</param>        
         public static string GetPath(string virtualPath)
         {
-
             return HttpContext.Current.Server.MapPath(virtualPath);
-
         }
+
         #endregion
 
         #region 获取指定调用层级的方法名
+
         /// <summary>
         /// 获取指定调用层级的方法名
         /// </summary>
@@ -48,9 +49,11 @@ namespace Senparc.Common.SDK
             //获取指定调用层级的方法名
             return trace.GetFrame(level).GetMethod().Name;
         }
+
         #endregion
 
         #region 获取换行字符
+
         /// <summary>
         /// 获取换行字符
         /// </summary>
@@ -61,9 +64,11 @@ namespace Senparc.Common.SDK
                 return Environment.NewLine;
             }
         }
+
         #endregion
 
         #region 获取当前应用程序域
+
         /// <summary>
         /// 获取当前应用程序域
         /// </summary>
@@ -74,9 +79,11 @@ namespace Senparc.Common.SDK
                 return Thread.GetDomain();
             }
         }
+
         #endregion
 
         #region 获取计算机基本信息
+
         /// <summary>  
         /// 获取本机机器名   
         /// </summary>  

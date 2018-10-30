@@ -60,6 +60,7 @@ namespace Senparc.Common.SDK
             }
             return list;
         }
+
         /// <summary>
         /// 把字符串转 按照, 分割 换为数据
         /// </summary>
@@ -69,6 +70,7 @@ namespace Senparc.Common.SDK
         {
             return str.Split(new Char[] { ',' });
         }
+
         /// <summary>
         /// 把 List<string> 按照分隔符组装成 string
         /// </summary>
@@ -92,6 +94,7 @@ namespace Senparc.Common.SDK
             }
             return sb.ToString();
         }
+
         /// <summary>
         /// 得到数组列表以逗号分隔的字符串
         /// </summary>
@@ -114,6 +117,7 @@ namespace Senparc.Common.SDK
             }
             return sb.ToString();
         }
+
         /// <summary>
         /// 得到数组列表以逗号分隔的字符串
         /// </summary>
@@ -136,7 +140,6 @@ namespace Senparc.Common.SDK
             }
         }
 
-
         #region 删除最后一个字符之后的字符
 
         /// <summary>
@@ -154,6 +157,7 @@ namespace Senparc.Common.SDK
         {
             return str.Substring(0, str.LastIndexOf(strchar));
         }
+
         /// <summary>
         /// 删除最后结尾的长度
         /// </summary>
@@ -167,6 +171,7 @@ namespace Senparc.Common.SDK
             str = str.Substring(0, str.Length - Length);
             return str;
         }
+
         #endregion
 
         /// <summary>
@@ -232,8 +237,8 @@ namespace Senparc.Common.SDK
             return list;
         }
 
-
         #region 将字符串样式转换为纯字符串
+
         /// <summary>
         ///  将字符串样式转换为纯字符串
         /// </summary>
@@ -257,9 +262,11 @@ namespace Senparc.Common.SDK
             }
             return RetrunValue;
         }
+
         #endregion
 
         #region 将字符串转换为新样式
+
         /// <summary>
         /// 将字符串转换为新样式
         /// </summary>
@@ -316,6 +323,7 @@ namespace Senparc.Common.SDK
             }
             return ReturnValue;
         }
+
         #endregion
 
         /// <summary>
@@ -333,6 +341,7 @@ namespace Senparc.Common.SDK
             }
             return strArray;
         }
+
         public static string SqlSafeString(string String, bool IsDel)
         {
             if (IsDel)
@@ -347,6 +356,7 @@ namespace Senparc.Common.SDK
         }
 
         #region 获取正确的Id，如果不是正整数，返回0
+
         /// <summary>
         /// 获取正确的Id，如果不是正整数，返回0
         /// </summary>
@@ -359,9 +369,11 @@ namespace Senparc.Common.SDK
             else
                 return 0;
         }
+
         #endregion
 
-        #region 检查一个字符串是否是纯数字构成的，一般用于查询字符串参数的有效性验证。
+        #region 检查一个字符串是否是纯数字构成的，一般用于查询字符串参数的有效性验证
+
         /// <summary>
         /// 检查一个字符串是否是纯数字构成的，一般用于查询字符串参数的有效性验证。(0除外)
         /// </summary>
@@ -371,9 +383,11 @@ namespace Senparc.Common.SDK
         {
             return QuickValidate("^[1-9]*[0-9]*$", _value);
         }
+
         #endregion
 
-        #region 快速验证一个字符串是否符合指定的正则表达式。
+        #region 快速验证一个字符串是否符合指定的正则表达式
+
         /// <summary>
         /// 快速验证一个字符串是否符合指定的正则表达式。
         /// </summary>
@@ -390,9 +404,11 @@ namespace Senparc.Common.SDK
             }
             return myRegex.IsMatch(_value);
         }
+
         #endregion
 
         #region 根据配置对指定字符串进行 MD5 加密
+
         /// <summary>
         /// 根据配置对指定字符串进行 MD5 加密
         /// </summary>
@@ -402,12 +418,13 @@ namespace Senparc.Common.SDK
         {
             //md5加密
             s = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(s, "md5").ToString();
-
             return s.ToLower().Substring(8, 16);
         }
+
         #endregion
 
         #region 得到字符串长度，一个汉字长度为2
+
         /// <summary>
         /// 得到字符串长度，一个汉字长度为2
         /// </summary>
@@ -427,9 +444,11 @@ namespace Senparc.Common.SDK
             }
             return tempLen;
         }
+
         #endregion
 
         #region 截取指定长度字符串
+
         /// <summary>
         /// 截取指定长度字符串
         /// </summary>
@@ -473,9 +492,11 @@ namespace Senparc.Common.SDK
                 tempString += "…";
             return tempString;
         }
+
         #endregion
 
         #region HTML转行成TEXT
+
         /// <summary>
         /// HTML转行成TEXT
         /// </summary>
@@ -513,12 +534,13 @@ namespace Senparc.Common.SDK
             strOutput.Replace(">", "");
             strOutput.Replace("\r\n", "");
 
-
             return strOutput;
         }
+
         #endregion
 
         #region 判断对象是否为空
+
         /// <summary>
         /// 判断对象是否为空，为空返回true
         /// </summary>
@@ -581,6 +603,7 @@ namespace Senparc.Common.SDK
             //不为空
             return false;
         }
+
         #endregion
     }
 }

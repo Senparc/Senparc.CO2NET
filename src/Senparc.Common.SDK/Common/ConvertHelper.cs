@@ -20,6 +20,7 @@ namespace Senparc.Common.SDK
     public sealed class ConvertHelper
     {
         #region 补足位数
+
         /// <summary>
         /// 指定字符串的固定长度，如果字符串小于固定长度，
         /// 则在字符串的前面补足零，可设置的固定长度最大为9位
@@ -43,9 +44,11 @@ namespace Senparc.Common.SDK
             //返回补足0的字符串
             return temp;
         }
+
         #endregion
 
         #region 各进制数间转换
+
         /// <summary>
         /// 实现各进制数间的转换。ConvertBase("15",10,16)表示将十进制数15转换为16进制的数。
         /// </summary>
@@ -89,9 +92,11 @@ namespace Senparc.Common.SDK
                 return "0";
             }
         }
+
         #endregion
 
         #region 使用指定字符集将string转换成byte[]
+
         /// <summary>
         /// 使用指定字符集将string转换成byte[]
         /// </summary>
@@ -101,9 +106,11 @@ namespace Senparc.Common.SDK
         {
             return encoding.GetBytes(text);
         }
+
         #endregion
 
         #region 使用指定字符集将byte[]转换成string
+
         /// <summary>
         /// 使用指定字符集将byte[]转换成string
         /// </summary>
@@ -113,9 +120,11 @@ namespace Senparc.Common.SDK
         {
             return encoding.GetString(bytes);
         }
+
         #endregion
 
         #region 将byte[]转换成int
+
         /// <summary>
         /// 将byte[]转换成int
         /// </summary>
@@ -147,8 +156,7 @@ namespace Senparc.Common.SDK
             //返回整数
             return num;
         }
+
         #endregion
-
-
     }
 }

@@ -19,11 +19,6 @@ namespace Senparc.Common.SDK
 {
     /// <summary>
     /// Log4Net日志类
-    /// 版本：2.0
-    /// <author>
-    ///		<name>MartyZane</name>
-    ///		<date>2014.03.03</date>
-    /// </author>
     /// </summary>
     public class LogHelper
     {

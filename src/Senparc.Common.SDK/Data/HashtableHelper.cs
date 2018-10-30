@@ -74,6 +74,7 @@ namespace Senparc.Common.SDK
             }
             return DataHelper.DataTableToHashtable(tb);
         }
+
         /// <summary>
         /// 实体类Model转Hashtable(反射)
         /// </summary>
@@ -88,6 +89,7 @@ namespace Senparc.Common.SDK
             }
             return ht;
         }
+
         /// <summary>
         /// Hashtable转换实体类
         /// </summary>
@@ -107,7 +109,13 @@ namespace Senparc.Common.SDK
             }
             return model;
         }
-        //这个类对可空类型进行判断转换，要不然会报错
+
+        /// <summary>
+        /// 这个类对可空类型进行判断转换，要不然会报错
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="conversionType"></param>
+        /// <returns></returns>
         public static object HackType(object value, Type conversionType)
         {
             if (conversionType.IsGenericType && conversionType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
@@ -124,8 +132,9 @@ namespace Senparc.Common.SDK
         {
             return ((obj is DBNull) || string.IsNullOrEmpty(obj.ToString())) ? true : false;
         }
+
         /// <summary>
-        /// 字符串 分割转换 Hashtable   ≌; ☻
+        /// 字符串 分割转换 Hashtable
         /// </summary>
         public static Hashtable ParameterToHashtable(string str)
         {
@@ -144,6 +153,7 @@ namespace Senparc.Common.SDK
             }
             return ht;
         }
+
         /// <summary>
         /// 自定义格式字符串转换 Hashtable
         /// </summary>
@@ -162,6 +172,7 @@ namespace Senparc.Common.SDK
             }
             return ht;
         }
+
         /// <summary>
         /// 指示指定的字符串是 null 还是 System.String.Empty 字符串。
         /// </summary>

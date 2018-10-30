@@ -33,6 +33,7 @@ namespace Senparc.Common.SDK
     public class CommonHelper
     {
         #region 类型转换
+
         /// <summary>
         /// 返回对象obj的String值,obj为null时返回空值。
         /// </summary>
@@ -42,6 +43,7 @@ namespace Senparc.Common.SDK
         {
             return null == obj ? String.Empty : obj.ToString();
         }
+
         /// <summary>
         /// 取得Int值,如果为Null 则返回０
         /// </summary>
@@ -164,6 +166,7 @@ namespace Senparc.Common.SDK
                 return DateTime.Now;
             //return DateTime.MinValue;
         }
+
         /// <summary>
         /// 计算耗时 
         /// </summary>
@@ -183,6 +186,7 @@ namespace Senparc.Common.SDK
             }
             return Time;
         }
+
         /// <summary>
         /// 取得DateTime值
         /// </summary>
@@ -195,6 +199,7 @@ namespace Senparc.Common.SDK
             else
                 return null;
         }
+
         /// <summary>
         /// 格式化日期 yyyy-MM-dd HH:mm
         /// </summary>
@@ -207,6 +212,7 @@ namespace Senparc.Common.SDK
             else
                 return "";
         }
+
         /// <summary>
         /// Json 的日期格式与.Net DateTime类型的转换
         /// </summary>
@@ -242,6 +248,7 @@ namespace Senparc.Common.SDK
             }
             return dateTime;
         }
+
         /// <summary>
         /// 取得bool值
         /// </summary>
@@ -286,6 +293,7 @@ namespace Senparc.Common.SDK
             else
                 return "";
         }
+
         /// <summary>   
         /// 判断用户输入是否为日期   
         /// </summary>   
@@ -362,9 +370,11 @@ namespace Senparc.Common.SDK
             }
             return false;
         }
+
         #endregion
 
         #region 数据判断
+
         /// <summary>
         /// 判断文本obj是否为空值。
         /// </summary>
@@ -472,9 +482,11 @@ namespace Senparc.Common.SDK
             catch
             { return false; }
         }
+
         #endregion
 
         #region "全球唯一码GUID"
+
         /// <summary>
         /// 获取一个全球唯一码GUID字符串
         /// </summary>
@@ -485,9 +497,11 @@ namespace Senparc.Common.SDK
                 return Guid.NewGuid().ToString().ToLower();
             }
         }
+
         #endregion
 
         #region 自动生成日期编号
+
         /// <summary>
         /// 自动生成编号  201008251145409865
         /// </summary>
@@ -499,9 +513,11 @@ namespace Senparc.Common.SDK
             string code = DateTime.Now.ToString("yyyyMMddHHmmss") + strRandom;//形如
             return code;
         }
+
         #endregion
 
         #region 生成0-9随机数
+
         /// <summary>
         /// 生成0-9随机数
         /// </summary>
@@ -519,9 +535,11 @@ namespace Senparc.Common.SDK
             return sb.ToString();
 
         }
+
         #endregion
 
         #region 路径转换（转换成绝对路径）
+
         /// <summary>
         /// 路径转换（转换成绝对路径）
         /// </summary>
@@ -538,9 +556,11 @@ namespace Senparc.Common.SDK
                 return path;
             }
         }
+
         #endregion
 
         #region 计时器
+
         /// <summary>
         /// 计时器开始
         /// </summary>
@@ -552,6 +572,7 @@ namespace Senparc.Common.SDK
             watch.Start();
             return watch;
         }
+
         /// <summary>
         /// 计时器结束
         /// </summary>
@@ -563,6 +584,7 @@ namespace Senparc.Common.SDK
             double costtime = watch.ElapsedMilliseconds;
             return costtime.ToString();
         }
+
         #endregion
     }
 }

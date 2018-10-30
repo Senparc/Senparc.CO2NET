@@ -29,6 +29,7 @@ namespace Senparc.Common.SDK
         {
             return DateTime.Now.ToString("yyyy-MM-dd");
         }
+
         /// <summary>
         /// 当前日期自定义格式
         /// </summary>
@@ -38,6 +39,7 @@ namespace Senparc.Common.SDK
         {
             return DateTime.Now.ToString(format);
         }
+
         /// <summary>
         /// 当前日期 加添加，减天数 -1、1
         /// </summary>
@@ -126,6 +128,7 @@ namespace Senparc.Common.SDK
         #endregion
 
         #region 返回本月有多少天
+
         /// <summary>本月有多少天</summary>
         /// <param name="iYear">年</param>
         /// <param name="Month">月</param>
@@ -175,7 +178,6 @@ namespace Senparc.Common.SDK
 
             return days;
         }
-
 
         /// <summary>本月有多少天</summary>
         /// <param name="dt">日期</param>
@@ -231,9 +233,11 @@ namespace Senparc.Common.SDK
             }
             return days;
         }
+
         #endregion
 
         #region 返回当前日期的 （星期名称or星期编号）
+
         /// <summary>返回当前日期的星期名称</summary>
         /// <param name="dt">日期</param>
         /// <returns>星期名称</returns>
@@ -267,7 +271,6 @@ namespace Senparc.Common.SDK
             return week;
         }
 
-
         /// <summary>返回当前日期的星期编号</summary>
         /// <param name="dt">日期</param>
         /// <returns>星期数字编号</returns>
@@ -300,9 +303,11 @@ namespace Senparc.Common.SDK
             }
             return week;
         }
+
         #endregion
 
         #region 获取某一年有多少周
+
         /// <summary>
         /// 获取某一年有多少周
         /// </summary>
@@ -314,9 +319,11 @@ namespace Senparc.Common.SDK
             var gc = new GregorianCalendar();
             return gc.GetWeekOfYear(end, CalendarWeekRule.FirstDay, DayOfWeek.Monday); //该年星期数
         }
+
         #endregion
 
         #region 获取某一日期是该年中的第几周
+
         /// <summary>
         /// 获取某一日期是该年中的第几周
         /// </summary>
@@ -327,9 +334,11 @@ namespace Senparc.Common.SDK
             var gc = new GregorianCalendar();
             return gc.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
         }
+
         #endregion
 
         #region 根据某年的第几周获取这周的起止日期
+
         /// <summary>
         /// 根据某年的第几周获取这周的起止日期
         /// </summary>
@@ -361,9 +370,11 @@ namespace Senparc.Common.SDK
                 lastDate = lastDate.AddDays(addDays);
             }
         }
+
         #endregion
 
         #region 返回两个日期之间相差的天数
+
         /// <summary>
         /// 返回2个时间的时间差
         /// </summary>
@@ -384,7 +395,6 @@ namespace Senparc.Common.SDK
             TimeSpan tsDiffer = dtto - dtfrm;
             return tsDiffer.Days;
         }
-
 
         /// <summary>
         /// 返回两个日期之间相差的小时
@@ -433,9 +443,11 @@ namespace Senparc.Common.SDK
             TimeSpan tsDiffer = dtto - dtfrm;
             return tsDiffer.Milliseconds;
         }
+
         #endregion
 
         #region 判断当前年份是否是闰年
+
         /// <summary>判断当前年份是否是闰年，私有函数</summary>
         /// <param name="iYear">年份</param>
         /// <returns>是闰年：True ，不是闰年：False</returns>
@@ -446,11 +458,13 @@ namespace Senparc.Common.SDK
             int n = iYear;
             return (n % 400 == 0) || (n % 4 == 0 && n % 100 != 0);
         }
+
         #endregion
 
         #region 将输入的字符串转化为日期。如果字符串的格式非法，则返回当前日期
+
         /// <summary>
-        /// 将输入的字符串转化为日期。如果字符串的格式非法，则返回当前日期。
+        /// 将输入的字符串转化为日期。如果字符串的格式非法，则返回当前日期
         /// </summary>
         /// <param name="strInput">输入字符串</param>
         /// <returns>日期对象</returns>
@@ -469,9 +483,11 @@ namespace Senparc.Common.SDK
 
             return oDateTime;
         }
+
         #endregion
 
         #region 将日期对象转化为格式字符串
+
         /// <summary>
         /// 将日期对象转化为格式字符串
         /// </summary>
@@ -509,6 +525,7 @@ namespace Senparc.Common.SDK
 
             return strDate;
         }
+
         #endregion
     }
 }

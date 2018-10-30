@@ -21,11 +21,6 @@ namespace Senparc.Common.SDK
 {
     /// <summary>
     ///  Config配置文件 公共帮助类
-    /// 版本：2.0
-    /// <author>
-    ///		<name>MartyZane</name>
-    ///		<date>2013.09.27</date>
-    /// </author>
     /// </summary>
     public class ConfigHelper
     {
@@ -37,6 +32,7 @@ namespace Senparc.Common.SDK
         {
             return ConfigurationManager.AppSettings[key].ToString().Trim();
         }
+
         /// <summary>
         /// 根据name取connectionString值
         /// </summary>
@@ -45,6 +41,7 @@ namespace Senparc.Common.SDK
         {
             return ConfigurationManager.ConnectionStrings[name].ConnectionString.Trim();
         }
+
         /// <summary>
         /// 根据Key修改Value
         /// </summary>

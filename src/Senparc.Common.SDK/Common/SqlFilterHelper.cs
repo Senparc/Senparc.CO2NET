@@ -42,6 +42,7 @@ namespace Senparc.Common.SDK
                 return inputString;
             }
         }
+
         ///<summary>
         /// 过滤字符串中注入SQL脚本的方法
         ///</summary>
