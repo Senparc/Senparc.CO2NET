@@ -54,6 +54,7 @@ namespace Senparc.Common.SDK
         ///// </summary>
         //public string Enabled { get; set; }
     }
+
     // 查询所用到的运算符
     public enum ConditionOperate : byte
     {
@@ -150,6 +151,7 @@ namespace Senparc.Common.SDK
         /// </summary>
         AfterDay,
     }
+
     /// <summary>
     /// 拼接查询条件SQL语句
     /// </summary>

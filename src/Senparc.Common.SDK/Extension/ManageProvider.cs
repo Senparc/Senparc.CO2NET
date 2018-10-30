@@ -23,11 +23,13 @@ namespace Senparc.Common.SDK
     public class ManageProvider : IManageProvider
     {
         #region 静态实例
+
         /// <summary>当前提供者</summary>
         public static IManageProvider Provider
         {
             get { return new ManageProvider(); }
         }
+
         #endregion
 
         /// <summary>
@@ -38,6 +40,7 @@ namespace Senparc.Common.SDK
         /// 登陆提供者模式:Session、Cookie 
         /// </summary>
         private string LoginProvider = ConfigHelper.AppSettings("LoginProvider");
+
         /// <summary>
         /// 写入登录信息
         /// </summary>
@@ -60,6 +63,7 @@ namespace Senparc.Common.SDK
                 throw new Exception(ex.Message);
             }
         }
+
         /// <summary>
         /// 当前用户
         /// </summary>
@@ -88,6 +92,7 @@ namespace Senparc.Common.SDK
                 throw new Exception("登录信息超时，请重新登录。");
             }
         }
+
         /// <summary>
         /// 删除登录信息
         /// </summary>
@@ -104,6 +109,7 @@ namespace Senparc.Common.SDK
                 SessionHelper.Remove(LoginUserKey.Trim());
             }
         }
+
         /// <summary>
         /// 是否过期
         /// </summary>

@@ -28,6 +28,7 @@ namespace Senparc.Common.SDK
     public class SessionHelper
     {
         #region 添加Session,有效期为默认
+
         /// <summary>
         /// 添加Session,有效期为默认
         /// </summary>
@@ -37,9 +38,11 @@ namespace Senparc.Common.SDK
         {
             HttpContext.Current.Session[strSessionName] = objValue;
         }
+
         #endregion
 
         #region 添加Session，并调整有效期为分钟或几年
+
         /// <summary>
         /// 添加Session，并调整有效期为分钟或几年
         /// </summary>
@@ -59,9 +62,11 @@ namespace Senparc.Common.SDK
                 HttpContext.Current.Session.Timeout = 60 * 24 * 365 * iYear;
             }
         }
+
         #endregion
 
         #region 读取某个Session对象值
+
         /// <summary>
         /// 读取某个Session对象值
         /// </summary>
@@ -71,9 +76,11 @@ namespace Senparc.Common.SDK
         {
             return HttpContext.Current.Session[strSessionName];
         }
+
         #endregion
 
         #region 删除某个Session对象
+
         /// <summary>
         /// 删除某个Session对象
         /// </summary>
@@ -82,6 +89,7 @@ namespace Senparc.Common.SDK
         {
             HttpContext.Current.Session.Remove(strSessionName);
         }
+
         #endregion
     }
 }

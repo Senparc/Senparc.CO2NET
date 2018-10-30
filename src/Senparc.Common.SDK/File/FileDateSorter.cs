@@ -53,6 +53,7 @@ namespace Senparc.Common.SDK
             arr[low] = pivot; //中心轴移到正确位置
             return low;  //返回中心轴位置
         }
+
         static void Swap(ref FileInfo i, ref FileInfo j)
         {
             FileInfo t;
@@ -60,6 +61,7 @@ namespace Senparc.Common.SDK
             i = j;
             j = t;
         }
+
         /// <summary>
         /// 快速排序算法
         /// </summary>

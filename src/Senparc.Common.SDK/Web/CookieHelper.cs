@@ -36,6 +36,7 @@ namespace Senparc.Common.SDK
             cookie.Value = strValue;
             HttpContext.Current.Response.AppendCookie(cookie);
         }
+
         /// <summary>
         /// 写cookie值
         /// </summary>
@@ -53,6 +54,7 @@ namespace Senparc.Common.SDK
             cookie.Expires = DateTime.Now.AddMinutes(expires);
             HttpContext.Current.Response.AppendCookie(cookie);
         }
+
         /// <summary>
         /// 读cookie值
         /// </summary>
@@ -66,6 +68,7 @@ namespace Senparc.Common.SDK
             }
             return "";
         }
+
         /// <summary>
         /// 删除Cookie对象
         /// </summary>

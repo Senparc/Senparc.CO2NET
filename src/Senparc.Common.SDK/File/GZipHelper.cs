@@ -121,6 +121,7 @@ namespace Senparc.Common.SDK
         }
 
         #region --单文件压缩+多文件压缩--
+
         /// <summary>
         /// 单文件压缩（生成的压缩包和第三方的解压软件兼容）
         /// </summary>
@@ -223,9 +224,11 @@ namespace Senparc.Common.SDK
         //var zipHelper = new Test.Zip.CompressHelper();
         //zipHelper.CompressMulti(strList.ToArray(), @"D:\wulala.gz");
         //    zipHelper.DeCompressMulti(@"D:\wulala.gz", @"D:\web\");
+
         #endregion
 
         #region Zip多文件压缩
+        
         /// <summary>
         /// 将多个流进行zip压缩，返回压缩后的流
         /// </summary>
@@ -267,10 +270,11 @@ namespace Senparc.Common.SDK
             returnStream.Position = 0;
             return returnStream;
         }
+        
         #endregion
 
-
         #region MyRegion
+
         /// <summary>
         /// 压缩单个文件
         /// </summary>
@@ -414,9 +418,6 @@ namespace Senparc.Common.SDK
                     
                 }
             }
-            
-
-            
         }
 
         /// <summary>
@@ -500,7 +501,6 @@ namespace Senparc.Common.SDK
         /// <param name="overWrite">是否覆盖已存在的文件。</param>
         public void UnZip(string zipedFile, string strDirectory, string password, bool overWrite)
         {
-
             if (strDirectory == "")
                 strDirectory = Directory.GetCurrentDirectory();
             if (!strDirectory.EndsWith("\\"))
@@ -550,6 +550,7 @@ namespace Senparc.Common.SDK
                 s.Close();
             }
         }
+
         #endregion
     }
 }

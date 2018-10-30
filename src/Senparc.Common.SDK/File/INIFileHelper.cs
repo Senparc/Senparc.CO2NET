@@ -61,6 +61,7 @@ namespace Senparc.Common.SDK
             int i = GetPrivateProfileString(Section, Key, "", temp, 255, path);
             return temp.ToString();
         }
+
         public static byte[] IniReadValues(string section, string key)
         {
             byte[] temp = new byte[255];
@@ -69,7 +70,6 @@ namespace Senparc.Common.SDK
 
         }
 
-
         /// <summary> 
         /// 删除ini文件下所有段落 
         /// </summary> 
@@ -77,6 +77,7 @@ namespace Senparc.Common.SDK
         {
             IniWriteValue(null, null, null);
         }
+
         /// <summary> 
         /// 删除ini文件下personal段落下的所有键 
         /// </summary> 

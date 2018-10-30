@@ -21,6 +21,7 @@ namespace Senparc.Common.SDK
     public class Md5Helper
     {
         #region "MD5加密"
+
         /// <summary>
         /// MD5加密
         /// </summary>
@@ -42,6 +43,7 @@ namespace Senparc.Common.SDK
 
             return strEncrypt;
         }
+
         #endregion
     }
 }

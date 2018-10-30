@@ -23,6 +23,7 @@ namespace Senparc.Common.SDK
     public class IPScanerHelper
     {
         #region 私有成员
+
         private string dataPath;
         private string ip;
         private string country;
@@ -36,18 +37,22 @@ namespace Senparc.Common.SDK
         private int countryFlag = 0;
         private long endIpOff = 0;
         private string errMsg = null;
+
         #endregion
 
         #region 构造函数
+
         public IPScanerHelper()
         {
             //  
             // TODO: 在此处添加构造函数逻辑  
             //  
         }
+
         #endregion
 
         #region 公共属性
+
         public string DataPath
         {
             set { dataPath = value; }
@@ -68,9 +73,11 @@ namespace Senparc.Common.SDK
         {
             get { return errMsg; }
         }
+
         #endregion
 
         #region 搜索匹配数据
+
         private int QQwry()
         {
             string pattern = @"(((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))";
@@ -151,9 +158,11 @@ namespace Senparc.Common.SDK
             }
 
         }
+
         #endregion
 
         #region IP地址转换成Int数据
+
         private long IpToInt(string ip)
         {
             char[] dot = new char[] { '.' };
@@ -170,9 +179,11 @@ namespace Senparc.Common.SDK
             ip_Int = p1 + p2 + p3 + p4;
             return ip_Int;
         }
+
         #endregion
 
         #region int转换成IP
+
         private string IntToIP(long ip_Int)
         {
             long seg1 = (ip_Int & 0xff000000) >> 24;
@@ -191,9 +202,11 @@ namespace Senparc.Common.SDK
 
             return ip;
         }
+
         #endregion
 
         #region 获取起始IP范围
+
         private long GetStartIp(long recNO)
         {
             long offSet = firstStartIp + recNO * 7;
@@ -206,9 +219,11 @@ namespace Senparc.Common.SDK
             startIp = Convert.ToInt64(buff[0].ToString()) + Convert.ToInt64(buff[1].ToString()) * 256 + Convert.ToInt64(buff[2].ToString()) * 256 * 256 + Convert.ToInt64(buff[3].ToString()) * 256 * 256 * 256;
             return startIp;
         }
+
         #endregion
 
         #region 获取结束IP
+
         private long GetEndIp()
         {
             //objfs.Seek(endIpOff,SeekOrigin.Begin);  
@@ -219,9 +234,11 @@ namespace Senparc.Common.SDK
             this.countryFlag = buff[4];
             return this.endIp;
         }
+
         #endregion
 
         #region 获取国家/区域偏移量
+
         private string GetCountry()
         {
             switch (this.countryFlag)
@@ -238,9 +255,11 @@ namespace Senparc.Common.SDK
             }
             return " ";
         }
+
         #endregion
 
         #region 获取国家/区域字符串
+
         private string GetFlagStr(long offSet)
         {
             int flag = 0;
@@ -270,9 +289,11 @@ namespace Senparc.Common.SDK
             objfs.Position = offSet;
             return GetStr();
         }
+
         #endregion
 
         #region GetStr
+
         private string GetStr()
         {
             byte lowC = 0;
@@ -299,14 +320,17 @@ namespace Senparc.Common.SDK
             }
             return str;
         }
+
         #endregion
 
         #region 获取IP地址
+
         public string IPLocation()
         {
             this.QQwry();
             return this.country + this.local;
         }
+
         public string IPLocation(string dataPath, string ip)
         {
             this.dataPath = dataPath;
@@ -314,6 +338,7 @@ namespace Senparc.Common.SDK
             this.QQwry();
             return this.country + this.local;
         }
+
         #endregion
     }
 }

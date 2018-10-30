@@ -22,6 +22,7 @@ namespace Senparc.Common.SDK
     public class DESEncrypt
     {
         #region ========加密========
+
         /// <summary>
         /// 加密
         /// </summary>
@@ -31,6 +32,7 @@ namespace Senparc.Common.SDK
         {
             return Encrypt(Text, "learun###***");
         }
+
         /// <summary> 
         /// 加密数据 
         /// </summary> 
@@ -59,6 +61,7 @@ namespace Senparc.Common.SDK
         #endregion
 
         #region ========解密========
+
         /// <summary>
         /// 解密
         /// </summary>
@@ -75,6 +78,7 @@ namespace Senparc.Common.SDK
                 return "";
             }
         }
+
         /// <summary> 
         /// 解密数据 
         /// </summary> 

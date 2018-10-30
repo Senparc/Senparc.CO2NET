@@ -42,6 +42,7 @@ namespace Senparc.Common.SDK
                 fileName);
             return connectionString;
         }
+
         /// <summary>
         /// Excel导入数据源
         /// </summary>

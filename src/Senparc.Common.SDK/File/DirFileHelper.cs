@@ -23,6 +23,7 @@ namespace Senparc.Common.SDK
     public static class DirFileHelper
     {
         #region 检测指定目录是否存在
+
         /// <summary>
         /// 检测指定目录是否存在
         /// </summary>
@@ -32,9 +33,11 @@ namespace Senparc.Common.SDK
         {
             return Directory.Exists(directoryPath);
         }
+
         #endregion
 
         #region 检测指定文件是否存在,如果存在返回true
+
         /// <summary>
         /// 检测指定文件是否存在,如果存在则返回true。
         /// </summary>
@@ -43,9 +46,11 @@ namespace Senparc.Common.SDK
         {
             return File.Exists(filePath);
         }
+
         #endregion
 
         #region 获取指定目录中的文件列表
+
         /// <summary>
         /// 获取指定目录中所有文件列表
         /// </summary>
@@ -61,9 +66,11 @@ namespace Senparc.Common.SDK
             //获取文件列表
             return Directory.GetFiles(directoryPath);
         }
+
         #endregion
 
         #region 获取指定目录中所有子目录列表,若要搜索嵌套的子目录列表,请使用重载方法.
+
         /// <summary>
         /// 获取指定目录中所有子目录列表,若要搜索嵌套的子目录列表,请使用重载方法.
         /// </summary>
@@ -79,9 +86,11 @@ namespace Senparc.Common.SDK
                 throw ex;
             }
         }
+
         #endregion
 
         #region 获取指定目录及子目录中所有文件列表
+
         /// <summary>
         /// 获取指定目录及子目录中所有文件列表
         /// </summary>
@@ -113,9 +122,11 @@ namespace Senparc.Common.SDK
                 throw ex;
             }
         }
+
         #endregion
 
         #region 检测指定目录是否为空
+
         /// <summary>
         /// 检测指定目录是否为空
         /// </summary>
@@ -147,9 +158,11 @@ namespace Senparc.Common.SDK
                 return true;
             }
         }
+
         #endregion
 
         #region 检测指定目录中是否存在指定的文件
+
         /// <summary>
         /// 检测指定目录中是否存在指定的文件,若要搜索子目录请使用重载方法.
         /// </summary>
@@ -210,9 +223,11 @@ namespace Senparc.Common.SDK
                 //LogHelper.WriteTraceLog(TraceLogLevel.Error, ex.Message);
             }
         }
+
         #endregion
 
         #region 创建目录
+
         /// <summary>
         /// 创建目录
         /// </summary>
@@ -223,9 +238,11 @@ namespace Senparc.Common.SDK
             if (!Directory.Exists(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir))
                 Directory.CreateDirectory(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir);
         }
+
         #endregion
 
         #region 删除目录
+
         /// <summary>
         /// 删除目录
         /// </summary>
@@ -236,9 +253,11 @@ namespace Senparc.Common.SDK
             if (Directory.Exists(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir))
                 Directory.Delete(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir);
         }
+
         #endregion
 
         #region 删除文件
+
         /// <summary>
         /// 删除文件
         /// </summary>
@@ -248,9 +267,11 @@ namespace Senparc.Common.SDK
             if (File.Exists(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file))
                 File.Delete(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file);
         }
+
         #endregion
 
         #region 创建文件
+
         /// <summary>
         /// 创建文件
         /// </summary>
@@ -265,9 +286,11 @@ namespace Senparc.Common.SDK
             sw.Write(pagestr);
             sw.Close();
         }
+
         #endregion
 
         #region 移动文件(剪贴--粘贴)
+
         /// <summary>
         /// 移动文件(剪贴--粘贴)
         /// </summary>
@@ -280,9 +303,11 @@ namespace Senparc.Common.SDK
             if (File.Exists(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir1))
                 File.Move(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir1, System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir2);
         }
+
         #endregion
 
         #region 复制文件
+
         /// <summary>
         /// 复制文件
         /// </summary>
@@ -297,9 +322,11 @@ namespace Senparc.Common.SDK
                 File.Copy(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir1, System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir2, true);
             }
         }
+
         #endregion
 
         #region 根据时间得到目录名 / 格式:yyyyMMdd 或者 HHmmssff
+
         /// <summary>
         /// 根据时间得到目录名yyyyMMdd
         /// </summary>
@@ -308,6 +335,7 @@ namespace Senparc.Common.SDK
         {
             return DateTime.Now.ToString("yyyyMMdd");
         }
+
         /// <summary>
         /// 根据时间得到文件名HHmmssff
         /// </summary>
@@ -316,9 +344,11 @@ namespace Senparc.Common.SDK
         {
             return DateTime.Now.ToString("HHmmssff");
         }
+
         #endregion
 
         #region 根据时间获取指定路径的 后缀名的 的所有文件
+
         /// <summary>
         /// 根据时间获取指定路径的 后缀名的 的所有文件
         /// </summary>
@@ -350,9 +380,11 @@ namespace Senparc.Common.SDK
             }
             return new DataRow[0];
         }
+
         #endregion
 
         #region 复制文件夹
+
         /// <summary>
         /// 复制文件夹(递归)
         /// </summary>
@@ -382,9 +414,11 @@ namespace Senparc.Common.SDK
                 }
             }
         }
+
         #endregion
 
         #region 检查文件,如果文件不存在则创建
+
         /// <summary>
         /// 检查文件,如果文件不存在则创建  
         /// </summary>
@@ -400,9 +434,11 @@ namespace Senparc.Common.SDK
                 fs.Close();
             }
         }
+
         #endregion
 
         #region 删除指定文件夹对应其他文件夹里的文件
+
         /// <summary>
         /// 删除指定文件夹对应其他文件夹里的文件
         /// </summary>
@@ -435,9 +471,11 @@ namespace Senparc.Common.SDK
                 }
             }
         }
+
         #endregion
 
         #region 从文件的绝对路径中获取文件名( 包含扩展名 )
+
         /// <summary>
         /// 从文件的绝对路径中获取文件名( 包含扩展名 )
         /// </summary>
@@ -448,9 +486,11 @@ namespace Senparc.Common.SDK
             FileInfo fi = new FileInfo(filePath);
             return fi.Name;
         }
+
         #endregion
 
         #region 复制文件参考方法,页面中引用
+
         /// <summary>
         /// 复制文件参考方法,页面中引用
         /// </summary>
@@ -527,9 +567,11 @@ namespace Senparc.Common.SDK
             //    }
             //}
         }
+
         #endregion
 
         #region 创建一个目录
+
         /// <summary>
         /// 创建一个目录
         /// </summary>
@@ -542,9 +584,11 @@ namespace Senparc.Common.SDK
                 Directory.CreateDirectory(directoryPath);
             }
         }
+
         #endregion
 
         #region 创建一个文件
+
         /// <summary>
         /// 创建一个文件。
         /// </summary>
@@ -604,9 +648,11 @@ namespace Senparc.Common.SDK
                 throw ex;
             }
         }
+
         #endregion
 
         #region 获取文本文件的行数
+
         /// <summary>
         /// 获取文本文件的行数
         /// </summary>
@@ -619,9 +665,11 @@ namespace Senparc.Common.SDK
             //返回行数
             return rows.Length;
         }
+
         #endregion
 
         #region 获取一个文件的长度
+
         /// <summary>
         /// 获取一个文件的长度,单位为Byte
         /// </summary>
@@ -634,9 +682,11 @@ namespace Senparc.Common.SDK
             //获取文件的大小
             return (int)fi.Length;
         }
+
         #endregion
 
         #region 获取指定目录中的子目录列表
+
         /// <summary>
         /// 获取指定目录及子目录中所有子目录列表
         /// </summary>
@@ -662,6 +712,7 @@ namespace Senparc.Common.SDK
                 throw ex;
             }
         }
+
         #endregion
 
         #region 向文本文件写入内容
@@ -677,9 +728,11 @@ namespace Senparc.Common.SDK
             //向文件写入内容
             File.WriteAllText(filePath, text, encoding);
         }
+
         #endregion
 
         #region 向文本文件的尾部追加内容
+
         /// <summary>
         /// 向文本文件的尾部追加内容
         /// </summary>
@@ -689,9 +742,11 @@ namespace Senparc.Common.SDK
         {
             File.AppendAllText(filePath, content);
         }
+
         #endregion
 
         #region 将现有文件的内容复制到新文件中
+
         /// <summary>
         /// 将源文件的内容复制到目标文件中
         /// </summary>
@@ -701,9 +756,11 @@ namespace Senparc.Common.SDK
         {
             File.Copy(sourceFilePath, destFilePath, true);
         }
+
         #endregion
 
         #region 将文件移动到指定目录
+
         /// <summary>
         /// 将文件移动到指定目录
         /// </summary>
@@ -725,9 +782,11 @@ namespace Senparc.Common.SDK
                 File.Move(sourceFilePath, descDirectoryPath + "\\" + sourceFileName);
             }
         }
+
         #endregion
 
         #region 从文件的绝对路径中获取文件名( 不包含扩展名 )
+
         /// <summary>
         /// 从文件的绝对路径中获取文件名( 不包含扩展名 )
         /// </summary>
@@ -738,9 +797,11 @@ namespace Senparc.Common.SDK
             FileInfo fi = new FileInfo(filePath);
             return fi.Name.Split('.')[0];
         }
+
         #endregion
 
         #region 从文件的绝对路径中获取扩展名
+
         /// <summary>
         /// 从文件的绝对路径中获取扩展名
         /// </summary>
@@ -751,9 +812,11 @@ namespace Senparc.Common.SDK
             FileInfo fi = new FileInfo(filePath);
             return fi.Extension;
         }
+
         #endregion
 
         #region 清空指定目录
+
         /// <summary>
         /// 清空指定目录下所有文件及子目录,但该目录依然保存.
         /// </summary>
@@ -777,9 +840,11 @@ namespace Senparc.Common.SDK
                 }
             }
         }
+
         #endregion
 
         #region 清空文件内容
+
         /// <summary>
         /// 清空文件内容
         /// </summary>
@@ -792,9 +857,11 @@ namespace Senparc.Common.SDK
             //重新创建该文件
             CreateFile(filePath);
         }
+
         #endregion
 
         #region 删除指定目录
+
         /// <summary>
         /// 删除指定目录及其所有子目录
         /// </summary>
@@ -807,6 +874,7 @@ namespace Senparc.Common.SDK
                 Directory.Delete(directoryPath, true);
             }
         }
+
         #endregion
 
         /// <summary>

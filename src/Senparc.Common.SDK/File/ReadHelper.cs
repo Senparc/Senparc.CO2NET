@@ -23,6 +23,7 @@ namespace Senparc.Common.SDK
     public class ReadHelper
     {
         #region 以只读方式读取文本文件
+
         /// <summary>
         /// 以只读方式读取文本文件
         /// </summary>
@@ -45,6 +46,7 @@ namespace Senparc.Common.SDK
             }
             return content;
         }
+
         public static string ReadFile(string FilePath)
         {
             string text = string.Empty;
@@ -60,6 +62,7 @@ namespace Senparc.Common.SDK
             }
             return text;
         }
+
         #endregion
     }
 }

@@ -41,6 +41,7 @@ namespace Senparc.Common.SDK
             else Result = string.Format("{0:####0.00} Bytes", FileSize);
             return Result;
         }
+
         /// <summary>
         /// 获取文件大小并以B，KB，GB，TB方式表示
         /// </summary>
@@ -61,6 +62,7 @@ namespace Senparc.Common.SDK
             else Result = string.Format("{0:####0.00} Bytes", FileSize);
             return Result;
         }
+
         /// <summary>
         /// 计算文件大小函数(保留两位小数),Size为字节大小
         /// </summary>

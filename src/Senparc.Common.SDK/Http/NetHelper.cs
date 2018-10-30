@@ -26,6 +26,7 @@ namespace Senparc.Common.SDK
     public class NetHelper
     {
         #region 检测本机是否联网（互联网）
+
         [DllImport("wininet")]
         private extern static bool InternetGetConnectedState(out int connectionDescription, int reservedValue);
         /// <summary>
@@ -46,9 +47,11 @@ namespace Senparc.Common.SDK
                 return false;
             }
         }
+
         #endregion
 
         #region 验证IP地址是否合法
+
         /// <summary>
         /// 验证IP地址是否合法
         /// </summary>
@@ -70,9 +73,11 @@ namespace Senparc.Common.SDK
             //验证
             return Regex.IsMatch(ip, pattern);
         }
+
         #endregion
 
         #region 检查设置的IP地址是否正确，返回正确的IP地址
+
         /// <summary>
         /// 检查设置的IP地址是否正确，并返回正确的IP地址,无效IP地址返回"-1"。
         /// </summary>
@@ -88,9 +93,11 @@ namespace Senparc.Common.SDK
                 return "-1";
             }
         }
+
         #endregion
 
         #region 检查设置的端口号是否正确，返回正确的端口号
+
         /// <summary>
         /// 检查设置的端口号是否正确，并返回正确的端口号,无效端口号返回-1。
         /// </summary>
@@ -128,9 +135,11 @@ namespace Senparc.Common.SDK
             }
             return validPort;
         }
+
         #endregion
 
         #region 将字符串形式的IP地址转换成IPAddress对象
+
         /// <summary>
         /// 将字符串形式的IP地址转换成IPAddress对象
         /// </summary>
@@ -139,9 +148,11 @@ namespace Senparc.Common.SDK
         {
             return IPAddress.Parse(ip);
         }
+
         #endregion
 
         #region 获取本机的计算机名
+
         /// <summary>
         /// 获取本机的计算机名
         /// </summary>
@@ -152,9 +163,11 @@ namespace Senparc.Common.SDK
                 return Dns.GetHostName();
             }
         }
+
         #endregion
 
         #region 获得当前页面客户端的IP
+
         /// <summary>    
         /// 获得当前页面客户端的IP    
         /// </summary>    
@@ -177,9 +190,11 @@ namespace Senparc.Common.SDK
             }
             return result;
         }
+
         #endregion
 
         #region 获取远程客户机的IP地址
+
         /// <summary>
         /// 获取远程客户机的IP地址
         /// </summary>
@@ -189,9 +204,11 @@ namespace Senparc.Common.SDK
             IPEndPoint client = (IPEndPoint)clientSocket.RemoteEndPoint;
             return client.Address.ToString();
         }
+
         #endregion
 
         #region 创建一个IPEndPoint对象
+
         /// <summary>
         /// 创建一个IPEndPoint对象
         /// </summary>
@@ -202,9 +219,11 @@ namespace Senparc.Common.SDK
             IPAddress ipAddress = StringToIPAddress(ip);
             return new IPEndPoint(ipAddress, port);
         }
+
         #endregion
 
         #region 创建一个TcpListener对象
+
         /// <summary>
         /// 创建一个自动分配IP和端口的TcpListener对象
         /// </summary>        
@@ -216,6 +235,7 @@ namespace Senparc.Common.SDK
 
             return new TcpListener(localEndPoint);
         }
+
         /// <summary>
         /// 创建一个TcpListener对象
         /// </summary>
@@ -229,9 +249,11 @@ namespace Senparc.Common.SDK
 
             return new TcpListener(localEndPoint);
         }
+
         #endregion
 
         #region 创建一个基于TCP协议的Socket对象
+
         /// <summary>
         /// 创建一个基于TCP协议的Socket对象
         /// </summary>        
@@ -239,9 +261,11 @@ namespace Senparc.Common.SDK
         {
             return new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
+
         #endregion
 
         #region 创建一个基于UDP协议的Socket对象
+
         /// <summary>
         /// 创建一个基于UDP协议的Socket对象
         /// </summary>        
@@ -249,11 +273,13 @@ namespace Senparc.Common.SDK
         {
             return new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         }
+
         #endregion
 
         #region 获取本地终结点
 
         #region 获取TcpListener对象的本地终结点
+
         /// <summary>
         /// 获取TcpListener对象的本地终结点
         /// </summary>
@@ -282,9 +308,11 @@ namespace Senparc.Common.SDK
             IPEndPoint localEndPoint = (IPEndPoint)tcpListener.LocalEndpoint;
             return localEndPoint.Port;
         }
+
         #endregion
 
         #region 获取Socket对象的本地终结点
+
         /// <summary>
         /// 获取Socket对象的本地终结点
         /// </summary>
@@ -313,11 +341,13 @@ namespace Senparc.Common.SDK
             IPEndPoint localEndPoint = (IPEndPoint)socket.LocalEndPoint;
             return localEndPoint.Port;
         }
+
         #endregion
 
         #endregion
 
         #region 绑定终结点
+
         /// <summary>
         /// 绑定终结点
         /// </summary>
@@ -348,9 +378,11 @@ namespace Senparc.Common.SDK
                 socket.Bind(endPoint);
             }
         }
+
         #endregion
 
         #region 指定Socket对象执行监听
+
         /// <summary>
         /// 指定Socket对象执行监听，默认允许的最大挂起连接数为100
         /// </summary>
@@ -401,9 +433,11 @@ namespace Senparc.Common.SDK
             //开始监听
             socket.Listen(maxConnection);
         }
+
         #endregion
 
         #region 连接到基于TCP协议的服务器
+
         /// <summary>
         /// 连接到基于TCP协议的服务器,连接成功返回true，否则返回false
         /// </summary>
@@ -426,9 +460,11 @@ namespace Senparc.Common.SDK
                 //LogHelper.WriteTraceLog(TraceLogLevel.Error, ex.Message);
             }
         }
+
         #endregion
 
         #region 以同步方式发送消息
+
         /// <summary>
         /// 以同步方式向指定的Socket对象发送消息
         /// </summary>
@@ -453,9 +489,11 @@ namespace Senparc.Common.SDK
             //发送消息
             socket.Send(buffer, buffer.Length, SocketFlags.None);
         }
+
         #endregion
 
         #region 以同步方式接收消息
+
         /// <summary>
         /// 以同步方式接收消息
         /// </summary>
@@ -484,9 +522,11 @@ namespace Senparc.Common.SDK
             //转换成字符串，并将其返回
             return ConvertHelper.BytesToString(tempBuffer, Encoding.Default);
         }
+
         #endregion
 
         #region 关闭基于Tcp协议的Socket对象
+
         /// <summary>
         /// 关闭基于Tcp协议的Socket对象
         /// </summary>
@@ -508,9 +548,11 @@ namespace Senparc.Common.SDK
                 socket.Close();
             }
         }
+
         #endregion
 
         #region 发送电子邮件
+
         /// <summary>
         /// 发送电子邮件,所有SMTP配置信息均在config配置文件中system.net节设置.
         /// </summary>

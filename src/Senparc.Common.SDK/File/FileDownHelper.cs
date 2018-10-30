@@ -25,7 +25,9 @@ namespace Senparc.Common.SDK
     public class FileDownHelper
     {
         public FileDownHelper()
-        { }
+        {
+        }
+
         /// <summary>
         /// 参数为虚拟路径
         /// </summary>
@@ -41,6 +43,7 @@ namespace Senparc.Common.SDK
         {
             return HttpContext.Current.Server.MapPath(FileName);
         }
+
         /// <summary>
         /// 验证文件是否存在
         /// </summary>
@@ -58,6 +61,7 @@ namespace Senparc.Common.SDK
                 return false;
             }
         }
+
         /// <summary>
         /// 普通下载
         /// </summary>

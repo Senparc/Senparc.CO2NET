@@ -22,8 +22,8 @@ namespace Senparc.Common.SDK
     /// </summary>
     public static class TreeJson
     {
-
         #region TreeToJson
+
         /// <summary>
         /// 转换树形Json
         /// </summary>
@@ -85,9 +85,11 @@ namespace Senparc.Common.SDK
             strJson.Append("]");
             return strJson.ToString();
         }
+
         #endregion
 
         #region ZTreeToJson
+
         /// <summary>
         /// 转换树形Json
         /// </summary>
@@ -113,9 +115,11 @@ namespace Senparc.Common.SDK
             strJson.Append("]");
             return strJson.ToString();
         }
+
         #endregion
 
     }
+
     public class TreeJsonEntity
     {
         public string parentId { get; set; }

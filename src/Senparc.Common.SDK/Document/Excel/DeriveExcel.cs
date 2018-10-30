@@ -65,6 +65,7 @@ namespace Senparc.Common.SDK
             HttpContext.Current.Response.Write(sbHtml.ToString());
             HttpContext.Current.Response.End();
         }
+
         /// <summary>
         /// DataTable导出Excel
         /// </summary>
@@ -101,6 +102,7 @@ namespace Senparc.Common.SDK
             HttpContext.Current.Response.Write(sbHtml.ToString());
             HttpContext.Current.Response.End();
         }
+
         /// <summary>
         /// Table标签导出Excel
         /// </summary>
@@ -118,6 +120,7 @@ namespace Senparc.Common.SDK
                 HttpContext.Current.Response.End();
             }
         }
+
         /// <summary>
         /// JqGrid导出Excel
         /// </summary>

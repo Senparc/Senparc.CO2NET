@@ -26,6 +26,7 @@ namespace Senparc.Common.SDK
     public class RequestHelper
     {
         #region URL请求数据
+
         /// <summary>
         /// HTTP POST方式请求数据
         /// </summary>
@@ -139,9 +140,11 @@ namespace Senparc.Common.SDK
                 sw.Dispose();
             }
         }
+
         #endregion
 
         #region "获取页面url"
+
         /// <summary>
         /// 获取当前访问页面地址参数
         /// </summary>
@@ -152,6 +155,7 @@ namespace Senparc.Common.SDK
                 return HttpContext.Current.Request.ServerVariables["QUERY_STRING"].ToString();
             }
         }
+
         /// <summary>
         /// 获取当前访问页面地址
         /// </summary>
@@ -162,6 +166,7 @@ namespace Senparc.Common.SDK
                 return HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
             }
         }
+
         /// <summary>
         /// 获取当前访问页面Url
         /// </summary>
@@ -172,6 +177,7 @@ namespace Senparc.Common.SDK
                 return GetScriptNameQueryString == "" ? GetScriptName : string.Format("{0}?{1}", GetScriptName, GetScriptNameQueryString);
             }
         }
+
         /// <summary>
         ///  获取当前访问页面 参数
         /// </summary>
@@ -182,9 +188,11 @@ namespace Senparc.Common.SDK
                 return HttpContext.Current.Request.Url.Query;
             }
         }
+
         #endregion
 
         #region URL处理
+
         /// <summary>
         /// URL字符编码
         /// </summary>
@@ -209,9 +217,11 @@ namespace Senparc.Common.SDK
             }
             return HttpContext.Current.Server.UrlDecode(str);
         }
+
         #endregion
 
         #region URL中去除指定参数
+
         /// <summary>
         /// 中去除指定参数
         /// </summary>
@@ -238,6 +248,7 @@ namespace Senparc.Common.SDK
                 return url1;
             }
         }
+
         #endregion
 
 

@@ -102,6 +102,7 @@ namespace Senparc.Common.SDK
             }
             return data;
         }
+
         public static Int64 GetContentLength(String url)
         {
             Int64 length;
@@ -230,11 +231,12 @@ namespace Senparc.Common.SDK
         }
 
         #region bool IsIPAddress(str1) 判断是否是IP格式 
-        /**//// <summary>
-            /// 判断是否是IP地址格式 0.0.0.0
-            /// </summary>
-            /// <param name="str1">待判断的IP地址</param>
-            /// <returns>true or false</returns>
+
+        /// <summary>
+        /// 判断是否是IP地址格式 0.0.0.0
+        /// </summary>
+        /// <param name="str1">待判断的IP地址</param>
+        /// <returns>true or false</returns>
         public static bool IsIPAddress(string str1)
         {
             if(str1 == null || str1 == string.Empty || str1.Length < 7 || str1.Length > 15) return false;
@@ -242,6 +244,7 @@ namespace Senparc.Common.SDK
             Regex regex = new Regex(regformat, RegexOptions.IgnoreCase);
             return regex.IsMatch(str1);
         }
+
         #endregion
 
         /// <summary>

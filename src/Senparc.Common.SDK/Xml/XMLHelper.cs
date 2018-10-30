@@ -24,6 +24,7 @@ namespace Senparc.Common.SDK
     public class XMLHelper
     {
         #region 对象转换
+
         /// <summary>
         /// Hashtable
         /// </summary>
@@ -34,6 +35,7 @@ namespace Senparc.Common.SDK
             DataTable dt = XMLToDataTable(xmlData);
             return DataHelper.DataTableToHashtable(dt);
         }
+
         /// <summary>
         /// DataTable
         /// </summary>
@@ -50,6 +52,7 @@ namespace Senparc.Common.SDK
             }
             return null;
         }
+
         /// <summary>
         /// DataSet
         /// </summary>
@@ -65,9 +68,11 @@ namespace Senparc.Common.SDK
             }
             return null;
         }
+
         #endregion
 
         #region 增、删、改操作
+
         /// <summary>
         /// 追加节点
         /// </summary>
@@ -170,9 +175,11 @@ namespace Senparc.Common.SDK
                 return null;
             }
         }
+
         #endregion 增、删、改操作
 
         #region 扩展方法
+
         /// <summary>
         /// 读取XML的所有子节点
         /// </summary>
