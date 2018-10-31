@@ -78,7 +78,6 @@
     <Compile Include="Config\ConfigHelper.cs" />
     <Compile Include="Data\DataHelper.cs" />
     <Compile Include="Data\HashtableHelper.cs" />
-    <Compile Include="DateTime\DateTime2Unix.cs" />
     <Compile Include="DateTime\DateTimeHelper.cs" />
     <Compile Include="DebugLog\LogFactory.cs" />
     <Compile Include="DebugLog\LogHelper.cs" />
