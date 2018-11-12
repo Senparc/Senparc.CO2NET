@@ -7,9 +7,13 @@
 
     创建标识：MartyZane - 20181030
 
+    修改标识：MartyZane - 20181112
+    修改描述：v0.0.1 优化读取Ini文件信息失败的bug
+
 ----------------------------------------------------------------*/
 
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Web;
@@ -17,74 +21,58 @@ using System.Web.SessionState;
 
 namespace Senparc.Common.SDK
 {
-    /// <summary>
-    /// INI文件读写类
-    /// </summary>
-    public class INIFileHelper
+  /// <summary>
+  /// INI文件读写类
+  /// </summary>
+  public class INIFileHelper
+  {
+    public string inipath;
+
+    //声明API函数
+
+    [DllImport("kernel32")]
+    private static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
+    [DllImport("kernel32")]
+    private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
+    /// <summary> 
+    /// 构造方法 
+    /// </summary> 
+    /// <param name="INIPath">文件路径</param> 
+    public INIFileHelper(string INIPath)
     {
-        public static string path;
-
-        [DllImport("kernel32")]
-        private static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
-
-        [DllImport("kernel32")]
-        private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
-
-
-        [DllImport("kernel32")]
-        private static extern int GetPrivateProfileString(string section, string key, string defVal, Byte[] retVal, int size, string filePath);
-
-
-        /// <summary> 
-        /// 写INI文件 
-        /// </summary> 
-        /// <param name="Section"></param> 
-        /// <param name="Key"></param> 
-        /// <param name="Value"></param> 
-        public static void IniWriteValue(string Section, string Key, string Value)
-        {
-            WritePrivateProfileString(Section, Key, Value, path);
-        }
-
-        /// <summary> 
-        /// 读取INI文件 
-        /// </summary> 
-        /// <param name="Section"></param> 
-        /// <param name="Key"></param> 
-        /// <returns></returns> 
-        public static string IniReadValue(string Section, string Key)
-        {
-            //Cache.Insert("Items1", list, new System.Web.Caching.CacheDependency(path)); 
-            HttpSessionState Session = HttpContext.Current.Session;
-            if (path == null) path = Session["path"].ToString();
-            StringBuilder temp = new StringBuilder(255);
-            int i = GetPrivateProfileString(Section, Key, "", temp, 255, path);
-            return temp.ToString();
-        }
-
-        public static byte[] IniReadValues(string section, string key)
-        {
-            byte[] temp = new byte[255];
-            int i = GetPrivateProfileString(section, key, "", temp, 255, path);
-            return temp;
-
-        }
-
-        /// <summary> 
-        /// 删除ini文件下所有段落 
-        /// </summary> 
-        public static void ClearAllSection()
-        {
-            IniWriteValue(null, null, null);
-        }
-
-        /// <summary> 
-        /// 删除ini文件下personal段落下的所有键 
-        /// </summary> 
-        /// <param name="Section"></param> 
-        public static void ClearSection(string Section)
-        {
-            IniWriteValue(Section, null, null);
-        }
+      inipath = INIPath;
     }
+
+    public INIFileHelper() { }
+
+    /// <summary> 
+    /// 写入INI文件 
+    /// </summary> 
+    /// <param name="Section">项目名称(如 [TypeName] )</param> 
+    /// <param name="Key">键</param> 
+    /// <param name="Value">值</param> 
+    public void IniWriteValue(string Section, string Key, string Value)
+    {
+      WritePrivateProfileString(Section, Key, Value, this.inipath);
+    }
+    /// <summary> 
+    /// 读出INI文件 
+    /// </summary> 
+    /// <param name="Section">项目名称(如 [TypeName] )</param> 
+    /// <param name="Key">键</param> 
+    public string IniReadValue(string Section, string Key)
+    {
+      StringBuilder temp = new StringBuilder(500);
+      int i = GetPrivateProfileString(Section, Key, "", temp, 500, this.inipath);
+      return temp.ToString();
+    }
+    /// <summary> 
+    /// 验证文件是否存在 
+    /// </summary> 
+    /// <returns>布尔值</returns> 
+    public bool ExistINIFile()
+    {
+      return File.Exists(inipath);
+    }
+  }
 }
