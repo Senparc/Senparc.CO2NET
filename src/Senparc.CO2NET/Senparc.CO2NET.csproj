@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net35;net40;net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
-    <Version>0.2.16</Version>
+    <Version>0.2.17</Version>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -63,6 +63,7 @@
       v0.2.11 修复 .NET Core 下模拟表单 Post 参数无效的问题
       v0.2.14 ToJson() 方法优化
       v0.2.15 Post 方法添加 headerAddition参数
+      v0.2.17 启用 SystemTime.Now，方便单元测试或紧急情况下改动系统当前时间
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
