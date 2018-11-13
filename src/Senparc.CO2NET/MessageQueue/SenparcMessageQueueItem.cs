@@ -76,7 +76,7 @@ namespace Senparc.CO2NET.MessageQueue
             Key = key;
             Action = action;
             Description = description;
-            AddTime = DateTime.Now;
+            AddTime = SystemTime.Now;
         }
     }
 }

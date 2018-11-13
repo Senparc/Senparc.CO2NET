@@ -34,8 +34,8 @@ namespace Senparc.CO2NET.Tests.Cache
                 Console.WriteLine($"开始缓存测试;{cache}");
                 CacheStrategyFactory.RegisterObjectCacheStrategy(() => cache);
                 var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
-                var dt = DateTime.Now;
-                var key = $"RedisTest-{DateTime.Now.Ticks}";
+                var dt = SystemTime.Now;
+                var key = $"RedisTest-{SystemTime.Now.Ticks}";
                 cacheStrategy.Set(key, new TestCustomObject()
                 {
                     Id = ++index,

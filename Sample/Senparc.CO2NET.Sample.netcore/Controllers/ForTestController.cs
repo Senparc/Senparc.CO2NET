@@ -26,9 +26,9 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
 
             var isAjax = Request.IsAjaxRequest();
 
-            Response.Cookies.Append("TestCookie", DateTime.Now.ToString());
+            Response.Cookies.Append("TestCookie", SystemTime.Now.ToString());
 
-            return Content(data + " Ajax:" + isAjax + " Server Time:" + DateTime.Now);
+            return Content(data + " Ajax:" + isAjax + " Server Time:" + SystemTime.Now);
         }
     }
 }

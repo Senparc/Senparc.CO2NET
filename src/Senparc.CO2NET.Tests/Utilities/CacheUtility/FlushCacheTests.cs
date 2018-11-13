@@ -18,7 +18,7 @@ namespace Senparc.CO2NET.Tests.Utilities
                 {
                     smq.Add("测试" + Guid.NewGuid().ToString(), () =>
                     {
-                        Console.WriteLine("执行队列：" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffffff"));
+                        Console.WriteLine("执行队列：" + SystemTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffffff"));
                     });
                 }
             }//立即执行所有队列

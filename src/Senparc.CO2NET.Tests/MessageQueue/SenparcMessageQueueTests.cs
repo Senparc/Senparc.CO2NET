@@ -23,7 +23,7 @@ namespace Senparc.CO2NET.Tests.MessageQueue
                 //测试Add
                 smq.Add(key, () =>
                   {
-                      Console.WriteLine("执行队列：" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffffff"));
+                      Console.WriteLine("执行队列：" + SystemTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffffff"));
                   });
 
 
@@ -63,7 +63,7 @@ namespace Senparc.CO2NET.Tests.MessageQueue
         {
             var mq = new SenparcMessageQueue();
             var count = mq.GetCount();
-            var key = DateTime.Now.Ticks.ToString();
+            var key = SystemTime.Now.Ticks.ToString();
 
             //Test Add()
             var item = mq.Add(key, () => Console.WriteLine("测试SenparcMessageQueue写入Key=A"));

@@ -30,12 +30,14 @@ namespace Senparc.CO2NET.APM
         /// <returns></returns>
         public DataItem Set(string kindName, double value, object data = null,DateTime? dateTime=null)
         {
-            var dateItem = new DataItem() {
+            var dataItem = new DataItem() {
                 KindName = kindName,
                 Value = value,
                 Data = data,
-                DateTime = dateTime ?? DateTime.Now;
+                DateTime = dateTime ?? SystemTime.Now
             };
+
+            return dataItem;
         }
     }
 }

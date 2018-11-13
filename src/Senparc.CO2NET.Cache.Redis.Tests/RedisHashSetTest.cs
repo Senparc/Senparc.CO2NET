@@ -18,7 +18,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisHashSetObjectCacheStrategy.Instance);
             var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
 
-            var dt = DateTime.Now;
+            var dt = SystemTime.Now;
             cacheStrategy.Set("RedisTest", new ContainerBag()
             {
                 Key = "123",
@@ -35,7 +35,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 
-            Console.WriteLine($"HashSet-SetTest单条测试耗时：{(DateTime.Now - dt).TotalMilliseconds}ms");
+            Console.WriteLine($"HashSet-SetTest单条测试耗时：{(SystemTime.Now - dt).TotalMilliseconds}ms");
         }
     }
 }

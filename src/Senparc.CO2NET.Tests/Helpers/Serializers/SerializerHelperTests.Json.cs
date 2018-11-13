@@ -34,7 +34,7 @@ namespace Senparc.CO2NET.Tests.Helpers
                 };
 
 
-            DateTime dt1 = DateTime.Now;
+            DateTime dt1 = SystemTime.Now;
 
             {
                 //不进行任何设置，返回原始JSON
@@ -161,7 +161,7 @@ namespace Senparc.CO2NET.Tests.Helpers
 
 
 
-            Console.WriteLine((DateTime.Now - dt1).TotalMilliseconds);
+            Console.WriteLine((SystemTime.Now - dt1).TotalMilliseconds);
         }
 
         public class RootClass /*: JsonIgnoreNull, IJsonIgnoreNull*/
@@ -273,14 +273,14 @@ namespace Senparc.CO2NET.Tests.Helpers
         {
             dynamic test = new ExpandoObject();
             test.x = "Senparc.Weixin SDK";
-            test.y = DateTime.Now;
+            test.y = SystemTime.Now;
 
-            DateTime dt1 = DateTime.Now;
+            DateTime dt1 = SystemTime.Now;
 
             var json = SerializerHelper.GetJsonString(test);
             Console.WriteLine(json);
 
-            Console.WriteLine((DateTime.Now - dt1).TotalMilliseconds);
+            Console.WriteLine((SystemTime.Now - dt1).TotalMilliseconds);
 
         }
 

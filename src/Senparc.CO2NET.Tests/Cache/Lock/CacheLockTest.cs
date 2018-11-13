@@ -18,15 +18,15 @@ namespace Senparc.CO2NET.Cache.Lock
         [TestMethod]
         public void TestParallelThreadsRunAtSameTime()
         {
-            var dt1 = DateTime.Now;
+            var dt1 = SystemTime.Now;
             Parallel.For(0, 100, i =>
             {
                 Console.WriteLine("T:{0}，Use Time：{1}ms", Thread.CurrentThread.GetHashCode(),
-                    (DateTime.Now - dt1).TotalMilliseconds);
+                    (SystemTime.Now - dt1).TotalMilliseconds);
                 Thread.Sleep(20);
             });
 
-            var dt2 = DateTime.Now;
+            var dt2 = SystemTime.Now;
             Console.WriteLine("Working Threads Count:{0}", 100 * 20 / (dt2 - dt1).TotalMilliseconds);
             //测试结果：同时运行的线程数约为4（平均3.6）,实际目测为5
 
@@ -41,20 +41,20 @@ namespace Senparc.CO2NET.Cache.Lock
                 var thread = new Thread(() =>
                 {
                     Console.WriteLine("T:{0}，Use Time：{1}ms", Thread.CurrentThread.GetHashCode(),
-                                (DateTime.Now - dt2).TotalMilliseconds);
+                                (SystemTime.Now - dt2).TotalMilliseconds);
                     Thread.Sleep(20);
                     runThreads[0]--;
                 });
                 list.Add(thread);
             }
 
-            var dt3 = DateTime.Now;
+            var dt3 = SystemTime.Now;
             list.ForEach(z => z.Start());
             while (runThreads[0] > 0)
             {
                 //Thread.Sleep(100);
             }
-            var dt4 = DateTime.Now;
+            var dt4 = SystemTime.Now;
             Console.WriteLine("Working Threads Count:{0}", 1000 * 20 / (dt4 - dt3).TotalMilliseconds);
             //测试结果：无限制
         }
@@ -122,7 +122,7 @@ namespace Senparc.CO2NET.Cache.Lock
 
                     Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 进入，准备尝试锁。Cache实例：{cache.GetHashCode()}");
 
-                    DateTime dt1 = DateTime.Now;
+                    DateTime dt1 = SystemTime.Now;
                     using (var cacheLock = cache.BeginCacheLock(resourceName, appId, (int)retryTimes, TimeSpan.FromMilliseconds(retryDelay)))
                     {
                         var result = cacheLock.LockSuccessful
@@ -130,19 +130,19 @@ namespace Senparc.CO2NET.Cache.Lock
                             : "【失败！】";
                         result += " | TTL：" + cacheLock.GetTotalTtl(retryTimes, TimeSpan.FromMilliseconds(retryDelay)) + "ms";
 
-                        Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 进入锁，等待时间：{(DateTime.Now - dt1).TotalMilliseconds} / {(DateTime.Now - dt0).TotalMilliseconds}ms，获得锁结果：{result}");
+                        Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 进入锁，等待时间：{(SystemTime.Now - dt1).TotalMilliseconds} / {(SystemTime.Now - dt0).TotalMilliseconds}ms，获得锁结果：{result}");
 
                         Thread.Sleep(sleepMillionSeconds);
                     }
-                    Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 释放锁（{(DateTime.Now - dt1).TotalMilliseconds}ms）");
+                    Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 释放锁（{(SystemTime.Now - dt1).TotalMilliseconds}ms）");
                     runThreads[0]--;
                 });
                 list.Add(thread);
             }
 
             
-            var dtAll1 = DateTime.Now;
-            dt0 = DateTime.Now;
+            var dtAll1 = SystemTime.Now;
+            dt0 = SystemTime.Now;
 
             list.ForEach(z => z.Start());
 
@@ -151,7 +151,7 @@ namespace Senparc.CO2NET.Cache.Lock
                 Thread.Sleep(10);
             }
 
-            Console.WriteLine("Real Time:{0}ms", (DateTime.Now - dtAll1).TotalMilliseconds);
+            Console.WriteLine("Real Time:{0}ms", (SystemTime.Now - dtAll1).TotalMilliseconds);
 
             //Thread.Sleep((int)hopedTotalTime + 1000);
             //while (true)
@@ -170,18 +170,18 @@ namespace Senparc.CO2NET.Cache.Lock
             //    var resourceName = "Test-" + rnd.Next(0, 2);
             //    Console.WriteLine("线程 {0} / {1} : {2} 进入，准备尝试锁", Thread.CurrentThread.GetHashCode(), resourceName, appId);
 
-            //    DateTime dt1 = DateTime.Now;
+            //    DateTime dt1 = SystemTime.Now;
             //    using (var cacheLock = Cache.BeginCacheLock(resourceName, appId, (int)retryTimes, new TimeSpan(0, 0, 0, 0, 20)))
             //    {
             //        var result = cacheLock.LockSuccessful
             //            ? "成功"
             //            : "【失败！】";
 
-            //        Console.WriteLine("线程 {0} / {1} : {2} 进入锁，等待时间：{3}ms，获得锁结果：{4}", Thread.CurrentThread.GetHashCode(), resourceName, appId, (DateTime.Now - dt1).TotalMilliseconds, result);
+            //        Console.WriteLine("线程 {0} / {1} : {2} 进入锁，等待时间：{3}ms，获得锁结果：{4}", Thread.CurrentThread.GetHashCode(), resourceName, appId, (SystemTime.Now - dt1).TotalMilliseconds, result);
 
             //        Thread.Sleep(sleepMillionSeconds);
             //    }
-            //    Console.WriteLine("线程 {0} / {1} : {2} 释放锁（{3}ms）", Thread.CurrentThread.GetHashCode(), resourceName, appId, (DateTime.Now - dt1).TotalMilliseconds);
+            //    Console.WriteLine("线程 {0} / {1} : {2} 释放锁（{3}ms）", Thread.CurrentThread.GetHashCode(), resourceName, appId, (SystemTime.Now - dt1).TotalMilliseconds);
             //});
         }
     }

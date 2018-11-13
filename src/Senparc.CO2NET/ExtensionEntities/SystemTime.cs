@@ -9,11 +9,11 @@ namespace System
         ///// <summary>
         ///// 返回 Now 方法
         ///// </summary>
-        //public static Func<DateTime> GetNow = () => DateTime.Now;
+        //public static Func<DateTime> GetNow = () => SystemTime.Now;
 
         /// <summary>
         /// 当前时间
         /// </summary>
-        public static DateTime Now => DateTime.Now
+        public static DateTime Now => DateTime.Now;
     }
 }
