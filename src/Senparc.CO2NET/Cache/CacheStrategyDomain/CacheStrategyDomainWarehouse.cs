@@ -152,7 +152,7 @@ namespace Senparc.CO2NET.Cache
         public static List<Type> AutoScanDomainCacheStrategy(bool autoScanExtensionCacheStrategies = false, Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
         {
             //注册扩展缓存
-            DateTime dt1 = DateTime.Now;
+            DateTime dt1 = SystemTime.Now;
             var addedTypes = new List<Type>();
             var cacheTypes = "";//所有注册的扩展缓存
 
@@ -215,7 +215,7 @@ namespace Senparc.CO2NET.Cache
                 }
             }
 
-            DateTime dt2 = DateTime.Now;
+            DateTime dt2 = SystemTime.Now;
             var exCacheLog = "注册总用时：{0}ms\r\n自动扫描程序集：{1}个\r\n扩展缓存：{2}".FormatWith((dt2 - dt1).TotalMilliseconds, scanTypesCount, cacheTypes);
             Trace.SenparcTrace.SendCustomLog("自动注册扩展缓存完成", exCacheLog);
 

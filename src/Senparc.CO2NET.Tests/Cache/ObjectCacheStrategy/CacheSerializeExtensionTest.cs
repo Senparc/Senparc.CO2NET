@@ -26,8 +26,8 @@ namespace Senparc.CO2NET.Tests.Cache
             var testClass = new TestClass()
             {
                 ID = Guid.NewGuid().ToString(),
-                Star = DateTime.Now.Ticks,
-                AddTime = DateTime.Now
+                Star = SystemTime.Now.Ticks,
+                AddTime = SystemTime.Now
             };
 
             var json = testClass.SerializeToCache();
@@ -52,19 +52,19 @@ namespace Senparc.CO2NET.Tests.Cache
                     var testClass = new TestClass()
                     {
                         ID = Guid.NewGuid().ToString(),
-                        Star = DateTime.Now.Ticks,
-                        AddTime = DateTime.Now
+                        Star = SystemTime.Now.Ticks,
+                        AddTime = SystemTime.Now
                     };
 
-                    var dtx = DateTime.Now;
+                    var dtx = SystemTime.Now;
                     var json = testClass.SerializeToCache();
                     //Console.WriteLine(json);
-                    Console.WriteLine($"testClass.SerializeToCache 耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                    Console.WriteLine($"testClass.SerializeToCache 耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
 
 
-                    dtx = DateTime.Now;
+                    dtx = SystemTime.Now;
                     var obj = json.DeserializeFromCache<TestClass>();
-                    Console.WriteLine($"json.DeserializeFromCache<TestClass> 耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                    Console.WriteLine($"json.DeserializeFromCache<TestClass> 耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
                     Assert.AreEqual(obj.ID, testClass.ID);
                     Assert.AreEqual(obj.Star, testClass.Star);
                     Assert.AreEqual(obj.AddTime, testClass.AddTime);
@@ -89,124 +89,124 @@ namespace Senparc.CO2NET.Tests.Cache
         public void CacheWapper_VS_BinaryTest()
         {
             var count = 50000;
-            var dt1 = DateTime.Now;
+            var dt1 = SystemTime.Now;
             for (int i = 0; i < count; i++)
             {
                 var testClass = new TestClass()
                 {
                     ID = Guid.NewGuid().ToString(),
-                    Star = DateTime.Now.Ticks,
-                    AddTime = DateTime.Now
+                    Star = SystemTime.Now.Ticks,
+                    AddTime = SystemTime.Now
                 };
 
-                var dtx = DateTime.Now;
+                var dtx = SystemTime.Now;
                 var json = testClass.SerializeToCache();
                 //Console.WriteLine(json);
-                //Console.WriteLine($"testClass.SerializeToCache 耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"testClass.SerializeToCache 耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
 
-                dtx = DateTime.Now;
+                dtx = SystemTime.Now;
                 var obj = json.DeserializeFromCache<TestClass>();
-                //Console.WriteLine($"json.DeserializeFromCache<TestClass> 耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"json.DeserializeFromCache<TestClass> 耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
                 Assert.AreEqual(obj.ID, testClass.ID);
                 Assert.AreEqual(obj.Star, testClass.Star);
                 Assert.AreEqual(obj.AddTime, testClass.AddTime);
 
             }
-            var dt2 = DateTime.Now;
+            var dt2 = SystemTime.Now;
             Console.WriteLine($"CacheWrapper序列化 {count} 次，时间：{(dt2 - dt1).TotalMilliseconds}ms");
 
-            dt1 = DateTime.Now;
+            dt1 = SystemTime.Now;
             for (int i = 0; i < count; i++)
             {
                 var testClass = new TestClass()
                 {
                     ID = Guid.NewGuid().ToString(),
-                    Star = DateTime.Now.Ticks,
-                    AddTime = DateTime.Now
+                    Star = SystemTime.Now.Ticks,
+                    AddTime = SystemTime.Now
                 };
 
-                var dtx = DateTime.Now;
+                var dtx = SystemTime.Now;
                 var serializedObj = StackExchangeRedisExtensions.Serialize(testClass);
-                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
 
-                dtx = DateTime.Now;
+                dtx = SystemTime.Now;
                 var containerBag = StackExchangeRedisExtensions.Deserialize<TestClass>((RedisValue)serializedObj);//11ms
-                //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
 
                 Assert.AreEqual(containerBag.AddTime.Ticks, testClass.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), testClass.GetHashCode());
 
             }
-            dt2 = DateTime.Now;
+            dt2 = SystemTime.Now;
             Console.WriteLine($"StackExchangeRedisExtensions序列化 {count} 次，时间：{(dt2 - dt1).TotalMilliseconds}ms");
 
 
-            dt1 = DateTime.Now;
+            dt1 = SystemTime.Now;
             for (int i = 0; i < count; i++)
             {
                 var testClass = new TestClass()
                 {
                     ID = Guid.NewGuid().ToString(),
-                    Star = DateTime.Now.Ticks,
-                    AddTime = DateTime.Now,
+                    Star = SystemTime.Now.Ticks,
+                    AddTime = SystemTime.Now,
                 };
 
                 //模拟CacheWrapper的Type额外工作量，对比效率，主要的效率损失就在反射类型上
                 //testClass.Type = testClass.GetType();
 
-                var dtx = DateTime.Now;
+                var dtx = SystemTime.Now;
                 var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(testClass);
-                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
 
-                dtx = DateTime.Now;
+                dtx = SystemTime.Now;
                 var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<TestClass>(serializedObj);//11ms
-                                                                                                           //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                                                                                                           //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
 
                 Assert.AreEqual(containerBag.AddTime.Ticks, testClass.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), testClass.GetHashCode());
 
             }
-            dt2 = DateTime.Now;
+            dt2 = SystemTime.Now;
             Console.WriteLine($"Newtonsoft 序列化（无反射） {count} 次，时间：{(dt2 - dt1).TotalMilliseconds}ms");
 
 
-            dt1 = DateTime.Now;
+            dt1 = SystemTime.Now;
             for (int i = 0; i < count; i++)
             {
                 var testClass = new TestClass()
                 {
                     ID = Guid.NewGuid().ToString(),
-                    Star = DateTime.Now.Ticks,
-                    AddTime = DateTime.Now,
+                    Star = SystemTime.Now.Ticks,
+                    AddTime = SystemTime.Now,
                 };
 
                 //模拟CacheWrapper的Type额外工作量，对比效率，主要的效率损失就在反射类型上
                 testClass.Type = testClass.GetType();
 
-                var dtx = DateTime.Now;
+                var dtx = SystemTime.Now;
                 var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(testClass);
-                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
 
-                dtx = DateTime.Now;
+                dtx = SystemTime.Now;
                 var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<TestClass>(serializedObj);//11ms
-                //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
 
                 Assert.AreEqual(containerBag.AddTime.Ticks, testClass.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), testClass.GetHashCode());
 
             }
-            dt2 = DateTime.Now;
+            dt2 = SystemTime.Now;
             Console.WriteLine($"Newtonsoft 序列化+反射 {count} 次，时间：{(dt2 - dt1).TotalMilliseconds}ms");
 
 
-            dt1 = DateTime.Now;
+            dt1 = SystemTime.Now;
             for (int i = 0; i < count; i++)
             {
                 var testClass = new TestClass()
                 {
                     ID = Guid.NewGuid().ToString(),
-                    Star = DateTime.Now.Ticks,
-                    AddTime = DateTime.Now,
+                    Star = SystemTime.Now.Ticks,
+                    AddTime = SystemTime.Now,
                 };
 
                 //模拟CacheWrapper的Type额外工作量，对比效率，主要的效率损失就在反射类型上
@@ -215,19 +215,19 @@ namespace Senparc.CO2NET.Tests.Cache
 
                 testClass.Type = fun.Body.Type;
 
-                var dtx = DateTime.Now;
+                var dtx = SystemTime.Now;
                 var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(testClass);
-                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
 
-                dtx = DateTime.Now;
+                dtx = SystemTime.Now;
                 var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<TestClass>(serializedObj);//11ms
-                                                                                                           //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(DateTime.Now - dtx).TotalMilliseconds}ms");
+                                                                                                           //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
                 Assert.AreEqual(typeof(TestClass), containerBag.Type);
                 Assert.AreEqual(containerBag.AddTime.Ticks, testClass.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), testClass.GetHashCode());
 
             }
-            dt2 = DateTime.Now;
+            dt2 = SystemTime.Now;
             Console.WriteLine($"Newtonsoft 序列化（Lambda） {count} 次，时间：{(dt2 - dt1).TotalMilliseconds}ms");
 
         }

@@ -21,7 +21,7 @@ namespace Senparc.CO2NET.Tests.TestEntities
 
         public TestCustomObject()
         {
-            AddTime = DateTime.Now;
+            AddTime = SystemTime.Now;
         }
     }
 }

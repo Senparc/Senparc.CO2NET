@@ -12,7 +12,7 @@ namespace Senparc.CO2NET.Tests.Trace
     [TestClass]
     public class SenparcTraceTests
     {
-        public static string LogFilePath => Path.Combine(UnitTestHelper.RootPath, "App_Data", "SenparcTraceLog", $"SenparcTrace-{DateTime.Now.ToString("yyyyMMdd")}.log");
+        public static string LogFilePath => Path.Combine(UnitTestHelper.RootPath, "App_Data", "SenparcTraceLog", $"SenparcTrace-{SystemTime.Now.ToString("yyyyMMdd")}.log");
 
 
         public SenparcTraceTests()

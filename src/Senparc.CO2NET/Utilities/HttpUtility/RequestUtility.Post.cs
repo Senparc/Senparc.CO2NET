@@ -136,7 +136,7 @@ namespace Senparc.CO2NET.HttpUtility
                 contentType = "multipart/form-data";
 
                 //通过表单上传文件
-                string boundary = "----" + DateTime.Now.Ticks.ToString("x");
+                string boundary = "----" + SystemTime.Now.Ticks.ToString("x");
 
                 postStream = postStream ?? new MemoryStream();
                 //byte[] boundarybytes = Encoding.ASCII.GetBytes("\r\n--" + boundary + "\r\n");
@@ -276,7 +276,7 @@ namespace Senparc.CO2NET.HttpUtility
                 contentType = "multipart/form-data";
 
                 //通过表单上传文件
-                string boundary = "----" + DateTime.Now.Ticks.ToString("x");
+                string boundary = "----" + SystemTime.Now.Ticks.ToString("x");
 
                 var multipartFormDataContent = new MultipartFormDataContent(boundary);
                 hc = multipartFormDataContent;

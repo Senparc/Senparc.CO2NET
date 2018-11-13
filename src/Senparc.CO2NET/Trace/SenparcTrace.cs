@@ -112,7 +112,7 @@ namespace Senparc.CO2NET.Trace
                     Directory.CreateDirectory(logDir);
                 }
 
-                string logFile = Path.Combine(logDir, string.Format("SenparcTrace-{0}.log", DateTime.Now.ToString("yyyyMMdd")));
+                string logFile = Path.Combine(logDir, string.Format("SenparcTrace-{0}.log", SystemTime.Now.ToString("yyyyMMdd")));
 
 #if NET35 || NET40 || NET45 || NET461
 
@@ -169,7 +169,7 @@ namespace Senparc.CO2NET.Trace
         /// </summary>
         private static void TimeLog()
         {
-            Log("[{0}]", DateTime.Now);
+            Log("[{0}]", SystemTime.Now);
         }
 
         /// <summary>

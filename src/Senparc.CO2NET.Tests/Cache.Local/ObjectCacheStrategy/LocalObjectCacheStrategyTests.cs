@@ -46,7 +46,7 @@ namespace Senparc.CO2NET.Tests.Cache.Local
 
             var cache = LocalObjectCacheStrategy.Instance;
             var key = "LocalObjectCacheStrategyInterfaceTest";
-            var value = DateTime.Now.ToString();
+            var value = SystemTime.Now.ToString();
 
             //Set
             cache.Set(key, value);
@@ -89,7 +89,7 @@ namespace Senparc.CO2NET.Tests.Cache.Local
             //Update
             objValue.Id = 666;
             objValue.Name = "NewDomainName";
-            objValue.AddTime = DateTime.Now;
+            objValue.AddTime = SystemTime.Now;
 
             cache.Update(objKey, objValue);
             var updatedRessult = cache.Get<TestCustomObject>(objKey);

@@ -150,7 +150,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             //                //config.Authentication.Parameters["userName"] = "username";
             //                //config.Authentication.Parameters["password"] = "password";
             //                //config.Authentication.Parameters["zone"] = "zone";//domain?   ——Jeffrey 2015.10.20
-            //                DateTime dt1 = DateTime.Now;
+            //                DateTime dt1 = SystemTime.Now;
             //                var config = GetMemcachedClientConfiguration();
             //                //var cache = new MemcachedClient(config);'
 
@@ -170,7 +170,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             //                    throw new Exception("MemcachedStrategy失效，没有计入缓存！");
             //                }
             //                cache.Remove(testKey);
-            //                DateTime dt2 = DateTime.Now;
+            //                DateTime dt2 = SystemTime.Now;
 
             //                SenparcTrace.Log(string.Format("MemcachedStrategy正常启用，启动及测试耗时：{0}ms", (dt2 - dt1).TotalMilliseconds));
             //            }

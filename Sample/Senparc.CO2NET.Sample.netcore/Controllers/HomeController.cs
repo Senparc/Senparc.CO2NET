@@ -56,7 +56,7 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
         [HttpPost]
         public IActionResult PostTest(string code)
         {
-            return Content(DateTime.Now + "," + code);
+            return Content(SystemTime.Now + "," + code);
         }
         #endregion
 

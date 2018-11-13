@@ -31,7 +31,7 @@ namespace Senparc.CO2NET.Tests
             Console.WriteLine($"memcache HashCode：{memcache.GetHashCode()}");
 
             var key = Guid.NewGuid().ToString();
-            var dt = DateTime.Now;
+            var dt = SystemTime.Now;
             memcache.Set(key, dt);//直接使用缓存
 
             var memcache2 = SenparcDI.GetService<IMemoryCache>();
