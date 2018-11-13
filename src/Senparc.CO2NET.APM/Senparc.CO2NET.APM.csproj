@@ -1,7 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFrameworks>net35;net40;net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
+
+    <Version>0.1.0</Version>
+    <AssemblyName>Senparc.CO2NET.APM</AssemblyName>
+    <RootNamespace>Senparc.CO2NET.APM</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>
+      Senparc.CO2NET.APM 应用性能管理
+    </Description>
+    <Copyright>Senparc Copyright © 2004~2018</Copyright>
+    <PackageTags>APM,.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
+    <Authors>Senparc</Authors>
+    <Owners>Senparc</Owners>
+    <PackageLicenseUrl>https://github.com/Senparc/Senparc.CO2NET/blob/master/license.md</PackageLicenseUrl>
+    <ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
+    <Title>Senparc.CO2NET.APM.dll</Title>
+    <Summary>Senparc.CO2NET.APM</Summary>
+    <PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
+    <PackageIconUrl>http://sdk.weixin.senparc.com/Images/Logo.jpg</PackageIconUrl>
+    <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
+    <Configurations>Debug;Release;Test</Configurations>
+    <PackageReleaseNotes>
+    </PackageReleaseNotes>
+
   </PropertyGroup>
 
   <ItemGroup>
