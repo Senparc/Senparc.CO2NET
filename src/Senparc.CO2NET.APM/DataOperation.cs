@@ -14,7 +14,8 @@ namespace Senparc.CO2NET.APM
 
         private string _domainKey;
 
-        private static Dictionary<string, DateTime> KeyStore { get; set; } = new Dictionary<string, DateTime>();
+        //TODO：需要考虑分布式的情况，最好储存在缓存中
+        private static Dictionary<string, Dictionary<string, DateTime>> KindNameStore { get; set; } = new Dictionary<string, Dictionary<string, DateTime>>();
 
         private string BuildFinalKey(string kindName)
         {
@@ -25,22 +26,22 @@ namespace Senparc.CO2NET.APM
         /// 注册 Key
         /// </summary>
         /// <param name="finalKey"></param>
-        private void RegisterFinalKey(string finalKey)
+        private void RegisterFinalKey(string kindName)
         {
-            if (KeyStore.ContainsKey(finalKey))
+            if (KindNameStore[_domain].ContainsKey(kindName))
             {
                 return;
             }
 
             var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
-            var keyForKeys = $"{_domainKey}:_keyStore";
-            var keyList = cacheStragety.Get<List<string>>(keyForKeys);
-            if (!keyList.Contains(finalKey))
+            var kindNameKey = $"{_domainKey}:_KindNameStore";
+            var keyList = cacheStragety.Get<List<string>>(kindNameKey);
+            if (!keyList.Contains(kindName))
             {
-                keyList.Add(finalKey);
-                cacheStragety.Set(keyForKeys, keyList);//永久储存
+                keyList.Add(kindName);
+                cacheStragety.Set(kindNameKey, keyList);//永久储存
             }
-            KeyStore[finalKey] = SystemTime.Now;
+            KindNameStore[_domain][kindName] = SystemTime.Now;
         }
 
         /// <summary>
@@ -51,6 +52,11 @@ namespace Senparc.CO2NET.APM
         {
             _domain = domain;
             _domainKey = $"{CACHE_NAMESPACE}:{domain}";
+
+            if (!KindNameStore.ContainsKey(domain))
+            {
+                KindNameStore[domain] = new Dictionary<string, DateTime>();
+            }
         }
 
         /// <summary>
@@ -79,7 +85,7 @@ namespace Senparc.CO2NET.APM
                 list.Add(dataItem);
                 cacheStragety.Set(finalKey, list, Config.DataExpire, true);
 
-                RegisterFinalKey(finalKey);//注册Key
+                RegisterFinalKey(kindName);//注册Key
 
                 return dataItem;
             }
@@ -96,6 +102,29 @@ namespace Senparc.CO2NET.APM
             var finalKey = BuildFinalKey(kindName);
             var list = cacheStragety.Get<List<DataItem>>(finalKey, true);
             return list ?? new List<DataItem>();
+        }
+
+        /// <summary>
+        /// 获取并清空该 Domain 下的所有数据
+        /// </summary>
+        /// <returns></returns>
+        public List<List<DataItem>> ReadAndCleanDataItems()
+        {
+            var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
+            List<List<DataItem>> result = new List<List<DataItem>>();
+            foreach (var item in KindNameStore[_domain])
+            {
+                var kindName = item.Key;
+                var finalKey = BuildFinalKey(kindName);
+                using (cacheStragety.BeginCacheLock("SenparcAPM", finalKey))
+                {
+                    var list = GetDataItemList(item.Key);//获取列表
+                    result.Add(list);//添加到列表
+                    
+                    cacheStragety.RemoveFromCache(finalKey);//删除
+                }
+            }
+            return result;
         }
     }
 }
