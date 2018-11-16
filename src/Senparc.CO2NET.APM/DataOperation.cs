@@ -44,6 +44,8 @@ namespace Senparc.CO2NET.APM
             KindNameStore[_domain][kindName] = SystemTime.Now;
         }
 
+
+
         /// <summary>
         /// DataOperation 构造函数
         /// </summary>
@@ -57,6 +59,21 @@ namespace Senparc.CO2NET.APM
             {
                 KindNameStore[domain] = new Dictionary<string, DateTime>();
             }
+        }
+
+        /// <summary>
+        /// 确保已经到达下一分钟
+        /// </summary>
+        /// <param name="recordTime"></param>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public bool IsLaterMinute(DateTime lastTime, DateTime dateTime)
+        {
+            return lastTime.Year < dateTime.Year ||
+                   lastTime.Month < dateTime.Month ||
+                   lastTime.Day < dateTime.Day ||
+                   lastTime.Hour < dateTime.Hour ||
+                   lastTime.Minute < dateTime.Minute;
         }
 
         /// <summary>
@@ -108,10 +125,15 @@ namespace Senparc.CO2NET.APM
         /// 获取并清空该 Domain 下的所有数据
         /// </summary>
         /// <returns></returns>
-        public List<List<DataItem>> ReadAndCleanDataItems()
+        public List<MinuteDataPack> ReadAndCleanDataItems()
         {
             var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
-            List<List<DataItem>> result = new List<List<DataItem>>();
+            Dictionary<string, List<DataItem>> tempDataItems = new IEnumerable<string, List<DataItem>>();
+
+            var systemNow = SystemTime.Now;
+            var nowMinuteTime = new DateTime(systemNow.Year, systemNow.Month, systemNow.Day, systemNow.Hour, systemNow.Minute, 0);
+
+            //快速获取并清理数据
             foreach (var item in KindNameStore[_domain])
             {
                 var kindName = item.Key;
@@ -119,11 +141,61 @@ namespace Senparc.CO2NET.APM
                 using (cacheStragety.BeginCacheLock("SenparcAPM", finalKey))
                 {
                     var list = GetDataItemList(item.Key);//获取列表
-                    result.Add(list);//添加到列表
-                    
+                    var toveRemove = list.Where(z => z.DateTime < nowMinuteTime);
+
+                    tempDataItems[kindName] = toveRemove.ToList();//添加到列表
                     cacheStragety.RemoveFromCache(finalKey);//删除
                 }
             }
+
+            //开始处理数据（分两步是为了减少同步锁的时间）
+            var result = new List<MinuteDataPack>();
+            foreach (var kv in tempDataItems)
+            {
+                var kindName = kv.Key;
+                var domainData = kv.Value;
+
+                DateTime lastDataItemTime = DateTime.MinValue;
+
+                MinuteDataPack minuteDataPack = new MinuteDataPack();
+                result.Add(minuteDataPack);//添加一个指标
+
+                MinuteData minuteData = null;//某一分钟的指标
+                foreach (var dataItem in domainData)
+                {
+                    if (IsLaterMinute(lastDataItemTime, dataItem.DateTime))
+                    {
+                        //新的一分钟
+                        minuteData = new MinuteData();
+                        minuteDataPack.MinuteDataList.Add(minuteData);
+
+                        minuteData.KindName = dataItem.KindName;
+                        minuteData.Time = new DateTime(dataItem.DateTime.Year, dataItem.DateTime.Month, dataItem.DateTime.Day, dataItem.DateTime.Hour, dataItem.DateTime.Minute, 0);
+                        minuteData.StartValue = dataItem.Value;
+                        minuteData.HighestValue = dataItem.Value;
+                        minuteData.LowestValue = dataItem.Value;
+                    }
+
+                    minuteData.EndValue = dataItem.Value;
+                    minuteData.SumValue += dataItem.Value;
+
+                    if (dataItem.Value > minuteData.HighestValue)
+                    {
+                        minuteData.HighestValue = dataItem.Value;
+                    }
+
+                    if (dataItem.Value < minuteData.LowestValue)
+                    {
+                        minuteData.LowestValue = dataItem.Value;
+                    }
+
+
+                    minuteData.SampleSize++;
+
+                    lastDataItemTime = dataItem.DateTime;
+                }
+            }
+
             return result;
         }
     }

@@ -32,7 +32,9 @@ namespace Senparc.CO2NET.APM
             {
                 if (IsNextMinute(LastRecordTime, SystemTime.Now))
                 {
-                    //进行多余数据的清理
+                    //进行统计并清理多余数据
+
+
 
 
                     LastRecordTime = SystemTime.Now;
