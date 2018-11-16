@@ -11,28 +11,15 @@ namespace Senparc.CO2NET.APM
     {
         private DateTime LastRecordTime = DateTime.MinValue;
 
-        /// <summary>
-        /// 确保已经到达下一分钟
-        /// </summary>
-        /// <param name="recordTime"></param>
-        /// <param name="dateTime"></param>
-        /// <returns></returns>
-        private bool IsNextMinute(DateTime lastTime, DateTime dateTime)
-        {
-            return lastTime.Year < dateTime.Year ||
-                   lastTime.Month < dateTime.Month ||
-                   lastTime.Day < dateTime.Day ||
-                   lastTime.Hour < dateTime.Hour ||
-                   lastTime.Minute < dateTime.Minute;
-        }
-
         public void Run()
         {
             while (true)
             {
-                if (IsNextMinute(LastRecordTime, SystemTime.Now))
+                if (DataHelper.IsLaterMinute(LastRecordTime, SystemTime.Now))
                 {
                     //进行统计并清理多余数据
+
+                    //进行数据清理
 
 
 
