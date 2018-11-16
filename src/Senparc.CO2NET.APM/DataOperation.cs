@@ -128,7 +128,7 @@ namespace Senparc.CO2NET.APM
         public List<MinuteDataPack> ReadAndCleanDataItems()
         {
             var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
-            Dictionary<string, List<DataItem>> tempDataItems = new IEnumerable<string, List<DataItem>>();
+            Dictionary<string, List<DataItem>> tempDataItems = new Dictionary<string, List<DataItem>>();
 
             var systemNow = SystemTime.Now;
             var nowMinuteTime = new DateTime(systemNow.Year, systemNow.Month, systemNow.Day, systemNow.Hour, systemNow.Minute, 0);
