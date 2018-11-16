@@ -62,21 +62,6 @@ namespace Senparc.CO2NET.APM
         }
 
         /// <summary>
-        /// 确保已经到达下一分钟
-        /// </summary>
-        /// <param name="recordTime"></param>
-        /// <param name="dateTime"></param>
-        /// <returns></returns>
-        public bool IsLaterMinute(DateTime lastTime, DateTime dateTime)
-        {
-            return lastTime.Year < dateTime.Year ||
-                   lastTime.Month < dateTime.Month ||
-                   lastTime.Day < dateTime.Day ||
-                   lastTime.Hour < dateTime.Hour ||
-                   lastTime.Minute < dateTime.Minute;
-        }
-
-        /// <summary>
         /// 设置数据
         /// </summary>
         /// <param name="kindName">统计类别名称</param>
@@ -176,7 +161,7 @@ namespace Senparc.CO2NET.APM
                 MinuteData minuteData = null;//某一分钟的指标
                 foreach (var dataItem in domainData)
                 {
-                    if (IsLaterMinute(lastDataItemTime, dataItem.DateTime))
+                    if (DataHelper.IsLaterMinute(lastDataItemTime, dataItem.DateTime))
                     {
                         //新的一分钟
                         minuteData = new MinuteData();
