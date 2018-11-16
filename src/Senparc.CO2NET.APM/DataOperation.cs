@@ -158,6 +158,7 @@ namespace Senparc.CO2NET.APM
                 DateTime lastDataItemTime = DateTime.MinValue;
 
                 MinuteDataPack minuteDataPack = new MinuteDataPack();
+                minuteDataPack.KindName = kindName;
                 result.Add(minuteDataPack);//添加一个指标
 
                 MinuteData minuteData = null;//某一分钟的指标
