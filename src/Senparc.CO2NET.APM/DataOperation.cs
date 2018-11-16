@@ -35,7 +35,7 @@ namespace Senparc.CO2NET.APM
 
             var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var kindNameKey = $"{_domainKey}:_KindNameStore";
-            var keyList = cacheStragety.Get<List<string>>(kindNameKey);
+            var keyList = cacheStragety.Get<List<string>>(kindNameKey) ?? new List<string>();
             if (!keyList.Contains(kindName))
             {
                 keyList.Add(kindName);
