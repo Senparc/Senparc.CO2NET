@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Tests;
 using System;
+using Moq;
 
 namespace Senparc.CO2NET.APM.Tests
 {
@@ -41,10 +42,10 @@ namespace Senparc.CO2NET.APM.Tests
             BuildTestData(dataOperation);
 
             var cpuData = dataOperation.GetDataItemList("CPU");
-            Assert.AreEqual(5, cpuData?.Count);
+            Assert.AreEqual(5, cpuData.Count);
 
             var viewData = dataOperation.GetDataItemList("访问量");
-            Assert.AreEqual(7, viewData?.Count);
+            Assert.AreEqual(7, viewData.Count);
         }
 
         [TestMethod]
@@ -80,6 +81,16 @@ namespace Senparc.CO2NET.APM.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(2, result.Count);
             Console.WriteLine(result.ToJson());
+
+            //立即获取，检查是否已经清空当前分钟之前的数据
+            var cpuData = dataOperation.GetDataItemList("CPU");
+            Assert.AreEqual(0, cpuData.Count);
+
+            var viewData = dataOperation.GetDataItemList("访问量");
+            Assert.AreEqual(1, viewData.Count);//当前分钟的缓存不会被清楚
+
+            //模拟当前时间
+
         }
     }
 }

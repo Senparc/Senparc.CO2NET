@@ -144,9 +144,21 @@ namespace Senparc.CO2NET.APM
                     var toveRemove = list.Where(z => z.DateTime < nowMinuteTime);
 
                     tempDataItems[kindName] = toveRemove.ToList();//添加到列表
-                    cacheStragety.RemoveFromCache(finalKey);//删除
+
+                    if (toveRemove.Count() == list.Count())
+                    {
+                        //已经全部删除
+                        cacheStragety.RemoveFromCache(finalKey, true);//删除
+                    }
+                    else
+                    {
+                        //部分删除
+                        var newList = list.Except(toveRemove).ToList();
+                        cacheStragety.Set(finalKey, newList, Config.DataExpire, true);
+                    }
                 }
             }
+
 
             //开始处理数据（分两步是为了减少同步锁的时间）
             var result = new List<MinuteDataPack>();
