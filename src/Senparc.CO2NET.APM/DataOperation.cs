@@ -67,8 +67,10 @@ namespace Senparc.CO2NET.APM
         /// <param name="kindName">统计类别名称</param>
         /// <param name="value">统计值</param>
         /// <param name="data">复杂类型数据</param>
+        /// <param name="tempStorage">临时储存信息</param>
+        /// <param name="dateTime">发生时间，默认为当前系统时间</param>
         /// <returns></returns>
-        public DataItem Set(string kindName, double value, object data = null, DateTime? dateTime = null)
+        public DataItem Set(string kindName, double value, object data = null, object tempStorage = null, DateTime? dateTime = null)
         {
             var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var finalKey = BuildFinalKey(kindName);
@@ -80,6 +82,7 @@ namespace Senparc.CO2NET.APM
                     KindName = kindName,
                     Value = value,
                     Data = data,
+                    TempStorage = tempStorage,
                     DateTime = dateTime ?? SystemTime.Now
                 };
 
