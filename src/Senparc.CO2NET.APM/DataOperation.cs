@@ -110,7 +110,8 @@ namespace Senparc.CO2NET.APM
         /// 获取并清空该 Domain 下的所有数据
         /// </summary>
         /// <returns></returns>
-        public List<MinuteDataPack> ReadAndCleanDataItems()
+        /// <param name="removeReadItems">是否移除已读取的项目，默认为 true</param>
+        public List<MinuteDataPack> ReadAndCleanDataItems(bool removeReadItems = true)
         {
             var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
             Dictionary<string, List<DataItem>> tempDataItems = new Dictionary<string, List<DataItem>>();
@@ -130,16 +131,20 @@ namespace Senparc.CO2NET.APM
 
                     tempDataItems[kindName] = toveRemove.ToList();//添加到列表
 
-                    if (toveRemove.Count() == list.Count())
+                    if (removeReadItems)
                     {
-                        //已经全部删除
-                        cacheStragety.RemoveFromCache(finalKey, true);//删除
-                    }
-                    else
-                    {
-                        //部分删除
-                        var newList = list.Except(toveRemove).ToList();
-                        cacheStragety.Set(finalKey, newList, Config.DataExpire, true);
+                        //移除已读取的项目
+                        if (toveRemove.Count() == list.Count())
+                        {
+                            //已经全部删除
+                            cacheStragety.RemoveFromCache(finalKey, true);//删除
+                        }
+                        else
+                        {
+                            //部分删除
+                            var newList = list.Except(toveRemove).ToList();
+                            cacheStragety.Set(finalKey, newList, Config.DataExpire, true);
+                        }
                     }
                 }
             }
