@@ -37,7 +37,7 @@ namespace Senparc.CO2NET.APM
 
             var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var kindNameKey = $"{_domainKey}:_KindNameStore";
-            var keyList = cacheStragety.Get<List<string>>(kindNameKey) ?? new List<string>();
+            var keyList = cacheStragety.Get<List<string>>(kindNameKey, true) ?? new List<string>();
             if (!keyList.Contains(kindName))
             {
                 keyList.Add(kindName);
@@ -97,14 +97,14 @@ namespace Senparc.CO2NET.APM
 
                     RegisterFinalKey(kindName);//注册Key
 
-                    SenparcTrace.SendCustomLog("APM 性能记录 - DataOperation.Set", (SystemTime.Now - dt1).TotalMilliseconds + " ms");
+                    SenparcTrace.SendCustomLog($"APM 性能记录 - DataOperation.Set - {_domain}:{kindName}", (SystemTime.Now - dt1).TotalMilliseconds + " ms");
 
                     return dataItem;
                 }
             }
             catch (Exception e)
             {
-                new APMException(e.Message, _domain, kindName, "DataOperation.Set");
+                new APMException(e.Message, _domain, kindName, $"DataOperation.Set -  {_domain}:{kindName}");
                 return null;
             }
         }
