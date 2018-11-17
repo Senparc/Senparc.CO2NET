@@ -52,7 +52,7 @@ namespace Senparc.CO2NET.APM
         /// <param name="domain">域，统计的最小单位，可以是一个网站，也可以是一个模块</param>
         public DataOperation(string domain)
         {
-            _domain = domain;
+            _domain = domain ?? "GLOBAL";//如果未提供，则统一为 GLOBAL，全局共享
             _domainKey = $"{CACHE_NAMESPACE}:{domain}";
 
             if (!KindNameStore.ContainsKey(domain))

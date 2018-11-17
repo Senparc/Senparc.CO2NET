@@ -23,7 +23,8 @@
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
     <PackageReleaseNotes>
-     v0.1.1 支持基础监控数据的记录、调取和整理/清除操作
+      v0.1.1 支持基础监控数据的记录、调取和整理/清除操作
+      v0.1.2 DataItem 提供 TempStorage 属性
     </PackageReleaseNotes>
 
   </PropertyGroup>
