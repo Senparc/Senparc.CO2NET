@@ -69,11 +69,11 @@ namespace Senparc.CO2NET.APM
 #else
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                return OSPlatform.Windows.ToString()
+                return OSPlatform.Windows.ToString();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                return OSPlatform.Linux.ToString()
+                return OSPlatform.Linux.ToString();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {

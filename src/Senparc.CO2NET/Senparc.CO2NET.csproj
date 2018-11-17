@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>net35;net40;net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
-    <Version>0.2.18-preview1</Version>
+    <Version>0.2.18</Version>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild  Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
 
     <Description>
       Senparc.CO2NET 公共基础库
@@ -64,6 +64,7 @@
       v0.2.14 ToJson() 方法优化
       v0.2.15 Post 方法添加 headerAddition参数
       v0.2.17 启用 SystemTime.Now，方便单元测试或紧急情况下改动系统当前时间
+      v0.2.18 支持 Senparc.CO2NET.APM
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>

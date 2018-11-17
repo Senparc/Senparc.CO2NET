@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TargetFrameworks>net35;net40;net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
 
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <AssemblyName>Senparc.CO2NET.APM</AssemblyName>
     <RootNamespace>Senparc.CO2NET.APM</RootNamespace>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild  Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <Description>
       Senparc.CO2NET.APM 应用性能管理
     </Description>
@@ -23,6 +23,7 @@
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
     <PackageReleaseNotes>
+     v0.1.1 支持基础监控数据的记录、调取和整理/清除操作
     </PackageReleaseNotes>
 
   </PropertyGroup>
@@ -30,5 +31,64 @@
   <ItemGroup>
     <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
   </ItemGroup>
+  
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\BuildOutPut</OutputPath>
+    <DefineConstants>TRACE;RELEASE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\BuildOutPut</OutputPath>
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.APM.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net35|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\net35\Senparc.CO2NET.APM.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net40|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\net40\Senparc.CO2NET.APM.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\net45\Senparc.CO2NET.APM.xml</DocumentationFile>
+  </PropertyGroup>
+
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\net461\Senparc.CO2NET.APM.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netstandard1.6\Senparc.CO2NET.APM.xml</DocumentationFile>
+  </PropertyGroup>-->
+
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.APM.xml</DocumentationFile>
+  </PropertyGroup>
+
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.0|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netcoreapp2.0\Senparc.CO2NET.APM.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.1|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netcoreapp2.1\Senparc.CO2NET.APM.xml</DocumentationFile>
+  </PropertyGroup>
+
 
 </Project>
