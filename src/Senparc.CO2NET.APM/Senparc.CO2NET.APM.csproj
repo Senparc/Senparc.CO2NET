@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net35;net40;net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
 
-    <Version>0.1.3-preview2</Version>
+    <Version>0.1.3</Version>
     <AssemblyName>Senparc.CO2NET.APM</AssemblyName>
     <RootNamespace>Senparc.CO2NET.APM</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -25,6 +25,7 @@
     <PackageReleaseNotes>
       v0.1.1 支持基础监控数据的记录、调取和整理/清除操作
       v0.1.2 DataItem 提供 TempStorage 属性；DataOperation 支持不分域的全局模式
+      v0.1.3 支持 Senparc.CO2NET v0.3.0
     </PackageReleaseNotes>
 
   </PropertyGroup>

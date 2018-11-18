@@ -50,7 +50,6 @@ namespace Senparc.CO2NET.Trace
 [{DateTime.ToString("yyyy/MM/dd HH:mm:ss.ffff")}]
 [线程：{ThreadId}]
 {Content}";
-
             return logStr;
         }
 

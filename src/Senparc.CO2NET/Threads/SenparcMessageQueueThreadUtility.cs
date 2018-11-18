@@ -47,7 +47,7 @@ namespace Senparc.CO2NET.Threads
         private readonly int _sleepMilliSeconds;
 
 
-        public SenparcMessageQueueThreadUtility(int sleepMilliSeconds = 1000)
+        public SenparcMessageQueueThreadUtility(int sleepMilliSeconds = 500)
         {
             _sleepMilliSeconds = sleepMilliSeconds;
         }

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
-    <Version>3.2.0</Version>
+    <Version>3.2.1</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -161,6 +161,13 @@
     <None Remove="ServiceStack.Redis\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!--<PackageReference Include="Senparc.CO2NET.Cache.Redis.RedLock" Version="0.1.0" />-->
+    <PackageReference Include="BinaryFormatter" Version="2.1.4" />
+    <PackageReference Include="StackExchange.Redis" Version="2.0.513" />
+  </ItemGroup>
+
+  
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
   </ItemGroup>
@@ -173,11 +180,6 @@
     <Compile Remove="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <!--<PackageReference Include="Senparc.CO2NET.Cache.Redis.RedLock" Version="0.1.0" />-->
-    <PackageReference Include="BinaryFormatter" Version="2.1.4" />
-    <PackageReference Include="StackExchange.Redis" Version="2.0.513" />
-  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Properties\" />
