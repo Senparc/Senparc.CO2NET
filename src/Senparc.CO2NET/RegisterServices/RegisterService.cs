@@ -90,7 +90,7 @@ namespace Senparc.CO2NET.RegisterServices
 
             //如果不注册此线程，则AccessToken、JsTicket等都无法使用SDK自动储存和管理。
             register.RegisterThreads();//默认把线程注册好
-
+            
             return register;
         }
 #endif

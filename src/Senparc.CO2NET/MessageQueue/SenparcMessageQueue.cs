@@ -56,7 +56,7 @@ namespace Senparc.CO2NET.MessageQueue
         /// <summary>
         /// 队列数据集合
         /// </summary>
-        public static Dictionary<string, SenparcMessageQueueItem> MessageQueueDictionary = new Dictionary<string, SenparcMessageQueueItem>(StringComparer.OrdinalIgnoreCase);
+        public static MessageQueueDictionary MessageQueueDictionary = new MessageQueueDictionary(); 
 
         /// <summary>
         /// 同步执行锁
