@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>net35;net40;net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
-    <Version>0.2.18</Version>
+    <Version>0.3.0</Version>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
-    <GeneratePackageOnBuild  Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
 
     <Description>
       Senparc.CO2NET 公共基础库
@@ -65,6 +65,7 @@
       v0.2.15 Post 方法添加 headerAddition参数
       v0.2.17 启用 SystemTime.Now，方便单元测试或紧急情况下改动系统当前时间
       v0.2.18 支持 Senparc.CO2NET.APM
+      v0.3.0 升级 SenparcTrace，使用队列
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
@@ -132,6 +133,7 @@
   <ItemGroup>
     <Compile Remove="Cache\Lock\CacheLockWrapper.cs" />
     <Compile Remove="Cache\Lock\CacheLockWrapperExtension.cs" />
+    <Compile Remove="Trace\SenparcTrace.v0.2.18.cs" />
   </ItemGroup>
 
 

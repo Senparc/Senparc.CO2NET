@@ -29,18 +29,19 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
  
     修改标识：Senparc - 20180721
     修改描述：v0.2.1 增加 SenparcTrace.BaseExceptionLog(Exception ex) 重写方法
+ 
+    修改标识：Senparc - 201801118
+    修改描述：v0.3.0 升级 SenparcTrace，使用队列
+
 ----------------------------------------------------------------*/
 
 
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Exceptions;
+using Senparc.CO2NET.MessageQueue;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace Senparc.CO2NET.Trace
 {
@@ -50,18 +51,22 @@ namespace Senparc.CO2NET.Trace
     public class SenparcTrace
     {
         /// <summary>
-        /// TraceListener
-        /// </summary>
-#if NET35 || NET40 || NET45 || NET461
-        private static TraceListener _traceListener = null;
-#elif NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-        private static TextWriterTraceListener _traceListener = null;
-#endif
-
-        /// <summary>
         /// 统一日志锁名称
         /// </summary>
         const string LockName = "SenparcTraceLock";
+
+
+        /// <summary>
+        /// 记录BaseException日志时需要执行的任务
+        /// </summary>
+        public static Action<BaseException> OnBaseExceptionFunc;
+
+        /// <summary>
+        /// 执行所有日志记录操作时执行的任务（发生在记录日志之后）
+        /// </summary>
+        public static Action OnLogFunc;
+
+        #region 私有方法
 
         /// <summary>
         /// Senparc.Weixin全局统一的缓存策略
@@ -76,22 +81,10 @@ namespace Senparc.CO2NET.Trace
         }
 
         /// <summary>
-        /// 记录BaseException日志时需要执行的任务
+        /// 队列执行逻辑
         /// </summary>
-        public static Action<BaseException> OnBaseExceptionFunc;
-
-        /// <summary>
-        /// 执行所有日志记录操作时执行的任务（发生在记录日志之后）
-        /// </summary>
-        public static Action OnLogFunc;
-
-        /// <summary>
-        /// 打开日志开始记录
-        /// </summary>
-        internal static void Open()
+        protected static Action<string> _queue = (logStr) =>
         {
-            Close();
-
             using (Cache.BeginCacheLock(LockName, ""))
             {
                 string logDir;
@@ -112,196 +105,44 @@ namespace Senparc.CO2NET.Trace
                     Directory.CreateDirectory(logDir);
                 }
 
+                //TODO：可以进行合并写入
+
                 string logFile = Path.Combine(logDir, string.Format("SenparcTrace-{0}.log", SystemTime.Now.ToString("yyyyMMdd")));
-
-#if NET35 || NET40 || NET45 || NET461
-
-                System.IO.TextWriter logWriter = new System.IO.StreamWriter(logFile, true);
-#elif NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-                System.IO.TextWriter logWriter = new System.IO.StreamWriter(logFile, true);
-#endif
-
-
-#if NET35 || NET40 || NET45 || NET461
-                _traceListener = new TextWriterTraceListener(logWriter);
-                System.Diagnostics.Trace.Listeners.Add(_traceListener);
-                System.Diagnostics.Trace.AutoFlush = true;
-#elif NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-                //TODO:如果这里不开通，netstandard1.6将无法使用日志记录功能
-                //ILoggerFactory loggerFactory = new LoggerFactory();
-
-                _traceListener = new TextWriterTraceListener(logWriter);
-                System.Diagnostics.Trace.Listeners.Add(_traceListener);
-                System.Diagnostics.Trace.AutoFlush = true;
-#endif
-
-            }
-        }
-
-        /// <summary>
-        /// 关闭日志记录
-        /// </summary>
-        internal static void Close()
-        {
-            using (Cache.BeginCacheLock(LockName, ""))
-            {
-#if NET35 || NET40 || NET45 || NET461
-
-                if (_traceListener != null && System.Diagnostics.Trace.Listeners.Contains(_traceListener))
+                using (var fs = new FileStream(logFile, FileMode.OpenOrCreate))
                 {
-                    _traceListener.Close();
-                    System.Diagnostics.Trace.Listeners.Remove(_traceListener);
+                    using (var sw = new StreamWriter(fs))
+                    {
+                        fs.Seek(0, SeekOrigin.End);
+                        sw.Write(logStr);
+                        sw.Flush();
+                    }
                 }
-#elif NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-                if (_traceListener != null && System.Diagnostics.Trace.Listeners.Contains(_traceListener))
-                {
-                    _traceListener.Close();
-                    System.Diagnostics.Trace.Listeners.Remove(_traceListener);
-                }
-#endif
             }
-        }
-
-        #region 私有方法
-
-        /// <summary>
-        /// 统一时间格式
-        /// </summary>
-        private static void TimeLog()
-        {
-            Log("[{0}]", SystemTime.Now);
-        }
-
-        /// <summary>
-        /// 当前线程记录
-        /// </summary>
-        private static void ThreadLog()
-        {
-            Log("[线程：{0}]", Thread.CurrentThread.GetHashCode());
-        }
-
-
-        /// <summary>
-        /// 退回一次缩进
-        /// </summary>
-        private static void Unindent()
-        {
-            using (Cache.BeginCacheLock(LockName, ""))
-            {
-#if NET35 || NET40 || NET45 || NET461
-                System.Diagnostics.Trace.Unindent();
-#elif NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-                System.Diagnostics.Trace.Unindent();
-#endif
-            }
-        }
-
-        /// <summary>
-        /// 缩进一次
-        /// </summary>
-        private static void Indent()
-        {
-            using (Cache.BeginCacheLock(LockName, ""))
-            {
-#if NET35 || NET40 || NET45 || NET461
-                System.Diagnostics.Trace.Indent();
-#elif NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-                System.Diagnostics.Trace.Indent();
-#endif
-            }
-        }
-
-        /// <summary>
-        /// 写入缓存到系统Trace
-        /// </summary>
-        private static void Flush()
-        {
-            using (Cache.BeginCacheLock(LockName, ""))
-            {
-#if NET35 || NET40 || NET45 || NET461
-                System.Diagnostics.Trace.Flush();
-#elif NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-                System.Diagnostics.Trace.Flush();
-#endif
-            }
-        }
-
-        /// <summary>
-        /// 开始记录日志
-        /// </summary>
-        /// <param name="title"></param>
-        protected static void LogBegin(string title = null)
-        {
-            Open();
-            Log("");
-            if (title != null)
-            {
-                Log("[{0}]", title);
-            }
-            TimeLog();//记录时间
-            ThreadLog();//记录线程
-            Indent();
-        }
-
-        /// <summary>
-        /// 记录日志
-        /// </summary>
-        /// <param name="messageFormat">日志内容格式</param>
-        /// <param name="args">日志内容参数</param>
-        public static void Log(string messageFormat, params object[] args)
-        {
-            using (Cache.BeginCacheLock(LockName, ""))
-            {
-#if NET35 || NET40 || NET45 || NET461
-                System.Diagnostics.Trace.WriteLine(string.Format(messageFormat, args));
-#elif NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-                System.Diagnostics.Trace.WriteLine(string.Format(messageFormat, args));
-#endif
-            }
-        }
+        };
 
         /// <summary>
         /// 结束日志记录
         /// </summary>
-        protected static void LogEnd()
+        protected static Action<SenparcTraceItem> _logEndActon = (traceItem) =>
         {
-            Unindent();
-            Flush();
-            Close();
-
-            if (OnLogFunc != null)
-            {
-                try
-                {
-                    OnLogFunc();
-                }
-                catch
-                {
-                }
-            }
-        }
+            var logStr = traceItem.GetFullLog();
+            SenparcMessageQueue messageQueue = new SenparcMessageQueue();
+            var key = SystemTime.Now.Ticks.ToString() + traceItem.ThreadId.ToString() + logStr.Length.ToString();//确保全局唯一
+            messageQueue.Add(key, () => _queue(logStr));
+        };
 
         #endregion
 
         #region 日志记录
 
         /// <summary>
-        /// <para>记录日志（建议使用SendXXLog()方法，以符合统一的记录规则）</para>
-        /// <para>注意：直接调用此方法不会记录到log文件中，而是输出到系统日志中</para>
+        /// 系统日志
         /// </summary>
         /// <param name="message">日志内容</param>
         public static void Log(string message)
         {
-            using (Cache.BeginCacheLock(LockName, ""))
-            {
-#if NET35 || NET40 || NET45 || NET461
-                System.Diagnostics.Trace.WriteLine(message);
-#elif NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-                System.Diagnostics.Trace.WriteLine(message);
-#endif
-            }
+            SendCustomLog("系统日志", message);
         }
-
 
         /// <summary>
         /// 自定义日志
@@ -315,9 +156,10 @@ namespace Senparc.CO2NET.Trace
                 return;
             }
 
-            LogBegin(string.Format("[[{0}]]", typeName));
-            Log(content);
-            LogEnd();
+            using (var traceItem = new SenparcTraceItem(_logEndActon, typeName, content))
+            {
+                //traceItem.Log(content);
+            }
         }
 
         /// <summary>
@@ -332,11 +174,12 @@ namespace Senparc.CO2NET.Trace
                 return;
             }
 
-            LogBegin("[[接口调用]]");
-            //TODO:从源头加入AppId
-            Log("URL：{0}", url);
-            Log("Result：\r\n{0}", returnText);
-            LogEnd();
+            using (var traceItem = new SenparcTraceItem(_logEndActon, "接口调用"))
+            {
+                //TODO:从源头加入AppId
+                traceItem.Log("URL：{0}", url);
+                traceItem.Log("Result：\r\n{0}", returnText);
+            }
         }
 
         /// <summary>
@@ -351,10 +194,11 @@ namespace Senparc.CO2NET.Trace
                 return;
             }
 
-            LogBegin("[[接口调用]]");
-            Log("URL：{0}", url);
-            Log("Post Data：\r\n{0}", data);
-            LogEnd();
+            using (var traceItem = new SenparcTraceItem(_logEndActon, "接口调用"))
+            {
+                traceItem.Log("URL：{0}", url);
+                traceItem.Log("Post Data：\r\n{0}", data);
+            }
         }
 
 
@@ -383,28 +227,30 @@ namespace Senparc.CO2NET.Trace
                 return;
             }
 
-            LogBegin("[[BaseException]]");
-            Log(ex.GetType().Name);
-            Log("Message：{0}", ex.Message);
-            Log("StackTrace：{0}", ex.StackTrace);
-            if (ex.InnerException != null)
-            {
-                Log("InnerException：{0}", ex.InnerException.Message);
-                Log("InnerException.StackTrace：{0}", ex.InnerException.StackTrace);
-            }
 
-            if (OnBaseExceptionFunc != null)
+            using (var traceItem = new SenparcTraceItem(_logEndActon, "BaseException"))
             {
-                try
+                traceItem.Log(ex.GetType().Name);
+                traceItem.Log("Message：{0}", ex.Message);
+                traceItem.Log("StackTrace：{0}", ex.StackTrace);
+
+                if (ex.InnerException != null)
                 {
-                    OnBaseExceptionFunc(ex);
+                    traceItem.Log("InnerException：{0}", ex.InnerException.Message);
+                    traceItem.Log("InnerException.StackTrace：{0}", ex.InnerException.StackTrace);
                 }
-                catch
+
+                if (OnBaseExceptionFunc != null)
                 {
+                    try
+                    {
+                        OnBaseExceptionFunc(ex);
+                    }
+                    catch
+                    {
+                    }
                 }
             }
-
-            LogEnd();
         }
 
         #endregion
