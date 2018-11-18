@@ -25,5 +25,9 @@ namespace Senparc.CO2NET.APM
         /// 复杂类型数据
         /// </summary>
         public object Data { get; set; }
+        /// <summary>
+        /// 临时储存（不会对外传递）
+        /// </summary>
+        public object TempStorage { get; set; }
     }
 }

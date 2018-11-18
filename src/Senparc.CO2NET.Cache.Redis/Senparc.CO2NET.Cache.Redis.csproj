@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
-    <Version>3.1.1</Version>
+    <Version>3.2.1</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis</RootNamespace>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
 
     <Description>
       微信公众账号 - Redis 模块
@@ -92,6 +92,7 @@
       3、新增 Register.UseKeyValueRedisNow() 方法
       4、新增 Register.UseHashRedisNow() 方法CO2NET.Cache.Memcached：
       5、Redis 缓存服务连接信息实现从 Config.SenparcSetting 自动获取信息并注册）
+      v3.2.0 StackExchange.Redis 升级到 2.0.513
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
@@ -160,14 +161,16 @@
     <None Remove="ServiceStack.Redis\**" />
   </ItemGroup>
 
-  <!--<ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>-->
+  <ItemGroup>
+    <!--<PackageReference Include="Senparc.CO2NET.Cache.Redis.RedLock" Version="0.1.0" />-->
+    <PackageReference Include="BinaryFormatter" Version="2.1.4" />
+    <PackageReference Include="StackExchange.Redis" Version="2.0.513" />
+  </ItemGroup>
+
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
+  </ItemGroup>
   
   <!--<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <PackageReference Include="protobuf-net" Version="2.1.0" />
@@ -177,11 +180,6 @@
     <Compile Remove="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <!--<PackageReference Include="Senparc.CO2NET.Cache.Redis.RedLock" Version="0.1.0" />-->
-    <PackageReference Include="BinaryFormatter" Version="2.1.4" />
-    <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
-  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Properties\" />
