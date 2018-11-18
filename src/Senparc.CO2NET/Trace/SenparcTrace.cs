@@ -117,6 +117,17 @@ namespace Senparc.CO2NET.Trace
                         sw.Flush();
                     }
                 }
+
+                if (OnLogFunc != null)
+                {
+                    try
+                    {
+                        OnLogFunc();
+                    }
+                    catch
+                    {
+                    }
+                }
             }
         };
 
