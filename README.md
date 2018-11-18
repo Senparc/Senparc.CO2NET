@@ -55,6 +55,6 @@ PM> Install-Package Senparc.CO2NET
 本项目后期将会配备更加完整的文档，如果大家迫不及待想要尝试，可以打开解决方案文件，参考单元测试项目（Senparc.CO2NET.Tests），每一个方法都能找到对应的用法，本项目完整指之一就是将单元测试代码覆盖率做到接近100%。
 
 ## 视频预告介绍
-[抢先预览（2017年6月15日）](http://study.163.com/course/courseLearn.htm?courseId=1004873017&share=2&shareId=400000000353002#/learn/video?lessonId=1052874494&courseId=1004873017)
+[抢先预览（2018年6月15日）](http://study.163.com/course/courseLearn.htm?courseId=1004873017&share=2&shareId=400000000353002#/learn/video?lessonId=1052874494&courseId=1004873017)
 
-[使用 CO2NET 初始化微信项目及普通项目（2017年6月22日）](http://study.163.com/course/courseLearn.htm?courseId=1004873017&share=2&shareId=400000000353002#/learn/video?lessonId=1052903157&courseId=1004873017)
+[使用 CO2NET 初始化微信项目及普通项目（2018年6月22日）](http://study.163.com/course/courseLearn.htm?courseId=1004873017&share=2&shareId=400000000353002#/learn/video?lessonId=1052903157&courseId=1004873017)
