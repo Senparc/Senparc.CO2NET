@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.HttpUtility;
 using Senparc.CO2NET.Sample.netcore.Models;
+using Senparc.CO2NET.Trace;
 
 namespace Senparc.CO2NET.Sample.netcore.Controllers
 {
@@ -24,6 +25,14 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
 
             return View();
         }
+
+
+        public IActionResult LogTest()
+        {
+            SenparcTrace.SendCustomLog("日志记录测试", "加入到队列");
+            return Content("OK");
+        }
+
 
         public IActionResult About()
         {

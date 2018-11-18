@@ -1,5 +1,6 @@
 ﻿using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Cache.Redis;
+using Senparc.CO2NET.Trace;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,12 @@ namespace Senparc.CO2NET.Sample.net45.Controllers
             ViewData["CacheType"] = cache.GetType();
 
             return View();
+        }
+
+        public ActionResult LogTest()
+        {
+            SenparcTrace.SendCustomLog("日志记录测试", "加入到队列");
+            return Content("OK");
         }
 
         public ActionResult About()
