@@ -13,8 +13,8 @@ namespace Senparc.CO2NET.Trace
     public class SenparcTraceItem : IDisposable
     {
         public string Title { get; set; }
-        public DateTime DateTime { get; set; }
         public string Content { get; set; }
+        public DateTime DateTime { get; set; }
 
         public int ThreadId { get; set; } = Thread.CurrentThread.GetHashCode();
 
@@ -25,6 +25,7 @@ namespace Senparc.CO2NET.Trace
             _logEndAction = logEndAction;
             Title = title;
             Content = content;
+            DateTime = SystemTime.Now;
         }
 
         public void Log(string messageFormat, params object[] param)
@@ -49,7 +50,9 @@ namespace Senparc.CO2NET.Trace
             string logStr = $@"[[[{Title}]]]
 [{DateTime.ToString("yyyy/MM/dd HH:mm:ss.ffff")}]
 [线程：{ThreadId}]
-{Content}";
+{Content}
+
+";
             return logStr;
         }
 

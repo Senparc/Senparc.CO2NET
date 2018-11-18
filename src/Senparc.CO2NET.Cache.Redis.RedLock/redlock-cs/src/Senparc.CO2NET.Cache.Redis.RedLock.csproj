@@ -4,7 +4,7 @@
     <Version>1.1.0</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis.RedLock</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis.RedLock</RootNamespace>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
 
     <Description>
       Senparc.CO2NET.Cache.Redis.RedLock 模块

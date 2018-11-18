@@ -5,7 +5,7 @@
     <Version>3.2.1</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis</RootNamespace>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
 
     <Description>
       微信公众账号 - Redis 模块
