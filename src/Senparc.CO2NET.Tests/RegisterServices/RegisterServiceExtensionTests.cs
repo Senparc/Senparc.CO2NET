@@ -24,6 +24,15 @@ namespace Senparc.CO2NET.Tests.RegisterServices
             Assert.IsNotNull(SenparcDI.GlobalServiceCollection);
             Assert.AreEqual(serviceCollection.GetHashCode(), SenparcDI.GlobalServiceCollection.GetHashCode());
 
+
+            var b1 = serviceCollection.BuildServiceProvider();
+            var b2 = serviceCollection.BuildServiceProvider();
+
+            //两个不同
+            Console.WriteLine(b1.GetHashCode());
+            Console.WriteLine(b2.GetHashCode());
+
+
             //TODO：测试获取（单元测试中不成功）
             //var senparcSetting = serviceCollection
             //                        .BuildServiceProvider().GetService<IOptions<SenparcSetting>>();
