@@ -6,7 +6,7 @@
     <Version>0.2.0-preview1</Version>
     <AssemblyName>Senparc.CO2NET.APM</AssemblyName>
     <RootNamespace>Senparc.CO2NET.APM</RootNamespace>
-    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>
       Senparc.CO2NET.APM 应用性能管理
     </Description>

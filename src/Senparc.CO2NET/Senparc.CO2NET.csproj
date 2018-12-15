@@ -5,7 +5,7 @@
     <Version>0.4.0-preview1</Version>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
-    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
     <Description>
       Senparc.CO2NET 公共基础库
