@@ -16,7 +16,7 @@
 
 ----------------------------------------------------------------*/
 
-#if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.CO2NET.Cache;

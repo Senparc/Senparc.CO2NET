@@ -74,7 +74,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Senparc.CO2NET.Extensions;
 #endif
-#if NETSTANDARD1_6 || NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0
 using Microsoft.AspNetCore.Http;
 #endif
 
@@ -208,7 +208,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
         }
-#else //NETSTANDARD1_6 || NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+#else // NETSTANDARD2_0
 
         /// <summary>
         /// 验证服务器证书
