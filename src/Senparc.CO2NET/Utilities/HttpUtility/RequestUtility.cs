@@ -52,6 +52,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20181009
     修改描述：v0.2.15 Post 方法添加 headerAddition参数
 
+    修改标识：Senparc - 20181215
+    修改描述：v0.3.1 更新 RequestUtility.GetQueryString() 方法
 
 ----------------------------------------------------------------*/
 
@@ -180,7 +182,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="useAjax">是否使用Ajax</param>
         /// <param name="headerAddition">header附加信息</param>
         /// <param name="timeOut"></param>
-        private static void HttpClientHeader(HttpWebRequest request, string refererUrl, bool useAjax,Dictionary<string,string> headerAddition, int timeOut)
+        private static void HttpClientHeader(HttpWebRequest request, string refererUrl, bool useAjax, Dictionary<string, string> headerAddition, int timeOut)
         {
             request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
             request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36";
@@ -354,7 +356,7 @@ namespace Senparc.CO2NET.HttpUtility
             foreach (var kv in formData)
             {
                 i++;
-                sb.AppendFormat("{0}={1}", kv.Key, kv.Value);
+                sb.AppendFormat("{0}={1}", kv.Key, Senparc.CO2NET.Extensions.WebCodingExtensions.UrlEncode(kv.Value));
                 if (i < formData.Count)
                 {
                     sb.Append("&");
