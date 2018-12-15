@@ -66,7 +66,7 @@ namespace Senparc.CO2NET.Utilities
             set
             {
                 _appDomainAppPath = value;
-#if NETSTANDARD1_6 || NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0
                 if (!_appDomainAppPath.EndsWith("/"))
                 {
                     _appDomainAppPath += "/";

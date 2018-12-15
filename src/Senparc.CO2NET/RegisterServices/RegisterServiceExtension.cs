@@ -23,7 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-#if NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 #endif
@@ -35,7 +35,7 @@ namespace Senparc.CO2NET.RegisterServices
     /// </summary>
     public static class RegisterServiceExtension
     {
-#if NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0
         /// <summary>
         /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程（必须）
         /// </summary>

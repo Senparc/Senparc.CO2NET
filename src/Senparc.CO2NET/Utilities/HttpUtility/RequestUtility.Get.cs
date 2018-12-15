@@ -46,7 +46,7 @@ using System.Web;
 using System.Net.Http;
 using System.Net.Http.Headers;
 #endif
-#if NETSTANDARD1_6 || NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0
 using Microsoft.AspNetCore.Http;
 using Senparc.CO2NET.WebProxy;
 #endif
@@ -88,7 +88,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 #endif
 
-#if NETSTANDARD1_6 || NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0
         /// <summary>
         /// .NET Core 版本的HttpWebRequest参数设置
         /// </summary>

@@ -59,7 +59,7 @@ using System.Web;
 using System.Net.Http;
 using System.Net.Http.Headers;
 #endif
-#if NETSTANDARD1_6 || NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0
 using Microsoft.AspNetCore.Http;
 using Senparc.CO2NET.WebProxy;
 using Senparc.CO2NET.Exceptions;
@@ -223,7 +223,7 @@ namespace Senparc.CO2NET.HttpUtility
 
 #endif
 
-#if NETSTANDARD1_6 || NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0
         /// <summary>
         /// 给.NET Core使用的HttpPost请求公共设置方法
         /// </summary>

@@ -55,11 +55,11 @@ namespace Senparc.CO2NET.APM
         public DataOperation(string domain)
         {
             _domain = domain ?? "GLOBAL";//如果未提供，则统一为 GLOBAL，全局共享
-            _domainKey = $"{CACHE_NAMESPACE}:{domain}";
+            _domainKey = $"{CACHE_NAMESPACE}:{_domain}";
 
-            if (!KindNameStore.ContainsKey(domain))
+            if (!KindNameStore.ContainsKey(_domain))
             {
-                KindNameStore[domain] = new Dictionary<string, DateTime>();
+                KindNameStore[_domain] = new Dictionary<string, DateTime>();
             }
         }
 

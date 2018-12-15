@@ -20,7 +20,7 @@
 ----------------------------------------------------------------*/
 
 
-#if NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -49,7 +49,7 @@ namespace Senparc.CO2NET.RegisterServices
             Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
         }
 
-#if NETCOREAPP2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0
 
         /// <summary>
         /// 单个实例引用全局的 ServiceCollection

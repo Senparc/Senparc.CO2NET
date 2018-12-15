@@ -40,6 +40,7 @@ namespace Senparc.CO2NET.Extensions
         }
         /// <summary>
         /// 封装System.Web.HttpUtility.UrlEncode
+        /// <para>注意：.NET Core 转义后字母为大写</para>
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
