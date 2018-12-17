@@ -1,4 +1,17 @@
-﻿using System;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2018 Senparc
+
+    文件名：WebCodingExtensions.cs
+    文件功能描述：网页编码扩展类
+
+    创建标识：Senparc - 20180602
+
+    修改标识：Senparc - 20181217
+    修改描述：v0.4.1 为 UrlEncode() 和 UrlDecode() 方法添加在 .net framework 环境下的编码类型选择
+
+----------------------------------------------------------------*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -38,34 +51,57 @@ namespace Senparc.CO2NET.Extensions
             return WebUtility.HtmlDecode(html);
 #endif
         }
+
+#if NET35 || NET40 || NET45
         /// <summary>
-        /// 封装System.Web.HttpUtility.UrlEncode
+        /// 封装 System.Web.HttpUtility.UrlEncode
+        /// <para>注意：.NET Core 转义后字母为大写</para>
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="encoding">编码，默认为 UTF8</param>
+        /// <returns></returns>
+        public static string UrlEncode(this string url, Encoding encoding = null)
+        {
+            encoding = encoding ?? Encoding.UTF8;
+            return System.Web.HttpUtility.UrlEncode(url, encoding);
+        }
+#else
+        /// <summary>
+        /// 封装 WebUtility.UrlEncode
         /// <para>注意：.NET Core 转义后字母为大写</para>
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
         public static string UrlEncode(this string url)
         {
-#if NET35 || NET40 || NET45
-            return System.Web.HttpUtility.UrlEncode(url);
-#else
             return WebUtility.UrlEncode(url);//转义后字母为大写
-#endif
         }
+#endif
+
+#if NET35 || NET40 || NET45
         /// <summary>
         /// 封装System.Web.HttpUtility.UrlDecode
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="encoding">编码，默认为 UTF8</param>
+        /// <returns></returns>
+        public static string UrlDecode(this string url, Encoding encoding = null)
+        {
+            encoding = encoding ?? Encoding.UTF8;
+            return System.Web.HttpUtility.UrlDecode(url, encoding);
+        }
+#else
+        /// <summary>
+        /// 封装 WebUtility.UrlDecode
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
         public static string UrlDecode(this string url)
         {
-#if NET35 || NET40 || NET45
-            return System.Web.HttpUtility.UrlDecode(url);
-#else
             return WebUtility.UrlDecode(url);
+        }
 #endif
 
-        }
 
         /// <summary>
         /// <para>将 URL 中的参数名称/值编码为合法的格式。</para>
@@ -82,7 +118,5 @@ namespace Senparc.CO2NET.Extensions
             }
             return Uri.EscapeDataString(data);
         }
-
-
     }
 }
