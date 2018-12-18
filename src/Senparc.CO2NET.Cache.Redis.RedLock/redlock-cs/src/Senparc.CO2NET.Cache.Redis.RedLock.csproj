@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <Version>2.0.0-preview1</Version>
+    <Version>2.0.0</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis.RedLock</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis.RedLock</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -54,7 +54,7 @@
       ======== CO2NET 移植 ========
 
       v1.0.0 从 Senparc.Weixin.Cache.REdis.Redlock 移植
-      v2.0.0 使用 .NETStandard2.0 统一支持 .NET Core，放弃对 .NET Core 1.x 的支持
+      v2.0.0 使用 .NETStandard2.0 统一支持 .NET Core，放弃对 .NET Core 1.x 的单独适配
 
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
