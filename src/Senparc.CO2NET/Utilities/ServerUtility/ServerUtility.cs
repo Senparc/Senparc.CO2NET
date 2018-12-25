@@ -27,6 +27,10 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     
     创建标识：Senparc - 20180819
 
+    修改标识：Senparc - 20181225
+    修改描述：v0.4.2 优化 ServerUtility 类中方法在 docker 或 linux 环境下的路径识别
+
+
 ----------------------------------------------------------------*/
 
 
@@ -67,9 +71,11 @@ namespace Senparc.CO2NET.Utilities
             {
                 _appDomainAppPath = value;
 #if NETSTANDARD2_0
-                if (!_appDomainAppPath.EndsWith("/"))
+
+                var pathSeparator = Path.PathSeparator.ToString();
+                if (!_appDomainAppPath.EndsWith(pathSeparator))
                 {
-                    _appDomainAppPath += "/";
+                    _appDomainAppPath += pathSeparator;
                 }
 #endif
             }
@@ -88,14 +94,16 @@ namespace Senparc.CO2NET.Utilities
             }
             else
             {
-                if (!Config.RootDictionaryPath.EndsWith("/") || Config.RootDictionaryPath.EndsWith("\\"))
+                //if (!Config.RootDictionaryPath.EndsWith("/") || Config.RootDictionaryPath.EndsWith("\\"))
+                var pathSeparator = Path.PathSeparator.ToString();
+                if (!Config.RootDictionaryPath.EndsWith(pathSeparator))
                 {
-                    Config.RootDictionaryPath += "\\";
+                    Config.RootDictionaryPath += Path.PathSeparator;
                 }
 
                 if (virtualPath.StartsWith("~/"))
                 {
-                    return virtualPath.Replace("~/", Config.RootDictionaryPath).Replace("/", "\\");
+                    return virtualPath.Replace("~/", Config.RootDictionaryPath).Replace("/", pathSeparator);
                 }
                 else
                 {
@@ -117,7 +125,8 @@ namespace Senparc.CO2NET.Utilities
             }
             else if (virtualPath.StartsWith("~/"))
             {
-                return virtualPath.Replace("~/", AppDomainAppPath).Replace("/", "\\");
+                var pathSeparator = Path.PathSeparator.ToString();
+                return virtualPath.Replace("~/", AppDomainAppPath).Replace("/", pathSeparator);
             }
             else
             {

@@ -44,6 +44,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 
 using System;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace Senparc.CO2NET
@@ -122,12 +123,12 @@ namespace Senparc.CO2NET
             {
                 if (_rootDictionaryPath==null)
                 {
-#if NET35 || NET40 || NET45 || NETSTANDARD2_0
+#if NET35 || NET40 || NET45
                     var appPath = AppDomain.CurrentDomain.BaseDirectory;
 
-                    if (Regex.Match(appPath, @"\\$", RegexOptions.Compiled).Success)
+                    if (Regex.Match(appPath, $@"{Path.PathSeparator}$", RegexOptions.Compiled).Success)
                     {
-                        _rootDictionaryPath = appPath;//我们
+                        _rootDictionaryPath = appPath;//
                         //_rootDictionaryPath = appPath.Substring(0, appPath.Length - 1);
 
                     }
