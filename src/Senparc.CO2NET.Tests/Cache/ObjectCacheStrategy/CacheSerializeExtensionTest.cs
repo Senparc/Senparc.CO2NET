@@ -16,7 +16,7 @@ namespace Senparc.CO2NET.Tests.Cache
         {
             public string ID { get; set; }
             public long Star { get; set; }
-            public DateTime AddTime { get; set; }
+            public DateTimeOffset AddTime { get; set; }
             public Type Type { get; set; }
         }
 

@@ -34,7 +34,7 @@ namespace Senparc.CO2NET.Tests.Helpers
                 };
 
 
-            DateTime dt1 = SystemTime.Now;
+            var dt1 = SystemTime.Now;
 
             {
                 //不进行任何设置，返回原始JSON
@@ -275,7 +275,7 @@ namespace Senparc.CO2NET.Tests.Helpers
             test.x = "Senparc.Weixin SDK";
             test.y = SystemTime.Now;
 
-            DateTime dt1 = SystemTime.Now;
+            var dt1 = SystemTime.Now;
 
             var json = SerializerHelper.GetJsonString(test);
             Console.WriteLine(json);

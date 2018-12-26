@@ -9,7 +9,7 @@ namespace Senparc.CO2NET.APM
     /// </summary>
     public class ApmThread
     {
-        private DateTime LastRecordTime = DateTime.MinValue;
+        private DateTimeOffset LastRecordTime = DateTime.MinValue;
 
         /// <summary>
         /// 打开 CPU 状态监控

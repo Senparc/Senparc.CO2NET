@@ -1,4 +1,38 @@
-﻿using System;
+﻿#region Apache License Version 2.0
+/*----------------------------------------------------------------
+
+Copyright 2018 Jeffrey Su & Suzhou Senparc Network Technology Co.,Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the
+License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the specific language governing permissions
+and limitations under the License.
+
+Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
+
+----------------------------------------------------------------*/
+#endregion Apache License Version 2.0
+
+/*----------------------------------------------------------------
+    Copyright (C) 2018 Senparc
+
+    文件名：DataHelper.cs
+    文件功能描述：数据帮助类
+
+
+    创建标识：Senparc - 20180602
+
+    修改标识：Senparc - 20181226
+    修改描述：v0.4.3 修改 DateTime 为 DateTimeOffset
+
+ ----------------------------------------------------------------*/
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,22 +41,25 @@ using System.Text;
 
 namespace Senparc.CO2NET.APM
 {
+    /// <summary>
+    /// 数据帮助类
+    /// </summary>
     public class DataHelper
     {
 
         /// <summary>
         /// 确保已经到达下一分钟
         /// </summary>
-        /// <param name="recordTime"></param>
-        /// <param name="dateTime"></param>
+        /// <param name="lastTime"></param>
+        /// <param name="currentDateTime"></param>
         /// <returns></returns>
-        public static bool IsLaterMinute(DateTime lastTime, DateTime dateTime)
+        public static bool IsLaterMinute(DateTimeOffset lastTime, DateTimeOffset currentDateTime)
         {
-            return lastTime.Year < dateTime.Year ||
-                   lastTime.Month < dateTime.Month ||
-                   lastTime.Day < dateTime.Day ||
-                   lastTime.Hour < dateTime.Hour ||
-                   lastTime.Minute < dateTime.Minute;
+            return lastTime.Year < currentDateTime.Year ||
+                   lastTime.Month < currentDateTime.Month ||
+                   lastTime.Day < currentDateTime.Day ||
+                   lastTime.Hour < currentDateTime.Hour ||
+                   lastTime.Minute < currentDateTime.Minute;
         }
 
         /// <summary>

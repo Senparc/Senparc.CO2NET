@@ -33,6 +33,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20170205
     修改描述：v0.2.0 重构分布式锁
 
+    修改标识：Senparc - 20181226
+    修改描述：v0.4.3 修改 DateTime 为 DateTimeOffset
+
  ----------------------------------------------------------------*/
 
 
@@ -93,9 +96,9 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// .NET Core 的 MemoryCache 不提供便利所有项目的方法，因此这里做一个储存Key的地方
+        /// .NET Core 的 MemoryCache 不提供遍历所有项目的方法，因此这里做一个储存Key的地方
         /// </summary>
-        public static Dictionary<string, DateTime> Keys { get; set; } = new Dictionary<string, DateTime>();
+        public static Dictionary<string, DateTimeOffset> Keys { get; set; } = new Dictionary<string, DateTimeOffset>();
 
         static LocalObjectCacheHelper()
         {
