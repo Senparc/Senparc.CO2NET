@@ -23,3 +23,4 @@ obj/*
 /src/Senparc.Weixin.Tests/App_Data/SenparcTraceLog
 /src/Senparc.CO2NET.Cache.Redis.Tests/App_Data/SenparcTraceLog/*
 /src/Senparc.CO2NET.APM.Tests/App_Data/SenparcTraceLog/*.log
+/Sample/Senparc.CO2NET.Sample.netcore/Properties/PublishProfiles/FolderProfile.pubxml
