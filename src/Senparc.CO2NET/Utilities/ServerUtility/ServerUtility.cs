@@ -71,9 +71,9 @@ namespace Senparc.CO2NET.Utilities
             {
                 _appDomainAppPath = value;
 #if NETSTANDARD2_0
-
-                var pathSeparator = Path.PathSeparator.ToString();
-                if (!_appDomainAppPath.EndsWith(pathSeparator))
+                var pathSeparator = Path.DirectorySeparatorChar.ToString();
+                var altPathSeparator = Path.AltDirectorySeparatorChar.ToString();
+                if (!_appDomainAppPath.EndsWith(pathSeparator) && !_appDomainAppPath.EndsWith(altPathSeparator))
                 {
                     _appDomainAppPath += pathSeparator;
                 }
@@ -95,10 +95,11 @@ namespace Senparc.CO2NET.Utilities
             else
             {
                 //if (!Config.RootDictionaryPath.EndsWith("/") || Config.RootDictionaryPath.EndsWith("\\"))
-                var pathSeparator = Path.PathSeparator.ToString();
-                if (!Config.RootDictionaryPath.EndsWith(pathSeparator))
+                var pathSeparator = Path.DirectorySeparatorChar.ToString();
+                var altPathSeparator = Path.AltDirectorySeparatorChar.ToString();
+                if (!Config.RootDictionaryPath.EndsWith(pathSeparator) &&!Config.RootDictionaryPath.EndsWith(altPathSeparator))
                 {
-                    Config.RootDictionaryPath += Path.PathSeparator;
+                    Config.RootDictionaryPath += pathSeparator;
                 }
 
                 if (virtualPath.StartsWith("~/"))
@@ -125,7 +126,7 @@ namespace Senparc.CO2NET.Utilities
             }
             else if (virtualPath.StartsWith("~/"))
             {
-                var pathSeparator = Path.PathSeparator.ToString();
+                var pathSeparator = Path.DirectorySeparatorChar.ToString();
                 return virtualPath.Replace("~/", AppDomainAppPath).Replace("/", pathSeparator);
             }
             else
