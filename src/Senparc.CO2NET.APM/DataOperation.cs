@@ -239,7 +239,7 @@ namespace Senparc.CO2NET.APM
                             minuteDataPack.MinuteDataList.Add(minuteData);
 
                             minuteData.KindName = dataItem.KindName;
-                            minuteData.Time = new DateTime(dataItem.DateTime.Year, dataItem.DateTime.Month, dataItem.DateTime.Day, dataItem.DateTime.Hour, dataItem.DateTime.Minute, 0);
+                            minuteData.Time = new DateTimeOffset(dataItem.DateTime.Year, dataItem.DateTime.Month, dataItem.DateTime.Day, dataItem.DateTime.Hour, dataItem.DateTime.Minute, 0,TimeSpan.Zero);
                             minuteData.StartValue = dataItem.Value;
                             minuteData.HighestValue = dataItem.Value;
                             minuteData.LowestValue = dataItem.Value;

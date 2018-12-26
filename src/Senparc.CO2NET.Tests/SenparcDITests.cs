@@ -51,7 +51,7 @@ namespace Senparc.CO2NET.Tests
             Assert.IsNotNull(obj1);
             Assert.AreEqual(dt, obj1);
 
-            var obj2 = cache.Get<DateTime>(key, true);//获取明确类型对象
+            var obj2 = cache.Get<DateTimeOffset>(key, true);//获取明确类型对象
             Assert.IsNotNull(obj2);
             Assert.AreEqual(dt, obj2);
 
