@@ -39,6 +39,10 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
  
     修改标识：Senparc - 20180802
     修改描述：v0.2.6 增加 GetUnixDateTime() 方法，标记过期 GetWeixinDateTime() 方法
+    
+    修改标识：Senparc - 20181226
+    修改描述：1、v0.4.3 修改 DateTime 为 DateTimeOffset
+              2、添加 支持 DateTimeOffset 类型参数的 GetUnixDateTime() 重写方法
 
 ----------------------------------------------------------------*/
 
@@ -86,6 +90,16 @@ namespace Senparc.CO2NET.Helpers
         public static long GetWeixinDateTime(DateTime dateTime)
         {
             return GetUnixDateTime(dateTime);
+        }
+
+        /// <summary>
+        /// 获取Unix时间戳
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static long GetUnixDateTime(DateTimeOffset dateTime)
+        {
+            return (long)(dateTime - BaseTime).TotalSeconds;
         }
 
         /// <summary>
