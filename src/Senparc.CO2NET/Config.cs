@@ -126,7 +126,7 @@ namespace Senparc.CO2NET
 #if NET35 || NET40 || NET45
                     var appPath = AppDomain.CurrentDomain.BaseDirectory;
 
-                    if (Regex.Match(appPath, $@"{Path.PathSeparator}$", RegexOptions.Compiled).Success)
+                    if (Regex.Match(appPath, $@"[{Path.DirectorySeparatorChar}{Path.AltDirectorySeparatorChar}]$", RegexOptions.Compiled).Success)
                     {
                         _rootDictionaryPath = appPath;//
                         //_rootDictionaryPath = appPath.Substring(0, appPath.Length - 1);
