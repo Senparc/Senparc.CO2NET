@@ -31,8 +31,8 @@ namespace System
         public static DateTimeOffset Now => DateTimeOffset.Now;
 
         /// <summary>
-        /// 当天零点时间
+        /// 当天零点时间，从 SystemTime.Now.Date 获得
         /// </summary>
-        public static DateTimeOffset Today => new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day, 0, 0, 0, TimeSpan.Zero);
+        public static DateTime Today => SystemTime.Now.Date;
     }
 }
