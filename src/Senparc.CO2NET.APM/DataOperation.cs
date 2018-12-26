@@ -1,4 +1,39 @@
-﻿using Senparc.CO2NET.APM.Exceptions;
+﻿#region Apache License Version 2.0
+/*----------------------------------------------------------------
+
+Copyright 2018 Jeffrey Su & Suzhou Senparc Network Technology Co.,Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the
+License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the specific language governing permissions
+and limitations under the License.
+
+Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
+
+----------------------------------------------------------------*/
+#endregion Apache License Version 2.0
+
+/*----------------------------------------------------------------
+    Copyright (C) 2018 Senparc
+
+    文件名：DataOperation.cs
+    文件功能描述：每一次跟踪日志的对象信息
+
+
+    创建标识：Senparc - 20180602
+
+    修改标识：Senparc - 20181226
+    修改描述：v0.4.3 修改 DateTime 为 DateTimeOffset
+
+ ----------------------------------------------------------------*/
+
+
+using Senparc.CO2NET.APM.Exceptions;
 using Senparc.CO2NET.Trace;
 using System;
 using System.Collections.Generic;
@@ -8,6 +43,9 @@ using System.Text;
 
 namespace Senparc.CO2NET.APM
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class DataOperation
     {
         const string CACHE_NAMESPACE = "SENPARC_APM";
@@ -17,7 +55,7 @@ namespace Senparc.CO2NET.APM
         private string _domainKey;
 
         //TODO：需要考虑分布式的情况，最好储存在缓存中
-        private static Dictionary<string, Dictionary<string, DateTime>> KindNameStore { get; set; } = new Dictionary<string, Dictionary<string, DateTime>>();
+        private static Dictionary<string, Dictionary<string, DateTimeOffset>> KindNameStore { get; set; } = new Dictionary<string, Dictionary<string, DateTimeOffset>>();
 
         private string BuildFinalKey(string kindName)
         {
@@ -27,7 +65,7 @@ namespace Senparc.CO2NET.APM
         /// <summary>
         /// 注册 Key
         /// </summary>
-        /// <param name="finalKey"></param>
+        /// <param name="kindName"></param>
         private void RegisterFinalKey(string kindName)
         {
             if (KindNameStore[_domain].ContainsKey(kindName))
@@ -59,7 +97,7 @@ namespace Senparc.CO2NET.APM
 
             if (!KindNameStore.ContainsKey(_domain))
             {
-                KindNameStore[_domain] = new Dictionary<string, DateTime>();
+                KindNameStore[_domain] = new Dictionary<string, DateTimeOffset>();
             }
         }
 
@@ -72,7 +110,7 @@ namespace Senparc.CO2NET.APM
         /// <param name="tempStorage">临时储存信息</param>
         /// <param name="dateTime">发生时间，默认为当前系统时间</param>
         /// <returns></returns>
-        public DataItem Set(string kindName, double value, object data = null, object tempStorage = null, DateTime? dateTime = null)
+        public DataItem Set(string kindName, double value, object data = null, object tempStorage = null, DateTimeOffset? dateTime = null)
         {
             try
             {
@@ -145,7 +183,7 @@ namespace Senparc.CO2NET.APM
                 Dictionary<string, List<DataItem>> tempDataItems = new Dictionary<string, List<DataItem>>();
 
                 var systemNow = SystemTime.Now;
-                var nowMinuteTime = new DateTime(systemNow.Year, systemNow.Month, systemNow.Day, systemNow.Hour, systemNow.Minute, 0);
+                var nowMinuteTime = new DateTimeOffset(systemNow.Year, systemNow.Month, systemNow.Day, systemNow.Hour, systemNow.Minute, 0, TimeSpan.Zero);
 
                 //快速获取并清理数据
                 foreach (var item in KindNameStore[_domain])
@@ -185,7 +223,7 @@ namespace Senparc.CO2NET.APM
                     var kindName = kv.Key;
                     var domainData = kv.Value;
 
-                    DateTime lastDataItemTime = DateTime.MinValue;
+                    var lastDataItemTime = DateTimeOffset.MinValue;
 
                     MinuteDataPack minuteDataPack = new MinuteDataPack();
                     minuteDataPack.KindName = kindName;
@@ -201,7 +239,7 @@ namespace Senparc.CO2NET.APM
                             minuteDataPack.MinuteDataList.Add(minuteData);
 
                             minuteData.KindName = dataItem.KindName;
-                            minuteData.Time = new DateTime(dataItem.DateTime.Year, dataItem.DateTime.Month, dataItem.DateTime.Day, dataItem.DateTime.Hour, dataItem.DateTime.Minute, 0);
+                            minuteData.Time = new DateTimeOffset(dataItem.DateTime.Year, dataItem.DateTime.Month, dataItem.DateTime.Day, dataItem.DateTime.Hour, dataItem.DateTime.Minute, 0,TimeSpan.Zero);
                             minuteData.StartValue = dataItem.Value;
                             minuteData.HighestValue = dataItem.Value;
                             minuteData.LowestValue = dataItem.Value;

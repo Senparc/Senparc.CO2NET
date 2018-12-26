@@ -16,7 +16,6 @@
     修改标识：Senparc - 20180707
     修改描述：v0.1.9 UseSenparcGlobal() 方法删除 senparcSetting 参数，因为在 RegisterService.Start 中已经提供
 
-
 ----------------------------------------------------------------*/
 
 using System;
