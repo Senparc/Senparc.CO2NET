@@ -17,7 +17,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
         public string Name { get; set; }
         [Key(2)]
         //[MessagePackFormatter(typeof(DateTimeFormatter))]
-        public DateTime AddTime { get; set; }
+        public DateTimeOffset AddTime { get; set; }
     }
 
 

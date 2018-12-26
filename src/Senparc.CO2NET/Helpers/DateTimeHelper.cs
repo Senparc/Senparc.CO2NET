@@ -55,23 +55,24 @@ namespace Senparc.CO2NET.Helpers
         /// <summary>
         /// Unix起始时间
         /// </summary>
-        public readonly static DateTime BaseTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        public readonly static DateTimeOffset BaseTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
         /// <summary>
         /// 转换微信DateTime时间到C#时间
         /// </summary>
         /// <param name="dateTimeFromXml">微信DateTime</param>
         /// <returns></returns>
-        public static DateTime GetDateTimeFromXml(long dateTimeFromXml)
+        public static DateTimeOffset GetDateTimeFromXml(long dateTimeFromXml)
         {
             return BaseTime.AddSeconds(dateTimeFromXml).ToLocalTime();
         }
+
         /// <summary>
         /// 转换微信DateTime时间到C#时间
         /// </summary>
         /// <param name="dateTimeFromXml">微信DateTime</param>
         /// <returns></returns>
-        public static DateTime GetDateTimeFromXml(string dateTimeFromXml)
+        public static DateTimeOffset GetDateTimeFromXml(string dateTimeFromXml)
         {
             return GetDateTimeFromXml(long.Parse(dateTimeFromXml));
         }

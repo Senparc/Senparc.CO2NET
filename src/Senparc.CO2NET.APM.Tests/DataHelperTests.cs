@@ -13,20 +13,20 @@ namespace Senparc.CO2NET.APM.Tests
         public void IsLaterMinuteTest()
         {
             {
-                var dateTime1 = new DateTime(2018, 11, 16, 15, 08, 20);
-                var dateTime2 = new DateTime(2018, 11, 16, 15, 08, 59);
+                var dateTime1 = new DateTimeOffset(2018, 11, 16, 15, 08, 20,TimeSpan.Zero);
+                var dateTime2 = new DateTimeOffset(2018, 11, 16, 15, 08, 59, TimeSpan.Zero);
                 Assert.IsFalse(DataHelper.IsLaterMinute(dateTime1, dateTime2));
             }
 
             {
-                var dateTime1 = new DateTime(2018, 11, 16, 15, 08, 20);
-                var dateTime2 = new DateTime(2018, 11, 16, 15, 20, 01);
+                var dateTime1 = new DateTimeOffset(2018, 11, 16, 15, 08, 20, TimeSpan.Zero);
+                var dateTime2 = new DateTimeOffset(2018, 11, 16, 15, 20, 01, TimeSpan.Zero);
                 Assert.IsTrue(DataHelper.IsLaterMinute(dateTime1, dateTime2));
             }
 
             {
-                var dateTime1 = new DateTime(2018, 11, 16, 23, 59, 59);
-                var dateTime2 = new DateTime(2018, 11, 17, 00, 00, 00);
+                var dateTime1 = new DateTimeOffset(2018, 11, 16, 23, 59, 59, TimeSpan.Zero);
+                var dateTime2 = new DateTimeOffset(2018, 11, 17, 00, 00, 00, TimeSpan.Zero);
                 Assert.IsTrue(DataHelper.IsLaterMinute(dateTime1, dateTime2));
             }
         }

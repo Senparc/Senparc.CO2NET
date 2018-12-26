@@ -109,7 +109,7 @@ namespace Senparc.CO2NET.Cache.Lock
 
             List<Thread> list = new List<Thread>();
             int[] runThreads = { 0 };
-            DateTime dt0 = DateTime.Today;
+            var dt0 = SystemTime.Today;
             for (int i = 0; i < (int)threadsCount; i++)
             {
                 runThreads[0]++;
@@ -122,7 +122,7 @@ namespace Senparc.CO2NET.Cache.Lock
 
                     Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 进入，准备尝试锁。Cache实例：{cache.GetHashCode()}");
 
-                    DateTime dt1 = SystemTime.Now;
+                    var dt1 = SystemTime.Now;
                     using (var cacheLock = cache.BeginCacheLock(resourceName, appId, (int)retryTimes, TimeSpan.FromMilliseconds(retryDelay)))
                     {
                         var result = cacheLock.LockSuccessful
@@ -140,7 +140,7 @@ namespace Senparc.CO2NET.Cache.Lock
                 list.Add(thread);
             }
 
-            
+
             var dtAll1 = SystemTime.Now;
             dt0 = SystemTime.Now;
 
