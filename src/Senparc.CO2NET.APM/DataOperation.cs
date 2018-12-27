@@ -182,7 +182,7 @@ namespace Senparc.CO2NET.APM
                 var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
                 Dictionary<string, List<DataItem>> tempDataItems = new Dictionary<string, List<DataItem>>();
 
-                var systemNow = SystemTime.Now;
+                var systemNow = SystemTime.Now.UtcDateTime;//统一UTC时间
                 var nowMinuteTime = new DateTimeOffset(systemNow.Year, systemNow.Month, systemNow.Day, systemNow.Hour, systemNow.Minute, 0, TimeSpan.Zero);
 
                 //快速获取并清理数据
