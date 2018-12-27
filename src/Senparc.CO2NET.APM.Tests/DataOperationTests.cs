@@ -48,8 +48,7 @@ namespace Senparc.CO2NET.APM.Tests
             Assert.AreEqual(7, viewData.Count);
         }
 
-      
-
+     
         [TestMethod]
         public void ReadAndCleanDataItemsTest()
         {
@@ -58,15 +57,16 @@ namespace Senparc.CO2NET.APM.Tests
             var result = dataOperation.ReadAndCleanDataItems();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(2, result.Count);//CPU、访问量两个分类
             Console.WriteLine(result.ToJson());
+            Console.WriteLine("===============");
 
             //立即获取，检查是否已经清空当前分钟之前的数据
             var cpuData = dataOperation.GetDataItemList("CPU");
             Assert.AreEqual(0, cpuData.Count);
 
             var viewData = dataOperation.GetDataItemList("访问量");
-            Assert.AreEqual(1, viewData.Count);//当前分钟的缓存不会被清楚
+            Assert.AreEqual(1, viewData.Count);//当前分钟的缓存不会被清除
 
             //模拟当前时间
 

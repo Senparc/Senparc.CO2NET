@@ -29,10 +29,20 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
             var mockEnv = new Mock<IHostingEnvironment>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
-            var redisServer = "localhost:6379";
-           var registerService = RegisterService.Start(mockEnv.Object, new SenparcSetting() { IsDebug = true, Cache_Redis_Configuration= redisServer })
-                .UseSenparcGlobal();
 
+            RedisManager.ConfigurationOption = null;//测试前清除
+
+            var redisServer = "localhost:6379";
+
+            var senparcSetting = new SenparcSetting()
+            {
+                IsDebug = true,
+                Cache_Redis_Configuration = redisServer
+            };
+
+
+            var registerService = RegisterService.Start(mockEnv.Object, senparcSetting)
+                 .UseSenparcGlobal();
             Assert.AreEqual(null, RedisManager.ConfigurationOption);//当前还没有进行注册
 
             registerService.RegisterCacheRedis(

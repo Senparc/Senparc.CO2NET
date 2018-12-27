@@ -12,7 +12,11 @@ namespace Senparc.CO2NET.Tests.Helpers
         [TestMethod]
         public void MutipleCacheTestHelperTest()
         {
-           var exCache = TestExtensionCacheStrategy.Instance;//完成领域缓存注册
+            BaseTest.RegisterServiceStart();//自动注册Redis，也可以手动注册
+            BaseTest.RegisterServiceCollection();
+
+            var exCache = TestExtensionCacheStrategy.Instance;//完成领域缓存注册
+            var exRedisCache = TestExtensionRedisCacheStrategy.Instance;//完成Redis领域缓存注册
 
             MutipleCacheTestHelper.RunMutipleCache(() =>
             {

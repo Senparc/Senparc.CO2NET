@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Cache;
@@ -21,6 +22,7 @@ namespace Senparc.CO2NET.Tests
 
                 var guid = Guid.NewGuid().ToString();
                 SenparcTrace.SendCustomLog("IsDebugTest:Debug", guid);
+                Thread.Sleep(1500);//通过队列写入需要等待
                 Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(SenparcTraceTests.LogFilePath, guid));
             }
 
@@ -31,6 +33,7 @@ namespace Senparc.CO2NET.Tests
 
                 var guid = Guid.NewGuid().ToString();
                 SenparcTrace.SendCustomLog("IsDebugTest:Not Debug", guid);
+                Thread.Sleep(1500);//通过队列写入需要等待
                 Assert.IsFalse(UnitTestHelper.CheckKeywordsExist(SenparcTraceTests.LogFilePath, guid));
             }
         }
