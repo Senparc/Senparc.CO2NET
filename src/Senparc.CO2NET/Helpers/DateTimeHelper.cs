@@ -44,6 +44,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改描述：1、v0.4.3 修改 DateTime 为 DateTimeOffset
               2、添加 支持 DateTimeOffset 类型参数的 GetUnixDateTime() 重写方法
 
+    修改标识：Senparc - 20181227
+    修改描述：添加 GetDateTimeOffsetFromXml() 重写方法
+
 ----------------------------------------------------------------*/
 
 
@@ -66,9 +69,9 @@ namespace Senparc.CO2NET.Helpers
         /// </summary>
         /// <param name="dateTimeFromXml">微信DateTime</param>
         /// <returns></returns>
-        public static DateTimeOffset GetDateTimeFromXml(long dateTimeFromXml)
+        public static DateTime GetDateTimeFromXml(long dateTimeFromXml)
         {
-            return BaseTime.AddSeconds(dateTimeFromXml).ToLocalTime();
+            return GetDateTimeOffsetFromXml(dateTimeFromXml).LocalDateTime;
         }
 
         /// <summary>
@@ -76,7 +79,27 @@ namespace Senparc.CO2NET.Helpers
         /// </summary>
         /// <param name="dateTimeFromXml">微信DateTime</param>
         /// <returns></returns>
-        public static DateTimeOffset GetDateTimeFromXml(string dateTimeFromXml)
+        public static DateTime GetDateTimeFromXml(string dateTimeFromXml)
+        {
+            return GetDateTimeFromXml(long.Parse(dateTimeFromXml));
+        }
+
+        /// <summary>
+        /// 转换微信DateTimeOffset时间到C#时间
+        /// </summary>
+        /// <param name="dateTimeFromXml">微信DateTime</param>
+        /// <returns></returns>
+        public static DateTimeOffset GetDateTimeOffsetFromXml(long dateTimeFromXml)
+        {
+            return BaseTime.AddSeconds(dateTimeFromXml).ToLocalTime();
+        }
+
+        /// <summary>
+        /// 转换微信DateTimeOffset时间到C#时间
+        /// </summary>
+        /// <param name="dateTimeFromXml">微信DateTime</param>
+        /// <returns></returns>
+        public static DateTimeOffset GetDateTimeOffsetFromXml(string dateTimeFromXml)
         {
             return GetDateTimeFromXml(long.Parse(dateTimeFromXml));
         }

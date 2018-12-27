@@ -113,6 +113,9 @@ namespace Senparc.CO2NET.Utilities
                     case "DateTime":
                         setValue = DateTimeHelper.GetDateTimeFromXml(value.ToString());
                         break;
+                    case "DateTimeOffset":
+                        setValue = DateTimeHelper.GetDateTimeOffsetFromXml(value.ToString());
+                        break;
                     case "Int32":
                         setValue = value.ConvertTo<int>();
                         break;

@@ -142,7 +142,6 @@ namespace Senparc.CO2NET.Cache.Lock
 
 
             var dtAll1 = SystemTime.Now;
-            dt0 = SystemTime.Now;
 
             list.ForEach(z => z.Start());
 
