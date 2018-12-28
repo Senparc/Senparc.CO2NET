@@ -135,7 +135,10 @@ namespace Senparc.CO2NET.APM
 
                     RegisterFinalKey(kindName);//注册Key
 
-                    SenparcTrace.SendCustomLog($"APM 性能记录 - DataOperation.Set - {_domain}:{kindName}", (SystemTime.Now - dt1).TotalMilliseconds + " ms");
+                    if (SenparcTrace.RecordAPMLog)
+                    {
+                        SenparcTrace.SendCustomLog($"APM 性能记录 - DataOperation.Set - {_domain}:{kindName}", (SystemTime.Now - dt1).TotalMilliseconds + " ms");
+                    }
 
                     return dataItem;
                 }
@@ -265,7 +268,10 @@ namespace Senparc.CO2NET.APM
                     }
                 }
 
-                SenparcTrace.SendCustomLog("APM 性能记录 - DataOperation.ReadAndCleanDataItems", (SystemTime.Now - dt1).TotalMilliseconds + " ms");
+                //if (SenparcTrace.RecordAPMLog)
+                {
+                    SenparcTrace.SendCustomLog("APM 记录 - DataOperation.ReadAndCleanDataItems", (SystemTime.Now - dt1).TotalMilliseconds + " ms");
+                }
 
                 return result;
             }

@@ -33,6 +33,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 201801118
     修改描述：v0.3.0 升级 SenparcTrace，使用队列
 
+    修改标识：Senparc - 20181227
+    修改描述：v0.4.4 提供 SenparcTrace.RecordAPMLog 参数
+
 ----------------------------------------------------------------*/
 
 
@@ -40,7 +43,6 @@ using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Exceptions;
 using Senparc.CO2NET.MessageQueue;
 using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace Senparc.CO2NET.Trace
@@ -65,6 +67,11 @@ namespace Senparc.CO2NET.Trace
         /// 执行所有日志记录操作时执行的任务（发生在记录日志之后）
         /// </summary>
         public static Action OnLogFunc;
+
+        /// <summary>
+        /// 是否开放每次 APM 录入的记录，默认为关闭（当 Senparc.CO2ENT.APM 启用时有效）
+        /// </summary>
+        public static bool RecordAPMLog = false;
 
         #region 私有方法
 
