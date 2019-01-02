@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <Version>2.0.0</Version>
+    <TargetFrameworks>net45;net461;netstandard2.0</TargetFrameworks>
+    <Version>2.1.0</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis.RedLock</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis.RedLock</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -81,7 +81,11 @@
     <OutputPath>..\..\..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\..\..\BuildOutPut\net45\Senparc.CO2NET.Cache.Redis.RedLock.xml</DocumentationFile>
   </PropertyGroup>
-
+  
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
+    <OutputPath>..\..\..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\..\..\BuildOutPut\net461\Senparc.CO2NET.Cache.Redis.RedLock.xml</DocumentationFile>
+  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
     <OutputPath>..\..\..\BuildOutPut\</OutputPath>
@@ -90,6 +94,9 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <PackageReference Include="StackExchange.Redis" Version="2.0.513" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="StackExchange.Redis" Version="2.0.513" />
