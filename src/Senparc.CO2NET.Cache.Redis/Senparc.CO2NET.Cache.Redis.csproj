@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <Version>3.3.2-preview2</Version>
+    <TargetFrameworks>net45;net461;netstandard2.0</TargetFrameworks>
+    <Version>3.4.0-preview2</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -94,6 +94,7 @@
       5、Redis 缓存服务连接信息实现从 Config.SenparcSetting 自动获取信息并注册）
       v3.2.0 StackExchange.Redis 升级到 2.0.513
       v3.3.0 使用 .NETStandard2.0 统一支持 .NET Core，放弃对 .NET Core 1.x 的单独适配
+      v3.4.0 支持 .net 4.6.1 版本
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
@@ -119,6 +120,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\BuildOutPut\net45\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\net461\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
@@ -156,6 +162,11 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
   </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <PackageReference Include="StackExchange.Redis" Version="2.0.513" />
+  </ItemGroup>
+  
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="StackExchange.Redis" Version="2.0.513" />
   </ItemGroup>
