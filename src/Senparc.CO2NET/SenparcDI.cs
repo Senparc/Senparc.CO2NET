@@ -45,6 +45,9 @@ namespace Senparc.CO2NET
         }
 
 
+        /// <summary>
+        /// 已过期，请使用 GlobalIServiceProvider
+        /// </summary>
         [Obsolete("Please use GlobalIServiceProvider")]
         public static ServiceProvider GlobalServiceProvider
         {
