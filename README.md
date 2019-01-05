@@ -13,6 +13,8 @@
 | Redis 基础库 | Senparc.CO2NET.Cache.Redis   | [![Senparc.CO2NET.Cache.Redis][3.1]][3.2]    [![Senparc.CO2NET.Cache.Redis][nuget-img-base-redis]][nuget-url-base-redis]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
 | Memcached 基础库 | Senparc.CO2NET.Cache.Memcached   | [![Senparc.CO2NET.Cache.Memcached][4.1]][4.2]    [![Senparc.CO2NET.Cache.Memcached][nuget-img-base-memcached]][nuget-url-base-memcached]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
 
+![.NET Core 2.0][core20Y] 同时支持 .NET Standard 2.0+ 及 .NET Core 2.2+
+
 [1.1]: https://img.shields.io/nuget/v/Senparc.CO2NET.svg?style=flat
 [1.2]: https://www.nuget.org/packages/Senparc.CO2NET
 [2.1]: https://img.shields.io/nuget/v/Senparc.CO2NET.APM.svg?style=flat
