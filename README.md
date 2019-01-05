@@ -6,12 +6,12 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/uqhyn9i2x5r300dq/branch/master?svg=true)](https://ci.appveyor.com/project/JeffreySu/senparc-co2net/branch/master)
 [![NuGet](https://img.shields.io/nuget/dt/Senparc.CO2NET.svg)](https://www.nuget.org/packages/Senparc.CO2NET)
 
-| 名称    |        DLL          |  Nuget                                                                                | 支持 .NET 版本 
+| 模块功能    |        DLL          |  Nuget                                                                                | 支持 .NET 版本 
 |---------|---------------------|---------------------------------------------------------------------------------------|--------------------------------------
-| CO2NET | Senparc.CO2NET.dll   | [![Senparc.CO2NET][1.1]][1.2]    [![Senparc.CO2NET][nuget-img-base]][nuget-url-base]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
-| CO2NET.Cache.Redis | Senparc.CO2NET.Cache.Redis.dll   | [![Senparc.CO2NET.Cache.Redis][3.1]][3.2]    [![Senparc.CO2NET.Cache.Redis][nuget-img-base-redis]][nuget-url-base-redis]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
-| CO2NET.Cache.Memcached | Senparc.CO2NET.Cache.Memcached.dll   | [![Senparc.CO2NET.Cache.Memcached][4.1]][4.2]    [![Senparc.CO2NET.Cache.Memcached][nuget-img-base-memcached]][nuget-url-base-memcached]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
-| CO2NET.APM | Senparc.CO2NET.APM.dll   | [![Senparc.CO2NET.APM][2.1]][2.2]    [![Senparc.CO2NET.APM][nuget-img-base-apm]][nuget-url-base-apm]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
+| CO2NET 基础库 | Senparc.CO2NET.dll   | [![Senparc.CO2NET][1.1]][1.2]    [![Senparc.CO2NET][nuget-img-base]][nuget-url-base]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
+| Redis 基础库 | Senparc.CO2NET.Cache.Redis   | [![Senparc.CO2NET.Cache.Redis][3.1]][3.2]    [![Senparc.CO2NET.Cache.Redis][nuget-img-base-redis]][nuget-url-base-redis]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
+| Memcached 基础库 | Senparc.CO2NET.Cache.Memcached.dll   | [![Senparc.CO2NET.Cache.Memcached][4.1]][4.2]    [![Senparc.CO2NET.Cache.Memcached][nuget-img-base-memcached]][nuget-url-base-memcached]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
+| APM 模块 | Senparc.CO2NET.APM.dll   | [![Senparc.CO2NET.APM][2.1]][2.2]    [![Senparc.CO2NET.APM][nuget-img-base-apm]][nuget-url-base-apm]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
 
 [1.1]: https://img.shields.io/nuget/v/Senparc.CO2NET.svg?style=flat
 [1.2]: https://www.nuget.org/packages/Senparc.CO2NET
