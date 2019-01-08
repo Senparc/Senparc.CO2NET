@@ -51,7 +51,6 @@ namespace Senparc.CO2NET.Sample.Consoles
 
             services.AddMemoryCache();//使用本地缓存必须添加
 
-
             /*
             * CO2NET 是从 Senparc.Weixin 分离的底层公共基础模块，经过了长达 6 年的迭代优化，稳定可靠。
             * 关于 CO2NET 在所有项目中的通用设置可参考 CO2NET 的 Sample：

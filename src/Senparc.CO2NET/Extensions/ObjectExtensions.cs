@@ -48,7 +48,12 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20180721
     修改描述：v0.2.1 优化序列化特性识别
 
+    修改标识：Senparc - 20190108
+    修改描述：v0.5.1 ToJson() 方法添加 jsonSerializerSettings 参数
+
 ----------------------------------------------------------------*/
+
+using Newtonsoft.Json;
 
 namespace Senparc.CO2NET.Extensions
 {
@@ -62,10 +67,12 @@ namespace Senparc.CO2NET.Extensions
         /// </summary>
         /// <param name="data">数据</param>
         /// <param name="indented">是否使用缩进格式</param>
+        /// <param name="jsonSerializerSettings">序列化设置（默认为null）</param>
         /// <returns></returns>
-        public static string ToJson(this object data, bool indented = false)
+        public static string ToJson(this object data, bool indented = false, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(data, indented ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None);
+            var formatting = indented ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None;
+            return Newtonsoft.Json.JsonConvert.SerializeObject(data, formatting, jsonSerializerSettings);
         }
 
         /// <summary>
