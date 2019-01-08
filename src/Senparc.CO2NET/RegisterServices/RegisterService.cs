@@ -16,6 +16,9 @@
     修改标识：Senparc - 20180517
     修改描述：v0.1.9 1、RegisterService 取消 public 的构造函数，统一使用 RegisterService.Start() 初始化
                      2、.net framework 和 .net core 版本统一强制在构造函数中要求提供 SenparcSetting 参数
+  
+    修改标识：Senparc - 20190108
+    修改描述：v0.5.0 添加 Start() 重写方法，提供 .NET Core Console 的全面支持
 
 ----------------------------------------------------------------*/
 
@@ -25,6 +28,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 #endif
+
+using System;
 
 namespace Senparc.CO2NET.RegisterServices
 {
@@ -70,6 +75,10 @@ namespace Senparc.CO2NET.RegisterServices
             {
                 Senparc.CO2NET.Config.RootDictionaryPath = env.ContentRootPath;
             }
+            else
+            {
+                Senparc.CO2NET.Config.RootDictionaryPath = AppDomain.CurrentDomain.BaseDirectory;
+            }
 
             var register = new RegisterService(senparcSetting);
 
@@ -77,6 +86,17 @@ namespace Senparc.CO2NET.RegisterServices
             register.RegisterThreads();//默认把线程注册好
 
             return register;
+        }
+
+        /// <summary>
+        /// 开始 Senparc.CO2NET SDK 初始化参数流程（.NET Core）
+        /// </summary>
+        /// <param name="env">IHostingEnvironment，控制台程序可以输入null，</param>
+        /// <param name="senparcSetting"></param>
+        /// <returns></returns>
+        public static RegisterService Start(SenparcSetting senparcSetting)
+        {
+            return Start(null, senparcSetting);
         }
 
 #else
@@ -87,6 +107,9 @@ namespace Senparc.CO2NET.RegisterServices
         public static RegisterService Start(SenparcSetting senparcSetting)
         {
             var register = new RegisterService(senparcSetting);
+
+            //提供网站根目录
+            Senparc.CO2NET.Config.RootDictionaryPath = AppDomain.CurrentDomain.BaseDirectory;
 
             //如果不注册此线程，则AccessToken、JsTicket等都无法使用SDK自动储存和管理。
             register.RegisterThreads();//默认把线程注册好
