@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net35;net40;net45;netstandard2.0</TargetFrameworks>
-    <Version>0.5.1</Version>
+    <Version>0.5.2</Version>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -74,6 +74,7 @@
       v0.4.4 提供 SenparcTrace.RecordAPMLog 参数
       v0.5.0 提供对 .NET Core Console 的全面支持
       v0.5.1 ToJson() 方法添加 jsonSerializerSettings 参数
+      v0.5.2 优化 DI 相关方法，提供 SenparcDI.GlobalApplicationBuilder 全局属性
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>

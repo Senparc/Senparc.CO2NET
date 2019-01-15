@@ -14,10 +14,15 @@
     修改标识：pengweiqhca - 20180802
     修改描述：v0.2.8 添加 SenparcDI.GetIServiceProvider() 方法，以支持其他依赖注入框架
 
+    修改标识：Senparc - 20190115
+    修改描述：v0.2.8 添加 SenparcDI.GetIServiceProvider() 方法，以支持其他依赖注入框架
+
+
 ----------------------------------------------------------------*/
 
 #if NETSTANDARD2_0
 using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.CO2NET.Cache;
 
@@ -34,6 +39,11 @@ namespace Senparc.CO2NET
         /// 全局 ServiceCollection
         /// </summary>
         public static IServiceCollection GlobalServiceCollection { get; set; }
+
+        /// <summary>
+        /// 全局 GlobalApplicationBuilder
+        /// </summary>
+        public static IApplicationBuilder GlobalApplicationBuilder { get; set; }
 
         /// <summary>
         /// 创建一个新的 ServiceCollection 对象

@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.Extensions;
+using Microsoft.AspNetCore.Builder;
 
 namespace Senparc.CO2NET
 {
@@ -70,19 +71,30 @@ namespace Senparc.CO2NET
             return registerService;
         }
 
+
         /// <summary>
         /// 开始 Senparc.CO2NET 初始化参数流程
         /// </summary>
         /// <param name="registerService"></param>
+        /// <param name="app">IApplicationBuilder，用于依赖注入获取 IHostingEnvironment 等对象，建议提供，如全局无需使用可传入 null</param>
         /// <param name="autoScanExtensionCacheStrategies">是否自动扫描全局的扩展缓存（会增加系统启动时间）</param>
         /// <param name="extensionCacheStrategiesFunc"><para>需要手动注册的扩展缓存策略</para>
         /// <para>（LocalContainerCacheStrategy、RedisContainerCacheStrategy、MemcacheContainerCacheStrategy已经自动注册），</para>
         /// <para>如果设置为 null（注意：不适委托返回 null，是整个委托参数为 null），则自动使用反射扫描所有可能存在的扩展缓存策略</para></param>
         /// <returns></returns>
-        public static IRegisterService UseSenparcGlobal(this IRegisterService registerService, bool autoScanExtensionCacheStrategies = false, Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
+        public static IRegisterService UseSenparcGlobal(this IRegisterService registerService,
+#if NETSTANDARD2_0
+            IApplicationBuilder app,
+#endif
+            bool autoScanExtensionCacheStrategies = false, Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
         {
             //注册扩展缓存策略
             CacheStrategyDomainWarehouse.AutoScanDomainCacheStrategy(autoScanExtensionCacheStrategies, extensionCacheStrategiesFunc);
+
+#if NETSTANDARD2_0
+            //注册 IApplicationBuilder
+            SenparcDI.GlobalApplicationBuilder = app;
+#endif
 
             return registerService;
         }

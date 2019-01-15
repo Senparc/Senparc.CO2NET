@@ -58,6 +58,7 @@ namespace Senparc.CO2NET
     {
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释   
         未知 = 0,
+        未设置 = 0,
         男 = 1,
         女 = 2,
         其他 = 3

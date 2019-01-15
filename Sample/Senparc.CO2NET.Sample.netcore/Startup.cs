@@ -75,7 +75,7 @@ namespace Senparc.CO2NET.Sample.netcore
 
             // 启动 CO2NET 全局注册，必须！
             IRegisterService register = RegisterService.Start(env, senparcSetting.Value)
-                                                       .UseSenparcGlobal(false, () => GetExCacheStrategies(senparcSetting.Value));
+                                                       .UseSenparcGlobal(app, false, () => GetExCacheStrategies(senparcSetting.Value));
 
             //如果需要自动扫描自定义扩展缓存，可以这样使用：
             //register.UseSenparcGlobal(true);
