@@ -28,7 +28,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     创建标识：Senparc - 20180602
  
     修改标识：Senparc - 20180704
-    修改描述：v0.5.1.1 添加 Sex.未设置
+    修改描述：v0.5.1.1 添加 Sex.未设置 枚举值
 
 
 ----------------------------------------------------------------*/
