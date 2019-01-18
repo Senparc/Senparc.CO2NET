@@ -44,11 +44,20 @@ namespace Senparc.CO2NET.Sample.Consoles
         static void Main(string[] args)
         {
             var dt1 = SystemTime.Now;
-            var services = new ServiceCollection();
+
             var configBuilder = new ConfigurationBuilder();
+            configBuilder.AddJsonFile("appsettings.json", false, false);
+            Console.WriteLine("完成 appsettings.json 添加");
+
             var config = configBuilder.Build();
             Console.WriteLine("完成 ServiceCollection 和 ConfigurationBuilder 初始化");
+            
+            //更多绑定操作参见：https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-2.2
+            var senparcSetting = new SenparcSetting();
+            config.GetSection("SenparcSetting").Bind(senparcSetting);
 
+
+            var services = new ServiceCollection();
             services.AddMemoryCache();//使用本地缓存必须添加
 
             /*
@@ -59,16 +68,6 @@ namespace Senparc.CO2NET.Sample.Consoles
 
             services.AddSenparcGlobalServices(config);//Senparc.CO2NET 全局注册
             Console.WriteLine("完成 AddSenparcGlobalServices 注册");
-
-
-            SenparcSetting senparcSetting = new SenparcSetting()
-            {
-                IsDebug = true,
-                DefaultCacheNamespace = "DefaultCache",
-                //Cache_Redis_Configuration = "localhost:6379"//Redis 连接字符串
-                //Cache_Redis_Configuration = "localhost:6379,password=senparc,connectTimeout=1000,connectRetry=2,syncTimeout=10000,defaultDatabase=3",//密码及其他配置
-                SenparcUnionAgentKey = "SenparcUnionAgentKey"//无需修改
-            };
 
             // 启动 CO2NET 全局注册，必须！
             IRegisterService register = RegisterService.Start(senparcSetting)
