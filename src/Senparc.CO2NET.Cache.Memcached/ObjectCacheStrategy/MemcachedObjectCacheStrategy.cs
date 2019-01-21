@@ -90,7 +90,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 #if !NET45
                 if (dic.Count() > 0)
                 {
-                    SenparcDI.GetServiceCollection().AddSenparcMemcached(options =>
+                    SenparcDI.GlobalServiceCollection.AddSenparcMemcached(options =>
                     {
                         foreach (var item in dic)
                         {
