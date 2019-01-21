@@ -34,35 +34,22 @@ namespace Senparc.CO2NET
     {
         private static ServiceProvider _globalServiceProvider;
 
-        public const string SENPARC_DI_THREAD_SERVICE_PROVIDER = "___SenparcDIThreadServiceProvider";
+        //public const string SENPARC_DI_THREAD_SERVICE_PROVIDER = "___SenparcDIThreadServiceProvider";
+        public const string SENPARC_DI_THREAD_SERVICE_Scope = "___SenparcDIThreadScope";
 
         /// <summary>
         /// 全局 ServiceCollection
         /// </summary>
         public static IServiceCollection GlobalServiceCollection { get; set; }
 
-        /// <summary>
-        /// 创建一个新的 ServiceCollection 对象
-        /// </summary>
-        /// <returns></returns>
-        public static IServiceCollection GetServiceCollection()
-        {
-            return GlobalServiceCollection;
-        }
-
-        /// <summary>
-        /// 已过期，请使用 GlobalIServiceProvider
-        /// </summary>
-        [Obsolete("Please use GlobalIServiceProvider")]
-        public static ServiceProvider GlobalServiceProvider
-        {
-            get => _globalServiceProvider;
-            set
-            {
-                GlobalIServiceProvider = value;
-                _globalServiceProvider = value;
-            }
-        }
+        ///// <summary>
+        ///// 创建一个新的 ServiceCollection 对象
+        ///// </summary>
+        ///// <returns></returns>
+        //public static IServiceCollection GetServiceCollection()
+        //{
+        //    return GlobalServiceCollection;
+        //}
 
         private static object _globalIServiceProviderLock = new object();
         private static object _threadIServiceProviderLock = new object();
@@ -73,31 +60,17 @@ namespace Senparc.CO2NET
         public static IServiceProvider GlobalIServiceProvider { get; set; }
 
         /// <summary>
-        /// 线程内的 ServiceProvider
+        /// 线程内的 单一 Scope 范围 ServiceScope
         /// </summary>
-        public static IServiceProvider ThreadIServiceProvider
+        public static IServiceScope ThreadServiceScope
         {
             get
             {
-                var threadServiceProvider = Thread.GetData(Thread.GetNamedDataSlot(SENPARC_DI_THREAD_SERVICE_PROVIDER)) as IServiceProvider;
-                return threadServiceProvider;
+                var threadServiceScope = Thread.GetData(Thread.GetNamedDataSlot(SENPARC_DI_THREAD_SERVICE_Scope)) as IServiceScope;
+                return threadServiceScope;
             }
         }
 
-        /// <summary>
-        /// 获取 ServiceProvider
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("Please use GetIServiceProvider")]
-        public static ServiceProvider GetServiceProvider()
-        {
-            if (GlobalServiceProvider == null)
-            {
-                //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
-                GlobalServiceProvider = GetServiceCollection().BuildServiceProvider();
-            }
-            return GlobalServiceProvider;
-        }
 
         /// <summary>
         /// 获取 ServiceProvider
@@ -116,7 +89,7 @@ namespace Senparc.CO2NET
                         if (GlobalIServiceProvider == null)
                         {
                             //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
-                            GlobalIServiceProvider = GetServiceCollection().BuildServiceProvider();
+                            GlobalIServiceProvider = GlobalServiceCollection.BuildServiceProvider();
                         }
                     }
                 }
@@ -124,20 +97,23 @@ namespace Senparc.CO2NET
             }
             else
             {
-                if (ThreadIServiceProvider == null)
+                if (ThreadServiceScope == null)
                 {
                     //加锁确保唯一
                     lock (_threadIServiceProviderLock)
                     {
-                        if (ThreadIServiceProvider == null)
+                        if (ThreadServiceScope == null)
                         {
                             //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
                             //GlobalIServiceProvider = GetServiceCollection().BuildServiceProvider();
-                            Thread.SetData(Thread.GetNamedDataSlot(SENPARC_DI_THREAD_SERVICE_PROVIDER), GetServiceCollection().BuildServiceProvider());
+
+                            var globalServiceProvider = GetIServiceProvider(true);
+
+                            Thread.SetData(Thread.GetNamedDataSlot(SENPARC_DI_THREAD_SERVICE_Scope), globalServiceProvider.CreateScope());
                         }
                     }
                 }
-                return ThreadIServiceProvider;
+                return ThreadServiceScope.ServiceProvider;
             }
         }
 
@@ -165,6 +141,39 @@ namespace Senparc.CO2NET
         {
             return GetIServiceProvider(useGlobalServiceProvider).GetRequiredService<T>();
         }
+
+        #region 过期方法
+
+        /// <summary>
+        /// 已过期，请使用 GlobalIServiceProvider
+        /// </summary>
+        [Obsolete("Please use GlobalIServiceProvider")]
+        public static ServiceProvider GlobalServiceProvider
+        {
+            get => _globalServiceProvider;
+            set
+            {
+                GlobalIServiceProvider = value;
+                _globalServiceProvider = value;
+            }
+        }
+
+        /// <summary>
+        /// 获取 ServiceProvider
+        /// </summary>
+        /// <returns></returns>
+        [Obsolete("Please use GetIServiceProvider")]
+        public static ServiceProvider GetServiceProvider()
+        {
+            if (GlobalServiceProvider == null)
+            {
+                //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
+                GlobalServiceProvider = GlobalServiceCollection.BuildServiceProvider();
+            }
+            return GlobalServiceProvider;
+        }
+
+        #endregion
     }
 }
 #endif
