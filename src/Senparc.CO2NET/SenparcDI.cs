@@ -75,11 +75,14 @@ namespace Senparc.CO2NET
         /// <summary>
         /// 获取 ServiceProvider
         /// </summary>
-        /// <param name="useGlobalServiceProvider">是否使用全局唯一 ServiceProvider 对象，默认为 false，即使用线程内唯一 ServiceProvider 对象</param>
+        /// <param name="useGlobalScope">是否使用全局唯一 ServiceScope 对象。
+        /// <para>默认为 true，即使用全局唯一 ServiceScope。</para>
+        /// <para>如果为 false，即使用线程内唯一 ServiceScope 对象</para>
+        /// </param>
         /// <returns></returns>
-        public static IServiceProvider GetIServiceProvider(bool useGlobalServiceProvider = false)
+        public static IServiceProvider GetIServiceProvider(bool useGlobalScope = true)
         {
-            if (useGlobalServiceProvider)
+            if (useGlobalScope)
             {
                 if (GlobalIServiceProvider == null)
                 {
@@ -124,10 +127,10 @@ namespace Senparc.CO2NET
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        /// <param name="useGlobalServiceProvider">是否使用全局唯一 ServiceProvider 对象，默认为 false，即使用线程内唯一 ServiceProvider 对象</param>
-        public static T GetService<T>(bool useGlobalServiceProvider = false)
+        /// <param name="useGlobalScope">是否使用全局唯一 ServiceScope 对象，默认为 false，即使用线程内唯一 ServiceScope 对象</param>
+        public static T GetService<T>(bool useGlobalScope = true)
         {
-            return GetIServiceProvider(useGlobalServiceProvider).GetService<T>();
+            return GetIServiceProvider(useGlobalScope).GetService<T>();
         }
 
         /// <summary>
@@ -136,10 +139,10 @@ namespace Senparc.CO2NET
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        /// <param name="useGlobalServiceProvider">是否使用全局唯一 ServiceProvider 对象，默认为 false，即使用线程内唯一 ServiceProvider 对象</param>
-        public static T GetRequiredService<T>(bool useGlobalServiceProvider = false)
+        /// <param name="useGlobalScope">是否使用全局唯一 ServiceScope 对象，默认为 false，即使用线程内唯一 ServiceScope 对象</param>
+        public static T GetRequiredService<T>(bool useGlobalScope = true)
         {
-            return GetIServiceProvider(useGlobalServiceProvider).GetRequiredService<T>();
+            return GetIServiceProvider(useGlobalScope).GetRequiredService<T>();
         }
 
         #region 过期方法
