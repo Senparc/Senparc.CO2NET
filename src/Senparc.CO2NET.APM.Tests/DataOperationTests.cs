@@ -64,7 +64,7 @@ namespace Senparc.CO2NET.APM.Tests
             var result = dataOperation.ReadAndCleanDataItems();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.Count);//CPU、访问量两个分类
+            Assert.AreEqual(3, result.Count);//内存、CPU、访问量3个分类
             Console.WriteLine(result.ToJson());
             Console.WriteLine("===============");
 
@@ -90,7 +90,7 @@ namespace Senparc.CO2NET.APM.Tests
             var result = dataOperation.ReadAndCleanDataItems(true, true);
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.Count);//CPU、访问量两个分类
+            Assert.AreEqual(3, result.Count);//内存、CPU、访问量3个分类
             Console.WriteLine(result.ToJson());
             Console.WriteLine("===============");
 
