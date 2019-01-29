@@ -28,7 +28,10 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     创建标识：Senparc - 20180602
 
     修改标识：Senparc - 20181226
-    修改描述：v0.4.3 修改 DateTime 为 DateTimeOffset
+    修改描述：支持 NeuChar v0.4.3 修改 DateTime 为 DateTimeOffset
+
+    修改标识：Senparc - 20180128
+    修改描述：v0.2.5 添加 ReadAndCleanDataItems 的 keepTodayData 属性，保留当天数据
 
  ----------------------------------------------------------------*/
 
@@ -176,7 +179,8 @@ namespace Senparc.CO2NET.APM
         /// </summary>
         /// <returns></returns>
         /// <param name="removeReadItems">是否移除已读取的项目，默认为 true</param>
-        public List<MinuteDataPack> ReadAndCleanDataItems(bool removeReadItems = true)
+        /// <param name="keepTodayData">当 removeReadItems = true 时有效，在清理的时候是否保留当天的数据</param>
+        public List<MinuteDataPack> ReadAndCleanDataItems(bool removeReadItems = true, bool keepTodayData = true)
         {
             try
             {
@@ -186,7 +190,7 @@ namespace Senparc.CO2NET.APM
                 Dictionary<string, List<DataItem>> tempDataItems = new Dictionary<string, List<DataItem>>();
 
                 var systemNow = SystemTime.Now.UtcDateTime;//统一UTC时间
-                var nowMinuteTime = new DateTimeOffset(systemNow.Year, systemNow.Month, systemNow.Day, systemNow.Hour, systemNow.Minute, 0, TimeSpan.Zero);
+                var nowMinuteTime = SystemTime.Now.AddSeconds(-SystemTime.Now.Second).AddMilliseconds(-SystemTime.Now.Millisecond);// new DateTimeOffset(systemNow.Year, systemNow.Month, systemNow.Day, systemNow.Hour, systemNow.Minute, 0, TimeSpan.Zero);
 
                 //快速获取并清理数据
                 foreach (var item in KindNameStore[_domain])
@@ -196,14 +200,17 @@ namespace Senparc.CO2NET.APM
                     using (cacheStragety.BeginCacheLock("SenparcAPM", finalKey))
                     {
                         var list = GetDataItemList(item.Key);//获取列表
-                        var toveRemove = list.Where(z => z.DateTime < nowMinuteTime);
+                        var completedStatData = list.Where(z => z.DateTime < nowMinuteTime).ToList();//统计范围内的所有数据
 
-                        tempDataItems[kindName] = toveRemove.ToList();//添加到列表
+                        tempDataItems[kindName] = completedStatData;//添加到列表
 
                         if (removeReadItems)
                         {
+                            //筛选需要删除的数据
+                            var tobeRemove = completedStatData.Where(z => keepTodayData ? z.DateTime < SystemTime.Today : true);
+                      
                             //移除已读取的项目
-                            if (toveRemove.Count() == list.Count())
+                            if (tobeRemove.Count() == list.Count())
                             {
                                 //已经全部删除
                                 cacheStragety.RemoveFromCache(finalKey, true);//删除
@@ -211,7 +218,7 @@ namespace Senparc.CO2NET.APM
                             else
                             {
                                 //部分删除
-                                var newList = list.Except(toveRemove).ToList();
+                                var newList = list.Except(tobeRemove).ToList();
                                 cacheStragety.Set(finalKey, newList, Config.DataExpire, true);
                             }
                         }
@@ -242,7 +249,7 @@ namespace Senparc.CO2NET.APM
                             minuteDataPack.MinuteDataList.Add(minuteData);
 
                             minuteData.KindName = dataItem.KindName;
-                            minuteData.Time = new DateTimeOffset(dataItem.DateTime.Year, dataItem.DateTime.Month, dataItem.DateTime.Day, dataItem.DateTime.Hour, dataItem.DateTime.Minute, 0,TimeSpan.Zero);
+                            minuteData.Time = new DateTimeOffset(dataItem.DateTime.Year, dataItem.DateTime.Month, dataItem.DateTime.Day, dataItem.DateTime.Hour, dataItem.DateTime.Minute, 0, TimeSpan.Zero);
                             minuteData.StartValue = dataItem.Value;
                             minuteData.HighestValue = dataItem.Value;
                             minuteData.LowestValue = dataItem.Value;

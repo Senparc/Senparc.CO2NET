@@ -127,6 +127,8 @@ namespace Senparc.CO2NET.Tests.Cache
 
                 var dtx = SystemTime.Now;
                 var serializedObj = StackExchangeRedisExtensions.Serialize(testClass);
+                //注意：此处方法似乎会把 DateTimeOffset 对象转为 Object，导致无法反序列化成原始对象。
+
                 //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
 
                 dtx = SystemTime.Now;
