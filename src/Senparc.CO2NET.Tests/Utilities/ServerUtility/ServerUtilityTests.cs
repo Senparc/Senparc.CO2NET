@@ -15,7 +15,8 @@ namespace Senparc.CO2NET.Tests.Utilities
             var path = "~/App_Data/log.log";
             var result = ServerUtility.DllMapPath(path);
             Console.WriteLine(result);
-            Assert.IsTrue(result.EndsWith(@"\bin\Test\netcoreapp2.2\App_Data\log.log"));
+            Assert.IsTrue(result.EndsWith(@"\bin\Test\netcoreapp2.2\App_Data\log.log") || 
+                          result.EndsWith(@"\bin\Release\netcoreapp2.2\App_Data\log.log"));
         }
 
         [TestMethod]

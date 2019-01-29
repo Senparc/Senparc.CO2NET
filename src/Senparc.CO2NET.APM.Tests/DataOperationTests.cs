@@ -61,7 +61,7 @@ namespace Senparc.CO2NET.APM.Tests
         {
             DataOperation dataOperation = new DataOperation(domainPrefix + "ReadAndCleanDataItemsTest");
             BuildTestData(dataOperation);
-            var result = dataOperation.ReadAndCleanDataItems();
+            var result = dataOperation.ReadAndCleanDataItems(true, false);//清除所有当前分钟前的过期数据
 
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.Count);//内存、CPU、访问量3个分类
@@ -87,7 +87,7 @@ namespace Senparc.CO2NET.APM.Tests
         {
             DataOperation dataOperation = new DataOperation(domainPrefix + "ReadAndCleanDataItems_KeepTodayDataTest");
             BuildTestData(dataOperation);
-            var result = dataOperation.ReadAndCleanDataItems(true, true);
+            var result = dataOperation.ReadAndCleanDataItems(true, true);//只清除今天之前的记录
 
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.Count);//内存、CPU、访问量3个分类

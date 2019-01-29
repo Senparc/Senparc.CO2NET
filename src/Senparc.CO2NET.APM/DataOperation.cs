@@ -190,7 +190,7 @@ namespace Senparc.CO2NET.APM
                 Dictionary<string, List<DataItem>> tempDataItems = new Dictionary<string, List<DataItem>>();
 
                 var systemNow = SystemTime.Now.UtcDateTime;//统一UTC时间
-                var nowMinuteTime = new DateTimeOffset(systemNow.Year, systemNow.Month, systemNow.Day, systemNow.Hour, systemNow.Minute, 0, TimeSpan.Zero);
+                var nowMinuteTime = SystemTime.Now.AddSeconds(-SystemTime.Now.Second).AddMilliseconds(-SystemTime.Now.Millisecond);// new DateTimeOffset(systemNow.Year, systemNow.Month, systemNow.Day, systemNow.Hour, systemNow.Minute, 0, TimeSpan.Zero);
 
                 //快速获取并清理数据
                 foreach (var item in KindNameStore[_domain])
@@ -200,14 +200,17 @@ namespace Senparc.CO2NET.APM
                     using (cacheStragety.BeginCacheLock("SenparcAPM", finalKey))
                     {
                         var list = GetDataItemList(item.Key);//获取列表
-                        var toveRemove = list.Where(z => z.DateTime < nowMinuteTime);
+                        var completedStatData = list.Where(z => z.DateTime < nowMinuteTime).ToList();//统计范围内的所有数据
 
-                        tempDataItems[kindName] = toveRemove.ToList();//添加到列表
+                        tempDataItems[kindName] = completedStatData;//添加到列表
 
-                        if (removeReadItems && (!keepTodayData || item.Value < SystemTime.Today))
+                        if (removeReadItems)
                         {
+                            //筛选需要删除的数据
+                            var tobeRemove = completedStatData.Where(z => keepTodayData ? z.DateTime < SystemTime.Today : true);
+                      
                             //移除已读取的项目
-                            if (toveRemove.Count() == list.Count())
+                            if (tobeRemove.Count() == list.Count())
                             {
                                 //已经全部删除
                                 cacheStragety.RemoveFromCache(finalKey, true);//删除
@@ -215,7 +218,7 @@ namespace Senparc.CO2NET.APM
                             else
                             {
                                 //部分删除
-                                var newList = list.Except(toveRemove).ToList();
+                                var newList = list.Except(tobeRemove).ToList();
                                 cacheStragety.Set(finalKey, newList, Config.DataExpire, true);
                             }
                         }
