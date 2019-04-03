@@ -25,8 +25,6 @@ namespace Senparc.CO2NET.Exceptions
     /// </summary>
     public class UnregisteredDomainCacheStrategyException : CacheException
     {
-
-
         /// <summary>
         /// UnregisteredDomainCacheStrategyException 构造函数
         /// </summary>
