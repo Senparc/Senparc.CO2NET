@@ -24,6 +24,9 @@ using System;
 
 namespace Senparc.CO2NET.Cache.Redis
 {
+    /// <summary>
+    /// Redis 注册
+    /// </summary>
     public static class Register
     {
         /// <summary>

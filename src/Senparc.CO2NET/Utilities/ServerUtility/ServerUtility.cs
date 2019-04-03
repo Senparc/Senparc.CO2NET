@@ -97,7 +97,7 @@ namespace Senparc.CO2NET.Utilities
                 //if (!Config.RootDictionaryPath.EndsWith("/") || Config.RootDictionaryPath.EndsWith("\\"))
                 var pathSeparator = Path.DirectorySeparatorChar.ToString();
                 var altPathSeparator = Path.AltDirectorySeparatorChar.ToString();
-                if (!Config.RootDictionaryPath.EndsWith(pathSeparator) &&!Config.RootDictionaryPath.EndsWith(altPathSeparator))
+                if (!Config.RootDictionaryPath.EndsWith(pathSeparator) && !Config.RootDictionaryPath.EndsWith(altPathSeparator))
                 {
                     Config.RootDictionaryPath += pathSeparator;
                 }
