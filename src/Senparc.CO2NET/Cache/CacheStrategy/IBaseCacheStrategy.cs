@@ -28,19 +28,19 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     创建标识：Senparc - 20160308
 
     修改标识：Senparc - 20160812
-    修改描述：v4.7.4  解决Container无法注册的问题
+    修改描述：v4.7.4 解决Container无法注册的问题
 
     --CO2NET--
     
-    修改标识：Senparc - 20180714
-    修改描述：v4.7.4  解决Container无法注册的问题
-
+    修改标识：Senparc - 20190411
+    修改描述：v0.6.0 提供缓存异步接口
 
  ----------------------------------------------------------------*/
 
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.Cache
 {
@@ -78,6 +78,8 @@ namespace Senparc.CO2NET.Cache
         /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
         /// <returns></returns>
         string GetFinalKey(string key, bool isFullKey = false);
+
+        #region 同步方法
 
 
         /// <summary>
@@ -149,5 +151,73 @@ namespace Senparc.CO2NET.Cache
         /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
         /// <param name="expiry">过期时间</param>
         void Update(TKey key, TValue value, TimeSpan? expiry = null, bool isFullKey = false);
+
+        #endregion
+
+        #region 异步方法
+#if !NET35 && !NET40
+
+        /// <summary>
+        /// 【异步方法】添加指定ID的对象
+        /// </summary>
+        /// <param name="key">缓存键</param>
+        /// <param name="value">缓存值</param>
+        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="expiry">过期时间</param>
+        Task SetAsync(TKey key, TValue value, TimeSpan? expiry = null, bool isFullKey = false);
+
+        /// <summary>
+        /// 【异步方法】移除指定缓存键的对象
+        /// </summary>
+        /// <param name="key">缓存键</param>
+        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        Task RemoveFromCacheAsync(TKey key, bool isFullKey = false);
+
+        /// <summary>
+        /// 【异步方法】返回指定缓存键的对象
+        /// </summary>
+        /// <param name="key">缓存键</param>
+        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <returns></returns>
+        Task<TValue> GetAsync(TKey key, bool isFullKey = false);
+
+        /// <summary>
+        /// 【异步方法】返回指定缓存键的对象，并强制指定类型
+        /// </summary>
+        /// <param name="key">缓存键</param>
+        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <returns></returns>
+        Task<T> GetAsync<T>(TKey key, bool isFullKey = false);
+
+        /// <summary>
+        /// 【异步方法】获取所有缓存信息集合
+        /// </summary>
+        /// <returns></returns>
+        Task<IDictionary<TKey, TValue>> GetAllAsync();
+
+        /// <summary>
+        /// 【异步方法】检查是否存在Key及对象
+        /// </summary>
+        /// <param name="key">缓存键</param>
+        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <returns></returns>
+        Task<bool> CheckExistedAsync(TKey key, bool isFullKey = false);
+
+        /// <summary>
+        /// 【异步方法】获取缓存集合总数（注意：每个缓存框架的计数对象不一定一致！）
+        /// </summary>
+        /// <returns></returns>
+        Task<long> GetCountAsync();
+
+        /// <summary>
+        /// 【异步方法】更新缓存
+        /// </summary>
+        /// <param name="key">缓存键</param>
+        /// <param name="value">缓存值</param>
+        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="expiry">过期时间</param>
+        Task UpdateAsync(TKey key, TValue value, TimeSpan? expiry = null, bool isFullKey = false);
+#endif
+        #endregion
     }
 }
