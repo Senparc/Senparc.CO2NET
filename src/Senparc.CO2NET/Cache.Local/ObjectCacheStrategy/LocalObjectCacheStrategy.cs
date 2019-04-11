@@ -47,6 +47,7 @@ using System.Linq;
 using System.Text;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Exceptions;
+using System.Threading.Tasks;
 #if NET35 || NET40 || NET45
 using System.Web;
 #else
@@ -355,89 +356,21 @@ namespace Senparc.CO2NET.Cache
         #endregion
 
         #region 异步方法
+#if !NET35 && !NET40
 
-
-        public Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
+        public async Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
-            if (key == null || value == null)
-            {
-                return;
-            }
-
-            var finalKey = base.GetFinalKey(key, isFullKey);
-
-#if NET35 || NET40 || NET45
-            _cache[finalKey] = value;
-#else
-            var newKey = !CheckExisted(finalKey, true);
-
-            if (expiry.HasValue)
-            {
-                _cache.Set(finalKey, value, expiry.Value);
-            }
-            else
-            {
-                _cache.Set(finalKey, value);
-            }
-
-            //由于MemoryCache不支持遍历Keys，所以需要单独储存
-            if (newKey)
-            {
-                var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
-                List<string> keys;
-                if (!CheckExisted(keyStoreFinalKey, true))
-                {
-                    keys = new List<string>();
-                }
-                else
-                {
-                    keys = _cache.Get<List<string>>(keyStoreFinalKey);
-                }
-                keys.Add(finalKey);
-                _cache.Set(keyStoreFinalKey, keys);
-            }
-
-#endif
+            await Task.Factory.StartNew(() => Set(key, value, expiry, isFullKey));
         }
 
-        public void RemoveFromCache(string key, bool isFullKey = false)
+        public async Task RemoveFromCacheAsync(string key, bool isFullKey = false)
         {
-            var cacheKey = GetFinalKey(key, isFullKey);
-            _cache.Remove(cacheKey);
-
-#if !NET35 && !NET40 && !NET45
-            //移除key
-            var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
-            if (CheckExisted(keyStoreFinalKey, true))
-            {
-                var keys = _cache.Get<List<string>>(keyStoreFinalKey);
-                keys.Remove(cacheKey);
-                _cache.Set(keyStoreFinalKey, keys);
-            }
-#endif
-
+            await Task.Factory.StartNew(() => RemoveFromCache(key, isFullKey));
         }
 
-        public object Get(string key, bool isFullKey = false)
+        public async Task<object> GetAsync(string key, bool isFullKey = false)
         {
-            if (string.IsNullOrEmpty(key))
-            {
-                return null;
-            }
-
-            if (!CheckExisted(key, isFullKey))
-            {
-                return null;
-                //InsertToCache(key, new ContainerItemCollection());
-            }
-
-            var cacheKey = GetFinalKey(key, isFullKey);
-
-#if NET35 || NET40 || NET45
-            return _cache[cacheKey];
-#else
-            return _cache.Get(cacheKey);
-#endif
+            return await Task.Factory.StartNew(() => Get(key, isFullKey));
         }
 
         /// <summary>
@@ -446,93 +379,34 @@ namespace Senparc.CO2NET.Cache
         /// <param name="key">缓存键</param>
         /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
         /// <returns></returns>
-        public T Get<T>(string key, bool isFullKey = false)
+        public async Task<T> GetAsync<T>(string key, bool isFullKey = false)
         {
-            if (string.IsNullOrEmpty(key))
-            {
-                return default(T);
-            }
+            return await Task.Factory.StartNew(() => Get<T>(key, isFullKey));
+        }
 
-            if (!CheckExisted(key, isFullKey))
-            {
-                return default(T);
-                //InsertToCache(key, new ContainerItemCollection());
-            }
+        public async Task<IDictionary<string, object>> GetAllAsync()
+        {
+            return await Task.Factory.StartNew(() => GetAll());
+        }
 
-            var cacheKey = GetFinalKey(key, isFullKey);
 
-#if NET35 || NET40 || NET45
-            return (T)_cache[cacheKey];
-#else
-            return _cache.Get<T>(cacheKey);
+        public async Task<bool> CheckExistedAsync(string key, bool isFullKey = false)
+        {
+            return await Task.Factory.StartNew(() => CheckExisted(key, isFullKey));
+
+        }
+
+        public async Task<long> GetCountAsync()
+        {
+            return await Task.Factory.StartNew(() => GetCount());
+        }
+
+
+        public async Task UpdateAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
+        {
+            await Task.Factory.StartNew(() => Update(key, isFullKey));
+        }
 #endif
-        }
-
-        public IDictionary<string, object> GetAll()
-        {
-            IDictionary<string, object> data = new Dictionary<string, object>();
-#if NET35 || NET40 || NET45
-            IDictionaryEnumerator cacheEnum = System.Web.HttpRuntime.Cache.GetEnumerator();
-
-            while (cacheEnum.MoveNext())
-            {
-                data[cacheEnum.Key as string] = cacheEnum.Value;
-            }
-#else
-            //获取所有Key
-            var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
-            if (CheckExisted(keyStoreFinalKey, true))
-            {
-                var keys = _cache.Get<List<string>>(keyStoreFinalKey);
-                foreach (var key in keys)
-                {
-                    data[key] = Get(key, true);
-                }
-            }
-#endif
-            return data;
-
-        }
-
-        public bool CheckExisted(string key, bool isFullKey = false)
-        {
-            var cacheKey = GetFinalKey(key, isFullKey);
-
-#if NET35 || NET40 || NET45
-            return _cache.Get(cacheKey) != null;
-#else
-            return _cache.Get(cacheKey) != null;
-#endif
-        }
-
-        public long GetCount()
-        {
-#if NET35 || NET40 || NET45
-            return _cache.Count;
-#else
-            var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
-            if (CheckExisted(keyStoreFinalKey, true))
-            {
-                var keys = _cache.Get<List<string>>(keyStoreFinalKey);
-                return keys.Count;
-            }
-            else
-            {
-                return 0;
-            }
-#endif
-        }
-
-        public void Update(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
-        {
-            Set(key, value, expiry, isFullKey);
-        }
-
-        //public void UpdateContainerBag(string key, object bag, bool isFullKey = false)
-        //{
-        //    Update(key, bag, isFullKey);
-        //}
-
         #endregion
 
         #endregion
