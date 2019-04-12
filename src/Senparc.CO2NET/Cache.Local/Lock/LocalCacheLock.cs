@@ -41,6 +41,7 @@ using Senparc.CO2NET.Trace;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.Cache
 {
@@ -70,6 +71,8 @@ namespace Senparc.CO2NET.Cache
         /// 读取LockPool时的锁
         /// </summary>
         private static object lookPoolLock = new object();
+
+        #region 同步方法
 
         public override bool Lock(string resourceName)
         {
@@ -125,5 +128,30 @@ namespace Senparc.CO2NET.Cache
                 LockPool.Remove(resourceName);
             }
         }
+
+        #endregion
+
+        #region 异步方法
+#if !NET35 && !NET40
+
+        public override async Task<bool> LockAsync(string resourceName)
+        {
+            return await LockAsync(resourceName, 99999 /*暂时不限制*/, new TimeSpan(0, 0, 0, 0, 10));
+        }
+
+        public override async Task<bool> LockAsync(string resourceName, int retryCount, TimeSpan retryDelay)
+        {
+            //TODO：异常处理
+
+            return await Task.Factory.StartNew(() => Lock(resourceName, retryCount, retryDelay));
+        }
+
+        public override Task UnLockAsync(string resourceName)
+        {
+            UnLock(resourceName);
+            return System.Threading.Tasks.TaskExtension.CompletedTask();
+        }
+#endif
+        #endregion
     }
 }
