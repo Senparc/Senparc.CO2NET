@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Enyim.Caching;
 using Enyim.Caching.Configuration;
 using Enyim.Caching.Memcached;
@@ -37,6 +38,8 @@ using Senparc.CO2NET.Exceptions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
+#else
+using static System.Threading.Tasks.TasksExtension;
 #endif
 
 namespace Senparc.CO2NET.Cache.Memcached
@@ -264,11 +267,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         #region IContainerCacheStrategy 成员
 
-        //public IContainerCacheStrategy ContainerCacheStrategy
-        //{
-        //    get { return MemcachedContainerStrategy.Instance; }
-        //}
-
+        #region 同步方法
 
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
         public void InsertToCache(string key, object value, TimeSpan? expiry = null)
@@ -420,6 +419,153 @@ namespace Senparc.CO2NET.Cache.Memcached
         {
             Set(key, value, expiry, isFullKey);
         }
+
+        #endregion
+
+        #region 异步方法
+#if !NET35 && !NET40 && !NET45
+
+
+        public async Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
+        {
+            if (string.IsNullOrEmpty(key) || value == null)
+            {
+                return;// TaskExtension.CompletedTask();
+            }
+
+            var cacheKey = GetFinalKey(key, isFullKey);
+
+            //TODO：加了绝对过期时间就会立即失效（再次获取后为null），memcache低版本的bug
+
+            var newKey = StoreKey ? await CheckExistedAsync(cacheKey, true) == false : false;
+
+            var json = value.SerializeToCache();
+            if (expiry.HasValue)
+            {
+                await Cache.StoreAsync(StoreMode.Set, cacheKey, json, expiry.Value);
+            }
+            else
+            {
+                await Cache.StoreAsync(StoreMode.Set, cacheKey, json, TimeSpan.FromDays(999999)/*不过期*/);
+            }
+
+
+            //由于 Enyim.Caching 不支持遍历Keys，所以需要单独储存
+            if (newKey)
+            {
+                var keyStoreFinalKey = MemcachedObjectCacheStrategy.GetKeyStoreKey(this);
+                List<string> keys;
+                if (!await CheckExistedAsync(keyStoreFinalKey, true))
+                {
+                    keys = new List<string>();
+                }
+                else
+                {
+                    keys = await GetAsync<List<string>>(keyStoreFinalKey, true);
+                }
+                keys.Add(cacheKey);
+                await Cache.StoreAsync(StoreMode.Set, keyStoreFinalKey, keys.SerializeToCache(), TimeSpan.FromDays(999999)/*不过期*/);
+            }
+
+        }
+
+        public virtual async Task RemoveFromCacheAsync(string key, bool isFullKey = false)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return;
+            }
+            var cacheKey = GetFinalKey(key, isFullKey);
+            await Cache.RemoveAsync(cacheKey);
+
+            if (StoreKey)
+            {
+                //移除key
+                var keyStoreFinalKey = MemcachedObjectCacheStrategy.GetKeyStoreKey(this);
+                if (await CheckExistedAsync(keyStoreFinalKey, true))
+                {
+                    var keys = await GetAsync<List<string>>(keyStoreFinalKey, true);
+                    keys.Remove(cacheKey);
+                    await Cache.StoreAsync(StoreMode.Set, keyStoreFinalKey, keys.SerializeToCache(), TimeSpan.FromDays(999999)/*不过期*/);
+                }
+            }
+        }
+
+        public virtual async Task<object> GetAsync(string key, bool isFullKey = false)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return null;
+            }
+
+            var cacheKey = GetFinalKey(key, isFullKey);
+            var json = await Cache.GetAsync<string>(cacheKey);
+            var obj = json?.Value.DeserializeFromCache();
+            return obj;
+        }
+
+
+        public virtual async Task<T> GetAsync<T>(string key, bool isFullKey = false)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return default(T);
+            }
+
+            var cacheKey = GetFinalKey(key, isFullKey);
+            var json = await Cache.GetAsync<string>(cacheKey);
+            var obj = json == null ? default(T) : json.Value.DeserializeFromCache<T>();
+            return obj;
+        }
+
+
+        public virtual async Task<IDictionary<string, object>> GetAllAsync()
+        {
+            IDictionary<string, object> data = new Dictionary<string, object>();
+
+            if (StoreKey)
+            {
+                //获取所有Key
+                var keyStoreFinalKey = MemcachedObjectCacheStrategy.GetKeyStoreKey(this);
+                if (await CheckExistedAsync(keyStoreFinalKey, true))
+                {
+                    var keys = await GetAsync<List<string>>(keyStoreFinalKey, true);
+                    foreach (var key in keys)
+                    {
+                        data[key] = Get(key, true);
+                    }
+                }
+            }
+
+            return data;
+        }
+
+        public virtual async Task<bool> CheckExistedAsync(string key, bool isFullKey = false)
+        {
+            return await Task.Factory.StartNew(() => CheckExisted(key, isFullKey));
+        }
+
+        public virtual async Task<long> GetCountAsync()
+        {
+            var keyStoreFinalKey = MemcachedObjectCacheStrategy.GetKeyStoreKey(this);
+            if (StoreKey && CheckExisted(keyStoreFinalKey, true))
+            {
+                var keys = await GetAsync<List<string>>(keyStoreFinalKey, true);
+                return keys.Count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public virtual async Task UpdateAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
+        {
+            await SetAsync(key, value, expiry, isFullKey);
+        }
+
+#endif
+        #endregion
 
         #endregion
 
