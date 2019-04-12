@@ -30,9 +30,13 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20170205
     修改描述：v1.2.0 重构分布式锁
 
+    修改标识：Senparc - 20191413
+    修改描述：v3.5.0 提供缓存异步接口
+
 ----------------------------------------------------------------*/
 
 using System;
+using System.Threading.Tasks;
 using Redlock.CSharp;
 using Senparc.CO2NET.Cache;
 
@@ -51,6 +55,8 @@ namespace Senparc.CO2NET.Cache.Redis
             _redisStrategy = strategy;
             LockNow();//立即等待并抢夺锁
         }
+
+        #region 同步方法
 
         public override bool Lock(string resourceName)
         {
@@ -84,5 +90,49 @@ namespace Senparc.CO2NET.Cache.Redis
                 _dlm.Unlock(_lockObject);
             }
         }
+
+        #endregion
+
+        #region 异步方法
+#if !NET35 && !NET40
+
+        public override async Task<bool> LockAsync(string resourceName)
+        {
+            return await LockAsync(resourceName, 0, new TimeSpan());
+        }
+
+        public override async Task<bool> LockAsync(string resourceName, int retryCount, TimeSpan retryDelay)
+        {
+            if (retryCount != 0)
+            {
+                _dlm = new Redlock.CSharp.Redlock(retryCount, retryDelay, _redisStrategy.Client);
+            }
+            else if (_dlm == null)
+            {
+                _dlm = new Redlock.CSharp.Redlock(_redisStrategy.Client);
+            }
+
+            var ttl = (retryDelay.TotalMilliseconds > 0 ? retryDelay.TotalMilliseconds : 10)
+                       *
+                      (retryCount > 0 ? retryCount : 10);
+
+
+            Tuple<bool, Lock> result = await _dlm.LockAsync(resourceName, TimeSpan.FromMilliseconds(ttl));
+            var successfull = result.Item1;
+            return successfull;
+        }
+
+        public override async Task UnLockAsync(string resourceName)
+        {
+            if (_lockObject != null)
+            {
+                await _dlm.UnlockAsync(_lockObject);
+            }
+        }
+
+#endif
+        #endregion
+
+
     }
 }
