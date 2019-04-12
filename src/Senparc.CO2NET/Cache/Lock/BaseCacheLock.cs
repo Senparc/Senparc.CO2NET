@@ -82,6 +82,10 @@ namespace Senparc.CO2NET.Cache
         /// 立即开始锁定，需要在子类的构造函数中执行
         /// </summary>
         /// <returns></returns>
+
+
+        #region 同步方法
+
         protected ICacheLock LockNow()
         {
             if (_retryCount != 0 && _retryDelay.Ticks != 0)
@@ -95,8 +99,6 @@ namespace Senparc.CO2NET.Cache
             return this;
         }
 
-        #region 同步方法
-
         public abstract bool Lock(string resourceName);
 
         public abstract bool Lock(string resourceName, int retryCount, TimeSpan retryDelay);
@@ -106,6 +108,20 @@ namespace Senparc.CO2NET.Cache
         #endregion
 
         #region 异步方法
+#if !NET35 && !NET40
+
+        protected async Task<ICacheLock> LockNowAsync()
+        {
+            if (_retryCount != 0 && _retryDelay.Ticks != 0)
+            {
+                LockSuccessful = await LockAsync(_resourceName, _retryCount, _retryDelay);
+            }
+            else
+            {
+                LockSuccessful = await LockAsync(_resourceName);
+            }
+            return this;
+        }
 
         public abstract Task<bool> LockAsync(string resourceName);
 
@@ -113,6 +129,7 @@ namespace Senparc.CO2NET.Cache
 
         public abstract Task UnLockAsync(string resourceName);
 
+#endif
         #endregion
 
     }
