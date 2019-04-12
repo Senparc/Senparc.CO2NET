@@ -34,6 +34,10 @@ namespace System.Threading.Tasks
 {
     public static class TaskExtension
     {
+        /// <summary>
+        /// 使 Task.Completed 兼容 .NET 4.5 的方法
+        /// </summary>
+        /// <returns></returns>
         public static Task CompletedTask()
         {
 #if NET45
