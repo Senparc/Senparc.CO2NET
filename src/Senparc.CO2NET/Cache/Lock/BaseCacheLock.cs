@@ -30,9 +30,13 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20170205
     修改描述：v4.11.0 重构分布式锁
 
+    修改标识：Senparc - 20190412
+    修改描述：v0.6.0 提供缓存异步接口
+
 ----------------------------------------------------------------*/
 
 using System;
+using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.Cache
 {
@@ -56,23 +60,6 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 立即开始锁定，需要在子类的构造函数中执行
-        /// </summary>
-        /// <returns></returns>
-        protected ICacheLock LockNow()
-        {
-            if (_retryCount != 0 && _retryDelay.Ticks != 0)
-            {
-                LockSuccessful = Lock(_resourceName, _retryCount, _retryDelay);
-            }
-            else
-            {
-                LockSuccessful = Lock(_resourceName);
-            }
-            return this;
-        }
-
-        /// <summary>
         /// 获取最长锁定时间（锁最长生命周期）
         /// </summary>
         /// <param name="retryCount">重试次数，</param>
@@ -91,10 +78,42 @@ namespace Senparc.CO2NET.Cache
             UnLock(_resourceName);
         }
 
+        /// <summary>
+        /// 立即开始锁定，需要在子类的构造函数中执行
+        /// </summary>
+        /// <returns></returns>
+        protected ICacheLock LockNow()
+        {
+            if (_retryCount != 0 && _retryDelay.Ticks != 0)
+            {
+                LockSuccessful = Lock(_resourceName, _retryCount, _retryDelay);
+            }
+            else
+            {
+                LockSuccessful = Lock(_resourceName);
+            }
+            return this;
+        }
+
+        #region 同步方法
+
         public abstract bool Lock(string resourceName);
 
         public abstract bool Lock(string resourceName, int retryCount, TimeSpan retryDelay);
 
         public abstract void UnLock(string resourceName);
+
+        #endregion
+
+        #region 异步方法
+
+        public abstract Task<bool> LockAsync(string resourceName);
+
+        public abstract Task<bool> LockAsync(string resourceName, int retryCount, TimeSpan retryDelay);
+
+        public abstract Task UnLockAsync(string resourceName);
+
+        #endregion
+
     }
 }
