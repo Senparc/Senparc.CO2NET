@@ -47,6 +47,7 @@ using Senparc.CO2NET.MessageQueue;
 using Senparc.CO2NET.Cache;
 using StackExchange.Redis;
 using Senparc.CO2NET.Trace;
+using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.Cache.Redis
 {
@@ -122,12 +123,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
         #region 实现 IBaseObjectCacheStrategy 接口
 
-        //public string CacheSetKey { get; set; }
-
-        //public IContainerCacheStrategy ContainerCacheStrategy
-        //{
-        //    get { return RedisContainerCacheStrategy.Instance; }
-        //}
+        #region 同步方法
 
 
         /// <summary>
@@ -277,6 +273,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="expiry"></param>
+        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
         public override void InsertToCache(string key, object value, TimeSpan? expiry = null)
         {
             Set(key, value, expiry, false);
@@ -345,6 +342,177 @@ namespace Senparc.CO2NET.Cache.Redis
         {
             Set(key, value, expiry, isFullKey);
         }
+
+
+        #endregion
+
+
+        #region 异步方法
+#if !NET35 && !NET40
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="isFullKey">是否已经是完整的Key</param>
+        /// <returns></returns>
+        public override async Task<bool> CheckExistedAsync(string key, bool isFullKey = false)
+        {
+            //var cacheKey = GetFinalKey(key, isFullKey);
+            var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
+
+            //return _cache.KeyExists(cacheKey);
+            return await _cache.HashExistsAsync(hashKeyAndField.Key, hashKeyAndField.Field);
+        }
+
+        public override async Task<object> GetAsync(string key, bool isFullKey = false)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return null;
+            }
+
+            if (!await CheckExistedAsync(key, isFullKey))
+            {
+                return null;
+                //InsertToCache(key, new ContainerItemCollection());
+            }
+
+            //var cacheKey = GetFinalKey(key, isFullKey);
+            var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
+
+            //var value = _cache.StringGet(cacheKey);
+            var value = await _cache.HashGetAsync(hashKeyAndField.Key, hashKeyAndField.Field);
+            if (value.HasValue)
+            {
+                return value.ToString().DeserializeFromCache();
+            }
+            return value;
+        }
+
+        public override async Task<T> GetAsync<T>(string key, bool isFullKey = false)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return default(T);
+            }
+
+            if (!await CheckExistedAsync(key, isFullKey))
+            {
+                return default(T);
+                //InsertToCache(key, new ContainerItemCollection());
+            }
+
+            //var cacheKey = GetFinalKey(key, isFullKey);
+            var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
+
+            //var value = _cache.StringGet(cacheKey);
+            var value = await _cache.HashGetAsync(hashKeyAndField.Key, hashKeyAndField.Field);
+            if (value.HasValue)
+            {
+                return value.ToString().DeserializeFromCache<T>();
+            }
+
+            return default(T);
+        }
+
+        /// <summary>
+        /// 注意：此方法获取的object为直接储存在缓存中，序列化之后的Value
+        /// </summary>
+        /// <returns></returns>
+        public override async Task<IDictionary<string, object>> GetAllAsync()
+        {
+            var keyPrefix = GetFinalKey("");//Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
+            var dic = new Dictionary<string, object>();
+
+            var hashKeys = GetServer().Keys(pattern: keyPrefix + "*");
+            foreach (var redisKey in hashKeys)
+            {
+                var list = await _cache.HashGetAllAsync(redisKey);
+
+                foreach (var hashEntry in list)
+                {
+                    var fullKey = redisKey.ToString() + ":" + hashEntry.Name;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
+                    dic[fullKey] = hashEntry.Value.ToString().DeserializeFromCache();
+                }
+            }
+            return dic;
+        }
+
+
+        public override Task<long> GetCountAsync()
+        {
+            return Task.Factory.StartNew(() => GetCount());
+        }
+
+        /// <summary>
+        /// 设置对象。注意：过期时间对 HashSet 无效！
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="isFullKey"></param>
+        /// <param name="expiry"></param>
+        public override async Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
+        {
+            if (string.IsNullOrEmpty(key) || value == null)
+            {
+                return;
+            }
+
+            //var cacheKey = GetFinalKey(key);
+            var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
+
+            //if (value is IDictionary)
+            //{
+            //    //Dictionary类型
+            //}
+
+            //_cache.StringSet(cacheKey, value.Serialize());
+            //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, value.Serialize());
+
+
+            //StackExchangeRedisExtensions.Serialize效率非常差
+            //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
+
+            var json = value.SerializeToCache();
+            await _cache.HashSetAsync(hashKeyAndField.Key, hashKeyAndField.Field, json);
+
+            //#if DEBUG
+            //            var value1 = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);//正常情况下可以得到 //_cache.GetValue(cacheKey);
+            //#endif
+        }
+
+        public override async Task RemoveFromCacheAsync(string key, bool isFullKey = false)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return;
+            }
+
+            //var cacheKey = GetFinalKey(key, isFullKey);
+            var hashKeyAndField = this.GetHashKeyAndField(key);
+
+            SenparcMessageQueue.OperateQueue();//延迟缓存立即生效
+                                               //_cache.KeyDelete(cacheKey);//删除键
+            await _cache.HashDeleteAsync(hashKeyAndField.Key, hashKeyAndField.Field);//删除项
+        }
+
+        /// <summary>
+        /// 更新对象。注意：过期时间对 HashSet 无效！
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="isFullKey"></param>
+        /// <param name="expiry"></param>
+        public override async Task UpdateAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
+        {
+            await SetAsync(key, value, expiry, isFullKey);
+        }
+
+#endif
+        #endregion
 
         #endregion
 
