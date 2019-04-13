@@ -10,11 +10,15 @@
     修改标识：Senparc - 20180802
     修改描述：v3.1.0 Redis 缓存服务连接信息实现从 Config.SenparcSetting 自动获取信息并注册）
 
+    修改标识：Senparc - 20190413
+    修改描述：v3.5.0 提供缓存异步接口
+
 ----------------------------------------------------------------*/
 
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.Cache.Redis
 {
@@ -81,6 +85,7 @@ namespace Senparc.CO2NET.Cache.Redis
             return server;
         }
 
+        #region 同步方法
 
 
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
@@ -100,5 +105,30 @@ namespace Senparc.CO2NET.Cache.Redis
         public abstract long GetCount();
 
         public abstract void Update(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
+
+
+        #endregion
+
+        #region 异步方法
+#if !NET35 && !NET40
+
+        public abstract Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
+
+        public abstract Task RemoveFromCacheAsync(string key, bool isFullKey = false);
+
+        public abstract Task<object> GetAsync(string key, bool isFullKey = false);
+
+        public abstract Task<T> GetAsync<T>(string key, bool isFullKey = false);
+
+        public abstract Task<IDictionary<string, object>> GetAllAsync();
+
+        public abstract Task<bool> CheckExistedAsync(string key, bool isFullKey = false);
+
+        public abstract Task<long> GetCountAsync();
+
+        public abstract Task UpdateAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
+
+#endif
+        #endregion
     }
 }
