@@ -112,7 +112,6 @@ namespace Senparc.CO2NET.Cache.Memcached
         #region 异步方法
 #if !NET35 && !NET40
 
-
         private async Task<bool> RetryLockAsync(string resourceName, int retryCount, TimeSpan retryDelay, Func<Task<bool>> action)
         {
             int currentRetry = 0;
@@ -142,28 +141,28 @@ namespace Senparc.CO2NET.Cache.Memcached
                  {
                      var ttl = base.GetTotalTtl(retryCount, retryDelay);
 #if NET45
-                    if (_mamcachedStrategy.Cache.Store(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl)))
+                     if (_mamcachedStrategy.Cache.Store(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl)))
 #else
                     if (await _mamcachedStrategy.Cache.StoreAsync(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl)))
 #endif
-                    {
+                     {
                          return true;//取得锁 
-                    }
+                     }
                      else
                      {
                          return false;//已被别人锁住，没有取得锁
-                    }
+                     }
 
-                    //if (_mamcachedStrategy._cache.Get(key) != null)
-                    //{
-                    //    return false;//已被别人锁住，没有取得锁
-                    //}
-                    //else
-                    //{
-                    //    _mamcachedStrategy._cache.Store(StoreMode.set, key, new object(), new TimeSpan(0, 0, 10));//创建锁
-                    //    return true;//取得锁
-                    //}
-                }
+                     //if (_mamcachedStrategy._cache.Get(key) != null)
+                     //{
+                     //    return false;//已被别人锁住，没有取得锁
+                     //}
+                     //else
+                     //{
+                     //    _mamcachedStrategy._cache.Store(StoreMode.set, key, new object(), new TimeSpan(0, 0, 10));//创建锁
+                     //    return true;//取得锁
+                     //}
+                 }
                  catch (Exception ex)
                  {
                      SenparcTrace.Log("Memcached同步锁发生异常：" + ex.Message);
@@ -177,9 +176,12 @@ namespace Senparc.CO2NET.Cache.Memcached
         public override async Task UnLockAsync(string resourceName)
         {
             var key = _mamcachedStrategy.GetFinalKey(resourceName);
+#if NET45
+            await Task.Factory.StartNew(() => _mamcachedStrategy.Cache.Remove(key));
+#else
             await _mamcachedStrategy.Cache.RemoveAsync(key);
+#endif
         }
-
 
 #endif
         #endregion

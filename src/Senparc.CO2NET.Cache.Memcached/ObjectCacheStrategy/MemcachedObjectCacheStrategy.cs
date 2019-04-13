@@ -39,7 +39,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 #else
-using static System.Threading.Tasks.TasksExtension;
+//using static System.Threading.Tasks.TasksExtension;
 #endif
 
 namespace Senparc.CO2NET.Cache.Memcached
@@ -423,8 +423,55 @@ namespace Senparc.CO2NET.Cache.Memcached
         #endregion
 
         #region 异步方法
-#if !NET35 && !NET40 && !NET45
+#if !NET35 && !NET40
 
+#if NET45
+
+        //当前使用的 Memcached 插件在 .NET 4.5 下未提供异步方法
+
+        public async Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
+        {
+            await Task.Factory.StartNew(() => Set(key, value, expiry, isFullKey));
+
+        }
+
+        public virtual async Task RemoveFromCacheAsync(string key, bool isFullKey = false)
+        {
+            await Task.Factory.StartNew(() => RemoveFromCache(key, isFullKey));
+        }
+
+        public virtual async Task<object> GetAsync(string key, bool isFullKey = false)
+        {
+            return await Task.Factory.StartNew(() => Get(key, isFullKey));
+        }
+
+
+        public virtual async Task<T> GetAsync<T>(string key, bool isFullKey = false)
+        {
+            return await Task.Factory.StartNew(() => Get<T>(key, isFullKey));
+        }
+
+
+        public virtual async Task<IDictionary<string, object>> GetAllAsync()
+        {
+            return await Task.Factory.StartNew(() => GetAll());
+        }
+
+        public virtual async Task<bool> CheckExistedAsync(string key, bool isFullKey = false)
+        {
+            return await Task.Factory.StartNew(() => CheckExisted(key, isFullKey));
+        }
+
+        public virtual async Task<long> GetCountAsync()
+        {
+            return await Task.Factory.StartNew(() => GetCount());
+        }
+
+        public virtual async Task UpdateAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
+        {
+            await SetAsync(key, value, expiry, isFullKey);
+        }
+#else
 
         public async Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
@@ -564,6 +611,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             await SetAsync(key, value, expiry, isFullKey);
         }
 
+#endif
 #endif
         #endregion
 
