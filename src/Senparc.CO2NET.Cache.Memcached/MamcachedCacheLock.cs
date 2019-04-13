@@ -141,7 +141,8 @@ namespace Senparc.CO2NET.Cache.Memcached
                  {
                      var ttl = base.GetTotalTtl(retryCount, retryDelay);
 #if NET45
-                     if (_mamcachedStrategy.Cache.Store(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl)))
+                     var storeResult = await Task.Factory.StartNew(() => _mamcachedStrategy.Cache.Store(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl)));
+                     if (storeResult)
 #else
                     if (await _mamcachedStrategy.Cache.StoreAsync(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl)))
 #endif

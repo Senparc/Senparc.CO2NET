@@ -257,12 +257,12 @@ namespace Redlock.CSharp
                       var startTime = DateTime.Now;
 
                       // Use keys
-                      for_each_redis_registered(
-                           async redis =>
-                            {
-                                if (await LockInstanceAsync(redis, resource, val, ttl)) n += 1;
-                            }
-                        );
+                      await for_each_redis_registeredAsync(
+                             async redis =>
+                              {
+                                  if (await LockInstanceAsync(redis, resource, val, ttl)) n += 1;
+                              }
+                          );
 
                       /*
                        * Add 2 milliseconds to the drift to account for Redis expires
@@ -279,12 +279,12 @@ namespace Redlock.CSharp
                       }
                       else
                       {
-                          for_each_redis_registered(
-                             async redis =>
-                              {
-                                  await UnlockInstanceAsync(redis, resource, val);
-                              }
-                          );
+                          await for_each_redis_registeredAsync(
+                               async redis =>
+                                {
+                                    await UnlockInstanceAsync(redis, resource, val);
+                                }
+                            );
                           return false;
                       }
                   }
