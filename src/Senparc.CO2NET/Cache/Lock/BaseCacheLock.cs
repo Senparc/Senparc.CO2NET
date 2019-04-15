@@ -68,19 +68,7 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 创建 ICacheLock 实例
-        /// </summary>
-        /// <param name="strategy"></param>
-        /// <param name="resourceName"></param>
-        /// <param name="key"></param>
-        /// <param name="retryCount"></param>
-        /// <param name="retryDelay"></param>
-        /// <returns></returns>
-        public abstract ICacheLock Create(IBaseCacheStrategy strategy, string resourceName, string key,
-            int? retryCount = null, TimeSpan? retryDelay = null);
-
-        /// <summary>
-        /// 获取最长锁定时间（锁最长生命周期）
+        /// 获取最长锁定时间（锁最长生命周期），单位：毫秒
         /// </summary>
         /// <param name="retryCount">重试次数，</param>
         /// <param name="retryDelay">最小锁定时间周期</param>

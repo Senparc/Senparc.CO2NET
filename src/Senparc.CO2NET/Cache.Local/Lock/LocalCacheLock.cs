@@ -81,9 +81,9 @@ namespace Senparc.CO2NET.Cache
         /// <param name="retryCount"></param>
         /// <param name="retryDelay"></param>
         /// <returns></returns>
-        public override ICacheLock Create(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
+        public static ICacheLock Create(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
         {
-            return new LocalCacheLock(strategy as LocalObjectCacheStrategy, resourceName, key, retryCount, retryDelay);
+            return new LocalCacheLock(strategy as LocalObjectCacheStrategy, resourceName, key, retryCount, retryDelay).Lock();
         }
 
         #region 同步方法

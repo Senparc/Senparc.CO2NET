@@ -53,37 +53,28 @@ namespace Senparc.CO2NET.Cache.Redis
             : base(strategy, resourceName, key, retryCount, retryDelay)
         {
             _redisStrategy = strategy;
-            LockNow();//立即等待并抢夺锁
+            //LockNow();//立即等待并抢夺锁
         }
 
         #region 同步方法
 
-        public override bool Lock(string resourceName)
+        public override ICacheLock Lock()
         {
-            return Lock(resourceName, 0, new TimeSpan());
-        }
-
-        public override bool Lock(string resourceName, int retryCount, TimeSpan retryDelay)
-        {
-            if (retryCount != 0)
+            if (_retryCount != 0)
             {
-                _dlm = new Redlock.CSharp.Redlock(retryCount, retryDelay, _redisStrategy.Client);
+                _dlm = new Redlock.CSharp.Redlock(_retryCount, _retryDelay, _redisStrategy.Client);
             }
             else if (_dlm == null)
             {
                 _dlm = new Redlock.CSharp.Redlock(_redisStrategy.Client);
             }
 
-            var ttl = (retryDelay.TotalMilliseconds > 0 ? retryDelay.TotalMilliseconds : 10)
-                       *
-                      (retryCount > 0 ? retryCount : 10);
-
-
-            var successfull = _dlm.Lock(resourceName, TimeSpan.FromMilliseconds(ttl), out _lockObject);
-            return successfull;
+            var ttl = base.GetTotalTtl(_retryCount, _retryDelay);
+            base.LockSuccessful = _dlm.Lock(_resourceName, TimeSpan.FromMilliseconds(ttl), out _lockObject);
+            return this;
         }
 
-        public override void UnLock(string resourceName)
+        public override void UnLock()
         {
             if (_lockObject != null)
             {
@@ -96,33 +87,25 @@ namespace Senparc.CO2NET.Cache.Redis
         #region 异步方法
 #if !NET35 && !NET40
 
-        public override async Task<bool> LockAsync(string resourceName)
+        public override async Task<ICacheLock> LockAsync()
         {
-            return await LockAsync(resourceName, 0, new TimeSpan());
-        }
-
-        public override async Task<bool> LockAsync(string resourceName, int retryCount, TimeSpan retryDelay)
-        {
-            if (retryCount != 0)
+            if (_retryCount != 0)
             {
-                _dlm = new Redlock.CSharp.Redlock(retryCount, retryDelay, _redisStrategy.Client);
+                _dlm = new Redlock.CSharp.Redlock(_retryCount, _retryDelay, _redisStrategy.Client);
             }
             else if (_dlm == null)
             {
                 _dlm = new Redlock.CSharp.Redlock(_redisStrategy.Client);
             }
 
-            var ttl = (retryDelay.TotalMilliseconds > 0 ? retryDelay.TotalMilliseconds : 10)
-                       *
-                      (retryCount > 0 ? retryCount : 10);
+            var ttl = base.GetTotalTtl(_retryCount, _retryDelay);
 
-
-            Tuple<bool, Lock> result = await _dlm.LockAsync(resourceName, TimeSpan.FromMilliseconds(ttl));
-            var successfull = result.Item1;
-            return successfull;
+            Tuple<bool, Lock> result = await _dlm.LockAsync(_resourceName, TimeSpan.FromMilliseconds(ttl));
+            base.LockSuccessful = result.Item1;
+            return this;
         }
 
-        public override async Task UnLockAsync(string resourceName)
+        public override async Task UnLockAsync()
         {
             if (_lockObject != null)
             {

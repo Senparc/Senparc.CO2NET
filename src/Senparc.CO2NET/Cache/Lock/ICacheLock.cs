@@ -55,17 +55,6 @@ namespace Senparc.CO2NET.Cache
         /// <returns>单位：Milliseconds，毫秒</returns>
         double GetTotalTtl(int retryCount, TimeSpan retryDelay);
 
-        /// <summary>
-        /// 创建 ICacheLock 实例
-        /// </summary>
-        /// <param name="strategy"></param>
-        /// <param name="resourceName"></param>
-        /// <param name="key"></param>
-        /// <param name="retryCount"></param>
-        /// <param name="retryDelay"></param>
-        /// <returns></returns>
-        ICacheLock Create(IBaseCacheStrategy strategy, string resourceName, string key,
-            int? retryCount = null, TimeSpan? retryDelay = null);
 
         #region 同步方法
 
