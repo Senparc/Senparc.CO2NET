@@ -52,6 +52,15 @@ namespace Senparc.CO2NET.Cache
         public bool LockSuccessful { get; set; }
 
         /// <summary>
+        /// 默认重试次数
+        /// </summary>
+        public readonly int DefaultRetryCount = 20;
+        /// <summary>
+        /// 默认每次重试间隔时间
+        /// </summary>
+        public readonly TimeSpan DefaultRetryDelay = TimeSpan.FromMilliseconds(10);
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="strategy"></param>
@@ -63,8 +72,8 @@ namespace Senparc.CO2NET.Cache
         {
             _cacheStrategy = strategy;
             _resourceName = resourceName + key;/*加上Key可以针对某个AppId加锁*/
-            _retryCount = retryCount == null || retryCount == 0 ? 50 : retryCount.Value;
-            _retryDelay = retryDelay == null || retryDelay.Value.TotalMilliseconds == 0 ? TimeSpan.FromMilliseconds(10) : retryDelay.Value;
+            _retryCount = retryCount == null || retryCount == 0 ? DefaultRetryCount : retryCount.Value;
+            _retryDelay = retryDelay == null || retryDelay.Value.TotalMilliseconds == 0 ? DefaultRetryDelay : retryDelay.Value;
         }
 
         /// <summary>
