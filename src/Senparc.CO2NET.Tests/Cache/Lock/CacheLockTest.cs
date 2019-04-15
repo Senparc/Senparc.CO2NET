@@ -83,7 +83,7 @@ namespace Senparc.CO2NET.Cache.Lock
                 RedisManager.ConfigurationOption = redisConfiguration;
                 CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//Redis
             }
-
+          
             Console.WriteLine($"使用缓存策略：{CacheStrategyFactory.GetObjectCacheStrategyInstance()}");
 
             Random rnd = new Random();
@@ -123,7 +123,7 @@ namespace Senparc.CO2NET.Cache.Lock
                     Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 进入，准备尝试锁。Cache实例：{cache.GetHashCode()}");
 
                     var dt1 = SystemTime.Now;
-                    using (var cacheLock = cache.BeginCacheLock(resourceName, appId, (int)retryTimes, TimeSpan.FromMilliseconds(retryDelay)))
+                    using (var cacheLock =  cache.BeginCacheLock(resourceName, appId, (int)retryTimes, TimeSpan.FromMilliseconds(retryDelay)))
                     {
                         var result = cacheLock.LockSuccessful
                             ? "成功"
