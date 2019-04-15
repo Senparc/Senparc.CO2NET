@@ -64,7 +64,7 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
         ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan());
 
-#if !NET35
+#if !NET35 && !NET40
         /// <summary>
         /// 【异步方法】创建一个（分布）锁
         /// </summary>

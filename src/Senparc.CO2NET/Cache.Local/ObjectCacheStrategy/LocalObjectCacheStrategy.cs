@@ -130,7 +130,6 @@ namespace Senparc.CO2NET.Cache
         private System.Web.Caching.Cache _cache = LocalObjectCacheHelper.LocalObjectCache;
 #else
         private IMemoryCache _cache = LocalObjectCacheHelper.LocalObjectCache;
-
 #endif
 
         #endregion
