@@ -55,30 +55,29 @@ namespace Senparc.CO2NET.Cache
         /// <returns>单位：Milliseconds，毫秒</returns>
         double GetTotalTtl(int retryCount, TimeSpan retryDelay);
 
+        /// <summary>
+        /// 创建 ICacheLock 实例
+        /// </summary>
+        /// <param name="strategy"></param>
+        /// <param name="resourceName"></param>
+        /// <param name="key"></param>
+        /// <param name="retryCount"></param>
+        /// <param name="retryDelay"></param>
+        /// <returns></returns>
+        ICacheLock Create(IBaseCacheStrategy strategy, string resourceName, string key,
+            int? retryCount = null, TimeSpan? retryDelay = null);
+
         #region 同步方法
 
         /// <summary>
         /// 开始锁
         /// </summary>
-        /// <param name="resourceName">资源名称，即锁的标识，实际值为IBaseCacheStrategy接口中的 BeginCacheLock() 方法中的 [resourceName.key]</param>
-        bool Lock(string resourceName);
-
-        /// <summary>
-        /// 开始锁，并设置重试条件
-        /// </summary>
-        /// <param name="resourceName">资源名称，即锁的标识，实际值为IBaseCacheStrategy接口中的 BeginCacheLock() 方法中的 [resourceName.key]</param>
-        /// <param name="retryCount">重试次数</param>
-        /// <param name="retryDelay">每次重试延时</param>
-        /// <returns></returns>
-        bool Lock(string resourceName, int retryCount, TimeSpan retryDelay);
-
-        //bool IsLocked(string resourceName);
+        ICacheLock Lock();
 
         /// <summary>
         /// 释放锁
         /// </summary>
-        /// <param name="resourceName">需要释放锁的 Key，即锁的标识，实际值为IBaseCacheStrategy接口中的 BeginCacheLock() 方法中的 [resourceName.key]资源名称，和 Lock() 方法中的 resourceName 对应</param>
-        void UnLock(string resourceName);
+        void UnLock();
 
         #endregion
 
@@ -88,25 +87,12 @@ namespace Senparc.CO2NET.Cache
         /// <summary>
         /// 开始锁
         /// </summary>
-        /// <param name="resourceName">资源名称，即锁的标识，实际值为IBaseCacheStrategy接口中的 BeginCacheLock() 方法中的 [resourceName.key]</param>
-        Task<bool> LockAsync(string resourceName);
-
-        /// <summary>
-        /// 开始锁，并设置重试条件
-        /// </summary>
-        /// <param name="resourceName">资源名称，即锁的标识，实际值为IBaseCacheStrategy接口中的 BeginCacheLock() 方法中的 [resourceName.key]</param>
-        /// <param name="retryCount">重试次数</param>
-        /// <param name="retryDelay">每次重试延时</param>
-        /// <returns></returns>
-        Task<bool> LockAsync(string resourceName, int retryCount, TimeSpan retryDelay);
-
-        //bool IsLocked(string resourceName);
+        Task<ICacheLock> LockAsync();
 
         /// <summary>
         /// 释放锁
         /// </summary>
-        /// <param name="resourceName">需要释放锁的 Key，即锁的标识，实际值为IBaseCacheStrategy接口中的 BeginCacheLock() 方法中的 [resourceName.key]资源名称，和 Lock() 方法中的 resourceName 对应</param>
-        Task UnLockAsync(string resourceName);
+        Task UnLockAsync();
 
 #endif
         #endregion

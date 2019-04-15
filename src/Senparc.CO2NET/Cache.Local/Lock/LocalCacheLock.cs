@@ -34,9 +34,6 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 ----------------------------------------------------------------*/
 
-
-
-
 using Senparc.CO2NET.Trace;
 using System;
 using System.Collections.Generic;
@@ -51,16 +48,19 @@ namespace Senparc.CO2NET.Cache
     public class LocalCacheLock : BaseCacheLock
     {
         private LocalObjectCacheStrategy _localStrategy;
-        public LocalCacheLock(LocalObjectCacheStrategy strategy, string resourceName, string key,
+
+
+        //这里必须为非公开的构造函数，使用 Create() 方法创建
+        protected LocalCacheLock(LocalObjectCacheStrategy strategy, string resourceName, string key,
             int? retryCount = null, TimeSpan? retryDelay = null)
             : base(strategy, resourceName, key, retryCount ?? 0, retryDelay ?? TimeSpan.FromMilliseconds(10))
         {
             _localStrategy = strategy;
-            LockNow();//立即等待并抢夺锁
+            //LockNow();//立即等待并抢夺锁
         }
 
         /// <summary>
-        /// 锁存放容器
+        /// 锁存放容器   TODO：考虑分布式情况
         /// </summary>
         private static Dictionary<string, object> LockPool = new Dictionary<string, object>();
         /// <summary>
@@ -72,19 +72,31 @@ namespace Senparc.CO2NET.Cache
         /// </summary>
         private static object lookPoolLock = new object();
 
-        #region 同步方法
-
-        public override bool Lock(string resourceName)
+        /// <summary>
+        /// 创建 LocalCacheLock 实例
+        /// </summary>
+        /// <param name="strategy">LocalObjectCacheStrategy</param>
+        /// <param name="resourceName"></param>
+        /// <param name="key"></param>
+        /// <param name="retryCount"></param>
+        /// <param name="retryDelay"></param>
+        /// <returns></returns>
+        public override ICacheLock Create(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
         {
-            return Lock(resourceName, 99999 /*暂时不限制*/, new TimeSpan(0, 0, 0, 0, 10));
+            return new LocalCacheLock(strategy as LocalObjectCacheStrategy, resourceName, key, retryCount, retryDelay);
         }
 
-        public override bool Lock(string resourceName, int retryCount, TimeSpan retryDelay)
-        {
+        #region 同步方法
 
+        /// <summary>
+        /// 立即等待并抢夺锁
+        /// </summary>
+        /// <returns></returns>
+        public override ICacheLock Lock()
+        {
             int currentRetry = 0;
-            int maxRetryDelay = (int)retryDelay.TotalMilliseconds;
-            while (currentRetry++ < retryCount)
+            int maxRetryDelay = (int)_retryDelay.TotalMilliseconds;
+            while (currentRetry++ < _retryCount)
             {
                 #region 尝试获得锁
 
@@ -93,13 +105,13 @@ namespace Senparc.CO2NET.Cache
                 {
                     lock (lookPoolLock)
                     {
-                        if (LockPool.ContainsKey(resourceName))
+                        if (LockPool.ContainsKey(_resourceName))
                         {
                             getLock = false;//已被别人锁住，没有取得锁
                         }
                         else
                         {
-                            LockPool.Add(resourceName, new object());//创建锁
+                            LockPool.Add(_resourceName, new object());//创建锁
                             getLock = true;//取得锁
                         }
                     }
@@ -114,18 +126,20 @@ namespace Senparc.CO2NET.Cache
 
                 if (getLock)
                 {
-                    return true;//取得锁
+                    LockSuccessful = true;
+                    return this;//取得锁
                 }
                 Thread.Sleep(_rnd.Next(maxRetryDelay));
             }
-            return false;
+            LockSuccessful = false;
+            return this;
         }
 
-        public override void UnLock(string resourceName)
+        public override void UnLock()
         {
             lock (lookPoolLock)
             {
-                LockPool.Remove(resourceName);
+                LockPool.Remove(_resourceName);
             }
         }
 
@@ -134,21 +148,16 @@ namespace Senparc.CO2NET.Cache
         #region 异步方法
 #if !NET35 && !NET40
 
-        public override async Task<bool> LockAsync(string resourceName)
-        {
-            return await LockAsync(resourceName, 99999 /*暂时不限制*/, new TimeSpan(0, 0, 0, 0, 10));
-        }
-
-        public override async Task<bool> LockAsync(string resourceName, int retryCount, TimeSpan retryDelay)
+        public override async Task<ICacheLock> LockAsync()
         {
             //TODO：异常处理
 
-            return await Task.Factory.StartNew(() => Lock(resourceName, retryCount, retryDelay));
+            return await Task.Factory.StartNew(() => Lock());
         }
 
-        public override Task UnLockAsync(string resourceName)
+        public override Task UnLockAsync()
         {
-            UnLock(resourceName);
+            UnLock();
             return System.Threading.Tasks.TaskExtension.CompletedTask();
         }
 #endif

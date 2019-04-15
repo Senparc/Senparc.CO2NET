@@ -51,13 +51,33 @@ namespace Senparc.CO2NET.Cache
         protected TimeSpan _retryDelay;
         public bool LockSuccessful { get; set; }
 
-        protected BaseCacheLock(IBaseCacheStrategy strategy, string resourceName, string key, int retryCount, TimeSpan retryDelay)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="strategy"></param>
+        /// <param name="resourceName"></param>
+        /// <param name="key"></param>
+        /// <param name="retryCount">如果传入null，默认为50</param>
+        /// <param name="retryDelay">如果传入null，默认为10毫秒</param>
+        protected BaseCacheLock(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount, TimeSpan? retryDelay)
         {
             _cacheStrategy = strategy;
             _resourceName = resourceName + key;/*加上Key可以针对某个AppId加锁*/
-            _retryCount = retryCount;
-            _retryDelay = retryDelay;
+            _retryCount = retryCount == null || retryCount == 0 ? 50 : retryCount.Value;
+            _retryDelay = retryDelay == null || retryDelay.Value.TotalMilliseconds == 0 ? TimeSpan.FromMilliseconds(10) : retryDelay.Value;
         }
+
+        /// <summary>
+        /// 创建 ICacheLock 实例
+        /// </summary>
+        /// <param name="strategy"></param>
+        /// <param name="resourceName"></param>
+        /// <param name="key"></param>
+        /// <param name="retryCount"></param>
+        /// <param name="retryDelay"></param>
+        /// <returns></returns>
+        public abstract ICacheLock Create(IBaseCacheStrategy strategy, string resourceName, string key,
+            int? retryCount = null, TimeSpan? retryDelay = null);
 
         /// <summary>
         /// 获取最长锁定时间（锁最长生命周期）
@@ -67,15 +87,13 @@ namespace Senparc.CO2NET.Cache
         /// <returns>单位：Milliseconds，毫秒</returns>
         public double GetTotalTtl(int retryCount, TimeSpan retryDelay)
         {
-            var ttl = (retryDelay.TotalMilliseconds > 0 ? retryDelay.TotalMilliseconds : 10)
-                  *
-                 (retryCount > 0 ? retryCount : 10);
+            var ttl = retryDelay.TotalMilliseconds * retryCount;
             return ttl;
         }
 
         public void Dispose()
         {
-            UnLock(_resourceName);
+            UnLock();
         }
 
         /// <summary>
@@ -86,48 +104,44 @@ namespace Senparc.CO2NET.Cache
 
         #region 同步方法
 
-        protected ICacheLock LockNow()
-        {
-            if (_retryCount != 0 && _retryDelay.Ticks != 0)
-            {
-                LockSuccessful = Lock(_resourceName, _retryCount, _retryDelay);
-            }
-            else
-            {
-                LockSuccessful = Lock(_resourceName);
-            }
-            return this;
-        }
+        //protected ICacheLock LockNow()
+        //{
+        //    if (_retryCount != 0 && _retryDelay.Ticks != 0)
+        //    {
+        //        LockSuccessful = Lock(_resourceName, _retryCount, _retryDelay);
+        //    }
+        //    else
+        //    {
+        //        LockSuccessful = Lock(_resourceName);
+        //    }
+        //    return this;
+        //}
 
-        public abstract bool Lock(string resourceName);
+        public abstract ICacheLock Lock();
 
-        public abstract bool Lock(string resourceName, int retryCount, TimeSpan retryDelay);
-
-        public abstract void UnLock(string resourceName);
+        public abstract void UnLock();
 
         #endregion
 
         #region 异步方法
 #if !NET35 && !NET40
 
-        protected async Task<ICacheLock> LockNowAsync()
-        {
-            if (_retryCount != 0 && _retryDelay.Ticks != 0)
-            {
-                LockSuccessful = await LockAsync(_resourceName, _retryCount, _retryDelay);
-            }
-            else
-            {
-                LockSuccessful = await LockAsync(_resourceName);
-            }
-            return this;
-        }
+        //protected async Task<ICacheLock> LockNowAsync()
+        //{
+        //    if (_retryCount != 0 && _retryDelay.Ticks != 0)
+        //    {
+        //        LockSuccessful = await LockAsync(_resourceName, _retryCount, _retryDelay);
+        //    }
+        //    else
+        //    {
+        //        LockSuccessful = await LockAsync(_resourceName);
+        //    }
+        //    return this;
+        //}
 
-        public abstract Task<bool> LockAsync(string resourceName);
+        public abstract Task<ICacheLock> LockAsync();
 
-        public abstract Task<bool> LockAsync(string resourceName, int retryCount, TimeSpan retryDelay);
-
-        public abstract Task UnLockAsync(string resourceName);
+        public abstract Task UnLockAsync();
 
 #endif
         #endregion
