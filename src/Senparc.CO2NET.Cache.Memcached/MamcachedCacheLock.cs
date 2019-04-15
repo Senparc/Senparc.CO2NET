@@ -28,14 +28,30 @@ namespace Senparc.CO2NET.Cache.Memcached
     public class MemcachedCacheLock : BaseCacheLock
     {
         private MemcachedObjectCacheStrategy _mamcachedStrategy;
-        public MemcachedCacheLock(MemcachedObjectCacheStrategy strategy, string resourceName, string key, int retryCount, TimeSpan retryDelay)
+        protected MemcachedCacheLock(MemcachedObjectCacheStrategy strategy, string resourceName, string key, int? retryCount, TimeSpan? retryDelay)
             : base(strategy, resourceName, key, retryCount, retryDelay)
         {
             _mamcachedStrategy = strategy;
-            LockNow();//立即等待并抢夺锁
+            //LockNow();//立即等待并抢夺锁
         }
 
         private static Random _rnd = new Random();
+
+
+        /// <summary>
+        /// 创建 MemcachedCacheLock 实例
+        /// </summary>
+        /// <param name="strategy">MemcachedObjectCacheStrategy</param>
+        /// <param name="resourceName"></param>
+        /// <param name="key"></param>
+        /// <param name="retryCount"></param>
+        /// <param name="retryDelay"></param>
+        /// <returns></returns>
+        public static ICacheLock Create(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
+        {
+            return new MemcachedCacheLock(strategy as MemcachedObjectCacheStrategy, resourceName, key, retryCount, retryDelay).Lock();
+        }
+
 
         private string GetLockKey(string resourceName)
         {
@@ -44,7 +60,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         #region 同步方法
 
-        private bool RetryLock(string resourceName, int retryCount, TimeSpan retryDelay, Func<bool> action)
+        private ICacheLock RetryLock(string resourceName, int retryCount, TimeSpan retryDelay, Func<bool> action)
         {
             int currentRetry = 0;
             int maxRetryDelay = (int)retryDelay.TotalMilliseconds;
@@ -52,32 +68,30 @@ namespace Senparc.CO2NET.Cache.Memcached
             {
                 if (action())
                 {
-                    return true;//取得锁
+                    base.LockSuccessful = true;
+                    return this;//取得锁
                 }
                 Thread.Sleep(_rnd.Next(maxRetryDelay));
             }
-            return false;
+            return this;
         }
 
-        public override bool Lock(string resourceName)
+        public override ICacheLock Lock()
         {
-            return Lock(resourceName, 9999, new TimeSpan(0, 0, 0, 0, 20));
-        }
-
-        public override bool Lock(string resourceName, int retryCount, TimeSpan retryDelay)
-        {
-            var key = _mamcachedStrategy.GetFinalKey(resourceName);
-            var successfull = RetryLock(key, retryCount, retryDelay, () =>
+            var key = _mamcachedStrategy.GetFinalKey(_resourceName);
+            var lockResult = RetryLock(key, _retryCount, _retryDelay, () =>
             {
                 try
                 {
-                    var ttl = base.GetTotalTtl(retryCount, retryDelay);
+                    var ttl = base.GetTotalTtl(_retryCount, _retryDelay);
                     if (_mamcachedStrategy.Cache.Store(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl)))
                     {
+                        base.LockSuccessful = true;
                         return true;//取得锁 
                     }
                     else
                     {
+                        base.LockSuccessful = false;
                         return false;//已被别人锁住，没有取得锁
                     }
 
@@ -98,12 +112,12 @@ namespace Senparc.CO2NET.Cache.Memcached
                 }
             }
               );
-            return successfull;
+            return lockResult;
         }
 
-        public override void UnLock(string resourceName)
+        public override void UnLock()
         {
-            var key = _mamcachedStrategy.GetFinalKey(resourceName);
+            var key = _mamcachedStrategy.GetFinalKey(_resourceName);
             _mamcachedStrategy.Cache.Remove(key);
         }
 
@@ -112,7 +126,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         #region 异步方法
 #if !NET35 && !NET40
 
-        private async Task<bool> RetryLockAsync(string resourceName, int retryCount, TimeSpan retryDelay, Func<Task<bool>> action)
+        private async Task<ICacheLock> RetryLockAsync(string resourceName, int retryCount, TimeSpan retryDelay, Func<Task<bool>> action)
         {
             int currentRetry = 0;
             int maxRetryDelay = (int)retryDelay.TotalMilliseconds;
@@ -120,26 +134,22 @@ namespace Senparc.CO2NET.Cache.Memcached
             {
                 if (await action())
                 {
-                    return true;//取得锁
+                    base.LockSuccessful = true;
+                    return this;//取得锁
                 }
                 Thread.Sleep(_rnd.Next(maxRetryDelay));
             }
-            return false;
+            return this;
         }
 
-        public override async Task<bool> LockAsync(string resourceName)
+        public override async Task<ICacheLock> LockAsync()
         {
-            return await LockAsync(resourceName, 9999, new TimeSpan(0, 0, 0, 0, 20));
-        }
-
-        public override async Task<bool> LockAsync(string resourceName, int retryCount, TimeSpan retryDelay)
-        {
-            var key = _mamcachedStrategy.GetFinalKey(resourceName);
-            var successfull = await RetryLockAsync(key, retryCount, retryDelay, async () =>
+            var key = _mamcachedStrategy.GetFinalKey(_resourceName);
+            var lockResult = await RetryLockAsync(key, _retryCount, _retryDelay, async () =>
              {
                  try
                  {
-                     var ttl = base.GetTotalTtl(retryCount, retryDelay);
+                     var ttl = base.GetTotalTtl(_retryCount, _retryDelay);
 #if NET45
                      var storeResult = await Task.Factory.StartNew(() => _mamcachedStrategy.Cache.Store(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl)));
                      if (storeResult)
@@ -147,10 +157,12 @@ namespace Senparc.CO2NET.Cache.Memcached
                     if (await _mamcachedStrategy.Cache.StoreAsync(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl)))
 #endif
                      {
+                         base.LockSuccessful = true;
                          return true;//取得锁 
                      }
                      else
                      {
+                         base.LockSuccessful = false;
                          return false;//已被别人锁住，没有取得锁
                      }
 
@@ -171,12 +183,12 @@ namespace Senparc.CO2NET.Cache.Memcached
                  }
              }
               );
-            return successfull;
+            return lockResult;
         }
 
-        public override async Task UnLockAsync(string resourceName)
+        public override async Task UnLockAsync()
         {
-            var key = _mamcachedStrategy.GetFinalKey(resourceName);
+            var key = _mamcachedStrategy.GetFinalKey(_resourceName);
 #if NET45
             await Task.Factory.StartNew(() => _mamcachedStrategy.Cache.Remove(key));
 #else
