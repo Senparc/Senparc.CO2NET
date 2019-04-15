@@ -64,7 +64,7 @@ namespace Senparc.CO2NET.Cache.Lock
         {
             /* 测试逻辑：
              * 20个异步线程同时进行，
-             * 线程内有两组不同的ResourceName（"Test-0"，"Test-1"，模拟AccessTokenContainer和JsTicketContainer），
+             * 线程内有两组不同的ResourceName： "Test-0"，"Test-1"，模拟AccessTokenContainer和JsTicketContainer），
              * 每组ResourceName下面有两组分别为0和1的appId。
              * 同时运行这些线程，观察锁是否生效。
              * 失败的现象：1、同一个ResourceName、同一个appId下有两个线程同时获得锁
@@ -84,7 +84,7 @@ namespace Senparc.CO2NET.Cache.Lock
                 CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//Redis
             }
 
-            Console.WriteLine($"使用川村策略：{CacheStrategyFactory.GetObjectCacheStrategyInstance()}");
+            Console.WriteLine($"使用缓存策略：{CacheStrategyFactory.GetObjectCacheStrategyInstance()}");
 
             Random rnd = new Random();
             var threadsCount = 20M;
