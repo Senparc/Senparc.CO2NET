@@ -516,11 +516,6 @@ namespace Senparc.CO2NET.Cache.Redis
 
         #endregion
 
-        public override ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
-        {
-            return new RedisCacheLock(this, resourceName, key, retryCount, retryDelay);
-        }
-
 
         /// <summary>
         /// _cache.HashGetAll()

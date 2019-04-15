@@ -49,12 +49,28 @@ namespace Senparc.CO2NET.Cache.Redis
 
         private BaseRedisObjectCacheStrategy _redisStrategy;
 
-        public RedisCacheLock(BaseRedisObjectCacheStrategy strategy, string resourceName, string key, int retryCount, TimeSpan retryDelay)
+        protected RedisCacheLock(BaseRedisObjectCacheStrategy strategy, string resourceName, string key, int? retryCount, TimeSpan? retryDelay)
             : base(strategy, resourceName, key, retryCount, retryDelay)
         {
             _redisStrategy = strategy;
             //LockNow();//立即等待并抢夺锁
         }
+
+
+        /// <summary>
+        /// 创建 RedisCacheLock 实例
+        /// </summary>
+        /// <param name="strategy">BaseRedisObjectCacheStrategy</param>
+        /// <param name="resourceName"></param>
+        /// <param name="key"></param>
+        /// <param name="retryCount"></param>
+        /// <param name="retryDelay"></param>
+        /// <returns></returns>
+        public static ICacheLock Create(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
+        {
+            return new RedisCacheLock(strategy as BaseRedisObjectCacheStrategy, resourceName, key, retryCount, retryDelay).Lock();
+        }
+
 
         #region 同步方法
 
