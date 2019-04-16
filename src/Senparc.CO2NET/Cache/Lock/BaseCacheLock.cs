@@ -84,7 +84,9 @@ namespace Senparc.CO2NET.Cache
         /// <returns>单位：Milliseconds，毫秒</returns>
         public double GetTotalTtl(int retryCount, TimeSpan retryDelay)
         {
-            var ttl = retryDelay.TotalMilliseconds * retryCount;
+            var ttl = (retryDelay.TotalMilliseconds > 0 ? retryDelay.TotalMilliseconds : 10)
+                       *
+                      (retryCount > 0 ? retryCount : 10);
             return ttl;
         }
 
