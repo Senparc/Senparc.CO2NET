@@ -414,13 +414,13 @@ namespace Senparc.CO2NET.Cache
 
         public override ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
-            return LocalCacheLock.Create(this, resourceName, key, retryCount, retryDelay).Lock();
+            return LocalCacheLock.CreateAndLock(this, resourceName, key, retryCount, retryDelay);
         }
 
 #if !NET35 && !NET40
         public override async Task<ICacheLock> BeginCacheLockAsync(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
-            return await LocalCacheLock.Create(this, resourceName, key, retryCount, retryDelay).LockAsync();
+            return await LocalCacheLock.CreateAndLockAsync(this, resourceName, key, retryCount, retryDelay);
         }
 #endif
         #endregion

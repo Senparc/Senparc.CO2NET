@@ -15,7 +15,7 @@ namespace Senparc.CO2NET.Tests.Cache.Local.Lock
             int retryCount = 10;
             var retryDelay = TimeSpan.FromMilliseconds(20);
 
-            using (var localCacheLock = LocalCacheLock.Create(LocalObjectCacheStrategy.Instance, resourceName, key, retryCount, retryDelay).Lock())
+            using (var localCacheLock = LocalCacheLock.CreateAndLock(LocalObjectCacheStrategy.Instance, resourceName, key, retryCount, retryDelay).Lock())
             {
                 //注意：常规情况下这里不能使用相同的 resourceName + key 组合，否则会造成死锁！！
 
@@ -28,7 +28,7 @@ namespace Senparc.CO2NET.Tests.Cache.Local.Lock
 
                 Console.WriteLine($"localCacheLock.LockSuccessful：{localCacheLock.LockSuccessful}");
 
-                using (var localCacheLock2 = LocalCacheLock.Create(LocalObjectCacheStrategy.Instance, resourceName, key, retryCount, retryDelay).Lock())
+                using (var localCacheLock2 = LocalCacheLock.CreateAndLock(LocalObjectCacheStrategy.Instance, resourceName, key, retryCount, retryDelay).Lock())
                 {
                     Console.WriteLine($"localCacheLock2.LockSuccessful：{localCacheLock2.LockSuccessful}");
                 }

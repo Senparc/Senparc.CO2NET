@@ -620,13 +620,13 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         public override ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
-            return MemcachedCacheLock.Create(this, resourceName, key, retryCount, retryDelay).Lock();
+            return MemcachedCacheLock.CreateAndLock(this, resourceName, key, retryCount, retryDelay);
         }
 
 
         public override async Task<ICacheLock> BeginCacheLockAsync(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
-            return await MemcachedCacheLock.Create(this, resourceName, key, retryCount, retryDelay).LockAsync();
+            return await MemcachedCacheLock.CreateAndLockAsync(this, resourceName, key, retryCount, retryDelay);
         }
 
 

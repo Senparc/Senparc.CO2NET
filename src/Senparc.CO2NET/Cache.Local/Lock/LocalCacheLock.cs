@@ -72,8 +72,12 @@ namespace Senparc.CO2NET.Cache
         /// </summary>
         private static object lookPoolLock = new object();
 
+
+        #region 同步方法
+
+
         /// <summary>
-        /// 创建 LocalCacheLock 实例
+        /// 创建 LocalCacheLock 实例，并立即尝试获得锁
         /// </summary>
         /// <param name="strategy">LocalObjectCacheStrategy</param>
         /// <param name="resourceName"></param>
@@ -81,12 +85,10 @@ namespace Senparc.CO2NET.Cache
         /// <param name="retryCount"></param>
         /// <param name="retryDelay"></param>
         /// <returns></returns>
-        public static ICacheLock Create(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
+        public static ICacheLock CreateAndLock(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
         {
             return new LocalCacheLock(strategy as LocalObjectCacheStrategy, resourceName, key, retryCount, retryDelay).Lock();
         }
-
-        #region 同步方法
 
         /// <summary>
         /// 立即等待并抢夺锁
@@ -148,6 +150,20 @@ namespace Senparc.CO2NET.Cache
         #region 异步方法
 #if !NET35 && !NET40
 
+
+        /// <summary>
+        /// 【异步方法】创建 LocalCacheLock 实例，并立即尝试获得锁
+        /// </summary>
+        /// <param name="strategy">LocalObjectCacheStrategy</param>
+        /// <param name="resourceName"></param>
+        /// <param name="key"></param>
+        /// <param name="retryCount"></param>
+        /// <param name="retryDelay"></param>
+        /// <returns></returns>
+        public static async Task<ICacheLock> CreateAndLockAsync(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
+        {
+            return await new LocalCacheLock(strategy as LocalObjectCacheStrategy, resourceName, key, retryCount, retryDelay).LockAsync();
+        }
         public override async Task<ICacheLock> LockAsync()
         {
             //TODO：异常处理

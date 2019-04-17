@@ -37,9 +37,15 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         private static Random _rnd = new Random();
 
+        private string GetLockKey(string resourceName)
+        {
+            return string.Format("{0}:{1}", "Lock", resourceName);
+        }
+
+        #region 同步方法
 
         /// <summary>
-        /// 创建 MemcachedCacheLock 实例
+        /// 创建 MemcachedCacheLock 实例，并立即尝试获得锁
         /// </summary>
         /// <param name="strategy">MemcachedObjectCacheStrategy</param>
         /// <param name="resourceName"></param>
@@ -47,18 +53,11 @@ namespace Senparc.CO2NET.Cache.Memcached
         /// <param name="retryCount"></param>
         /// <param name="retryDelay"></param>
         /// <returns></returns>
-        public static ICacheLock Create(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
+        public static ICacheLock CreateAndLock(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
         {
             return new MemcachedCacheLock(strategy as MemcachedObjectCacheStrategy, resourceName, key, retryCount, retryDelay).Lock();
         }
 
-
-        private string GetLockKey(string resourceName)
-        {
-            return string.Format("{0}:{1}", "Lock", resourceName);
-        }
-
-        #region 同步方法
 
         private ICacheLock RetryLock(string resourceName, int retryCount, TimeSpan retryDelay, Func<bool> action)
         {
@@ -125,6 +124,20 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         #region 异步方法
 #if !NET35 && !NET40
+
+        /// <summary>
+        /// 【异步方法】创建 MemcachedCacheLock 实例，并立即尝试获得锁
+        /// </summary>
+        /// <param name="strategy">MemcachedObjectCacheStrategy</param>
+        /// <param name="resourceName"></param>
+        /// <param name="key"></param>
+        /// <param name="retryCount"></param>
+        /// <param name="retryDelay"></param>
+        /// <returns></returns>
+        public static async Task<ICacheLock> CreateAndLockAsync(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
+        {
+            return await new MemcachedCacheLock(strategy as MemcachedObjectCacheStrategy, resourceName, key, retryCount, retryDelay).LockAsync();
+        }
 
         private async Task<ICacheLock> RetryLockAsync(string resourceName, int retryCount, TimeSpan retryDelay, Func<Task<bool>> action)
         {
