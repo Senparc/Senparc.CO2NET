@@ -257,7 +257,7 @@ namespace Redlock.CSharp
                       var startTime = DateTime.Now;
 
                       // Use keys
-                      await for_each_redis_registeredAsync(
+                       for_each_redis_registered(
                              async redis =>
                               {
                                   if (await LockInstanceAsync(redis, resource, val, ttl)) n += 1;
@@ -279,7 +279,7 @@ namespace Redlock.CSharp
                       }
                       else
                       {
-                          await for_each_redis_registeredAsync(
+                          for_each_redis_registered(
                                async redis =>
                                 {
                                     await UnlockInstanceAsync(redis, resource, val);

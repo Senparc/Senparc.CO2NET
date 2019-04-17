@@ -49,6 +49,9 @@ namespace Senparc.CO2NET.Cache
         protected IBaseCacheStrategy _cacheStrategy;
         protected int _retryCount;
         protected TimeSpan _retryDelay;
+
+        protected bool _isSyncLock;//是否使用异步步的方法调用锁
+
         public bool LockSuccessful { get; set; }
 
         /// <summary>
@@ -90,7 +93,48 @@ namespace Senparc.CO2NET.Cache
 
         public void Dispose()
         {
-            UnLock();
+            //必须为true
+            Dispose(true);
+            //通知垃圾回收机制不再调用终结器（析构器）
+            GC.SuppressFinalize(this);
+        }
+
+        ///<summary>
+        /// 必须，以备程序员忘记了显式调用Dispose方法
+        ///</summary>
+        ~BaseCacheLock()
+        {
+            //必须为false
+            Dispose(false);
+        }
+
+        protected bool disposed = false;
+
+        ///<summary>
+        /// 非密封类修饰用protected virtual
+        /// 密封类修饰用private
+        ///</summary>
+        ///<param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+            {
+                return;
+            }
+
+#if !NET35 && !NET40
+            UnLockAsync();
+#else
+            UnLock();//TODO：这里使用使用的是同步方法，可以改成根据调用 LockAsync 方法的情况主动调用异步方法
+#endif
+
+            if (disposing)
+            {
+                //清理托管资源
+            }
+
+            //让类型知道自己已经被释放
+            disposed = true;
         }
 
         /// <summary>

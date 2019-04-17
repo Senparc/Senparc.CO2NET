@@ -131,6 +131,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
             Tuple<bool, Lock> result = await _dlm.LockAsync(_resourceName, TimeSpan.FromMilliseconds(ttl));
             base.LockSuccessful = result.Item1;
+            _lockObject = result.Item2;
             return this;
         }
 

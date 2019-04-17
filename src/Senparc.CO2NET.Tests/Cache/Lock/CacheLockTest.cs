@@ -216,7 +216,7 @@ namespace Senparc.CO2NET.Cache.Lock
             Console.WriteLine($"使用缓存策略：{CacheStrategyFactory.GetObjectCacheStrategyInstance()}");
 
             Random rnd = new Random();
-            var threadsCount = 20M;
+            var threadsCount = 30M;
             int sleepMillionSeconds = 200;//数字越大，每个线程占用时间越长，直至超时
 
             //初步估计需要重试时间
