@@ -52,6 +52,33 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
         }
 
         [TestMethod]
+        public void SetAsyncTest()
+        {
+            RedisManager.ConfigurationOption = "localhost:6379";
+            CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
+            var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+
+            var dt = SystemTime.Now;
+            cacheStrategy.Set("RedisTest", new ContainerBag()
+            {
+                Key = "123",
+                Name = "",// Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                AddTime = dt
+            });
+
+            var obj = cacheStrategy.GetAsync<ContainerBag>("RedisTest").Result;
+            Assert.IsNotNull(obj);
+            Assert.IsInstanceOfType(obj, typeof(ContainerBag));
+            //Console.WriteLine(obj);
+
+            var containerBag = obj as ContainerBag;
+            Assert.IsNotNull(containerBag);
+            Assert.AreEqual(dt, containerBag.AddTime);
+
+            Console.WriteLine($"SetTest单条测试耗时：{(SystemTime.Now - dt).TotalMilliseconds}ms");
+        }
+
+        [TestMethod]
         public void ExpiryTest()
         {
             RedisManager.ConfigurationOption = "localhost:6379";
@@ -76,7 +103,33 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Thread.Sleep(1000);//让缓存过期
             entity = cacheStrategy.Get(key);
             Assert.IsNull(entity);
+        }
 
+        [TestMethod]
+        public void ExpiryAsyncTest()
+        {
+            RedisManager.ConfigurationOption = "localhost:6379";
+            CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
+            var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+            var dt = SystemTime.Now;
+            var key = $"RedisTest-{SystemTime.Now.Ticks}";
+            cacheStrategy.Set(key, new ContainerBag()
+            {
+                Key = "123",
+                Name = "",// Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                AddTime = dt
+            }, TimeSpan.FromSeconds(1));
+
+            var entity = cacheStrategy.GetAsync(key).Result;
+            Assert.IsNotNull(entity);
+
+            var strongEntity = cacheStrategy.Get<ContainerBag>(key);
+            Assert.IsNotNull(strongEntity);
+            Assert.AreEqual(dt, strongEntity.AddTime);
+
+            Thread.Sleep(1000);//让缓存过期
+            entity = cacheStrategy.GetAsync(key).Result;
+            Assert.IsNull(entity);
         }
 
         #region 性能相关测试

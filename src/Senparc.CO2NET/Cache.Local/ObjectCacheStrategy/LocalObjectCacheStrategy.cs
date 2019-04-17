@@ -130,7 +130,6 @@ namespace Senparc.CO2NET.Cache
         private System.Web.Caching.Cache _cache = LocalObjectCacheHelper.LocalObjectCache;
 #else
         private IMemoryCache _cache = LocalObjectCacheHelper.LocalObjectCache;
-
 #endif
 
         #endregion
@@ -415,9 +414,15 @@ namespace Senparc.CO2NET.Cache
 
         public override ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
-            return new LocalCacheLock(this, resourceName, key, retryCount, retryDelay);
+            return LocalCacheLock.CreateAndLock(this, resourceName, key, retryCount, retryDelay);
         }
 
+#if !NET35 && !NET40
+        public override async Task<ICacheLock> BeginCacheLockAsync(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
+        {
+            return await LocalCacheLock.CreateAndLockAsync(this, resourceName, key, retryCount, retryDelay);
+        }
+#endif
         #endregion
 
     }
