@@ -98,7 +98,7 @@ namespace Senparc.CO2NET.Cache.Redis
             #endregion
 #endif
 
-            Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+            //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
 
 
             //使用JSON序列化，会在Get()方法反序列化到IContainerBag的过程中出错

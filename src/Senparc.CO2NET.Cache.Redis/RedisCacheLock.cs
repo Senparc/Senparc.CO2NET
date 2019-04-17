@@ -30,9 +30,13 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20170205
     修改描述：v1.2.0 重构分布式锁
 
+    修改标识：Senparc - 20191413
+    修改描述：v3.5.0 提供缓存异步接口
+
 ----------------------------------------------------------------*/
 
 using System;
+using System.Threading.Tasks;
 using Redlock.CSharp;
 using Senparc.CO2NET.Cache;
 
@@ -45,44 +49,103 @@ namespace Senparc.CO2NET.Cache.Redis
 
         private BaseRedisObjectCacheStrategy _redisStrategy;
 
-        public RedisCacheLock(BaseRedisObjectCacheStrategy strategy, string resourceName, string key, int retryCount, TimeSpan retryDelay)
+        protected RedisCacheLock(BaseRedisObjectCacheStrategy strategy, string resourceName, string key, int? retryCount, TimeSpan? retryDelay)
             : base(strategy, resourceName, key, retryCount, retryDelay)
         {
             _redisStrategy = strategy;
-            LockNow();//立即等待并抢夺锁
+            //LockNow();//立即等待并抢夺锁
         }
 
-        public override bool Lock(string resourceName)
+        #region 同步方法
+
+        /// <summary>
+        /// 创建 RedisCacheLock 实例，并立即尝试获得锁
+        /// </summary>
+        /// <param name="strategy">BaseRedisObjectCacheStrategy</param>
+        /// <param name="resourceName"></param>
+        /// <param name="key"></param>
+        /// <param name="retryCount"></param>
+        /// <param name="retryDelay"></param>
+        /// <returns></returns>
+        public static ICacheLock CreateAndLock(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
         {
-            return Lock(resourceName, 0, new TimeSpan());
+            return new RedisCacheLock(strategy as BaseRedisObjectCacheStrategy, resourceName, key, retryCount, retryDelay).Lock();
         }
 
-        public override bool Lock(string resourceName, int retryCount, TimeSpan retryDelay)
+        public override ICacheLock Lock()
         {
-            if (retryCount != 0)
+            if (_retryCount != 0)
             {
-                _dlm = new Redlock.CSharp.Redlock(retryCount, retryDelay, _redisStrategy.Client);
+                _dlm = new Redlock.CSharp.Redlock(_retryCount, _retryDelay, _redisStrategy.Client);
             }
             else if (_dlm == null)
             {
                 _dlm = new Redlock.CSharp.Redlock(_redisStrategy.Client);
             }
 
-            var ttl = (retryDelay.TotalMilliseconds > 0 ? retryDelay.TotalMilliseconds : 10)
-                       *
-                      (retryCount > 0 ? retryCount : 10);
-
-
-            var successfull = _dlm.Lock(resourceName, TimeSpan.FromMilliseconds(ttl), out _lockObject);
-            return successfull;
+            var ttl = base.GetTotalTtl(_retryCount, _retryDelay);
+            base.LockSuccessful = _dlm.Lock(_resourceName, TimeSpan.FromMilliseconds(ttl), out _lockObject);
+            return this;
         }
 
-        public override void UnLock(string resourceName)
+        public override void UnLock()
         {
             if (_lockObject != null)
             {
                 _dlm.Unlock(_lockObject);
             }
         }
+
+        #endregion
+
+        #region 异步方法
+#if !NET35 && !NET40
+
+        /// <summary>
+        /// 【异步方法】创建 RedisCacheLock 实例，并立即尝试获得锁
+        /// </summary>
+        /// <param name="strategy">BaseRedisObjectCacheStrategy</param>
+        /// <param name="resourceName"></param>
+        /// <param name="key"></param>
+        /// <param name="retryCount"></param>
+        /// <param name="retryDelay"></param>
+        /// <returns></returns>
+        public static async Task<ICacheLock> CreateAndLockAsync(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
+        {
+            return await new RedisCacheLock(strategy as BaseRedisObjectCacheStrategy, resourceName, key, retryCount, retryDelay).LockAsync();
+        }
+
+
+        public override async Task<ICacheLock> LockAsync()
+        {
+            if (_retryCount != 0)
+            {
+                _dlm = new Redlock.CSharp.Redlock(_retryCount, _retryDelay, _redisStrategy.Client);
+            }
+            else if (_dlm == null)
+            {
+                _dlm = new Redlock.CSharp.Redlock(_redisStrategy.Client);
+            }
+
+            var ttl = base.GetTotalTtl(_retryCount, _retryDelay);
+
+            Tuple<bool, Lock> result = await _dlm.LockAsync(_resourceName, TimeSpan.FromMilliseconds(ttl));
+            base.LockSuccessful = result.Item1;
+            _lockObject = result.Item2;
+            return this;
+        }
+
+        public override async Task UnLockAsync()
+        {
+            if (_lockObject != null)
+            {
+                await _dlm.UnlockAsync(_lockObject);
+            }
+        }
+
+#endif
+        #endregion
+
+
     }
 }
