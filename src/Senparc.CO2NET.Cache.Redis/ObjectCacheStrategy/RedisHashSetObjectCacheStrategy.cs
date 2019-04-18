@@ -35,7 +35,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
       1、分离 HashSet 和 Key-Value 两种不同格式的缓存：RedisHashSetObjectCacheStrategy 以及 RedisObjectCacheStrategy
       2、提供缓存过期新策略
 
-
+    修改标识：Senparc - 20190418
+    修改描述：v3.5.0 提供  HashGetAllAsync() 异步方法
 
  ----------------------------------------------------------------*/
 
@@ -523,6 +524,15 @@ namespace Senparc.CO2NET.Cache.Redis
         public HashEntry[] HashGetAll(string key)
         {
             return _cache.HashGetAll(key);
+        }
+
+
+        /// <summary>
+        /// _cache.HashGetAll()
+        /// </summary>
+        public async Task<HashEntry[]> HashGetAllAsync(string key)
+        {
+            return await _cache.HashGetAllAsync(key);
         }
     }
 }
