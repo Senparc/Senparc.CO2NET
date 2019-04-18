@@ -38,6 +38,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20180715
     修改描述：v3.0.1 添加 GetAllByPrefix() 方法
 
+    修改标识：Senparc - 20190418
+    修改描述：v3.5.0.1 添加 GetAllByPrefixAsync() 方法
+
  ----------------------------------------------------------------*/
 
 using System;
@@ -346,6 +349,27 @@ namespace Senparc.CO2NET.Cache.Redis
             foreach (var fullKey in keys)
             {
                 var obj = Get<T>(fullKey, true);
+                if (obj != null)
+                {
+                    list.Add(obj);
+                }
+            }
+
+            return list;
+        }
+
+
+        /// <summary>
+        /// 【异步方法】根据 key 的前缀获取对象列表
+        /// </summary>
+        public async Task<IList<T>> GetAllByPrefixAsync<T>(string key)
+        {
+            var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
+            var keys = GetServer().Keys(pattern: keyPattern);
+            List<T> list = new List<T>();
+            foreach (var fullKey in keys)
+            {
+                var obj = await GetAsync<T>(fullKey, true);
                 if (obj != null)
                 {
                     list.Add(obj);
