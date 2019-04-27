@@ -11,6 +11,10 @@
     修改描述：1、将 DateTime 改为 DateTimeOffset
               2、添加 Today 属性
 
+
+    修改标识：Senparc - 20190427
+    修改描述：v0.6.1 添加 NowTicks 属性
+
 ----------------------------------------------------------------*/
 
 namespace System
@@ -34,5 +38,14 @@ namespace System
         /// 当天零点时间，从 SystemTime.Now.Date 获得
         /// </summary>
         public static DateTime Today => SystemTime.Now.Date;
+
+        /// <summary>
+        /// 获取当前时间的 Ticks
+        /// </summary>
+        public static long NowTicks => Now.Ticks;
+
+
+        //TODO：添加更多实用方法
+
     }
 }

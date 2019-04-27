@@ -115,6 +115,11 @@ namespace Senparc.CO2NET.APM
         /// <returns></returns>
         public DataItem Set(string kindName, double value, object data = null, object tempStorage = null, DateTimeOffset? dateTime = null)
         {
+            if (!Config.EnableAPM)
+            {
+                return null;//不启用，不进行记录
+            }
+
             try
             {
                 var dt1 = SystemTime.Now;
@@ -208,7 +213,7 @@ namespace Senparc.CO2NET.APM
                         {
                             //筛选需要删除的数据
                             var tobeRemove = completedStatData.Where(z => keepTodayData ? z.DateTime < SystemTime.Today : true);
-                      
+
                             //移除已读取的项目
                             if (tobeRemove.Count() == list.Count())
                             {
