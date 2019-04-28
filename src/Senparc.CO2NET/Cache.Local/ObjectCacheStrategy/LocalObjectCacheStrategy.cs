@@ -403,7 +403,7 @@ namespace Senparc.CO2NET.Cache
 
         public async Task UpdateAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
-            await Task.Factory.StartNew(() => Update(key, isFullKey));
+            await Task.Factory.StartNew(() => Update(key, value, expiry, isFullKey));
         }
 #endif
         #endregion
