@@ -37,7 +37,6 @@ namespace Senparc.CO2NET.Sample.netcore
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddMemoryCache();//使用本地缓需要添加
