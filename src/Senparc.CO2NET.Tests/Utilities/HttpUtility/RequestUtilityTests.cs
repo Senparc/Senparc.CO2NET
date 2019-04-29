@@ -20,6 +20,7 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.HttpUtility;
+using Senparc.CO2NET.Tests;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,7 +32,7 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.HttpUtility.Tests
 {
     [TestClass()]
-    public class RequestUtilityTests
+    public class RequestUtilityTests : BaseTest
     {
         [TestMethod()]
         public void SetHttpProxyTest()
@@ -81,12 +82,38 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             Assert.IsNotNull(result);
 #if !NET45
             var resultString = result.Result.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            Console.WriteLine("resultString:{0}", resultString);
+            Console.WriteLine("resultString : \t{0}", resultString);
 #endif
             var cookie = cookieContainer.GetCookies(new Uri("https://localhost:44335"));
             Console.WriteLine("TestCookie：{0}", cookie["TestCookie"]);
         }
 
+        [TestMethod]
+        public void CookieTest()
+        {
+            var cookieContainer = new CookieContainer();
+            //cookieContainer.Add(new Uri("https://localhost"), new Cookie("TestCount", "20"));
+            cookieContainer.SetCookies(new Uri("https://localhost:44335/ForTest/PostTest"), "TestCount=100; path=/; domain=localhost; Expires=Tue, 19 Jan 2038 03:14:07 GMT;");
 
+            for (int i = 0; i < 3; i++)
+            {
+                var data = "CookieTest";
+                Stream stream = new MemoryStream();
+                var bytes = Encoding.UTF8.GetBytes(data);
+                stream.Write(bytes, 0, bytes.Length);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                var url = "https://localhost:44335/ForTest/PostTest";//使用.NET 4.5的Sample
+                var result = RequestUtility.HttpResponsePost(url,cookieContainer, stream, useAjax: true);
+
+                Assert.IsNotNull(result);
+                var resultString = result.Result.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                Console.WriteLine("resultString : \t{0}", resultString);
+
+                var cookie = cookieContainer.GetCookies(new Uri("https://localhost:44335"));
+                Console.WriteLine($"TestCookie：{cookie["TestCookie"]}，TestCount：{cookie["TestCount"]}\r\n");
+            }
+
+        }
     }
 }
