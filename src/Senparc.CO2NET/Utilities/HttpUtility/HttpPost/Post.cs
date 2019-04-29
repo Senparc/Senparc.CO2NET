@@ -44,6 +44,10 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
     修改标识：Senparc - 20170409
     修改描述：v4.11.9 修改Download方法
+
+    修改标识：Senparc - 20190429
+    修改描述：v0.7.0 优化 HttpClient，重构 RequestUtility（包括 Post 和 Get），引入 HttpClientFactory 机制
+    
 ----------------------------------------------------------------*/
 
 
@@ -177,7 +181,7 @@ namespace Senparc.CO2NET.HttpUtility
             //    stream.WriteByte(b);
             //}
 #else
-            HttpClient httpClient = new HttpClient();
+            HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
             HttpContent hc = new StringContent(data);
             var ht = httpClient.PostAsync(url, hc);
             ht.Wait();
@@ -292,7 +296,7 @@ namespace Senparc.CO2NET.HttpUtility
             var fileBytes = await wc.UploadDataTaskAsync(url, "POST", Encoding.UTF8.GetBytes(string.IsNullOrEmpty(data) ? "" : data));
             await stream.WriteAsync(fileBytes, 0, fileBytes.Length);//也可以分段写入
 #else
-            HttpClient httpClient = new HttpClient();
+            HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
             HttpContent hc = new StringContent(data);
             var ht = await httpClient.PostAsync(url, hc);
             var fileBytes = await ht.Content.ReadAsByteArrayAsync();

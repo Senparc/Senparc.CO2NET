@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.HttpUtility;
 using Senparc.CO2NET.Sample.netcore.Models;
@@ -26,9 +27,24 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
 
             var isAjax = Request.IsAjaxRequest();
 
-            Response.Cookies.Append("TestCookie", SystemTime.Now.ToString());
+            var testCount = 0;
+            if (Request.Cookies["TestCount"] != null)
+            {
+                testCount = int.Parse(Request.Cookies["TestCount"]);
+            }
+            testCount++;
 
-            return Content(data + " Ajax:" + isAjax + " Server Time:" + SystemTime.Now);
+            Response.Headers.Add(HeaderNames.SetCookie,
+                new Microsoft.Extensions.Primitives.StringValues(
+                    new[] {
+                        $"TestCount={testCount}; path=/; domain=localhost; Expires=Tue, 19 Jan 2038 03:14:07 GMT;",
+                        "TestCookie=20190429 20:27:45; path=/; domain=localhost; Expires=Tue, 19 Jan 2038 03:14:07 GMT;"
+                    }));
+
+            //Response.Cookies.Append("TestCookie", SystemTime.Now.ToString());
+            //Response.Cookies.Append("TestCount", testCount.ToString());
+
+            return Content($"data：{data}  Ajax:{isAjax} Server Time:{SystemTime.Now} TestCount：{testCount}");
         }
     }
 }
