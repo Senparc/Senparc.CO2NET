@@ -115,7 +115,12 @@ namespace Senparc.CO2NET.HttpUtility
             _webproxy = null;
         }
 #else
-        private static IWebProxy _webproxy = null;
+
+        /// <summary>
+        /// 作用于 SenparcHttpClient 的 WebProxy（需要在 AddSenparcGlobalServices 之前定义）
+        /// </summary>
+        public static IWebProxy SenparcHttpClientWebProxy { get; set; } = null;
+
         /// <summary>
         /// 设置Web代理
         /// </summary>
@@ -129,7 +134,7 @@ namespace Senparc.CO2NET.HttpUtility
             cred = new NetworkCredential(username, password);
             if (!string.IsNullOrEmpty(host))
             {
-                _webproxy = new CoreWebProxy(new Uri(host + ":" + port ?? "80"), cred);
+                SenparcHttpClientWebProxy = new CoreWebProxy(new Uri(host + ":" + port ?? "80"), cred);
             }
         }
 
@@ -138,7 +143,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// </summary>
         public static void RemoveHttpProxy()
         {
-            _webproxy = null;
+            SenparcHttpClientWebProxy = null;
         }
 
         /// <summary>

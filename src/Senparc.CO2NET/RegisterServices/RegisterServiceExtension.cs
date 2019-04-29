@@ -22,8 +22,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Senparc.CO2NET.HttpUtility;
 
 #if NETSTANDARD2_0
+using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 #endif
@@ -42,10 +44,20 @@ namespace Senparc.CO2NET.RegisterServices
         /// <param name="serviceCollection">IServiceCollection</param>
         /// <param name="configuration">IConfiguration</param>
         /// <returns></returns>
-        public static IServiceCollection AddSenparcGlobalServices(this IServiceCollection serviceCollection, IConfiguration configuration)
+        public static IServiceCollection AddSenparcGlobalServices(this IServiceCollection serviceCollection,
+            IConfiguration configuration)
         {
             SenparcDI.GlobalServiceCollection = serviceCollection;
             serviceCollection.Configure<SenparcSetting>(configuration.GetSection("SenparcSetting"));
+
+            //配置 HttpClient，课使用 Head 自定义 Cookie
+            serviceCollection.AddHttpClient<SenparcHttpClient>()
+            //.ConfigureHttpMessageHandlerBuilder((c) =>
+            .ConfigurePrimaryHttpMessageHandler((c) =>
+            {
+                var httpClientHandler = HttpClientHelper.GetHttpClientHandler(null, RequestUtility.SenparcHttpClientWebProxy, System.Net.DecompressionMethods.GZip);
+                return httpClientHandler;
+            });
 
             /*
              * appsettings.json 中添加节点：
@@ -55,6 +67,22 @@ namespace Senparc.CO2NET.RegisterServices
     "DefaultCacheNamespace": "DefaultCache"
   },
              */
+
+            return serviceCollection;
+        }
+
+        /// <summary>
+        /// 添加作用于 SenparcHttpClient 的 WebProxy（需要在 AddSenparcGlobalServices 之前定义）
+        /// </summary>
+        /// <param name="serviceCollection"></param>
+        /// <param name="host"></param>
+        /// <param name="port"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddSenparcHttpClientProxy(this IServiceCollection serviceCollection, string host, string port, string username, string password)
+        {
+            RequestUtility.SetHttpProxy(host, port, username, password);
 
             return serviceCollection;
         }

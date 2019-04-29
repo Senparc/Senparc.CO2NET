@@ -65,6 +65,8 @@ using Senparc.CO2NET.Helpers;
 #if NET35 || NET40 || NET45
 using System.Web.Script.Serialization;
 #endif
+
+
 //using Senparc.CO2NET.Entities;
 //using Senparc.CO2NET.Exceptions;
 using System.Text.RegularExpressions;
@@ -86,7 +88,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
 
-        #region 同步方法
+#region 同步方法
 
         /// <summary>
         /// GET方式请求URL，并返回T类型
@@ -126,7 +128,7 @@ namespace Senparc.CO2NET.HttpUtility
             //    stream.WriteByte(b);
             //}
 #else
-            HttpClient httpClient = new HttpClient();
+            HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
             var t = httpClient.GetByteArrayAsync(url);
             t.Wait();
             var data = t.Result;
@@ -147,7 +149,7 @@ namespace Senparc.CO2NET.HttpUtility
             var dir = Path.GetDirectoryName(filePathName) ?? "/";
             Directory.CreateDirectory(dir);
 
-#if NET35 || NET40
+#if NET35 || NET40 || NET45
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
@@ -185,7 +187,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
 #else
-            System.Net.Http.HttpClient httpClient = new HttpClient();
+            System.Net.Http.HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
             using (var responseMessage = httpClient.GetAsync(url).Result)
             {
                 if (responseMessage.StatusCode == HttpStatusCode.OK)
@@ -219,10 +221,10 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
         }
         //#endif
-        #endregion
+#endregion
 
 #if !NET35 && !NET40
-        #region 异步方法
+#region 异步方法
 
         /// <summary>
         /// 【异步方法】异步GetJson
@@ -264,7 +266,7 @@ namespace Senparc.CO2NET.HttpUtility
             //    stream.WriteAsync(b);
             //}
 #else
-            HttpClient httpClient = new HttpClient();
+            HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
             var data = await httpClient.GetByteArrayAsync(url);
             await stream.WriteAsync(data, 0, data.Length);
 #endif
@@ -283,7 +285,11 @@ namespace Senparc.CO2NET.HttpUtility
             var dir = Path.GetDirectoryName(filePathName) ?? "/";
             Directory.CreateDirectory(dir);
 
+#if NET45
             System.Net.Http.HttpClient httpClient = new HttpClient();
+#else
+            System.Net.Http.HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
+#endif
             httpClient.Timeout = TimeSpan.FromMilliseconds(timeOut);
             using (var responseMessage = await httpClient.GetAsync(url))
             {
@@ -315,7 +321,7 @@ namespace Senparc.CO2NET.HttpUtility
                 }
             }
         }
-        #endregion
+#endregion
 #endif
 
     }
