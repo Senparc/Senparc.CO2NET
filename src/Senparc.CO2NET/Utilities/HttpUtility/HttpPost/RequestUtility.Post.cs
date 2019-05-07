@@ -195,8 +195,8 @@ namespace Senparc.CO2NET.HttpUtility
                     //contentType = "application/x-www-form-urlencoded";
                 }
             }
-            #endregion
-
+        #endregion
+            request.ContentType = contentType;
             request.ContentLength = postStream != null ? postStream.Length : 0;
 
             HttpClientHeader(request, refererUrl, useAjax, headerAddition, timeOut);
