@@ -117,7 +117,7 @@ namespace Senparc.CO2NET.HttpUtility
                   new RemoteCertificateValidationCallback(CheckValidationResult);
             }
 
-        #region 处理Form表单文件上传
+            #region 处理Form表单文件上传
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
             {
@@ -196,10 +196,10 @@ namespace Senparc.CO2NET.HttpUtility
                 }
             }
         #endregion
-
+            request.ContentType = contentType;
             request.ContentLength = postStream != null ? postStream.Length : 0;
 
-            HttpClientHeader(request, refererUrl, useAjax,headerAddition, timeOut);
+            HttpClientHeader(request, refererUrl, useAjax, headerAddition, timeOut);
 
             if (cookieContainer != null)
             {
@@ -252,7 +252,7 @@ namespace Senparc.CO2NET.HttpUtility
             HttpClient client = senparcHttpClient.Client;
             HttpClientHeader(client, refererUrl, useAjax, headerAddition, timeOut);
 
-            #region 处理Form表单文件上传
+        #region 处理Form表单文件上传
 
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
@@ -323,7 +323,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             //HttpContentHeader(hc, timeOut);
-            #endregion
+        #endregion
 
             if (!string.IsNullOrEmpty(refererUrl))
             {
@@ -608,12 +608,12 @@ namespace Senparc.CO2NET.HttpUtility
 
 
 #if NET35 || NET40 || NET45
-            #region 已经使用方法重用
+        #region 已经使用方法重用
             /*
 
             var request = HttpPost_Common_Net45(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax,headerAddition, timeOut, checkValidationResult);
 
-            #region 输入二进制流
+        #region 输入二进制流
             if (postStream != null && postStream.Length > 0)
             {
                 postStream.Position = 0;
@@ -636,10 +636,10 @@ namespace Senparc.CO2NET.HttpUtility
 
                 postStream.Close();//关闭文件访问
             }
-            #endregion
+        #endregion
             HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync());
     */
-            #endregion
+        #endregion
 
 
             if (cookieContainer != null)
@@ -658,7 +658,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
 
-            #region 已经使用方法重用
+        #region 已经使用方法重用
             /*
             HttpContent hc;
             var client = HttpPost_Common_NetCore(url, out hc, cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, timeOut, checkValidationResult);
@@ -687,7 +687,7 @@ namespace Senparc.CO2NET.HttpUtility
             {
             }
             */
-            #endregion
+        #endregion
 
             var retString = await response.Content.ReadAsStringAsync();
 
@@ -730,7 +730,7 @@ namespace Senparc.CO2NET.HttpUtility
 #if NET35 || NET40 || NET45
             var request = HttpPost_Common_Net45(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
 
-            #region 输入二进制流
+        #region 输入二进制流
             if (postStream != null && postStream.Length > 0)
             {
                 postStream.Position = 0;
@@ -752,7 +752,7 @@ namespace Senparc.CO2NET.HttpUtility
 
                 postStream.Close();//关闭文件访问
             }
-            #endregion
+        #endregion
 
             HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync());
             return new SenparcHttpResponse(response);

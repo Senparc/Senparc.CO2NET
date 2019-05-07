@@ -71,7 +71,7 @@
       v0.4.1 为 UrlEncode() 和 UrlDecode() 方法添加在 .net framework 环境下的编码类型选择
       v0.4.2 优化 ServerUtility 类中方法在 docker 或 linux 环境下的路径识别
       v0.4.3 使用 DateTimeOffset 取代 DateTime
-      v0.4.4 提供 SenparcTrace.RecordAPMLog 参数
+      v0.4.4 提供 SenparcTrace.RecordAPMLog 参数RequestUtility.Post.cs 
       v0.5.0 提供对 .NET Core Console 的全面支持
       v0.5.1 ToJson() 方法添加 jsonSerializerSettings 参数
       v0.5.1.1 添加 Sex.未设置 枚举值
@@ -85,6 +85,7 @@
       v0.7.1
       1、添加 NowDiff 属性
       2、添加 DayOfWeekString、DILifecycleType 配置和枚举
+      3、修复：.NET 4.5 下 Post 方法未指定 content-type
 
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
