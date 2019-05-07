@@ -15,6 +15,9 @@
     修改标识：Senparc - 20190427
     修改描述：v0.6.1 添加 NowTicks 属性
 
+    修改标识：Senparc - 20190507
+    修改描述：v0.7.1 添加 NowDiff 属性
+
 ----------------------------------------------------------------*/
 
 namespace System
@@ -37,7 +40,7 @@ namespace System
         /// <summary>
         /// 当天零点时间，从 SystemTime.Now.Date 获得
         /// </summary>
-        public static DateTime Today => SystemTime.Now.Date;
+        public static DateTime Today => Now.Date;
 
         /// <summary>
         /// 获取当前时间的 Ticks
@@ -46,6 +49,27 @@ namespace System
 
 
         //TODO：添加更多实用方法
+
+        /// <summary>
+        /// 获取 TimeSpan
+        /// </summary>
+        /// <param name="compareTime">当前时间 - compareTime</param>
+        /// <returns></returns>
+        public static TimeSpan NowDiff(DateTimeOffset compareTime)
+        {
+            return Now - compareTime;
+        }
+
+        /// <summary>
+        /// 获取 TimeSpan
+        /// </summary>
+        /// <param name="compareTime">当前时间 - compareTime</param>
+        /// <returns></returns>
+        public static TimeSpan NowDiff(DateTime compareTime)
+        {
+            return Now.DateTime - compareTime;
+        }
+
 
     }
 }
