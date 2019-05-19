@@ -246,6 +246,8 @@ namespace Senparc.CO2NET.HttpUtility
                 handler.ClientCertificates.Add(cer);
             }
 
+            //TODO:此处 handler并没有被使用到，因此 cer 实际无法传递（这个也是 .net core 目前针对多 cer 场景的一个问题）
+
             var senparcHttpClient = SenparcDI.GetRequiredService<SenparcHttpClient>();
             senparcHttpClient.SetCookie(new Uri(url), cookieContainer);//设置Cookie
 
