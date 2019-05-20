@@ -39,6 +39,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 using Senparc.CO2NET.APM.Exceptions;
 using Senparc.CO2NET.Trace;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -58,7 +59,7 @@ namespace Senparc.CO2NET.APM
         private string _domainKey;
 
         //TODO：需要考虑分布式的情况，最好储存在缓存中
-        private static Dictionary<string, Dictionary<string, DateTimeOffset>> KindNameStore { get; set; } = new Dictionary<string, Dictionary<string, DateTimeOffset>>();
+        private static ConcurrentDictionary<string, Dictionary<string, DateTimeOffset>> KindNameStore { get; set; } = new ConcurrentDictionary<string, Dictionary<string, DateTimeOffset>>();
 
         private string BuildFinalKey(string kindName)
         {
@@ -84,6 +85,7 @@ namespace Senparc.CO2NET.APM
                 keyList.Add(kindName);
                 cacheStragety.Set(kindNameKey, keyList, isFullKey: true);//永久储存
             }
+
             KindNameStore[_domain][kindName] = SystemTime.Now;
         }
 
