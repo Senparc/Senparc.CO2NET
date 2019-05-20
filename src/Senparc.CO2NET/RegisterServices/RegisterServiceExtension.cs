@@ -73,7 +73,7 @@ namespace Senparc.CO2NET.RegisterServices
             SenparcDI.GlobalServiceCollection = serviceCollection;
             serviceCollection.Configure<SenparcSetting>(configuration.GetSection("SenparcSetting"));
 
-            //配置 HttpClient，课使用 Head 自定义 Cookie
+            //配置 HttpClient，可使用 Head 自定义 Cookie
             serviceCollection.AddHttpClient<SenparcHttpClient>()
             //.ConfigureHttpMessageHandlerBuilder((c) =>
             .ConfigurePrimaryHttpMessageHandler((c) =>
