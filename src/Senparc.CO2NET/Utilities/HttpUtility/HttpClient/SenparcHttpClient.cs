@@ -62,7 +62,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static SenparcHttpClient GetInstanceByName(string httpClientName)
         {
-            if (string.IsNullOrEmpty(httpClientName))
+            if (!string.IsNullOrEmpty(httpClientName))
             {
                 var clientFactory = SenparcDI.GetRequiredService<IHttpClientFactory>();
                 var httpClient = clientFactory.CreateClient(httpClientName);
