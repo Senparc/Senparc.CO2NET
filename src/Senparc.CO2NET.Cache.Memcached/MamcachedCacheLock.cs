@@ -205,7 +205,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 #if NET45
             await Task.Factory.StartNew(() => _mamcachedStrategy.Cache.Remove(key)).ConfigureAwait(false);
 #else
-            await _mamcachedStrategy.Cache.RemoveAsync(key);
+            await _mamcachedStrategy.Cache.RemoveAsync(key).ConfigureAwait(false);
 #endif
         }
 

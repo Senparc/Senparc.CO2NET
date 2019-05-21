@@ -219,7 +219,7 @@ namespace Senparc.CO2NET.HttpUtility
             using (MemoryStream ms = new MemoryStream())
             {
                 postDataDictionary.FillFormDataStream(ms); //填充formData
-                string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, ms, fileDictionary, null, encoding, cer, useAjax, null, timeOut);
+                string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, ms, fileDictionary, null, encoding, cer, useAjax, null, timeOut).ConfigureAwait(false);
 
                 afterReturnText?.Invoke(url, returnText);
 
@@ -247,7 +247,7 @@ namespace Senparc.CO2NET.HttpUtility
             bool useAjax = false, bool checkValidationResult = false, Action<string, string> afterReturnText = null,
             int timeOut = Config.TIME_OUT)
         {
-            string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, fileStream, null, null, encoding, cer, useAjax, null, timeOut, checkValidationResult);
+            string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, fileStream, null, null, encoding, cer, useAjax, null, timeOut, checkValidationResult).ConfigureAwait(false);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -273,7 +273,7 @@ namespace Senparc.CO2NET.HttpUtility
         public static async Task<T> PostGetJsonAsync<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
             X509Certificate2 cer = null, bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
-            string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, formData, encoding, cer, useAjax, null, timeOut);
+            string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, formData, encoding, cer, useAjax, null, timeOut).ConfigureAwait(false);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -293,14 +293,14 @@ namespace Senparc.CO2NET.HttpUtility
 #if NET35 || NET40 || NET45
             WebClient wc = new WebClient();
 
-            var fileBytes = await wc.UploadDataTaskAsync(url, "POST", Encoding.UTF8.GetBytes(string.IsNullOrEmpty(data) ? "" : data));
-            await stream.WriteAsync(fileBytes, 0, fileBytes.Length);//也可以分段写入
+            var fileBytes = await wc.UploadDataTaskAsync(url, "POST", Encoding.UTF8.GetBytes(string.IsNullOrEmpty(data) ? "" : data)).ConfigureAwait(false);
+            await stream.WriteAsync(fileBytes, 0, fileBytes.Length).ConfigureAwait(false);//也可以分段写入
 #else
             HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
             HttpContent hc = new StringContent(data);
-            var ht = await httpClient.PostAsync(url, hc);
-            var fileBytes = await ht.Content.ReadAsByteArrayAsync();
-            await stream.WriteAsync(fileBytes, 0, fileBytes.Length);//也可以分段写入
+            var ht = await httpClient.PostAsync(url, hc).ConfigureAwait(false);
+            var fileBytes = await ht.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            await stream.WriteAsync(fileBytes, 0, fileBytes.Length).ConfigureAwait(false);//也可以分段写入
 #endif
 
         }

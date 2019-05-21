@@ -224,10 +224,10 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
         }
         //#endif
-#endregion
+        #endregion
 
 #if !NET35 && !NET40
-#region 异步方法
+        #region 异步方法
 
         /// <summary>
         /// 【异步方法】异步GetJson
@@ -240,7 +240,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <exception cref="ErrorJsonResultException"></exception>
         public static async Task<T> GetJsonAsync<T>(string url, Encoding encoding = null, Action<string, string> afterReturnText = null)
         {
-            string returnText = await RequestUtility.HttpGetAsync(url, encoding);
+            string returnText = await RequestUtility.HttpGetAsync(url, encoding).ConfigureAwait(false);
 
             afterReturnText?.Invoke(url, returnText);
 
@@ -262,16 +262,16 @@ namespace Senparc.CO2NET.HttpUtility
             //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
 
             WebClient wc = new WebClient();
-            var data = await wc.DownloadDataTaskAsync(url);
-            await stream.WriteAsync(data, 0, data.Length);
+            var data = await wc.DownloadDataTaskAsync(url).ConfigureAwait(false);
+            await stream.WriteAsync(data, 0, data.Length).ConfigureAwait(false);
             //foreach (var b in data)
             //{
             //    stream.WriteAsync(b);
             //}
 #else
             HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
-            var data = await httpClient.GetByteArrayAsync(url);
-            await stream.WriteAsync(data, 0, data.Length);
+            var data = await httpClient.GetByteArrayAsync(url).ConfigureAwait(false);
+            await stream.WriteAsync(data, 0, data.Length).ConfigureAwait(false);
 #endif
 
         }
@@ -294,7 +294,7 @@ namespace Senparc.CO2NET.HttpUtility
             System.Net.Http.HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
 #endif
             httpClient.Timeout = TimeSpan.FromMilliseconds(timeOut);
-            using (var responseMessage = await httpClient.GetAsync(url))
+            using (var responseMessage = await httpClient.GetAsync(url).ConfigureAwait(false))
             {
                 if (responseMessage.StatusCode == HttpStatusCode.OK)
                 {
@@ -310,10 +310,10 @@ namespace Senparc.CO2NET.HttpUtility
                     var fullName = responseFileName ?? Path.Combine(dir, GetRandomFileName());
                     using (var fs = File.Open(fullName, FileMode.Create))
                     {
-                        using (var responseStream = await responseMessage.Content.ReadAsStreamAsync())
+                        using (var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
                         {
-                            await responseStream.CopyToAsync(fs);
-                            await fs.FlushAsync();
+                            await responseStream.CopyToAsync(fs).ConfigureAwait(false);
+                            await fs.FlushAsync().ConfigureAwait(false);
                         }
                     }
                     return fullName;
@@ -324,7 +324,7 @@ namespace Senparc.CO2NET.HttpUtility
                 }
             }
         }
-#endregion
+        #endregion
 #endif
 
     }
