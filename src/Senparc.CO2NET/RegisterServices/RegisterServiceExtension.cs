@@ -46,6 +46,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Senparc.CO2NET.HttpUtility;
+using System.Security.Cryptography.X509Certificates;
 
 #if NETSTANDARD2_0
 using System.Net.Http;
@@ -66,9 +67,10 @@ namespace Senparc.CO2NET.RegisterServices
         /// </summary>
         /// <param name="serviceCollection">IServiceCollection</param>
         /// <param name="configuration">IConfiguration</param>
+        /// <param name="certificate">需要注册的证书信息</param>
         /// <returns></returns>
         public static IServiceCollection AddSenparcGlobalServices(this IServiceCollection serviceCollection,
-            IConfiguration configuration)
+            IConfiguration configuration, Dictionary<string, X509Certificate> certificate = null)
         {
             SenparcDI.GlobalServiceCollection = serviceCollection;
             serviceCollection.Configure<SenparcSetting>(configuration.GetSection("SenparcSetting"));
@@ -91,6 +93,27 @@ namespace Senparc.CO2NET.RegisterServices
   },
              */
 
+            return serviceCollection;
+        }
+
+        /// <summary>
+        /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程（必须）
+        /// </summary>
+        /// <param name="serviceCollection">IServiceCollection</param>
+        /// <param name="certName">证书名称，必须全局唯一，并且确保在全局 HttpClientFactory 内唯一</param>
+        /// <param name="certSecret">证书密码</param>
+        /// <param name="certPath">证书路径（物理路径）</param>
+        /// <returns></returns>
+        public static IServiceCollection AddSenparcHttpClientWithCert(this IServiceCollection serviceCollection,
+            string certName, string certSecret, string certPath)
+        {
+            serviceCollection.AddHttpClient<SenparcHttpClient>(certName)
+                         .ConfigurePrimaryHttpMessageHandler(() => {
+                             var httpClientHandler = HttpClientHelper.GetHttpClientHandler(null, RequestUtility.SenparcHttpClientWebProxy, System.Net.DecompressionMethods.GZip);
+                             var cert = new X509Certificate2(certPath, certSecret, X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.MachineKeySet);
+                             httpClientHandler.ClientCertificates.Add(cert);
+                             return httpClientHandler;
+                         });
             return serviceCollection;
         }
 
