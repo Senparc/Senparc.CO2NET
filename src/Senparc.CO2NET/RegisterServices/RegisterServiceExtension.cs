@@ -35,8 +35,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20180704
     修改描述：v0.1.5 RegisterServiceExtension.AddSenparcGlobalServices() 方法可自动获取 SenparcSetting 全局设置
 
-    修改标识：Senparc - 201929
+    修改标识：Senparc - 20190429
     修改描述：v0.7.0 优化 HttpClient，重构 RequestUtility（包括 Post 和 Get），引入 HttpClientFactory 机制
+
+    修改标识：Senparc - 20190521
+    修改描述：v0.7.3 .NET Core 提供多证书注册功能
 
 ----------------------------------------------------------------*/
 
@@ -46,6 +49,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Senparc.CO2NET.HttpUtility;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 #if NETSTANDARD2_0
 using System.Net.Http;
@@ -91,6 +96,50 @@ namespace Senparc.CO2NET.RegisterServices
   },
              */
 
+            return serviceCollection;
+        }
+
+        /// <summary>
+        /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程（必须）
+        /// </summary>
+        /// <param name="serviceCollection">IServiceCollection</param>
+        /// <param name="certName">证书名称，必须全局唯一，并且确保在全局 HttpClientFactory 内唯一</param>
+        /// <param name="certSecret">证书密码</param>
+        /// <param name="certPath">证书路径（物理路径）</param>
+        /// <param name="checkValidationResult">设置</param>
+        /// <returns></returns>
+        public static IServiceCollection AddSenparcHttpClientWithCertificate(this IServiceCollection serviceCollection,
+            string certName, string certSecret, string certPath, bool checkValidationResult = false)
+        {
+            var cert = new X509Certificate2(certPath, certSecret, X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.MachineKeySet);
+            return AddSenparcHttpClientWithCertificate(serviceCollection, certName, cert, checkValidationResult);
+        }
+
+        /// <summary>
+        /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程（必须）
+        /// </summary>
+        /// <param name="serviceCollection">IServiceCollection</param>
+        /// <param name="certName">证书名称，必须全局唯一，并且确保在全局 HttpClientFactory 内唯一</param>
+        /// <param name="cert">证书对象，也可以是 X509Certificate2</param>
+        /// <param name="checkValidationResult">设置</param>
+        /// <returns></returns>
+        public static IServiceCollection AddSenparcHttpClientWithCertificate(this IServiceCollection serviceCollection,
+            string certName, X509Certificate cert, bool checkValidationResult = false)
+        {
+            serviceCollection.AddHttpClient<SenparcHttpClient>(certName)
+                         .ConfigurePrimaryHttpMessageHandler(() =>
+                         {
+                             var httpClientHandler = HttpClientHelper.GetHttpClientHandler(null, RequestUtility.SenparcHttpClientWebProxy, System.Net.DecompressionMethods.GZip);
+
+                             httpClientHandler.ClientCertificates.Add(cert);
+
+                             if (checkValidationResult)
+                             {
+                                 httpClientHandler.ServerCertificateCustomValidationCallback = new Func<HttpRequestMessage, X509Certificate2, X509Chain, SslPolicyErrors, bool>(RequestUtility.CheckValidationResult);
+                             }
+
+                             return httpClientHandler;
+                         });
             return serviceCollection;
         }
 

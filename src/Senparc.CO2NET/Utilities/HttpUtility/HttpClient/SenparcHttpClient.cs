@@ -27,6 +27,10 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
     创建标识：Senparc - 20190429
 
+    修改标识：Senparc - 20190521
+    修改描述：v0.7.3 .NET Core 提供多证书注册功能
+
+
 ----------------------------------------------------------------*/
 
 
@@ -46,7 +50,22 @@ namespace Senparc.CO2NET.HttpUtility
     /// </summary>
     public class SenparcHttpClient
     {
+        /// <summary>
+        /// HttpClient 对象
+        /// </summary>
         public HttpClient Client { get; private set; }
+
+        /// <summary>
+        /// 从 HttpClientFactory 的唯一名称中获取 HttpClient 对象，并加载到 SenparcHttpClient 中
+        /// </summary>
+        /// <param name="httpClientName"></param>
+        /// <returns></returns>
+        public static SenparcHttpClient GetInstanceByName(string httpClientName)
+        {
+            var clientFactory = SenparcDI.GetRequiredService<IHttpClientFactory>();
+            var httpClient = clientFactory.CreateClient(httpClientName);
+            return new SenparcHttpClient(httpClient);
+        }
 
         public SenparcHttpClient(HttpClient httpClient)
         {

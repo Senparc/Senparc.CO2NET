@@ -39,6 +39,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 using Senparc.CO2NET.APM.Exceptions;
 using Senparc.CO2NET.Trace;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -47,7 +48,7 @@ using System.Text;
 namespace Senparc.CO2NET.APM
 {
     /// <summary>
-    /// 
+    /// DataOperation
     /// </summary>
     public class DataOperation
     {
@@ -84,10 +85,9 @@ namespace Senparc.CO2NET.APM
                 keyList.Add(kindName);
                 cacheStragety.Set(kindNameKey, keyList, isFullKey: true);//永久储存
             }
+
             KindNameStore[_domain][kindName] = SystemTime.Now;
         }
-
-
 
         /// <summary>
         /// DataOperation 构造函数
