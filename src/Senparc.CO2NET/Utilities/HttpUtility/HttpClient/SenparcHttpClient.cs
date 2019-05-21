@@ -62,11 +62,20 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static SenparcHttpClient GetInstanceByName(string httpClientName)
         {
-            var clientFactory = SenparcDI.GetRequiredService<IHttpClientFactory>();
-            var httpClient = clientFactory.CreateClient(httpClientName);
-            return new SenparcHttpClient(httpClient);
+            if (string.IsNullOrEmpty(httpClientName))
+            {
+                var clientFactory = SenparcDI.GetRequiredService<IHttpClientFactory>();
+                var httpClient = clientFactory.CreateClient(httpClientName);
+                return new SenparcHttpClient(httpClient);
+            }
+
+            return SenparcDI.GetRequiredService<SenparcHttpClient>();
         }
 
+        /// <summary>
+        /// SenparcHttpClient 构造函数
+        /// </summary>
+        /// <param name="httpClient"></param>
         public SenparcHttpClient(HttpClient httpClient)
         {
             //httpClient.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
