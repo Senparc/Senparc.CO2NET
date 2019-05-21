@@ -260,7 +260,7 @@ namespace Redlock.CSharp
                        for_each_redis_registered(
                              async redis =>
                               {
-                                  if (await LockInstanceAsync(redis, resource, val, ttl)) n += 1;
+                                  if (await LockInstanceAsync(redis, resource, val, ttl).ConfigureAwait(false)) n += 1;
                               }
                           );
 
