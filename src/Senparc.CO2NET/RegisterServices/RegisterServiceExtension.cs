@@ -51,6 +51,7 @@ using System.Threading.Tasks;
 using Senparc.CO2NET.HttpUtility;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
+using System.IO;
 
 #if NETSTANDARD2_0
 using System.Net.Http;
@@ -111,8 +112,30 @@ namespace Senparc.CO2NET.RegisterServices
         public static IServiceCollection AddSenparcHttpClientWithCertificate(this IServiceCollection serviceCollection,
             string certName, string certSecret, string certPath, bool checkValidationResult = false)
         {
-            var cert = new X509Certificate2(certPath, certSecret, X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.MachineKeySet);
-            return AddSenparcHttpClientWithCertificate(serviceCollection, certName, cert, checkValidationResult);
+            //添加注册
+            if (!string.IsNullOrEmpty(certPath))
+            {
+                if (File.Exists(certPath))
+                {
+                    try
+                    {
+                        var cert = new X509Certificate2(certPath, certSecret, X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.MachineKeySet);
+                        return AddSenparcHttpClientWithCertificate(serviceCollection, certName, cert, checkValidationResult);
+                    }
+                    catch (Exception ex)
+                    {
+                        Senparc.CO2NET.Trace.SenparcTrace.SendCustomLog($"添加微信支付证书发生异常", $"certName:{certName},certPath:{certPath}");
+                        Senparc.CO2NET.Trace.SenparcTrace.BaseExceptionLog(ex);
+                        return serviceCollection;
+                    }
+                }
+                else
+                {
+                    Senparc.CO2NET.Trace.SenparcTrace.SendCustomLog($"已设置微信支付证书，但无法找到文件", $"certName:{certName},certPath:{certPath}");
+                    return serviceCollection;
+                }
+            }
+            return serviceCollection;
         }
 
         /// <summary>
