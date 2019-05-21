@@ -217,7 +217,7 @@ namespace Redlock.CSharp
             try
             {
                 var redis = this.redisMasterDictionary[redisServer];
-                succeeded = await redis.GetDatabase().StringSetAsync(resource, val, ttl, When.NotExists);
+                succeeded = await redis.GetDatabase().StringSetAsync(resource, val, ttl, When.NotExists).ConfigureAwait(false);
             }
             catch (Exception)
             {
@@ -236,7 +236,7 @@ namespace Redlock.CSharp
                    UnlockScript,
                    key,
                    values
-                   );
+                   ).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -260,7 +260,7 @@ namespace Redlock.CSharp
                        for_each_redis_registered(
                              async redis =>
                               {
-                                  if (await LockInstanceAsync(redis, resource, val, ttl)) n += 1;
+                                  if (await LockInstanceAsync(redis, resource, val, ttl)).ConfigureAwait(false) n += 1;
                               }
                           );
 
@@ -282,7 +282,7 @@ namespace Redlock.CSharp
                           for_each_redis_registered(
                                async redis =>
                                 {
-                                    await UnlockInstanceAsync(redis, resource, val);
+                                    await UnlockInstanceAsync(redis, resource, val).ConfigureAwait(false);
                                 }
                             );
                           return false;
@@ -290,19 +290,19 @@ namespace Redlock.CSharp
                   }
                   catch (Exception)
                   { return false; }
-              });
+              }).ConfigureAwait(false);
 
             return Tuple.Create(successfull, innerLock);
         }
 
         protected async Task for_each_redis_registeredAsync(Action<ConnectionMultiplexer> action)
         {
-            await Task.Factory.StartNew(() => for_each_redis_registered(action));
+            await Task.Factory.StartNew(() => for_each_redis_registered(action)).ConfigureAwait(false);
         }
 
         protected async Task for_each_redis_registeredAsync(Action<String> action)
         {
-            await Task.Factory.StartNew(() => for_each_redis_registered(action));
+            await Task.Factory.StartNew(() => for_each_redis_registered(action)).ConfigureAwait(false);
 
         }
 
@@ -314,7 +314,7 @@ namespace Redlock.CSharp
 
             while (currentRetry++ < retryCount)
             {
-                if (await action()) return true;
+                if (await action().ConfigureAwait(false)) return true;
                 Thread.Sleep(rnd.Next(maxRetryDelay));
             }
             return false;
@@ -324,8 +324,8 @@ namespace Redlock.CSharp
         {
             await for_each_redis_registeredAsync(async redis =>
              {
-                 await UnlockInstanceAsync(redis, lockObject.Resource, lockObject.Value);
-             });
+                 await UnlockInstanceAsync(redis, lockObject.Resource, lockObject.Value).ConfigureAwait(false);
+             }).ConfigureAwait(false);
         }
 
         #endregion

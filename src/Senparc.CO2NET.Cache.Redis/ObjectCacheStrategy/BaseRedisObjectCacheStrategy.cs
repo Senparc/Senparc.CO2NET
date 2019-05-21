@@ -140,7 +140,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
         public override async Task<ICacheLock> BeginCacheLockAsync(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
-            return await RedisCacheLock.CreateAndLockAsync(this, resourceName, key, retryCount, retryDelay);
+            return await RedisCacheLock.CreateAndLockAsync(this, resourceName, key, retryCount, retryDelay).ConfigureAwait(false);
         }
 
     }

@@ -230,7 +230,7 @@ namespace Senparc.CO2NET.Cache.Redis
         public override async Task<bool> CheckExistedAsync(string key, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
-            return await _cache.KeyExistsAsync(cacheKey);
+            return await _cache.KeyExistsAsync(cacheKey).ConfigureAwait(false);
         }
 
         public override async Task<object> GetAsync(string key, bool isFullKey = false)
@@ -240,14 +240,14 @@ namespace Senparc.CO2NET.Cache.Redis
                 return null;
             }
 
-            if (!await CheckExistedAsync(key, isFullKey))
+            if (!await CheckExistedAsync(key, isFullKey).ConfigureAwait(false))
             {
                 return null;
             }
 
             var cacheKey = GetFinalKey(key, isFullKey);
 
-            var value = await _cache.StringGetAsync(cacheKey);
+            var value = await _cache.StringGetAsync(cacheKey).ConfigureAwait(false);
             if (value.HasValue)
             {
                 return value.ToString().DeserializeFromCache();
@@ -262,7 +262,7 @@ namespace Senparc.CO2NET.Cache.Redis
                 return default(T);
             }
 
-            if (!await CheckExistedAsync(key, isFullKey))
+            if (!await CheckExistedAsync(key, isFullKey).ConfigureAwait(false))
             {
                 return default(T);
                 //InsertToCache(key, new ContainerItemCollection());
@@ -270,7 +270,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
             var cacheKey = GetFinalKey(key, isFullKey);
 
-            var value = await _cache.StringGetAsync(cacheKey);
+            var value = await _cache.StringGetAsync(cacheKey).ConfigureAwait(false);
             if (value.HasValue)
             {
                 return value.ToString().DeserializeFromCache<T>();
@@ -291,7 +291,7 @@ namespace Senparc.CO2NET.Cache.Redis
             var keys = GetServer().Keys(pattern: keyPrefix + "*");
             foreach (var redisKey in keys)
             {
-                dic[redisKey] = await GetAsync(redisKey, true);
+                dic[redisKey] = await GetAsync(redisKey, true).ConfigureAwait(false);
             }
             return dic;
         }
@@ -312,7 +312,7 @@ namespace Senparc.CO2NET.Cache.Redis
             var cacheKey = GetFinalKey(key, isFullKey);
 
             var json = value.SerializeToCache();
-            await _cache.StringSetAsync(cacheKey, json, expiry);
+            await _cache.StringSetAsync(cacheKey, json, expiry).ConfigureAwait(false);
         }
 
         public override async Task RemoveFromCacheAsync(string key, bool isFullKey = false)
@@ -325,12 +325,12 @@ namespace Senparc.CO2NET.Cache.Redis
             var cacheKey = GetFinalKey(key, isFullKey);
 
             SenparcMessageQueue.OperateQueue();//延迟缓存立即生效
-            await _cache.KeyDeleteAsync(cacheKey);//删除键
+            await _cache.KeyDeleteAsync(cacheKey).ConfigureAwait(false);//删除键
         }
 
         public override async Task UpdateAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
-            await SetAsync(key, value, expiry, isFullKey);
+            await SetAsync(key, value, expiry, isFullKey).ConfigureAwait(false);
         }
 
 #endif
@@ -369,7 +369,7 @@ namespace Senparc.CO2NET.Cache.Redis
             List<T> list = new List<T>();
             foreach (var fullKey in keys)
             {
-                var obj = await GetAsync<T>(fullKey, true);
+                var obj = await GetAsync<T>(fullKey, true).ConfigureAwait(false);
                 if (obj != null)
                 {
                     list.Add(obj);

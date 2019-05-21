@@ -431,45 +431,45 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         public async Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
-            await Task.Factory.StartNew(() => Set(key, value, expiry, isFullKey));
+            await Task.Factory.StartNew(() => Set(key, value, expiry, isFullKey)).ConfigureAwait(false);
 
         }
 
         public virtual async Task RemoveFromCacheAsync(string key, bool isFullKey = false)
         {
-            await Task.Factory.StartNew(() => RemoveFromCache(key, isFullKey));
+            await Task.Factory.StartNew(() => RemoveFromCache(key, isFullKey)).ConfigureAwait(false);
         }
 
         public virtual async Task<object> GetAsync(string key, bool isFullKey = false)
         {
-            return await Task.Factory.StartNew(() => Get(key, isFullKey));
+            return await Task.Factory.StartNew(() => Get(key, isFullKey)).ConfigureAwait(false);
         }
 
 
         public virtual async Task<T> GetAsync<T>(string key, bool isFullKey = false)
         {
-            return await Task.Factory.StartNew(() => Get<T>(key, isFullKey));
+            return await Task.Factory.StartNew(() => Get<T>(key, isFullKey)).ConfigureAwait(false);
         }
 
 
         public virtual async Task<IDictionary<string, object>> GetAllAsync()
         {
-            return await Task.Factory.StartNew(() => GetAll());
+            return await Task.Factory.StartNew(() => GetAll()).ConfigureAwait(false);
         }
 
         public virtual async Task<bool> CheckExistedAsync(string key, bool isFullKey = false)
         {
-            return await Task.Factory.StartNew(() => CheckExisted(key, isFullKey));
+            return await Task.Factory.StartNew(() => CheckExisted(key, isFullKey)).ConfigureAwait(false);
         }
 
         public virtual async Task<long> GetCountAsync()
         {
-            return await Task.Factory.StartNew(() => GetCount());
+            return await Task.Factory.StartNew(() => GetCount()).ConfigureAwait(false);
         }
 
         public virtual async Task UpdateAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
-            await SetAsync(key, value, expiry, isFullKey);
+            await SetAsync(key, value, expiry, isFullKey).ConfigureAwait(false);
         }
 #else
 
@@ -626,7 +626,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         public override async Task<ICacheLock> BeginCacheLockAsync(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
-            return await MemcachedCacheLock.CreateAndLockAsync(this, resourceName, key, retryCount, retryDelay);
+            return await MemcachedCacheLock.CreateAndLockAsync(this, resourceName, key, retryCount, retryDelay).ConfigureAwait(false);
         }
 
 
