@@ -231,7 +231,14 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static bool CheckValidationResult(HttpRequestMessage request, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
-            return true;
+            if (sslPolicyErrors == SslPolicyErrors.None)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private static StreamContent CreateFileContent(Stream stream, string formName, string fileName, string contentType = "application/octet-stream")
