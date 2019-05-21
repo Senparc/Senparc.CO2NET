@@ -47,6 +47,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
     修改标识：Senparc - 20190429
     修改描述：v0.7.0 优化 HttpClient，重构 RequestUtility（包括 Post 和 Get），引入 HttpClientFactory 机制
+
+    修改标识：Senparc - 20190521
+    修改描述：v0.7.3 .NET Core 提供多证书注册功能
     
 ----------------------------------------------------------------*/
 
@@ -86,6 +89,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="url">请求Url</param>
         /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
         /// <param name="encoding"></param>
+        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
         /// <param name="cer">证书，如果不需要则保留null</param>
         /// <param name="useAjax"></param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
@@ -95,14 +99,26 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static T PostFileGetJson<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null,
             Dictionary<string, string> postDataDictionary = null,
-            Encoding encoding = null, X509Certificate2 cer = null, bool useAjax = false,
+            Encoding encoding = null,
+#if NETSTANDARD2_0
+            string certName = null,
+#else
+            X509Certificate2 cer = null,
+#endif
+            bool useAjax = false,
             Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
             using (MemoryStream ms = new MemoryStream())
             {
                 postDataDictionary.FillFormDataStream(ms); //填充formData
 
-                string returnText = RequestUtility.HttpPost(url, cookieContainer, ms, fileDictionary, null, encoding, cer, useAjax, null, timeOut);
+                string returnText = RequestUtility.HttpPost(url, cookieContainer, ms, fileDictionary, null, encoding,
+#if NETSTANDARD2_0
+                    certName,
+#else
+                    cer,
+#endif
+                    useAjax, null, timeOut);
 
                 afterReturnText?.Invoke(url, returnText);
 
@@ -119,17 +135,29 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
         /// <param name="fileStream">文件流</param>
         /// <param name="encoding"></param>
+        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
         /// <param name="cer">证书，如果不需要则保留null</param>
         /// <param name="useAjax">是否使用Ajax请求</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
-        public static T PostGetJson<T>(string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null, X509Certificate2 cer = null,
+        public static T PostGetJson<T>(string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null,
+#if NETSTANDARD2_0
+            string certName = null,
+#else
+            X509Certificate2 cer = null,
+#endif
             bool useAjax = false, bool checkValidationResult = false, Action<string, string> afterReturnText = null,
             int timeOut = Config.TIME_OUT)
         {
-            string returnText = RequestUtility.HttpPost(url, cookieContainer, fileStream, null, null, encoding, cer, useAjax, null, timeOut, checkValidationResult);
+            string returnText = RequestUtility.HttpPost(url, cookieContainer, fileStream, null, null, encoding,
+#if NETSTANDARD2_0
+                certName,
+#else
+                cer,
+#endif
+                useAjax, null, timeOut, checkValidationResult);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -146,15 +174,27 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
         /// <param name="formData">表单数据，Key对应name，Value对应value</param>
         /// <param name="encoding"></param>
+        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
         /// <param name="cer">证书，如果不需要则保留null</param>
         /// <param name="useAjax">是否使用Ajax请求</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static T PostGetJson<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
-            X509Certificate2 cer = null, bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
+#if NETSTANDARD2_0
+            string certName = null,
+#else
+            X509Certificate2 cer = null,
+#endif
+            bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
-            string returnText = RequestUtility.HttpPost(url, cookieContainer, formData, encoding, cer, useAjax, null, timeOut);
+            string returnText = RequestUtility.HttpPost(url, cookieContainer, formData, encoding,
+#if NETSTANDARD2_0
+                certName,
+#else
+                cer,
+#endif
+                useAjax, null, timeOut);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -205,6 +245,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="url">请求Url</param>
         /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
         /// <param name="encoding"></param>
+        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
         /// <param name="cer">证书，如果不需要则保留null</param>
         /// <param name="useAjax"></param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
@@ -213,13 +254,26 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static async Task<T> PostFileGetJsonAsync<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null, Dictionary<string, string> postDataDictionary = null,
-            Encoding encoding = null, X509Certificate2 cer = null, bool useAjax = false,
+            Encoding encoding = null,
+#if NETSTANDARD2_0
+            string certName = null,
+#else
+            X509Certificate2 cer = null,
+#endif            
+            bool useAjax = false,
             Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
             using (MemoryStream ms = new MemoryStream())
             {
                 postDataDictionary.FillFormDataStream(ms); //填充formData
-                string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, ms, fileDictionary, null, encoding, cer, useAjax, null, timeOut).ConfigureAwait(false);
+
+                string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, ms, fileDictionary, null, encoding,
+#if NETSTANDARD2_0
+                    certName,
+#else
+                    cer,
+#endif
+                    useAjax, null, timeOut).ConfigureAwait(false);;
 
                 afterReturnText?.Invoke(url, returnText);
 
@@ -237,17 +291,29 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
         /// <param name="fileStream">文件流</param>
         /// <param name="encoding"></param>
-        /// <param name="cer">证书，如果不需要则保留null</param>
+        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
+       /// <param name="cer">证书，如果不需要则保留null</param>
         /// <param name="useAjax">是否使用Ajax请求</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
-        public static async Task<T> PostGetJsonAsync<T>(string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null, X509Certificate2 cer = null,
+        public static async Task<T> PostGetJsonAsync<T>(string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null,
+#if NETSTANDARD2_0
+            string certName = null,
+#else
+            X509Certificate2 cer = null,
+#endif
             bool useAjax = false, bool checkValidationResult = false, Action<string, string> afterReturnText = null,
             int timeOut = Config.TIME_OUT)
         {
-            string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, fileStream, null, null, encoding, cer, useAjax, null, timeOut, checkValidationResult).ConfigureAwait(false);
+            string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, fileStream, null, null, encoding,
+#if NETSTANDARD2_0
+                certName,
+#else
+                cer,
+#endif
+                useAjax, null, timeOut, checkValidationResult).ConfigureAwait(false);;
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -265,15 +331,27 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
         /// <param name="formData">表单数据，Key对应name，Value对应value</param>
         /// <param name="encoding"></param>
+        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
         /// <param name="cer">证书，如果不需要则保留null</param>
         /// <param name="useAjax">是否使用Ajax请求</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static async Task<T> PostGetJsonAsync<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
-            X509Certificate2 cer = null, bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
+#if NETSTANDARD2_0
+            string certName = null,
+#else
+            X509Certificate2 cer = null,
+#endif
+            bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
-            string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, formData, encoding, cer, useAjax, null, timeOut).ConfigureAwait(false);
+            string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, formData, encoding,
+#if NETSTANDARD2_0
+                certName,
+#else
+                cer,
+#endif
+                useAjax, null, timeOut).ConfigureAwait(false);;
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
