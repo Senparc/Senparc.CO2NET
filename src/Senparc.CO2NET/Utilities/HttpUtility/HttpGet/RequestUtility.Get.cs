@@ -255,7 +255,7 @@ namespace Senparc.CO2NET.HttpUtility
             WebClient wc = new WebClient();
             wc.Proxy = _webproxy;
             wc.Encoding = encoding ?? Encoding.UTF8;
-            return await wc.DownloadStringTaskAsync(url);
+            return await wc.DownloadStringTaskAsync(url).ConfigureAwait(false);
 #else
             var handler = new HttpClientHandler
             {
@@ -264,7 +264,7 @@ namespace Senparc.CO2NET.HttpUtility
             };
 
             HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
-            return await httpClient.GetStringAsync(url);
+            return await httpClient.GetStringAsync(url).ConfigureAwait(false);
 #endif
 
         }
@@ -285,7 +285,7 @@ namespace Senparc.CO2NET.HttpUtility
 #if NET35 || NET40 || NET45
             HttpWebRequest request = HttpGet_Common_Net45(url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
 
-            HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync());
+            HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync().ConfigureAwait(false));
 
             if (cookieContainer != null)
             {
@@ -296,18 +296,18 @@ namespace Senparc.CO2NET.HttpUtility
             {
                 using (StreamReader myStreamReader = new StreamReader(responseStream, encoding ?? Encoding.GetEncoding("utf-8")))
                 {
-                    string retString = await myStreamReader.ReadToEndAsync();
+                    string retString = await myStreamReader.ReadToEndAsync().ConfigureAwait(false);
                     return retString;
                 }
             }
 #else
             var httpClient = HttpGet_Common_NetCore(url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
 
-            var response = await httpClient.GetAsync(url);//获取响应信息
+            var response = await httpClient.GetAsync(url).ConfigureAwait(false);//获取响应信息
 
             HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
 
-            var retString = await response.Content.ReadAsStringAsync();
+            var retString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             return retString;
 #endif

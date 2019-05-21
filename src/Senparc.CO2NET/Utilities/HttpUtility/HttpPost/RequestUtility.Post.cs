@@ -595,7 +595,7 @@ namespace Senparc.CO2NET.HttpUtility
             bool checkValidationResult = false)
         {
             MemoryStream ms = new MemoryStream();
-            await formData.FillFormDataStreamAsync(ms);//填充formData
+            await formData.FillFormDataStreamAsync(ms).ConfigureAwait(false);//填充formData
 
             string contentType = HttpClientHelper.GetContentType(formData);
 
@@ -605,7 +605,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false);;
         }
 
 
@@ -657,7 +657,8 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false);;
+
             var response = senparcResponse.Result;//获取响应信息
 
 
@@ -677,25 +678,26 @@ namespace Senparc.CO2NET.HttpUtility
                 postStream.Position = 0;
 
                 //直接写入流
-                Stream requestStream = await request.GetRequestStreamAsync();
+                Stream requestStream = await request.GetRequestStreamAsync().ConfigureAwait(false);
 
                 byte[] buffer = new byte[1024];
                 int bytesRead = 0;
-                while ((bytesRead = await postStream.ReadAsync(buffer, 0, buffer.Length)) != 0)
+                while ((bytesRead = await postStream.ReadAsync(buffer, 0, buffer.Length)) != 0).ConfigureAwait(false)
                 {
-                    await requestStream.WriteAsync(buffer, 0, bytesRead);
+                    await requestStream.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
                 }
 
 
                 //debug
                 //postStream.Seek(0, SeekOrigin.Begin);
                 //StreamReader sr = new StreamReader(postStream);
-                //var postStr = await sr.ReadToEndAsync();
+                //var postStr = await sr.ReadToEndAsync().ConfigureAwait(false);
 
                 postStream.Close();//关闭文件访问
             }
+
             #endregion
-            HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync());
+            HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync()).ConfigureAwait(false);;
     */
             #endregion
 
@@ -709,7 +711,7 @@ namespace Senparc.CO2NET.HttpUtility
             {
                 using (StreamReader myStreamReader = new StreamReader(responseStream, encoding ?? Encoding.GetEncoding("utf-8")))
                 {
-                    string retString = await myStreamReader.ReadToEndAsync();
+                    string retString = await myStreamReader.ReadToEndAsync().ConfigureAwait(false);
                     return retString;
                 }
             }
@@ -721,7 +723,7 @@ namespace Senparc.CO2NET.HttpUtility
             HttpContent hc;
             var client = HttpPost_Common_NetCore(url, out hc, cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, timeOut, checkValidationResult);
 
-            var response = await client.PostAsync(url, hc);
+            var response = await client.PostAsync(url, hc).ConfigureAwait(false);
 
             if (response.Content.Headers.ContentType.CharSet != null &&
                 response.Content.Headers.ContentType.CharSet.ToLower().Contains("utf8"))
@@ -730,7 +732,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
 
-            var retString = await response.Content.ReadAsStringAsync();
+            var retString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             try
             {
@@ -747,7 +749,7 @@ namespace Senparc.CO2NET.HttpUtility
             */
             #endregion
 
-            var retString = await response.Content.ReadAsStringAsync();
+            var retString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             return retString;
 #endif
@@ -800,13 +802,13 @@ namespace Senparc.CO2NET.HttpUtility
                 postStream.Position = 0;
 
                 //直接写入流
-                Stream requestStream = await request.GetRequestStreamAsync();
+                Stream requestStream = await request.GetRequestStreamAsync().ConfigureAwait(false);
 
                 byte[] buffer = new byte[1024];
                 int bytesRead = 0;
-                while ((bytesRead = await postStream.ReadAsync(buffer, 0, buffer.Length)) != 0)
+                while ((bytesRead = await postStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) != 0)
                 {
-                    await requestStream.WriteAsync(buffer, 0, bytesRead);
+                    await requestStream.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
                 }
 
                 //debug
@@ -818,13 +820,13 @@ namespace Senparc.CO2NET.HttpUtility
             }
             #endregion
 
-            HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync());
+            HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync().ConfigureAwait(false));
             return new SenparcHttpResponse(response);
 #else
             HttpContent hc;
             var client = HttpPost_Common_NetCore(url, out hc, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
 
-            var response = await client.PostAsync(url, hc);//获取响应信息
+            var response = await client.PostAsync(url, hc).ConfigureAwait(false);//获取响应信息
 
             HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
 

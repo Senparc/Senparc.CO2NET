@@ -129,7 +129,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
             var ttl = base.GetTotalTtl(_retryCount, _retryDelay);
 
-            Tuple<bool, Lock> result = await _dlm.LockAsync(_resourceName, TimeSpan.FromMilliseconds(ttl));
+            Tuple<bool, Lock> result = await _dlm.LockAsync(_resourceName, TimeSpan.FromMilliseconds(ttl)).ConfigureAwait(false);
             base.LockSuccessful = result.Item1;
             _lockObject = result.Item2;
             return this;
@@ -139,7 +139,7 @@ namespace Senparc.CO2NET.Cache.Redis
         {
             if (_lockObject != null)
             {
-                await _dlm.UnlockAsync(_lockObject);
+                await _dlm.UnlockAsync(_lockObject).ConfigureAwait(false);
             }
         }
 

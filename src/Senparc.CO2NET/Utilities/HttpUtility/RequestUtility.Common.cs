@@ -339,7 +339,7 @@ namespace Senparc.CO2NET.HttpUtility
         {
             string dataString = GetQueryString(formData);
             var formDataBytes = formData == null ? new byte[0] : Encoding.UTF8.GetBytes(dataString);
-            await stream.WriteAsync(formDataBytes, 0, formDataBytes.Length);
+            await stream.WriteAsync(formDataBytes, 0, formDataBytes.Length).ConfigureAwait(false);
             stream.Seek(0, SeekOrigin.Begin);//设置指针读取位置
         }
 
