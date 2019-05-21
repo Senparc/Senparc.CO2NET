@@ -168,7 +168,7 @@ namespace Senparc.CO2NET.Cache
         {
             //TODO：异常处理
 
-            return await Task.Factory.StartNew(() => Lock());
+            return await Task.Factory.StartNew(() => Lock()).ConfigureAwait(false);
         }
 
         public override Task UnLockAsync()

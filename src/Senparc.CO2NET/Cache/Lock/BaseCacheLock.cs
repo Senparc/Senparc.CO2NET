@@ -171,11 +171,11 @@ namespace Senparc.CO2NET.Cache
         //{
         //    if (_retryCount != 0 && _retryDelay.Ticks != 0)
         //    {
-        //        LockSuccessful = await LockAsync(_resourceName, _retryCount, _retryDelay);
+        //        LockSuccessful = await LockAsync(_resourceName, _retryCount, _retryDelay).ConfigureAwait(false);
         //    }
         //    else
         //    {
-        //        LockSuccessful = await LockAsync(_resourceName);
+        //        LockSuccessful = await LockAsync(_resourceName).ConfigureAwait(false);
         //    }
         //    return this;
         //}
