@@ -30,8 +30,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20181226
     修改描述：支持 NeuChar v0.4.3 修改 DateTime 为 DateTimeOffset
 
-    修改标识：Senparc - 20180128
+    修改标识：Senparc - 20181116
     修改描述：v0.2.5 添加 ReadAndCleanDataItems 的 keepTodayData 属性，保留当天数据
+
+    修改标识：Senparc - 20190523
+    修改描述：v0.4 使用异步方法提升并发效率
 
  ----------------------------------------------------------------*/
 
@@ -44,6 +47,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.APM
 {
@@ -70,7 +74,7 @@ namespace Senparc.CO2NET.APM
         /// 注册 Key
         /// </summary>
         /// <param name="kindName"></param>
-        private void RegisterFinalKey(string kindName)
+        private async Task RegisterFinalKeyAsync(string kindName)
         {
             if (KindNameStore[_domain].ContainsKey(kindName))
             {
@@ -79,11 +83,11 @@ namespace Senparc.CO2NET.APM
 
             var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var kindNameKey = $"{_domainKey}:_KindNameStore";
-            var keyList = cacheStragety.Get<List<string>>(kindNameKey, true) ?? new List<string>();
+            var keyList = await cacheStragety.GetAsync<List<string>>(kindNameKey, true).ConfigureAwait(false) ?? new List<string>();
             if (!keyList.Contains(kindName))
             {
                 keyList.Add(kindName);
-                cacheStragety.Set(kindNameKey, keyList, isFullKey: true);//永久储存
+                await cacheStragety.SetAsync(kindNameKey, keyList, isFullKey: true).ConfigureAwait(false); ;//永久储存
             }
 
             KindNameStore[_domain][kindName] = SystemTime.Now;
@@ -113,7 +117,7 @@ namespace Senparc.CO2NET.APM
         /// <param name="tempStorage">临时储存信息</param>
         /// <param name="dateTime">发生时间，默认为当前系统时间</param>
         /// <returns></returns>
-        public DataItem Set(string kindName, double value, object data = null, object tempStorage = null, DateTimeOffset? dateTime = null)
+        public async Task<DataItem> SetAsync(string kindName, double value, object data = null, object tempStorage = null, DateTimeOffset? dateTime = null)
         {
             if (!Config.EnableAPM)
             {
@@ -126,7 +130,7 @@ namespace Senparc.CO2NET.APM
                 var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
                 var finalKey = BuildFinalKey(kindName);
                 //使用同步锁确定写入顺序
-                using (cacheStragety.BeginCacheLock("SenparcAPM", finalKey))
+                using (await cacheStragety.BeginCacheLockAsync("SenparcAPM", finalKey).ConfigureAwait(false))
                 {
                     var dataItem = new DataItem()
                     {
@@ -137,11 +141,11 @@ namespace Senparc.CO2NET.APM
                         DateTime = dateTime ?? SystemTime.Now
                     };
 
-                    var list = GetDataItemList(kindName);
+                    var list = await GetDataItemListAsync(kindName).ConfigureAwait(false);
                     list.Add(dataItem);
-                    cacheStragety.Set(finalKey, list, Config.DataExpire, true);
+                    await cacheStragety.SetAsync(finalKey, list, Config.DataExpire, true).ConfigureAwait(false);
 
-                    RegisterFinalKey(kindName);//注册Key
+                    await RegisterFinalKeyAsync(kindName).ConfigureAwait(false);//注册Key
 
                     if (SenparcTrace.RecordAPMLog)
                     {
@@ -163,13 +167,13 @@ namespace Senparc.CO2NET.APM
         /// </summary>
         /// <param name="kindName"></param>
         /// <returns></returns>
-        public List<DataItem> GetDataItemList(string kindName)
+        public async Task<List<DataItem>> GetDataItemListAsync(string kindName)
         {
             try
             {
                 var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
                 var finalKey = BuildFinalKey(kindName);
-                var list = cacheStragety.Get<List<DataItem>>(finalKey, true);
+                var list = await cacheStragety.GetAsync<List<DataItem>>(finalKey, true).ConfigureAwait(false);
                 return list ?? new List<DataItem>();
             }
             catch (Exception e)
@@ -185,7 +189,7 @@ namespace Senparc.CO2NET.APM
         /// <returns></returns>
         /// <param name="removeReadItems">是否移除已读取的项目，默认为 true</param>
         /// <param name="keepTodayData">当 removeReadItems = true 时有效，在清理的时候是否保留当天的数据</param>
-        public List<MinuteDataPack> ReadAndCleanDataItems(bool removeReadItems = true, bool keepTodayData = true)
+        public async Task<List<MinuteDataPack>> ReadAndCleanDataItemsAsync(bool removeReadItems = true, bool keepTodayData = true)
         {
             try
             {
@@ -202,9 +206,9 @@ namespace Senparc.CO2NET.APM
                 {
                     var kindName = item.Key;
                     var finalKey = BuildFinalKey(kindName);
-                    using (cacheStragety.BeginCacheLock("SenparcAPM", finalKey))
+                    using (await cacheStragety.BeginCacheLockAsync("SenparcAPM", finalKey).ConfigureAwait(false))
                     {
-                        var list = GetDataItemList(item.Key);//获取列表
+                        var list = await GetDataItemListAsync(item.Key).ConfigureAwait(false);//获取列表
                         var completedStatData = list.Where(z => z.DateTime < nowMinuteTime).ToList();//统计范围内的所有数据
 
                         tempDataItems[kindName] = completedStatData;//添加到列表
@@ -218,13 +222,13 @@ namespace Senparc.CO2NET.APM
                             if (tobeRemove.Count() == list.Count())
                             {
                                 //已经全部删除
-                                cacheStragety.RemoveFromCache(finalKey, true);//删除
+                                await cacheStragety.RemoveFromCacheAsync(finalKey, true).ConfigureAwait(false);//删除
                             }
                             else
                             {
                                 //部分删除
                                 var newList = list.Except(tobeRemove).ToList();
-                                cacheStragety.Set(finalKey, newList, Config.DataExpire, true);
+                                await cacheStragety.SetAsync(finalKey, newList, Config.DataExpire, true).ConfigureAwait(false);
                             }
                         }
                     }
