@@ -12,7 +12,7 @@ namespace Senparc.CO2NET.APM
         /// <summary>
         /// APM 信息自动过期时间
         /// </summary>
-        public static TimeSpan DataExpire = TimeSpan.FromHours(48);//2天
+        public static TimeSpan DataExpire = TimeSpan.FromMinutes(20);//20分钟
 
         /// <summary>
         /// 启用 APM
