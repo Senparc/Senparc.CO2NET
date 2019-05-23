@@ -57,7 +57,7 @@ namespace Senparc.CO2NET
         /// <summary>
         /// 全局 IServiceCollection 对象
         /// </summary>
-        public static IServiceProvider GlobalIServiceProvider { get; set; }
+        public static IServiceProvider GlobalIServiceProvider { get; private set; }
 
         /// <summary>
         /// 线程内的 单一 Scope 范围 ServiceScope
@@ -143,6 +143,14 @@ namespace Senparc.CO2NET
         public static T GetRequiredService<T>(bool useGlobalScope = true)
         {
             return GetIServiceProvider(useGlobalScope).GetRequiredService<T>();
+        }
+
+        /// <summary>
+        /// 重置 GlobalIServiceProvider 对象，重新从 GlobalServiceCollection..BuildServiceProvider() 生成对象
+        /// </summary>
+        public static void ResetGlobalIServiceProvider()
+        {
+            GlobalIServiceProvider = null;
         }
 
         #region 过期方法

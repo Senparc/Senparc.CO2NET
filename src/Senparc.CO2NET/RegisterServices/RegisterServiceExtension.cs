@@ -163,6 +163,8 @@ namespace Senparc.CO2NET.RegisterServices
 
                              return httpClientHandler;
                          });
+             
+            SenparcDI.ResetGlobalIServiceProvider();//重置 GlobalIServiceProvider
             return serviceCollection;
         }
 

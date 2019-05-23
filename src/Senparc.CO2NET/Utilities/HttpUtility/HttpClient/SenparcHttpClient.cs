@@ -69,7 +69,7 @@ namespace Senparc.CO2NET.HttpUtility
                 return new SenparcHttpClient(httpClient);
             }
 
-            return SenparcDI.GetRequiredService<SenparcHttpClient>();
+            return SenparcDI.GetRequiredService<SenparcHttpClient>(true);
         }
 
         /// <summary>
