@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2018 Senparc
+    Copyright (C) 2019 Senparc
 
     文件名：SystemTime.cs
     文件功能描述：用于从 DateTimeOffset 进行扩展，方便进行单元测试
