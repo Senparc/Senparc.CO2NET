@@ -36,7 +36,10 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190523
     修改描述：v0.4 使用异步方法提升并发效率
 
- ----------------------------------------------------------------*/
+    修改标识：Senparc - 20190523
+    修改描述：v0.4.1.1 在静态构造函数中初始化 KindNameStore
+
+----------------------------------------------------------------*/
 
 
 using Senparc.CO2NET.APM.Exceptions;
@@ -63,7 +66,7 @@ namespace Senparc.CO2NET.APM
         private string _domainKey;
 
         //TODO：需要考虑分布式的情况，最好储存在缓存中
-        private static Dictionary<string, Dictionary<string, DateTimeOffset>> KindNameStore { get; set; } = new Dictionary<string, Dictionary<string, DateTimeOffset>>();
+        private static Dictionary<string, Dictionary<string, DateTimeOffset>> KindNameStore { get; set; } //= new Dictionary<string, Dictionary<string, DateTimeOffset>>();
 
         private string BuildFinalKey(string kindName)
         {
@@ -106,6 +109,12 @@ namespace Senparc.CO2NET.APM
             {
                 KindNameStore[_domain] = new Dictionary<string, DateTimeOffset>();
             }
+        }
+
+        static DataOperation()
+        {
+            KindNameStore = new Dictionary<string, Dictionary<string, DateTimeOffset>>();
+
         }
 
         /// <summary>
