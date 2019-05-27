@@ -17,6 +17,9 @@
     修改标识：pengweiqhca - 20190118
     修改描述：v0.5.2 添加 SenparcDI.GetRequiredService() 方法，提供线程内独立 ServiceProvider 实例
 
+    修改标识：pengweiqhca - 201901527
+    修改描述：v0.8.2 添加 SenparcDI.ResetGlobalIServiceProvider(this IServiceCollection serviceCollection) 方法
+
 ----------------------------------------------------------------*/
 
 #if NETSTANDARD2_0
@@ -151,6 +154,17 @@ namespace Senparc.CO2NET
         public static void ResetGlobalIServiceProvider()
         {
             GlobalIServiceProvider = null;
+        }
+
+        /// <summary>
+        /// 重置 GlobalIServiceProvider 对象，重新从 GlobalServiceCollection..BuildServiceProvider() 生成对象
+        /// </summary>
+        /// <param name="serviceCollection"></param>
+        /// <returns></returns>
+        public static IServiceCollection ResetGlobalIServiceProvider(this IServiceCollection serviceCollection)
+        {
+            ResetGlobalIServiceProvider();
+            return serviceCollection;
         }
 
         #region 过期方法
