@@ -126,7 +126,7 @@ namespace Senparc.CO2NET.Tests
             BaseTest.RegisterServiceStart(true);
 
             SenparcDI.GlobalServiceCollection.AddScoped<SenparcSetting>();
-            SenparcDI.GlobalIServiceProvider = null;
+            SenparcDI.ResetGlobalIServiceProvider();
 
             //测试跨线程唯一
             var s = SenparcDI.GetService<SenparcSetting>(true);
