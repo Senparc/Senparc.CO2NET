@@ -474,7 +474,7 @@ namespace Senparc.CO2NET.HttpUtility
                 response.Content.Headers.ContentType.CharSet = "utf-8";
             }
 
-            var retString = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var retString = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
             return retString;
 
             //t1.Wait();
@@ -554,7 +554,7 @@ namespace Senparc.CO2NET.HttpUtility
             HttpContent hc;
             var client = HttpPost_Common_NetCore(url, out hc, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
 
-            var response = client.PostAsync(url, hc).GetAwaiter().GetResult();//获取响应信息
+            var response = client.PostAsync(url, hc).ConfigureAwait(false).GetAwaiter().GetResult();//获取响应信息
 
             HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
 
