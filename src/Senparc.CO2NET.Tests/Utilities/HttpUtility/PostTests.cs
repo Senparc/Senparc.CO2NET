@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Tests;
 using System.Xml.Linq;
+using Senparc.CO2NET.Helpers;
 
 namespace Senparc.CO2NET.HttpUtility.Tests
 {
@@ -108,7 +109,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
                 doc.Add(new XElement("xml"));
                 doc.Root.Add(new XElement("ToUserName", "Senparc"));
                 doc.Root.Add(new XElement("FromUserName", "NeuChar"));
-                doc.Root.Add(new XElement("CreateTime", Senparc.CO2NET.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString()));
+                doc.Root.Add(new XElement("CreateTime", DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString()));
                 doc.Root.Add(new XElement("MsgType", "NeuChar"));
                 doc.Root.Add(new XElement("MsgId", DateTime.Now.Ticks.ToString()));
                 doc.Root.Add(new XElement("NeuCharMessageType", "GetConfig"));//设置类型
@@ -119,7 +120,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
                 sr.Flush();
                 ms.Seek(0, SeekOrigin.Begin);
 
-                var result = await Senparc.CO2NET.HttpUtility.Post.PostGetJsonAsync<dynamic>(url, fileStream: ms, encoding: Encoding.UTF8);
+                var result = await Post.PostGetJsonAsync<dynamic>(url, fileStream: ms, encoding: Encoding.UTF8);
 
                 Console.WriteLine(result);
             }
