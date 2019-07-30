@@ -62,7 +62,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改描述：v0.7.3 .NET Core 提供多证书注册功能
 
     修改标识：Senparc - 20190521
-    修改描述：v0.8.3 HttpUtility.HttpPost_Common_NetCore 所调用的额 CreateFileContent 取消对 fileName 参数的 UrlEncode 编码
+    修改描述：v0.8.4 HttpUtility.HttpPost_Common_NetCore 所调用的额 CreateFileContent 取消对 fileName 参数的 UrlEncode 编码
 
 ----------------------------------------------------------------*/
 
