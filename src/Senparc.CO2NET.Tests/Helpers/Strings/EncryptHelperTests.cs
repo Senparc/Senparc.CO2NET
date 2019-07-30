@@ -64,7 +64,7 @@ namespace Senparc.CO2NET.Tests.Helpers
                     result = EncryptHelper.GetMD5(ms);
                     Assert.AreEqual(exceptMD5Result/*ด๓ะด*/, result);
 
-                    result = EncryptHelper.GetMD5(ms,false);
+                    result = EncryptHelper.GetMD5(ms, false);
                     Assert.AreEqual(exceptMD5Result.ToLower()/*ะกะด*/, result);
                 }
             }
