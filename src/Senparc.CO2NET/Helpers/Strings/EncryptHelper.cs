@@ -213,6 +213,31 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
+        /// 获取MD5签名结果
+        /// </summary>
+        /// <param name="stream">Stream</param>
+        /// <param name="encoding">默认为：utf8</param>
+        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <returns></returns>
+        public static string GetMD5(Stream stream, bool toUpper = true, Encoding encoding = null)
+        {
+            encoding = encoding ?? Encoding.UTF8;
+            stream.Position = 0;
+
+            System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            byte[] ret = md5.ComputeHash(stream);
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < ret.Length; i++)
+            {
+                sb.Append(ret[i].ToString(toUpper ? "X2" : "x2"));
+            }
+
+            string md5str = sb.ToString();
+            return md5str;
+        }
+
+        /// <summary>
         /// 获取小写的MD5签名结果
         /// </summary>
         /// <param name="encypStr">需要加密的字符串</param>

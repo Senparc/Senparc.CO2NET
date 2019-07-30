@@ -22,7 +22,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Copyright (C) 2019 Senparc
 
     文件名：Program.cs
-    文件功能描述：Console 示例
+    文件功能描述：Console 示例（同样适用于 WinForm 和 WPF）
 
 
     创建标识：Senparc - 20190108

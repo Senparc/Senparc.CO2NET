@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Helpers;
 using System;
+using System.IO;
 using System.Text;
 
 namespace Senparc.CO2NET.Tests.Helpers
@@ -51,6 +52,22 @@ namespace Senparc.CO2NET.Tests.Helpers
             //Сд
             result = EncryptHelper.GetLowerMD5(encypStr, Encoding.UTF8);
             Assert.AreEqual(exceptMD5Result.ToLower(), result);
+
+            //Stream
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (StreamWriter sr = new StreamWriter(ms))
+                {
+                    sr.Write(encypStr);
+                    sr.Flush();
+
+                    result = EncryptHelper.GetMD5(ms);
+                    Assert.AreEqual(exceptMD5Result/*��д*/, result);
+
+                    result = EncryptHelper.GetMD5(ms, false);
+                    Assert.AreEqual(exceptMD5Result.ToLower()/*Сд*/, result);
+                }
+            }
         }
 
         #endregion
