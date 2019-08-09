@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <Version>0.8.4</Version>
+    <Version>0.8.5</Version>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -95,6 +95,7 @@
       2、使用异步方法提升并发效率
       v0.8.3 添加 Stream 参数的 GetMD5() 方法
       v0.8.4 HttpUtility.HttpPost_Common_NetCore 所调用的额 CreateFileContent 取消对 fileName 参数的 UrlEncode 编码
+      v0.8.5 解决 .NET Framework 4.5 下文件上传的 ContentType 设置问题
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
