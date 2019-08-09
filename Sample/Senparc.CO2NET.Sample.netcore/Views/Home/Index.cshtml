@@ -13,7 +13,7 @@
             <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
             <div class="carousel-caption" role="option">
                 <p>
-                   Demo 正在完善中，设置请看 startup.cs
+                   Demo 正在完善中，系统启动设置请看 startup.cs
                 </p>
             </div>
         </div>
@@ -51,41 +51,30 @@
 </div>
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <h2>测试数据</h2>
         <ul>
             <li>CacheType：@ViewData["CacheType"]</li>
-            <li> Cache Test：@ViewData["IndexTest"]</li>
+            <li> Cache Test：@ViewData["IndexTest"]<br />（刷新当前页面可以查看缓存数字的改变）</li>
         </ul>
     </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
+    <div class="col-md-2">
+        
+    </div>
+    <div class="col-md-6">
+        <h2>测试项目</h2>
         <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
+            <li>@Html.ActionLink("Post 参数", "PostParameter", "Home", null, new { target = "_blank" })</li>
+            <li>@Html.ActionLink("Post 文件", "PostFile", "Home", null, new { target = "_blank" })</li>
+            <li>@Html.ActionLink("日志记录测试", "LogTest", "Home", null, new { target = "_blank" })</li>
         </ul>
     </div>
     <div class="col-md-3">
-        <h2>Overview</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Run &amp; Deploy</h2>
+        @*<h2>Run &amp; Deploy</h2>
         <ul>
             <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
             <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
             <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure Web Apps</a></li>
-        </ul>
+        </ul>*@
     </div>
 </div>
