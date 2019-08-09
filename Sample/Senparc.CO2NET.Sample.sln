@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2000
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET", "..\src\Senparc.CO2NET\Senparc.CO2NET.csproj", "{8B66B7FB-6918-4D21-9C31-98EACF3264C8}"
 EndProject
@@ -35,6 +35,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.APM.Tests", "..\src\Senparc.CO2NET.APM.Tests\Senparc.CO2NET.APM.Tests.csproj", "{4FA6F2C4-54B5-469D-8ECF-0040120D3344}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Sample.Consoles", "Senparc.CO2NET.Sample.Consoles\Senparc.CO2NET.Sample.Consoles.csproj", "{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.CO2NET.Sample.FW", "Senparc.CO2NET.Sample.FW\Senparc.CO2NET.Sample.FW.csproj", "{5FD94FFC-BACA-4F1E-9B9B-8438BDAC3E15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,12 @@ Global
 		{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}.Test|Any CPU.Build.0 = Test|Any CPU
+		{5FD94FFC-BACA-4F1E-9B9B-8438BDAC3E15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FD94FFC-BACA-4F1E-9B9B-8438BDAC3E15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FD94FFC-BACA-4F1E-9B9B-8438BDAC3E15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FD94FFC-BACA-4F1E-9B9B-8438BDAC3E15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FD94FFC-BACA-4F1E-9B9B-8438BDAC3E15}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{5FD94FFC-BACA-4F1E-9B9B-8438BDAC3E15}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,6 +130,7 @@ Global
 		{D3A0D429-B7EB-446B-8E1B-4DD8225C75ED} = {FE9C797C-0788-451E-B04C-778484434ED5}
 		{4FA6F2C4-54B5-469D-8ECF-0040120D3344} = {118ECC07-977C-42ED-A452-8934C8632261}
 		{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87} = {A9F634CC-7806-44B9-9768-4DAE13B669D5}
+		{5FD94FFC-BACA-4F1E-9B9B-8438BDAC3E15} = {A9F634CC-7806-44B9-9768-4DAE13B669D5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {796B18F2-8DBB-4792-881F-4C5A81E1F2DB}
