@@ -68,8 +68,8 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
 
         public async Task<IActionResult> PostFile()
         {
-            var filePath = Path.GetFullPath("App_Data/cover.png");
-            var file = new Dictionary<string, string>() { { "file", filePath } };
+            var filePath = Path.GetFullPath("App_Data/cover.png");//也可以上传其他任意文件
+            var file = new Dictionary<string, string>() { { "image", filePath } };
             var url = "https://localhost:44335/Home/PostFile";
             var result = await RequestUtility.HttpPostAsync(url, fileDictionary: file);//获取图片的base64编码
             var html = $@"<html>
@@ -86,11 +86,11 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostFile(IFormFile file)
+        public async Task<IActionResult> PostFile(IFormFile image)
         {
             using (var ms = new MemoryStream())
             {
-                await file.CopyToAsync(ms);
+                await image.CopyToAsync(ms);
                 ms.Seek(0, SeekOrigin.Begin);
 
                 byte[] bytes = new byte[ms.Length];

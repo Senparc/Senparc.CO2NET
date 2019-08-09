@@ -183,7 +183,8 @@ namespace Senparc.CO2NET.HttpUtility
                 var footer = Encoding.UTF8.GetBytes("\r\n--" + boundary + "--\r\n");
                 postStream.Write(footer, 0, footer.Length);
 
-                request.ContentType = string.Format("multipart/form-data; boundary={0}", boundary);
+                //request.ContentType = string.Format("multipart/form-data; boundary={0}", boundary);//request.ContentType在下方统一设置
+                contentType = string.Format("multipart/form-data; boundary={0}", boundary);
             }
             else
             {
