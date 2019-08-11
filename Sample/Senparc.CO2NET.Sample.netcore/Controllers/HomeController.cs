@@ -66,20 +66,34 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
 
         #region Post 文件
 
-        public async Task<IActionResult> PostFile()
+        public async Task<IActionResult> PostFile(string byStream = null)
         {
             var filePath = Path.GetFullPath("App_Data/cover.png");//也可以上传其他任意文件
+
+            if (byStream != null)
+            {
+                //使用Stream传入，而不是文件名
+                using (var fs = System.IO.File.OpenRead(filePath))
+                {
+                    BinaryReader r = new BinaryReader(fs);
+                    r.BaseStream.Seek(0, SeekOrigin.Begin);    //将文件指针设置到文件开
+                    byte[] bytes = r.ReadBytes((int)r.BaseStream.Length);
+                    filePath = Convert.ToBase64String(bytes);
+                }
+            }
+
             var file = new Dictionary<string, string>() { { "image", filePath } };
             var url = "https://localhost:44335/Home/PostFile";
             var result = await RequestUtility.HttpPostAsync(url, fileDictionary: file);//获取图片的base64编码
+            var note = byStream != null ? "使用文件流" : "使用文件名";
             var html = $@"<html>
 <head>
 <meta http-equiv=Content-Type content=""text/html;charset=utf-8"">
-<title>CO2NET 文件 Post 测试</title>
-</head>
-<body>
-<p>如果在下方看到《微信开发深度解析》图书封面，表示测试成功</p>
-<img src=""data:image/png;base64,{result}"" />
+<title>CO2NET 文件 Post 测试 - {note}</title>
+    </head>
+    <body>
+    <p> 如果在下方看到《微信开发深度解析》图书封面，表示测试成功（{note}） </p>
+       <img src=""data:image/png; base64,{ result}"" />
 </body>
 </html>";
             return Content(html, "text/html");

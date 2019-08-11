@@ -90,7 +90,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="postStream"></param>
-        /// <param name="fileDictionary"></param>
+        /// <param name="fileDictionary">需要上传的文件，Key：对应要上传的Name，Value：本地文件名，或文件内容的Base64编码</param>
         /// <param name="refererUrl"></param>
         /// <param name="encoding"></param>
         /// <param name="cer"></param>
@@ -142,19 +142,29 @@ namespace Senparc.CO2NET.HttpUtility
                     {
                         var fileName = file.Value;
                         //准备文件流
+                        var memoryStream = new MemoryStream();//这里不能释放，否则如在请求的时候 memoryStream 已经关闭会发生错误
                         using (var fileStream = FileHelper.GetFileStream(fileName))
                         {
-
                             string formdata = null;
                             if (fileStream != null)
                             {
                                 //存在文件
+                                fileStream.CopyTo(memoryStream);
                                 formdata = string.Format(fileFormdataTemplate, file.Key, /*fileName*/ Path.GetFileName(fileName));
                             }
                             else
                             {
-                                //不存在文件或只是注释
-                                formdata = string.Format(dataFormdataTemplate, file.Key, file.Value);
+                                //不存在文件或只是注释，或为base64编码
+                                try
+                                {
+                                    var base64Bytes = Convert.FromBase64String(fileName);
+                                    memoryStream.Write(base64Bytes, 0, base64Bytes.Length);
+                                }
+                                catch (Exception)
+                                {
+                                    //不存在文件或只是注释
+                                    formdata = string.Format(dataFormdataTemplate, file.Key, file.Value);
+                                }
                             }
 
                             //统一处理
@@ -162,16 +172,19 @@ namespace Senparc.CO2NET.HttpUtility
                             postStream.Write(formdataBytes, 0, formdataBytes.Length);
 
                             //写入文件
-                            if (fileStream != null)
+                            if (memoryStream != null)
                             {
+                                memoryStream.Seek(0, SeekOrigin.Begin);
+
                                 byte[] buffer = new byte[1024];
                                 int bytesRead = 0;
                                 while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
                                 {
                                     postStream.Write(buffer, 0, bytesRead);
                                 }
-                            }
 
+                                fileStream?.Dispose();
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -223,7 +236,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="hc"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="postStream"></param>
-        /// <param name="fileDictionary"></param>
+        /// <param name="fileDictionary">需要上传的文件，Key：对应要上传的Name，Value：本地文件名，或文件内容的Base64编码</param>
         /// <param name="refererUrl"></param>
         /// <param name="encoding"></param>
         /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
@@ -258,7 +271,7 @@ namespace Senparc.CO2NET.HttpUtility
             HttpClient client = senparcHttpClient.Client;
             HttpClientHeader(client, refererUrl, useAjax, headerAddition, timeOut);
 
-            #region 处理Form表单文件上传
+        #region 处理Form表单文件上传
 
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
@@ -277,25 +290,38 @@ namespace Senparc.CO2NET.HttpUtility
                     {
                         var fileName = file.Value;
                         //准备文件流
+                        var memoryStream = new MemoryStream();//这里不能释放，否则如在请求的时候 memoryStream 已经关闭会发生错误
                         using (var fileStream = FileHelper.GetFileStream(fileName))
                         {
                             if (fileStream != null)
                             {
                                 //存在文件
-                                var memoryStream = new MemoryStream();
-                                fileStream.CopyTo(memoryStream);
-                                memoryStream.Seek(0, SeekOrigin.Begin);
-
-                                //multipartFormDataContent.Add(new StreamContent(memoryStream), file.Key, Path.GetFileName(fileName)); //报流已关闭的异常
-
-                                multipartFormDataContent.Add(CreateFileContent(memoryStream, file.Key, Path.GetFileName(fileName)), file.Key, Path.GetFileName(fileName));
-                                fileStream.Dispose();
+                                fileStream.CopyTo(memoryStream);//TODO:可以使用异步方法
                             }
                             else
                             {
-                                //不存在文件或只是注释
-                                multipartFormDataContent.Add(new StringContent(file.Value), "\"" + file.Key + "\"");
+                                //不存在文件或只是注释，或为base64编码
+                                try
+                                {
+                                    var base64Bytes = Convert.FromBase64String(fileName);
+                                    memoryStream.Write(base64Bytes, 0, base64Bytes.Length);
+                                }
+                                catch (Exception)
+                                {
+                                    //只是注释
+                                    multipartFormDataContent.Add(new StringContent(file.Value), "\"" + file.Key + "\"");
+                                }
                             }
+
+                            if (memoryStream.Length > 0)
+                            {
+                                //有文件内容
+                                //multipartFormDataContent.Add(new StreamContent(memoryStream), file.Key, Path.GetFileName(fileName)); //报流已关闭的异常
+
+                                memoryStream.Seek(0, SeekOrigin.Begin);
+                                multipartFormDataContent.Add(CreateFileContent(memoryStream, file.Key, Path.GetFileName(fileName)), file.Key, Path.GetFileName(fileName));
+                            }
+                            fileStream?.Dispose();
                         }
                     }
                     catch (Exception ex)
@@ -329,7 +355,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             //HttpContentHeader(hc, timeOut);
-            #endregion
+        #endregion
 
             if (!string.IsNullOrEmpty(refererUrl))
             {
@@ -490,7 +516,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="postStream"></param>
-        /// <param name="fileDictionary">需要上传的文件，Key：对应要上传的Name，Value：本地文件名</param>
+        /// <param name="fileDictionary">需要上传的文件，Key：对应要上传的Name，Value：本地文件名，或文件内容的Base64编码</param>
         /// <param name="encoding"></param>
         /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
         /// <param name="cer">证书，如果不需要则保留null</param>
@@ -606,7 +632,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false);;
+                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false); ;
         }
 
 
@@ -658,7 +684,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false);;
+                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false); ;
 
             var response = senparcResponse.Result;//获取响应信息
 
