@@ -61,6 +61,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Senparc.CO2NET.Helpers;
+using Senparc.CO2NET.Extensions;
 
 #if NET35 || NET40 || NET45
 using System.Web;
@@ -83,6 +84,8 @@ namespace Senparc.CO2NET.HttpUtility
     public static partial class RequestUtility
     {
         #region 静态公共方法
+
+ 
 
 
 #if NET35 || NET40 || NET45
@@ -123,7 +126,7 @@ namespace Senparc.CO2NET.HttpUtility
                   new RemoteCertificateValidationCallback(CheckValidationResult);
             }
 
-        #region 处理Form表单文件上传
+            #region 处理Form表单文件上传
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
             {
@@ -217,7 +220,7 @@ namespace Senparc.CO2NET.HttpUtility
                     //contentType = "application/x-www-form-urlencoded";
                 }
             }
-        #endregion
+            #endregion
             request.ContentType = contentType;
             request.ContentLength = postStream != null ? postStream.Length : 0;
 
