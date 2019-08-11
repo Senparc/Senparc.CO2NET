@@ -47,6 +47,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190521
     修改描述：v0.7.3 .NET Core 提供多证书注册功能
 
+    修改标识：Senparc - 20190811
+    修改描述：v0.8.7 RequestUtility.Post() 方法添加新功能：使用文件流模拟 Form 表单提交
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -178,7 +181,7 @@ namespace Senparc.CO2NET.HttpUtility
 
                                 byte[] buffer = new byte[1024];
                                 int bytesRead = 0;
-                                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
+                                while ((bytesRead = memoryStream.Read(buffer, 0, buffer.Length)) != 0)
                                 {
                                     postStream.Write(buffer, 0, bytesRead);
                                 }
