@@ -143,24 +143,26 @@ namespace Senparc.CO2NET.HttpUtility
                 {
                     try
                     {
-                        var fileName = file.Value;
+                        var fileNameOrBase64 = file.Value;
                         //准备文件流
-                        var memoryStream = new MemoryStream();//这里不能释放，否则如在请求的时候 memoryStream 已经关闭会发生错误
-                        using (var fileStream = FileHelper.GetFileStream(fileName))
+                        using (var memoryStream = new MemoryStream())
+                        using (var fileStream = FileHelper.GetFileStream(fileNameOrBase64))
                         {
                             string formdata = null;
                             if (fileStream != null)
                             {
                                 //存在文件
                                 fileStream.CopyTo(memoryStream);
-                                formdata = string.Format(fileFormdataTemplate, file.Key, /*fileName*/ Path.GetFileName(fileName));
+                                formdata = string.Format(fileFormdataTemplate, file.Key, Path.GetFileName(fileNameOrBase64));
                             }
                             else
                             {
                                 //不存在文件或只是注释，或为base64编码
                                 try
                                 {
-                                    var base64Bytes = Convert.FromBase64String(fileName);
+                                    var base64Bytes = Convert.FromBase64String(fileNameOrBase64);
+                                    var fileName = SystemTime.NowTicks.ToString();//随机文件名
+                                    formdata = string.Format(fileFormdataTemplate, file.Key, fileName);
                                     memoryStream.Write(base64Bytes, 0, base64Bytes.Length);
                                 }
                                 catch (Exception)
@@ -175,7 +177,7 @@ namespace Senparc.CO2NET.HttpUtility
                             postStream.Write(formdataBytes, 0, formdataBytes.Length);
 
                             //写入文件
-                            if (memoryStream != null)
+                            if (memoryStream.Length > 0)
                             {
                                 memoryStream.Seek(0, SeekOrigin.Begin);
 
@@ -291,23 +293,26 @@ namespace Senparc.CO2NET.HttpUtility
                 {
                     try
                     {
-                        var fileName = file.Value;
+                        var fileNameOrBase64 = file.Value;
                         //准备文件流
                         var memoryStream = new MemoryStream();//这里不能释放，否则如在请求的时候 memoryStream 已经关闭会发生错误
-                        using (var fileStream = FileHelper.GetFileStream(fileName))
+                        using (var fileStream = FileHelper.GetFileStream(fileNameOrBase64))
                         {
+                            string fileName = null;
                             if (fileStream != null)
                             {
                                 //存在文件
                                 fileStream.CopyTo(memoryStream);//TODO:可以使用异步方法
+                                fileName = Path.GetFileName(fileNameOrBase64);
                             }
                             else
                             {
                                 //不存在文件或只是注释，或为base64编码
                                 try
                                 {
-                                    var base64Bytes = Convert.FromBase64String(fileName);
+                                    var base64Bytes = Convert.FromBase64String(fileNameOrBase64);
                                     memoryStream.Write(base64Bytes, 0, base64Bytes.Length);
+                                    fileName = SystemTime.NowTicks.ToString();//随机文件名
                                 }
                                 catch (Exception)
                                 {
@@ -322,7 +327,7 @@ namespace Senparc.CO2NET.HttpUtility
                                 //multipartFormDataContent.Add(new StreamContent(memoryStream), file.Key, Path.GetFileName(fileName)); //报流已关闭的异常
 
                                 memoryStream.Seek(0, SeekOrigin.Begin);
-                                multipartFormDataContent.Add(CreateFileContent(memoryStream, file.Key, Path.GetFileName(fileName)), file.Key, Path.GetFileName(fileName));
+                                multipartFormDataContent.Add(CreateFileContent(memoryStream, file.Key, fileName), file.Key, fileName);
                             }
                             fileStream?.Dispose();
                         }
