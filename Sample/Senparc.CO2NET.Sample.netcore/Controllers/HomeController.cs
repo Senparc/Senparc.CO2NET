@@ -10,6 +10,7 @@ using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.HttpUtility;
 using Senparc.CO2NET.Sample.netcore.Models;
 using Senparc.CO2NET.Trace;
+using Senparc.CO2NET.Utilities.HttpUtility.HttpPost;
 
 namespace Senparc.CO2NET.Sample.netcore.Controllers
 {
@@ -66,34 +67,70 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
 
         #region Post 文件
 
+        /// <summary>
+        /// 记录耗时，并返回平均时间
+        /// </summary>
+        /// <param name="byStream"></param>
+        /// <param name="cost"></param>
+        /// <returns></returns>
+        private async Task<double> RecordTimeCost(string byStream, TimeSpan cost)
+        {
+            var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+            var cacheKey = $"RecordTimeCost-{byStream}";
+            dynamic record;
+            if (await cache.CheckExistedAsync(cacheKey))
+            {
+                record = await cache.GetAsync<dynamic>(cacheKey);
+                record = new { ViewCount = record.ViewCount + 1, TotalCost = ((TimeSpan)record.TotalCost).Add(cost) };
+                //record.ViewCount++;//增加访问量
+                //record.TotalCost = ((TimeSpan)record.TotalCost).Add(cost);//增加总耗时
+            }
+            else
+            {
+                record = new { ViewCount = 1, TotalCost = cost };
+            }
+
+            await cache.SetAsync(cacheKey, record, TimeSpan.FromMinutes(10));//更新信息
+
+            return ((TimeSpan)record.TotalCost).TotalMilliseconds / (int)record.ViewCount;
+        }
+
         public async Task<IActionResult> PostFile(string byStream = null)
         {
+            var dt1 = SystemTime.Now;
             var filePath = Path.GetFullPath("App_Data/cover.png");//也可以上传其他任意文件
-
+            var fileDictionary = new Dictionary<string, string>();
             if (byStream != null)
             {
                 //使用Stream传入，而不是文件名
+                SenparcTrace.SendCustomLog("Post 文件信息", $"使用文件流放入 fileDictionary 中，并将修改文件名。");
                 using (var fs = System.IO.File.OpenRead(filePath))
                 {
-                    BinaryReader r = new BinaryReader(fs);
-                    r.BaseStream.Seek(0, SeekOrigin.Begin);    //将文件指针设置到文件开
-                    byte[] bytes = r.ReadBytes((int)r.BaseStream.Length);
-                    filePath = Convert.ToBase64String(bytes);
+                    var formFileData = new FormFileData(Path.GetFileName(filePath), fs);
+                    formFileData.FileName = $"changed-{formFileData.FileName}";//修改文件名
+                    fileDictionary["image"] = formFileData.GetFileValue();
                 }
             }
+            else
+            {
+                SenparcTrace.SendCustomLog("Post 文件信息", $"使用文件物理地址放入 fileDictionary 中，保留原文件名。");
+                fileDictionary["image"] = filePath;
+            }
 
-            var file = new Dictionary<string, string>() { { "image", filePath } };
             var url = "https://localhost:44335/Home/PostFile";
-            var result = await RequestUtility.HttpPostAsync(url, fileDictionary: file);//获取图片的base64编码
+            var result = await RequestUtility.HttpPostAsync(url, fileDictionary: fileDictionary);//获取图片的base64编码
             var note = byStream != null ? "使用文件流" : "使用文件名";
+            var timeCost = SystemTime.NowDiff(dt1);
+            var averageCost = await RecordTimeCost(byStream, timeCost);
             var html = $@"<html>
 <head>
 <meta http-equiv=Content-Type content=""text/html;charset=utf-8"">
 <title>CO2NET 文件 Post 测试 - {note}</title>
-    </head>
-    <body>
-    <p> 如果在下方看到《微信开发深度解析》图书封面，表示测试成功（{note}） </p>
-       <img src=""data:image/png; base64,{ result}"" />
+</head>
+<body>
+    <p>如果在下方看到《微信开发深度解析》图书封面，表示测试成功（{note}）。可通过 SenparcTrace 日志查看更多过调试信息日志。</p>
+    <p>耗时：{timeCost.TotalMilliseconds} ms，平均：{averageCost} ms</p>
+       <img src=""data:image/png; base64,{result}"" />
 </body>
 </html>";
             return Content(html, "text/html");
@@ -111,6 +148,9 @@ namespace Senparc.CO2NET.Sample.netcore.Controllers
                 await ms.ReadAsync(bytes, 0, bytes.Length);
 
                 var base64 = Convert.ToBase64String(bytes);
+
+                SenparcTrace.SendCustomLog("Post 文件信息", $"Name：{image.Name}，FileName：{image.FileName}，Length：{image.Length}");
+
                 return Content(base64, "text/plain");
             }
         }

@@ -45,7 +45,7 @@ namespace Senparc.CO2NET.Tests.MessageQueue
             {
                 Console.WriteLine("如果看到这一条，说明没有清楚成功");
             });
-            smq.Remove("ToRemove");
+            smq.Remove("ToRemove",out SenparcMessageQueueItem value);
 
             //启动线程
             ThreadUtility.Register();
@@ -80,7 +80,7 @@ namespace Senparc.CO2NET.Tests.MessageQueue
             Assert.AreEqual(currentItem.AddTime, item.AddTime);
 
             //Test Remove
-            mq.Remove(key);
+            mq.Remove(key,out SenparcMessageQueueItem value);
             Assert.AreEqual(count, mq.GetCount());
         }
     }
