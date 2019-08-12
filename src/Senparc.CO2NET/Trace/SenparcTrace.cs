@@ -90,9 +90,9 @@ namespace Senparc.CO2NET.Trace
         /// <summary>
         /// 队列执行逻辑
         /// </summary>
-        protected static Action<string> _queue = (logStr) =>
+        protected static Action<string> _queue = async (logStr) =>
         {
-            using (Cache.BeginCacheLock(LockName, ""))
+            using (await Cache.BeginCacheLockAsync(LockName, ""))
             {
                 string logDir;
 #if NET35
@@ -115,13 +115,15 @@ namespace Senparc.CO2NET.Trace
                 //TODO：可以进行合并写入
 
                 string logFile = Path.Combine(logDir, string.Format("SenparcTrace-{0}.log", SystemTime.Now.ToString("yyyyMMdd")));
+                //TODO:判断文件被占用情况
+
                 using (var fs = new FileStream(logFile, FileMode.OpenOrCreate))
                 {
                     using (var sw = new StreamWriter(fs))
                     {
                         fs.Seek(0, SeekOrigin.End);
-                        sw.Write(logStr);
-                        sw.Flush();
+                        await sw.WriteAsync(logStr);
+                        await sw.FlushAsync();
                     }
                 }
 
@@ -145,7 +147,7 @@ namespace Senparc.CO2NET.Trace
         {
             var logStr = traceItem.GetFullLog();
             SenparcMessageQueue messageQueue = new SenparcMessageQueue();
-            var key = SystemTime.Now.Ticks.ToString() + traceItem.ThreadId.ToString() + logStr.Length.ToString();//确保全局唯一
+            var key = $"{SystemTime.Now.Ticks.ToString()}{traceItem.ThreadId.ToString()}{logStr.Length.ToString()}";//确保全局唯一
             messageQueue.Add(key, () => _queue(logStr));
         };
 

@@ -57,18 +57,20 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
         /// 文件 base64 编码
         /// </summary>
         public string FileBase64 { get; set; }
-        /// <summary>
-        /// 整合之后的 Value
-        /// </summary>
-        public string FileValue
-        {
-            get
-            {
-                return FILE_DICTIONARY_STREAM_FORMAT.FormatWith(FileName, FileBase64);
-            }
-        }
+
 
         public FormFileData() { }
+
+        public FormFileData(string fileValue)
+        {
+            FillFromFileValue(fileValue);
+        }
+
+        public FormFileData(string fileName,Stream stream)
+        {
+            FileName = fileName;
+            SetFileBase64FromStream(stream);
+        }
 
 
         /// <summary>
@@ -86,8 +88,7 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
             BinaryReader r = new BinaryReader(fileStream);
             r.BaseStream.Seek(0, SeekOrigin.Begin);
             var fileBytes = r.ReadBytes((int)r.BaseStream.Length);
-            var base64 = Convert.ToBase64String(fileBytes);
-            FileBase64 = FILE_DICTIONARY_STREAM_FORMAT.FormatWith(FileName, base64);
+            FileBase64 = Convert.ToBase64String(fileBytes);
         }
 
         /// <summary>
@@ -102,10 +103,81 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
             }
 
             var values = fileValue.Split(new[] { "||" }, StringSplitOptions.None);
-            FileName = values[0];
-            FileBase64 = values[1];
+            if (values.Length>1)
+            {
+                FileName = values[0];
+                FileBase64 = values[1];
+            }
+            else
+            {
+                FileBase64 = values[0];
+            }
 
             //TODO:可以加入校验
         }
+
+        /// <summary>
+        /// 尝试将 Base64 加载到 stream 中，会进行 Base64 检测，如果失败则返回 false
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public async Task<bool> TryLoadStream(Stream stream)
+        {
+            if (stream == null)
+            {
+                throw new Exceptions.FileValueException(this, "stream 不能为 null！");
+            }
+
+            if (string.IsNullOrWhiteSpace(FileBase64))
+            {
+                throw new Exceptions.FileValueException(this, "FileBase64 不能为 null！");
+            }
+
+            try
+            {
+                byte[] bytes = Convert.FromBase64String(FileBase64);
+                stream.Seek(0, SeekOrigin.Begin);
+                await stream.WriteAsync(bytes, 0, bytes.Length);
+                stream.Seek(0, SeekOrigin.Begin);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 获取可用的文件名
+        /// </summary>
+        /// <param name="backupName">备用名称（当前FileName为空时使用）</param>
+        /// <returns></returns>
+        public string GetAvaliableFileName(string backupName)
+        {
+            return string.IsNullOrWhiteSpace(FileName) ? backupName : FileName;
+        }
+
+        /// <summary>
+        /// 获取整合之后的给 fileDictionary 使用的 Value
+        /// </summary>
+        public string GetFileValue()
+        {
+            if (string.IsNullOrWhiteSpace(FileBase64))
+            {
+                throw new Exceptions.FileValueException(this, "FileBase64 不能为 null！");
+            }
+
+            return FILE_DICTIONARY_STREAM_FORMAT.FormatWith(FileName, FileBase64);
+        }
+
+        ///// <summary>
+        ///// 获取整合之后的给 fileDictionary 使用的 K-V 对象
+        ///// </summary>
+        ///// <param name="formName">表单提交时的 name，即 fileDictionary 中的 Key 值</param>
+        ///// <returns></returns>
+        //public KeyValuePair<string, string> GetFileDictionaryKV(string formName)
+        //{
+        //    return new KeyValuePair<string, string>(formName, GetFileValue());
+        //}
     }
 }

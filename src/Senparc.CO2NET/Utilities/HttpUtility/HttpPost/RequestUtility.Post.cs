@@ -62,6 +62,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.Extensions;
+using Senparc.CO2NET.Utilities.HttpUtility.HttpPost;
 
 #if NET35 || NET40 || NET45
 using System.Web;
@@ -85,7 +86,7 @@ namespace Senparc.CO2NET.HttpUtility
     {
         #region 静态公共方法
 
- 
+
 
 
 #if NET35 || NET40 || NET45
@@ -126,7 +127,7 @@ namespace Senparc.CO2NET.HttpUtility
                   new RemoteCertificateValidationCallback(CheckValidationResult);
             }
 
-            #region 处理Form表单文件上传
+        #region 处理Form表单文件上传
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
             {
@@ -146,32 +147,37 @@ namespace Senparc.CO2NET.HttpUtility
                 {
                     try
                     {
-                        var fileNameOrBase64 = file.Value;
-                        //准备文件流
+                        var fileNameOrFileData = file.Value;
+
+                        var formFileData = new FormFileData(fileNameOrFileData);
+                        string formdata = null;
                         using (var memoryStream = new MemoryStream())
-                        using (var fileStream = FileHelper.GetFileStream(fileNameOrBase64))
                         {
-                            string formdata = null;
-                            if (fileStream != null)
+                            if (formFileData.TryLoadStream(memoryStream).ConfigureAwait(false).GetAwaiter().GetResult())
                             {
-                                //存在文件
-                                fileStream.CopyTo(memoryStream);
-                                formdata = string.Format(fileFormdataTemplate, file.Key, Path.GetFileName(fileNameOrBase64));
+                                //fileNameOrFileData 中储存的储存的是 Stream
+                                var fileName = Path.GetFileName(formFileData.GetAvaliableFileName(SystemTime.NowTicks.ToString()));
+                                formdata = string.Format(fileFormdataTemplate, file.Key, fileName);
                             }
                             else
                             {
-                                //不存在文件或只是注释，或为base64编码
-                                try
+                                //fileNameOrFileData 中储存的储存的可能是文件地址或备注
+
+                                //准备文件流
+                                using (var fileStream = FileHelper.GetFileStream(fileNameOrFileData))
                                 {
-                                    var base64Bytes = Convert.FromBase64String(fileNameOrBase64);
-                                    var fileName = SystemTime.NowTicks.ToString();//随机文件名
-                                    formdata = string.Format(fileFormdataTemplate, file.Key, fileName);
-                                    memoryStream.Write(base64Bytes, 0, base64Bytes.Length);
-                                }
-                                catch (Exception)
-                                {
-                                    //不存在文件或只是注释
-                                    formdata = string.Format(dataFormdataTemplate, file.Key, file.Value);
+                                    if (fileStream != null)
+                                    {
+                                        //存在文件
+                                        fileStream.CopyTo(memoryStream);
+                                        formdata = string.Format(fileFormdataTemplate, file.Key, Path.GetFileName(fileNameOrFileData));
+                                        fileStream.Dispose();
+                                    }
+                                    else
+                                    {
+                                        //不存在文件或只是注释
+                                        formdata = string.Format(dataFormdataTemplate, file.Key, file.Value);
+                                    }
                                 }
                             }
 
@@ -190,8 +196,6 @@ namespace Senparc.CO2NET.HttpUtility
                                 {
                                     postStream.Write(buffer, 0, bytesRead);
                                 }
-
-                                fileStream?.Dispose();
                             }
                         }
                     }
@@ -220,7 +224,7 @@ namespace Senparc.CO2NET.HttpUtility
                     //contentType = "application/x-www-form-urlencoded";
                 }
             }
-            #endregion
+        #endregion
             request.ContentType = contentType;
             request.ContentLength = postStream != null ? postStream.Length : 0;
 
@@ -279,7 +283,7 @@ namespace Senparc.CO2NET.HttpUtility
             HttpClient client = senparcHttpClient.Client;
             HttpClientHeader(client, refererUrl, useAjax, headerAddition, timeOut);
 
-        #region 处理Form表单文件上传
+            #region 处理Form表单文件上传
 
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
@@ -296,43 +300,44 @@ namespace Senparc.CO2NET.HttpUtility
                 {
                     try
                     {
-                        var fileNameOrBase64 = file.Value;
+                        var fileNameOrFileData = file.Value;
+                        var formFileData = new FormFileData(fileNameOrFileData);
+                        string fileName = null;
+
                         //准备文件流
                         var memoryStream = new MemoryStream();//这里不能释放，否则如在请求的时候 memoryStream 已经关闭会发生错误
-                        using (var fileStream = FileHelper.GetFileStream(fileNameOrBase64))
+                        if (formFileData.TryLoadStream(memoryStream).ConfigureAwait(false).GetAwaiter().GetResult())
                         {
-                            string fileName = null;
-                            if (fileStream != null)
+                            //fileNameOrFileData 中储存的储存的是 Stream
+                            fileName = Path.GetFileName(formFileData.GetAvaliableFileName(SystemTime.NowTicks.ToString()));
+                        }
+                        else
+                        {
+                            //fileNameOrFileData 中储存的储存的可能是文件地址或备注
+                            using (var fileStream = FileHelper.GetFileStream(fileNameOrFileData))
                             {
-                                //存在文件
-                                fileStream.CopyTo(memoryStream);//TODO:可以使用异步方法
-                                fileName = Path.GetFileName(fileNameOrBase64);
-                            }
-                            else
-                            {
-                                //不存在文件或只是注释，或为base64编码
-                                try
+                                if (fileStream != null)
                                 {
-                                    var base64Bytes = Convert.FromBase64String(fileNameOrBase64);
-                                    memoryStream.Write(base64Bytes, 0, base64Bytes.Length);
-                                    fileName = SystemTime.NowTicks.ToString();//随机文件名
+                                    //存在文件
+                                    fileStream.CopyTo(memoryStream);//TODO:可以使用异步方法
+                                    fileName = Path.GetFileName(fileNameOrFileData);
+                                    fileStream.Dispose();
                                 }
-                                catch (Exception)
+                                else
                                 {
                                     //只是注释
                                     multipartFormDataContent.Add(new StringContent(file.Value), "\"" + file.Key + "\"");
                                 }
                             }
+                        }
 
-                            if (memoryStream.Length > 0)
-                            {
-                                //有文件内容
-                                //multipartFormDataContent.Add(new StreamContent(memoryStream), file.Key, Path.GetFileName(fileName)); //报流已关闭的异常
+                        if (memoryStream.Length > 0)
+                        {
+                            //有文件内容
+                            //multipartFormDataContent.Add(new StreamContent(memoryStream), file.Key, Path.GetFileName(fileName)); //报流已关闭的异常
 
-                                memoryStream.Seek(0, SeekOrigin.Begin);
-                                multipartFormDataContent.Add(CreateFileContent(memoryStream, file.Key, fileName), file.Key, fileName);
-                            }
-                            fileStream?.Dispose();
+                            memoryStream.Seek(0, SeekOrigin.Begin);
+                            multipartFormDataContent.Add(CreateFileContent(memoryStream, file.Key, fileName), file.Key, fileName);
                         }
                     }
                     catch (Exception ex)
@@ -366,7 +371,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             //HttpContentHeader(hc, timeOut);
-        #endregion
+            #endregion
 
             if (!string.IsNullOrEmpty(refererUrl))
             {
