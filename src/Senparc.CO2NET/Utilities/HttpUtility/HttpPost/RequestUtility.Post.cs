@@ -127,7 +127,7 @@ namespace Senparc.CO2NET.HttpUtility
                   new RemoteCertificateValidationCallback(CheckValidationResult);
             }
 
-        #region 处理Form表单文件上传
+            #region 处理Form表单文件上传
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
             {
@@ -169,6 +169,7 @@ namespace Senparc.CO2NET.HttpUtility
                                     if (fileStream != null)
                                     {
                                         //存在文件
+                                        memoryStream.Seek(0, SeekOrigin.Begin);
                                         fileStream.CopyTo(memoryStream);
                                         formdata = string.Format(fileFormdataTemplate, file.Key, Path.GetFileName(fileNameOrFileData));
                                         fileStream.Dispose();
@@ -224,7 +225,8 @@ namespace Senparc.CO2NET.HttpUtility
                     //contentType = "application/x-www-form-urlencoded";
                 }
             }
-        #endregion
+            #endregion
+
             request.ContentType = contentType;
             request.ContentLength = postStream != null ? postStream.Length : 0;
 
@@ -283,7 +285,7 @@ namespace Senparc.CO2NET.HttpUtility
             HttpClient client = senparcHttpClient.Client;
             HttpClientHeader(client, refererUrl, useAjax, headerAddition, timeOut);
 
-            #region 处理Form表单文件上传
+        #region 处理Form表单文件上传
 
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
@@ -371,7 +373,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             //HttpContentHeader(hc, timeOut);
-            #endregion
+        #endregion
 
             if (!string.IsNullOrEmpty(refererUrl))
             {

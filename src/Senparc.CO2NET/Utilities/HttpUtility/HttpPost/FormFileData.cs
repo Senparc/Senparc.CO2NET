@@ -86,9 +86,16 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
             }
 
             fileStream.Seek(0, SeekOrigin.Begin);
-            BinaryReader r = new BinaryReader(fileStream);
-            r.BaseStream.Seek(0, SeekOrigin.Begin);
-            var fileBytes = r.ReadBytes((int)r.BaseStream.Length);
+
+            //方法一
+            byte[] fileBytes = new byte[fileStream.Length];
+            fileStream.Read(fileBytes, 0, fileBytes.Length);
+
+            //方法二
+            //BinaryReader r = new BinaryReader(fileStream);
+            //r.BaseStream.Seek(0, SeekOrigin.Begin);
+            //var fileBytes = r.ReadBytes((int)r.BaseStream.Length);//TODO: 不使用 int 限制 long 的长度
+
             FileBase64 = Convert.ToBase64String(fileBytes);
         }
 
@@ -136,7 +143,7 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
 
             try
             {
-                byte[] bytes = Convert.FromBase64String(FileBase64);
+                byte[] bytes = Convert.FromBase64String(FileBase64);//如果不是有效的 Base64 编码，则会进入异常
                 stream.Seek(0, SeekOrigin.Begin);
                 await stream.WriteAsync(bytes, 0, bytes.Length);
                 stream.Seek(0, SeekOrigin.Begin);
