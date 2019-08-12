@@ -85,6 +85,7 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
                 throw new Exceptions.FileValueException(this, "FileName 不能为 null！");
             }
 
+            fileStream.Seek(0, SeekOrigin.Begin);
             BinaryReader r = new BinaryReader(fileStream);
             r.BaseStream.Seek(0, SeekOrigin.Begin);
             var fileBytes = r.ReadBytes((int)r.BaseStream.Length);
