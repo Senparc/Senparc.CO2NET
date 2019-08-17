@@ -139,6 +139,9 @@ namespace Senparc.CO2NET.Trace
                     {
                         if (FileHelper.FileInUse(logFile))
                         {
+                            //说明：
+                            //1、回收文件占用的方法有许多方案，以下两行 GC 命令同时使用的参考见：https://stackoverflow.com/questions/4128211/system-io-ioexception-the-process-cannot-access-the-file-file-name
+                            //2、针对 .NET Core 如果有更好的差异化的方法，欢迎 PR：https://github.com/JeffreySu/WeiXinMPSDK。
                             GC.Collect();
                             GC.WaitForPendingFinalizers();
 
