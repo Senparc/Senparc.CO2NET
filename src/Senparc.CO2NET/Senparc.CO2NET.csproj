@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <Version>0.8.8-preivew5</Version>
+    <Version>0.8.9-preivew1</Version>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -99,6 +99,7 @@
       v0.8.6 添加 FileHelper.FileInUse() 方法，用于判断文件是否正在被占用
       v0.8.7 RequestUtility.Post() 方法添加新功能：使用文件流模拟 Form 表单提交
       v0.8.8 改进 SenparcTrace 日志记录效率，提供异步方法处理
+      v0.8.9 提供 AutoUnlockLogFile 参数，并针对日志文件可能被占用的情况尝试自动解锁。
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
