@@ -36,14 +36,19 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20181227
     修改描述：v0.4.4 提供 SenparcTrace.RecordAPMLog 参数
 
+    修改标识：Senparc - 20181227
+    修改描述：v0.8.9 提供 AutoUnlockLogFile 参数，并针对日志文件可能被占用的情况尝试自动解锁
+
 ----------------------------------------------------------------*/
 
 
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Exceptions;
+using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.MessageQueue;
 using System;
 using System.IO;
+using System.Threading;
 
 namespace Senparc.CO2NET.Trace
 {
@@ -71,7 +76,13 @@ namespace Senparc.CO2NET.Trace
         /// <summary>
         /// 是否开放每次 APM 录入的记录，默认为关闭（当 Senparc.CO2ENT.APM 启用时有效）
         /// </summary>
-        public static bool RecordAPMLog = false;
+        public static bool RecordAPMLog { get; set; } = false;
+
+        /// <summary>
+        /// 是否自动解锁可能发生的日志文件被占用情况，如果为 true，则启用（触发时会立即进行 GC 操作，消耗部分系统资源，一般不会影响系统整体性能），如果为 false，则在文件使用冲突发生时抛出异常，放弃日志写入。
+        /// （注意：如果多个站点或应用程序使用相同的日志文件目录，请务必开启此项）
+        /// </summary>
+        public static bool AutoUnlockLogFile { get; set; } = true;
 
         #region 私有方法
 
@@ -115,17 +126,56 @@ namespace Senparc.CO2NET.Trace
                 //TODO：可以进行合并写入
 
                 string logFile = Path.Combine(logDir, string.Format("SenparcTrace-{0}.log", SystemTime.Now.ToString("yyyyMMdd")));
-                //TODO:判断文件被占用情况
 
-                using (var fs = new FileStream(logFile, FileMode.OpenOrCreate))
+
+                //判断文件被占用情况
+                if (AutoUnlockLogFile)
                 {
-                    using (var sw = new StreamWriter(fs))
+                    const int maxRetryTimes = 3;//最大重试次数
+                    const int retryDelayTimeMillinSeconds = 100;//每次重试后等待的时间（毫秒）
+
+                    //立即进行回收
+                    for (int i = 0; i < maxRetryTimes; i++)
                     {
-                        fs.Seek(0, SeekOrigin.End);
-                        await sw.WriteAsync(logStr);
-                        await sw.FlushAsync();
+                        if (FileHelper.FileInUse(logFile))
+                        {
+                            GC.Collect();
+                            GC.WaitForPendingFinalizers();
+
+                            var dt = SystemTime.Now;
+                            if (i < maxRetryTimes - 1)
+                            {
+                                while (SystemTime.NowDiff(dt).TotalMilliseconds < retryDelayTimeMillinSeconds)
+                                {
+                                    //如果不是最后一次尝试，则等待一段时间再进入下一步
+                                }
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
+
+                try
+                {
+                    using (var fs = new FileStream(logFile, FileMode.OpenOrCreate))
+                    {
+                        using (var sw = new StreamWriter(fs))
+                        {
+                            fs.Seek(0, SeekOrigin.End);
+                            await sw.WriteAsync(logStr);
+                            await sw.FlushAsync();
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    //写入失败
+                    //throw;
+                }
+
 
                 if (OnLogFunc != null)
                 {
