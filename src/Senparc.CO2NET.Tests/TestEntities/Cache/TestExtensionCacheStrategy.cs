@@ -58,7 +58,7 @@ namespace Senparc.CO2NET.Tests.TestEntities
         /// <returns></returns>
         public string GetTestCache(string key)
         {
-            return BaseCacheStrategy().Get(key).ToString();
+            return BaseCacheStrategy().Get(key).ToString()+"|ABC";
         }
 
         public void RegisterCacheStrategyDomain(IDomainExtensionCacheStrategy extensionCacheStrategy)

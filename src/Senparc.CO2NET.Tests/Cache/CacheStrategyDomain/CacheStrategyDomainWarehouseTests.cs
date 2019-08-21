@@ -40,7 +40,8 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
 
             //∂¡»°
             var result = (testCacheStrategy as TestExtensionCacheStrategy).GetTestCache("TestCache");
-            Assert.AreEqual(testStr, result);
+            Assert.AreEqual(testStr + "|ABC", result);
+            Console.WriteLine(result);
         }
 
         [TestMethod]
