@@ -10,7 +10,7 @@ namespace Senparc.CO2NET.APM
     public class Config
     {
         /// <summary>
-        /// APM 信息自动过期时间
+        /// APM 信息自动过期时间（默认为20分钟）
         /// </summary>
         public static TimeSpan DataExpire = TimeSpan.FromMinutes(20);//20分钟
 

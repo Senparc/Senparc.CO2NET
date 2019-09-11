@@ -39,10 +39,15 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
  
     修改标识：Senparc - 20180830
     修改描述：v0.2.9 优化 Config.RootDictionaryPath 方法，可自动获取默认值
+
+    修改标识：Senparc - 20180911
+    修改描述：v0.8.10 提供 Config.HostingEnvironment 属性 
    
 ----------------------------------------------------------------*/
 
-
+#if NETSTANDARD2_0
+using Microsoft.AspNetCore.Hosting;
+#endif 
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -85,6 +90,13 @@ namespace Senparc.CO2NET
             }
         }
 
+#if NETSTANDARD2_0
+        /// <summary>
+        /// Web hosting environment
+        /// </summary>
+        public static IHostingEnvironment HostingEnvironment { get; set; }
+#endif
+
         /// <summary>
         /// 请求超时设置（以毫秒为单位），默认为10秒。
         /// 说明：此处常量专为提供给方法的参数的默认值，不是方法内所有请求的默认超时时间。
@@ -121,7 +133,7 @@ namespace Senparc.CO2NET
         {
             get
             {
-                if (_rootDictionaryPath==null)
+                if (_rootDictionaryPath == null)
                 {
 #if NET35 || NET40 || NET45
                     var appPath = AppDomain.CurrentDomain.BaseDirectory;

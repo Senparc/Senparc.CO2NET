@@ -127,7 +127,7 @@ namespace Senparc.CO2NET.HttpUtility
                   new RemoteCertificateValidationCallback(CheckValidationResult);
             }
 
-            #region 处理Form表单文件上传
+        #region 处理Form表单文件上传
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
             {
@@ -225,7 +225,7 @@ namespace Senparc.CO2NET.HttpUtility
                     //contentType = "application/x-www-form-urlencoded";
                 }
             }
-            #endregion
+        #endregion
 
             request.ContentType = contentType;
             request.ContentLength = postStream != null ? postStream.Length : 0;
@@ -513,7 +513,8 @@ namespace Senparc.CO2NET.HttpUtility
 
             //var response = senparcResponse.Result;
 
-            if (response.Content.Headers.ContentType.CharSet != null &&
+            if (response.Content.Headers.ContentType != null &&
+                response.Content.Headers.ContentType.CharSet != null &&
                 response.Content.Headers.ContentType.CharSet.ToLower().Contains("utf8"))
             {
                 response.Content.Headers.ContentType.CharSet = "utf-8";

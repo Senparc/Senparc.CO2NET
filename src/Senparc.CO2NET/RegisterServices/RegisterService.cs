@@ -40,6 +40,10 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190108
     修改描述：v0.5.0 添加 Start() 重写方法，提供 .NET Core Console 的全面支持
 
+    修改标识：Senparc - 20180911
+    修改描述：v0.8.10 RegisterService.Start() 方法开始记录 evn 参数到 Config.HostingEnvironment 属性 
+   
+
 ----------------------------------------------------------------*/
 
 
@@ -89,7 +93,6 @@ namespace Senparc.CO2NET.RegisterServices
         /// <returns></returns>
         public static RegisterService Start(IHostingEnvironment env, SenparcSetting senparcSetting)
         {
-
             //提供网站根目录
             if (env != null && env.ContentRootPath != null)
             {
@@ -99,6 +102,8 @@ namespace Senparc.CO2NET.RegisterServices
             {
                 Senparc.CO2NET.Config.RootDictionaryPath = AppDomain.CurrentDomain.BaseDirectory;
             }
+
+            Senparc.CO2NET.Config.HostingEnvironment = env;
 
             var register = new RegisterService(senparcSetting);
 
