@@ -32,7 +32,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改描述：v0.7.2.1 解决 GetHttpClientHandler() 方法中 cookieContainer 为 null 可能发生的异常
 
     修改标识：Senparc - 20190911
-    修改描述：v0.8.10 优化 SetResponseCookieContainer() 方法，防止 null 异常（TODO：原因未知）
+    修改描述：v0.8.10 优化 SetResponseCookieContainer() 方法，防止 null 异常（理论上不会出现）
 
 ----------------------------------------------------------------*/
 
@@ -112,7 +112,6 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             //收集Cookie
-            //Console.WriteLine("Headers:" + response.Headers.ToJson());
             try
             {
                 IEnumerable<string> setCookieHeaders = null;
@@ -133,6 +132,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
             catch (Exception ex)
             {
+                //理论上这里不应该抛出异常
                 _ = new HttpException($"SetResponseCookieContainer 过程失败！{ex.Message}", ex);
             }
 
