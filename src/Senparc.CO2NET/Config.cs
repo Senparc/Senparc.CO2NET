@@ -45,8 +45,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
    
 ----------------------------------------------------------------*/
 
-
+#if NETSTANDARD2_0
 using Microsoft.AspNetCore.Hosting;
+#endif 
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
