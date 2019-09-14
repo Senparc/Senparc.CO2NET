@@ -38,6 +38,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190418
     修改描述：v3.5.0 提供  HashGetAllAsync() 异步方法
 
+    修改标识：Senparc - 20190914
+    修改描述：v3.5.4 fix bug：GetServer().Keys() 方法添加 database 索引值
+
  ----------------------------------------------------------------*/
 
 using System;
@@ -246,7 +249,7 @@ namespace Senparc.CO2NET.Cache.Redis
             var keyPrefix = GetFinalKey("");//Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
             var dic = new Dictionary<string, object>();
 
-            var hashKeys = GetServer().Keys(pattern: keyPrefix + "*");
+            var hashKeys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPrefix + "*");
             foreach (var redisKey in hashKeys)
             {
                 var list = _cache.HashGetAll(redisKey);
@@ -264,7 +267,7 @@ namespace Senparc.CO2NET.Cache.Redis
         public override long GetCount()
         {
             var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
-            var count = GetServer().Keys(pattern: keyPattern).Count();
+            var count = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern).Count();
             return count;
         }
 
@@ -428,7 +431,7 @@ namespace Senparc.CO2NET.Cache.Redis
             var keyPrefix = GetFinalKey("");//Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
             var dic = new Dictionary<string, object>();
 
-            var hashKeys = GetServer().Keys(pattern: keyPrefix + "*");
+            var hashKeys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPrefix + "*");
             foreach (var redisKey in hashKeys)
             {
                 var list = await _cache.HashGetAllAsync(redisKey).ConfigureAwait(false);
