@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <Version>3.3.3</Version>
+    <Version>3.3.4</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Memcached</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Memcached</RootNamespace>
     
@@ -85,6 +85,7 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
       v3.2.0 使用 .NETStandard2.0 统一支持 .NET Core，放弃对 .NET Core 1.x 的单独适配
       v3.3.0 提供缓存异步接口
       v3.3.1 使用 .ConfigureAwait(false) 避免异步锁死的情况
+      v3.3.4 支持新版本 CO2NET
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
