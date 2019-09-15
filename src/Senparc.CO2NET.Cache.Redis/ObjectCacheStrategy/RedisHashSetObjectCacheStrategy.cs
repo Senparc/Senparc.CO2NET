@@ -241,7 +241,7 @@ namespace Senparc.CO2NET.Cache.Redis
         //}
 
         /// <summary>
-        /// 注意：此方法获取的object为直接储存在缓存中，序列化之后的Value
+        /// 注意：此方法获取的object为直接储存在缓存中，序列化之后的Value（最多 99999 条）
         /// </summary>
         /// <returns></returns>
         public override IDictionary<string, object> GetAll()
@@ -249,7 +249,7 @@ namespace Senparc.CO2NET.Cache.Redis
             var keyPrefix = GetFinalKey("");//Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
             var dic = new Dictionary<string, object>();
 
-            var hashKeys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPrefix + "*");
+            var hashKeys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPrefix + "*", pageSize: 99999);
             foreach (var redisKey in hashKeys)
             {
                 var list = _cache.HashGetAll(redisKey);
@@ -263,11 +263,15 @@ namespace Senparc.CO2NET.Cache.Redis
             return dic;
         }
 
+        /// <summary>
+        /// 获取所有缓存项计数（最多 99999 条）
+        /// </summary>
+        /// <returns></returns>
 
         public override long GetCount()
         {
             var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
-            var count = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern).Count();
+            var count = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern, pageSize: 99999).Count();
             return count;
         }
 
@@ -423,7 +427,7 @@ namespace Senparc.CO2NET.Cache.Redis
         }
 
         /// <summary>
-        /// 注意：此方法获取的object为直接储存在缓存中，序列化之后的Value
+        /// 注意：此方法获取的object为直接储存在缓存中，序列化之后的Value（最多 99999 条）
         /// </summary>
         /// <returns></returns>
         public override async Task<IDictionary<string, object>> GetAllAsync()
@@ -431,7 +435,7 @@ namespace Senparc.CO2NET.Cache.Redis
             var keyPrefix = GetFinalKey("");//Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
             var dic = new Dictionary<string, object>();
 
-            var hashKeys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPrefix + "*");
+            var hashKeys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPrefix + "*", pageSize: 99999);
             foreach (var redisKey in hashKeys)
             {
                 var list = await _cache.HashGetAllAsync(redisKey).ConfigureAwait(false);

@@ -17,6 +17,9 @@
 
     修改标识：Senparc - 20190507
     修改描述：v0.7.1 添加 NowDiff 属性
+    
+    修改标识：Senparc - 20190914
+    修改描述：v0.9.0 添加 SystemTime.UtcDateTime 属性
 
 ----------------------------------------------------------------*/
 
@@ -36,6 +39,11 @@ namespace System
         /// 当前时间
         /// </summary>
         public static DateTimeOffset Now => DateTimeOffset.Now;
+
+        /// <summary>
+        /// 当前时间的 UTC DateTime 类型
+        /// </summary>
+        public static DateTime UtcDateTime => DateTimeOffset.Now.UtcDateTime;
 
         /// <summary>
         /// 当天零点时间，从 SystemTime.Now.Date 获得
