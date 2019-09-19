@@ -32,7 +32,7 @@
       v0.3.0 提供 APM 开关设置
       v0.3.1 使用 .ConfigureAwait(false) 避免异步锁死的情况
       v0.4.0 停止对 .NET 3.5/4.0 的支持
-      v0.4.3 支持新版本 CO2NET，提供带符号的 nuget 包（.nupkg)
+      v0.4.3 支持新版本 CO2NET，提供带符号的 nuget 包（.snupkg)
     </PackageReleaseNotes>
 
   </PropertyGroup>
