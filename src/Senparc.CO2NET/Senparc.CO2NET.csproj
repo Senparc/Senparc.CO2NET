@@ -13,7 +13,7 @@
       Senparc.Weixin SDK 开源项目：
       https://github.com/Senparc/Senparc.CO2NET
     </Description>
-    <Copyright>Senparc Copyright © 2004~2018</Copyright>
+    <Copyright>Senparc Copyright © 2004~2019</Copyright>
     <PackageTags>.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
 
     <Authors>Senparc</Authors>
@@ -141,6 +141,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.0|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netstandard2.1\Senparc.CO2NET.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
