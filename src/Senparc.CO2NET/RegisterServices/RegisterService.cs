@@ -47,10 +47,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 ----------------------------------------------------------------*/
 
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
-using Microsoft.AspNetCore.Hosting;
+#if NETSTANDARD2_0
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+#elif NETSTANDARD2_1
+using Microsoft.AspNetCore.Hosting;
 #endif
 
 using System;
@@ -91,7 +92,13 @@ namespace Senparc.CO2NET.RegisterServices
         /// <param name="env">IHostingEnvironment，控制台程序可以输入null，</param>
         /// <param name="senparcSetting"></param>
         /// <returns></returns>
-        public static RegisterService Start(IHostingEnvironment env, SenparcSetting senparcSetting)
+        public static RegisterService Start(
+#if NETSTANDARD2_0
+            IHostingEnvironment env, 
+#else
+            IWebHostEnvironment env,
+#endif
+            SenparcSetting senparcSetting)
         {
             //提供网站根目录
             if (env != null && env.ContentRootPath != null)
