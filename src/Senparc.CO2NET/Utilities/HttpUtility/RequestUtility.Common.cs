@@ -83,7 +83,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Senparc.CO2NET.Extensions;
 #endif
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETSTANDARD2_1
 using Microsoft.AspNetCore.Http;
 #endif
 

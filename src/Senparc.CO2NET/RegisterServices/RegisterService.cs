@@ -47,7 +47,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 ----------------------------------------------------------------*/
 
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETSTANDARD2_1
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -78,7 +78,7 @@ namespace Senparc.CO2NET.RegisterServices
             Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
         }
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETSTANDARD2_1
 
         /// <summary>
         /// 单个实例引用全局的 ServiceCollection
