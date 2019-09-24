@@ -60,7 +60,7 @@ namespace Senparc.CO2NET.Sample.netcore3.Controllers
         [HttpGet]
         public IActionResult PostParameter()
         {
-            var result = RequestUtility.HttpPost("https://localhost:44335/Home/PostParameter", formData: new Dictionary<string, string>() { { "code", SystemTime.NowTicks.ToString() } });
+            var result = RequestUtility.HttpPost("https://localhost:44351/Home/PostParameter", formData: new Dictionary<string, string>() { { "code", SystemTime.NowTicks.ToString() } });
             return Content(result);
         }
 
@@ -125,7 +125,7 @@ namespace Senparc.CO2NET.Sample.netcore3.Controllers
                 fileDictionary["image"] = filePath;
             }
 
-            var url = "https://localhost:44335/Home/PostFile";
+            var url = "https://localhost:44351/Home/PostFile";
             var result = await RequestUtility.HttpPostAsync(url, fileDictionary: fileDictionary);//获取图片的base64编码
             var note = byStream != null ? "使用文件流" : "使用文件名";
             var timeCost = SystemTime.NowDiff(dt1);

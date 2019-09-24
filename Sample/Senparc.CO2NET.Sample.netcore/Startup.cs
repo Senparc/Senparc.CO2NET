@@ -210,42 +210,5 @@ namespace Senparc.CO2NET.Sample.netcore
             return exContainerCacheStrategies;
         }
 
-        /// <summary>
-        /// 获取扩展缓存策略
-        /// </summary>
-        /// <returns></returns>
-        private IList<IDomainExtensionCacheStrategy> GetExCacheStrategies(SenparcSetting senparcSetting)
-        {
-            var exContainerCacheStrategies = new List<IDomainExtensionCacheStrategy>();
-            senparcSetting = senparcSetting ?? new SenparcSetting();
-
-            //注意：以下两个 if 判断仅作为演示，方便大家添加自定义的扩展缓存策略，
-
-            #region 演示扩展缓存注册方法
-
-            /*
-
-            //判断Redis是否可用
-            var redisConfiguration = senparcSetting.Cache_Redis_Configuration;
-            if ((!string.IsNullOrEmpty(redisConfiguration) && redisConfiguration != "Redis配置"))
-            {
-                exContainerCacheStrategies.Add(RedisContainerCacheStrategy.Instance);//自定义的扩展缓存
-            }
-
-            //判断Memcached是否可用
-            var memcachedConfiguration = senparcSetting.Cache_Memcached_Configuration;
-            if ((!string.IsNullOrEmpty(memcachedConfiguration) && memcachedConfiguration != "Memcached配置"))
-            {
-                exContainerCacheStrategies.Add(MemcachedContainerCacheStrategy.Instance);//TODO:如果没有进行配置会产生异常
-            }
-            */
-
-            #endregion
-
-            //扩展自定义的缓存策略
-
-            return exContainerCacheStrategies;
-        }
-
     }
 }
