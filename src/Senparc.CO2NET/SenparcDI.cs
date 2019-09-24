@@ -22,7 +22,7 @@
 
 ----------------------------------------------------------------*/
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
 using System;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;

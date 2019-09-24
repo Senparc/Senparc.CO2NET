@@ -45,7 +45,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
    
 ----------------------------------------------------------------*/
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
 using Microsoft.AspNetCore.Hosting;
 #endif 
 using System;
@@ -95,7 +95,7 @@ namespace Senparc.CO2NET
         /// Web hosting environment
         /// </summary>
         public static IHostingEnvironment HostingEnvironment { get; set; }
-#elif NETSTANDARD2_1
+#elif (NETSTANDARD2_1 || NETCOREAPP3_0)
         /// <summary>
         /// Web hosting environment
         /// </summary>

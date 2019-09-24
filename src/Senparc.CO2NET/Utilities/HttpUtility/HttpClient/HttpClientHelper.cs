@@ -73,7 +73,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
 
         /// <summary>
         /// 获取 HttpClientHandler 对象
