@@ -143,6 +143,11 @@
     <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.0|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netstandard2.1\Senparc.CO2NET.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Cache\Lock\CacheLockWrapper.cs" />
     <Compile Remove="Cache\Lock\CacheLockWrapperExtension.cs" />
