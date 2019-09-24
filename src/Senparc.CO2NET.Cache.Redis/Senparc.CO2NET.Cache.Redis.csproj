@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;net461;netstandard2.0</TargetFrameworks>
-    <Version>3.5.5</Version>
+    <Version>3.6.0</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -102,6 +102,7 @@
       1、fix bug：GetServer().Keys() 方法添加 database 索引值
       2、为 GetServer().Keys() 方法约束获取上限：99999
       v3.5.5 支持新版本 CO2NET，提供带符号的 nuget 包（.snupkg)
+      v3.6.0 支持新版本 CO23NET，支持 .NET Core 3.0
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>

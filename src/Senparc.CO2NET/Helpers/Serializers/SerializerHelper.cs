@@ -125,7 +125,7 @@ namespace Senparc.CO2NET.Helpers
         //                return null;
         //            }
 
-        //#if NETSTANDARD2_0
+        //#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
         //            ////二进制序列化方案
         //            //using (MemoryStream memoryStream = new MemoryStream())
         //            //{
@@ -170,7 +170,7 @@ namespace Senparc.CO2NET.Helpers
         //                return default(T);
         //            }
 
-        //#if NETSTANDARD2_0
+        //#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
         //            ////二进制序列化方案
         //            //using (MemoryStream memoryStream = new MemoryStream(stream))
         //            //{
