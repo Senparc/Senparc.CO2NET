@@ -43,14 +43,12 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20180911
     修改描述：v0.8.10 RegisterService.Start() 方法开始记录 evn 参数到 Config.HostingEnvironment 属性 
    
-
 ----------------------------------------------------------------*/
 
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETSTANDARD2_1
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-#elif NETSTANDARD2_1
 using Microsoft.AspNetCore.Hosting;
 #endif
 

@@ -90,11 +90,16 @@ namespace Senparc.CO2NET
             }
         }
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if NETSTANDARD2_0
         /// <summary>
         /// Web hosting environment
         /// </summary>
         public static IHostingEnvironment HostingEnvironment { get; set; }
+#elif NETSTANDARD2_1
+        /// <summary>
+        /// Web hosting environment
+        /// </summary>
+        public static IWebHostEnvironment HostingEnvironment { get; set; }
 #endif
 
         /// <summary>
