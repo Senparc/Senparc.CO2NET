@@ -36,6 +36,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.APM.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Sample.Consoles", "Senparc.CO2NET.Sample.Consoles\Senparc.CO2NET.Sample.Consoles.csproj", "{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.CO2NET.Sample.netcore3", "Senparc.CO2NET.Sample.netcore3\Senparc.CO2NET.Sample.netcore3.csproj", "{EFCF9B13-CFF7-4BB6-9C0F-5EBC8C0AD1AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,12 @@ Global
 		{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}.Test|Any CPU.Build.0 = Test|Any CPU
+		{EFCF9B13-CFF7-4BB6-9C0F-5EBC8C0AD1AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFCF9B13-CFF7-4BB6-9C0F-5EBC8C0AD1AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFCF9B13-CFF7-4BB6-9C0F-5EBC8C0AD1AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFCF9B13-CFF7-4BB6-9C0F-5EBC8C0AD1AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFCF9B13-CFF7-4BB6-9C0F-5EBC8C0AD1AB}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFCF9B13-CFF7-4BB6-9C0F-5EBC8C0AD1AB}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,6 +130,7 @@ Global
 		{D3A0D429-B7EB-446B-8E1B-4DD8225C75ED} = {FE9C797C-0788-451E-B04C-778484434ED5}
 		{4FA6F2C4-54B5-469D-8ECF-0040120D3344} = {118ECC07-977C-42ED-A452-8934C8632261}
 		{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87} = {A9F634CC-7806-44B9-9768-4DAE13B669D5}
+		{EFCF9B13-CFF7-4BB6-9C0F-5EBC8C0AD1AB} = {A9F634CC-7806-44B9-9768-4DAE13B669D5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {796B18F2-8DBB-4792-881F-4C5A81E1F2DB}
