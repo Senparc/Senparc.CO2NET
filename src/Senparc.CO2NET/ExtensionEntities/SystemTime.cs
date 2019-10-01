@@ -80,6 +80,18 @@ namespace System
             return NowDiff(compareTime).TotalMilliseconds;
         }
 
+
+        /// <summary>
+        /// 获取 TotalMilliseconds 时间差
+        /// </summary>
+        /// <param name="compareTime">当前时间 - compareTime</param>
+        /// <param name="format">对 TotalMilliseconds 结果进行 ToString([format]) 中的参数</param>
+        /// <returns></returns>
+        public static string DiffTotalMilliseconds(DateTimeOffset compareTime, string format)
+        {
+            return NowDiff(compareTime).TotalMilliseconds.ToString(format);
+        }
+
         /// <summary>
         /// 获取 TimeSpan
         /// </summary>
@@ -98,6 +110,17 @@ namespace System
         public static double DiffTotalMilliseconds(DateTime compareTime)
         {
             return NowDiff(compareTime).TotalMilliseconds;
+        }
+
+        /// <summary>
+        /// 获取 TotalMilliseconds 时间差
+        /// </summary>
+        /// <param name="compareTime">当前时间 - compareTime</param>
+        /// <param name="format">对 TotalMilliseconds 结果进行 ToString([format]) 中的参数</param>
+        /// <returns></returns>
+        public static string DiffTotalMilliseconds(DateTime compareTime,string format)
+        {
+            return NowDiff(compareTime).TotalMilliseconds.ToString(format);
         }
 
         //TODO：添加更多实用方法
