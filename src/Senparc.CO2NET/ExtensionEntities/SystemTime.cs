@@ -21,6 +21,9 @@
     修改标识：Senparc - 20190914
     修改描述：v0.9.0 添加 SystemTime.UtcDateTime 属性
 
+    修改标识：Senparc - 20191001
+    修改描述：v1.0.102 添加更多 SystemTime 辅助方法
+
 ----------------------------------------------------------------*/
 
 namespace System
@@ -56,7 +59,6 @@ namespace System
         public static long NowTicks => Now.Ticks;
 
 
-        //TODO：添加更多实用方法
 
         /// <summary>
         /// 获取 TimeSpan
@@ -69,6 +71,16 @@ namespace System
         }
 
         /// <summary>
+        /// 获取 TotalMilliseconds 时间差
+        /// </summary>
+        /// <param name="compareTime">当前时间 - compareTime</param>
+        /// <returns></returns>
+        public static double DiffTotalMilliseconds(DateTimeOffset compareTime)
+        {
+            return NowDiff(compareTime).TotalMilliseconds;
+        }
+
+        /// <summary>
         /// 获取 TimeSpan
         /// </summary>
         /// <param name="compareTime">当前时间 - compareTime</param>
@@ -78,6 +90,17 @@ namespace System
             return Now.DateTime - compareTime;
         }
 
+        /// <summary>
+        /// 获取 TotalMilliseconds 时间差
+        /// </summary>
+        /// <param name="compareTime">当前时间 - compareTime</param>
+        /// <returns></returns>
+        public static double DiffTotalMilliseconds(DateTime compareTime)
+        {
+            return NowDiff(compareTime).TotalMilliseconds;
+        }
+
+        //TODO：添加更多实用方法
 
     }
 }
