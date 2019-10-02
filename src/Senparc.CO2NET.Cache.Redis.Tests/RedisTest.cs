@@ -48,7 +48,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 
-            Console.WriteLine($"SetTest单条测试耗时：{(SystemTime.Now - dt).TotalMilliseconds}ms");
+            Console.WriteLine($"SetTest单条测试耗时：{SystemTime.DiffTotalMS(dt)}ms");
         }
 
         [TestMethod]
@@ -75,7 +75,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 
-            Console.WriteLine($"SetTest单条测试耗时：{(SystemTime.Now - dt).TotalMilliseconds}ms");
+            Console.WriteLine($"SetTest单条测试耗时：{SystemTime.DiffTotalMS(dt)}ms");
         }
 
         [TestMethod]
@@ -143,7 +143,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                 SetTest();
             }
 
-            Console.WriteLine($"EfficiencyTest总测试时间（使用CacheWrapper)：{(SystemTime.Now - dt1).TotalMilliseconds}ms");
+            Console.WriteLine($"EfficiencyTest总测试时间（使用CacheWrapper)：{SystemTime.DiffTotalMS(dt1)}ms");
         }
 
         //[TestMethod]
@@ -181,7 +181,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
         //            Assert.AreEqual(dt.Ticks, containerBag.AddTime.Ticks);
 
 
-        //            Console.WriteLine($"Thread内单条测试耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+        //            Console.WriteLine($"Thread内单条测试耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
         //            finishCount++;
         //        });
@@ -193,7 +193,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
         //        //等待
         //    }
 
-        //    Console.WriteLine($"EfficiencyTest总测试时间：{(SystemTime.Now - dt1).TotalMilliseconds}ms");
+        //    Console.WriteLine($"EfficiencyTest总测试时间：{SystemTime.DiffTotalMS(dt1)}ms");
         //}
 
         [TestMethod]
@@ -214,11 +214,11 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                     };
                     var dtx = SystemTime.Now;
                     var serializedObj = StackExchangeRedisExtensions.Serialize(newObj);
-                    Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                    Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                     dtx = SystemTime.Now;
                     var containerBag = StackExchangeRedisExtensions.Deserialize<ContainerBag>((RedisValue)serializedObj);//11ms
-                    Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                    Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                     Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
                     Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
@@ -243,11 +243,11 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                 };
                 var dtx = SystemTime.Now;
                 var serializedObj = StackExchangeRedisExtensions.Serialize(newObj);
-                Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                 dtx = SystemTime.Now;
                 var containerBag = StackExchangeRedisExtensions.Deserialize<ContainerBag>((RedisValue)serializedObj);//11ms
-                Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                 Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
@@ -293,11 +293,11 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
                     var dtx = SystemTime.Now;
                     var serializedObj = MessagePackSerializer.Serialize(newObj/*, NativeDateTimeResolver.Instance*/);
-                    Console.WriteLine($"MessagePackSerializer.Serialize 耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                    Console.WriteLine($"MessagePackSerializer.Serialize 耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                     dtx = SystemTime.Now;
                     var containerBag = MessagePackSerializer.Deserialize<ContainerBag>(serializedObj);//11ms
-                    Console.WriteLine($"MessagePackSerializer.Deserialize 耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                    Console.WriteLine($"MessagePackSerializer.Deserialize 耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                     Console.WriteLine(containerBag.AddTime.ToUniversalTime());
 
@@ -347,11 +347,11 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
                     var dtx = SystemTime.Now;
                     var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(newObj);
-                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.SerializeObject 耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.SerializeObject 耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                     dtx = SystemTime.Now;
                     var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<ContainerBag>(serializedObj);//11ms
-                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.DeserializeObject 耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.DeserializeObject 耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                     Console.WriteLine(containerBag.AddTime.ToUniversalTime());
 

@@ -21,7 +21,7 @@ namespace Senparc.CO2NET.Tests.Cache.Local.Lock
 
                 var dt0 = SystemTime.Now;
                 Console.WriteLine($"锁定开始：{dt0}");
-                while ((SystemTime.Now - dt0).TotalMilliseconds < retryCount * retryDelay.TotalMilliseconds + 1000)
+                while (SystemTime.DiffTotalMS(dt0) < retryCount * retryDelay.TotalMilliseconds + 1000)
                 {
                     //确保足够的过期时间
                 }

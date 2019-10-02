@@ -709,7 +709,7 @@ namespace Senparc.CO2NET.HttpUtility
 
 
 
-            //Console.WriteLine($"{System.Threading.Thread.CurrentThread.Name} - FINISH- {(SystemTime.Now - dt1).TotalMilliseconds:###,###} ms");
+            //Console.WriteLine($"{System.Threading.Thread.CurrentThread.Name} - FINISH- {SystemTime.DiffTotalMS(dt1):###,###} ms");
 
 
 #if NET35 || NET40 || NET45

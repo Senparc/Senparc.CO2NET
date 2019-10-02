@@ -69,7 +69,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                 //等待完成
             }
 
-            Console.WriteLine($"过程结束，总用时：{(SystemTime.Now - dtStart).TotalMilliseconds} ms");
+            Console.WriteLine($"过程结束，总用时：{SystemTime.DiffTotalMS(dtStart)} ms");
         }
     }
 }

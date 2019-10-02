@@ -59,12 +59,12 @@ namespace Senparc.CO2NET.Tests.Cache
                     var dtx = SystemTime.Now;
                     var json = testClass.SerializeToCache();
                     //Console.WriteLine(json);
-                    Console.WriteLine($"testClass.SerializeToCache 耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                    Console.WriteLine($"testClass.SerializeToCache 耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
 
                     dtx = SystemTime.Now;
                     var obj = json.DeserializeFromCache<TestClass>();
-                    Console.WriteLine($"json.DeserializeFromCache<TestClass> 耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                    Console.WriteLine($"json.DeserializeFromCache<TestClass> 耗时：{SystemTime.DiffTotalMS(dtx)}ms");
                     Assert.AreEqual(obj.ID, testClass.ID);
                     Assert.AreEqual(obj.Star, testClass.Star);
                     Assert.AreEqual(obj.AddTime, testClass.AddTime);
@@ -102,11 +102,11 @@ namespace Senparc.CO2NET.Tests.Cache
                 var dtx = SystemTime.Now;
                 var json = testClass.SerializeToCache();
                 //Console.WriteLine(json);
-                //Console.WriteLine($"testClass.SerializeToCache 耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"testClass.SerializeToCache 耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                 dtx = SystemTime.Now;
                 var obj = json.DeserializeFromCache<TestClass>();
-                //Console.WriteLine($"json.DeserializeFromCache<TestClass> 耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"json.DeserializeFromCache<TestClass> 耗时：{SystemTime.DiffTotalMS(dtx)}ms");
                 Assert.AreEqual(obj.ID, testClass.ID);
                 Assert.AreEqual(obj.Star, testClass.Star);
                 Assert.AreEqual(obj.AddTime, testClass.AddTime);
@@ -129,11 +129,11 @@ namespace Senparc.CO2NET.Tests.Cache
                 var serializedObj = StackExchangeRedisExtensions.Serialize(testClass);
                 //注意：此处方法似乎会把 DateTimeOffset 对象转为 Object，导致无法反序列化成原始对象。
 
-                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                 dtx = SystemTime.Now;
                 var containerBag = StackExchangeRedisExtensions.Deserialize<TestClass>((RedisValue)serializedObj);//11ms
-                //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                 Assert.AreEqual(containerBag.AddTime.Ticks, testClass.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), testClass.GetHashCode());
@@ -158,11 +158,11 @@ namespace Senparc.CO2NET.Tests.Cache
 
                 var dtx = SystemTime.Now;
                 var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(testClass);
-                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                 dtx = SystemTime.Now;
                 var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<TestClass>(serializedObj);//11ms
-                                                                                                           //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                                                                                                           //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                 Assert.AreEqual(containerBag.AddTime.Ticks, testClass.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), testClass.GetHashCode());
@@ -187,11 +187,11 @@ namespace Senparc.CO2NET.Tests.Cache
 
                 var dtx = SystemTime.Now;
                 var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(testClass);
-                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                 dtx = SystemTime.Now;
                 var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<TestClass>(serializedObj);//11ms
-                //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                 Assert.AreEqual(containerBag.AddTime.Ticks, testClass.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), testClass.GetHashCode());
@@ -219,11 +219,11 @@ namespace Senparc.CO2NET.Tests.Cache
 
                 var dtx = SystemTime.Now;
                 var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(testClass);
-                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
                 dtx = SystemTime.Now;
                 var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<TestClass>(serializedObj);//11ms
-                                                                                                           //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{(SystemTime.Now - dtx).TotalMilliseconds}ms");
+                                                                                                           //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
                 Assert.AreEqual(typeof(TestClass), containerBag.Type);
                 Assert.AreEqual(containerBag.AddTime.Ticks, testClass.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), testClass.GetHashCode());
