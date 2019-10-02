@@ -161,7 +161,7 @@ namespace Senparc.CO2NET.Tests.Helpers
 
 
 
-            Console.WriteLine((SystemTime.Now - dt1).TotalMilliseconds);
+            Console.WriteLine(SystemTime.DiffTotalMS(dt1));
         }
 
         public class RootClass /*: JsonIgnoreNull, IJsonIgnoreNull*/
@@ -280,7 +280,7 @@ namespace Senparc.CO2NET.Tests.Helpers
             var json = SerializerHelper.GetJsonString(test);
             Console.WriteLine(json);
 
-            Console.WriteLine((SystemTime.Now - dt1).TotalMilliseconds);
+            Console.WriteLine(SystemTime.DiffTotalMS(dt1));
 
         }
 

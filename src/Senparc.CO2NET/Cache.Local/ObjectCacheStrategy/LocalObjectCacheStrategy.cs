@@ -194,7 +194,7 @@ namespace Senparc.CO2NET.Cache
             _cache[finalKey] = value;
 #else
             var newKey = !CheckExisted(finalKey, true);
-
+            
             if (expiry.HasValue)
             {
                 _cache.Set(finalKey, value, expiry.Value);

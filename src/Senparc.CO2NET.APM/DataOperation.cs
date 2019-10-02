@@ -158,7 +158,7 @@ namespace Senparc.CO2NET.APM
 
                     if (SenparcTrace.RecordAPMLog)
                     {
-                        SenparcTrace.SendCustomLog($"APM 性能记录 - DataOperation.Set - {_domain}:{kindName}", (SystemTime.Now - dt1).TotalMilliseconds + " ms");
+                        SenparcTrace.SendCustomLog($"APM 性能记录 - DataOperation.Set - {_domain}:{kindName}", SystemTime.DiffTotalMS(dt1) + " ms");
                     }
 
                     return dataItem;
@@ -295,7 +295,7 @@ namespace Senparc.CO2NET.APM
 
                 //if (SenparcTrace.RecordAPMLog)
                 {
-                    SenparcTrace.SendCustomLog("APM 记录 - DataOperation.ReadAndCleanDataItems", (SystemTime.Now - dt1).TotalMilliseconds + " ms");
+                    SenparcTrace.SendCustomLog("APM 记录 - DataOperation.ReadAndCleanDataItems", SystemTime.DiffTotalMS(dt1) + " ms");
                 }
 
                 return result;
