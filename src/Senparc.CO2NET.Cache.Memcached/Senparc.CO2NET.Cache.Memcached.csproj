@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <Version>3.4.0102-preview2</Version>
+    <TargetFrameworks>net45;netstandard2.0;netcoreapp3.0</TargetFrameworks>
+    <Version>3.4.102.1-preview2</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Memcached</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Memcached</RootNamespace>
     
@@ -147,6 +147,13 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
     <DocumentationFile>..\BuildOutPut\netcoreapp2.1\Senparc.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>
 
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.0|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netcoreapp3.0\Senparc.Cache.Memcached.xml</DocumentationFile>
+  </PropertyGroup>
+
+
   <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\BuildOutPut\net461\Senparc.Cache.Memcached.xml</DocumentationFile>
@@ -180,20 +187,15 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
     </PackageReference>
   </ItemGroup>
   
-  <!--<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.1.1" />
-    <PackageReference Include="EnyimMemcachedCore">
-      <Version>1.1.1.12</Version>
-    </PackageReference>
-  </ItemGroup>-->
-
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.0" />
     <PackageReference Include="EnyimMemcachedCore" Version="2.1.10" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' or '$(TargetFramework)' == 'netcoreapp3.0'">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="EnyimMemcachedCore" Version="2.1.10" />
   </ItemGroup>
 
   <ItemGroup>

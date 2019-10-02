@@ -9,9 +9,7 @@
 
 ----------------------------------------------------------------*/
 
-#if NET45 || NET461
-
-#else
+#if !NET45
 using Enyim.Caching;
 using Microsoft.Extensions.Logging;
 using System;
