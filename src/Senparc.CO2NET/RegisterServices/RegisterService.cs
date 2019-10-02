@@ -69,7 +69,9 @@ namespace Senparc.CO2NET.RegisterServices
     /// </summary>
     public class RegisterService : IRegisterService
     {
-        //private RegisterService() : this(null) { }
+        public static RegisterService Object { get; internal set; }
+
+        private RegisterService() : this(null) { }
 
         private RegisterService(SenparcSetting senparcSetting)
         {

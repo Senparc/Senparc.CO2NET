@@ -52,8 +52,8 @@ namespace System
         /// 当天零点时间，从 SystemTime.Now.Date 获得
         /// </summary>
         public static DateTime Today => Now.Date;
-
         /// <summary>
+
         /// 获取当前时间的 Ticks
         /// </summary>
         public static long NowTicks => Now.Ticks;
@@ -75,7 +75,7 @@ namespace System
         /// </summary>
         /// <param name="compareTime">当前时间 - compareTime</param>
         /// <returns></returns>
-        public static double DiffTotalMilliseconds(DateTimeOffset compareTime)
+        public static double DiffTotalMS(DateTimeOffset compareTime)
         {
             return NowDiff(compareTime).TotalMilliseconds;
         }
@@ -87,7 +87,7 @@ namespace System
         /// <param name="compareTime">当前时间 - compareTime</param>
         /// <param name="format">对 TotalMilliseconds 结果进行 ToString([format]) 中的参数</param>
         /// <returns></returns>
-        public static string DiffTotalMilliseconds(DateTimeOffset compareTime, string format)
+        public static string DiffTotalMS(DateTimeOffset compareTime, string format)
         {
             return NowDiff(compareTime).TotalMilliseconds.ToString(format);
         }
@@ -107,7 +107,7 @@ namespace System
         /// </summary>
         /// <param name="compareTime">当前时间 - compareTime</param>
         /// <returns></returns>
-        public static double DiffTotalMilliseconds(DateTime compareTime)
+        public static double DiffTotalMS(DateTime compareTime)
         {
             return NowDiff(compareTime).TotalMilliseconds;
         }
@@ -118,7 +118,7 @@ namespace System
         /// <param name="compareTime">当前时间 - compareTime</param>
         /// <param name="format">对 TotalMilliseconds 结果进行 ToString([format]) 中的参数</param>
         /// <returns></returns>
-        public static string DiffTotalMilliseconds(DateTime compareTime,string format)
+        public static string DiffTotalMS(DateTime compareTime, string format)
         {
             return NowDiff(compareTime).TotalMilliseconds.ToString(format);
         }
