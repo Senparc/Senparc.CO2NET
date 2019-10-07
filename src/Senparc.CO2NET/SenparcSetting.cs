@@ -69,7 +69,7 @@ namespace Senparc.CO2NET
             IsDebug = isDebug;
         }
 
-#if !NETSTANDARD2_0
+#if NET45
         /// <summary>
         /// 从 Web.Config 文件自动生成 SenparcSetting
         /// </summary>

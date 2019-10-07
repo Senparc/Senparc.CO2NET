@@ -53,10 +53,13 @@ using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.IO;
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
 using System.Net.Http;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 #endif
 
 namespace Senparc.CO2NET.RegisterServices
@@ -66,7 +69,13 @@ namespace Senparc.CO2NET.RegisterServices
     /// </summary>
     public static class RegisterServiceExtension
     {
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0) 
+
+        /// <summary>
+        /// 是否已经进行过全局注册
+        /// </summary>
+        public static bool SenparcGlobalServicesRegistered { get; set; }
+
         /// <summary>
         /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程（必须）
         /// </summary>
@@ -79,6 +88,7 @@ namespace Senparc.CO2NET.RegisterServices
             SenparcDI.GlobalServiceCollection = serviceCollection;
             serviceCollection.Configure<SenparcSetting>(configuration.GetSection("SenparcSetting"));
 
+            // .net core 3.0 HttpClient 文档参考：https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/http-requests?view=aspnetcore-3.0
             //配置 HttpClient，可使用 Head 自定义 Cookie
             serviceCollection.AddHttpClient<SenparcHttpClient>()
             //.ConfigureHttpMessageHandlerBuilder((c) =>
@@ -96,6 +106,8 @@ namespace Senparc.CO2NET.RegisterServices
     "DefaultCacheNamespace": "DefaultCache"
   },
              */
+
+            SenparcGlobalServicesRegistered = true;
 
             return serviceCollection;
         }
