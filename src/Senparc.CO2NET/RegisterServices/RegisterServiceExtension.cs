@@ -70,6 +70,12 @@ namespace Senparc.CO2NET.RegisterServices
     public static class RegisterServiceExtension
     {
 #if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0) 
+
+        /// <summary>
+        /// 是否已经进行过全局注册
+        /// </summary>
+        public static bool SenparcGlobalServicesRegistered { get; set; }
+
         /// <summary>
         /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程（必须）
         /// </summary>
@@ -100,6 +106,8 @@ namespace Senparc.CO2NET.RegisterServices
     "DefaultCacheNamespace": "DefaultCache"
   },
              */
+
+            SenparcGlobalServicesRegistered = true;
 
             return serviceCollection;
         }
