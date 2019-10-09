@@ -41,6 +41,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190812
     修改描述：v0.8.8 改用继承 ConcurrentDictionary 后的 MessageQueueDictionary，对方法进行调整
 
+    修改标识：Senparc - 20191009
+    修改描述：v1.0.102 修改 SenparcMessageQueue.GetCurrentKey() 方法
+
 ----------------------------------------------------------------*/
 
 
@@ -112,7 +115,13 @@ namespace Senparc.CO2NET.MessageQueue
         {
             lock (MessageQueueSyncLock)
             {
-                return MessageQueueDictionary.Keys.FirstOrDefault();
+                //不直接使用 Key 是因为 Key 的顺序是不确定的
+                var value = MessageQueueDictionary.Values.OrderBy(z=>z.AddTime).FirstOrDefault();
+                if (value==null)
+                {
+                    return null;
+                }
+                return value.Key;
             }
         }
 
