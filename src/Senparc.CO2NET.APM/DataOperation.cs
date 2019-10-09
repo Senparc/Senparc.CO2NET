@@ -39,6 +39,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190523
     修改描述：v0.4.1.1 在静态构造函数中初始化 KindNameStore
 
+    修改标识：Senparc - 20190523
+    修改描述：v0.6.102 使用队列处理 DataOperation.SetAsync()
+
 ----------------------------------------------------------------*/
 
 
@@ -133,42 +136,50 @@ namespace Senparc.CO2NET.APM
                 return null;//不启用，不进行记录
             }
 
-            try
+            var dataItem = new DataItem()
             {
-                var dt1 = SystemTime.Now;
-                var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
-                var finalKey = BuildFinalKey(kindName);
-                //使用同步锁确定写入顺序
-                using (await cacheStragety.BeginCacheLockAsync("SenparcAPM", finalKey).ConfigureAwait(false))
+                KindName = kindName,
+                Value = value,
+                Data = data,
+                TempStorage = tempStorage,
+                DateTime = dateTime ?? SystemTime.Now
+            };
+
+            MessageQueue.SenparcMessageQueue queue = new MessageQueue.SenparcMessageQueue();
+            queue.Add($"SenparcAPM-{kindName}-{DateTime.Now.Ticks}", async () =>
+            {
+                try
                 {
-                    var dataItem = new DataItem()
+                    var dt1 = SystemTime.Now;
+                    var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
+                    var finalKey = BuildFinalKey(kindName);
+                    //使用同步锁确定写入顺序
+                    using (await cacheStragety.BeginCacheLockAsync("SenparcAPM", finalKey).ConfigureAwait(false))
                     {
-                        KindName = kindName,
-                        Value = value,
-                        Data = data,
-                        TempStorage = tempStorage,
-                        DateTime = dateTime ?? SystemTime.Now
-                    };
 
-                    var list = await GetDataItemListAsync(kindName).ConfigureAwait(false);
-                    list.Add(dataItem);
-                    await cacheStragety.SetAsync(finalKey, list, Config.DataExpire, true).ConfigureAwait(false);
 
-                    await RegisterFinalKeyAsync(kindName).ConfigureAwait(false);//注册Key
+                        var list = await GetDataItemListAsync(kindName).ConfigureAwait(false);
+                        list.Add(dataItem);
+                        await cacheStragety.SetAsync(finalKey, list, Config.DataExpire, true).ConfigureAwait(false);
 
-                    if (SenparcTrace.RecordAPMLog)
-                    {
-                        SenparcTrace.SendCustomLog($"APM 性能记录 - DataOperation.Set - {_domain}:{kindName}", SystemTime.DiffTotalMS(dt1) + " ms");
+                        await RegisterFinalKeyAsync(kindName).ConfigureAwait(false);//注册Key
+
+                        if (SenparcTrace.RecordAPMLog)
+                        {
+                            SenparcTrace.SendCustomLog($"APM 性能记录 - DataOperation.Set - {_domain}:{kindName}", SystemTime.DiffTotalMS(dt1) + " ms");
+                        }
+
+                        return;// dataItem;
                     }
-
-                    return dataItem;
                 }
-            }
-            catch (Exception e)
-            {
-                new APMException(e.Message, _domain, kindName, $"DataOperation.Set -  {_domain}:{kindName}");
-                return null;
-            }
+                catch (Exception e)
+                {
+                    new APMException(e.Message, _domain, kindName, $"DataOperation.Set -  {_domain}:{kindName}");
+                    return;// null;
+                }
+            });
+
+            return dataItem;
         }
 
         /// <summary>
@@ -183,6 +194,12 @@ namespace Senparc.CO2NET.APM
                 var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
                 var finalKey = BuildFinalKey(kindName);
                 var list = await cacheStragety.GetAsync<List<DataItem>>(finalKey, true).ConfigureAwait(false);
+
+                if (list != null)
+                {
+                    list = list.OrderBy(z => z.DateTime).ToList();
+                }
+
                 return list ?? new List<DataItem>();
             }
             catch (Exception e)

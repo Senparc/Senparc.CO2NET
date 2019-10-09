@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
 
-    <Version>0.5.102-preview2</Version>
+    <Version>0.6.102-preview7</Version>
     <AssemblyName>Senparc.CO2NET.APM</AssemblyName>
     <RootNamespace>Senparc.CO2NET.APM</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -35,6 +35,7 @@
       v0.4.3 支持新版本 CO2NET，提供带符号的 nuget 包（.snupkg)
       v0.5.0 支持 .NET Core 3.0
       v0.5.102 支持新版本 CO2NET
+      v0.6.102 支持新版本 CO2NET
     </PackageReleaseNotes>
 
   </PropertyGroup>
