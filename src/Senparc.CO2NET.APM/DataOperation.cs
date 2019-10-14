@@ -40,7 +40,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改描述：v0.4.1.1 在静态构造函数中初始化 KindNameStore
 
     修改标识：Senparc - 20190523
-    修改描述：v0.6.102 使用队列处理 DataOperation.SetAsync()
+    修改描述：v0.6.102 1、使用队列处理 DataOperation.SetAsync()
+                       2、DataOperation.KindNameStore 使用 ConcurrentDictionary 类型
 
 ----------------------------------------------------------------*/
 
@@ -69,7 +70,7 @@ namespace Senparc.CO2NET.APM
         private string _domainKey;
 
         //TODO：需要考虑分布式的情况，最好储存在缓存中
-        private static Dictionary<string, Dictionary<string, DateTimeOffset>> KindNameStore { get; set; } //= new Dictionary<string, Dictionary<string, DateTimeOffset>>();
+        private static ConcurrentDictionary<string, ConcurrentDictionary<string, DateTimeOffset>> KindNameStore { get; set; } //= new Dictionary<string, Dictionary<string, DateTimeOffset>>();
 
         private string BuildFinalKey(string kindName)
         {
@@ -110,13 +111,13 @@ namespace Senparc.CO2NET.APM
 
             if (!KindNameStore.ContainsKey(_domain))
             {
-                KindNameStore[_domain] = new Dictionary<string, DateTimeOffset>();
+                KindNameStore[_domain] = new ConcurrentDictionary<string, DateTimeOffset>();
             }
         }
 
         static DataOperation()
         {
-            KindNameStore = new Dictionary<string, Dictionary<string, DateTimeOffset>>();
+            KindNameStore = new ConcurrentDictionary<string, ConcurrentDictionary<string, DateTimeOffset>>();
 
         }
 
