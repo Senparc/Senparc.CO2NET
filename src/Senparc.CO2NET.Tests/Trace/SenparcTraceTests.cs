@@ -47,7 +47,7 @@ namespace Senparc.CO2NET.Tests.Trace
             SenparcTrace.Log($"添加Log：{keyword}");
 
             var dt1 = SystemTime.Now;
-            while ((SystemTime.Now - dt1).TotalMilliseconds < 600)
+            while (SystemTime.DiffTotalMS(dt1) < 600)
             {
                 //等待队列执行
             }
@@ -68,7 +68,7 @@ namespace Senparc.CO2NET.Tests.Trace
             SenparcTrace.SendCustomLog("标题", $"添加Log：{keyword}");
 
             var dt1 = SystemTime.Now;
-            while ((SystemTime.Now - dt1).TotalMilliseconds < 800)
+            while (SystemTime.DiffTotalMS(dt1) < 800)
             {
                 //等待队列执行
             }
@@ -85,7 +85,7 @@ namespace Senparc.CO2NET.Tests.Trace
             SenparcTrace.SendApiLog(url, result);
 
             var dt1 = SystemTime.Now;
-            while ((SystemTime.Now - dt1).TotalMilliseconds < 800)
+            while (SystemTime.DiffTotalMS(dt1) < 800)
             {
                 //等待队列执行
             }
@@ -102,7 +102,7 @@ namespace Senparc.CO2NET.Tests.Trace
             SenparcTrace.SendApiLog(url, data);
 
             var dt1 = SystemTime.Now;
-            while ((SystemTime.Now - dt1).TotalMilliseconds < 800)
+            while (SystemTime.DiffTotalMS(dt1) < 800)
             {
                 //等待队列执行
             }
@@ -121,7 +121,7 @@ namespace Senparc.CO2NET.Tests.Trace
             SenparcTrace.BaseExceptionLog(ex);
 
             var dt1 = SystemTime.Now;
-            while ((SystemTime.Now - dt1).TotalMilliseconds < 800)
+            while (SystemTime.DiffTotalMS(dt1) < 800)
             {
                 //等待队列执行
             }
@@ -139,7 +139,7 @@ namespace Senparc.CO2NET.Tests.Trace
             SenparcTrace.SendCustomLog("测试OnLogFuncTest", keyword);
 
             var dt1 = SystemTime.Now;
-            while ((SystemTime.Now - dt1).TotalMilliseconds < 800)
+            while (SystemTime.DiffTotalMS(dt1) < 800)
             {
                 //等待队列执行
             }
@@ -161,7 +161,7 @@ namespace Senparc.CO2NET.Tests.Trace
             SenparcTrace.BaseExceptionLog(ex);
 
             var dt1 = SystemTime.Now;
-            while ((SystemTime.Now - dt1).TotalMilliseconds < 800)
+            while (SystemTime.DiffTotalMS(dt1) < 800)
             {
                 //等待队列执行
             }

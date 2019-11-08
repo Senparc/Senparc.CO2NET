@@ -39,6 +39,10 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190523
     修改描述：v0.4.1.1 在静态构造函数中初始化 KindNameStore
 
+    修改标识：Senparc - 20190523
+    修改描述：v0.6.102 1、使用队列处理 DataOperation.SetAsync()
+                       2、DataOperation.KindNameStore 使用 ConcurrentDictionary 类型
+
 ----------------------------------------------------------------*/
 
 
@@ -66,7 +70,7 @@ namespace Senparc.CO2NET.APM
         private string _domainKey;
 
         //TODO：需要考虑分布式的情况，最好储存在缓存中
-        private static Dictionary<string, Dictionary<string, DateTimeOffset>> KindNameStore { get; set; } //= new Dictionary<string, Dictionary<string, DateTimeOffset>>();
+        private static ConcurrentDictionary<string, ConcurrentDictionary<string, DateTimeOffset>> KindNameStore { get; set; } //= new Dictionary<string, Dictionary<string, DateTimeOffset>>();
 
         private string BuildFinalKey(string kindName)
         {
@@ -107,13 +111,19 @@ namespace Senparc.CO2NET.APM
 
             if (!KindNameStore.ContainsKey(_domain))
             {
-                KindNameStore[_domain] = new Dictionary<string, DateTimeOffset>();
+                KindNameStore[_domain] = new ConcurrentDictionary<string, DateTimeOffset>();
             }
         }
 
         static DataOperation()
         {
             KindNameStore = new Dictionary<string, Dictionary<string, DateTimeOffset>>();
+
+        }
+
+        static DataOperation()
+        {
+            KindNameStore = new ConcurrentDictionary<string, ConcurrentDictionary<string, DateTimeOffset>>();
 
         }
 
@@ -133,42 +143,50 @@ namespace Senparc.CO2NET.APM
                 return null;//不启用，不进行记录
             }
 
-            try
+            var dataItem = new DataItem()
             {
-                var dt1 = SystemTime.Now;
-                var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
-                var finalKey = BuildFinalKey(kindName);
-                //使用同步锁确定写入顺序
-                using (await cacheStragety.BeginCacheLockAsync("SenparcAPM", finalKey).ConfigureAwait(false))
+                KindName = kindName,
+                Value = value,
+                Data = data,
+                TempStorage = tempStorage,
+                DateTime = dateTime ?? SystemTime.Now
+            };
+
+            MessageQueue.SenparcMessageQueue queue = new MessageQueue.SenparcMessageQueue();
+            queue.Add($"SenparcAPM-{kindName}-{DateTime.Now.Ticks}", async () =>
+            {
+                try
                 {
-                    var dataItem = new DataItem()
+                    var dt1 = SystemTime.Now;
+                    var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
+                    var finalKey = BuildFinalKey(kindName);
+                    //使用同步锁确定写入顺序
+                    using (await cacheStragety.BeginCacheLockAsync("SenparcAPM", finalKey).ConfigureAwait(false))
                     {
-                        KindName = kindName,
-                        Value = value,
-                        Data = data,
-                        TempStorage = tempStorage,
-                        DateTime = dateTime ?? SystemTime.Now
-                    };
 
-                    var list = await GetDataItemListAsync(kindName).ConfigureAwait(false);
-                    list.Add(dataItem);
-                    await cacheStragety.SetAsync(finalKey, list, Config.DataExpire, true).ConfigureAwait(false);
 
-                    await RegisterFinalKeyAsync(kindName).ConfigureAwait(false);//注册Key
+                        var list = await GetDataItemListAsync(kindName).ConfigureAwait(false);
+                        list.Add(dataItem);
+                        await cacheStragety.SetAsync(finalKey, list, Config.DataExpire, true).ConfigureAwait(false);
 
-                    if (SenparcTrace.RecordAPMLog)
-                    {
-                        SenparcTrace.SendCustomLog($"APM 性能记录 - DataOperation.Set - {_domain}:{kindName}", (SystemTime.Now - dt1).TotalMilliseconds + " ms");
+                        await RegisterFinalKeyAsync(kindName).ConfigureAwait(false);//注册Key
+
+                        if (SenparcTrace.RecordAPMLog)
+                        {
+                            SenparcTrace.SendCustomLog($"APM 性能记录 - DataOperation.Set - {_domain}:{kindName}", SystemTime.DiffTotalMS(dt1) + " ms");
+                        }
+
+                        return;// dataItem;
                     }
-
-                    return dataItem;
                 }
-            }
-            catch (Exception e)
-            {
-                new APMException(e.Message, _domain, kindName, $"DataOperation.Set -  {_domain}:{kindName}");
-                return null;
-            }
+                catch (Exception e)
+                {
+                    new APMException(e.Message, _domain, kindName, $"DataOperation.Set -  {_domain}:{kindName}");
+                    return;// null;
+                }
+            });
+
+            return dataItem;
         }
 
         /// <summary>
@@ -183,6 +201,12 @@ namespace Senparc.CO2NET.APM
                 var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
                 var finalKey = BuildFinalKey(kindName);
                 var list = await cacheStragety.GetAsync<List<DataItem>>(finalKey, true).ConfigureAwait(false);
+
+                if (list != null)
+                {
+                    list = list.OrderBy(z => z.DateTime).ToList();
+                }
+
                 return list ?? new List<DataItem>();
             }
             catch (Exception e)
@@ -295,7 +319,7 @@ namespace Senparc.CO2NET.APM
 
                 //if (SenparcTrace.RecordAPMLog)
                 {
-                    SenparcTrace.SendCustomLog("APM 记录 - DataOperation.ReadAndCleanDataItems", (SystemTime.Now - dt1).TotalMilliseconds + " ms");
+                    SenparcTrace.SendCustomLog("APM 记录 - DataOperation.ReadAndCleanDataItems", SystemTime.DiffTotalMS(dt1) + " ms");
                 }
 
                 return result;

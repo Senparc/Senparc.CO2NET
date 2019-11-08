@@ -15,6 +15,8 @@
 
 ![.NET Core 2.0][core20Y] 同时支持 .NET Standard 2.0+ 及 .NET Core 2.2+
 
+> CO2NET 将逐步停止对 .NET Framework 4.0 及以下版本的支持。
+
 [1.1]: https://img.shields.io/nuget/v/Senparc.CO2NET.svg?style=flat
 [1.2]: https://www.nuget.org/packages/Senparc.CO2NET
 [2.1]: https://img.shields.io/nuget/v/Senparc.CO2NET.APM.svg?style=flat

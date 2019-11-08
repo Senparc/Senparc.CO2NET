@@ -31,12 +31,18 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190521
     修改描述：v0.7.2.1 解决 GetHttpClientHandler() 方法中 cookieContainer 为 null 可能发生的异常
 
+    修改标识：Senparc - 20190911
+    修改描述：v0.8.10 优化 SetResponseCookieContainer() 方法，防止 null 异常（理论上不会出现）
+
 ----------------------------------------------------------------*/
 
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using Senparc.CO2NET.Extensions;
+using Senparc.CO2NET.Trace;
+using Senparc.CO2NET.Exceptions;
 
 #if !NET35 && !NET40
 using System.Net.Http;
@@ -67,7 +73,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
 
         /// <summary>
         /// 获取 HttpClientHandler 对象
@@ -86,7 +92,7 @@ namespace Senparc.CO2NET.HttpUtility
                 AutomaticDecompression = decompressionMethods
             };
 
-            if (cookieContainer!=null)
+            if (cookieContainer != null)
             {
                 httpClientHandler.CookieContainer = cookieContainer;
             }
@@ -100,19 +106,36 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="response"></param>
         public static void SetResponseCookieContainer(CookieContainer cookieContainer, HttpResponseMessage response)
         {
-            if (cookieContainer == null || response==null)
+            if (cookieContainer == null || response == null)
             {
                 return;
             }
 
             //收集Cookie
-            if (cookieContainer != null && response.Headers.TryGetValues(Microsoft.Net.Http.Headers.HeaderNames.SetCookie, out var setCookieHeaders))
+            try
             {
-                foreach (var header in setCookieHeaders)
+                IEnumerable<string> setCookieHeaders = null;
+                if (cookieContainer != null && response.Headers != null &&
+                    response.Headers.Contains(Microsoft.Net.Http.Headers.HeaderNames.SetCookie) && response.Headers.TryGetValues(Microsoft.Net.Http.Headers.HeaderNames.SetCookie, out setCookieHeaders))
                 {
-                    cookieContainer.SetCookies(response.RequestMessage.RequestUri, header);
+                    if (setCookieHeaders == null)
+                    {
+                        throw new Exception("setCookieHeaders is null");
+                    }
+
+                    foreach (var header in setCookieHeaders)
+                    {
+                        //Console.WriteLine("Header:" + header.ToJson());
+                        cookieContainer.SetCookies(response.RequestMessage.RequestUri, header);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                //理论上这里不应该抛出异常
+                _ = new HttpException($"SetResponseCookieContainer 过程失败！{ex.Message}", ex);
+            }
+
         }
 #endif
 

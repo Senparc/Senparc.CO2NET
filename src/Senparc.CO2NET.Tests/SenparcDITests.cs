@@ -93,7 +93,7 @@ namespace Senparc.CO2NET.Tests
 
                 var dt1 = SystemTime.Now;
                 var provider = services.BuildServiceProvider();
-                Console.WriteLine($"HashCode:{provider.GetHashCode()},Time:{(SystemTime.Now - dt1).TotalMilliseconds}ms");
+                Console.WriteLine($"HashCode:{provider.GetHashCode()},Time:{SystemTime.DiffTotalMS(dt1)}ms");
 
 
                 Console.WriteLine("进行Scope测试");
@@ -126,7 +126,7 @@ namespace Senparc.CO2NET.Tests
             BaseTest.RegisterServiceStart(true);
 
             SenparcDI.GlobalServiceCollection.AddScoped<SenparcSetting>();
-            SenparcDI.GlobalIServiceProvider = null;
+            SenparcDI.ResetGlobalIServiceProvider();
 
             //测试跨线程唯一
             var s = SenparcDI.GetService<SenparcSetting>(true);

@@ -31,8 +31,8 @@ namespace Senparc.CO2NET.Cache
     /// </summary>
     public class CacheStrategyFactory
     {
-        internal static Func<IBaseObjectCacheStrategy> ObjectCacheStrateFunc;
-        internal static IBaseObjectCacheStrategy ObjectCacheStrate;
+        internal static Func<IBaseObjectCacheStrategy> ObjectCacheStrateFunc { get; set; }
+        internal static IBaseObjectCacheStrategy ObjectCacheStrategy { get; set; }
         //internal static IBaseCacheStrategy<TKey, TValue> GetContainerCacheStrategy<TKey, TValue>()
         //    where TKey : class
         //    where TValue : class
@@ -50,7 +50,7 @@ namespace Senparc.CO2NET.Cache
 
             if (func!=null)
             {
-                ObjectCacheStrate = func();//提前运行一次，否则第一次运行开销比较大（400毫秒以上）
+                ObjectCacheStrategy = func();//提前运行一次，否则第一次运行开销比较大（400毫秒以上）
             }
         }
 

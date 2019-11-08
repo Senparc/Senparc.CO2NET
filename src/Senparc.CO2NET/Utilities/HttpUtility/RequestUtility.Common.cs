@@ -61,6 +61,12 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190521
     修改描述：v0.7.3 .NET Core 提供多证书注册功能
 
+    修改标识：Senparc - 20190521
+    修改描述：v0.8.4 HttpUtility.HttpPost_Common_NetCore 所调用的额 CreateFileContent 取消对 fileName 参数的 UrlEncode 编码
+
+    修改标识：Senparc - 20190928
+    修改描述：v1.0.101 RequestUtility.GetRequestMemoryStream() 增加对 .NET Core 3.0 AllowSynchronousIO 的设置
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -80,8 +86,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Senparc.CO2NET.Extensions;
 #endif
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
 using Microsoft.AspNetCore.Http;
+#if NETCOREAPP3_0
+using Microsoft.AspNetCore.Http.Features;
+#endif
 #endif
 
 
@@ -159,6 +168,14 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static Stream GetRequestMemoryStream(this HttpRequest request)
         {
+#if NETCOREAPP3_0
+            var syncIOFeature = request.HttpContext.Features.Get<IHttpBodyControlFeature>();
+
+            if (syncIOFeature != null)
+            {
+                syncIOFeature.AllowSynchronousIO = true;
+            }
+#endif
             string body = new StreamReader(request.Body).ReadToEnd();
             byte[] requestData = Encoding.UTF8.GetBytes(body);
             Stream inputStream = new MemoryStream(requestData);
@@ -243,7 +260,7 @@ namespace Senparc.CO2NET.HttpUtility
 
         private static StreamContent CreateFileContent(Stream stream, string formName, string fileName, string contentType = "application/octet-stream")
         {
-            fileName = fileName.UrlEncode();
+            //fileName = fileName.UrlEncode();
             var fileContent = new StreamContent(stream);
             //上传格式参考：
             //https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738729

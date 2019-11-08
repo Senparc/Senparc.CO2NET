@@ -17,7 +17,7 @@ namespace Senparc.CO2NET.Cache
         string IdentityName { get; }
 
         /// <summary>
-        /// 预的名称
+        /// 域的名称
         /// </summary>
         string DomainName { get; }
     }
