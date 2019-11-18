@@ -1,8 +1,7 @@
 <img src="https://sdk.weixin.senparc.com/images/senparc-logo-500.jpg" /> 
 
 # Senparc.CO2NET
-
-[![Build status](https://mysenparc.visualstudio.com/Senparc%20SDK/_apis/build/status/CO2NET/Senparc.CO2NET%20-ASP.NET%20Core-CI-clone)](https://mysenparc.visualstudio.com/Senparc%20SDK/_build/latest?definitionId=11)
+[![Build status](https://mysenparc.visualstudio.com/Senparc%20SDK/_apis/build/status/CO2NET/CO2NET%20master-%E5%A4%96%E9%83%A8-%E8%87%AA%E5%8A%A8)](https://mysenparc.visualstudio.com/Senparc%20SDK/_build/latest?definitionId=13)
 [![Build status](https://ci.appveyor.com/api/projects/status/uqhyn9i2x5r300dq/branch/master?svg=true)](https://ci.appveyor.com/project/JeffreySu/senparc-co2net/branch/master)
 [![NuGet](https://img.shields.io/nuget/dt/Senparc.CO2NET.svg)](https://www.nuget.org/packages/Senparc.CO2NET)
 
