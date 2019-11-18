@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0;netcoreapp3.0</TargetFrameworks>
-    <Version>3.4.102.1</Version>
+    <Version>3.4.103</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Memcached</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Memcached</RootNamespace>
     
@@ -89,6 +89,7 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
       v3.3.5 支持新版本 CO2NET，提供带符号的 nuget 包（.snupkg)
       v3.4.0 支持新版本 CO23NET，支持 .NET Core 3.0
       v3.4.102 支持新版本 CO2NET
+      v3.4.103 支持新版本 CO2NET
 
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>

@@ -39,6 +39,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20181227
     修改描述：v0.8.9 提供 AutoUnlockLogFile 参数，并针对日志文件可能被占用的情况尝试自动解锁
 
+    修改标识：Senparc - 20181227
+    修改描述：v0.8.9 提供 AutoUnlockLogFile 参数，并针对日志文件可能被占用的情况尝试自动解锁
+
 ----------------------------------------------------------------*/
 
 
@@ -103,7 +106,7 @@ namespace Senparc.CO2NET.Trace
         /// </summary>
         protected static Action<string> _queue = async (logStr) =>
         {
-            using (await Cache.BeginCacheLockAsync(LockName, ""))
+            using (await Cache.BeginCacheLockAsync(LockName, "").ConfigureAwait(false))
             {
                 string logDir;
 #if NET35
