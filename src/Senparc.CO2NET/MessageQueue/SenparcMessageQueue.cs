@@ -65,7 +65,7 @@ namespace Senparc.CO2NET.MessageQueue
         public static MessageQueueDictionary MessageQueueDictionary = new MessageQueueDictionary();
 
         /// <summary>
-        /// 同步执行锁
+        /// 同步执行锁（注意：此处不使用并发锁，也不实用缓存策略中的本地锁，否则如果在外部锁中记录日志可能会引发死循环）
         /// </summary>
         private static object MessageQueueSyncLock = new object();
         /// <summary>

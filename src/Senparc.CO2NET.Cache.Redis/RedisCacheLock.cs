@@ -38,7 +38,6 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 using System;
 using System.Threading.Tasks;
 using Redlock.CSharp;
-using Senparc.CO2NET.Cache;
 
 namespace Senparc.CO2NET.Cache.Redis
 {
@@ -112,7 +111,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <returns></returns>
         public static async Task<ICacheLock> CreateAndLockAsync(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
         {
-            return await new RedisCacheLock(strategy as BaseRedisObjectCacheStrategy, resourceName, key, retryCount, retryDelay).LockAsync();
+            return await new RedisCacheLock(strategy as BaseRedisObjectCacheStrategy, resourceName, key, retryCount, retryDelay).LockAsync().ConfigureAwait(false);
         }
 
 
