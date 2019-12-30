@@ -69,7 +69,7 @@ namespace Senparc.CO2NET.Sample.netcore3
 
 
             // 启动 CO2NET 全局注册，必须！
-            app.UseSenparcGlobal(env as Microsoft.AspNetCore.Hosting.IHostingEnvironment, senparcSetting.Value, register =>
+            app.UseSenparcGlobal(env, senparcSetting.Value, register =>
                 {
                     #region CO2NET 全局配置
 

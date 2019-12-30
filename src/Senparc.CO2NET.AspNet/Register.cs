@@ -32,9 +32,9 @@ namespace Senparc.CO2NET.AspNet
         /// <returns></returns>
         public static IRegisterService UseSenparcGlobal(this IApplicationBuilder registerService,
 #if NETSTANDARD2_0
-            IHostingEnvironment env, 
+            Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/ env,
 #else
-            IHostingEnvironment/*IWebHostEnvironment*/ env,
+            Microsoft.Extensions.Hosting.IHostEnvironment/*IWebHostEnvironment*/ env,
 #endif
             SenparcSetting senparcSetting,
             Action<RegisterService> registerConfigure,

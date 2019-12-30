@@ -19,9 +19,9 @@ namespace Senparc.CO2NET.AspNet.RegisterServices
         /// <returns></returns>
         public static Senparc.CO2NET.RegisterServices.RegisterService Start(
 #if NETSTANDARD2_0
-            IHostingEnvironment env, 
+            Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/ env, 
 #else
-            IHostingEnvironment/*IWebHostEnvironment*/ env,
+            Microsoft.Extensions.Hosting.IHostEnvironment/*IWebHostEnvironment*/ env,
 #endif
             SenparcSetting senparcSetting)
         {

@@ -14,12 +14,12 @@ namespace Senparc.CO2NET
         /// <summary>
         /// Web hosting environment
         /// </summary>
-        public static IHostingEnvironment HostingEnvironment { get; set; }
+        public static Microsoft.Extensions.Hosting.IHostEnvironment HostingEnvironment { get; set; }
 #elif NETSTANDARD2_1
         /// <summary>
         /// Web hosting environment
         /// </summary>
-        public static IHostingEnvironment/*IWebHostEnvironment*/ HostingEnvironment { get; set; }
+        public static Microsoft.Extensions.Hosting.IHostEnvironment/*IWebHostEnvironment*/ HostingEnvironment { get; set; }
 #endif
     }
 }

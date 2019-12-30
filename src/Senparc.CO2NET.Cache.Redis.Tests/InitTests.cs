@@ -28,7 +28,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             serviceCollection.AddSenparcGlobalServices(config);
             serviceCollection.AddMemoryCache();//使用内存缓存
 
-            var mockEnv = new Mock<IHostingEnvironment>();
+            var mockEnv = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
 
             RedisManager.ConfigurationOption = null;//测试前清除
