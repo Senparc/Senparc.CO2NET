@@ -45,9 +45,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
    
 ----------------------------------------------------------------*/
 
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
-using Microsoft.AspNetCore.Hosting;
-#endif 
+
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -89,18 +87,6 @@ namespace Senparc.CO2NET
                 //}
             }
         }
-
-#if NETSTANDARD2_0
-        /// <summary>
-        /// Web hosting environment
-        /// </summary>
-        public static IHostingEnvironment HostingEnvironment { get; set; }
-#elif (NETSTANDARD2_1 || NETCOREAPP3_0)
-        /// <summary>
-        /// Web hosting environment
-        /// </summary>
-        public static IWebHostEnvironment HostingEnvironment { get; set; }
-#endif
 
         /// <summary>
         /// 请求超时设置（以毫秒为单位），默认为10秒。

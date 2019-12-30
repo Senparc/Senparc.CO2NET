@@ -100,7 +100,7 @@ namespace Senparc.CO2NET.HttpUtility
         public static T PostFileGetJson<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null,
             Dictionary<string, string> postDataDictionary = null,
             Encoding encoding = null,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -113,7 +113,7 @@ namespace Senparc.CO2NET.HttpUtility
                 postDataDictionary.FillFormDataStream(ms); //填充formData
 
                 string returnText = RequestUtility.HttpPost(url, cookieContainer, ms, fileDictionary, null, encoding,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
                     certName,
 #else
                     cer,
@@ -143,7 +143,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static T PostGetJson<T>(string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -152,7 +152,7 @@ namespace Senparc.CO2NET.HttpUtility
             int timeOut = Config.TIME_OUT)
         {
             string returnText = RequestUtility.HttpPost(url, cookieContainer, fileStream, null, null, encoding,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
                 certName,
 #else
                 cer,
@@ -181,7 +181,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static T PostGetJson<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -189,7 +189,7 @@ namespace Senparc.CO2NET.HttpUtility
             bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
             string returnText = RequestUtility.HttpPost(url, cookieContainer, formData, encoding,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
                 certName,
 #else
                 cer,
@@ -255,7 +255,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static async Task<T> PostFileGetJsonAsync<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null, Dictionary<string, string> postDataDictionary = null,
             Encoding encoding = null,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -268,7 +268,7 @@ namespace Senparc.CO2NET.HttpUtility
                 postDataDictionary.FillFormDataStream(ms); //填充formData
 
                 string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, ms, fileDictionary, null, encoding,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
                     certName,
 #else
                     cer,
@@ -299,7 +299,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static async Task<T> PostGetJsonAsync<T>(string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -308,7 +308,7 @@ namespace Senparc.CO2NET.HttpUtility
             int timeOut = Config.TIME_OUT)
         {
             string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, fileStream, null, null, encoding,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
                 certName,
 #else
                 cer,
@@ -338,7 +338,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static async Task<T> PostGetJsonAsync<T>(string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -346,7 +346,7 @@ namespace Senparc.CO2NET.HttpUtility
             bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
             string returnText = await RequestUtility.HttpPostAsync(url, cookieContainer, formData, encoding,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
                 certName,
 #else
                 cer,

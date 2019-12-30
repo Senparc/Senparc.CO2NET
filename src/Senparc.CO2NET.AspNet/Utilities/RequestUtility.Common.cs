@@ -67,6 +67,10 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190928
     修改描述：v1.0.101 RequestUtility.GetRequestMemoryStream() 增加对 .NET Core 3.0 AllowSynchronousIO 的设置
 
+    -- 从 CO2NET 移植到 CO2NET.AspNet --
+    
+    修改标识：Senparc - 20180721
+    修改描述：v0.1.0  从 CO2NET 移植到 CO2NET.AspNet
 ----------------------------------------------------------------*/
 
 using System;
@@ -85,6 +89,7 @@ using System.Web;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Senparc.CO2NET.Extensions;
+using Microsoft.AspNetCore.Http;
 #endif
 
 namespace Senparc.CO2NET.HttpUtility

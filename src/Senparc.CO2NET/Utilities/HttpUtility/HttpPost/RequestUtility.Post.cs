@@ -70,8 +70,7 @@ using System.Web;
 using System.Net.Http;
 using System.Net.Http.Headers;
 #endif
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
-using Microsoft.AspNetCore.Http;
+#if NETSTANDARD2_0 || NETSTANDARD2_1
 using Senparc.CO2NET.WebProxy;
 using Senparc.CO2NET.Exceptions;
 using System.Linq;
@@ -242,7 +241,7 @@ namespace Senparc.CO2NET.HttpUtility
 
 #endif
 
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
         /// <summary>
         /// 给.NET Core使用的HttpPost请求公共设置方法
         /// </summary>
@@ -395,7 +394,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static string HttpPost(string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null,
             Encoding encoding = null,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -409,7 +408,7 @@ namespace Senparc.CO2NET.HttpUtility
             string contentType = HttpClientHelper.GetContentType(formData);
 
             return HttpPost(url, cookieContainer, ms, null, null, encoding,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
                 certName,
 #else
                 cer,
@@ -436,7 +435,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static string HttpPost(string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -450,7 +449,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             var senparcResponse = HttpResponsePost(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
                 certName,
 #else
                 cer,
@@ -548,7 +547,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static SenparcHttpResponse HttpResponsePost(string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -632,7 +631,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static async Task<string> HttpPostAsync(string url, CookieContainer cookieContainer = null,
             Dictionary<string, string> formData = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -646,7 +645,7 @@ namespace Senparc.CO2NET.HttpUtility
             string contentType = HttpClientHelper.GetContentType(formData);
 
             return await HttpPostAsync(url, cookieContainer, ms, null, null, encoding,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
                 certName,
 #else
                 cer,
@@ -674,7 +673,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static async Task<string> HttpPostAsync(string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -698,7 +697,7 @@ namespace Senparc.CO2NET.HttpUtility
             //Console.WriteLine($"{System.Threading.Thread.CurrentThread.Name} - START - {dt1:HH:mm:ss.ffff}");
 
             var senparcResponse = await HttpResponsePostAsync(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
                 certName,
 #else
                 cer,
@@ -820,7 +819,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static async Task<SenparcHttpResponse> HttpResponsePostAsync(string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
 #else
             X509Certificate2 cer = null,

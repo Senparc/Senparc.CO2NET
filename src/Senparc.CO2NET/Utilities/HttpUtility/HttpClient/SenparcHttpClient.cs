@@ -34,7 +34,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 ----------------------------------------------------------------*/
 
 
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;

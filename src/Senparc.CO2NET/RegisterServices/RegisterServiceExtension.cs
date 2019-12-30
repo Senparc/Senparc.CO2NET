@@ -53,13 +53,10 @@ using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.IO;
 
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
 using System.Net.Http;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 #endif
 
 namespace Senparc.CO2NET.RegisterServices
@@ -69,7 +66,7 @@ namespace Senparc.CO2NET.RegisterServices
     /// </summary>
     public static class RegisterServiceExtension
     {
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0) 
+#if NETSTANDARD2_0 || NETSTANDARD2_1 
 
         /// <summary>
         /// 是否已经进行过全局注册
