@@ -40,7 +40,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using Senparc.CO2NET.Extensions;
-#if NET35 || NET40 || NET45
+#if NET45
 using System.Web;
 #else
 using System.Net.Http;
@@ -54,7 +54,7 @@ namespace Senparc.CO2NET.HttpUtility
     /// </summary>
     public class SenparcHttpResponse
     {
-#if NET35 || NET40 || NET45
+#if NET45
         public HttpWebResponse Result { get; set; }
 
         public SenparcHttpResponse(HttpWebResponse httpWebResponse)
@@ -77,7 +77,7 @@ namespace Senparc.CO2NET.HttpUtility
 //        {
 //            get
 //            {
-//#if NET35 || NET40 || NET45
+//#if NET45
 //                var values = Result.Headers.GetValues("X-Requested-With");
 //                return values != null ? values.FirstOrDefault().IsNullOrEmpty() : false;
 //#else

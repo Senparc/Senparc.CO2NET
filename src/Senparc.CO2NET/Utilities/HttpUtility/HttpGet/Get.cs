@@ -65,7 +65,7 @@ using System.Threading.Tasks;
 #endif
 using System.Text;
 using Senparc.CO2NET.Helpers;
-#if NET35 || NET40 || NET45
+#if NET45
 using System.Web.Script.Serialization;
 #endif
 
@@ -119,7 +119,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="stream"></param>
         public static void Download(string url, Stream stream)
         {
-#if NET35 || NET40 || NET45
+#if NET45
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3
             //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
 
@@ -152,7 +152,7 @@ namespace Senparc.CO2NET.HttpUtility
             var dir = Path.GetDirectoryName(filePathName) ?? "/";
             Directory.CreateDirectory(dir);
 
-#if NET35 || NET40 || NET45
+#if NET45
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
@@ -257,7 +257,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static async Task DownloadAsync(string url, Stream stream)
         {
-#if NET35 || NET40 || NET45
+#if NET45
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3
             //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
 

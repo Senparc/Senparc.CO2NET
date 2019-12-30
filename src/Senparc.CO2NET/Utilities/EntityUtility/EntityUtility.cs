@@ -62,7 +62,7 @@ namespace Senparc.CO2NET.Utilities
             }
             
             var t = typeof(T);
-#if NET35 || NET40 || NET45
+#if NET45
             if (t.IsGenericType)
 #else
             if (t.GetTypeInfo().IsGenericType)

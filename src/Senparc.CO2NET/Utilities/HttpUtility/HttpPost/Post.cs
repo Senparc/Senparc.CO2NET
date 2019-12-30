@@ -66,7 +66,7 @@ using Senparc.CO2NET.Helpers;
 //using Senparc.CO2NET.Entities;
 //using Senparc.CO2NET.Exceptions;
 
-#if NET35 || NET40 || NET45
+#if NET45
 using System.Web.Script.Serialization;
 #endif
 #if !NET35 && !NET40
@@ -211,7 +211,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="stream"></param>
         public static void Download(string url, string data, Stream stream)
         {
-#if NET35 || NET40 || NET45
+#if NET45
             WebClient wc = new WebClient();
             var file = wc.UploadData(url, "POST", Encoding.UTF8.GetBytes(string.IsNullOrEmpty(data) ? "" : data));
             stream.Write(file, 0, file.Length);
@@ -368,7 +368,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="stream"></param>
         public static async Task DownloadAsync(string url, string data, Stream stream)
         {
-#if NET35 || NET40 || NET45
+#if NET45
             WebClient wc = new WebClient();
 
             var fileBytes = await wc.UploadDataTaskAsync(url, "POST", Encoding.UTF8.GetBytes(string.IsNullOrEmpty(data) ? "" : data)).ConfigureAwait(false);

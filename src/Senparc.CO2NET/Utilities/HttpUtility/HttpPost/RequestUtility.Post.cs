@@ -64,7 +64,7 @@ using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Utilities.HttpUtility.HttpPost;
 
-#if NET35 || NET40 || NET45
+#if NET45
 using System.Web;
 #else
 using System.Net.Http;
@@ -88,7 +88,7 @@ namespace Senparc.CO2NET.HttpUtility
 
 
 
-#if NET35 || NET40 || NET45
+#if NET45
 
         /// <summary>
         /// 给.NET Framework使用的HttpPost请求公共设置方法
@@ -459,7 +459,7 @@ namespace Senparc.CO2NET.HttpUtility
             var response = senparcResponse.Result;//获取响应信息
 
 
-#if NET35 || NET40 || NET45
+#if NET45
 
             #region 已经使用方法重用
             /*
@@ -566,7 +566,7 @@ namespace Senparc.CO2NET.HttpUtility
                 postStream = new MemoryStream();
             }
 
-#if NET35 || NET40 || NET45
+#if NET45
             var request = HttpPost_Common_Net45(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
 
             #region 输入二进制流
@@ -711,7 +711,7 @@ namespace Senparc.CO2NET.HttpUtility
             //Console.WriteLine($"{System.Threading.Thread.CurrentThread.Name} - FINISH- {SystemTime.DiffTotalMS(dt1):###,###} ms");
 
 
-#if NET35 || NET40 || NET45
+#if NET45
             #region 已经使用方法重用
             /*
 
@@ -838,7 +838,7 @@ namespace Senparc.CO2NET.HttpUtility
                 postStream = new MemoryStream();
             }
 
-#if NET35 || NET40 || NET45
+#if NET45
             var request = HttpPost_Common_Net45(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
 
             #region 输入二进制流

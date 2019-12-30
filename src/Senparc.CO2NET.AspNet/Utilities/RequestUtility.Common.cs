@@ -83,7 +83,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.WebProxy;
-#if NET35 || NET40 || NET45
+#if NET45
 using System.Web;
 #else
 using System.Net.Http;
@@ -101,7 +101,7 @@ namespace Senparc.CO2NET.HttpUtility
     {
         #region 代理
 
-#if NET35 || NET40 || NET45
+#if NET45
         private static System.Net.WebProxy _webproxy = null;
         /// <summary>
         /// 设置Web代理
@@ -199,7 +199,7 @@ namespace Senparc.CO2NET.HttpUtility
             return true;
         }
 
-#if NET35 || NET40 || NET45
+#if NET45
         /// <summary>
         /// 设置HTTP头
         /// </summary>

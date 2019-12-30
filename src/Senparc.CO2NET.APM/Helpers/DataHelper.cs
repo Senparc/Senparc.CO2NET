@@ -68,7 +68,7 @@ namespace Senparc.CO2NET.APM
         /// <returns></returns>
         public static object GetCPUCounter()
         {
-#if NET35 || NET40 || NET45
+#if NET45
             PerformanceCounter pc = new PerformanceCounter();
             pc.CategoryName = "Processor";
             pc.CounterName = "% Processor Time";
@@ -99,7 +99,7 @@ namespace Senparc.CO2NET.APM
         {
             //return Environment.OSVersion.Platform.ToString();
 
-#if NET35 || NET40 || NET45
+#if NET45
             //OperatingSystem os = Environment.OSVersion;
             //return os.ToString();
             return Environment.OSVersion.Platform.ToString();

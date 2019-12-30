@@ -56,7 +56,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
-//#if NET35 || NET40 || NET45
+//#if NET45
 //using System.Web.Script.Serialization;
 //#endif
 
@@ -129,7 +129,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
         }
     }
 
-    //#if NET35 || NET40 || NET45
+    //#if NET45
 
     //    /// <summary>
     //    /// 微信 JSON 转换器

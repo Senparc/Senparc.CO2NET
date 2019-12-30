@@ -59,7 +59,7 @@ namespace Senparc.CO2NET.Utilities
             {
                 if (_appDomainAppPath == null)
                 {
-#if NET35 || NET40 || NET45
+#if NET45
                     _appDomainAppPath = HttpRuntime.AppDomainAppPath;
 #else
                     _appDomainAppPath = AppContext.BaseDirectory; //dll所在目录：;

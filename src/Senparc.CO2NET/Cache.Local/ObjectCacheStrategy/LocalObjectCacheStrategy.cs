@@ -48,7 +48,7 @@ using System.Text;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Exceptions;
 using System.Threading.Tasks;
-#if NET35 || NET40 || NET45
+#if NET45
 using System.Web;
 #else
 using Microsoft.Extensions.Caching.Memory;
@@ -62,7 +62,7 @@ namespace Senparc.CO2NET.Cache
     /// </summary>
     public static class LocalObjectCacheHelper
     {
-#if NET35 || NET40 || NET45
+#if NET45
         /// <summary>
         /// 所有数据集合的列表
         /// </summary>
@@ -126,7 +126,7 @@ namespace Senparc.CO2NET.Cache
     {
         #region 数据源
 
-#if NET35 || NET40 || NET45
+#if NET45
         private System.Web.Caching.Cache _cache = LocalObjectCacheHelper.LocalObjectCache;
 #else
         private IMemoryCache _cache = LocalObjectCacheHelper.LocalObjectCache;
@@ -190,7 +190,7 @@ namespace Senparc.CO2NET.Cache
 
             var finalKey = base.GetFinalKey(key, isFullKey);
 
-#if NET35 || NET40 || NET45
+#if NET45
             _cache[finalKey] = value;
 #else
             var newKey = !CheckExisted(finalKey, true);
@@ -257,7 +257,7 @@ namespace Senparc.CO2NET.Cache
 
             var cacheKey = GetFinalKey(key, isFullKey);
 
-#if NET35 || NET40 || NET45
+#if NET45
             return _cache[cacheKey];
 #else
             return _cache.Get(cacheKey);
@@ -285,7 +285,7 @@ namespace Senparc.CO2NET.Cache
 
             var cacheKey = GetFinalKey(key, isFullKey);
 
-#if NET35 || NET40 || NET45
+#if NET45
             return (T)_cache[cacheKey];
 #else
             return _cache.Get<T>(cacheKey);
@@ -295,7 +295,7 @@ namespace Senparc.CO2NET.Cache
         public IDictionary<string, object> GetAll()
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
-#if NET35 || NET40 || NET45
+#if NET45
             IDictionaryEnumerator cacheEnum = System.Web.HttpRuntime.Cache.GetEnumerator();
 
             while (cacheEnum.MoveNext())
@@ -322,7 +322,7 @@ namespace Senparc.CO2NET.Cache
         {
             var cacheKey = GetFinalKey(key, isFullKey);
 
-#if NET35 || NET40 || NET45
+#if NET45
             return _cache.Get(cacheKey) != null;
 #else
             return _cache.Get(cacheKey) != null;
@@ -331,7 +331,7 @@ namespace Senparc.CO2NET.Cache
 
         public long GetCount()
         {
-#if NET35 || NET40 || NET45
+#if NET45
             return _cache.Count;
 #else
             var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
