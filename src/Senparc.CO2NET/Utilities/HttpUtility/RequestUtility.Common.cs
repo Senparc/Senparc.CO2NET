@@ -154,26 +154,7 @@ namespace Senparc.CO2NET.HttpUtility
             SenparcHttpClientWebProxy = null;
         }
 
-        /// <summary>
-        /// 从 Request.Body 中读取流，并复制到一个独立的 MemoryStream 对象中
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public static Stream GetRequestMemoryStream(this HttpRequest request)
-        {
-#if NETCOREAPP3_0
-            var syncIOFeature = request.HttpContext.Features.Get<IHttpBodyControlFeature>();
 
-            if (syncIOFeature != null)
-            {
-                syncIOFeature.AllowSynchronousIO = true;
-            }
-#endif
-            string body = new StreamReader(request.Body).ReadToEnd();
-            byte[] requestData = Encoding.UTF8.GetBytes(body);
-            Stream inputStream = new MemoryStream(requestData);
-            return inputStream;
-        }
 #endif
 
         #endregion

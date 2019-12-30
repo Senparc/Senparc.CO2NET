@@ -92,7 +92,7 @@ using Senparc.CO2NET.Extensions;
 using Microsoft.AspNetCore.Http;
 #endif
 
-namespace Senparc.CO2NET.HttpUtility
+namespace Senparc.CO2NET.AspNet.HttpUtility
 {
     /// <summary>
     /// HTTP 请求工具类

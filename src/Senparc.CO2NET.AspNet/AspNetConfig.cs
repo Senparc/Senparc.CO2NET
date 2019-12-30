@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Senparc.CO2NET.AspNet
+namespace Senparc.CO2NET
 {
-    public static class Config
+    public static class AspNetConfig
     {
 
 #if NETSTANDARD2_0

@@ -64,7 +64,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Config.cs" />
     <Compile Include="Register.cs" />
   </ItemGroup>
 

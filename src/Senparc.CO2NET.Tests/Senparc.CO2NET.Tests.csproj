@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
     <ProjectReference Include="..\Senparc.CO2NET.Cache.Memcached\Senparc.CO2NET.Cache.Memcached.csproj" />
     <ProjectReference Include="..\Senparc.CO2NET.Cache.Redis\Senparc.CO2NET.Cache.Redis.csproj" />
     <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />

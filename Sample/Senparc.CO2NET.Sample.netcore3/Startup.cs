@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Cache.Memcached;
 using Senparc.CO2NET.RegisterServices;
+using Senparc.CO2NET.AspNet;
 
 namespace Senparc.CO2NET.Sample.netcore3
 {

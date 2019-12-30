@@ -48,7 +48,7 @@ namespace Senparc.CO2NET.Tests
             var mockEnv = new Mock<IHostingEnvironment>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
 
-            registerService = RegisterService.Start(mockEnv.Object, _senparcSetting)
+            registerService = Senparc.CO2NET.AspNet.RegisterServices.RegisterService.Start(mockEnv.Object, _senparcSetting)
                 .UseSenparcGlobal(autoScanExtensionCacheStrategies);
 
             //配置全局使用Redis缓存（按需，独立）

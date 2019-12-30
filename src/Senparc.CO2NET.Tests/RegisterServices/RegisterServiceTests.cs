@@ -3,8 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.RegisterServices;
 using Microsoft.Extensions.Options;
 using Moq;
-using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Senparc.CO2NET.Tests.RegisterServices
 {

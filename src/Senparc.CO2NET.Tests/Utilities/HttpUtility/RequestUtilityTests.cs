@@ -19,7 +19,7 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 #endregion Apache License Version 2.0
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Senparc.CO2NET.HttpUtility;
+using Senparc.CO2NET.AspNet.HttpUtility;
 using Senparc.CO2NET.Tests;
 using System;
 using System.Collections.Generic;
