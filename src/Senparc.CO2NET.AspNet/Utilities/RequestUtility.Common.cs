@@ -83,6 +83,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.WebProxy;
+
 #if NET45
 using System.Web;
 #else
@@ -90,6 +91,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Senparc.CO2NET.Extensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 #endif
 
 namespace Senparc.CO2NET.AspNet.HttpUtility
@@ -166,7 +168,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         /// <returns></returns>
         public static Stream GetRequestMemoryStream(this HttpRequest request)
         {
-#if NETCOREAPP3_0
+#if NETSTANDARD2_1
             var syncIOFeature = request.HttpContext.Features.Get<IHttpBodyControlFeature>();
 
             if (syncIOFeature != null)

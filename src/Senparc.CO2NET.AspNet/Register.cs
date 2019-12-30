@@ -34,7 +34,7 @@ namespace Senparc.CO2NET.AspNet
 #if NETSTANDARD2_0
             IHostingEnvironment env, 
 #else
-            IHostingEnvironment/*IWebHostEnvironment*/ env,
+            IWebHostEnvironment env,
 #endif
             SenparcSetting senparcSetting,
             Action<RegisterService> registerConfigure,
