@@ -33,7 +33,6 @@
   </PropertyGroup>
 
 
-
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\BuildOutPut</OutputPath>
     <DefineConstants>TRACE;RELEASE</DefineConstants>
@@ -62,10 +61,6 @@
     <OutputPath>..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\BuildOutPut\netstandard2.1\Senparc.CO2NET.AspNet.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="Register.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
@@ -97,8 +92,5 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Utilities\HttpUtility\" />
-  </ItemGroup>
 
 </Project>
