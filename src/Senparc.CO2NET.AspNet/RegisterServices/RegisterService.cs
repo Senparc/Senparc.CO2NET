@@ -1,7 +1,6 @@
 ﻿#if NETSTANDARD2_0 || NETSTANDARD2_1
 using Microsoft.AspNetCore.Hosting;
 using Senparc.CO2NET.RegisterServices;
-#endif
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +35,7 @@ namespace Senparc.CO2NET.AspNet.RegisterServices
                 Senparc.CO2NET.Config.RootDictionaryPath = AppDomain.CurrentDomain.BaseDirectory;
             }
 
-            Senparc.CO2NET.AspNet.Config.HostingEnvironment = env;
+            Senparc.CO2NET.AspNetConfig.HostingEnvironment = env;
 
            
             var register = Senparc.CO2NET.RegisterServices.RegisterService.Start(senparcSetting);
@@ -44,3 +43,4 @@ namespace Senparc.CO2NET.AspNet.RegisterServices
         }
     }
 }
+#endif

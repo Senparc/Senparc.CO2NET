@@ -1,6 +1,6 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Senparc.CO2NET.RegisterServices;
+using Senparc.CO2NET.AspNet.RegisterServices;
 using Microsoft.Extensions.Options;
 using Moq;
 using System.IO;

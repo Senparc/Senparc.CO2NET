@@ -19,7 +19,7 @@ namespace Senparc.CO2NET.AspNet
 #if NETSTANDARD2_0 || NETSTANDARD2_1
 
         /// <summary>
-        /// 开始 Senparc.CO2NET 初始化参数流程
+        /// 开始 Senparc.CO2NET 初始化参数流程（ASP.NET Core)
         /// </summary>
         /// <param name="registerService"></param>
         /// <param name="env">IHostingEnvironment（.NET Core 2.0） 或 IWebHostEnvironment（.NET Core 3.0）</param>

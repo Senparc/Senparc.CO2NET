@@ -43,6 +43,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20180531
     修改描述：v0.1.0 移植 BrowserUtility
 
+    -- 从 CO2NET 移植到 CO2NET.AspNet --
+    
+    修改标识：Senparc - 20180721
+    修改描述：v0.1.0  从 CO2NET 移植到 CO2NET.AspNet
+
 ----------------------------------------------------------------*/
 
 using System.Web;
