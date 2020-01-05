@@ -115,16 +115,15 @@ namespace Senparc.CO2NET.APM
             }
         }
 
-        static DataOperation()
-        {
-            KindNameStore = new Dictionary<string, Dictionary<string, DateTimeOffset>>();
+        //static DataOperation()
+        //{
+        //    KindNameStore = new Dictionary<string, Dictionary<string, DateTimeOffset>>();
 
-        }
+        //}
 
         static DataOperation()
         {
             KindNameStore = new ConcurrentDictionary<string, ConcurrentDictionary<string, DateTimeOffset>>();
-
         }
 
         /// <summary>
