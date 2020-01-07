@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD2_0 || NETSTANDARD2_1
+﻿#if !NET45
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 #endif
@@ -16,7 +16,7 @@ namespace Senparc.CO2NET.AspNet
     /// </summary>
     public static class Register
     {
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
 
         /// <summary>
         /// 开始 Senparc.CO2NET 初始化参数流程（ASP.NET Core)
@@ -30,7 +30,7 @@ namespace Senparc.CO2NET.AspNet
         /// <para>（LocalContainerCacheStrategy、RedisContainerCacheStrategy、MemcacheContainerCacheStrategy已经自动注册），</para>
         /// <para>如果设置为 null（注意：不适委托返回 null，是整个委托参数为 null），则自动使用反射扫描所有可能存在的扩展缓存策略</para></param>
         /// <returns></returns>
-        public static IRegisterService UseSenparcGlobal(this IApplicationBuilder registerService,
+        public static IRegisterService UseSenparcGlobal(this IApplicationBuilder registerService,]
 #if NETSTANDARD2_0
             Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/ env,
 #else
