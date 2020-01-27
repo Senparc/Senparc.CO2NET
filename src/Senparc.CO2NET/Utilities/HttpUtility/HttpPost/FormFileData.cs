@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
 
     文件名：FormFileData.cs
     文件功能描述：模拟 Form 提交时， RequestUtility.Post 中 fileDictionary 的 Value 值在提供 base64 文件流信息状态下的解析信息
