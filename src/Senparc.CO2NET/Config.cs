@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
   
     文件名：Config.cs
     文件功能描述：全局配置文件
@@ -45,9 +45,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
    
 ----------------------------------------------------------------*/
 
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
-using Microsoft.AspNetCore.Hosting;
-#endif 
+
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -90,18 +88,6 @@ namespace Senparc.CO2NET
             }
         }
 
-#if NETSTANDARD2_0
-        /// <summary>
-        /// Web hosting environment
-        /// </summary>
-        public static IHostingEnvironment HostingEnvironment { get; set; }
-#elif (NETSTANDARD2_1 || NETCOREAPP3_0)
-        /// <summary>
-        /// Web hosting environment
-        /// </summary>
-        public static IWebHostEnvironment HostingEnvironment { get; set; }
-#endif
-
         /// <summary>
         /// 请求超时设置（以毫秒为单位），默认为10秒。
         /// 说明：此处常量专为提供给方法的参数的默认值，不是方法内所有请求的默认超时时间。
@@ -140,7 +126,7 @@ namespace Senparc.CO2NET
             {
                 if (_rootDictionaryPath == null)
                 {
-#if NET35 || NET40 || NET45
+#if NET45
                     var appPath = AppDomain.CurrentDomain.BaseDirectory;
 
                     if (Regex.Match(appPath, $@"[\\/]$", RegexOptions.Compiled).Success)

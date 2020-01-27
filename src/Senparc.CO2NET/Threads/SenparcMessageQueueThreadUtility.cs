@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
 
     文件名：SenparcMessageQueueThreadUtility.cs
     文件功能描述：SenparcMessageQueue消息队列线程处理
@@ -61,7 +61,7 @@ namespace Senparc.CO2NET.Threads
             {
                 var mq = new SenparcMessageQueue();
 
-#if NET35 || NET40 || NET45
+#if NET45
                 System.Diagnostics.Trace.WriteLine(string.Format("SenparcMessageQueueThreadUtility执行析构函数"));
                 System.Diagnostics.Trace.WriteLine(string.Format("当前队列数量：{0}", mq.GetCount()));
 #endif
@@ -71,7 +71,7 @@ namespace Senparc.CO2NET.Threads
             catch (Exception ex)
             {
                 //此处可以添加日志
-#if NET35 || NET40 || NET45
+#if NET45
 
                 System.Diagnostics.Trace.WriteLine(string.Format("SenparcMessageQueueThreadUtility执行析构函数错误：{0}", ex.Message));
 #endif

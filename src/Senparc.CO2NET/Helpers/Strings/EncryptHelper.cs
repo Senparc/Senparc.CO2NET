@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
  
     创建标识：Senparc - 20160808
     创建描述：安全帮助类，提供SHA-1、AES算法等
@@ -158,7 +158,7 @@ namespace Senparc.CO2NET.Helpers
         {
             string retStr;
 
-#if NET35 || NET40 || NET45
+#if NET45
             MD5CryptoServiceProvider m5 = new MD5CryptoServiceProvider();
 #else
             MD5 m5 = MD5.Create();
@@ -204,7 +204,7 @@ namespace Senparc.CO2NET.Helpers
                 //使用UTF-8编码
                 return GetMD5("utf-8", Encoding.GetEncoding(charset));
 
-                //#if NET35 || NET40 || NET45
+                //#if NET45
                 //                inputBye = Encoding.GetEncoding("GB2312").GetBytes(encypStr);
                 //#else
                 //                inputBye = Encoding.GetEncoding(936).GetBytes(encypStr);
@@ -262,7 +262,7 @@ namespace Senparc.CO2NET.Helpers
         public static byte[] AESEncrypt(byte[] inputdata, byte[] iv, string strKey)
         {
             //分组加密算法   
-#if NET35 || NET40 || NET45
+#if NET45
             SymmetricAlgorithm des = Rijndael.Create();
 #else
             SymmetricAlgorithm des = Aes.Create();
@@ -299,7 +299,7 @@ namespace Senparc.CO2NET.Helpers
         /// <returns></returns>
         public static byte[] AESDecrypt(byte[] inputdata, byte[] iv, string strKey)
         {
-#if NET35 || NET40 || NET45
+#if NET45
             SymmetricAlgorithm des = Rijndael.Create();
 #else
             SymmetricAlgorithm des = Aes.Create();
@@ -364,7 +364,7 @@ namespace Senparc.CO2NET.Helpers
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);
 
 
-            //#if NET35 || NET40 || NET45
+            //#if NET45
             //            SymmetricAlgorithm des = Rijndael.Create();
             //#else
             //            SymmetricAlgorithm des = Aes.Create();
@@ -409,7 +409,7 @@ namespace Senparc.CO2NET.Helpers
 
 
             //RijndaelManaged aes = new RijndaelManaged();
-#if NET35 || NET40 || NET45
+#if NET45
             SymmetricAlgorithm aes = Rijndael.Create();
 #else
             SymmetricAlgorithm aes = Aes.Create();
@@ -431,7 +431,7 @@ namespace Senparc.CO2NET.Helpers
             }
             finally
             {
-#if NET35 || NET40 || NET45
+#if NET45
                 cryptoStream.Close();
                 mStream.Close();
                 aes.Clear();

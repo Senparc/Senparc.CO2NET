@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Senparc.CO2NET.APM\Senparc.CO2NET.APM.csproj" />
+    <ProjectReference Include="..\..\src\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
     <ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.Memcached\Senparc.CO2NET.Cache.Memcached.csproj" />
     <ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.Redis\Senparc.CO2NET.Cache.Redis.csproj" />
     <ProjectReference Include="..\..\src\Senparc.CO2NET\Senparc.CO2NET.csproj" />

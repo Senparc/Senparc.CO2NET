@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
 
     文件名：SenparcHttpResponse.cs
     文件功能描述：统一封装HttpResonse请求，提供Http请求过程中的调试、跟踪等扩展能力
@@ -40,7 +40,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using Senparc.CO2NET.Extensions;
-#if NET35 || NET40 || NET45
+#if NET45
 using System.Web;
 #else
 using System.Net.Http;
@@ -54,7 +54,7 @@ namespace Senparc.CO2NET.HttpUtility
     /// </summary>
     public class SenparcHttpResponse
     {
-#if NET35 || NET40 || NET45
+#if NET45
         public HttpWebResponse Result { get; set; }
 
         public SenparcHttpResponse(HttpWebResponse httpWebResponse)
@@ -77,7 +77,7 @@ namespace Senparc.CO2NET.HttpUtility
 //        {
 //            get
 //            {
-//#if NET35 || NET40 || NET45
+//#if NET45
 //                var values = Result.Headers.GetValues("X-Requested-With");
 //                return values != null ? values.FirstOrDefault().IsNullOrEmpty() : false;
 //#else

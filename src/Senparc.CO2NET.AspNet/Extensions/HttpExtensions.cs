@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc COCONET
+    Copyright (C) 2020 Senparc COCONET
 
     文件名：HttpExtensions.cs
     文件功能描述：ASP.NET Core 中的 Http 一系列扩展
@@ -30,9 +30,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20180721
     修改描述：v0.2.2  添加对 NETSTANDARD2_0 的支持
 
+    -- 从 CO2NET 移植到 CO2NET.AspNet --
+    
+    修改标识：Senparc - 20180721
+    修改描述：v0.1.0  从 CO2NET 移植到 CO2NET.AspNet
+
 ----------------------------------------------------------------*/
 
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
 
 using Microsoft.AspNetCore.Http.Features;
 using System;

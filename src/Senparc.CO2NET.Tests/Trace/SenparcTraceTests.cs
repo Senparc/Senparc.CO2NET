@@ -22,9 +22,9 @@ namespace Senparc.CO2NET.Tests.Trace
         public SenparcTraceTests()
         {
             //×¢²á
-            var mockEnv = new Mock<IHostingEnvironment>();
+            var mockEnv = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
-            var register = RegisterService.Start(mockEnv.Object, new SenparcSetting() { IsDebug = true });
+            var register = Senparc.CO2NET.AspNet.RegisterServices.RegisterService.Start(mockEnv.Object, new SenparcSetting() { IsDebug = true });
 
             IServiceCollection services = new ServiceCollection();
             services.AddMemoryCache();//Ê¹ÓÃÄÚ´æ»º´æ

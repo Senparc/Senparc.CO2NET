@@ -1,6 +1,6 @@
 ﻿
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
 
     文件名：SenparcDI.cs
     文件功能描述：针对 .NET Core 的依赖注入扩展类
@@ -22,7 +22,7 @@
 
 ----------------------------------------------------------------*/
 
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
 using System;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;

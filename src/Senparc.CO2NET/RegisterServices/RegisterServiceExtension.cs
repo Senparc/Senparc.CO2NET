@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
 
     文件名：RegisterService.cs
     文件功能描述：Senparc.Weixin SDK 快捷注册流程
@@ -53,13 +53,10 @@ using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.IO;
 
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
 using System.Net.Http;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 #endif
 
 namespace Senparc.CO2NET.RegisterServices
@@ -69,7 +66,7 @@ namespace Senparc.CO2NET.RegisterServices
     /// </summary>
     public static class RegisterServiceExtension
     {
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0) 
+#if NETSTANDARD2_0 || NETSTANDARD2_1 
 
         /// <summary>
         /// 是否已经进行过全局注册

@@ -1,10 +1,10 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Senparc.CO2NET.RegisterServices;
+using Senparc.CO2NET.AspNet.RegisterServices;
 using Microsoft.Extensions.Options;
 using Moq;
-using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Senparc.CO2NET.Tests.RegisterServices
 {
@@ -17,7 +17,7 @@ namespace Senparc.CO2NET.Tests.RegisterServices
             var isDebug = true;
             Senparc.CO2NET.Config.IsDebug = !isDebug;//故意换成相反值
 
-            var mockEnv = new Mock<IHostingEnvironment>();
+            var mockEnv = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath );
             RegisterService.Start(mockEnv.Object, new SenparcSetting() { IsDebug = isDebug });
 

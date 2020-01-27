@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Cache;
-using Senparc.CO2NET.RegisterServices;
+using Senparc.CO2NET.AspNet.RegisterServices;
 using Senparc.CO2NET.Tests.TestEntities;
 using Senparc.CO2NET.Tests.Trace;
 using Senparc.CO2NET.Threads;
 using Senparc.CO2NET.Trace;
+using Senparc.CO2NET.RegisterServices;
 
 namespace Senparc.CO2NET.Tests
 {
@@ -35,7 +36,7 @@ namespace Senparc.CO2NET.Tests
         [TestMethod]
         public void RegisterThreadsTest()
         {
-            var registerService = RegisterService.Start(null, new SenparcSetting(true));
+            var registerService = Senparc.CO2NET.AspNet.RegisterServices.RegisterService.Start(null, new SenparcSetting(true));
             Register.RegisterThreads(registerService);
 
             Assert.IsTrue(ThreadUtility.AsynThreadCollection.Count > 0);
@@ -46,7 +47,7 @@ namespace Senparc.CO2NET.Tests
         [TestMethod]
         public void RegisterTraceLogTest()
         {
-            var registerService = RegisterService.Start(null, new SenparcSetting(true));
+            var registerService = Senparc.CO2NET.AspNet.RegisterServices.RegisterService.Start(null, new SenparcSetting(true));
             Register.RegisterTraceLog(registerService, RegisterTraceLogAction);
             Assert.IsTrue(registerTraceLogActionRun);
         }
@@ -72,7 +73,7 @@ namespace Senparc.CO2NET.Tests
         [TestMethod]
         public void UseSenparcGlobalTest()
         {
-            IRegisterService registerService = RegisterService.Start(null, new SenparcSetting(true));
+            IRegisterService registerService = Senparc.CO2NET.AspNet.RegisterServices.RegisterService.Start(null, new SenparcSetting(true));
             registerService.UseSenparcGlobal(true, null);
 
             Assert.IsNotNull(Config.SenparcSetting);

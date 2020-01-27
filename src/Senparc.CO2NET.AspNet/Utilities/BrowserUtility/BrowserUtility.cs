@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
 
     文件名：BrowserUtility.cs
     文件功能描述：浏览器公共类
@@ -43,11 +43,16 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20180531
     修改描述：v0.1.0 移植 BrowserUtility
 
+    -- 从 CO2NET 移植到 CO2NET.AspNet --
+    
+    修改标识：Senparc - 20180721
+    修改描述：v0.1.0  从 CO2NET 移植到 CO2NET.AspNet
+
 ----------------------------------------------------------------*/
 
 using System.Web;
 
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
 using Microsoft.AspNetCore.Http;
 #endif
 
@@ -70,7 +75,7 @@ namespace Senparc.CO2NET.Utilities
         public static string GetUserAgent(HttpRequest httpRequest)
 #endif
         {
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
 
             string userAgent = null;
             var userAgentHeader = httpRequest.Headers["User-Agent"];

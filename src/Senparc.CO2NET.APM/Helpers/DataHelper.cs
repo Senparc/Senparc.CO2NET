@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
 
     文件名：DataHelper.cs
     文件功能描述：数据帮助类
@@ -68,7 +68,7 @@ namespace Senparc.CO2NET.APM
         /// <returns></returns>
         public static object GetCPUCounter()
         {
-#if NET35 || NET40 || NET45
+#if NET45
             PerformanceCounter pc = new PerformanceCounter();
             pc.CategoryName = "Processor";
             pc.CounterName = "% Processor Time";
@@ -99,7 +99,7 @@ namespace Senparc.CO2NET.APM
         {
             //return Environment.OSVersion.Platform.ToString();
 
-#if NET35 || NET40 || NET45
+#if NET45
             //OperatingSystem os = Environment.OSVersion;
             //return os.ToString();
             return Environment.OSVersion.Platform.ToString();

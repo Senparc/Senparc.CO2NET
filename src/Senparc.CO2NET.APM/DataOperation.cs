@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
 
     文件名：DataOperation.cs
     文件功能描述：每一次跟踪日志的对象信息
@@ -115,16 +115,15 @@ namespace Senparc.CO2NET.APM
             }
         }
 
-        static DataOperation()
-        {
-            KindNameStore = new Dictionary<string, Dictionary<string, DateTimeOffset>>();
+        //static DataOperation()
+        //{
+        //    KindNameStore = new Dictionary<string, Dictionary<string, DateTimeOffset>>();
 
-        }
+        //}
 
         static DataOperation()
         {
             KindNameStore = new ConcurrentDictionary<string, ConcurrentDictionary<string, DateTimeOffset>>();
-
         }
 
         /// <summary>

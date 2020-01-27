@@ -67,6 +67,10 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190928
     修改描述：v1.0.101 RequestUtility.GetRequestMemoryStream() 增加对 .NET Core 3.0 AllowSynchronousIO 的设置
 
+    -- 从 CO2NET 移植到 CO2NET.AspNet --
+    
+    修改标识：Senparc - 20180721
+    修改描述：v0.1.0  从 CO2NET 移植到 CO2NET.AspNet
 ----------------------------------------------------------------*/
 
 using System;
@@ -79,15 +83,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.WebProxy;
+
 #if NET45
 using System.Web;
 #else
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Senparc.CO2NET.Extensions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 #endif
 
-namespace Senparc.CO2NET.HttpUtility
+namespace Senparc.CO2NET.AspNet.HttpUtility
 {
     /// <summary>
     /// HTTP 请求工具类
@@ -154,7 +161,26 @@ namespace Senparc.CO2NET.HttpUtility
             SenparcHttpClientWebProxy = null;
         }
 
+        /// <summary>
+        /// 从 Request.Body 中读取流，并复制到一个独立的 MemoryStream 对象中
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public static Stream GetRequestMemoryStream(this HttpRequest request)
+        {
+#if NETSTANDARD2_1
+            var syncIOFeature = request.HttpContext.Features.Get<IHttpBodyControlFeature>();
 
+            if (syncIOFeature != null)
+            {
+                syncIOFeature.AllowSynchronousIO = true;
+            }
+#endif
+            string body = new StreamReader(request.Body).ReadToEnd();
+            byte[] requestData = Encoding.UTF8.GetBytes(body);
+            Stream inputStream = new MemoryStream(requestData);
+            return inputStream;
+        }
 #endif
 
         #endregion

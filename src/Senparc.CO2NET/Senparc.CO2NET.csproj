@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard2.0;netcoreapp3.0</TargetFrameworks>
-    <Version>1.0.103</Version>
+    <TargetFrameworks>net45;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <Version>1.1.100-preview1</Version>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -10,10 +10,10 @@
     <Description>
       Senparc.CO2NET 公共基础库
 
-      Senparc.Weixin SDK 开源项目：
+      Senparc.CO2NET 开源项目：
       https://github.com/Senparc/Senparc.CO2NET
     </Description>
-    <Copyright>Senparc Copyright © 2004~2019</Copyright>
+    <Copyright>Senparc Copyright © 2004~2020</Copyright>
     <PackageTags>.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
 
     <Authors>Senparc</Authors>
@@ -148,7 +148,7 @@
     <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.xml</DocumentationFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.0|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\BuildOutPut\netstandard2.1\Senparc.CO2NET.xml</DocumentationFile>
   </PropertyGroup>
@@ -178,13 +178,13 @@
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.0" />
+    <!--<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.0" />-->
     <!--<PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />-->
     <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.0" />
+    <!--<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.0" />-->
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
@@ -192,8 +192,8 @@
 
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' or '$(TargetFramework)' == 'netcoreapp3.0'">
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1'">
+    <!--<FrameworkReference Include="Microsoft.AspNetCore.App" />-->
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
@@ -205,6 +205,20 @@
 
   <ItemGroup>
     <Folder Include="Utilities\Cache\" />
+  </ItemGroup>
+
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Net.Http.Headers">
+      <Version>2.2.8</Version>
+    </PackageReference>
+  </ItemGroup>
+
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
+    <PackageReference Include="Microsoft.Net.Http.Headers">
+      <Version>2.2.8</Version>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

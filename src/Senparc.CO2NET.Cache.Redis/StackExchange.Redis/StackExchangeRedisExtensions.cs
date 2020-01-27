@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
 
     文件名：StackExchangeRedisExtensions.cs
     文件功能描述：StackExchange.Redis 扩展。
@@ -73,7 +73,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
             var dtx = SystemTime.Now;
 
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             ////二进制序列化方案
             //using (MemoryStream memoryStream = new MemoryStream())
             //{
@@ -121,7 +121,7 @@ namespace Senparc.CO2NET.Cache.Redis
                 return default(T);
             }
 
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
             ////二进制序列化方案
             //using (MemoryStream memoryStream = new MemoryStream(stream))
             //{

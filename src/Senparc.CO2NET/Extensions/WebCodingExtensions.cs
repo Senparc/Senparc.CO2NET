@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
 
     文件名：WebCodingExtensions.cs
     文件功能描述：网页编码扩展类
@@ -32,7 +32,7 @@ namespace Senparc.CO2NET.Extensions
         /// <returns></returns>
         public static string HtmlEncode(this string html)
         {
-#if NET35 || NET40 || NET45
+#if NET45
             return System.Web.HttpUtility.HtmlEncode(html);
 #else
             return WebUtility.HtmlEncode(html);
@@ -45,14 +45,14 @@ namespace Senparc.CO2NET.Extensions
         /// <returns></returns>
         public static string HtmlDecode(this string html)
         {
-#if NET35 || NET40 || NET45
+#if NET45
             return System.Web.HttpUtility.HtmlDecode(html);
 #else
             return WebUtility.HtmlDecode(html);
 #endif
         }
 
-#if NET35 || NET40 || NET45
+#if NET45
         /// <summary>
         /// 封装 System.Web.HttpUtility.UrlEncode
         /// <para>注意：.NET Core 转义后字母为大写</para>
@@ -78,7 +78,7 @@ namespace Senparc.CO2NET.Extensions
         }
 #endif
 
-#if NET35 || NET40 || NET45
+#if NET45
         /// <summary>
         /// 封装System.Web.HttpUtility.UrlDecode
         /// </summary>

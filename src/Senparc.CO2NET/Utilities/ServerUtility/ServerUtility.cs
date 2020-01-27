@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
     
     文件名：ServerUtility.cs
     文件功能描述：服务器工具类
@@ -59,7 +59,7 @@ namespace Senparc.CO2NET.Utilities
             {
                 if (_appDomainAppPath == null)
                 {
-#if NET35 || NET40 || NET45
+#if NET45
                     _appDomainAppPath = HttpRuntime.AppDomainAppPath;
 #else
                     _appDomainAppPath = AppContext.BaseDirectory; //dll所在目录：;
@@ -70,7 +70,7 @@ namespace Senparc.CO2NET.Utilities
             set
             {
                 _appDomainAppPath = value;
-#if NETSTANDARD2_0 || (NETSTANDARD2_1 || NETCOREAPP3_0)
+#if NETSTANDARD2_0 || NETSTANDARD2_1
                 var pathSeparator = Path.DirectorySeparatorChar.ToString();
                 var altPathSeparator = Path.AltDirectorySeparatorChar.ToString();
                 if (!_appDomainAppPath.EndsWith(pathSeparator) && !_appDomainAppPath.EndsWith(altPathSeparator))

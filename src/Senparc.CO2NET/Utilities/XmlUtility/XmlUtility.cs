@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2019 Senparc
+    Copyright (C) 2020 Senparc
 
     文件名：BrowserUtility.cs
     文件功能描述：浏览器公共类
@@ -144,7 +144,7 @@ namespace Senparc.CO2NET.Utilities
             {
                 return XDocument.Load(xr);
             }
-//#if NET35 || NET40 || NET45
+//#if NET45
 //            using (XmlReader xr = XmlReader.Create(stream))
 //            {
 //                return XDocument.Load(xr);
