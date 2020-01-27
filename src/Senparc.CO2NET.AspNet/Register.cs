@@ -30,7 +30,7 @@ namespace Senparc.CO2NET.AspNet
         /// <para>（LocalContainerCacheStrategy、RedisContainerCacheStrategy、MemcacheContainerCacheStrategy已经自动注册），</para>
         /// <para>如果设置为 null（注意：不适委托返回 null，是整个委托参数为 null），则自动使用反射扫描所有可能存在的扩展缓存策略</para></param>
         /// <returns></returns>
-        public static IRegisterService UseSenparcGlobal(this IApplicationBuilder registerService,]
+        public static IRegisterService UseSenparcGlobal(this IApplicationBuilder registerService,
 #if NETSTANDARD2_0
             Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/ env,
 #else
