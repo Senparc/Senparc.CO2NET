@@ -92,6 +92,17 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
         #endregion
 
+        /// <summary>
+        /// 获得过期时间（秒）
+        /// </summary>
+        /// <param name="expiry"></param>
+        /// <returns></returns>
+        private int GetExpirySeconds(TimeSpan? expiry)
+        { 
+            var expirySeconds = expiry.HasValue ? expiry.Value.Seconds : -1;
+            return expirySeconds;
+        }
+
 
         #region 实现 IBaseObjectCacheStrategy 接口
 
@@ -106,7 +117,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         public override bool CheckExisted(string key, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
-            return _cache.KeyExists(cacheKey);
+            return base.Client.Exists(cacheKey);
         }
 
         public override object Get(string key, bool isFullKey = false)
@@ -123,8 +134,8 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
             var cacheKey = GetFinalKey(key, isFullKey);
 
-            var value = _cache.StringGet(cacheKey);
-            if (value.HasValue)
+            var value = base.Client.Get(cacheKey);
+            if (value != null)
             {
                 return value.ToString().DeserializeFromCache();
             }
@@ -146,8 +157,8 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
             var cacheKey = GetFinalKey(key, isFullKey);
 
-            var value = _cache.StringGet(cacheKey);
-            if (value.HasValue)
+            var value = base.Client.Get(cacheKey);
+            if (value != null)
             {
                 return value.ToString().DeserializeFromCache<T>();
             }
@@ -165,7 +176,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var dic = new Dictionary<string, object>();
 
 
-            var keys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPrefix + "*", pageSize: 99999);
+            var keys = base.Client.Keys(/*database: Client.GetDatabase().Database,*/ pattern: keyPrefix + "*"/*, pageSize: 99999*/);
             foreach (var redisKey in keys)
             {
                 dic[redisKey] = Get(redisKey, true);
@@ -179,7 +190,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         public override long GetCount()
         {
             var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
-            var count = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern, pageSize: 99999).Count();
+            var count = base.Client.Keys(/*database: Client.GetDatabase().Database,*/ pattern: keyPattern/*, pageSize: 99999*/).Count();
             return count;
         }
 
@@ -199,7 +210,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var cacheKey = GetFinalKey(key, isFullKey);
 
             var json = value.SerializeToCache();
-            _cache.StringSet(cacheKey, json, expiry);
+            base.Client.Set(cacheKey, json, GetExpirySeconds(expiry));
         }
 
         public override void RemoveFromCache(string key, bool isFullKey = false)
@@ -212,7 +223,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var cacheKey = GetFinalKey(key, isFullKey);
 
             SenparcMessageQueue.OperateQueue();//延迟缓存立即生效
-            _cache.KeyDelete(cacheKey);//删除键
+            base.Client.Del(cacheKey);//删除键
         }
 
         public override void Update(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
@@ -235,7 +246,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         public override async Task<bool> CheckExistedAsync(string key, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
-            return await _cache.KeyExistsAsync(cacheKey).ConfigureAwait(false);
+            return await base.Client.ExistsAsync(cacheKey).ConfigureAwait(false);
         }
 
         public override async Task<object> GetAsync(string key, bool isFullKey = false)
@@ -252,8 +263,8 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
             var cacheKey = GetFinalKey(key, isFullKey);
 
-            var value = await _cache.StringGetAsync(cacheKey).ConfigureAwait(false);
-            if (value.HasValue)
+            var value = await base.Client.GetAsync(cacheKey).ConfigureAwait(false);
+            if (value!=null)
             {
                 return value.ToString().DeserializeFromCache();
             }
@@ -275,8 +286,8 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
             var cacheKey = GetFinalKey(key, isFullKey);
 
-            var value = await _cache.StringGetAsync(cacheKey).ConfigureAwait(false);
-            if (value.HasValue)
+            var value = await base.Client.GetAsync(cacheKey).ConfigureAwait(false);
+            if (value != null)
             {
                 return value.ToString().DeserializeFromCache<T>();
             }
@@ -293,7 +304,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var keyPrefix = GetFinalKey("");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
             var dic = new Dictionary<string, object>();
 
-            var keys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPrefix + "*", pageSize: 99999);
+            var keys = base.Client.Keys(/*database: Client.GetDatabase().Database,*/ pattern: keyPrefix + "*"/*, pageSize: 99999*/);
             foreach (var redisKey in keys)
             {
                 dic[redisKey] = await GetAsync(redisKey, true).ConfigureAwait(false);
@@ -317,7 +328,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var cacheKey = GetFinalKey(key, isFullKey);
 
             var json = value.SerializeToCache();
-            await _cache.StringSetAsync(cacheKey, json, expiry).ConfigureAwait(false);
+            await base.Client.SetAsync(cacheKey, json, GetExpirySeconds(expiry)).ConfigureAwait(false);
         }
 
         public override async Task RemoveFromCacheAsync(string key, bool isFullKey = false)
@@ -330,7 +341,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var cacheKey = GetFinalKey(key, isFullKey);
 
             SenparcMessageQueue.OperateQueue();//延迟缓存立即生效
-            await _cache.KeyDeleteAsync(cacheKey).ConfigureAwait(false);//删除键
+            await base.Client.DelAsync(cacheKey).ConfigureAwait(false);//删除键
         }
 
         public override async Task UpdateAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
@@ -370,7 +381,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         public async Task<IList<T>> GetAllByPrefixAsync<T>(string key)
         {
             var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
-            var keys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern, pageSize: 99999);
+            var keys = base.Client.Keys(/*database: Client.GetDatabase().Database,*/ pattern: keyPattern/*, pageSize: 99999*/);
             List<T> list = new List<T>();
             foreach (var fullKey in keys)
             {

@@ -49,7 +49,6 @@ using System.Linq;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.MessageQueue;
 using Senparc.CO2NET.Cache;
-using StackExchange.Redis;
 using Senparc.CO2NET.Trace;
 using System.Threading.Tasks;
 
@@ -142,7 +141,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
 
             //return _cache.KeyExists(cacheKey);
-            return _cache.HashExists(hashKeyAndField.Key, hashKeyAndField.Field);
+            return base.Client.HExists(hashKeyAndField.Key, hashKeyAndField.Field);
         }
 
         public override object Get(string key, bool isFullKey = false)
@@ -162,8 +161,8 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
 
             //var value = _cache.StringGet(cacheKey);
-            var value = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);
-            if (value.HasValue)
+            var value = base.Client.HGet(hashKeyAndField.Key, hashKeyAndField.Field);
+            if (value != null)
             {
                 return value.ToString().DeserializeFromCache();
             }
@@ -187,8 +186,8 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
 
             //var value = _cache.StringGet(cacheKey);
-            var value = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);
-            if (value.HasValue)
+            var value = base.Client.HGet(hashKeyAndField.Key, hashKeyAndField.Field);
+            if (value != null)
             {
                 return value.ToString().DeserializeFromCache<T>();
             }
@@ -249,14 +248,14 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var keyPrefix = GetFinalKey("");//Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
             var dic = new Dictionary<string, object>();
 
-            var hashKeys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPrefix + "*", pageSize: 99999);
+            var hashKeys = base.Client.Keys(/*database: Client.GetDatabase().Database,*/ pattern: keyPrefix + "*"/*, pageSize: 99999*/);
             foreach (var redisKey in hashKeys)
             {
-                var list = _cache.HashGetAll(redisKey);
+                var list = base.Client.HGetAll(redisKey);
 
                 foreach (var hashEntry in list)
                 {
-                    var fullKey = redisKey.ToString() + ":" + hashEntry.Name;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
+                    var fullKey = redisKey.ToString() + ":" + hashEntry.Key;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
                     dic[fullKey] = hashEntry.Value.ToString().DeserializeFromCache();
                 }
             }
@@ -271,7 +270,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         public override long GetCount()
         {
             var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
-            var count = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern, pageSize: 99999).Count();
+            var count = base.Client.Keys(/*database: Client.GetDatabase().Database,*/ pattern: keyPattern/*, pageSize: 99999*/).Count();
             return count;
         }
 
@@ -317,7 +316,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
 
             var json = value.SerializeToCache();
-            _cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, json);
+            base.Client.HSet(hashKeyAndField.Key, hashKeyAndField.Field, json);
 
             //#if DEBUG
             //            var value1 = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);//正常情况下可以得到 //_cache.GetValue(cacheKey);
@@ -336,7 +335,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
             SenparcMessageQueue.OperateQueue();//延迟缓存立即生效
             //_cache.KeyDelete(cacheKey);//删除键
-            _cache.HashDelete(hashKeyAndField.Key, hashKeyAndField.Field);//删除项
+            base.Client.HDel(hashKeyAndField.Key, hashKeyAndField.Field);//删除项
         }
 
         /// <summary>
@@ -372,7 +371,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
 
             //return _cache.KeyExists(cacheKey);
-            return await _cache.HashExistsAsync(hashKeyAndField.Key, hashKeyAndField.Field).ConfigureAwait(false);
+            return await base.Client.HExistsAsync(hashKeyAndField.Key, hashKeyAndField.Field).ConfigureAwait(false);
         }
 
         public override async Task<object> GetAsync(string key, bool isFullKey = false)
@@ -392,8 +391,8 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
 
             //var value = _cache.StringGet(cacheKey);
-            var value = await _cache.HashGetAsync(hashKeyAndField.Key, hashKeyAndField.Field).ConfigureAwait(false);
-            if (value.HasValue)
+            var value = await base.Client.HGetAsync(hashKeyAndField.Key, hashKeyAndField.Field).ConfigureAwait(false);
+            if (value != null)
             {
                 return value.ToString().DeserializeFromCache();
             }
@@ -417,8 +416,8 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var hashKeyAndField = this.GetHashKeyAndField(key, isFullKey);
 
             //var value = _cache.StringGet(cacheKey);
-            var value = await _cache.HashGetAsync(hashKeyAndField.Key, hashKeyAndField.Field).ConfigureAwait(false);
-            if (value.HasValue)
+            var value = await base.Client.HGetAsync(hashKeyAndField.Key, hashKeyAndField.Field).ConfigureAwait(false);
+            if (value != null)
             {
                 return value.ToString().DeserializeFromCache<T>();
             }
@@ -435,14 +434,14 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var keyPrefix = GetFinalKey("");//Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
             var dic = new Dictionary<string, object>();
 
-            var hashKeys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPrefix + "*", pageSize: 99999);
+            var hashKeys = base.Client.Keys(/*database: Client.GetDatabase().Database,*/ pattern: keyPrefix + "*"/*, pageSize: 99999*/);
             foreach (var redisKey in hashKeys)
             {
-                var list = await _cache.HashGetAllAsync(redisKey).ConfigureAwait(false);
+                var list = await base.Client.HGetAllAsync(redisKey).ConfigureAwait(false);
 
                 foreach (var hashEntry in list)
                 {
-                    var fullKey = redisKey.ToString() + ":" + hashEntry.Name;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
+                    var fullKey = redisKey.ToString() + ":" + hashEntry.Key;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
                     dic[fullKey] = hashEntry.Value.ToString().DeserializeFromCache();
                 }
             }
@@ -485,7 +484,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
 
             var json = value.SerializeToCache();
-            await _cache.HashSetAsync(hashKeyAndField.Key, hashKeyAndField.Field, json).ConfigureAwait(false);
+            await base.Client.HSetAsync(hashKeyAndField.Key, hashKeyAndField.Field, json).ConfigureAwait(false);
 
             //#if DEBUG
             //            var value1 = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);//正常情况下可以得到 //_cache.GetValue(cacheKey);
@@ -504,7 +503,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
             SenparcMessageQueue.OperateQueue();//延迟缓存立即生效
                                                //_cache.KeyDelete(cacheKey);//删除键
-            await _cache.HashDeleteAsync(hashKeyAndField.Key, hashKeyAndField.Field).ConfigureAwait(false);//删除项
+            await base.Client.HDelAsync(hashKeyAndField.Key, hashKeyAndField.Field).ConfigureAwait(false);//删除项
         }
 
         /// <summary>
@@ -528,18 +527,18 @@ namespace Senparc.CO2NET.Cache.CsRedis
         /// <summary>
         /// _cache.HashGetAll()
         /// </summary>
-        public HashEntry[] HashGetAll(string key)
+        public Dictionary<string,string> HashGetAll(string key)
         {
-            return _cache.HashGetAll(key);
+            return base.Client.HGetAll(key);
         }
 
 
         /// <summary>
         /// _cache.HashGetAll()
         /// </summary>
-        public async Task<HashEntry[]> HashGetAllAsync(string key)
+        public async Task<Dictionary<string, string>> HashGetAllAsync(string key)
         {
-            return await _cache.HashGetAllAsync(key).ConfigureAwait(false);
+            return await base.Client.HGetAllAsync(key).ConfigureAwait(false);
         }
     }
 }
