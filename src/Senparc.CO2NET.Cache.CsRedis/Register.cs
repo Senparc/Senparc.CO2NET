@@ -67,7 +67,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         /// </summary>
         public static void UseKeyValueRedisNow()
         {
-            CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//键值Redis
+            CacheStrategyFactory.RegisterObjectCacheStrategy(() => CsRedis.RedisObjectCacheStrategy.Instance);//键值Redis
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         /// </summary>
         public static void UseHashRedisNow()
         {
-            CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisHashSetObjectCacheStrategy.Instance);//Hash格式储存的Redis
+            CacheStrategyFactory.RegisterObjectCacheStrategy(() => CsRedis.RedisHashSetObjectCacheStrategy.Instance);//Hash格式储存的Redis
         }
     }
 }
