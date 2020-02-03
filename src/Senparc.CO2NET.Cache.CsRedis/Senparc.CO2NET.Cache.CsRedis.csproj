@@ -81,13 +81,9 @@
   </ItemGroup>-->
   <ItemGroup>
     <Compile Remove="Properties\AssemblyInfo.cs" />
-    <Compile Remove="StackExchange.Redis\RedisManager.cs" />
-    <Compile Remove="StackExchange.Redis\RedisUtils.cs" />
-    <Compile Remove="StackExchange.Redis\StackExchangeRedisExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="StackExchange.Redis\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Senparc.CO2NET.Cache.CsRedis.RedLock\redlock-cs\src\Senparc.CO2NET.Cache.CsRedis.RedLock.csproj" />

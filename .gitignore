@@ -28,3 +28,4 @@ obj/*
 /src/ProjectFileManager
 /src/Senparc.CO2NET.Cache.CsRedis/packages
 /src/Senparc.CO2NET.Cache.CsRedis/Properties/AssemblyInfo.cs
+/src/Senparc.CO2NET.Cache.Redis.Tests - Copy/App_Data/SenparcTraceLog
