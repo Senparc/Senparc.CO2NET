@@ -31,7 +31,7 @@
     
 ----------------------------------------------------------------*/
 
-using StackExchange.Redis;
+using CSRedis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,17 +43,17 @@ namespace Redlock.CSharp
 {
     public class Redlock
     {
-        public Redlock(int retryCount, TimeSpan retryDelay, params ConnectionMultiplexer[] list)
+        public Redlock(int retryCount, TimeSpan retryDelay, params CSRedisClient[] list)
         {
             DefaultRetryCount = retryCount;
             DefaultRetryDelay = retryDelay;
             foreach (var item in list)
             {
-                this.redisMasterDictionary.Add(item.GetEndPoints().First().ToString(), item);
+                this.redisMasterDictionary.Add(item.Nodes.Keys.First(), item);
             }
         }
 
-        public Redlock(params ConnectionMultiplexer[] list)
+        public Redlock(params CSRedisClient[] list)
             : this(3, new TimeSpan(0, 0, 0, 0, 200), list)
         {
 
@@ -82,7 +82,7 @@ namespace Redlock.CSharp
         }
 
 
-        protected Dictionary<String, ConnectionMultiplexer> redisMasterDictionary = new Dictionary<string, ConnectionMultiplexer>();
+        protected Dictionary<String, CSRedisClient> redisMasterDictionary = new Dictionary<string, CSRedisClient>();
 
         #region 同步方法
 
@@ -94,7 +94,7 @@ namespace Redlock.CSharp
             try
             {
                 var redis = this.redisMasterDictionary[redisServer];
-                succeeded = redis.GetDatabase().StringSet(resource, val, ttl, When.NotExists);
+                succeeded = redis.Set(resource, val, ttl, RedisExistence.Nx);
             }
             catch (Exception)
             {
@@ -106,17 +106,17 @@ namespace Redlock.CSharp
         //TODO: Refactor passing a ConnectionMultiplexer
         protected void UnlockInstance(string redisServer, string resource, byte[] val)
         {
-            RedisKey[] key = { resource };
-            RedisValue[] values = { val };
+            string key = resource;
+            byte[][] values = { val };
             var redis = redisMasterDictionary[redisServer];
-            redis.GetDatabase().ScriptEvaluate(
+            redis.Eval(
                 UnlockScript,
                 key,
                 values
                 );
         }
 
-        public bool Lock(RedisKey resource, TimeSpan ttl, out Lock lockObject)
+        public bool Lock(string resource, TimeSpan ttl, out Lock lockObject)
         {
             var val = CreateUniqueLockId();
             Lock innerLock = null;
@@ -167,7 +167,7 @@ namespace Redlock.CSharp
             return successfull;
         }
 
-        protected void for_each_redis_registered(Action<ConnectionMultiplexer> action)
+        protected void for_each_redis_registered(Action<CSRedisClient> action)
         {
             foreach (var item in redisMasterDictionary)
             {
@@ -200,9 +200,9 @@ namespace Redlock.CSharp
         public void Unlock(Lock lockObject)
         {
             for_each_redis_registered(redis =>
-                {
-                    UnlockInstance(redis, lockObject.Resource, lockObject.Value);
-                });
+            {
+                UnlockInstance(redis, lockObject.Resource, lockObject.Value);
+            });
         }
 
         #endregion
@@ -217,7 +217,7 @@ namespace Redlock.CSharp
             try
             {
                 var redis = this.redisMasterDictionary[redisServer];
-                succeeded = await redis.GetDatabase().StringSetAsync(resource, val, ttl, When.NotExists).ConfigureAwait(false);
+                succeeded = await redis.SetAsync(resource, val, ttl, RedisExistence.Nx).ConfigureAwait(false);
             }
             catch (Exception)
             {
@@ -229,10 +229,10 @@ namespace Redlock.CSharp
         //TODO: Refactor passing a ConnectionMultiplexer
         protected async Task UnlockInstanceAsync(string redisServer, string resource, byte[] val)
         {
-            RedisKey[] key = { resource };
-            RedisValue[] values = { val };
+            string key = resource;
+            byte[][] values = { val };
             var redis = redisMasterDictionary[redisServer];
-            await redis.GetDatabase().ScriptEvaluateAsync(
+            await redis.EvalAsync(
                    UnlockScript,
                    key,
                    values
@@ -245,57 +245,57 @@ namespace Redlock.CSharp
         /// <param name="resource"></param>
         /// <param name="ttl"></param>
         /// <returns>bool：successfull，Lock：lockObject</returns>
-        public async Task<Tuple<bool, Lock>> LockAsync(RedisKey resource, TimeSpan ttl)
+        public async Task<Tuple<bool, Lock>> LockAsync(string resource, TimeSpan ttl)
         {
             var val = CreateUniqueLockId();
             Lock innerLock = null;
             bool successfull = await retryAsync(DefaultRetryCount, DefaultRetryDelay, async () =>
-              {
-                  try
-                  {
-                      int n = 0;
-                      var startTime = DateTime.Now;
+            {
+                try
+                {
+                    int n = 0;
+                    var startTime = DateTime.Now;
 
-                      // Use keys
-                       for_each_redis_registered(
+                    // Use keys
+                    for_each_redis_registered(
+                          async redis =>
+                          {
+                              if (await LockInstanceAsync(redis, resource, val, ttl).ConfigureAwait(false)) n += 1;
+                          }
+                       );
+
+                    /*
+                     * Add 2 milliseconds to the drift to account for Redis expires
+                     * precision, which is 1 millisecond, plus 1 millisecond min drift 
+                     * for small TTLs.        
+                     */
+                    var drift = Convert.ToInt32((ttl.TotalMilliseconds * ClockDriveFactor) + 2);
+                    var validity_time = ttl - (DateTime.Now - startTime) - new TimeSpan(0, 0, 0, 0, drift);
+
+                    if (n >= Quorum && validity_time.TotalMilliseconds > 0)
+                    {
+                        innerLock = new Lock(resource, val, validity_time);
+                        return true;
+                    }
+                    else
+                    {
+                        for_each_redis_registered(
                              async redis =>
-                              {
-                                  if (await LockInstanceAsync(redis, resource, val, ttl).ConfigureAwait(false)) n += 1;
-                              }
+                             {
+                                 await UnlockInstanceAsync(redis, resource, val).ConfigureAwait(false);
+                             }
                           );
-
-                      /*
-                       * Add 2 milliseconds to the drift to account for Redis expires
-                       * precision, which is 1 millisecond, plus 1 millisecond min drift 
-                       * for small TTLs.        
-                       */
-                      var drift = Convert.ToInt32((ttl.TotalMilliseconds * ClockDriveFactor) + 2);
-                      var validity_time = ttl - (DateTime.Now - startTime) - new TimeSpan(0, 0, 0, 0, drift);
-
-                      if (n >= Quorum && validity_time.TotalMilliseconds > 0)
-                      {
-                          innerLock = new Lock(resource, val, validity_time);
-                          return true;
-                      }
-                      else
-                      {
-                          for_each_redis_registered(
-                               async redis =>
-                                {
-                                    await UnlockInstanceAsync(redis, resource, val).ConfigureAwait(false);
-                                }
-                            );
-                          return false;
-                      }
-                  }
-                  catch (Exception)
-                  { return false; }
-              }).ConfigureAwait(false);
+                        return false;
+                    }
+                }
+                catch (Exception)
+                { return false; }
+            }).ConfigureAwait(false);
 
             return Tuple.Create(successfull, innerLock);
         }
 
-        protected async Task for_each_redis_registeredAsync(Action<ConnectionMultiplexer> action)
+        protected async Task for_each_redis_registeredAsync(Action<CSRedisClient> action)
         {
             await Task.Factory.StartNew(() => for_each_redis_registered(action)).ConfigureAwait(false);
         }
@@ -323,9 +323,9 @@ namespace Redlock.CSharp
         public async Task UnlockAsync(Lock lockObject)
         {
             await for_each_redis_registeredAsync(async redis =>
-             {
-                 await UnlockInstanceAsync(redis, lockObject.Resource, lockObject.Value).ConfigureAwait(false);
-             }).ConfigureAwait(false);
+            {
+                await UnlockInstanceAsync(redis, lockObject.Resource, lockObject.Value).ConfigureAwait(false);
+            }).ConfigureAwait(false);
         }
 
         #endregion
@@ -338,7 +338,7 @@ namespace Redlock.CSharp
             sb.AppendLine("Registered Connections:");
             foreach (var item in redisMasterDictionary)
             {
-                sb.AppendLine(item.Value.GetEndPoints().First().ToString());
+                sb.AppendLine(item.Key.First().ToString());
             }
 
             return sb.ToString();

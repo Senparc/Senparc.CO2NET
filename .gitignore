@@ -26,3 +26,5 @@ obj/*
 /Sample/Senparc.CO2NET.Sample.netcore/Properties/PublishProfiles/FolderProfile.pubxml
 /Sample/Senparc.CO2NET.Sample.netcore3/App_Data/SenparcTraceLog/*
 /src/ProjectFileManager
+/src/Senparc.CO2NET.Cache.CsRedis/packages
+/src/Senparc.CO2NET.Cache.CsRedis/Properties/AssemblyInfo.cs

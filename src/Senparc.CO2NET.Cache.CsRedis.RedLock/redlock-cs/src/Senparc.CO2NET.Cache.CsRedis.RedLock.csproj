@@ -1,108 +1,61 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net45;net461;netstandard2.0</TargetFrameworks>
-    <Version>2.2.4</Version>
-    <AssemblyName>Senparc.CO2NET.Cache.Redis.RedLock</AssemblyName>
-    <RootNamespace>Senparc.CO2NET.Cache.Redis.RedLock</RootNamespace>
+    <Version>0.1.0-alpha1</Version>
+    <AssemblyName>Senparc.CO2NET.Cache.CsRedis.RedLock</AssemblyName>
+    <RootNamespace>Senparc.CO2NET.Cache.CsRedis.RedLock</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-
     <Description>
-      Senparc.CO2NET.Cache.Redis.RedLock 模块
+      Senparc.CO2NET.Cache.CsRedis.RedLock 模块
 
       redlock-cs 开源项目：https://github.com/JeffreySu/redlock-cs
 
-      Senparc.Weixin SDK 开源项目：
-      https://github.com/JeffreySu/WeiXinMPSDK
+      CO2NET 开源项目：
+      https://github.com/Senparc/Senparc.CO2NET
     </Description>
     <Copyright>Senparc Copyright © 2004~2020</Copyright>
     <PackageTags>Cache,Redis,RedLock,Senparc,盛派,CO2NET</PackageTags>
-
-
     <Authors>Jeffrey Su</Authors>
     <Owners>Senparc</Owners>
     <PackageLicenseUrl>https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md</PackageLicenseUrl>
     <ProjectUrl>https://github.com/JeffreySu/redlock-cs</ProjectUrl>
-    <Title>Senparc.CO2NET.Cache.Redis.RedLock.dll</Title>
-
+    <Title>Senparc.CO2NET.Cache.CsRedis.RedLock.dll</Title>
     <Summary>微信公众号SDK for C#</Summary>
     <PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
     <PackageIconUrl>http://sdk.weixin.senparc.com/Images/Logo.jpg</PackageIconUrl>
     <PackageReleaseNotes>
-      v0.0.1
-      重写构造函数，提供更加灵活的参数配置。
-
-      v0.0.2
-      调整引用框架
-
-      v0.0.3
-      提供.net core 支持
-
-      v0.0.4
-      提供.net framework 4.6.1 支持
-
       v0.1.0
-      提供.NET Core支持
-
-      v1.0.1-beta1 支持.NET Core 2.0
-
-      v1.1.0 停止对 .net core 1.1 生成的独立版本
-
-      v1.2.0-rc1 支持 .NET Core 2.1.0-rc1-final
-
-      v1.2.5 发布支持 .net core 2.1 的正式版
-
-      ======== CO2NET 移植 ========
-
-      v1.0.0 从 Senparc.Weixin.Cache.REdis.Redlock 移植
-      v2.0.0 使用 .NETStandard2.0 统一支持 .NET Core，放弃对 .NET Core 1.x 的单独适配
-      v2.1.1 升级 StackExchange.Redis 到最新版本
-      v2.2.0 提供缓存异步接口
-      v2.2.1 使用 .ConfigureAwait(false) 避免异步锁死的情况
-      v2.2.4 提供带符号的 nuget 包（.snupkg)
+      创世
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\..\..\BuildOutPut</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>..\..\..\..\..\BuildOutPut</OutputPath>
     <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-    <DocumentationFile>..\..\..\..\..\BuildOutPut\Senparc.CO2NET.Cache.Redis.RedLock.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\..\..\BuildOutPut\Senparc.CO2NET.Cache.CsRedis.RedLock.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-
-
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
     <OutputPath>..\..\..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\..\BuildOutPut\net45\Senparc.CO2NET.Cache.Redis.RedLock.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\BuildOutPut\net45\Senparc.CO2NET.Cache.CsRedis.RedLock.xml</DocumentationFile>
   </PropertyGroup>
-  
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
     <OutputPath>..\..\..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\..\BuildOutPut\net461\Senparc.CO2NET.Cache.Redis.RedLock.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\BuildOutPut\net461\Senparc.CO2NET.Cache.CsRedis.RedLock.xml</DocumentationFile>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
     <OutputPath>..\..\..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.Redis.RedLock.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.CsRedis.RedLock.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
+  <ItemGroup>
+    <PackageReference Include="CSRedisCore" Version="3.3.0" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <PackageReference Include="StackExchange.Redis" Version="2.0.600" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="StackExchange.Redis" Version="2.0.600" />
-  </ItemGroup>
-
 </Project>

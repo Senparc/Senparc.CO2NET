@@ -9,6 +9,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
 {
     public class RedisManager
     {
+        public static 
         public static string ConfigurationOption { get; set; }
     }
 }

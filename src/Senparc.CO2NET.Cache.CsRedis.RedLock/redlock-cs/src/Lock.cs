@@ -28,7 +28,7 @@
 
 ----------------------------------------------------------------*/
 
-using StackExchange.Redis;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,22 +40,22 @@ namespace Redlock.CSharp
     public class Lock
     {
 
-        public Lock(RedisKey resource, RedisValue val, TimeSpan validity)
+        public Lock(string resource, byte[] val, TimeSpan validity)
         {
             this.resource = resource;
-            this.val = val ;
+            this.val = val;
             this.validity_time = validity;
         }
 
-        private RedisKey resource;
+        private string resource;
 
-        private RedisValue val;
+        private byte[] val;
 
         private TimeSpan validity_time;
 
-        public RedisKey Resource { get { return resource; } }
+        public string Resource { get { return resource; } }
 
-        public RedisValue Value { get { return val; } }
+        public byte[] Value { get { return val; } }
 
         public TimeSpan Validity { get { return validity_time; } }
     }

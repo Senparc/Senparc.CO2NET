@@ -35,7 +35,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>..\..\BuildOutPut</OutputPath>
     <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.Cache.Redis.XML</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.Cache.CsRedis.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
@@ -43,15 +43,15 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\net45\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\net45\Senparc.CO2NET.Cache.CsRedis.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\net461\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\net461\Senparc.CO2NET.Cache.CsRedis.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.CsRedis.xml</DocumentationFile>
   </PropertyGroup>
   <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.6|AnyCPU'">
     <DefineConstants>TRACE;DEBUG</DefineConstants>
@@ -90,7 +90,7 @@
     <Folder Include="StackExchange.Redis\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Senparc.CO2NET.Cache.Redis.RedLock\redlock-cs\src\Senparc.CO2NET.Cache.Redis.RedLock.csproj" />
+    <ProjectReference Include="..\Senparc.CO2NET.Cache.CsRedis.RedLock\redlock-cs\src\Senparc.CO2NET.Cache.CsRedis.RedLock.csproj" />
     <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
   </ItemGroup>
 </Project>
