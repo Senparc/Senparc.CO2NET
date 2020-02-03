@@ -52,7 +52,6 @@ using System.Linq;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.MessageQueue;
 using Senparc.CO2NET.Cache;
-using StackExchange.Redis;
 using Senparc.CO2NET.Trace;
 using System.Threading.Tasks;
 
@@ -350,7 +349,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         public IList<T> GetAllByPrefix<T>(string key)
         {
             var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
-            var keys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern, pageSize: 99999);
+            var keys = base.Client.Keys(database: Client.GetDatabase().Database, pattern: keyPattern, pageSize: 99999);
             List<T> list = new List<T>();
             foreach (var fullKey in keys)
             {

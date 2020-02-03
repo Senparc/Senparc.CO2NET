@@ -15,7 +15,6 @@
 
 ----------------------------------------------------------------*/
 
-using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -28,12 +27,10 @@ namespace Senparc.CO2NET.Cache.CsRedis
     public abstract class BaseRedisObjectCacheStrategy : BaseCacheStrategy, IBaseObjectCacheStrategy
     {
         public CSRedis.CSRedisClient Client { get; set; }
-        protected IDatabase _cache;
 
         protected BaseRedisObjectCacheStrategy()
         {
-            Client = RedisManager.Manager;
-            _cache = Client.GetDatabase();
+            Client = new CSRedis.CSRedisClient(Config.SenparcSetting.Cache_Redis_Configuration);
         }
 
         static BaseRedisObjectCacheStrategy()
@@ -44,11 +41,6 @@ namespace Senparc.CO2NET.Cache.CsRedis
                 Config.SenparcSetting.Cache_Redis_Configuration != "Redis配置")
             {
                 RedisManager.ConfigurationOption = Config.SenparcSetting.Cache_Redis_Configuration;
-
-                Client = new CSRedis.CSRedisClient(
-    "mymaster,password=123,prefix=key前辍",
-    new[] { "192.169.1.10:26379", "192.169.1.11:26379", "192.169.1.12:26379" });
-
             }
 
             //全局初始化一次，测试结果为319ms
@@ -77,17 +69,6 @@ namespace Senparc.CO2NET.Cache.CsRedis
             Client.Dispose();//释放
         }
 
-
-        /// <summary>
-        /// 获取 Server 对象
-        /// </summary>
-        /// <returns></returns>
-        protected IServer GetServer()
-        {
-            //https://github.com/StackExchange/StackExchange.Redis/blob/master/Docs/KeysScan.md
-            var server = Client.GetServer(Client.GetEndPoints()[0]);
-            return server;
-        }
 
         #region 同步方法
 
