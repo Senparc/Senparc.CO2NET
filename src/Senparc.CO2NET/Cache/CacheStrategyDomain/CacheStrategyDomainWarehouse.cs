@@ -55,7 +55,6 @@ namespace Senparc.CO2NET.Cache
         /// <summary>
         /// 添加或更新缓存策略映射
         /// </summary>
-        /// <param name="domainCacheStrategy"></param>
         /// <param name="item"></param>
         public void AddOrUpdate(CacheStrategyDomainMappingItem item)
         {
