@@ -1,9 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-
-    <Version>0.7.100-preview1</Version>
+    <Version>0.7.100-preview2</Version>
     <AssemblyName>Senparc.CO2NET.APM</AssemblyName>
     <RootNamespace>Senparc.CO2NET.APM</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -36,15 +34,11 @@
       v0.5.0 支持 .NET Core 3.0
       v0.5.102 支持新版本 CO2NET
       v0.6.102 支持新版本 CO2NET
-    </PackageReleaseNotes>
-
+</PackageReleaseNotes>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
   </ItemGroup>
-  
-
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\BuildOutPut</OutputPath>
     <DefineConstants>TRACE;RELEASE</DefineConstants>
@@ -58,24 +52,16 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\BuildOutPut\net45\Senparc.CO2NET.APM.xml</DocumentationFile>
   </PropertyGroup>
-
-
   <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\BuildOutPut\netstandard1.6\Senparc.CO2NET.APM.xml</DocumentationFile>
   </PropertyGroup>-->
-
-
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.APM.xml</DocumentationFile>
   </PropertyGroup>
-
-
-
 </Project>
