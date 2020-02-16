@@ -139,6 +139,11 @@
     <DocumentationFile>..\BuildOutPut\netstandard2.1\Senparc.CO2NET.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Utilities\Cache\**" />
+    <EmbeddedResource Remove="Utilities\Cache\**" />
+    <None Remove="Utilities\Cache\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="Cache\Lock\CacheLockWrapper.cs" />
     <Compile Remove="Cache\Lock\CacheLockWrapperExtension.cs" />
     <Compile Remove="Trace\SenparcTrace.v0.2.18.cs" />
@@ -179,9 +184,6 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utilities\Cache\" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.Net.Http.Headers">
