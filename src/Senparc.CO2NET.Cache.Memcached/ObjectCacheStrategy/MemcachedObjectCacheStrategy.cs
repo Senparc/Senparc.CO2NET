@@ -199,11 +199,11 @@ namespace Senparc.CO2NET.Cache.Memcached
 #if NET45 //|| NET461
             Cache = new MemcachedClient(_config);
 #else
-            ILoggerFactory loggerFactory = SenparcDI.GetService<ILoggerFactory>();
+            var serviceProvider = SenparcDI.GlobalServiceCollection.BuildServiceProvider();
+            ILoggerFactory loggerFactory = serviceProvider.GetService<ILoggerFactory>();
             Cache = new MemcachedClient(loggerFactory, _config);
 #endif
         }
-
 
         //静态LocalCacheStrategy
         public static IBaseObjectCacheStrategy Instance
@@ -244,8 +244,9 @@ namespace Senparc.CO2NET.Cache.Memcached
             config.Protocol = MemcachedProtocol.Binary;
 
 #else
-            ILoggerFactory loggerFactory = SenparcDI.GetService<ILoggerFactory>();
-            IOptions<MemcachedClientOptions> optionsAccessor = SenparcDI.GetService<IOptions<MemcachedClientOptions>>();
+            var serviceProvider = SenparcDI.GlobalServiceCollection.BuildServiceProvider();
+            ILoggerFactory loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+            IOptions<MemcachedClientOptions> optionsAccessor = serviceProvider.GetService<IOptions<MemcachedClientOptions>>();
 
             var config = new MemcachedClientConfiguration(loggerFactory, optionsAccessor);
 #endif

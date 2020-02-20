@@ -82,13 +82,14 @@ namespace Senparc.CO2NET
         /// <returns></returns>
         public static IRegisterService UseSenparcGlobal(this IRegisterService registerService, bool autoScanExtensionCacheStrategies = false, Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
         {
+
             //注册扩展缓存策略
             CacheStrategyDomainWarehouse.AutoScanDomainCacheStrategy(autoScanExtensionCacheStrategies, extensionCacheStrategiesFunc);
 
             return registerService;
         }
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
 
         /// <summary>
         /// 开始 Senparc.CO2NET 初始化参数流程

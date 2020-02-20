@@ -70,7 +70,7 @@ namespace Senparc.CO2NET.Utilities
             set
             {
                 _appDomainAppPath = value;
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
                 var pathSeparator = Path.DirectorySeparatorChar.ToString();
                 var altPathSeparator = Path.AltDirectorySeparatorChar.ToString();
                 if (!_appDomainAppPath.EndsWith(pathSeparator) && !_appDomainAppPath.EndsWith(altPathSeparator))

@@ -28,16 +28,15 @@ namespace Senparc.CO2NET.Sample.netcore3
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
 
             services.AddMemoryCache();//使用本地缓需要添加
             services.Add(ServiceDescriptor.Singleton(typeof(ILogger<>), typeof(Logger<>)));//使用 Memcached 或 Logger 需要添加
 
-
             //Senparc.CO2NET 全局注册（必须）
-            return services.AddSenparcGlobalServices(Configuration);
+            services.AddSenparcGlobalServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

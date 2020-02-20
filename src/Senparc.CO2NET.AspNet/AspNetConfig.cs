@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD2_0 || NETSTANDARD2_1
+﻿#if !NET45
 using Microsoft.AspNetCore.Hosting;
 #endif 
 using System;

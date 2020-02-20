@@ -29,7 +29,7 @@ namespace Senparc.CO2NET.Cache
     /// 缓存策略工厂。
     /// <para>缓存策略的注册（立即启用）和当前缓存策略获取</para>
     /// </summary>
-    public class CacheStrategyFactory
+    public static class CacheStrategyFactory
     {
         internal static Func<IBaseObjectCacheStrategy> ObjectCacheStrateFunc { get; set; }
         internal static IBaseObjectCacheStrategy ObjectCacheStrategy { get; set; }
@@ -54,6 +54,10 @@ namespace Senparc.CO2NET.Cache
             }
         }
 
+        public static IBaseObjectCacheStrategy GetObjectCacheStrategyInstance(this IServiceProvider serviceProvider)
+        {
+            return GetObjectCacheStrategyInstance();
+        }
 
         /// <summary>
         /// 获取全局缓存策略

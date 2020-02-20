@@ -18,22 +18,20 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 ----------------------------------------------------------------*/
 #endregion Apache License Version 2.0
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Senparc.CO2NET.Helpers;
+using Senparc.CO2NET.Tests;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Senparc.CO2NET.Tests;
 using System.Xml.Linq;
-using Senparc.CO2NET.Helpers;
 
 namespace Senparc.CO2NET.HttpUtility.Tests
 {
     [TestClass]
-    public class PostTests:BaseTest
+    public class PostTests : BaseTest
     {
         string ApiMpHost = "https://api.weixin.qq.com";
 
@@ -45,7 +43,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             try
             {
                 //这里因为参数错误，系统会返回错误信息
-                WxJsonResult resultFail = Post.PostGetJson<WxJsonResult>(url, cookieContainer: null, formData: null, encoding: null);
+                WxJsonResult resultFail = Post.PostGetJson<WxJsonResult>(BaseTest.serviceProvider, url, cookieContainer: null, formData: null, encoding: null);
                 Assert.Fail();//上一步就应该已经抛出异常
             }
             catch (Exception ex)
@@ -64,7 +62,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             try
             {
                 WxJsonResult resultFail =
-                    await Post.PostGetJsonAsync<WxJsonResult>(url, cookieContainer: null, formData: null,
+                    await Post.PostGetJsonAsync<WxJsonResult>(BaseTest.serviceProvider, url, cookieContainer: null, formData: null,
                             encoding: null);
                 //这里因为参数错误，系统会返回错误信息
                 Assert.Fail(); //上一步就应该已经抛出异常
@@ -89,7 +87,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
                 var formData = new Dictionary<string, string>();
                 formData["appKey"] = "test";
                 formData["secret"] = "test2";
-                var resultFail = Post.PostGetJson<object>(url, formData: formData);
+                var resultFail = Post.PostGetJson<object>(BaseTest.serviceProvider, url, formData: formData);
             }
             catch (Exception ex)
             {
@@ -120,7 +118,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
                 sr.Flush();
                 ms.Seek(0, SeekOrigin.Begin);
 
-                var result = await Post.PostGetJsonAsync<dynamic>(url, fileStream: ms, encoding: Encoding.UTF8);
+                var result = await Post.PostGetJsonAsync<dynamic>(BaseTest.serviceProvider, url, fileStream: ms, encoding: Encoding.UTF8);
 
                 Console.WriteLine(result);
             }

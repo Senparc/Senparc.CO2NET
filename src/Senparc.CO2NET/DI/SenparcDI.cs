@@ -22,7 +22,7 @@
 
 ----------------------------------------------------------------*/
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
 using System;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,6 +60,7 @@ namespace Senparc.CO2NET
         /// <summary>
         /// 全局 IServiceCollection 对象
         /// </summary>
+        [Obsolete("已过期，请使用系统的注入方式", true)]
         public static IServiceProvider GlobalServiceProvider
         {
             get
@@ -70,6 +71,15 @@ namespace Senparc.CO2NET
             {
                 _globalServiceProvider = value;
             }
+        }
+
+        /// <summary>
+        /// 从 GlobalServiceCollection 重新 Build，生成新的 IServiceProvider
+        /// </summary>
+        /// <returns></returns>
+        public static IServiceProvider GetServiceProvider()
+        {
+            return GlobalServiceCollection.BuildServiceProvider();
         }
 
         /// <summary>
@@ -154,6 +164,7 @@ namespace Senparc.CO2NET
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        [Obsolete("已过期", true)]
         public static T GetRequiredService<T>()
         {
             return GlobalServiceProvider.GetRequiredService<T>();
@@ -165,41 +176,34 @@ namespace Senparc.CO2NET
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        [Obsolete("已过期", true)]
         public static T GetService<T>()
         {
             return GlobalServiceProvider.GetService<T>();
         }
 
+        ///// <summary>
+        ///// 使用 .net core 默认的 DI 方法获得实例（推荐）
+        ///// <para>如果未注册，抛出异常 </para>
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <returns></returns>
+        //public static T GetService<T>(this IServiceProvider serviceProvider)
+        //{
+        //    return (T)serviceProvider.GetService(typeof(T));
+        //}
+
+
 
         /// <summary>
         /// 重置 GlobalIServiceProvider 对象，重新从 serviceCollection.BuildServiceProvider() 生成对象
         /// </summary>
+        [Obsolete("已过期", true)]
         public static IServiceProvider ResetGlobalIServiceProvider(this IServiceCollection serviceCollection)
         {
             GlobalServiceProvider = serviceCollection.BuildServiceProvider();
             return GlobalServiceProvider;
         }
-
-
-        #region 过期方法
-
-
-        /// <summary>
-        /// 获取 ServiceProvider
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("Please use GetIServiceProvider", true)]
-        public static IServiceProvider GetServiceProvider()
-        {
-            if (GlobalServiceProvider == null)
-            {
-                //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
-                GlobalServiceProvider = GlobalServiceCollection.BuildServiceProvider();
-            }
-            return GlobalServiceProvider;
-        }
-
-        #endregion
     }
 }
 #endif

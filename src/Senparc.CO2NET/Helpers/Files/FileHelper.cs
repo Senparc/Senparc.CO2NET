@@ -49,6 +49,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 
 
+using System;
 using System.IO;
 
 namespace Senparc.CO2NET.Helpers
@@ -78,11 +79,13 @@ namespace Senparc.CO2NET.Helpers
         /// </summary>
         /// <param name="url"></param>
         /// <param name="fullFilePathAndName"></param>
-        public static void DownLoadFileFromUrl(string url, string fullFilePathAndName)
+        public static void DownLoadFileFromUrl(IServiceProvider serviceProvider,string url, string fullFilePathAndName)
         {
             using (FileStream fs = new FileStream(fullFilePathAndName, FileMode.OpenOrCreate))
             {
-                HttpUtility.Get.Download(url, fs);
+                HttpUtility.Get.Download(
+                    serviceProvider,
+                    url, fs);
 #if NET35
                 fs.Flush();
 #else
