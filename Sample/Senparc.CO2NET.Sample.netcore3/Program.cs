@@ -21,6 +21,6 @@ namespace Senparc.CO2NET.Sample.netcore3
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                }).UseServiceProviderFactory(new SenparcServiceProviderFactory());
     }
 }
