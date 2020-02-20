@@ -74,7 +74,7 @@ namespace Senparc.CO2NET.Tests
         public void UseSenparcGlobalTest()
         {
             IRegisterService registerService = Senparc.CO2NET.AspNet.RegisterServices.RegisterService.Start(null, new SenparcSetting(true));
-            registerService.UseSenparcGlobal(true, null);
+            registerService.UseSenparcGlobal(BaseTest.serviceProvider, true, null);
 
             Assert.IsNotNull(Config.SenparcSetting);
             Assert.AreEqual(true, Config.SenparcSetting.IsDebug);
@@ -89,7 +89,7 @@ namespace Senparc.CO2NET.Tests
                 return list;
             };
 
-            registerService.UseSenparcGlobal(false, func);
+            registerService.UseSenparcGlobal(BaseTest.serviceProvider,false, func);
 
         }
     }

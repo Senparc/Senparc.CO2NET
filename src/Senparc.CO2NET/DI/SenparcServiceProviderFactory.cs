@@ -9,14 +9,14 @@ namespace Senparc.CO2NET
     {
         public IServiceContainer CreateBuilder(IServiceCollection services)
         {
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
-            return builder;
-            return services.ToServiceContainer();
+            var serviceProvider = services.BuildServiceProvider();
+            return new ServiceContainer(serviceProvider);
         }
 
         public IServiceProvider CreateServiceProvider(IServiceContainer containerBuilder)
         {
+            //SenparcDI.GlobalServiceProvider = containerBuilder;
+            Console.WriteLine(containerBuilder.GetHashCode());
             return containerBuilder;
         }
     }

@@ -52,7 +52,7 @@ namespace Senparc.CO2NET.Sample.Consoles
 
             var config = configBuilder.Build();
             Console.WriteLine("完成 ServiceCollection 和 ConfigurationBuilder 初始化");
-            
+
             //更多绑定操作参见：https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-2.2
             var senparcSetting = new SenparcSetting();
             config.GetSection("SenparcSetting").Bind(senparcSetting);
@@ -73,7 +73,7 @@ namespace Senparc.CO2NET.Sample.Consoles
             // 启动 CO2NET 全局注册，必须！
             IRegisterService register = RegisterService.Start(senparcSetting)
                                                         //关于 UseSenparcGlobal() 的更多用法见 CO2NET Demo：https://github.com/Senparc/Senparc.CO2NET/blob/master/Sample/Senparc.CO2NET.Sample.netcore/Startup.cs
-                                                        .UseSenparcGlobal();
+                                                        .UseSenparcGlobal(services.BuildServiceProvider());
 
             Console.WriteLine("完成 RegisterService.Start().UseSenparcGlobal()  启动设置");
             Console.WriteLine($"设定程序目录为：{Senparc.CO2NET.Config.RootDictionaryPath}");

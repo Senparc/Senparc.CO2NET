@@ -23,12 +23,12 @@ namespace Senparc.CO2NET.Tests
         [TestMethod]
         public void GetServiceTest()
         {
-            var serviceProvider = BaseTest.RegisterServiceCollection();
+            var serviceProvider = BaseTest.serviceProvider;
             BaseTest.RegisterServiceStart(true);
 
-            Assert.AreSame(serviceProvider, SenparcDI.GlobalServiceProvider);
+            //Assert.AreSame(serviceProvider, SenparcDI.GlobalServiceProvider);
 
-            var memcache = SenparcDI.GetService<IMemoryCache>();
+            var memcache = serviceProvider.GetService<IMemoryCache>();
             Assert.IsNotNull(memcache);
             Console.WriteLine($"memcache HashCode：{memcache.GetHashCode()}");
 
@@ -36,7 +36,7 @@ namespace Senparc.CO2NET.Tests
             var dt = SystemTime.Now;
             memcache.Set(key, dt);//直接使用缓存
 
-            var memcache2 = SenparcDI.GetService<IMemoryCache>();
+            var memcache2 = serviceProvider.GetService<IMemoryCache>();
             Console.WriteLine($"memcache 2 HashCode：{memcache2.GetHashCode()}");
 
             Assert.AreEqual(memcache.GetHashCode(), memcache2.GetHashCode());//同一个全局对象
@@ -127,10 +127,10 @@ namespace Senparc.CO2NET.Tests
             BaseTest.RegisterServiceStart(true);
 
             SenparcDI.GlobalServiceCollection.AddScoped<SenparcSetting>();
-            SenparcDI.GlobalServiceCollection.ResetGlobalIServiceProvider();
 
+            BaseTest.serviceProvider = SenparcDI.GlobalServiceCollection.BuildServiceProvider();
             //测试跨线程唯一
-            var s = SenparcDI.GetService<SenparcSetting>();
+            var s = BaseTest.serviceProvider.GetService<SenparcSetting>();
             Console.WriteLine($"s:{s.GetHashCode()}");
 
             var threadsCount = 10;
@@ -142,9 +142,9 @@ namespace Senparc.CO2NET.Tests
                 var index = i;
                 var thread = new Thread(() =>
                 {
-                    var s1 = SenparcDI.GetService<SenparcSetting>();
-                    var s2 = SenparcDI.GetService<SenparcSetting>();
-                    Console.WriteLine("ServiceProcider:" + SenparcDI.GlobalServiceProvider?.GetHashCode());
+                    var s1 = serviceProvider.GetService<SenparcSetting>();
+                    var s2 = serviceProvider.GetService<SenparcSetting>();
+                    Console.WriteLine("ServiceProvider:" + serviceProvider.GetHashCode());
                     Console.WriteLine($"{index}:{s1.GetHashCode()}");
                     Console.WriteLine($"{index}:{s2.GetHashCode()}");
                     Assert.AreEqual(s1.GetHashCode(), s2.GetHashCode());
@@ -174,7 +174,7 @@ namespace Senparc.CO2NET.Tests
                     //Console.WriteLine("ServiceScope:" + threadScope?.GetHashCode());
                     //Console.WriteLine("ServiceProcider:" + threadScope?.ServiceProvider.GetHashCode());
 
-                    using (var threadScopeService = SenparcDI.GlobalServiceProvider.CreateScope())
+                    using (var threadScopeService = serviceProvider.CreateScope())
                     {
                         var s1 = threadScopeService.ServiceProvider.GetService<SenparcSetting>();
                         var s2 = threadScopeService.ServiceProvider.GetService<SenparcSetting>();

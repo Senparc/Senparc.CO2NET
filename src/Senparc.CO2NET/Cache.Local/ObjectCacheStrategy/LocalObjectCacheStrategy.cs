@@ -52,73 +52,12 @@ using System.Threading.Tasks;
 using System.Web;
 #else
 using Microsoft.Extensions.Caching.Memory;
+
 #endif
 
 
 namespace Senparc.CO2NET.Cache
 {
-    /// <summary>
-    /// 全局静态数据源帮助类
-    /// </summary>
-    public static class LocalObjectCacheHelper
-    {
-#if NET45
-        /// <summary>
-        /// 所有数据集合的列表
-        /// </summary>
-        public static System.Web.Caching.Cache LocalObjectCache { get; set; }
-
-        static LocalObjectCacheHelper()
-        {
-            LocalObjectCache = System.Web.HttpRuntime.Cache;
-        }
-#else
-
-        private static IMemoryCache _localObjectCache;
-
-        /// <summary>
-        /// 所有数据集合的列表
-        /// </summary>
-        public static IMemoryCache LocalObjectCache
-        {
-            get
-            {
-                if (_localObjectCache == null)
-                {
-                    _localObjectCache = SenparcDI.GetService<IMemoryCache>();
-
-                    if (_localObjectCache == null)
-                    {
-                        throw new CacheException("IMemoryCache 依赖注入未设置！请在 Startup.cs 中使用 serviceCollection.AddMemoryCache() 进行设置！");
-                    }
-                }
-                return _localObjectCache;
-            }
-        }
-
-        /// <summary>
-        /// .NET Core 的 MemoryCache 不提供遍历所有项目的方法，因此这里做一个储存Key的地方
-        /// </summary>
-        public static Dictionary<string, DateTimeOffset> Keys { get; set; } = new Dictionary<string, DateTimeOffset>();
-
-        static LocalObjectCacheHelper()
-        {
-
-        }
-
-        /// <summary>
-        /// 获取储存Keys信息的缓存键
-        /// </summary>
-        /// <param name="cacheStrategy"></param>
-        /// <returns></returns>
-        public static string GetKeyStoreKey(BaseCacheStrategy cacheStrategy)
-        {
-            var keyStoreFinalKey = cacheStrategy.GetFinalKey("CO2NET_KEY_STORE");
-            return keyStoreFinalKey;
-        }
-#endif
-    }
-
     /// <summary>
     /// 本地容器缓存策略
     /// </summary>
@@ -194,7 +133,7 @@ namespace Senparc.CO2NET.Cache
             _cache[finalKey] = value;
 #else
             var newKey = !CheckExisted(finalKey, true);
-            
+
             if (expiry.HasValue)
             {
                 _cache.Set(finalKey, value, expiry.Value);

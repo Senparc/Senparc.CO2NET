@@ -60,10 +60,12 @@ namespace Senparc.CO2NET
         /// <summary>
         /// 全局 IServiceCollection 对象
         /// </summary>
+        [Obsolete("已过期，请使用系统的注入方式", true)]
         public static IServiceProvider GlobalServiceProvider
         {
             get
             {
+                return null;
                 return _globalServiceProvider ?? throw new Exception("请在 Startup.cs 注册过程中，使用 services.AddSenparcGlobalServices() 方法提供全局统一的 ServiceProvider");
             }
             set
@@ -154,6 +156,7 @@ namespace Senparc.CO2NET
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        [Obsolete("已过期", true)]
         public static T GetRequiredService<T>()
         {
             return GlobalServiceProvider.GetRequiredService<T>();
@@ -165,15 +168,29 @@ namespace Senparc.CO2NET
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        [Obsolete("已过期", true)]
         public static T GetService<T>()
         {
             return GlobalServiceProvider.GetService<T>();
         }
 
+        /// <summary>
+        /// 使用 .net core 默认的 DI 方法获得实例（推荐）
+        /// <para>如果未注册，抛出异常 </para>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T GetService<T>(this IServiceProvider serviceProvider)
+        {
+            return (T)serviceProvider.GetService(typeof(T));
+        }
+
+
 
         /// <summary>
         /// 重置 GlobalIServiceProvider 对象，重新从 serviceCollection.BuildServiceProvider() 生成对象
         /// </summary>
+        [Obsolete("已过期", true)]
         public static IServiceProvider ResetGlobalIServiceProvider(this IServiceCollection serviceCollection)
         {
             GlobalServiceProvider = serviceCollection.BuildServiceProvider();

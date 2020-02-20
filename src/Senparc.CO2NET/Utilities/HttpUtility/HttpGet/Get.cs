@@ -59,14 +59,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-#if !NET35 && !NET40
 using System.Net.Http;
 using System.Threading.Tasks;
-#endif
 using System.Text;
 using Senparc.CO2NET.Helpers;
 #if NET45
 using System.Web.Script.Serialization;
+#else
+using Microsoft.Extensions.DependencyInjection;
 #endif
 
 
@@ -91,7 +91,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
 
-#region 同步方法
+        #region 同步方法
 
         /// <summary>
         /// GET方式请求URL，并返回T类型
@@ -101,9 +101,17 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="encoding"></param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
-        public static T GetJson<T>(string url, Encoding encoding = null, Action<string, string> afterReturnText = null)
+        public static T GetJson<T>(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, Encoding encoding = null, Action<string, string> afterReturnText = null)
         {
-            string returnText = RequestUtility.HttpGet(url, encoding);
+            string returnText = RequestUtility.HttpGet(
+#if !NET45
+                 serviceProvider,
+#endif
+                 url, encoding);
 
             afterReturnText?.Invoke(url, returnText);
 
@@ -117,7 +125,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// </summary>
         /// <param name="url"></param>
         /// <param name="stream"></param>
-        public static void Download(string url, Stream stream)
+        public static void Download(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, Stream stream)
         {
 #if NET45
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3
@@ -131,7 +143,7 @@ namespace Senparc.CO2NET.HttpUtility
             //    stream.WriteByte(b);
             //}
 #else
-            HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
+            HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
             var t = httpClient.GetByteArrayAsync(url);
             t.Wait();
             var data = t.Result;
@@ -147,7 +159,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="filePathName">保存文件的路径，如果下载文件包含文件名，按照文件名储存，否则将分配Ticks随机文件名</param>
         /// <param name="timeOut">超时时间</param>
         /// <returns></returns>
-        public static string Download(string url, string filePathName, int timeOut = 999)
+        public static string Download(IServiceProvider serviceProvider, string url, string filePathName, int timeOut = 999)
         {
             var dir = Path.GetDirectoryName(filePathName) ?? "/";
             Directory.CreateDirectory(dir);
@@ -190,7 +202,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
 #else
-            System.Net.Http.HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
+            System.Net.Http.HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
             using (var responseMessage = httpClient.GetAsync(url).Result)
             {
                 if (responseMessage.StatusCode == HttpStatusCode.OK)
@@ -238,9 +250,17 @@ namespace Senparc.CO2NET.HttpUtility
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="ErrorJsonResultException"></exception>
-        public static async Task<T> GetJsonAsync<T>(string url, Encoding encoding = null, Action<string, string> afterReturnText = null)
+        public static async Task<T> GetJsonAsync<T>(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, Encoding encoding = null, Action<string, string> afterReturnText = null)
         {
-            string returnText = await RequestUtility.HttpGetAsync(url, encoding).ConfigureAwait(false);
+            string returnText = await RequestUtility.HttpGetAsync(
+#if !NET45
+                 serviceProvider,
+#endif
+                 url, encoding).ConfigureAwait(false);
 
             afterReturnText?.Invoke(url, returnText);
 
@@ -255,7 +275,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="url"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static async Task DownloadAsync(string url, Stream stream)
+        public static async Task DownloadAsync(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, Stream stream)
         {
 #if NET45
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3
@@ -269,7 +293,7 @@ namespace Senparc.CO2NET.HttpUtility
             //    stream.WriteAsync(b);
             //}
 #else
-            HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
+            HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
             var data = await httpClient.GetByteArrayAsync(url).ConfigureAwait(false);
             await stream.WriteAsync(data, 0, data.Length).ConfigureAwait(false);
 #endif
@@ -283,7 +307,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="filePathName">保存文件的路径，如果下载文件包含文件名，按照文件名储存，否则将分配Ticks随机文件名</param>
         /// <param name="timeOut">超时时间</param>
         /// <returns></returns>
-        public static async Task<string> DownloadAsync(string url, string filePathName, int timeOut = Config.TIME_OUT)
+        public static async Task<string> DownloadAsync(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, string filePathName, int timeOut = Config.TIME_OUT)
         {
             var dir = Path.GetDirectoryName(filePathName) ?? "/";
             Directory.CreateDirectory(dir);
@@ -291,7 +319,7 @@ namespace Senparc.CO2NET.HttpUtility
 #if NET45
             System.Net.Http.HttpClient httpClient = new HttpClient();
 #else
-            System.Net.Http.HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
+            System.Net.Http.HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
 #endif
             httpClient.Timeout = TimeSpan.FromMilliseconds(timeOut);
             using (var responseMessage = await httpClient.GetAsync(url).ConfigureAwait(false))

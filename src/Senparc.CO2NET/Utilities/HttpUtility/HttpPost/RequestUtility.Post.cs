@@ -259,7 +259,9 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="checkValidationResult"></param>
         /// <param name="contentType"></param>
         /// <returns></returns>
-        public static HttpClient HttpPost_Common_NetCore(string url, out HttpContent hc, CookieContainer cookieContainer = null,
+        public static HttpClient HttpPost_Common_NetCore(
+            IServiceProvider serviceProvider,
+            string url, out HttpContent hc, CookieContainer cookieContainer = null,
             Stream postStream = null, Dictionary<string, string> fileDictionary = null, string refererUrl = null,
             Encoding encoding = null, string certName = null, bool useAjax = false, Dictionary<string, string> headerAddition = null,
             int timeOut = Config.TIME_OUT, bool checkValidationResult = false, string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
@@ -278,13 +280,13 @@ namespace Senparc.CO2NET.HttpUtility
 
             //TODO:此处 handler并没有被使用到，因此 cer 实际无法传递（这个也是 .net core 目前针对多 cer 场景的一个问题）
 
-            var senparcHttpClient = SenparcHttpClient.GetInstanceByName(certName);
+            var senparcHttpClient = SenparcHttpClient.GetInstanceByName(serviceProvider, certName);
             senparcHttpClient.SetCookie(new Uri(url), cookieContainer);//设置Cookie
 
             HttpClient client = senparcHttpClient.Client;
             HttpClientHeader(client, refererUrl, useAjax, headerAddition, timeOut);
 
-        #region 处理Form表单文件上传
+            #region 处理Form表单文件上传
 
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
@@ -372,7 +374,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             //HttpContentHeader(hc, timeOut);
-        #endregion
+            #endregion
 
             if (!string.IsNullOrEmpty(refererUrl))
             {
@@ -392,7 +394,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// 使用Post方法获取字符串结果，常规提交
         /// </summary>
         /// <returns></returns>
-        public static string HttpPost(string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null,
+        public static string HttpPost(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null,
             Encoding encoding = null,
 #if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
@@ -407,7 +413,11 @@ namespace Senparc.CO2NET.HttpUtility
 
             string contentType = HttpClientHelper.GetContentType(formData);
 
-            return HttpPost(url, cookieContainer, ms, null, null, encoding,
+            return HttpPost(
+#if !NET45
+                serviceProvider,
+#endif
+                url, cookieContainer, ms, null, null, encoding,
 #if NETSTANDARD2_0 || NETSTANDARD2_1
                 certName,
 #else
@@ -433,7 +443,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="contentType"></param>
         /// <param name="refererUrl"></param>
         /// <returns></returns>
-        public static string HttpPost(string url, CookieContainer cookieContainer = null, Stream postStream = null,
+        public static string HttpPost(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
 #if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
@@ -448,7 +462,11 @@ namespace Senparc.CO2NET.HttpUtility
                 cookieContainer = new CookieContainer();
             }
 
-            var senparcResponse = HttpResponsePost(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
+            var senparcResponse = HttpResponsePost(
+#if !NET45
+                serviceProvider,
+#endif
+                url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
 #if NETSTANDARD2_0 || NETSTANDARD2_1
                 certName,
 #else
@@ -545,7 +563,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="contentType"></param>
         /// <param name="refererUrl"></param>
         /// <returns></returns>
-        public static SenparcHttpResponse HttpResponsePost(string url, CookieContainer cookieContainer = null, Stream postStream = null,
+        public static SenparcHttpResponse HttpResponsePost(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
 #if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
@@ -597,7 +619,7 @@ namespace Senparc.CO2NET.HttpUtility
             return new SenparcHttpResponse(response);
 #else
             HttpContent hc;
-            var client = HttpPost_Common_NetCore(url, out hc, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+            var client = HttpPost_Common_NetCore(serviceProvider, url, out hc, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
 
             var response = client.PostAsync(url, hc).ConfigureAwait(false).GetAwaiter().GetResult();//获取响应信息
 
@@ -629,7 +651,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// 使用Post方法获取字符串结果，常规提交
         /// </summary>
         /// <returns></returns>
-        public static async Task<string> HttpPostAsync(string url, CookieContainer cookieContainer = null,
+        public static async Task<string> HttpPostAsync(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, CookieContainer cookieContainer = null,
             Dictionary<string, string> formData = null, Encoding encoding = null,
 #if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
@@ -644,7 +670,11 @@ namespace Senparc.CO2NET.HttpUtility
 
             string contentType = HttpClientHelper.GetContentType(formData);
 
-            return await HttpPostAsync(url, cookieContainer, ms, null, null, encoding,
+            return await HttpPostAsync(
+#if !NET45
+                serviceProvider,
+#endif
+                url, cookieContainer, ms, null, null, encoding,
 #if NETSTANDARD2_0 || NETSTANDARD2_1
                 certName,
 #else
@@ -671,7 +701,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="refererUrl"></param>
         /// <param name="encoding"></param>
         /// <returns></returns>
-        public static async Task<string> HttpPostAsync(string url, CookieContainer cookieContainer = null, Stream postStream = null,
+        public static async Task<string> HttpPostAsync(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
 #if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
@@ -696,7 +730,11 @@ namespace Senparc.CO2NET.HttpUtility
             //var dt1 = SystemTime.Now;
             //Console.WriteLine($"{System.Threading.Thread.CurrentThread.Name} - START - {dt1:HH:mm:ss.ffff}");
 
-            var senparcResponse = await HttpResponsePostAsync(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
+            var senparcResponse = await HttpResponsePostAsync(
+#if !NET45
+                serviceProvider,
+#endif
+                url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
 #if NETSTANDARD2_0 || NETSTANDARD2_1
                 certName,
 #else
@@ -817,7 +855,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="contentType"></param>
         /// <param name="refererUrl"></param>
         /// <returns></returns>
-        public static async Task<SenparcHttpResponse> HttpResponsePostAsync(string url, CookieContainer cookieContainer = null, Stream postStream = null,
+        public static async Task<SenparcHttpResponse> HttpResponsePostAsync(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
 #if NETSTANDARD2_0 || NETSTANDARD2_1
             string certName = null,
@@ -869,7 +911,7 @@ namespace Senparc.CO2NET.HttpUtility
             return new SenparcHttpResponse(response);
 #else
             HttpContent hc;
-            var client = HttpPost_Common_NetCore(url, out hc, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+            var client = HttpPost_Common_NetCore(serviceProvider, url, out hc, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
 
             var response = await client.PostAsync(url, hc).ConfigureAwait(false);//获取响应信息
 

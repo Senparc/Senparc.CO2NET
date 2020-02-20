@@ -49,6 +49,7 @@ using System.Web;
 #else
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.DependencyInjection;
 #endif
 #if NETSTANDARD2_0 || NETSTANDARD2_1
 using Senparc.CO2NET.WebProxy;
@@ -96,7 +97,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// .NET Core 版本的HttpWebRequest参数设置
         /// </summary>
         /// <returns></returns>
-        private static HttpClient HttpGet_Common_NetCore(string url, CookieContainer cookieContainer = null,
+        private static HttpClient HttpGet_Common_NetCore(IServiceProvider serviceProvider, string url, CookieContainer cookieContainer = null,
             Encoding encoding = null, X509Certificate2 cer = null,
             string refererUrl = null, bool useAjax = false, int timeOut = Config.TIME_OUT)
         {
@@ -107,7 +108,7 @@ namespace Senparc.CO2NET.HttpUtility
                 handler.ClientCertificates.Add(cer);
             }
 
-            HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
+            HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
             HttpClientHeader(httpClient, refererUrl, useAjax, null, timeOut);
 
             return httpClient;
@@ -123,7 +124,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static string HttpGet(string url, Encoding encoding = null)
+        public static string HttpGet(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, Encoding encoding = null)
         {
 #if NET45
             WebClient wc = new WebClient();
@@ -134,7 +139,7 @@ namespace Senparc.CO2NET.HttpUtility
             var handler = HttpClientHelper.GetHttpClientHandler(null, SenparcHttpClientWebProxy, DecompressionMethods.GZip);
 
 
-            HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
+            HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
 
             return httpClient.GetStringAsync(url).Result;
 #endif
@@ -151,7 +156,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="useAjax">是否使用Ajax</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static string HttpGet(string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
+        public static string HttpGet(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
             string refererUrl = null, bool useAjax = false, int timeOut = Config.TIME_OUT)
         {
 #if NET45
@@ -174,7 +183,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 #else
 
-            var httpClient = HttpGet_Common_NetCore(url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
+            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
 
             var response = httpClient.GetAsync(url).GetAwaiter().GetResult();//获取响应信息
 
@@ -223,10 +232,14 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="useAjax">是否使用Ajax请求</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static HttpResponseMessage HttpResponseGet(string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
+        public static HttpResponseMessage HttpResponseGet(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
    string refererUrl = null, bool useAjax = false, int timeOut = Config.TIME_OUT)
         {
-            var httpClient = HttpGet_Common_NetCore(url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
+            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
             var task = httpClient.GetAsync(url);
             HttpResponseMessage response = task.Result;
 
@@ -248,7 +261,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static async Task<string> HttpGetAsync(string url, Encoding encoding = null)
+        public static async Task<string> HttpGetAsync(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, Encoding encoding = null)
         {
 #if NET45
             WebClient wc = new WebClient();
@@ -262,7 +279,7 @@ namespace Senparc.CO2NET.HttpUtility
                 Proxy = SenparcHttpClientWebProxy,
             };
 
-            HttpClient httpClient = SenparcDI.GetRequiredService<SenparcHttpClient>().Client;
+            HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
             return await httpClient.GetStringAsync(url).ConfigureAwait(false);
 #endif
 
@@ -278,7 +295,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="timeOut"></param>
         /// <param name="refererUrl">referer参数</param>
         /// <returns></returns>
-        public static async Task<string> HttpGetAsync(string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
+        public static async Task<string> HttpGetAsync(
+#if !NET45
+            IServiceProvider serviceProvider,
+#endif
+            string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
             string refererUrl = null, bool useAjax = false, int timeOut = Config.TIME_OUT)
         {
 #if NET45
@@ -300,7 +321,7 @@ namespace Senparc.CO2NET.HttpUtility
                 }
             }
 #else
-            var httpClient = HttpGet_Common_NetCore(url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
+            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
 
             var response = await httpClient.GetAsync(url).ConfigureAwait(false);//获取响应信息
 

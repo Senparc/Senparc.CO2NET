@@ -45,7 +45,7 @@ namespace Senparc.CO2NET.AspNet
             var register = Senparc.CO2NET.AspNet.RegisterServices.
                             RegisterService.Start(env, senparcSetting);
 
-            return Senparc.CO2NET.Register.UseSenparcGlobal(senparcSetting, registerConfigure, autoScanExtensionCacheStrategies, extensionCacheStrategiesFunc);
+            return Senparc.CO2NET.Register.UseSenparcGlobal(registerService.ApplicationServices, senparcSetting, registerConfigure, autoScanExtensionCacheStrategies, extensionCacheStrategiesFunc);
         }
 #endif
     }

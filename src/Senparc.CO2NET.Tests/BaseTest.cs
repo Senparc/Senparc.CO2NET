@@ -12,6 +12,7 @@ namespace Senparc.CO2NET.Tests
     //[TestClass]
     public class BaseTest
     {
+        public static IServiceProvider serviceProvider;
         protected static IRegisterService registerService;
         protected static SenparcSetting _senparcSetting;
 
@@ -25,7 +26,7 @@ namespace Senparc.CO2NET.Tests
         /// <summary>
         /// 注册 IServiceCollection 和 MemoryCache
         /// </summary>
-        public static IServiceProvider RegisterServiceCollection()
+        public static void RegisterServiceCollection()
         {
             var serviceCollection = new ServiceCollection();
 
@@ -33,13 +34,12 @@ namespace Senparc.CO2NET.Tests
             var configBuilder = new ConfigurationBuilder();
             configBuilder.AddJsonFile("appsettings.json", false, false);
             var config = configBuilder.Build();
-            var serviceProvider = serviceCollection.AddSenparcGlobalServices(config);
+            serviceCollection.AddSenparcGlobalServices(config);
 
             _senparcSetting = new SenparcSetting() { IsDebug = true };
             config.GetSection("SenparcSetting").Bind(_senparcSetting);
 
             serviceCollection.AddMemoryCache();//使用内存缓存
-            return serviceCollection.ResetGlobalIServiceProvider();
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Senparc.CO2NET.Tests
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
 
             registerService = Senparc.CO2NET.AspNet.RegisterServices.RegisterService.Start(mockEnv.Object, _senparcSetting)
-                .UseSenparcGlobal(autoScanExtensionCacheStrategies);
+                .UseSenparcGlobal(BaseTest.serviceProvider, autoScanExtensionCacheStrategies);
 
             //配置全局使用Redis缓存（按需，独立）
             var redisConfigurationStr = _senparcSetting.Cache_Redis_Configuration;

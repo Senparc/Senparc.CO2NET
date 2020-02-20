@@ -37,6 +37,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 
 #if NETSTANDARD2_0 || NETSTANDARD2_1
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
@@ -62,16 +63,16 @@ namespace Senparc.CO2NET.HttpUtility
         /// </summary>
         /// <param name="httpClientName"></param>
         /// <returns></returns>
-        public static SenparcHttpClient GetInstanceByName(string httpClientName)
+        public static SenparcHttpClient GetInstanceByName(IServiceProvider serviceProvider, string httpClientName)
         {
             if (!string.IsNullOrEmpty(httpClientName))
             {
-                var clientFactory = SenparcDI.GetRequiredService<IHttpClientFactory>();
+                var clientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
                 var httpClient = clientFactory.CreateClient(httpClientName);
                 return new SenparcHttpClient(httpClient);
             }
 
-            return SenparcDI.GetRequiredService<SenparcHttpClient>();
+            return serviceProvider.GetRequiredService<SenparcHttpClient>();
         }
 
         /// <summary>

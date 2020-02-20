@@ -82,7 +82,7 @@ namespace Senparc.CO2NET.RegisterServices
         /// <param name="serviceCollection">IServiceCollection</param>
         /// <param name="configuration">IConfiguration</param>
         /// <returns></returns>
-        public static IServiceProvider AddSenparcGlobalServices(this IServiceCollection serviceCollection,
+        public static IServiceCollection AddSenparcGlobalServices(this IServiceCollection serviceCollection,
             IConfiguration configuration)
         {
             SenparcDI.GlobalServiceCollection = serviceCollection;
@@ -109,9 +109,11 @@ namespace Senparc.CO2NET.RegisterServices
 
             SenparcGlobalServicesRegistered = true;
 
-            var serviceProvider  = serviceCollection.BuildServiceProvider();
-            SenparcDI.GlobalServiceProvider = serviceProvider;
-            return serviceProvider;
+            //var serviceProvider  = serviceCollection.BuildServiceProvider();
+            //SenparcDI.GlobalServiceProvider = serviceProvider;
+            //return serviceProvider;
+
+            return serviceCollection;
         }
 
         /// <summary>
@@ -178,7 +180,7 @@ namespace Senparc.CO2NET.RegisterServices
                              return httpClientHandler;
                          });
 
-            serviceCollection.ResetGlobalIServiceProvider();//重置 GlobalIServiceProvider
+            //serviceCollection.ResetGlobalIServiceProvider();//重置 GlobalIServiceProvider
             return serviceCollection;
         }
 
