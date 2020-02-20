@@ -41,6 +41,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190521
     修改描述：v0.7.3 .NET Core 提供多证书注册功能
 
+    修改标识：Senparc - 20200220
+    修改描述：v1.1.100 重构 SenparcDI
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -79,7 +82,7 @@ namespace Senparc.CO2NET.RegisterServices
         /// <param name="serviceCollection">IServiceCollection</param>
         /// <param name="configuration">IConfiguration</param>
         /// <returns></returns>
-        public static IServiceCollection AddSenparcGlobalServices(this IServiceCollection serviceCollection,
+        public static IServiceProvider AddSenparcGlobalServices(this IServiceCollection serviceCollection,
             IConfiguration configuration)
         {
             SenparcDI.GlobalServiceCollection = serviceCollection;
@@ -106,7 +109,9 @@ namespace Senparc.CO2NET.RegisterServices
 
             SenparcGlobalServicesRegistered = true;
 
-            return serviceCollection;
+            var serviceProvider  = serviceCollection.BuildServiceProvider();
+            SenparcDI.GlobalServiceProvider = serviceProvider;
+            return serviceProvider;
         }
 
         /// <summary>
@@ -172,8 +177,8 @@ namespace Senparc.CO2NET.RegisterServices
 
                              return httpClientHandler;
                          });
-             
-            SenparcDI.ResetGlobalIServiceProvider();//重置 GlobalIServiceProvider
+
+            serviceCollection.ResetGlobalIServiceProvider();//重置 GlobalIServiceProvider
             return serviceCollection;
         }
 

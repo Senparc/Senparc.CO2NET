@@ -25,18 +25,21 @@ namespace Senparc.CO2NET.Tests
         /// <summary>
         /// 注册 IServiceCollection 和 MemoryCache
         /// </summary>
-        public static void RegisterServiceCollection()
+        public static IServiceProvider RegisterServiceCollection()
         {
             var serviceCollection = new ServiceCollection();
+
+
             var configBuilder = new ConfigurationBuilder();
             configBuilder.AddJsonFile("appsettings.json", false, false);
             var config = configBuilder.Build();
+            var serviceProvider = serviceCollection.AddSenparcGlobalServices(config);
 
             _senparcSetting = new SenparcSetting() { IsDebug = true };
             config.GetSection("SenparcSetting").Bind(_senparcSetting);
 
-            serviceCollection.AddSenparcGlobalServices(config);
             serviceCollection.AddMemoryCache();//使用内存缓存
+            return serviceCollection.ResetGlobalIServiceProvider();
         }
 
         /// <summary>

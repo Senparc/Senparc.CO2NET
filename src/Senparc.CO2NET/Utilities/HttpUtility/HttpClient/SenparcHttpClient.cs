@@ -30,6 +30,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190521
     修改描述：v0.7.3 .NET Core 提供多证书注册功能
 
+    修改标识：Senparc - 20200220
+    修改描述：v1.1.100 重构 SenparcDI
 
 ----------------------------------------------------------------*/
 
@@ -69,7 +71,7 @@ namespace Senparc.CO2NET.HttpUtility
                 return new SenparcHttpClient(httpClient);
             }
 
-            return SenparcDI.GetRequiredService<SenparcHttpClient>(true);
+            return SenparcDI.GetRequiredService<SenparcHttpClient>();
         }
 
         /// <summary>

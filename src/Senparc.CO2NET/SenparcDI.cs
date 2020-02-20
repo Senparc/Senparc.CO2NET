@@ -35,8 +35,6 @@ namespace Senparc.CO2NET
     /// </summary>
     public static class SenparcDI
     {
-        private static ServiceProvider _globalServiceProvider;
-
         //public const string SENPARC_DI_THREAD_SERVICE_PROVIDER = "___SenparcDIThreadServiceProvider";
         public const string SENPARC_DI_THREAD_SERVICE_Scope = "___SenparcDIThreadScope";
 
@@ -57,10 +55,22 @@ namespace Senparc.CO2NET
         private static object _globalIServiceProviderLock = new object();
         private static object _threadIServiceProviderLock = new object();
 
+        private static IServiceProvider _globalServiceProvider;
+
         /// <summary>
         /// 全局 IServiceCollection 对象
         /// </summary>
-        public static IServiceProvider GlobalIServiceProvider { get; private set; }
+        public static IServiceProvider GlobalServiceProvider
+        {
+            get
+            {
+                return _globalServiceProvider ?? throw new Exception("请在 Startup.cs 注册过程中，使用 services.AddSenparcGlobalServices() 方法提供全局统一的 ServiceProvider");
+            }
+            set
+            {
+                _globalServiceProvider = value;
+            }
+        }
 
         /// <summary>
         /// 线程内的 单一 Scope 范围 ServiceScope
@@ -83,23 +93,24 @@ namespace Senparc.CO2NET
         /// <para>如果为 false，即使用线程内唯一 ServiceScope 对象</para>
         /// </param>
         /// <returns></returns>
+        [Obsolete("不再储存此对象，直接使用全局统一的GlobalIServiceProvider", true)]
         public static IServiceProvider GetIServiceProvider(bool useGlobalScope = true)
         {
             if (useGlobalScope)
             {
-                if (GlobalIServiceProvider == null)
+                if (GlobalServiceProvider == null)
                 {
                     //加锁确保唯一
                     lock (_globalIServiceProviderLock)
                     {
-                        if (GlobalIServiceProvider == null)
+                        if (GlobalServiceProvider == null)
                         {
                             //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
-                            GlobalIServiceProvider = GlobalServiceCollection.BuildServiceProvider();
+                            GlobalServiceProvider = GlobalServiceCollection.BuildServiceProvider();
                         }
                     }
                 }
-                return GlobalIServiceProvider;
+                return GlobalServiceProvider;
             }
             else
             {
@@ -131,6 +142,7 @@ namespace Senparc.CO2NET
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <param name="useGlobalScope">是否使用全局唯一 ServiceScope 对象，默认为 false，即使用线程内唯一 ServiceScope 对象</param>
+        [Obsolete("不再储存此对象，直接使用全局统一的GlobalIServiceProvider", true)]
         public static T GetService<T>(bool useGlobalScope = true)
         {
             return GetIServiceProvider(useGlobalScope).GetService<T>();
@@ -142,53 +154,42 @@ namespace Senparc.CO2NET
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        /// <param name="useGlobalScope">是否使用全局唯一 ServiceScope 对象，默认为 false，即使用线程内唯一 ServiceScope 对象</param>
-        public static T GetRequiredService<T>(bool useGlobalScope = true)
+        public static T GetRequiredService<T>()
         {
-            return GetIServiceProvider(useGlobalScope).GetRequiredService<T>();
+            return GlobalServiceProvider.GetRequiredService<T>();
         }
 
         /// <summary>
-        /// 重置 GlobalIServiceProvider 对象，重新从 GlobalServiceCollection..BuildServiceProvider() 生成对象
+        /// 使用 .net core 默认的 DI 方法获得实例（推荐）
+        /// <para>如果未注册，抛出异常 </para>
         /// </summary>
-        public static void ResetGlobalIServiceProvider()
-        {
-            GlobalIServiceProvider = null;
-        }
-
-        /// <summary>
-        /// 重置 GlobalIServiceProvider 对象，重新从 GlobalServiceCollection..BuildServiceProvider() 生成对象
-        /// </summary>
-        /// <param name="serviceCollection"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IServiceCollection ResetGlobalIServiceProvider(this IServiceCollection serviceCollection)
+        public static T GetService<T>()
         {
-            ResetGlobalIServiceProvider();
-            return serviceCollection;
+            return GlobalServiceProvider.GetService<T>();
         }
+
+
+        /// <summary>
+        /// 重置 GlobalIServiceProvider 对象，重新从 serviceCollection.BuildServiceProvider() 生成对象
+        /// </summary>
+        public static IServiceProvider ResetGlobalIServiceProvider(this IServiceCollection serviceCollection)
+        {
+            GlobalServiceProvider = serviceCollection.BuildServiceProvider();
+            return GlobalServiceProvider;
+        }
+
 
         #region 过期方法
 
-        /// <summary>
-        /// 已过期，请使用 GlobalIServiceProvider
-        /// </summary>
-        [Obsolete("Please use GlobalIServiceProvider")]
-        public static ServiceProvider GlobalServiceProvider
-        {
-            get => _globalServiceProvider;
-            set
-            {
-                GlobalIServiceProvider = value;
-                _globalServiceProvider = value;
-            }
-        }
 
         /// <summary>
         /// 获取 ServiceProvider
         /// </summary>
         /// <returns></returns>
-        [Obsolete("Please use GetIServiceProvider")]
-        public static ServiceProvider GetServiceProvider()
+        [Obsolete("Please use GetIServiceProvider", true)]
+        public static IServiceProvider GetServiceProvider()
         {
             if (GlobalServiceProvider == null)
             {
