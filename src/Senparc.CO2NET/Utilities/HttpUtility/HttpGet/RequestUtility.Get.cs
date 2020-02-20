@@ -51,7 +51,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Extensions.DependencyInjection;
 #endif
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
 using Senparc.CO2NET.WebProxy;
 #endif
 
@@ -92,7 +92,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 #endif
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
         /// <summary>
         /// .NET Core 版本的HttpWebRequest参数设置
         /// </summary>

@@ -92,7 +92,7 @@ namespace Senparc.CO2NET
             return registerService;
         }
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
 
         /// <summary>
         /// 开始 Senparc.CO2NET 初始化参数流程

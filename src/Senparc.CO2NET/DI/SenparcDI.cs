@@ -22,7 +22,7 @@
 
 ----------------------------------------------------------------*/
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
 using System;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;

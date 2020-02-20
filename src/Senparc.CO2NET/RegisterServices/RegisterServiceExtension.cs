@@ -56,7 +56,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.IO;
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -69,7 +69,7 @@ namespace Senparc.CO2NET.RegisterServices
     /// </summary>
     public static class RegisterServiceExtension
     {
-#if NETSTANDARD2_0 || NETSTANDARD2_1 
+#if !NET45 
 
         /// <summary>
         /// 是否已经进行过全局注册

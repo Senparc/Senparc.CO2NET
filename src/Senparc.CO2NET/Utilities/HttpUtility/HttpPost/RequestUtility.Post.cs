@@ -70,7 +70,7 @@ using System.Web;
 using System.Net.Http;
 using System.Net.Http.Headers;
 #endif
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
 using Senparc.CO2NET.WebProxy;
 using Senparc.CO2NET.Exceptions;
 using System.Linq;
@@ -241,7 +241,7 @@ namespace Senparc.CO2NET.HttpUtility
 
 #endif
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
         /// <summary>
         /// 给.NET Core使用的HttpPost请求公共设置方法
         /// </summary>
@@ -400,7 +400,7 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null,
             Encoding encoding = null,
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -418,7 +418,7 @@ namespace Senparc.CO2NET.HttpUtility
                 serviceProvider,
 #endif
                 url, cookieContainer, ms, null, null, encoding,
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
                 certName,
 #else
                 cer,
@@ -449,7 +449,7 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -467,7 +467,7 @@ namespace Senparc.CO2NET.HttpUtility
                 serviceProvider,
 #endif
                 url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
                 certName,
 #else
                 cer,
@@ -569,7 +569,7 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -657,7 +657,7 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
             string url, CookieContainer cookieContainer = null,
             Dictionary<string, string> formData = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -675,7 +675,7 @@ namespace Senparc.CO2NET.HttpUtility
                 serviceProvider,
 #endif
                 url, cookieContainer, ms, null, null, encoding,
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
                 certName,
 #else
                 cer,
@@ -707,7 +707,7 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -735,7 +735,7 @@ namespace Senparc.CO2NET.HttpUtility
                 serviceProvider,
 #endif
                 url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
                 certName,
 #else
                 cer,
@@ -861,7 +861,7 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if !NET45
             string certName = null,
 #else
             X509Certificate2 cer = null,
