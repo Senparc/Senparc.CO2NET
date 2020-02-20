@@ -44,7 +44,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
             var registerService = Senparc.CO2NET.AspNet.RegisterServices.
                                     RegisterService.Start(mockEnv.Object, senparcSetting)
-                 .UseSenparcGlobal(BaseTest.serviceProvider);
+                 .UseSenparcGlobal();
             Assert.AreEqual(null, RedisManager.ConfigurationOption);//当前还没有进行注册
 
             registerService.RegisterCacheRedis(

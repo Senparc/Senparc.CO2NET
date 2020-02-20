@@ -65,13 +65,21 @@ namespace Senparc.CO2NET
         {
             get
             {
-                return null;
                 return _globalServiceProvider ?? throw new Exception("请在 Startup.cs 注册过程中，使用 services.AddSenparcGlobalServices() 方法提供全局统一的 ServiceProvider");
             }
             set
             {
                 _globalServiceProvider = value;
             }
+        }
+
+        /// <summary>
+        /// 从 GlobalServiceCollection 重新 Build，生成新的 IServiceProvider
+        /// </summary>
+        /// <returns></returns>
+        public static IServiceProvider GetServiceProvider()
+        {
+            return GlobalServiceCollection.BuildServiceProvider();
         }
 
         /// <summary>
@@ -174,16 +182,16 @@ namespace Senparc.CO2NET
             return GlobalServiceProvider.GetService<T>();
         }
 
-        /// <summary>
-        /// 使用 .net core 默认的 DI 方法获得实例（推荐）
-        /// <para>如果未注册，抛出异常 </para>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static T GetService<T>(this IServiceProvider serviceProvider)
-        {
-            return (T)serviceProvider.GetService(typeof(T));
-        }
+        ///// <summary>
+        ///// 使用 .net core 默认的 DI 方法获得实例（推荐）
+        ///// <para>如果未注册，抛出异常 </para>
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <returns></returns>
+        //public static T GetService<T>(this IServiceProvider serviceProvider)
+        //{
+        //    return (T)serviceProvider.GetService(typeof(T));
+        //}
 
 
 
@@ -196,27 +204,6 @@ namespace Senparc.CO2NET
             GlobalServiceProvider = serviceCollection.BuildServiceProvider();
             return GlobalServiceProvider;
         }
-
-
-        #region 过期方法
-
-
-        /// <summary>
-        /// 获取 ServiceProvider
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("Please use GetIServiceProvider", true)]
-        public static IServiceProvider GetServiceProvider()
-        {
-            if (GlobalServiceProvider == null)
-            {
-                //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
-                GlobalServiceProvider = GlobalServiceCollection.BuildServiceProvider();
-            }
-            return GlobalServiceProvider;
-        }
-
-        #endregion
     }
 }
 #endif

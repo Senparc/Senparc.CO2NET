@@ -31,10 +31,12 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 #if !NET45
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 #endif
 using Senparc.CO2NET.Exceptions;
 using System;
 using System.Collections.Generic;
+
 
 namespace Senparc.CO2NET.Cache
 {
@@ -57,12 +59,6 @@ namespace Senparc.CO2NET.Cache
 
         private static IMemoryCache _localObjectCache;
 
-        public static IMemoryCache GenerateMemoryCache(IServiceProvider serviceProvider)
-        {
-            _localObjectCache = serviceProvider.GetService<IMemoryCache>();
-            return _localObjectCache;
-        }
-
         /// <summary>
         /// 所有数据集合的列表
         /// </summary>
@@ -75,7 +71,15 @@ namespace Senparc.CO2NET.Cache
 
                     if (_localObjectCache == null)
                     {
-                        throw new CacheException("IMemoryCache 依赖注入未设置！请在 Startup.cs 中或其调用的函数执行了 LocalObjectCacheStrategy.GenerateMemoryCache() 方法！");
+                        try
+                        {
+                            var serviceProvider = SenparcDI.GetServiceProvider();
+                            _localObjectCache = serviceProvider.GetService<IMemoryCache>();
+                        }
+                        catch
+                        {
+                            throw new CacheException("IMemoryCache 依赖注入未设置！请在 Startup.cs 中或其调用的函数执行了 LocalObjectCacheStrategy.GenerateMemoryCache() 方法！");
+                        }
                     }
                 }
                 return _localObjectCache;

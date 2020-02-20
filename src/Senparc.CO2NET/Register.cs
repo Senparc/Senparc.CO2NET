@@ -80,11 +80,8 @@ namespace Senparc.CO2NET
         /// <para>（LocalContainerCacheStrategy、RedisContainerCacheStrategy、MemcacheContainerCacheStrategy已经自动注册），</para>
         /// <para>如果设置为 null（注意：不适委托返回 null，是整个委托参数为 null），则自动使用反射扫描所有可能存在的扩展缓存策略</para></param>
         /// <returns></returns>
-        public static IRegisterService UseSenparcGlobal(this IRegisterService registerService, IServiceProvider serviceProvider, bool autoScanExtensionCacheStrategies = false, Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
+        public static IRegisterService UseSenparcGlobal(this IRegisterService registerService, bool autoScanExtensionCacheStrategies = false, Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
         {
-#if !NET45
-            LocalObjectCacheHelper.GenerateMemoryCache(serviceProvider);
-#endif
 
             //注册扩展缓存策略
             CacheStrategyDomainWarehouse.AutoScanDomainCacheStrategy(autoScanExtensionCacheStrategies, extensionCacheStrategiesFunc);
@@ -105,7 +102,6 @@ namespace Senparc.CO2NET
         /// <para>如果设置为 null（注意：不适委托返回 null，是整个委托参数为 null），则自动使用反射扫描所有可能存在的扩展缓存策略</para></param>
         /// <returns></returns>
         public static IRegisterService UseSenparcGlobal(
-            IServiceProvider serviceProvider,
             SenparcSetting senparcSetting,
             Action<RegisterService> registerConfigure,
             bool autoScanExtensionCacheStrategies = false,
@@ -117,7 +113,7 @@ namespace Senparc.CO2NET
 
             registerConfigure?.Invoke(register);
 
-            return register.UseSenparcGlobal(serviceProvider, autoScanExtensionCacheStrategies, extensionCacheStrategiesFunc);
+            return register.UseSenparcGlobal(autoScanExtensionCacheStrategies, extensionCacheStrategiesFunc);
         }
 #endif
     }

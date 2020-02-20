@@ -73,7 +73,7 @@ namespace Senparc.CO2NET.Sample.Consoles
             // 启动 CO2NET 全局注册，必须！
             IRegisterService register = RegisterService.Start(senparcSetting)
                                                         //关于 UseSenparcGlobal() 的更多用法见 CO2NET Demo：https://github.com/Senparc/Senparc.CO2NET/blob/master/Sample/Senparc.CO2NET.Sample.netcore/Startup.cs
-                                                        .UseSenparcGlobal(services.BuildServiceProvider());
+                                                        .UseSenparcGlobal();
 
             Console.WriteLine("完成 RegisterService.Start().UseSenparcGlobal()  启动设置");
             Console.WriteLine($"设定程序目录为：{Senparc.CO2NET.Config.RootDictionaryPath}");
