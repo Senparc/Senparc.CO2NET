@@ -28,7 +28,7 @@ namespace Senparc.CO2NET.Sample.netcore3
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
 
@@ -37,7 +37,7 @@ namespace Senparc.CO2NET.Sample.netcore3
 
 
             //Senparc.CO2NET 全局注册（必须）
-            services.AddSenparcGlobalServices(Configuration);
+            return services.AddSenparcGlobalServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -139,14 +139,14 @@ namespace Senparc.CO2NET.Sample.netcore3
                     #endregion
                 },
 
-                #region 扫描自定义扩展缓存
+            #region 扫描自定义扩展缓存
 
                 //自动扫描自定义扩展缓存（二选一）
                 autoScanExtensionCacheStrategies: true //默认为 true，可以不传入
-                //指定自定义扩展缓存（二选一）
-                //autoScanExtensionCacheStrategies: false, extensionCacheStrategiesFunc: () => GetExCacheStrategies(senparcSetting.Value)
+                                                       //指定自定义扩展缓存（二选一）
+                                                       //autoScanExtensionCacheStrategies: false, extensionCacheStrategiesFunc: () => GetExCacheStrategies(senparcSetting.Value)
 
-                #endregion
+            #endregion
             );
         }
 

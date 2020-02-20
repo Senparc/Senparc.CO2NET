@@ -174,7 +174,7 @@ namespace Senparc.CO2NET.Cache
             var scanTypesCount = 0;
             if (autoScanExtensionCacheStrategies)
             {
-                //查找所有扩展缓存
+                //查找所有扩展缓存  TODO:扫描程序可以集中到一个 Helper 或者 Utility 中
                 var types = AppDomain.CurrentDomain.GetAssemblies()
                             .SelectMany(a =>
                             {

@@ -22,6 +22,9 @@
     修改标识：Senparc - 20180802
     修改描述：v3.1.0 Memcached 缓存服务连接信息实现从 Config.SenparcSetting 自动获取信息并注册）
 
+    修改标识：Senparc - 20200220
+    修改描述：v1.1.100 重构 SenparcDI
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -196,8 +199,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 #if NET45 //|| NET461
             Cache = new MemcachedClient(_config);
 #else
-            var provider = SenparcDI.GetIServiceProvider();
-            ILoggerFactory loggerFactory = provider.GetService<ILoggerFactory>();
+            ILoggerFactory loggerFactory = SenparcDI.GetService<ILoggerFactory>();
             Cache = new MemcachedClient(loggerFactory, _config);
 #endif
         }
@@ -242,9 +244,8 @@ namespace Senparc.CO2NET.Cache.Memcached
             config.Protocol = MemcachedProtocol.Binary;
 
 #else
-            var provider = SenparcDI.GetIServiceProvider();
-            ILoggerFactory loggerFactory = provider.GetService<ILoggerFactory>();
-            IOptions<MemcachedClientOptions> optionsAccessor = provider.GetService<IOptions<MemcachedClientOptions>>();
+            ILoggerFactory loggerFactory = SenparcDI.GetService<ILoggerFactory>();
+            IOptions<MemcachedClientOptions> optionsAccessor = SenparcDI.GetService<IOptions<MemcachedClientOptions>>();
 
             var config = new MemcachedClientConfiguration(loggerFactory, optionsAccessor);
 #endif
