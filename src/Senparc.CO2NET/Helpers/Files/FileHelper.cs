@@ -84,9 +84,7 @@ namespace Senparc.CO2NET.Helpers
             using (FileStream fs = new FileStream(fullFilePathAndName, FileMode.OpenOrCreate))
             {
                 HttpUtility.Get.Download(
-#if !NET45
                     serviceProvider,
-#endif
                     url, fs);
 #if NET35
                 fs.Flush();

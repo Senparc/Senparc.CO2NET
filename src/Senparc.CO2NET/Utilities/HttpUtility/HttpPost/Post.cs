@@ -97,9 +97,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static T PostFileGetJson<T>(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null,
             Dictionary<string, string> postDataDictionary = null,
             Encoding encoding = null,
@@ -116,9 +114,7 @@ namespace Senparc.CO2NET.HttpUtility
                 postDataDictionary.FillFormDataStream(ms); //填充formData
 
                 string returnText = RequestUtility.HttpPost(
-#if !NET45
-             serviceProvider,
-#endif
+                    serviceProvider,
                     url, cookieContainer, ms, fileDictionary, null, encoding,
 #if !NET45
                     certName,
@@ -150,9 +146,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static T PostGetJson<T>(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null,
 #if !NET45
             string certName = null,
@@ -163,9 +157,7 @@ namespace Senparc.CO2NET.HttpUtility
             int timeOut = Config.TIME_OUT)
         {
             string returnText = RequestUtility.HttpPost(
-#if !NET45
                 serviceProvider,
-#endif
                 url, cookieContainer, fileStream, null, null, encoding,
 #if !NET45
                 certName,
@@ -196,9 +188,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static T PostGetJson<T>(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
 #if !NET45
             string certName = null,
@@ -208,9 +198,7 @@ namespace Senparc.CO2NET.HttpUtility
             bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
             string returnText = RequestUtility.HttpPost(
-#if !NET45
                 serviceProvider,
-#endif
                 url, cookieContainer, formData, encoding,
 #if !NET45
                 certName,
@@ -233,9 +221,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="data"></param>
         /// <param name="stream"></param>
         public static void Download(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, string data, Stream stream)
         {
 #if NET45
@@ -281,9 +267,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static async Task<T> PostFileGetJsonAsync<T>(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null, Dictionary<string, string> postDataDictionary = null,
             Encoding encoding = null,
 #if !NET45
@@ -299,9 +283,7 @@ namespace Senparc.CO2NET.HttpUtility
                 postDataDictionary.FillFormDataStream(ms); //填充formData
 
                 string returnText = await RequestUtility.HttpPostAsync(
-#if !NET45
                     serviceProvider,
-#endif
                     url, cookieContainer, ms, fileDictionary, null, encoding,
 #if !NET45
                     certName,
@@ -334,9 +316,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static async Task<T> PostGetJsonAsync<T>(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null,
 #if !NET45
             string certName = null,
@@ -347,9 +327,7 @@ namespace Senparc.CO2NET.HttpUtility
             int timeOut = Config.TIME_OUT)
         {
             string returnText = await RequestUtility.HttpPostAsync(
-#if !NET45
                 serviceProvider,
-#endif
                 url, cookieContainer, fileStream, null, null, encoding,
 #if !NET45
                 certName,
@@ -381,9 +359,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static async Task<T> PostGetJsonAsync<T>(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
 #if !NET45
             string certName = null,
@@ -393,9 +369,7 @@ namespace Senparc.CO2NET.HttpUtility
             bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
             string returnText = await RequestUtility.HttpPostAsync(
-#if !NET45
                 serviceProvider,
-#endif
                 url, cookieContainer, formData, encoding,
 #if !NET45
                 certName,
@@ -418,9 +392,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="data"></param>
         /// <param name="stream"></param>
         public static async Task DownloadAsync(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, string data, Stream stream)
         {
 #if NET45

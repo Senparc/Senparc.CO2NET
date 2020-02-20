@@ -102,15 +102,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static T GetJson<T>(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, Encoding encoding = null, Action<string, string> afterReturnText = null)
         {
             string returnText = RequestUtility.HttpGet(
-#if !NET45
                  serviceProvider,
-#endif
                  url, encoding);
 
             afterReturnText?.Invoke(url, returnText);
@@ -126,9 +122,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="url"></param>
         /// <param name="stream"></param>
         public static void Download(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, Stream stream)
         {
 #if NET45
@@ -251,15 +245,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         /// <exception cref="ErrorJsonResultException"></exception>
         public static async Task<T> GetJsonAsync<T>(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, Encoding encoding = null, Action<string, string> afterReturnText = null)
         {
             string returnText = await RequestUtility.HttpGetAsync(
-#if !NET45
                  serviceProvider,
-#endif
                  url, encoding).ConfigureAwait(false);
 
             afterReturnText?.Invoke(url, returnText);
@@ -276,9 +266,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="stream"></param>
         /// <returns></returns>
         public static async Task DownloadAsync(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, Stream stream)
         {
 #if NET45
@@ -308,9 +296,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="timeOut">超时时间</param>
         /// <returns></returns>
         public static async Task<string> DownloadAsync(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, string filePathName, int timeOut = Config.TIME_OUT)
         {
             var dir = Path.GetDirectoryName(filePathName) ?? "/";

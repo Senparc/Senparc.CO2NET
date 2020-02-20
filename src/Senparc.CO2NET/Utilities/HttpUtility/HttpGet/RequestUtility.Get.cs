@@ -125,9 +125,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="url"></param>
         /// <returns></returns>
         public static string HttpGet(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, Encoding encoding = null)
         {
 #if NET45
@@ -157,9 +155,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="timeOut"></param>
         /// <returns></returns>
         public static string HttpGet(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
             string refererUrl = null, bool useAjax = false, int timeOut = Config.TIME_OUT)
         {
@@ -233,9 +229,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="timeOut"></param>
         /// <returns></returns>
         public static HttpResponseMessage HttpResponseGet(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
    string refererUrl = null, bool useAjax = false, int timeOut = Config.TIME_OUT)
         {
@@ -262,9 +256,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="url"></param>
         /// <returns></returns>
         public static async Task<string> HttpGetAsync(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, Encoding encoding = null)
         {
 #if NET45
@@ -296,9 +288,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="refererUrl">referer参数</param>
         /// <returns></returns>
         public static async Task<string> HttpGetAsync(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
             string refererUrl = null, bool useAjax = false, int timeOut = Config.TIME_OUT)
         {

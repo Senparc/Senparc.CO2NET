@@ -394,9 +394,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// </summary>
         /// <returns></returns>
         public static string HttpPost(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null,
             Encoding encoding = null,
 #if !NET45
@@ -413,9 +411,7 @@ namespace Senparc.CO2NET.HttpUtility
             string contentType = HttpClientHelper.GetContentType(formData);
 
             return HttpPost(
-#if !NET45
                 serviceProvider,
-#endif
                 url, cookieContainer, ms, null, null, encoding,
 #if !NET45
                 certName,
@@ -443,9 +439,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="refererUrl"></param>
         /// <returns></returns>
         public static string HttpPost(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
 #if !NET45
@@ -462,9 +456,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             var senparcResponse = HttpResponsePost(
-#if !NET45
                 serviceProvider,
-#endif
                 url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
 #if !NET45
                 certName,
@@ -563,9 +555,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="refererUrl"></param>
         /// <returns></returns>
         public static SenparcHttpResponse HttpResponsePost(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
 #if !NET45
@@ -651,9 +641,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// </summary>
         /// <returns></returns>
         public static async Task<string> HttpPostAsync(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null,
             Dictionary<string, string> formData = null, Encoding encoding = null,
 #if !NET45
@@ -670,9 +658,7 @@ namespace Senparc.CO2NET.HttpUtility
             string contentType = HttpClientHelper.GetContentType(formData);
 
             return await HttpPostAsync(
-#if !NET45
                 serviceProvider,
-#endif
                 url, cookieContainer, ms, null, null, encoding,
 #if !NET45
                 certName,
@@ -701,9 +687,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="encoding"></param>
         /// <returns></returns>
         public static async Task<string> HttpPostAsync(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
 #if !NET45
@@ -730,9 +714,7 @@ namespace Senparc.CO2NET.HttpUtility
             //Console.WriteLine($"{System.Threading.Thread.CurrentThread.Name} - START - {dt1:HH:mm:ss.ffff}");
 
             var senparcResponse = await HttpResponsePostAsync(
-#if !NET45
                 serviceProvider,
-#endif
                 url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
 #if !NET45
                 certName,
@@ -855,9 +837,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="refererUrl"></param>
         /// <returns></returns>
         public static async Task<SenparcHttpResponse> HttpResponsePostAsync(
-#if !NET45
             IServiceProvider serviceProvider,
-#endif
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
 #if !NET45
