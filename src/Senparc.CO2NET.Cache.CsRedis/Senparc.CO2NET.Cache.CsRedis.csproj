@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net45;net461;netstandard2.0</TargetFrameworks>
-    <Version>0.3.101</Version>
+    <Version>0.3.102</Version>
     <AssemblyName>Senparc.CO2NET.Cache.CsRedis</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.CsRedis</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
