@@ -54,6 +54,8 @@ namespace Senparc.CO2NET.Tests
             registerService = Senparc.CO2NET.AspNet.RegisterServices.RegisterService.Start(mockEnv.Object, _senparcSetting)
                 .UseSenparcGlobal(autoScanExtensionCacheStrategies);
 
+            registerService.ChangeDefaultCacheNamespace("Senparc.CO2NET Tests");
+
             //配置全局使用Redis缓存（按需，独立）
             var redisConfigurationStr = _senparcSetting.Cache_Redis_Configuration;
             var useRedis = !string.IsNullOrEmpty(redisConfigurationStr) && redisConfigurationStr != "#{Cache_Redis_Configuration}#"/*默认值，不启用*/;
