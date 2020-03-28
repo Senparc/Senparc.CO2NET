@@ -29,7 +29,7 @@
       v0.1.4 添加 SenparcSetting 全局配置属性
       v0.1.5 RegisterServiceExtension.AddSenparcGlobalServices() 方法可自动获取 SenparcSetting 全局设置
       v0.1.6 解决 XXE 漏洞，继承自 XmlDocument 对象，自动将 XmlResolver 设为 null
-      v0.1.6.1 添加 Register.UseSenparcGlobal() 方法
+      v0.1.6.1 添加 Register.UseSenparcGlobal() 方
       v0.1.7 扩展 ReflectionHelper.GetStaticMember() 方法
       v0.1.8 .net core 下的 RegisterService.Start() 方法中，env 可以传入 null，以便在控制台等环境中完成注册
       v0.1.9
