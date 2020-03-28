@@ -98,8 +98,8 @@ namespace Senparc.CO2NET.Cache.CsRedis
         /// <param name="expiry"></param>
         /// <returns></returns>
         private int GetExpirySeconds(TimeSpan? expiry)
-        { 
-            var expirySeconds = expiry.HasValue ? expiry.Value.Seconds : -1;
+        {
+            var expirySeconds = expiry.HasValue ? (int)Math.Ceiling(expiry.Value.TotalSeconds) : -1;
             return expirySeconds;
         }
 
@@ -264,7 +264,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var cacheKey = GetFinalKey(key, isFullKey);
 
             var value = await base.Client.GetAsync(cacheKey).ConfigureAwait(false);
-            if (value!=null)
+            if (value != null)
             {
                 return value.ToString().DeserializeFromCache();
             }

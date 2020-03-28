@@ -37,8 +37,12 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20180602
     修改描述：v0.1.6.2 扩展 ReflectionHelper.GetStaticMember() 方法
 
+    修改标识：Senparc - 20200228
+    修改描述：v1.3.102 提供 ReflectionHelper 异常是否记录日志的选项
+
 ----------------------------------------------------------------*/
 
+using Senparc.CO2NET.Trace;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,8 +78,9 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="assemblyName">类型所在程序集名称</param>
         /// <param name="nameSpace">类型所在命名空间</param>
         /// <param name="className">类型名</param>
+        /// <param name="recordLog">是否记录日志</param>
         /// <returns></returns>
-        public static T CreateInstance<T>(string assemblyName, string nameSpace, string className)
+        public static T CreateInstance<T>(string assemblyName, string nameSpace, string className, bool recordLog = false)
         {
             try
             {
@@ -98,8 +103,10 @@ namespace Senparc.CO2NET.Helpers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                //发生异常，返回类型的默认值
+                if (recordLog)
+                {
+                    SenparcTrace.BaseExceptionLog(ex);
+                }                //发生异常，返回类型的默认值
                 return default(T);
             }
         }
@@ -111,8 +118,9 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="nameSpace">类型所在命名空间</param>
         /// <param name="className">类型名</param>
         /// <param name="memberName">属性名称（忽略大小写）</param>
+        /// <param name="recordLog">是否记录日志</param>
         /// <returns></returns>
-        public static object GetStaticMember(string assemblyName, string nameSpace, string className,string memberName)
+        public static object GetStaticMember(string assemblyName, string nameSpace, string className,string memberName,bool recordLog=false)
         {
             try
             {
@@ -125,7 +133,10 @@ namespace Senparc.CO2NET.Helpers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                if (recordLog)
+                {
+                    SenparcTrace.BaseExceptionLog(ex);
+                }
                 return null;
             }
         }
@@ -135,8 +146,9 @@ namespace Senparc.CO2NET.Helpers
         /// </summary>
         /// <param name="type">类型</param>
         /// <param name="memberName">属性名称（忽略大小写）</param>
+        /// <param name="recordLog">是否记录日志</param>
         /// <returns></returns>
-        public static object GetStaticMember(Type type, string memberName)
+        public static object GetStaticMember(Type type, string memberName, bool recordLog = false)
         {
             try
             {
@@ -146,7 +158,10 @@ namespace Senparc.CO2NET.Helpers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                if (recordLog)
+                {
+                    SenparcTrace.BaseExceptionLog(ex);
+                }
                 return null;
             }
         }

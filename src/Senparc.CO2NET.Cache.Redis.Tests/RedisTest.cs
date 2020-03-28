@@ -86,14 +86,19 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var dt = SystemTime.Now;
             var key = $"RedisTest-{SystemTime.Now.Ticks}";
-            cacheStrategy.Set(key, new ContainerBag()
+            var value = new ContainerBag()
             {
                 Key = "123",
                 Name = "",// Newtonsoft.Json.JsonConvert.SerializeObject(this),
                 AddTime = dt
-            }, TimeSpan.FromSeconds(1));
-
+            };
+            cacheStrategy.Set(key, value, TimeSpan.FromSeconds(100));
+            Thread.Sleep(1000);//等待
             var entity = cacheStrategy.Get(key);
+            Assert.IsNotNull(entity);//未过期
+
+            cacheStrategy.Update(key, value, TimeSpan.FromSeconds(1));//重新设置时间
+            entity = cacheStrategy.Get(key);
             Assert.IsNotNull(entity);
 
             var strongEntity = cacheStrategy.Get<ContainerBag>(key);

@@ -23,7 +23,9 @@ namespace Senparc.CO2NET.Tests.Cache
             var caches = new IBaseObjectCacheStrategy[] {
                 LocalObjectCacheStrategy.Instance,
                 RedisObjectCacheStrategy.Instance,
-                RedisHashSetObjectCacheStrategy.Instance//,
+                RedisHashSetObjectCacheStrategy.Instance,
+                CO2NET.Cache.CsRedis.RedisObjectCacheStrategy.Instance,
+                CO2NET.Cache.CsRedis.RedisHashSetObjectCacheStrategy.Instance,
               //  MemcachedObjectCacheStrategy.Instance
             };
 
@@ -51,11 +53,20 @@ namespace Senparc.CO2NET.Tests.Cache
                 Assert.AreEqual(index, strongEntity.Id);
                 Assert.AreEqual(dt, strongEntity.AddTime);
 
-                Thread.Sleep(500);//让缓存过期
+                if (cache is CO2NET.Cache.CsRedis.RedisObjectCacheStrategy || cache is CO2NET.Cache.CsRedis.RedisHashSetObjectCacheStrategy)
+                {
+                    //CsRedis 只支持整秒过期
+                    Thread.Sleep(1000);//让缓存过期
+                }
+                else
+                {
+                    Thread.Sleep(500);//让缓存过期
+                }
 
                 entity = cacheStrategy.Get(key);
 
-                if (cache.GetType() == typeof(RedisHashSetObjectCacheStrategy))
+                if (cache.GetType() == typeof(RedisHashSetObjectCacheStrategy) ||
+                    cache.GetType() == typeof(Senparc.CO2NET.Cache.CsRedis.RedisHashSetObjectCacheStrategy))
                 {
                     Assert.IsNotNull(entity);//RedisHashSet 不支持过期
                 }
