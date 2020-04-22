@@ -85,6 +85,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// 发起Post请求，可上传文件
         /// </summary>
         /// <typeparam name="T">返回数据类型（Json对应的实体）</typeparam>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url">请求Url</param>
         /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
         /// <param name="encoding"></param>
@@ -134,6 +135,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// 发起Post请求，可包含文件流
         /// </summary>
         /// <typeparam name="T">返回数据类型（Json对应的实体）</typeparam>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url">请求Url</param>
         /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
         /// <param name="fileStream">文件流</param>
@@ -177,6 +179,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// Form表单Post数据，获取JSON
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
         /// <param name="formData">表单数据，Key对应name，Value对应value</param>
@@ -217,6 +220,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 使用Post方法上传数据并下载文件或结果
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
         /// <param name="data"></param>
         /// <param name="stream"></param>
@@ -255,6 +259,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// 【异步方法】发起Post请求，可上传文件
         /// </summary>
         /// <typeparam name="T">返回数据类型（Json对应的实体）</typeparam>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url">请求Url</param>
         /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
         /// <param name="encoding"></param>
@@ -304,6 +309,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// 【异步方法】发起Post请求，可包含文件流
         /// </summary>
         /// <typeparam name="T">返回数据类型（Json对应的实体）</typeparam>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url">请求Url</param>
         /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
         /// <param name="fileStream">文件流</param>
@@ -348,6 +354,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// 【异步方法】Form表单Post数据，获取JSON
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
         /// <param name="formData">表单数据，Key对应name，Value对应value</param>
@@ -388,6 +395,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 【异步方法】使用Post方法上传数据并下载文件或结果
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
         /// <param name="data"></param>
         /// <param name="stream"></param>

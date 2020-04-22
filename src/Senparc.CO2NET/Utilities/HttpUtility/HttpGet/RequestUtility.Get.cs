@@ -122,7 +122,9 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 使用Get方法获取字符串结果（没有加入Cookie）
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
+        /// <param name="encoding"></param>
         /// <returns></returns>
         public static string HttpGet(
             IServiceProvider serviceProvider,
@@ -146,6 +148,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 使用Get方法获取字符串结果（加入Cookie）
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="encoding"></param>
@@ -220,6 +223,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 获取HttpWebResponse或HttpResponseMessage对象，本方法通常用于测试）
         /// </summary>
+        /// <param name="serviceProvider">NetCore的服务器提供程序</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="encoding"></param>
@@ -253,6 +257,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 使用Get方法获取字符串结果（没有加入Cookie）
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
         /// <returns></returns>
         public static async Task<string> HttpGetAsync(
@@ -280,6 +285,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 使用Get方法获取字符串结果（加入Cookie）
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="encoding"></param>

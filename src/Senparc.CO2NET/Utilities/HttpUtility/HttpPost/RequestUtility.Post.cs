@@ -244,6 +244,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 给.NET Core使用的HttpPost请求公共设置方法
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
         /// <param name="hc"></param>
         /// <param name="cookieContainer"></param>
@@ -392,6 +393,17 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 使用Post方法获取字符串结果，常规提交
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
+        /// <param name="url"></param>
+        /// <param name="cookieContainer"></param>
+        /// <param name="formData"></param>
+        /// <param name="encoding"></param>
+        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
+        /// <param name="cer">证书，如果不需要则保留null</param>
+        /// <param name="useAjax"></param>
+        /// <param name="headerAddition">header 附加信息</param>
+        /// <param name="timeOut"></param>
+        /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
         /// <returns></returns>
         public static string HttpPost(
             IServiceProvider serviceProvider,
@@ -424,6 +436,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 使用Post方法获取字符串结果
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="postStream"></param>
@@ -540,6 +553,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 使用Post方法获取HttpWebResponse或HttpResponseMessage对象，本方法独立使用时通常用于测试）
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="postStream"></param>
@@ -639,6 +653,17 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 使用Post方法获取字符串结果，常规提交
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
+        /// <param name="url"></param>
+        /// <param name="cookieContainer"></param>
+        /// <param name="formData"></param>
+        /// <param name="encoding"></param>
+        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
+        /// <param name="cer">证书，如果不需要则保留null</param>
+        /// <param name="useAjax"></param>
+        /// <param name="headerAddition">header 附加信息</param>
+        /// <param name="timeOut"></param>
+        /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
         /// <returns></returns>
         public static async Task<string> HttpPostAsync(
             IServiceProvider serviceProvider,
@@ -672,6 +697,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 使用Post方法获取字符串结果
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="postStream"></param>
@@ -822,6 +848,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 使用Post方法获取HttpWebResponse或HttpResponseMessage对象，本方法独立使用时通常用于测试）
         /// </summary>
+        /// <param name="serviceProvider">NetCore下的服务器提供程序，如果Framework则保留Null</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="postStream"></param>
