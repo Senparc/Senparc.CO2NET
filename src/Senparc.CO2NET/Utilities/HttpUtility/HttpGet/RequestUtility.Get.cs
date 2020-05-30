@@ -34,6 +34,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
     修改标识：Senparc - 20200530
     修改描述：v1.3.108 为 RequestUtility.Get 方法添加 headerAddition 参数
+              v1.3.109 添加 HttpResponseGetAsync
 
 ----------------------------------------------------------------*/
 
@@ -255,7 +256,6 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-#if !NET35 && !NET40
         #region 异步方法
 
         /// <summary>
@@ -335,7 +335,63 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
         }
 
-        #endregion
+#if NET45
+
+        /// <summary>
+        /// 获取HttpWebResponse或HttpResponseMessage对象，本方法通常用于测试）
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="cookieContainer"></param>
+        /// <param name="encoding"></param>
+        /// <param name="cer"></param>
+        /// <param name="refererUrl"></param>
+        /// <param name="useAjax"></param>
+        /// <param name="timeOut"></param>
+        /// <returns></returns>
+        public static async Task<HttpWebResponse> HttpResponseGetAsync(string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
+    string refererUrl = null, bool useAjax = false, int timeOut = Config.TIME_OUT)
+        {
+            HttpWebRequest request = HttpGet_Common_Net45(url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
+
+            HttpWebResponse response =  (HttpWebResponse)(await request.GetResponseAsync().ConfigureAwait(false));
+
+            if (cookieContainer != null)
+            {
+                response.Cookies = cookieContainer.GetCookies(response.ResponseUri);
+            }
+
+            return response;
+        }
+#else
+        /// <summary>
+        /// 获取HttpWebResponse或HttpResponseMessage对象，本方法通常用于测试）
+        /// </summary>
+        /// <param name="serviceProvider">NetCore的服务器提供程序</param>
+        /// <param name="url"></param>
+        /// <param name="cookieContainer"></param>
+        /// <param name="encoding"></param>
+        /// <param name="cer"></param>
+        /// <param name="refererUrl"></param>
+        /// <param name="useAjax">是否使用Ajax请求</param>
+        /// <param name="headerAddition"></param>
+        /// <param name="timeOut"></param>
+        /// <returns></returns>
+        public static async Task<HttpResponseMessage> HttpResponseGetAsync(
+            IServiceProvider serviceProvider,
+            string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
+   string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
+        {
+            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
+            var task = httpClient.GetAsync(url);
+            HttpResponseMessage response = await task;
+
+            HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
+
+            return response;
+        }
+
 #endif
+
+        #endregion
     }
 }
