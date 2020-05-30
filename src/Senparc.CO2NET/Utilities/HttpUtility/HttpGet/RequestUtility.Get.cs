@@ -32,6 +32,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190429
     修改描述：v0.7.0 优化 HttpClient，重构 RequestUtility（包括 Post 和 Get），引入 HttpClientFactory 机制
 
+    修改标识：Senparc - 20200530
+    修改描述：v1.3.108 为 RequestUtility.Get 方法添加 headerAddition 参数
 
 ----------------------------------------------------------------*/
 
@@ -99,7 +101,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         private static HttpClient HttpGet_Common_NetCore(IServiceProvider serviceProvider, string url, CookieContainer cookieContainer = null,
             Encoding encoding = null, X509Certificate2 cer = null,
-            string refererUrl = null, bool useAjax = false, int timeOut = Config.TIME_OUT)
+            string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
             var handler = HttpClientHelper.GetHttpClientHandler(cookieContainer, RequestUtility.SenparcHttpClientWebProxy, DecompressionMethods.GZip);
 
@@ -109,7 +111,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
-            HttpClientHeader(httpClient, refererUrl, useAjax, null, timeOut);
+            HttpClientHeader(httpClient, refererUrl, useAjax, headerAddition, timeOut);
 
             return httpClient;
         }
@@ -155,12 +157,13 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="cer">证书，如果不需要则保留null</param>
         /// <param name="refererUrl">referer参数</param>
         /// <param name="useAjax">是否使用Ajax</param>
+        /// <param name="headerAddition"></param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
         public static string HttpGet(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
-            string refererUrl = null, bool useAjax = false, int timeOut = Config.TIME_OUT)
+            string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
 #if NET45
             HttpWebRequest request = HttpGet_Common_Net45(url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
@@ -182,7 +185,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 #else
 
-            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
+            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
 
             var response = httpClient.GetAsync(url).GetAwaiter().GetResult();//获取响应信息
 
@@ -230,14 +233,15 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="cer"></param>
         /// <param name="refererUrl"></param>
         /// <param name="useAjax">是否使用Ajax请求</param>
+        /// <param name="headerAddition"></param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
         public static HttpResponseMessage HttpResponseGet(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
-   string refererUrl = null, bool useAjax = false, int timeOut = Config.TIME_OUT)
+   string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
-            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
+            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
             var task = httpClient.GetAsync(url);
             HttpResponseMessage response = task.Result;
 
@@ -292,11 +296,13 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="cer">证书，如果不需要则保留null</param>
         /// <param name="timeOut"></param>
         /// <param name="refererUrl">referer参数</param>
+        /// <param name="useAjax"></param>
+        /// <param name="headerAddition"></param>
         /// <returns></returns>
         public static async Task<string> HttpGetAsync(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
-            string refererUrl = null, bool useAjax = false, int timeOut = Config.TIME_OUT)
+            string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
 #if NET45
             HttpWebRequest request = HttpGet_Common_Net45(url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
@@ -317,7 +323,7 @@ namespace Senparc.CO2NET.HttpUtility
                 }
             }
 #else
-            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
+            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
 
             var response = await httpClient.GetAsync(url).ConfigureAwait(false);//获取响应信息
 
