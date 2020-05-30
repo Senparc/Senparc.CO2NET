@@ -45,6 +45,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190811
     修改描述：v0.8.6 添加 FileHelper.FileInUse() 方法，用于判断文件是否正在被占用
 
+    修改标识：Senparc - 20200530
+    修改描述：v1.3.110 添加 FileHelper.TryCreateDirectory() 方法
+
 ----------------------------------------------------------------*/
 
 
@@ -116,6 +119,18 @@ namespace Senparc.CO2NET.Helpers
             catch
             {
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// 如果目录不存在，则创建目录
+        /// </summary>
+        /// <param name="dir">目录绝对路径</param>
+        public static void TryCreateDirectory(string dir)
+        {
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
             }
         }
     }
