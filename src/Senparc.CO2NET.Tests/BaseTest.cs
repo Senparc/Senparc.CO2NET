@@ -40,6 +40,8 @@ namespace Senparc.CO2NET.Tests
             config.GetSection("SenparcSetting").Bind(_senparcSetting);
 
             serviceCollection.AddMemoryCache();//Ê¹ÓÃÄÚ´æ»º´æ
+
+            serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
         /// <summary>
