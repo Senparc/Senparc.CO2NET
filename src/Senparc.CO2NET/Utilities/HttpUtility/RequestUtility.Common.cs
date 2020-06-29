@@ -72,6 +72,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -239,12 +240,19 @@ namespace Senparc.CO2NET.HttpUtility
             //上传格式参考：
             //https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738729
             //https://work.weixin.qq.com/api/doc#10112
-            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            var cd = new ContentDispositionHeaderValue("form-data")
             {
                 Name = "\"{0}\"".FormatWith(formName),
-                FileName = "\"" + fileName + "\"",
-                Size = stream.Length
+                Parameters = { new NameValueHeaderValue("filename", $"\"{Encoding.GetEncoding(28591).GetString(Encoding.UTF8.GetBytes(fileName))}\"")}, //非ascii字符乱码
+                FileNameStar = fileName
             }; // the extra quotes are key here
+
+            var star = cd.Parameters.Last();
+            star.Value = $"\"{star.Value}\"";
+
+            cd.Size = stream.Length;
+
+            fileContent.Headers.ContentDisposition = cd;
             fileContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             return fileContent;
         }

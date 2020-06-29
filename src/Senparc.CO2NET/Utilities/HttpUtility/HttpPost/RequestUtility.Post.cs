@@ -155,7 +155,7 @@ namespace Senparc.CO2NET.HttpUtility
                             {
                                 //fileNameOrFileData 中储存的储存的是 Stream
                                 var fileName = Path.GetFileName(formFileData.GetAvaliableFileName(SystemTime.NowTicks.ToString()));
-                                formdata = string.Format(fileFormdataTemplate, file.Key, fileName);
+                                formdata = string.Format(fileFormdataTemplate, file.Key, Encoding.GetEncoding(28591).GetString(Encoding.UTF8.GetBytes(fileName))); //非ascii字符乱码
                             }
                             else
                             {
@@ -169,7 +169,7 @@ namespace Senparc.CO2NET.HttpUtility
                                         //存在文件
                                         memoryStream.Seek(0, SeekOrigin.Begin);
                                         fileStream.CopyTo(memoryStream);
-                                        formdata = string.Format(fileFormdataTemplate, file.Key, Path.GetFileName(fileNameOrFileData));
+                                        formdata = string.Format(fileFormdataTemplate, file.Key, Encoding.GetEncoding(28591).GetString(Encoding.UTF8.GetBytes(Path.GetFileName(fileNameOrFileData)))); //非ascii字符乱码
                                         fileStream.Dispose();
                                     }
                                     else
@@ -413,7 +413,7 @@ namespace Senparc.CO2NET.HttpUtility
             string certName = null,
 #else
             X509Certificate2 cer = null,
-#endif            
+#endif
             bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT,
             bool checkValidationResult = false)
         {
@@ -485,7 +485,7 @@ namespace Senparc.CO2NET.HttpUtility
 
             #region 已经使用方法重用
             /*
-            
+
             var request = HttpPost_Common_Net45(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, timeOut, checkValidationResult);
 
             #region 输入二进制流
