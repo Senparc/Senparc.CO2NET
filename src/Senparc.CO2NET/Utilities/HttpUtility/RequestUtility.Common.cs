@@ -281,7 +281,6 @@ namespace Senparc.CO2NET.HttpUtility
 
             //httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"));
 
-            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36");
             client.DefaultRequestHeaders.Add("Timeout", timeOut.ToString());
             client.DefaultRequestHeaders.Add("KeepAlive", "true");
 
@@ -295,12 +294,22 @@ namespace Senparc.CO2NET.HttpUtility
                 client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
             }
 
+            var userAgentSetted = false;//是否已经自定义User-Agent
             if (headerAddition != null)
             {
                 foreach (var item in headerAddition)
                 {
                     client.DefaultRequestHeaders.Add(item.Key, item.Value);
+                    if (item.Key.ToUpper() == "USER-AGENT")
+                    {
+                        userAgentSetted = true;
+                    }
                 }
+            }
+
+            if (!userAgentSetted)
+            {
+                client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36");
             }
         }
 

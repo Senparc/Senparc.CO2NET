@@ -100,6 +100,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// GET方式请求URL，并返回T类型
         /// </summary>
         /// <typeparam name="T">接收JSON的数据类型</typeparam>
+        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
         /// <param name="url"></param>
         /// <param name="encoding"></param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
@@ -122,6 +123,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 从Url下载
         /// </summary>
+        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
         /// <param name="url"></param>
         /// <param name="stream"></param>
         public static void Download(
@@ -152,6 +154,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 从Url下载，并保存到指定目录
         /// </summary>
+        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
         /// <param name="url">需要下载文件的Url</param>
         /// <param name="filePathName">保存文件的路径，如果下载文件包含文件名，按照文件名储存，否则将分配Ticks随机文件名</param>
         /// <param name="timeOut">超时时间</param>
@@ -243,6 +246,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 【异步方法】异步GetJson
         /// </summary>
+        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
         /// <param name="url"></param>
         /// <param name="encoding"></param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
@@ -267,6 +271,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 【异步方法】异步从Url下载
         /// </summary>
+        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
         /// <param name="url"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
@@ -296,6 +301,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <summary>
         /// 【异步方法】从Url下载，并保存到指定目录
         /// </summary>
+        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
         /// <param name="url">需要下载文件的Url</param>
         /// <param name="filePathName">保存文件的路径，如果下载文件包含文件名，按照文件名储存，否则将分配Ticks随机文件名</param>
         /// <param name="timeOut">超时时间</param>
