@@ -52,6 +52,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190429
     修改描述：v0.7.0 优化 HttpClient，重构 RequestUtility（包括 Post 和 Get），引入 HttpClientFactory 机制
 
+    修改标识：Senparc - 20200925
+    修改描述：v1.3.201 更新 Senparc.CO2NET.HttpUtility.Get.Download() 方法，修正 filename 判断正则表达式
+
 ----------------------------------------------------------------*/
 
 
@@ -172,10 +175,12 @@ namespace Senparc.CO2NET.HttpUtility
             using (Stream responseStream = response.GetResponseStream())
             {
                 string responseFileName = null;
+                //如：content-disposition: inline; filename="WeChatSampleBuilder-2.0.0.zip"; filename*=utf-8''WeChatSampleBuilder-2.0.0.zip
                 var contentDescriptionHeader = response.GetResponseHeader("Content-Disposition");
+
                 if (!string.IsNullOrEmpty(contentDescriptionHeader))
                 {
-                    var fileName = Regex.Match(contentDescriptionHeader, @"(?<=filename="")([\s\S]+)(?= "")", RegexOptions.IgnoreCase).Value;
+                    var fileName = Regex.Match(contentDescriptionHeader, @"(?<=filename="")([\s\S]+)(?="")", RegexOptions.IgnoreCase).Value;
 
                     responseFileName = Path.Combine(dir, fileName);
                 }
