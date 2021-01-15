@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2020 Senparc
+    Copyright (C) 2021 Senparc
 
     文件名：Register.cs
     文件功能描述：Senparc.CO2NET 快捷注册流程（包括Thread、TraceLog等）
