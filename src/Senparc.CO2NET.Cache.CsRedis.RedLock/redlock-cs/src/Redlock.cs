@@ -183,6 +183,14 @@ namespace Redlock.CSharp
             }
         }
 
+        protected async Task for_each_redis_registered_async(Func<string, Task> func)
+        {
+            foreach (var item in redisMasterDictionary)
+            {
+                await func(item.Key).ConfigureAwait(false);
+            }
+        }
+
         protected bool retry(int retryCount, TimeSpan retryDelay, Func<bool> action)
         {
             int maxRetryDelay = (int)retryDelay.TotalMilliseconds;
@@ -257,12 +265,12 @@ namespace Redlock.CSharp
                     var startTime = DateTime.Now;
 
                     // Use keys
-                    for_each_redis_registered(
+                    await for_each_redis_registered_async(
                           async redis =>
                           {
                               if (await LockInstanceAsync(redis, resource, val, ttl).ConfigureAwait(false)) n += 1;
                           }
-                       );
+                       ).ConfigureAwait(false);
 
                     /*
                      * Add 2 milliseconds to the drift to account for Redis expires
@@ -279,12 +287,12 @@ namespace Redlock.CSharp
                     }
                     else
                     {
-                        for_each_redis_registered(
+                        await for_each_redis_registered_async(
                              async redis =>
                              {
                                  await UnlockInstanceAsync(redis, resource, val).ConfigureAwait(false);
                              }
-                          );
+                          ).ConfigureAwait(false);
                         return false;
                     }
                 }
@@ -304,6 +312,17 @@ namespace Redlock.CSharp
         {
             await Task.Factory.StartNew(() => for_each_redis_registered(action)).ConfigureAwait(false);
 
+        }
+
+        /// <summary>
+        /// 这是改造新增的委托，返回task
+        /// </summary>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        protected async Task for_each_redis_registeredAsync(Func<string, Task> func)
+        {
+            await for_each_redis_registered_async(func).ConfigureAwait(false);
+            //await Task.Factory.StartNew(() => for_each_redis_registered(action)).ConfigureAwait(false);
         }
 
         protected async Task<bool> retryAsync(int retryCount, TimeSpan retryDelay, Func<Task<bool>> action)
