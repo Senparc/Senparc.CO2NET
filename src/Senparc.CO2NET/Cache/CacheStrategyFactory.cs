@@ -54,6 +54,11 @@ namespace Senparc.CO2NET.Cache
             }
         }
 
+        /// <summary>
+        /// 获取全局缓存策略
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <returns></returns>
         public static IBaseObjectCacheStrategy GetObjectCacheStrategyInstance(this IServiceProvider serviceProvider)
         {
             return GetObjectCacheStrategyInstance();
