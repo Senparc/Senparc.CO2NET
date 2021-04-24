@@ -30,3 +30,4 @@ obj/*
 /src/Senparc.CO2NET.Cache.CsRedis/Properties/AssemblyInfo.cs
 /src/Senparc.CO2NET.Cache.Redis.Tests - Copy/App_Data/SenparcTraceLog
 /src/Senparc.CO2NET.Cache.CsRedis.Tests/App_Data/SenparcTraceLog/*
+/Sample/Senparc.CO2NET.Sample.net6/App_Data/SenparcTraceLog
