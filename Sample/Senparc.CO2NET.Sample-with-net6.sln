@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET", "..\src\Senparc.CO2NET\Senparc.CO2NET.csproj", "{8B66B7FB-6918-4D21-9C31-98EACF3264C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Tests", "..\src\Senparc.CO2NET.Tests\Senparc.CO2NET.Tests.csproj", "{0CE4D0D4-97F3-4A7C-A999-27AFE121BD26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Tests.net6", "..\src\Senparc.CO2NET.Tests\Senparc.CO2NET.Tests.net6.csproj", "{0CE4D0D4-97F3-4A7C-A999-27AFE121BD26}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cache", "Cache", "{577DD010-AF7A-4113-9AEA-4BD6244D5318}"
 EndProject
@@ -19,18 +19,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraires", "Libraires", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{118ECC07-977C-42ED-A452-8934C8632261}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.Redis.Tests", "..\src\Senparc.CO2NET.Cache.Redis.Tests\Senparc.CO2NET.Cache.Redis.Tests.csproj", "{BE38FE20-928D-46EF-B17B-8CB4BC401389}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.Redis.Tests.net6", "..\src\Senparc.CO2NET.Cache.Redis.Tests\Senparc.CO2NET.Cache.Redis.Tests.net6.csproj", "{BE38FE20-928D-46EF-B17B-8CB4BC401389}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{A9F634CC-7806-44B9-9768-4DAE13B669D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.Memcached.Tests", "..\src\Senparc.CO2NET.Cache.Memcached.Tests\Senparc.CO2NET.Cache.Memcached.Tests.csproj", "{0014D962-7E93-4906-A22E-30A5D2786D64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.Memcached.Tests.net6", "..\src\Senparc.CO2NET.Cache.Memcached.Tests\Senparc.CO2NET.Cache.Memcached.Tests.net6.csproj", "{0014D962-7E93-4906-A22E-30A5D2786D64}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.APM", "..\src\Senparc.CO2NET.APM\Senparc.CO2NET.APM.csproj", "{D3A0D429-B7EB-446B-8E1B-4DD8225C75ED}"
 	ProjectSection(ProjectDependencies) = postProject
 		{8B66B7FB-6918-4D21-9C31-98EACF3264C8} = {8B66B7FB-6918-4D21-9C31-98EACF3264C8}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.APM.Tests", "..\src\Senparc.CO2NET.APM.Tests\Senparc.CO2NET.APM.Tests.csproj", "{4FA6F2C4-54B5-469D-8ECF-0040120D3344}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.APM.Tests.net6", "..\src\Senparc.CO2NET.APM.Tests\Senparc.CO2NET.APM.Tests.net6.csproj", "{4FA6F2C4-54B5-469D-8ECF-0040120D3344}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Sample.Consoles", "Senparc.CO2NET.Sample.Consoles\Senparc.CO2NET.Sample.Consoles.Net6.csproj", "{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}"
 EndProject
@@ -48,7 +48,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EnyimMemcached", "EnyimMemc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CsRedis", "CsRedis", "{DE30C50A-9779-4906-8061-AD6A6C1F6796}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.CsRedis.Tests", "..\src\Senparc.CO2NET.Cache.CsRedis.Tests\Senparc.CO2NET.Cache.CsRedis.Tests.csproj", "{93DE8797-1F11-4963-9197-115C981A5196}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.CsRedis.Tests.net6", "..\src\Senparc.CO2NET.Cache.CsRedis.Tests\Senparc.CO2NET.Cache.CsRedis.Tests.net6.csproj", "{93DE8797-1F11-4963-9197-115C981A5196}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
