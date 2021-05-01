@@ -373,6 +373,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
             stream.Seek(0, SeekOrigin.Begin);//设置指针读取位置
         }
 
+#if !NET45
         /// <summary>
         /// 【异步方法】从 Request.Body 中读取流，并复制到一个独立的 MemoryStream 对象中
         /// </summary>
@@ -394,7 +395,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
             Stream inputStream = new MemoryStream(requestData);
             return inputStream;
         }
-
+#endif
         #endregion
 #endif
 
