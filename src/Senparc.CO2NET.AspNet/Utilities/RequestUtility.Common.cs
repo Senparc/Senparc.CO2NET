@@ -71,6 +71,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     
     修改标识：Senparc - 20180721
     修改描述：v0.1.0  从 CO2NET 移植到 CO2NET.AspNet
+    
+    修改标识：Senparc - 20210501
+    修改描述：v0.4.300.4 提供 GetRequestMemoryStreamAsync() 异步方法
+
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -165,15 +170,16 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         /// 从 Request.Body 中读取流，并复制到一个独立的 MemoryStream 对象中
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="allowSynchronousIO"></param>
         /// <returns></returns>
-        public static Stream GetRequestMemoryStream(this HttpRequest request)
+        public static Stream GetRequestMemoryStream(this HttpRequest request, bool? allowSynchronousIO = true)
         {
 #if NETSTANDARD2_1
             var syncIOFeature = request.HttpContext.Features.Get<IHttpBodyControlFeature>();
 
-            if (syncIOFeature != null)
+            if (syncIOFeature != null && allowSynchronousIO.HasValue)
             {
-                syncIOFeature.AllowSynchronousIO = true;
+                syncIOFeature.AllowSynchronousIO = allowSynchronousIO.Value;
             }
 #endif
             string body = new StreamReader(request.Body).ReadToEnd();
@@ -367,6 +373,29 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
             stream.Seek(0, SeekOrigin.Begin);//设置指针读取位置
         }
 
+#if !NET45
+        /// <summary>
+        /// 【异步方法】从 Request.Body 中读取流，并复制到一个独立的 MemoryStream 对象中
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="allowSynchronousIO"></param>
+        /// <returns></returns>
+        public static async Task<Stream> GetRequestMemoryStreamAsync(this HttpRequest request, bool? allowSynchronousIO = true)
+        {
+#if NETSTANDARD2_1
+            var syncIOFeature = request.HttpContext.Features.Get<IHttpBodyControlFeature>();
+
+            if (syncIOFeature != null && allowSynchronousIO.HasValue)
+            {
+                syncIOFeature.AllowSynchronousIO = allowSynchronousIO.Value;
+            }
+#endif
+            string body = await new StreamReader(request.Body).ReadToEndAsync();
+            byte[] requestData = Encoding.UTF8.GetBytes(body);
+            Stream inputStream = new MemoryStream(requestData);
+            return inputStream;
+        }
+#endif
         #endregion
 #endif
 

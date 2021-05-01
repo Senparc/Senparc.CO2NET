@@ -20,21 +20,25 @@ namespace Senparc.CO2NET.Sample.netcore3.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IServiceProvider _serviceProvider;
 
-        public HomeController(ILogger<HomeController> logger,IServiceProvider serviceProvider /*,IBaseObjectCacheStrategy oCache*/)
+        public HomeController(ILogger<HomeController> logger, IServiceProvider serviceProvider /*,IBaseObjectCacheStrategy oCache*/)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
-            var count = cache.Get<int>("IndexTest");
+            var dt1 = SystemTime.Now;
+            var count = await cache.GetAsync<int>("IndexTest");
+            var dt2 = SystemTime.Now;
             count++;
-            cache.Set("IndexTest", count);
+            await cache.SetAsync("IndexTest", count);
+            var dt3 = SystemTime.Now;
 
             ViewData["IndexTest"] = count;
             ViewData["CacheType"] = cache.GetType();
+            ViewData["CacheCost"] = $"缓存读取：{(dt2 - dt1).TotalMilliseconds}ms，缓存写入：{(dt3 - dt2).TotalMilliseconds}ms";
 
             return View();
         }
@@ -62,7 +66,7 @@ namespace Senparc.CO2NET.Sample.netcore3.Controllers
         [HttpGet]
         public IActionResult PostParameter()
         {
-            var result = RequestUtility.HttpPost(_serviceProvider,"https://localhost:44351/Home/PostParameter", formData: new Dictionary<string, string>() { { "code", SystemTime.NowTicks.ToString() } });
+            var result = RequestUtility.HttpPost(_serviceProvider, "https://localhost:44351/Home/PostParameter", formData: new Dictionary<string, string>() { { "code", SystemTime.NowTicks.ToString() } });
             return Content(result);
         }
 
@@ -163,6 +167,20 @@ namespace Senparc.CO2NET.Sample.netcore3.Controllers
 
                 return Content(base64, "text/plain");
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> TestGetRequestMemoryStreamAsync()
+        {
+
+            var bodyStream = await Senparc.CO2NET.AspNet.HttpUtility.RequestUtility.GetRequestMemoryStreamAsync(Request);
+            bodyStream.Position = 0;
+            string content;
+            using (StreamReader sr = new StreamReader(bodyStream))
+            {
+                content = await sr.ReadToEndAsync();
+            }
+            return Content("Post Body数据：" + content);
         }
 
         #endregion

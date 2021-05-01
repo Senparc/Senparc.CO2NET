@@ -1,44 +1,47 @@
 ﻿@{
     ViewData["Title"] = "CO2NET Sample for .NET 6.0";
 }
-    <div class="text-center" id="homeArea">
-        <h1 class="display-4">CO2NET Sample for .NET Core 3.1</h1>
+<div class="text-center" id="homeArea">
+    <h1 class="display-4">CO2NET Sample for .NET 6.0</h1>
 
 
-        <p>Demo 正在完善中，系统启动设置请看 startup.cs</p>
+    <p>Demo 正在完善中，系统启动设置请看 startup.cs</p>
 
 
-        <p>CO2NET 开源地址：<a href="https://github.com/Senparc/Senparc.CO2NET" target="_blank">https://github.com/Senparc/Senparc.CO2NET</a></p>
-        <p>CO2NET NuGet地址：<a href="https://www.nuget.org/packages/Senparc.CO2NET" target="_blank">https://www.nuget.org/packages/Senparc.CO2NET</a></p>
+    <p>CO2NET 开源地址：<a href="https://github.com/Senparc/Senparc.CO2NET" target="_blank">https://github.com/Senparc/Senparc.CO2NET</a></p>
+    <p>CO2NET NuGet地址：<a href="https://www.nuget.org/packages/Senparc.CO2NET" target="_blank">https://www.nuget.org/packages/Senparc.CO2NET</a></p>
 
-        <div class="row" id="functionDashboard">
-            <div class="col-md-4">
-                <h2>测试数据</h2>
-                <ul>
-                    <li>CacheType：@ViewData["CacheType"]</li>
-                    <li>Cache Test：@ViewData["IndexTest"]<br />（刷新当前页面可以查看缓存数字的改变）</li>
-                </ul>
-            </div>
-            <div class="col-md-2">
-
-            </div>
-            <div class="col-md-6">
-                <h2>测试项目</h2>
-                <ul>
-                    <li>@Html.ActionLink("Post 参数", "PostParameter", "Home", null, new { target = "_blank" })</li>
-                    <li>@Html.ActionLink("Post 文件（使用表单文件名）", "PostFile", "Home", null, new { target = "_blank" })</li>
-                    <li>@Html.ActionLink("Post 文件（使用直接文件流模拟表单提交）", "PostFile", "Home", new { byStream = "1" }, new { target = "_blank" })</li>
-                    <li>@Html.ActionLink("日志记录测试", "LogTest", "Home", null, new { target = "_blank" })</li>
-                </ul>
-            </div>
-            <div class="col-md-3">
-                @*<h2>Run &amp; Deploy</h2>
-                <ul>
-                    <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-                    <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-                    <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure Web Apps</a></li>
-                </ul>*@
-            </div>
+    <div class="row" id="functionDashboard">
+        <div class="col-md-6 funcArea">
+            <h2>缓存及数据测试</h2>
+            <ul>
+                <li>CacheType：@ViewData["CacheType"]</li>
+                <li>Cache Test：<strong>@ViewData["IndexTest"]</strong> （刷新当前页面可以查看缓存数字的改变）</li>
+                <li>Cache Cost：@ViewData["CacheCost"]</li>
+            </ul>
         </div>
-
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-4 funcArea">
+            <h2>Post及日志</h2>
+            <ul>
+                <li>@Html.ActionLink("Post 参数", "PostParameter", "Home", null, new { target = "_blank" })</li>
+                <li>@Html.ActionLink("Post 文件（使用表单文件名）", "PostFile", "Home", null, new { target = "_blank" })</li>
+                <li>@Html.ActionLink("Post 文件（使用直接文件流模拟表单提交）", "PostFile", "Home", new { byStream = "1" }, new { target = "_blank" })</li>
+                <li>@Html.ActionLink("日志记录测试", "LogTest", "Home", null, new { target = "_blank" })</li>
+            </ul>
+        </div>
+        
     </div>
+
+    <div class="row">
+        <div class="col-md-12 funcArea">
+            <h2>GetRequestMemoryStreamAsync 测试</h2>
+            @using (Html.BeginForm("TestGetRequestMemoryStream", "Home", FormMethod.Post, new { target="_blank" }))
+            {
+                <div>输入测试内容：<input name="contet" type="text" /> <input type="submit" value="提交" /></div>
+                <div>原理：使用表单 Post 信息，数据，并使用 GetRequestMemoryStreamAsync() 异步方法获取请求 Body 中的所有值。</div>
+            }
+        </div>
+    </div>
+</div>
