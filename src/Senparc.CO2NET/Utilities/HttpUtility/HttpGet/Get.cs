@@ -55,11 +55,13 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20200925
     修改描述：v1.3.201 更新 Senparc.CO2NET.HttpUtility.Get.Download() 方法，修正 filename 判断正则表达式
 
+    修改标识：Senparc - 20210606
+    修改描述：v1.4.400 修复 Download 方法 bug
+
 ----------------------------------------------------------------*/
 
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -187,7 +189,7 @@ namespace Senparc.CO2NET.HttpUtility
 
                 var fullName = responseFileName ?? Path.Combine(dir, GetRandomFileName());
 
-                using (var fs = File.Open(filePathName, FileMode.OpenOrCreate))
+                using (var fs = File.Open(fullName, FileMode.OpenOrCreate))
                 {
                     byte[] bArr = new byte[1024];
                     int size = responseStream.Read(bArr, 0, (int)bArr.Length);
