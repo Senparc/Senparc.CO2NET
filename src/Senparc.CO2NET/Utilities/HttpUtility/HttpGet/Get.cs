@@ -187,7 +187,7 @@ namespace Senparc.CO2NET.HttpUtility
 
                 var fullName = responseFileName ?? Path.Combine(dir, GetRandomFileName());
 
-                using (var fs = File.Open(filePathName, FileMode.OpenOrCreate))
+                using (var fs = File.Open(fullName, FileMode.OpenOrCreate))
                 {
                     byte[] bArr = new byte[1024];
                     int size = responseStream.Read(bArr, 0, (int)bArr.Length);
