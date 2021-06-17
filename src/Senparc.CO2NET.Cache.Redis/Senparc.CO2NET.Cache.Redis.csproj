@@ -129,15 +129,7 @@
     <OutputPath>..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
   </PropertyGroup>
-  <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.6|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-  </PropertyGroup>-->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <!--<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" />
-    <PackageReference Include="System.Dynamic.Runtime" />
-    <PackageReference Include="System.Threading.Thread" />
-    <PackageReference Include="System.Xml.XmlSerializer" />-->
-  </ItemGroup>
+ 
   <ItemGroup>
     <Compile Remove="packages\**" />
     <Compile Remove="ServiceStack.Redis\**" />

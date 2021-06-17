@@ -105,39 +105,39 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
   </PropertyGroup>
   <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\netstandard1.6\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\netstandard1.6\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>-->
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\net45\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\net45\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>
   <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\netstandard1.6\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\netstandard1.6\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>-->
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.0|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\netcoreapp2.0\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\netcoreapp2.0\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.1|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\netcoreapp2.1\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\netcoreapp2.1\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\netcoreapp3.0\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\netcoreapp3.0\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\net6.0\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\net6.0\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>
   <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\net461\Senparc.Cache.Memcached.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\net461\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>-->
   <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.6|AnyCPU'">
     <DefineConstants>TRACE;DEBUG</DefineConstants>
