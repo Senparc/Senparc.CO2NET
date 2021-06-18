@@ -52,8 +52,8 @@ namespace System
         /// 当天零点时间，从 SystemTime.Now.Date 获得
         /// </summary>
         public static DateTime Today => Now.Date;
-        /// <summary>
 
+        /// <summary>
         /// 获取当前时间的 Ticks
         /// </summary>
         public static long NowTicks => Now.Ticks;

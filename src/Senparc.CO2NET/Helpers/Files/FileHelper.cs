@@ -80,6 +80,7 @@ namespace Senparc.CO2NET.Helpers
         /// <summary>
         /// 从Url下载文件
         /// </summary>
+        /// <param name="serviceProvider"></param>
         /// <param name="url"></param>
         /// <param name="fullFilePathAndName"></param>
         public static void DownLoadFileFromUrl(IServiceProvider serviceProvider,string url, string fullFilePathAndName)
