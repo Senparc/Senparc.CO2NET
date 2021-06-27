@@ -32,9 +32,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.APM", "..\sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.APM.Tests.net6", "..\src\Senparc.CO2NET.APM.Tests\Senparc.CO2NET.APM.Tests.net6.csproj", "{4FA6F2C4-54B5-469D-8ECF-0040120D3344}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Sample.Consoles", "Senparc.CO2NET.Sample.Consoles\Senparc.CO2NET.Sample.Consoles.Net6.csproj", "{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Sample.Consoles.Net6", "Senparc.CO2NET.Sample.Consoles\Senparc.CO2NET.Sample.Consoles.Net6.csproj", "{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Sample.netcore3", "Senparc.CO2NET.Sample.net6\Senparc.CO2NET.Sample.net6.csproj", "{84DE5542-70F9-4576-AF3E-6E8013338112}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Sample.net6", "Senparc.CO2NET.Sample.net6\Senparc.CO2NET.Sample.net6.csproj", "{84DE5542-70F9-4576-AF3E-6E8013338112}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.AspNet", "..\src\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj", "{374C2921-C376-4D14-A88D-6DBC6FC53D8E}"
 EndProject
@@ -49,6 +49,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CsRedis", "CsRedis", "{DE30C50A-9779-4906-8061-AD6A6C1F6796}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.CsRedis.Tests.net6", "..\src\Senparc.CO2NET.Cache.CsRedis.Tests\Senparc.CO2NET.Cache.CsRedis.Tests.net6.csproj", "{93DE8797-1F11-4963-9197-115C981A5196}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.CO2NET.WebApi", "..\src\Senparc.CO2NET.WebApi\Senparc.CO2NET.WebApi.csproj", "{DB5A5677-472C-4C21-AEB6-34C674C7997A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -142,6 +144,12 @@ Global
 		{93DE8797-1F11-4963-9197-115C981A5196}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93DE8797-1F11-4963-9197-115C981A5196}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{93DE8797-1F11-4963-9197-115C981A5196}.Test|Any CPU.Build.0 = Test|Any CPU
+		{DB5A5677-472C-4C21-AEB6-34C674C7997A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB5A5677-472C-4C21-AEB6-34C674C7997A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB5A5677-472C-4C21-AEB6-34C674C7997A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB5A5677-472C-4C21-AEB6-34C674C7997A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB5A5677-472C-4C21-AEB6-34C674C7997A}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB5A5677-472C-4C21-AEB6-34C674C7997A}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,6 +174,7 @@ Global
 		{12AE45FC-1142-439C-9917-AC6FBDC22848} = {577DD010-AF7A-4113-9AEA-4BD6244D5318}
 		{DE30C50A-9779-4906-8061-AD6A6C1F6796} = {577DD010-AF7A-4113-9AEA-4BD6244D5318}
 		{93DE8797-1F11-4963-9197-115C981A5196} = {118ECC07-977C-42ED-A452-8934C8632261}
+		{DB5A5677-472C-4C21-AEB6-34C674C7997A} = {FE9C797C-0788-451E-B04C-778484434ED5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {796B18F2-8DBB-4792-881F-4C5A81E1F2DB}
