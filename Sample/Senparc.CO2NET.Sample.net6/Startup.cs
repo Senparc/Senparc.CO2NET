@@ -15,6 +15,8 @@ using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Cache.Memcached;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.AspNet;
+using Senparc.CO2NET.WebApi;
+using System.IO;
 
 namespace Senparc.CO2NET.Sample.netcore3
 {
@@ -34,9 +36,12 @@ namespace Senparc.CO2NET.Sample.netcore3
 
             services.AddMemoryCache();//使用本地缓需要添加
             services.Add(ServiceDescriptor.Singleton(typeof(ILogger<>), typeof(Logger<>)));//使用 Memcached 或 Logger 需要添加
-
+            var builder = services.AddMvcCore();
             //Senparc.CO2NET 全局注册（必须）
             services.AddSenparcGlobalServices(Configuration);
+
+            WebApiEngine wae = new WebApiEngine(new FindWeixinApiService(), 400);
+            wae.InitDynamicApi(builder, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,7 +59,6 @@ namespace Senparc.CO2NET.Sample.netcore3
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
             app.UseAuthorization();
@@ -147,6 +151,8 @@ namespace Senparc.CO2NET.Sample.netcore3
 
             #endregion
             );
+
+
         }
 
         /// <summary>

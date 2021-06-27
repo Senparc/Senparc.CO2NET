@@ -72,12 +72,12 @@ namespace Senparc.CO2NET.ApiBind
         /// <summary>
         /// 获取全局唯一名称
         /// </summary>
-        /// <param name="platformType">PlatformType</param>
+        /// <param name="category">目录（平台类型），用于输出 API 的 Url 时分组</param>
         /// <param name="apiBindAttrName">跨程序集的通用名称（如：CustomApi.SendText）</param>
         /// <returns></returns>
-        private string GetGlobalName(PlatformType platformType, string apiBindAttrName)
+        private string GetGlobalName(string category, string apiBindAttrName)
         {
-            return $"{platformType.ToString()}:{apiBindAttrName}";//TODO：生成全局唯一名称
+            return $"{category}:{apiBindAttrName}";//TODO：生成全局唯一名称
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Senparc.CO2NET.ApiBind
         /// <param name="apiBindAttr"></param>
         public void Add(MethodInfo method, ApiBindAttribute apiBindAttr)
         {
-            var name = GetGlobalName(apiBindAttr.PlatformType, apiBindAttr.Name);
+            var name = GetGlobalName(apiBindAttr.Category, apiBindAttr.Name);
 
             var finalName = name;
             var suffix = 0;
@@ -112,11 +112,11 @@ namespace Senparc.CO2NET.ApiBind
         /// <summary>
         /// 获取 ApiBindInfo
         /// </summary>
-        /// <param name="platformType">PlatformType</param>
+        /// <param name="category">目录（平台类型），用于输出 API 的 Url 时分组</param>
         /// <param name="apiBindAttrName">跨程序集的通用名称（如：CustomApi.SendText）</param>
-        public ApiBindInfo Get(PlatformType platformType, string apiBindAttrName)
+        public ApiBindInfo Get(string category, string apiBindAttrName)
         {
-            var name = GetGlobalName(platformType, apiBindAttrName);
+            var name = GetGlobalName(category, apiBindAttrName);
             if (ApiBindInfoCollection.Instance.ContainsKey(name))
             {
                 return ApiBindInfoCollection.Instance[name];
@@ -128,9 +128,9 @@ namespace Senparc.CO2NET.ApiBind
         /// 获取不同模块的分组 API 绑定信息（注意：每次获取都会重新执行分组过程）
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IGrouping<PlatformType, KeyValuePair<string, ApiBindInfo>>> GetGroupedCollection()
+        public IEnumerable<IGrouping<string, KeyValuePair<string, ApiBindInfo>>> GetGroupedCollection()
         {
-            var apiGroups = ApiBindInfoCollection.Instance.GroupBy(z => z.Value.ApiBindAttribute.PlatformType);
+            var apiGroups = ApiBindInfoCollection.Instance.GroupBy(z => z.Value.ApiBindAttribute.Category);
             return apiGroups;
         }
     }

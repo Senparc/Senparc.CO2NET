@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Senparc.CO2NET.WebApi
+namespace Senparc.CO2NET
 {
     /// <summary>
     /// 自动绑定属性
