@@ -415,7 +415,7 @@ namespace Senparc.CO2NET.WebApi
             var sourceName = $"Senparc.Xncf.WeixinManager.App_Data.ApiDocXml.{xmlFileName}";//嵌入资源地址
             var sourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(sourceName);
 
-            var useXml = sourceStream.Length > 0;
+            var useXml = sourceStream?.Length > 0;
             var assembleName = WeixinApiAssemblyNames[category];
             ConcurrentDictionary<string, DocMembersCollectionValue> docMembersCollection = new ConcurrentDictionary<string, DocMembersCollectionValue>();
             XDocument document = null;
@@ -667,7 +667,7 @@ namespace Senparc.CO2NET.WebApi
             //Func<object, int, string> outputResult = (text, length) => string.Format($"{{0,{length}}}", text);
 
             WriteLog("");
-            WriteLog(string.Format("{0,25} | {1,15}| {2,15} |{3,15}", "Platform Name", "API Count", "Cost Time", "Average"));
+            WriteLog(string.Format("{0,25} | {1,15}| {2,15} |{3,15}", "Category Name", "API Count", "Cost Time", "Average"));
             WriteLog(new string('-', 80));
             foreach (var item in assemblyBuildStat)
             {
