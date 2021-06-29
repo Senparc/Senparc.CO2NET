@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Senparc.CO2NET.WebApi
 {
@@ -50,7 +51,7 @@ namespace Senparc.CO2NET.WebApi
 
                 foreach (var assembly in assembiles)
                 {
-                    
+
                     try
                     {
                         scanTypesCount++;
@@ -61,7 +62,7 @@ namespace Senparc.CO2NET.WebApi
 
                         foreach (var type in classTypes)
                         {
-                           
+
                             if (/*type.IsAbstract || 静态类会被识别为 IsAbstract*/
                                 !type.IsPublic || !type.IsClass || type.IsEnum)
                             {
@@ -75,7 +76,13 @@ namespace Senparc.CO2NET.WebApi
                                 var attrs = method.GetCustomAttributes(typeof(ApiBindAttribute), false);
                                 foreach (var attr in attrs)
                                 {
-                                    ApiBindInfoCollection.Instance.Add(method, attr as ApiBindAttribute);
+                                    var apiBindAttr = attr as ApiBindAttribute;
+                                    if (!WebApiEngine.WeixinApiAssemblyNames.ContainsKey(apiBindAttr.Category))
+                                    {
+                                        var newNameSpace = $"Senparc.DynamicWebApi.{Regex.Replace(apiBindAttr.Category,@"[\s\.\(\)]","")}";//TODO:可以换成缓存命名空间等更加特殊的前缀
+                                        WebApiEngine.WeixinApiAssemblyNames.TryAdd(apiBindAttr.Category, newNameSpace);
+                                    }
+                                    ApiBindInfoCollection.Instance.Add(method, apiBindAttr);
                                 }
                             }
                         }

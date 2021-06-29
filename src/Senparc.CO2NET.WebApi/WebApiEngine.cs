@@ -45,12 +45,12 @@ namespace Senparc.CO2NET.WebApi
 
             //TODO：注册预载入模块
 
-            //WeixinApiAssemblyNames[string.WeChat_OfficialAccount] = $"NeuCharDocApi.{string.WeChat_OfficialAccount}";
-            //WeixinApiAssemblyNames[string.WeChat_MiniProgram] = $"NeuCharDocApi.{string.WeChat_MiniProgram}";
-            //WeixinApiAssemblyNames[string.WeChat_Open] = $"NeuCharDocApi.{string.WeChat_Open}";
-            //WeixinApiAssemblyNames[string.WeChat_Work] = $"NeuCharDocApi.{string.WeChat_Work}";
-            //WeixinApiAssemblyNames[string.General] = $"NeuCharDocApi.{string.General}";
-            //WeixinApiAssemblyNames[string.WeChat_Tenpay] = $"NeuCharDocApi.{string.WeChat_Tenpay}";
+            //WeixinApiAssemblyNames[PlatformType.WeChat_OfficialAccount] = $"NeuCharDocApi.{PlatformType.WeChat_OfficialAccount}";
+            //WeixinApiAssemblyNames[PlatformType.WeChat_MiniProgram] = $"NeuCharDocApi.{PlatformType.WeChat_MiniProgram}";
+            //WeixinApiAssemblyNames[PlatformType.WeChat_Open] = $"NeuCharDocApi.{PlatformType.WeChat_Open}";
+            //WeixinApiAssemblyNames[PlatformType.WeChat_Work] = $"NeuCharDocApi.{WeCPlatformType.WeChat_Work}";
+            //WeixinApiAssemblyNames[PlatformType.General] = $"NeuCharDocApi.{PlatformType.General}";
+            //WeixinApiAssemblyNames[PlatformType.WeChat_Tenpay] = $"NeuCharDocApi.{PlatformType.WeChat_Tenpay}";
         }
 
         /// <summary>
@@ -415,40 +415,47 @@ namespace Senparc.CO2NET.WebApi
             var sourceName = $"Senparc.Xncf.WeixinManager.App_Data.ApiDocXml.{xmlFileName}";//嵌入资源地址
             var sourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(sourceName);
 
+            var useXml = sourceStream.Length > 0;
             var assembleName = WeixinApiAssemblyNames[category];
-
-            XDocument document = await XDocument.LoadAsync(sourceStream, LoadOptions.None, Task.Factory.CancellationToken);
-            //XDocument document = XDocument.Load(sourceStream, LoadOptions.None);
-            var root = document.Root;
-            root.Element("assembly").Element("name").Value = assembleName;
-            var docMembers = GetXmlMembers(root);// root.Element("members").Elements("member");
-
             ConcurrentDictionary<string, DocMembersCollectionValue> docMembersCollection = new ConcurrentDictionary<string, DocMembersCollectionValue>();
-
-            double dtlong = 0;
-
-            //var dtDoc = SystemTime.Now;
-            await foreach (var x in docMembers)
+            XDocument document = null;
+            if (useXml)
             {
-                if (x.HasAttributes)
-                {
-                    var nameAttr = x.FirstAttribute;
-                    var dt00 = SystemTime.Now;
-                    var docMethodInfo = GetDocMethodInfo(nameAttr);
-                    dtlong += SystemTime.DiffTotalMS(dt00);
-                    if (docMethodInfo.MethodName != null && docMethodInfo.ParamsPart != null)
-                    {
-                        //记录索引信息
-                        docMembersCollection[docMethodInfo.MethodName] = new DocMembersCollectionValue(/*x, */nameAttr, docMethodInfo.ParamsPart);
 
-                        //记录接口信息，用于搜索
-                        var isAsync = docMethodInfo.MethodName.EndsWith("Async", StringComparison.OrdinalIgnoreCase) ||
-                                        docMethodInfo.MethodName.Contains("Async``", StringComparison.OrdinalIgnoreCase);//是否是异步方法
-                        _findWeixinApiService.RecordApiItem(category, docMethodInfo.MethodName, docMethodInfo.ParamsPart,
-                            x.Element("summary")?.Value, isAsync);
+                document = await XDocument.LoadAsync(sourceStream, LoadOptions.None, Task.Factory.CancellationToken);
+                //XDocument document = XDocument.Load(sourceStream, LoadOptions.None);
+                var root = document.Root;
+                root.Element("assembly").Element("name").Value = assembleName;
+                var docMembers = GetXmlMembers(root);// root.Element("members").Elements("member");
+
+
+
+                double dtlong = 0;
+
+                //var dtDoc = SystemTime.Now;
+                await foreach (var x in docMembers)
+                {
+                    if (x.HasAttributes)
+                    {
+                        var nameAttr = x.FirstAttribute;
+                        var dt00 = SystemTime.Now;
+                        var docMethodInfo = GetDocMethodInfo(nameAttr);
+                        dtlong += SystemTime.DiffTotalMS(dt00);
+                        if (docMethodInfo.MethodName != null && docMethodInfo.ParamsPart != null)
+                        {
+                            //记录索引信息
+                            docMembersCollection[docMethodInfo.MethodName] = new DocMembersCollectionValue(/*x, */nameAttr, docMethodInfo.ParamsPart);
+
+                            //记录接口信息，用于搜索
+                            var isAsync = docMethodInfo.MethodName.EndsWith("Async", StringComparison.OrdinalIgnoreCase) ||
+                                            docMethodInfo.MethodName.Contains("Async``", StringComparison.OrdinalIgnoreCase);//是否是异步方法
+                            _findWeixinApiService.RecordApiItem(category, docMethodInfo.MethodName, docMethodInfo.ParamsPart,
+                                x.Element("summary")?.Value, isAsync);
+                        }
                     }
                 }
             }
+
             //WriteLog($"docMembersCollection init cost:{SystemTime.DiffTotalMS(dtDoc)}ms");
 
             //WriteLog("Document Root Name:" + root.Name);
@@ -537,22 +544,26 @@ namespace Senparc.CO2NET.WebApi
             //WeixinApiAssembly = myType.Assembly;//注意：此处会重复赋值相同的对象，不布偶股影响效率
 
             #region 保存新的 Xml 文件
-
-            var newDocFileName = $"App_Data/ApiDocXml/{assembleName}.xml";
-            try
+            if (useXml)
             {
-                //using (XmlWriter xw = XmlWriter.Create(newDocFile, new XmlWriterSettings() { Async = true }))
-                //{
-                //    await document.SaveAsync(xw, new CancellationToken()).ConfigureAwait(false);//保存
-                //}
-                document.Save(newDocFileName);
+                var newDocFileName = $"App_Data/ApiDocXml/{assembleName}.xml";
+                try
+                {
+                    //using (XmlWriter xw = XmlWriter.Create(newDocFile, new XmlWriterSettings() { Async = true }))
+                    //{
+                    //    await document.SaveAsync(xw, new CancellationToken()).ConfigureAwait(false);//保存
+                    //}
+                    document.Save(newDocFileName);
 
-                WriteLog($"new document file saved: {newDocFileName}, assembly cost:{SystemTime.NowDiff(groupStartTime)}");
+                    WriteLog($"new document file saved: {newDocFileName}, assembly cost:{SystemTime.NowDiff(groupStartTime)}");
+                }
+                catch (Exception ex)
+                {
+                    WriteLog($"save document xml faild: {ex.Message}\r\n{ex.ToString()}");
+                }
+
             }
-            catch (Exception ex)
-            {
-                WriteLog($"save document xml faild: {ex.Message}\r\n{ex.ToString()}");
-            }
+
 
             #endregion
 
