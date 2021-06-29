@@ -19,7 +19,7 @@ namespace Senparc.CO2NET.WebApi
     {
         //private static ConcurrentDictionary<string, Dictionary<string, ApiBindInfo>> _apiCollection = new ConcurrentDictionary<string, Dictionary<string, ApiBindInfo>>();
 
-        public static ConcurrentDictionary<string, Assembly> ApiAssemblyCollection { get; set; } = new ConcurrentDictionary<string, Assembly>();
+        public static ConcurrentDictionary<string, Assembly> WeixinApiAssemblyCollection { get; set; } = new ConcurrentDictionary<string, Assembly>();
 
         public static ConcurrentDictionary<string, string> WeixinApiAssemblyNames { get; private set; } = new ConcurrentDictionary<string, string>(); //= "WeixinApiAssembly";
         public static ConcurrentDictionary<string, string> WeixinApiAssemblyVersions { get; private set; } = new ConcurrentDictionary<string, string>(); //= "WeixinApiAssembly";
@@ -417,8 +417,8 @@ namespace Senparc.CO2NET.WebApi
 
             var assembleName = WeixinApiAssemblyNames[category];
 
-            //XDocument document = await XDocument.LoadAsync(sourceStream, LoadOptions.None, Task.Factory.CancellationToken);
-            XDocument document = XDocument.Load(sourceStream, LoadOptions.None);
+            XDocument document = await XDocument.LoadAsync(sourceStream, LoadOptions.None, Task.Factory.CancellationToken);
+            //XDocument document = XDocument.Load(sourceStream, LoadOptions.None);
             var root = document.Root;
             root.Element("assembly").Element("name").Value = assembleName;
             var docMembers = GetXmlMembers(root);// root.Element("members").Elements("member");
