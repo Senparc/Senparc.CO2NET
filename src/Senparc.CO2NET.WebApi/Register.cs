@@ -69,7 +69,7 @@ namespace Senparc.CO2NET.WebApi
                                 continue;
                             }
 
-                            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly /*| BindingFlags.Static | BindingFlags.InvokeMethod*/);
+                            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Static /*| BindingFlags.Static | BindingFlags.InvokeMethod*/);
 
                             foreach (var method in methods)
                             {
@@ -79,8 +79,12 @@ namespace Senparc.CO2NET.WebApi
                                     var apiBindAttr = attr as ApiBindAttribute;
                                     if (!WebApiEngine.WeixinApiAssemblyNames.ContainsKey(apiBindAttr.Category))
                                     {
-                                        var newNameSpace = $"Senparc.DynamicWebApi.{Regex.Replace(apiBindAttr.Category,@"[\s\.\(\)]","")}";//TODO:可以换成缓存命名空间等更加特殊的前缀
-                                        WebApiEngine.WeixinApiAssemblyNames.TryAdd(apiBindAttr.Category, newNameSpace);
+                                        var newNameSpace = $"Senparc.DynamicWebApi.{Regex.Replace(apiBindAttr.Category, @"[\s\.\(\)]", "")}";//TODO:可以换成缓存命名空间等更加特殊的前缀
+                                        var addSuccess = WebApiEngine.WeixinApiAssemblyNames.TryAdd(apiBindAttr.Category, newNameSpace);
+                                        if (!addSuccess)
+                                        {
+                                            SenparcTrace.SendCustomLog($"动态API未添加成功！", $"信息：[{apiBindAttr.Category} - {newNameSpace}]");
+                                        }
                                     }
                                     ApiBindInfoCollection.Instance.Add(method, apiBindAttr);
                                 }

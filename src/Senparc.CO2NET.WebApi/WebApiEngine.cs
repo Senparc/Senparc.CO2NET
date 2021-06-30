@@ -428,8 +428,6 @@ namespace Senparc.CO2NET.WebApi
                 root.Element("assembly").Element("name").Value = assembleName;
                 var docMembers = GetXmlMembers(root);// root.Element("members").Elements("member");
 
-
-
                 double dtlong = 0;
 
                 //var dtDoc = SystemTime.Now;
