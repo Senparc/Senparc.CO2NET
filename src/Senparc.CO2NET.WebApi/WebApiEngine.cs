@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -178,14 +179,14 @@ namespace Senparc.CO2NET.WebApi
 
                     //TODO:引入Swagger
 
-                    ////Controller已经使用过一次SwaggerOperationAttribute
-                    //var t2_3 = typeof(SwaggerOperationAttribute);
-                    //var tagName = new[] { $"{keyName}:{apiBindGroupName}" };
-                    //var tagAttrBuilder = new CustomAttributeBuilder(t2_3.GetConstructor(new Type[] { typeof(string), typeof(string) }),
-                    //    new object[] { (string)null, (string)null },
-                    //    new[] { t2_3.GetProperty("Tags") }, new[] { tagName });
-                    //setPropMthdBldr.SetCustomAttribute(tagAttrBuilder);
-                    ////其他Method排序方法参考：https://stackoverflow.com/questions/34175018/grouping-of-api-methods-in-documentation-is-there-some-custom-attribute
+                    //Controller已经使用过一次SwaggerOperationAttribute
+                    var t2_3 = typeof(SwaggerOperationAttribute);
+                    var tagName = new[] { $"{keyName}:{apiBindGroupName}" };
+                    var tagAttrBuilder = new CustomAttributeBuilder(t2_3.GetConstructor(new Type[] { typeof(string), typeof(string) }),
+                        new object[] { (string)null, (string)null },
+                        new[] { t2_3.GetProperty("Tags") }, new[] { tagName });
+                    setPropMthdBldr.SetCustomAttribute(tagAttrBuilder);
+                    //其他Method排序方法参考：https://stackoverflow.com/questions/34175018/grouping-of-api-methods-in-documentation-is-there-some-custom-attribute
 
                     //TODO:
 

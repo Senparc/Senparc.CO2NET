@@ -47,10 +47,12 @@
 		<DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.WebApi.xml</DocumentationFile>
 	</PropertyGroup>-->
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
-		
+
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
+
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />

@@ -51,6 +51,11 @@ namespace Senparc.CO2NET.Sample.netcore3
 
             //.NET Core 3.0 for Swagger https://www.thecodebuzz.com/swagger-api-documentation-in-net-core-3-0/
 
+
+            WebApiEngine wae = new WebApiEngine(new FindWeixinApiService(), 400, true);
+            wae.InitDynamicApi(builder, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data"));
+
+
             //添加Swagger
             services.AddSwaggerGen(c =>
             {
@@ -84,27 +89,27 @@ namespace Senparc.CO2NET.Sample.netcore3
                     //}
                 }
 
-                //分组显示  https://www.cnblogs.com/toiv/archive/2018/07/28/9379249.html
-                c.DocInclusionPredicate((docName, apiDesc) =>
-                {
-                    if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo))
-                    {
-                        return false;
-                    }
+                ////分组显示  https://www.cnblogs.com/toiv/archive/2018/07/28/9379249.html
+                //c.DocInclusionPredicate((docName, apiDesc) =>
+                //{
+                //    if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo))
+                //    {
+                //        return false;
+                //    }
 
-                    var versions = methodInfo.DeclaringType
-                          .GetCustomAttributes(true)
-                          .OfType<SwaggerOperationAttribute>()
-                          .Select(z => z.Tags[0].Split(':')[0]);
+                //    var versions = methodInfo.DeclaringType
+                //          .GetCustomAttributes(true)
+                //          .OfType<SwaggerOperationAttribute>()
+                //          .Select(z => z.Tags[0].Split(':')[0]);
 
-                    if (versions.FirstOrDefault() == null)
-                    {
-                        return false;//不符合要求的都不显示
-                    }
+                //    if (versions.FirstOrDefault() == null)
+                //    {
+                //        return false;//不符合要求的都不显示
+                //    }
 
-                    //docName: $"{neucharApiDocAssembly.Key}-v1"
-                    return versions.Any(z => docName.StartsWith(z));
-                });
+                //    //docName: $"{neucharApiDocAssembly.Key}-v1"
+                //    return versions.Any(z => docName.StartsWith(z));
+                //});
 
                 c.OrderActionsBy(z => z.RelativePath);
                 //c.DescribeAllEnumsAsStrings();//枚举显示字符串
@@ -155,10 +160,6 @@ namespace Senparc.CO2NET.Sample.netcore3
                 */
 
             });
-
-            WebApiEngine wae = new WebApiEngine(new FindWeixinApiService(), 400, true);
-            wae.InitDynamicApi(builder, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data"));
-
             #endregion
 
 
@@ -182,14 +183,6 @@ namespace Senparc.CO2NET.Sample.netcore3
             app.UseRouting();
 
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-
 
             // 启动 CO2NET 全局注册，必须！
             app.UseSenparcGlobal(env, senparcSetting.Value, register =>
@@ -297,6 +290,15 @@ namespace Senparc.CO2NET.Sample.netcore3
                 c.OAuthClientId("e65ea785b96b442a919965ccf857aba3");//客服端名称
                 c.OAuthAppName("微信 API Swagger 文档 "); // 描述
             });
+
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+
         }
 
         /// <summary>
