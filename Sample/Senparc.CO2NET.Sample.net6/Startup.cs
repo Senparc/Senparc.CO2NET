@@ -63,7 +63,7 @@ namespace Senparc.CO2NET.Sample.netcore3
                     {
                         Title = $"CO2NET Dynamic WebApi Engine : {neucharApiDocAssembly.Key}",
                         Version = $"v{version}",//"v16.5.4"
-                        Description = $"Senparc CO2NET WebApi 自生成引擎（{neucharApiDocAssembly.Key} - v{version}）",
+                        Description = $"Senparc CO2NET WebApi 动态引擎（{neucharApiDocAssembly.Key} - v{version}）",
                         //License = new OpenApiLicense()
                         //{
                         //    Name = "Apache License Version 2.0",
@@ -72,7 +72,7 @@ namespace Senparc.CO2NET.Sample.netcore3
                         Contact = new OpenApiContact()
                         {
                             Email = "zsu@senparc.com",
-                            Name = "Senparc SDK Team",
+                            Name = "Senparc Team",
                             Url = new Uri("https://www.senparc.com")
                         },
                         //TermsOfService = new Uri("https://github.com/JeffreySu/WeiXinMPSDK")

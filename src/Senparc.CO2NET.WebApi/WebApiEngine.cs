@@ -57,10 +57,10 @@ namespace Senparc.CO2NET.WebApi
         /// 控制台打印日志
         /// </summary>
         /// <param name="msg"></param>
-        /// <param name="addLogCondition"></param>
-        private void WriteLog(string msg, bool addLogCondition = false)
+        /// <param name="hideLog"></param>
+        private void WriteLog(string msg, bool hideLog = false)
         {
-            if (!addLogCondition || _showDetailApiLog)
+            if (!hideLog || _showDetailApiLog)
             {
                 Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId:00}] {SystemTime.Now:yyyy-MM-dd HH:ss:mm.ffff}\t\t{msg}");
             }
@@ -580,10 +580,7 @@ namespace Senparc.CO2NET.WebApi
             //生成文档
             var docMethodName = $"{methodInfo.DeclaringType.FullName}.{methodInfo.Name}";//以(结尾确定匹配到完整的方法名
 
-            if (_showDetailApiLog)
-            {
-                WriteLog($"\t search for docName:  {docMethodName}");//\t\tSDK Method：{apiMethodInfo.ToString()}
-            }
+            WriteLog($"\t search for docName:  {docMethodName}");//\t\tSDK Method：{apiMethodInfo.ToString()}
 
             if (docMembersCollection.ContainsKey(docMethodName))
             {

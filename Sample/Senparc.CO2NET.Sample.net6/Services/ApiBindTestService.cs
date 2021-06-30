@@ -12,13 +12,11 @@ namespace Senparc.CO2NET.Sample.net6.Services
         {
             return $"{name}:{value}";
         }
-
-
     }
 
     public static class StaticApiBindTestService
     {
-        [ApiBind("CO2NET", "StaticApiBindTest.TestApi")]
+        [ApiBind("CO2NETStatic", "StaticApiBindTest.TestApi")]
         public static string TestApi(string name, int value)
         {
             return $"{name}:{value}";
