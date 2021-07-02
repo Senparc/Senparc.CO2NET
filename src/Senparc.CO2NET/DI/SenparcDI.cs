@@ -39,7 +39,7 @@ namespace Senparc.CO2NET
     public static class SenparcDI
     {
         //public const string SENPARC_DI_THREAD_SERVICE_PROVIDER = "___SenparcDIThreadServiceProvider";
-        public const string SENPARC_DI_THREAD_SERVICE_Scope = "___SenparcDIThreadScope";
+        public const string SENPARC_DI_THREAD_SERVICE_SCOPE = "___SenparcDIThreadScope";
 
         /// <summary>
         /// 全局 ServiceCollection
@@ -77,7 +77,7 @@ namespace Senparc.CO2NET
         {
             get
             {
-                var threadServiceScope = Thread.GetData(Thread.GetNamedDataSlot(SENPARC_DI_THREAD_SERVICE_Scope)) as IServiceScope;
+                var threadServiceScope = Thread.GetData(Thread.GetNamedDataSlot(SENPARC_DI_THREAD_SERVICE_SCOPE)) as IServiceScope;
                 return threadServiceScope;
             }
         }
