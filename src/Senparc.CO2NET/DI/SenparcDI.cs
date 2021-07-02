@@ -20,6 +20,9 @@
     修改标识：pengweiqhca - 201901527
     修改描述：v0.8.2 添加 SenparcDI.ResetGlobalIServiceProvider(this IServiceCollection serviceCollection) 方法
 
+    修改标识：pengweiqhca - 20210702
+    修改描述：1.4.400.2 增加 GetService() 方法
+
 ----------------------------------------------------------------*/
 
 #if !NET45
@@ -52,26 +55,11 @@ namespace Senparc.CO2NET
         //    return GlobalServiceCollection;
         //}
 
-        private static object _globalIServiceProviderLock = new object();
-        private static object _threadIServiceProviderLock = new object();
+        //private static object _globalIServiceProviderLock = new object();
+        //private static object _threadIServiceProviderLock = new object();
 
         private static IServiceProvider _globalServiceProvider;
 
-        /// <summary>
-        /// 全局 IServiceCollection 对象
-        /// </summary>
-        [Obsolete("已过期，请使用系统的注入方式", true)]
-        public static IServiceProvider GlobalServiceProvider
-        {
-            get
-            {
-                return _globalServiceProvider ?? throw new Exception("请在 Startup.cs 注册过程中，使用 services.AddSenparcGlobalServices() 方法提供全局统一的 ServiceProvider");
-            }
-            set
-            {
-                _globalServiceProvider = value;
-            }
-        }
 
         /// <summary>
         /// 从 GlobalServiceCollection 重新 Build，生成新的 IServiceProvider
@@ -94,6 +82,46 @@ namespace Senparc.CO2NET
             }
         }
 
+        /// <summary>
+        /// 通过 GetServiceProvider() 方法执行 .GetService() 方法
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object GetService(Type type)
+        {
+            return GetServiceProvider().GetService(type);
+        }
+
+
+        ///// <summary>
+        ///// 使用 .net core 默认的 DI 方法获得实例（推荐）
+        ///// <para>如果未注册，抛出异常 </para>
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <returns></returns>
+        //public static T GetService<T>(this IServiceProvider serviceProvider)
+        //{
+        //    return (T)serviceProvider.GetService(typeof(T));
+        //}
+
+
+        /* 过期方法
+
+        /// <summary>
+        /// 全局 IServiceCollection 对象
+        /// </summary>
+        [Obsolete("已过期，请使用系统的注入方式", true)]
+        public static IServiceProvider GlobalServiceProvider
+        {
+            get
+            {
+                return _globalServiceProvider ?? throw new Exception("请在 Startup.cs 注册过程中，使用 services.AddSenparcGlobalServices() 方法提供全局统一的 ServiceProvider");
+            }
+            set
+            {
+                _globalServiceProvider = value;
+            }
+        }
 
         /// <summary>
         /// 获取 ServiceProvider
@@ -182,18 +210,6 @@ namespace Senparc.CO2NET
             return GlobalServiceProvider.GetService<T>();
         }
 
-        ///// <summary>
-        ///// 使用 .net core 默认的 DI 方法获得实例（推荐）
-        ///// <para>如果未注册，抛出异常 </para>
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <returns></returns>
-        //public static T GetService<T>(this IServiceProvider serviceProvider)
-        //{
-        //    return (T)serviceProvider.GetService(typeof(T));
-        //}
-
-
 
         /// <summary>
         /// 重置 GlobalIServiceProvider 对象，重新从 serviceCollection.BuildServiceProvider() 生成对象
@@ -204,6 +220,7 @@ namespace Senparc.CO2NET
             GlobalServiceProvider = serviceCollection.BuildServiceProvider();
             return GlobalServiceProvider;
         }
+        */
     }
 }
 #endif

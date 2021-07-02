@@ -22,7 +22,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace Senparc.CO2NET.Sample.netcore3
+namespace Senparc.CO2NET.Sample.net6
 {
     public class Startup
     {

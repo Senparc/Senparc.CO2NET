@@ -16,9 +16,10 @@ namespace Senparc.CO2NET.Sample.net6.Controllers
 
         [HttpPost]
         [SwaggerOperationAttribute(Tags = new[] { "v2.0:版本2.0" })]
-        public string OnPost(string name,int value)
+        public string OnPost(string name, int value)
         {
             return $"{name}:{value}";
         }
+
     }
 }
