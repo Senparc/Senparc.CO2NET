@@ -11,7 +11,7 @@ namespace Senparc.CO2NET.WebApi
     {
         Post,
         Get,
-        Pub,
+        Put,
         Delete
     }
 }

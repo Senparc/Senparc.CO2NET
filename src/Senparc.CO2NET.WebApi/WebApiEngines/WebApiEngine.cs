@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Concurrent;
@@ -8,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +30,7 @@ namespace Senparc.CO2NET.WebApi
 
         private bool _showDetailApiLog = false;
         private readonly Lazy<FindApiService> _findWeixinApiService;
+        private readonly DefaultAction _defaultAction;
         private readonly bool _copyCustomAttributes;
         private int _taskCount;
         private Type _typeOfApiBind = typeof(ApiBindAttribute);
@@ -39,12 +38,14 @@ namespace Senparc.CO2NET.WebApi
         /// <summary>
         /// WebApiEngine
         /// </summary>
-        /// <param name="findWeixinApiService"></param>
         /// <param name="taskCount">同时执行线程数</param>
         /// <param name="showDetailApiLog"></param>
-        public WebApiEngine(bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false)
+        /// <param name="copyCustomAttributes"></param>
+        /// <param name="defaultAction">默认请求类型，如 Post，Get</param>
+        public WebApiEngine(DefaultAction defaultAction = DefaultAction.Post, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false)
         {
             _findWeixinApiService = new Lazy<FindApiService>(new FindApiService());
+            _defaultAction = defaultAction;
             _copyCustomAttributes = copyCustomAttributes;
             _taskCount = taskCount;
             _showDetailApiLog = showDetailApiLog;
@@ -214,8 +215,18 @@ namespace Senparc.CO2NET.WebApi
                     WriteLog($"added Api path: {apiPath}", true);
 
                     //[HttpPost]
-                    var t3 = typeof(HttpPostAttribute);//默认都使用 Post
-                    setPropMthdBldr.SetCustomAttribute(new CustomAttributeBuilder(t3.GetConstructor(new Type[0]), new object[0]));
+                    Type tActionMethod = _defaultAction switch
+                    {
+                        DefaultAction.Post => typeof(HttpPostAttribute),
+                        DefaultAction.Get => typeof(HttpGetAttribute),
+                        DefaultAction.Put => typeof(HttpPutAttribute),
+                        DefaultAction.Delete => typeof(HttpDeleteAttribute),
+                        _ => typeof(HttpPostAttribute),//默认都使用 Post
+                    };
+                    
+                    setPropMthdBldr.SetCustomAttribute(new CustomAttributeBuilder(tActionMethod.GetConstructor(new Type[0]), new object[0]));
+
+                    //TODO：复制 Class 特性 -> 创建接口或类进行集中接口定义
 
                     //添加默认已有特性
                     if (_copyCustomAttributes)
@@ -416,7 +427,7 @@ namespace Senparc.CO2NET.WebApi
 
             //动态创建程序集
             AssemblyName dynamicApiAssembly = new AssemblyName(assembleName); //Assembly.GetExecutingAssembly().GetName();// new AssemblyName("DynamicAssembly");
-            //AppDomain currentDomain = Thread.GetDomain();
+                                                                              //AppDomain currentDomain = Thread.GetDomain();
             AssemblyBuilder dynamicAssemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(dynamicApiAssembly, AssemblyBuilderAccess.RunAndCollect);
 
             //动态创建模块
@@ -635,13 +646,13 @@ namespace Senparc.CO2NET.WebApi
 
                     apiIndex++;
 
-                    #region 创建 API 方法
+                #region 创建 API 方法
 
-                    BuildApiForOneThread(apiBindGroup, apiBindInfoBlock, apiMethodName, dynamicAssembly.ControllerKeyName, dynamicAssembly.Tb,
-                        dynamicAssembly.FbServiceProvider, docMembersCollection, apiIndex);
+                BuildApiForOneThread(apiBindGroup, apiBindInfoBlock, apiMethodName, dynamicAssembly.ControllerKeyName, dynamicAssembly.Tb,
+                dynamicAssembly.FbServiceProvider, docMembersCollection, apiIndex);
 
-                    #endregion
-                });
+                #endregion
+            });
                 taskList.Add(apiTask);
             }
 
