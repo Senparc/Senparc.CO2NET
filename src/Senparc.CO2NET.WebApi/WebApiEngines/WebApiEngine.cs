@@ -28,13 +28,13 @@ namespace Senparc.CO2NET.WebApi
         /// <summary>
         /// API 方法附加属性
         /// </summary>
-        public static Func<MethodInfo, IEnumerable<Attribute>> AdditionalAttributeFunc { get; internal set; }
+        public static Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> AdditionalAttributeFunc { get; internal set; }
 
         private bool _showDetailApiLog = false;
         private readonly Lazy<FindApiService> _findWeixinApiService;
         private readonly bool _copyCustomAttributes;
         private int _taskCount;
-
+        private Type _typeOfApiBind = typeof(ApiBindAttribute);
 
         /// <summary>
         /// WebApiEngine
@@ -224,20 +224,29 @@ namespace Senparc.CO2NET.WebApi
 
                         foreach (var item in customAttrs)
                         {
-                            if (item.AttributeType == typeof(ApiBindAttribute))
+                            if (item.AttributeType == _typeOfApiBind)
                             {
                                 continue;
                             }
 
-                            var attrType = item.GetType();
                             var attrBuilder = new CustomAttributeBuilder(item.Constructor, item.ConstructorArguments.Select(z => z.Value).ToArray());
                             setPropMthdBldr.SetCustomAttribute(attrBuilder);
                         }
                     }
-                   
 
                     //添加用户自定义特性
-                    AdditionalAttributeFunc?.Invoke(apiMethodInfo);
+                    if (AdditionalAttributeFunc != null)
+                    {
+                        var additionalAttrs = AdditionalAttributeFunc(apiMethodInfo);
+                        if (additionalAttrs != null)
+                        {
+                            foreach (var item in additionalAttrs)
+                            {
+                                setPropMthdBldr.SetCustomAttribute(item);
+                            }
+                        }
+                    }
+
 
                     //用户限制  ——  Jeffrey Su 2021.06.18
                     //var t4 = typeof(UserAuthorizeAttribute);//[UserAuthorize("UserOnly")]

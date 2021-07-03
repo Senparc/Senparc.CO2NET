@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 
 namespace Senparc.CO2NET.Sample.net6.Services
 {
@@ -18,7 +21,8 @@ namespace Senparc.CO2NET.Sample.net6.Services
         }
 
         [ApiBind("CO2NET", "ApiBindTest.TestApi")]
-        [MyTestAttribute("TestCopyAttrFromTestApi")]
+        [MyTest("TestCopyAttrFromTestApi")]
+        //[AuthorizeAttribute()]
         public string TestApi(string name, int value)
         {
             return $"[from ApiBindTestService.TestApi]{name}:{value}";
@@ -96,6 +100,20 @@ namespace Senparc.CO2NET.Sample.net6.Services
             ParameterBuilder pb1 = setPropMthdBldr.DefineParameter(1, ParameterAttributes.None, "name");
             ParameterBuilder pb2 = setPropMthdBldr.DefineParameter(2, ParameterAttributes.None, "val");
 
+            //复制特性
+            var customAttrs = CustomAttributeData.GetCustomAttributes(typeof(ApiBindTestService).GetMember("TestApi").First());
+
+            foreach (var item in customAttrs)
+            {
+                if (item.AttributeType == typeof(ApiBindAttribute))
+                {
+                    continue;
+                }
+
+                var attrBuilder = new CustomAttributeBuilder(item.Constructor, item.ConstructorArguments.Select(z => z.Value).ToArray());
+                setPropMthdBldr.SetCustomAttribute(attrBuilder);
+            }
+
             //执行具体方法
             var il = setPropMthdBldr.GetILGenerator();
 
@@ -168,7 +186,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 Console.WriteLine(testMethod.GetParameters().Count());
                 var result = testMethod.Invoke(ctrl, new object[] { "来自 ApiBindTestService.DynamicBuild() 方法，看到此信息表明自动生成 API 已成功", 1 });
                 Console.WriteLine("result:" + result);
-                Console.WriteLine("MethodName: " + string.Join('|', ctrl.GetType().GetMethod("Tests").GetCustomAttributes().Select(z => z.GetType().Name)));
+                Console.WriteLine("Attrs Name: " + string.Join('|', ctrl.GetType().GetMethod("Tests").GetCustomAttributes().Select(z => z.GetType().Name)));
             }
             builder.AddApplicationPart(mb.Assembly);
         }
@@ -217,8 +235,17 @@ namespace Senparc.CO2NET.Sample.net6.Services
         public MyTestAttribute(string name)
         {
             Name = name;
+            StackTrace st = new StackTrace(true);
+            var fromName = st.GetFrame(1);
             //输出 TypeId，用于确认当前特性是非被复制到动态 API，并被调用
-            Console.WriteLine($"MyTestAttribute [{Name}] TypeId Hash:{this.TypeId.GetHashCode()}");
+            //Console.WriteLine("-------------");
+            Console.WriteLine($"MyTestAttribute [{Name}] TypeId Hash:{this.TypeId.GetHashCode()}  Caller ：{fromName?.GetMethod()?.Name}");
+            //foreach (var item in st.GetFrames())
+            //{
+            //    Console.WriteLine($"\t{item.GetMethod()?.Name}");
+            //}
+            //Console.WriteLine("-------------");
+
         }
     }
 }
