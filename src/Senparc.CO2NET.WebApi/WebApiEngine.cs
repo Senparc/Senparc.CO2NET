@@ -302,27 +302,9 @@ namespace Senparc.CO2NET.WebApi
                     {
                         //非静态方法
 
-                        IServiceProvider _serviceProvider = null;
-
-                        //il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
+                        il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
                         //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
                         il.Emit(OpCodes.Nop); // the first one in arguments list
-
-                        //il.Emit(OpCodes.Ldtoken,)
-
-                        il.Emit(OpCodes.Ldarg, 0); //非静态方法，需要 this 指针
-
-                        
-
-                        //_serviceProvider.GetService(typeof(MyClass));
-                        var serviceProviderLocal = il.DeclareLocal(typeof(IServiceProvider));
-
-                        MethodInfo getScopeMethodInfo = typeof(IServiceProvider).GetMethod("GetService");
-
-
-                        //il.Emit(OpCodes.Ldfld, _serviceProvider);
-
-
                         for (int i = 0; i < parameters.Length; i++)
                         {
                             var p = parameters[i];
@@ -393,6 +375,24 @@ namespace Senparc.CO2NET.WebApi
             //动态创建类 XXController
             var controllerClassName = $"{controllerKeyName}Controller";
             TypeBuilder tb = mb.DefineType(controllerClassName, TypeAttributes.Public, typeof(ControllerBase) /*typeof(Controller)*/);
+
+            //私有变量
+            var fbServiceProvider = tb.DefineField("_serviceProvider", typeof(IServiceProvider), FieldAttributes.Private | FieldAttributes.InitOnly);
+
+            //设置构造函数
+            var ctorBuilder = tb.DefineConstructor(MethodAttributes.Public, CallingConventions.HasThis, new[] { typeof(IServiceProvider) });
+            var ctorIl = ctorBuilder.GetILGenerator();
+            ctorIl.Emit(OpCodes.Ldarg, 0);
+            //Define the reflection ConstructorInfor for System.Object
+            ConstructorInfo conObj = typeof(object).GetConstructor(new Type[0]);
+            ctorIl.Emit(OpCodes.Call, conObj);//调用base的默认ctor
+            ctorIl.Emit(OpCodes.Nop);
+            ctorIl.Emit(OpCodes.Nop);
+            ctorIl.Emit(OpCodes.Ldarg, 0);
+            ctorIl.Emit(OpCodes.Ldarg, 1);
+            ctorIl.Emit(OpCodes.Stfld, fbServiceProvider);
+            ctorIl.Emit(OpCodes.Ret);
+
             //ConstructorBuilder constructor = tb.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
             //多个Get参数放在同一个Controller中可能发生问题：NotSupportedException: HTTP method "GET" & path "wxapi/WeChat_OfficialAccount/CommonApi_CreateMenu" overloaded by actions - WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly),WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly). Actions require unique method/path combination for OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
 

@@ -46,6 +46,7 @@ namespace Senparc.CO2NET.Sample.netcore3
             services.AddSenparcGlobalServices(Configuration);
 
 
+            services.AddScoped(typeof(ApiBindTestService));
             services.AddScoped(typeof(EntityApiBindTestService));
 
             using (var scope = services.BuildServiceProvider().CreateScope())

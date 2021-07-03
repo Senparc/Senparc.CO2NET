@@ -30,7 +30,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
         /// </summary>
         public void DynamicBuild(IServiceCollection services)
         {
-            AssemblyName dynamicApiAssembly = new AssemblyName("DynamicTest");
+            AssemblyName dynamicApiAssembly = new AssemblyName("DynamicTests");
             //AppDomain currentDomain = Thread.GetDomain();
             AssemblyBuilder dynamicAssemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(dynamicApiAssembly, AssemblyBuilderAccess.RunAndCollect);
 
@@ -45,10 +45,10 @@ namespace Senparc.CO2NET.Sample.net6.Services
             //tb.SetCustomAttribute(new CustomAttributeBuilder(t1.GetConstructor(new Type[] { typeof(string) }), new object[]  }));
 
             var t2 = typeof(RouteAttribute);
-            tb.SetCustomAttribute(new CustomAttributeBuilder(t2.GetConstructor(new Type[] { typeof(string) }), new object[] { $"/myapi/[controller]" }));
+            tb.SetCustomAttribute(new CustomAttributeBuilder(t2.GetConstructor(new Type[] { typeof(string) }), new object[] { $"myapi/[controller]" }));
 
             //私有变量
-            var fbServiceProvider = tb.DefineField("_serviceProvider", typeof(IServiceProvider), FieldAttributes.Private /*| FieldAttributes.InitOnly*/);
+            var fbServiceProvider = tb.DefineField("_serviceProvider", typeof(IServiceProvider), FieldAttributes.Private | FieldAttributes.InitOnly);
 
             //设置构造函数
             var ctorBuilder = tb.DefineConstructor(MethodAttributes.Public, CallingConventions.HasThis, new[] { typeof(IServiceProvider) });
@@ -67,7 +67,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
 
             //设置方法
             MethodBuilder setPropMthdBldr =
-                      tb.DefineMethod("Test", MethodAttributes.Public | MethodAttributes.Virtual,
+                      tb.DefineMethod("Tests", MethodAttributes.Public | MethodAttributes.Virtual,
                       typeof(string), //返回类型
                       new[] { typeof(string), typeof(int) }//输入参数
                       );
@@ -90,11 +90,12 @@ namespace Senparc.CO2NET.Sample.net6.Services
             //[HttpGet]
             var t3 = typeof(HttpGetAttribute);
             setPropMthdBldr.SetCustomAttribute(new CustomAttributeBuilder(t3.GetConstructor(new Type[0]), new object[0]));
-            ParameterBuilder pb1 = setPropMthdBldr.DefineParameter(1, ParameterAttributes.None, "name");
-            ParameterBuilder pb2 = setPropMthdBldr.DefineParameter(2, ParameterAttributes.None, "val");
             //var tFromQuery = typeof(FromQueryAttribute);
             //pb2.SetCustomAttribute(new CustomAttributeBuilder(tFromQuery.GetConstructor(new Type[0]), new object[0]));
 
+
+            ParameterBuilder pb1 = setPropMthdBldr.DefineParameter(1, ParameterAttributes.None, "name");
+            ParameterBuilder pb2 = setPropMthdBldr.DefineParameter(2, ParameterAttributes.None, "val");
 
             //执行具体方法
             var il = setPropMthdBldr.GetILGenerator();
@@ -104,26 +105,42 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 var invokeClassType = typeof(EntityApiBindTestService);
                 //Label lblEnd = il.DefineLabel();
 
+                LocalBuilder local = il.DeclareLocal(typeof(string)); // create a local variable
+
+                /* 最简洁方法
+                il.Emit(OpCodes.Nop);
+                //il.Emit(OpCodes.Ldarg, 0);
+                il.Emit(OpCodes.Ldarg, 1);
+                il.Emit(OpCodes.Stloc, local);
+                il.Emit(OpCodes.Ldloc, local);
+                il.Emit(OpCodes.Ret);
+                */
+
                 //实例方法
-                il.Emit(OpCodes.Nop); // the first one in arguments list
-                il.Emit(OpCodes.Stloc,0);
-                il.Emit(OpCodes.Ldarg,0);
+                il.Emit(OpCodes.Nop);
+                il.Emit(OpCodes.Ldarg, 0);
+
+                //il.Emit(OpCodes.Ldarg, 1);
+                //il.Emit(OpCodes.Stloc, 0);
+                //il.Emit(OpCodes.Ldloc, 0);
+
+
                 il.Emit(OpCodes.Ldfld, fbServiceProvider);
-                //il.Emit(OpCodes.Ldtoken, invokeClassType);
-                //il.Emit(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle"));
+
+                il.Emit(OpCodes.Ldtoken, invokeClassType);
+                il.Emit(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle"));
+
                 il.Emit(OpCodes.Callvirt, typeof(IServiceProvider).GetMethod("GetService"));
                 il.Emit(OpCodes.Isinst, invokeClassType);
-                il.Emit(OpCodes.Stloc,0);
-                il.Emit(OpCodes.Ldloc,0);
-                il.Emit(OpCodes.Ldarg,1);
-                il.Emit(OpCodes.Ldarg,2);
+                il.Emit(OpCodes.Stloc, 0);
+                il.Emit(OpCodes.Ldloc, 0);
+                il.Emit(OpCodes.Ldarg, 1);
+                il.Emit(OpCodes.Ldarg, 2);
                 il.Emit(OpCodes.Callvirt, invokeClassType.GetMethod("TestApi"));
-                il.Emit(OpCodes.Stloc,1);
-                il.Emit(OpCodes.Ldloc,1);
-                //il.Emit(OpCodes.Stloc_2);
+                il.Emit(OpCodes.Stloc, local);
                 //il.Emit(OpCodes.Br_S, lblEnd);
                 //il.MarkLabel(lblEnd);
-                //il.Emit(OpCodes.Ldloc_2);
+                il.Emit(OpCodes.Ldloc, local);
                 il.Emit(OpCodes.Ret);
             }
             else
@@ -136,8 +153,8 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 il.Emit(OpCodes.Ldarg, 1); // the first one in arguments list
                 il.Emit(OpCodes.Ldarg, 2);
                 il.Emit(OpCodes.Call, methodInfo);
-                il.Emit(OpCodes.Stloc, 0); // set local variable
-                il.Emit(OpCodes.Ldloc, 0); // load local variable to stack 
+                il.Emit(OpCodes.Stloc, local); // set local variable
+                il.Emit(OpCodes.Ldloc, local); // load local variable to stack 
                 //il.Emit(OpCodes.Stloc, 1);
                 //Label lbl = il.DefineLabel();
                 //il.Emit(OpCodes.Br_S, lbl);
@@ -146,7 +163,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 il.Emit(OpCodes.Ret);
             }
 
-
+            var t = tb.CreateType();
             TypeInfo objectTypeInfo = tb.CreateTypeInfo();
             var myType = objectTypeInfo.AsType();
             services.AddScoped(myType);
@@ -156,11 +173,11 @@ namespace Senparc.CO2NET.Sample.net6.Services
             {
                 var ctrl = scope.ServiceProvider.GetService(myType);
                 Console.WriteLine(ctrl.GetType());
-                var testMethod = ctrl.GetType().GetMethod("Test");
+                var testMethod = ctrl.GetType().GetMethod("Tests");
                 Console.WriteLine(testMethod.GetParameters().Count());
-                var result = testMethod.Invoke(ctrl, new object?[] { "from dynamic", 1 });
+                var result = testMethod.Invoke(ctrl, new object?[] { "from dynamic 2", 1 });
                 Console.WriteLine("result:" + result);
-                Console.WriteLine("MethodName: " + string.Join('|', ctrl.GetType().GetMethod("Test").GetCustomAttributes().Select(z => z.GetType().Name)));
+                Console.WriteLine("MethodName: " + string.Join('|', ctrl.GetType().GetMethod("Tests").GetCustomAttributes().Select(z => z.GetType().Name)));
             }
         }
     }
@@ -179,8 +196,8 @@ namespace Senparc.CO2NET.Sample.net6.Services
         {
             var addMsg = "";
 
-            //var testService = _serviceProvider.GetService(typeof(ApiBindTestService)) as ApiBindTestService;
-            //addMsg = testService.TestApi(name, value);
+            var testService = _serviceProvider.GetService(typeof(ApiBindTestService)) as ApiBindTestService;
+            addMsg = testService.TestApi(name, value);
 
             return $"[from EntityApiBindTestService.TestApi]{name}:{value} - {addMsg}";
         }
