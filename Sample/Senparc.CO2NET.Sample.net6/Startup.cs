@@ -21,6 +21,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using Swashbuckle.AspNetCore.Annotations;
+using Senparc.CO2NET.Sample.net6.Services;
 
 namespace Senparc.CO2NET.Sample.netcore3
 {
@@ -43,6 +44,16 @@ namespace Senparc.CO2NET.Sample.netcore3
             var builder = services.AddMvcCore();
             //Senparc.CO2NET È«¾Ö×¢²á£¨±ØÐë£©
             services.AddSenparcGlobalServices(Configuration);
+
+
+            services.AddScoped(typeof(EntityApiBindTestService));
+
+            using (var scope = services.BuildServiceProvider().CreateScope())
+            {
+                var apiBindTestService = new ApiBindTestService(scope.ServiceProvider);
+                apiBindTestService.DynamicBuild(services);
+            }
+            
 
             #region Swagger
 

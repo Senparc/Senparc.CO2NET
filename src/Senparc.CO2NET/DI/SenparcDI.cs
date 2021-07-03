@@ -94,7 +94,30 @@ namespace Senparc.CO2NET
             }
         }
 
+        /// <summary>
+        /// 通过 GetServiceProvider() 方法执行 .GetService() 方法
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object GetService(Type type)
+        {
+            return GetServiceProvider().GetService(type);
+        }
 
+
+        ///// <summary>
+        ///// 使用 .net core 默认的 DI 方法获得实例（推荐）
+        ///// <para>如果未注册，抛出异常 </para>
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <returns></returns>
+        //public static T GetService<T>(this IServiceProvider serviceProvider)
+        //{
+        //    return (T)serviceProvider.GetService(typeof(T));
+        //}
+
+
+        /* 过期方法
         /// <summary>
         /// 获取 ServiceProvider
         /// </summary>
@@ -182,18 +205,6 @@ namespace Senparc.CO2NET
             return GlobalServiceProvider.GetService<T>();
         }
 
-        ///// <summary>
-        ///// 使用 .net core 默认的 DI 方法获得实例（推荐）
-        ///// <para>如果未注册，抛出异常 </para>
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <returns></returns>
-        //public static T GetService<T>(this IServiceProvider serviceProvider)
-        //{
-        //    return (T)serviceProvider.GetService(typeof(T));
-        //}
-
-
 
         /// <summary>
         /// 重置 GlobalIServiceProvider 对象，重新从 serviceCollection.BuildServiceProvider() 生成对象
@@ -204,6 +215,7 @@ namespace Senparc.CO2NET
             GlobalServiceProvider = serviceCollection.BuildServiceProvider();
             return GlobalServiceProvider;
         }
+        */
     }
 }
 #endif

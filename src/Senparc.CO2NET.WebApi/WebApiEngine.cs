@@ -264,35 +264,92 @@ namespace Senparc.CO2NET.WebApi
                                                                            //动态创建字段   
                     }
 
-
-                    //il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
-                    //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
-                    il.Emit(OpCodes.Nop); // the first one in arguments list
-                    for (int i = 0; i < parameters.Length; i++)
+                    if (methodInfo.IsStatic)
                     {
-                        var p = parameters[i];
-                        //WriteLog($"\t\t Ldarg: {p.Name}\t isOptional:{p.IsOptional}\t defaultValue:{p.DefaultValue}");
-                        il.Emit(OpCodes.Ldarg, i + 1); // the first one in arguments list
+                        //静态方法
+
+
+                        //il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
+                        //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
+                        il.Emit(OpCodes.Nop); // the first one in arguments list
+                        for (int i = 0; i < parameters.Length; i++)
+                        {
+                            var p = parameters[i];
+                            //WriteLog($"\t\t Ldarg: {p.Name}\t isOptional:{p.IsOptional}\t defaultValue:{p.DefaultValue}");
+                            il.Emit(OpCodes.Ldarg, i + 1); // the first one in arguments list
+                        }
+
+                        //WriteLog($"\t get static method: {methodInfo.Name}\t returnType:{methodInfo.ReturnType}");
+
+                        il.Emit(OpCodes.Call, methodInfo);
+
+                        ////if (apiMethodInfo.GetType() == apiMethodInfo.DeclaringType)//注意：此处使用不同的方法，会出现不同的异常
+                        //if (typeof(Senparc.Weixin.MP.CommonAPIs.CommonApi) == methodInfo.DeclaringType)
+                        //    il.Emit(OpCodes.Call, methodInfo);
+                        //else
+                        //    il.Emit(OpCodes.Callvirt, methodInfo);
+
+                        if (methodInfo.ReturnType != typeof(void))
+                        {
+                            il.Emit(OpCodes.Stloc, local); // set local variable
+                            il.Emit(OpCodes.Ldloc, local); // load local variable to stack 
+                                                           //il.Emit(OpCodes.Pop);
+                        }
+
+                        il.Emit(OpCodes.Ret);
+                    }
+                    else
+                    {
+                        //非静态方法
+
+                        IServiceProvider _serviceProvider = null;
+
+                        //il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
+                        //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
+                        il.Emit(OpCodes.Nop); // the first one in arguments list
+
+                        //il.Emit(OpCodes.Ldtoken,)
+
+                        il.Emit(OpCodes.Ldarg, 0); //非静态方法，需要 this 指针
+
+                        
+
+                        //_serviceProvider.GetService(typeof(MyClass));
+                        var serviceProviderLocal = il.DeclareLocal(typeof(IServiceProvider));
+
+                        MethodInfo getScopeMethodInfo = typeof(IServiceProvider).GetMethod("GetService");
+
+
+                        //il.Emit(OpCodes.Ldfld, _serviceProvider);
+
+
+                        for (int i = 0; i < parameters.Length; i++)
+                        {
+                            var p = parameters[i];
+                            //WriteLog($"\t\t Ldarg: {p.Name}\t isOptional:{p.IsOptional}\t defaultValue:{p.DefaultValue}");
+                            il.Emit(OpCodes.Ldarg, i + 1); // the first one in arguments list
+                        }
+
+                        //WriteLog($"\t get static method: {methodInfo.Name}\t returnType:{methodInfo.ReturnType}");
+
+                        il.Emit(OpCodes.Call, methodInfo);
+
+                        ////if (apiMethodInfo.GetType() == apiMethodInfo.DeclaringType)//注意：此处使用不同的方法，会出现不同的异常
+                        //if (typeof(Senparc.Weixin.MP.CommonAPIs.CommonApi) == methodInfo.DeclaringType)
+                        //    il.Emit(OpCodes.Call, methodInfo);
+                        //else
+                        //    il.Emit(OpCodes.Callvirt, methodInfo);
+
+                        if (methodInfo.ReturnType != typeof(void))
+                        {
+                            il.Emit(OpCodes.Stloc, local); // set local variable
+                            il.Emit(OpCodes.Ldloc, local); // load local variable to stack 
+                                                           //il.Emit(OpCodes.Pop);
+                        }
+
+                        il.Emit(OpCodes.Ret);
                     }
 
-                    //WriteLog($"\t get static method: {methodInfo.Name}\t returnType:{methodInfo.ReturnType}");
-
-                    il.Emit(OpCodes.Call, methodInfo);
-
-                    ////if (apiMethodInfo.GetType() == apiMethodInfo.DeclaringType)//注意：此处使用不同的方法，会出现不同的异常
-                    //if (typeof(Senparc.Weixin.MP.CommonAPIs.CommonApi) == methodInfo.DeclaringType)
-                    //    il.Emit(OpCodes.Call, methodInfo);
-                    //else
-                    //    il.Emit(OpCodes.Callvirt, methodInfo);
-
-                    if (methodInfo.ReturnType != typeof(void))
-                    {
-                        il.Emit(OpCodes.Stloc, local); // set local variable
-                        il.Emit(OpCodes.Ldloc, local); // load local variable to stack 
-                                                       //il.Emit(OpCodes.Pop);
-                    }
-
-                    il.Emit(OpCodes.Ret);
 
                     //var dt1 = SystemTime.Now;
                     //修改XML文档
@@ -522,7 +579,7 @@ namespace Senparc.CO2NET.WebApi
 
                     apiIndex++;
 
-                    #region ApiBuild
+                    #region 创建 API 方法
 
                     BuildApiForOneThread(apiBindGroup, apiBindInfoBlock, apiMethodName, dynamicAssembly.ControllerKeyName, dynamicAssembly.Tb, docMembersCollection, apiIndex);
 
