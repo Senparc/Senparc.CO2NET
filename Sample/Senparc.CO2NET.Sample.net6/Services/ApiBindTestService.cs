@@ -2,25 +2,21 @@
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Threading.Tasks;
-using Senparc.CO2NET.Exceptions;
-using Senparc.CO2NET.WebApi;
 
 namespace Senparc.CO2NET.Sample.net6.Services
 {
+    /// <summary>
+    /// 用于测试动态生成 API 的 Service
+    /// </summary>
     public class ApiBindTestService
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public ApiBindTestService(IServiceProvider serviceProvider)
+        public ApiBindTestService()
         {
-            this._serviceProvider = serviceProvider;
         }
-        
+
         [ApiBind("CO2NET", "ApiBindTest.TestApi")]
         public string TestApi(string name, int value)
         {
@@ -28,7 +24,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
         }
 
         /// <summary>
-        /// 动态构建API代码
+        /// 动态构建API代码，核心代码测试
         /// </summary>
         public void DynamicBuild(IServiceCollection services, IMvcCoreBuilder builder)
         {
@@ -109,7 +105,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
 
                 LocalBuilder local = il.DeclareLocal(typeof(string)); // create a local variable
 
-                /* 最简洁方法
+                /* 最简洁方法（独立使用）
                 il.Emit(OpCodes.Nop);
                 //il.Emit(OpCodes.Ldarg, 0);
                 il.Emit(OpCodes.Ldarg, 1);
@@ -121,13 +117,9 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 //实例方法
                 il.Emit(OpCodes.Nop);
                 il.Emit(OpCodes.Ldarg, 0);
-
-
                 il.Emit(OpCodes.Ldfld, fbServiceProvider);
-
                 il.Emit(OpCodes.Ldtoken, invokeClassType);
                 il.Emit(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle"));
-
                 il.Emit(OpCodes.Callvirt, typeof(IServiceProvider).GetMethod("GetService"));
                 il.Emit(OpCodes.Isinst, invokeClassType);
                 il.Emit(OpCodes.Stloc, 0);
@@ -173,7 +165,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 Console.WriteLine(ctrl.GetType());
                 var testMethod = ctrl.GetType().GetMethod("Tests");
                 Console.WriteLine(testMethod.GetParameters().Count());
-                var result = testMethod.Invoke(ctrl, new object?[] { "from dynamic 2", 1 });
+                var result = testMethod.Invoke(ctrl, new object?[] { "来自 ApiBindTestService.DynamicBuild() 方法，看到此信息表明自动生成 API 已成功", 1 });
                 Console.WriteLine("result:" + result);
                 Console.WriteLine("MethodName: " + string.Join('|', ctrl.GetType().GetMethod("Tests").GetCustomAttributes().Select(z => z.GetType().Name)));
             }
@@ -181,6 +173,9 @@ namespace Senparc.CO2NET.Sample.net6.Services
         }
     }
 
+    /// <summary>
+    /// 用于测试自动生成的 WebApi 方法内调用非静态方法，并且包含 IServiceProvider，使用 DI 自动注入
+    /// </summary>
     public class EntityApiBindTestService
     {
         private readonly IServiceProvider _serviceProvider;
@@ -191,7 +186,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
         }
 
         //[ApiBind("CO2NETEntity", "EntityApiBindTest.TestApi")]
-        public string TestApi(string name, int value)
+        public string TestApi(string name, int value = 666)
         {
             var addMsg = "";
 
@@ -202,10 +197,13 @@ namespace Senparc.CO2NET.Sample.net6.Services
         }
     }
 
+    /// <summary>
+    /// 用于测试自动生成的 WebApi 方法内调用静态方法
+    /// </summary>
     public static class StaticApiBindTestService
     {
         //[ApiBind("CO2NETStatic", "StaticApiBindTest.TestApi")]
-        public static string TestApi(string name, int value)
+        public static string TestApi(string name = "Senparc", int value = 999)
         {
             return $"[from StaticApiBindTestService.TestApi]{name}:{value}";
         }

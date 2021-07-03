@@ -9,7 +9,7 @@ namespace Senparc.CO2NET.WebApi
     public class FindApiService
     {
         /// <summary>
-        /// 微信 API 文档记录
+        /// API 文档记录
         /// </summary>
         public static List<ApiItem> ApiItemList { get; set; } = new List<ApiItem>();
 

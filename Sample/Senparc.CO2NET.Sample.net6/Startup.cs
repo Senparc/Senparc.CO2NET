@@ -47,24 +47,20 @@ namespace Senparc.CO2NET.Sample.net6
             services.AddSenparcGlobalServices(Configuration);
 
 
-            services.AddScoped(typeof(ApiBindTestService));
-            services.AddScoped(typeof(EntityApiBindTestService));
+
 
             var appDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data");
             services.UseAndInitDynamicApi(builder, appDataPath, 400, false);
 
             //∂¿¡¢≤‚ ‘
-            using (var scope = services.BuildServiceProvider().CreateScope())
-            {
-                var apiBindTestService = new ApiBindTestService(scope.ServiceProvider);
-                apiBindTestService.DynamicBuild(services, builder);
-            }
-
+            services.AddScoped(typeof(ApiBindTestService));
+            services.AddScoped(typeof(EntityApiBindTestService));
+            var apiBindTestService = new ApiBindTestService();
+            apiBindTestService.DynamicBuild(services, builder);
 
             #region Swagger
 
-            services.AddScoped<FindApiService>();
-            services.AddScoped<WebApiEngine>();
+
 
             //.NET Core 3.0 for Swagger https://www.thecodebuzz.com/swagger-api-documentation-in-net-core-3-0/
 
