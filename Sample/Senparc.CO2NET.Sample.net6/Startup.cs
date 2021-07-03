@@ -22,6 +22,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using Swashbuckle.AspNetCore.Annotations;
 using Senparc.CO2NET.Sample.net6.Services;
+using Senparc.CO2NET.WebApi.WebApiEngines;
 
 namespace Senparc.CO2NET.Sample.net6
 {
@@ -49,32 +50,32 @@ namespace Senparc.CO2NET.Sample.net6
             services.AddScoped(typeof(ApiBindTestService));
             services.AddScoped(typeof(EntityApiBindTestService));
 
+            var appDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data");
+            services.UseAndInitDynamicApi(builder, appDataPath, 400, false);
+
+            //独立测试
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
                 var apiBindTestService = new ApiBindTestService(scope.ServiceProvider);
-                apiBindTestService.DynamicBuild(services);
+                apiBindTestService.DynamicBuild(services, builder);
             }
-            
+
 
             #region Swagger
 
-            services.AddScoped<FindWeixinApiService>();
+            services.AddScoped<FindApiService>();
             services.AddScoped<WebApiEngine>();
 
             //.NET Core 3.0 for Swagger https://www.thecodebuzz.com/swagger-api-documentation-in-net-core-3-0/
-
-
-            WebApiEngine wae = new WebApiEngine(new FindWeixinApiService(), 400, true);
-            wae.InitDynamicApi(builder, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data"));
 
 
             //添加Swagger
             services.AddSwaggerGen(c =>
             {
                 //为每个程序集创建文档
-                foreach (var neucharApiDocAssembly in WebApiEngine.WeixinApiAssemblyCollection)
+                foreach (var neucharApiDocAssembly in WebApiEngine.ApiAssemblyCollection)
                 {
-                    var version = WebApiEngine.WeixinApiAssemblyVersions[neucharApiDocAssembly.Key]; //neucharApiDocAssembly.Value.ImageRuntimeVersion;
+                    var version = WebApiEngine.ApiAssemblyVersions[neucharApiDocAssembly.Key]; //neucharApiDocAssembly.Value.ImageRuntimeVersion;
                     var docName = WebApiEngine.GetDocName(neucharApiDocAssembly.Key);
                     c.SwaggerDoc(docName, new OpenApiInfo
                     {
@@ -286,11 +287,11 @@ namespace Senparc.CO2NET.Sample.net6
                 //c.InjectJavascript("/js/tongji.js");
                 c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
 
-                foreach (var co2netApiDocAssembly in WebApiEngine.WeixinApiAssemblyCollection)
+                foreach (var co2netApiDocAssembly in WebApiEngine.ApiAssemblyCollection)
                 {
 
                     //TODO:真实的动态版本号
-                    var verion = WebApiEngine.WeixinApiAssemblyVersions[co2netApiDocAssembly.Key]; //neucharApiDocAssembly.Value.ImageRuntimeVersion;
+                    var verion = WebApiEngine.ApiAssemblyVersions[co2netApiDocAssembly.Key]; //neucharApiDocAssembly.Value.ImageRuntimeVersion;
                     var docName = WebApiEngine.GetDocName(co2netApiDocAssembly.Key);
 
                     //Console.WriteLine($"\tAdd {docName}");

@@ -20,25 +20,25 @@ namespace Senparc.CO2NET.WebApi
     {
         //private static ConcurrentDictionary<string, Dictionary<string, ApiBindInfo>> _apiCollection = new ConcurrentDictionary<string, Dictionary<string, ApiBindInfo>>();
 
-        public static ConcurrentDictionary<string, Assembly> WeixinApiAssemblyCollection { get; set; } = new ConcurrentDictionary<string, Assembly>();
+        public static ConcurrentDictionary<string, Assembly> ApiAssemblyCollection { get; set; } = new ConcurrentDictionary<string, Assembly>();
 
-        public static ConcurrentDictionary<string, string> WeixinApiAssemblyNames { get; private set; } = new ConcurrentDictionary<string, string>(); //= "WeixinApiAssembly";
-        public static ConcurrentDictionary<string, string> WeixinApiAssemblyVersions { get; private set; } = new ConcurrentDictionary<string, string>(); //= "WeixinApiAssembly";
+        public static ConcurrentDictionary<string, string> ApiAssemblyNames { get; private set; } = new ConcurrentDictionary<string, string>(); //= "WeixinApiAssembly";
+        public static ConcurrentDictionary<string, string> ApiAssemblyVersions { get; private set; } = new ConcurrentDictionary<string, string>(); //= "WeixinApiAssembly";
 
         private bool _showDetailApiLog = false;
-        private readonly FindWeixinApiService _findWeixinApiService;
+        private readonly Lazy<FindApiService> _findWeixinApiService;
         private int _taskCount;
 
 
         /// <summary>
-        /// 
+        /// WebApiEngine
         /// </summary>
         /// <param name="findWeixinApiService"></param>
         /// <param name="taskCount">同时执行线程数</param>
         /// <param name="showDetailApiLog"></param>
-        public WebApiEngine(FindWeixinApiService findWeixinApiService = null, int taskCount = 4, bool showDetailApiLog = false)
+        public WebApiEngine(int taskCount = 4, bool showDetailApiLog = false)
         {
-            _findWeixinApiService = findWeixinApiService ?? new FindWeixinApiService();
+            _findWeixinApiService = new Lazy<FindApiService>(new FindApiService());
             _taskCount = taskCount;
             _showDetailApiLog = showDetailApiLog;
 
@@ -59,7 +59,7 @@ namespace Senparc.CO2NET.WebApi
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="hideLog"></param>
-        private void WriteLog(string msg, bool hideLog = false)
+        internal void WriteLog(string msg, bool hideLog = false)
         {
             if (!hideLog || _showDetailApiLog)
             {
@@ -74,7 +74,7 @@ namespace Senparc.CO2NET.WebApi
         /// <returns></returns>
         public static string GetDocName(string category)
         {
-            return $"{category}-v{WeixinApiAssemblyVersions[category]}";
+            return $"{category}-v{ApiAssemblyVersions[category]}";
         }
 
 
@@ -82,7 +82,7 @@ namespace Senparc.CO2NET.WebApi
         /// 检查并创建物理目录
         /// </summary>
         /// <param name="appDataPath">App_Data 文件夹路径</param>
-        private void TryCreateDir(string appDataPath)
+        internal void TryCreateDir(string appDataPath)
         {
             var dir = Path.Combine(/*SiteConfig.WebRootPath, "..", "App_Data",*/ appDataPath, "ApiDocXml");// ServerUtility.ContentRootMapPath("~/App_Data/ApiDocXml");
             WriteLog($"检查目录：{dir}");
@@ -93,6 +93,9 @@ namespace Senparc.CO2NET.WebApi
             }
         }
 
+        /// <summary>
+        /// 从 xml 中获取方法名和参数的正则
+        /// </summary>
         private static Regex regex = new Regex(@"(M\:)(?<docName>[^(]+)(?<paramsPart>\({1}.+\){1})", RegexOptions.Compiled);
 
 
@@ -145,9 +148,9 @@ namespace Senparc.CO2NET.WebApi
                     var category = apiBindGroup.Key;
 
                     //定义版本号
-                    if (!WeixinApiAssemblyVersions.ContainsKey(category))
+                    if (!ApiAssemblyVersions.ContainsKey(category))
                     {
-                        WeixinApiAssemblyVersions[category] = apiBindInfo.Value.MethodInfo.DeclaringType.Assembly.GetName().Version.ToString(3);
+                        ApiAssemblyVersions[category] = apiBindInfo.Value.MethodInfo.DeclaringType.Assembly.GetName().Version.ToString(3);
                     }
 
                     //当前方法名称
@@ -193,7 +196,7 @@ namespace Senparc.CO2NET.WebApi
                     //[Route("/wxapi/...", Name="xxx")]
                     var t2_4 = typeof(RouteAttribute);
                     //var routeName = apiBindInfo.Value.ApiBindAttribute.Name.Split('.')[0];
-                    var showStaticApiState = $"-{(apiMethodInfo.IsStatic ? "_StaticApi" : "_NotStaticApi")}";
+                    var showStaticApiState = $"{(apiMethodInfo.IsStatic ? "_StaticApi" : "_NonStaticApi")}";
                     var apiPath = $"/wxapi/{keyName}/{apiBindGroupName}/{apiName}{showStaticApiState}";
                     var routeAttrBuilder = new CustomAttributeBuilder(t2_4.GetConstructor(new Type[] { typeof(string) }),
                         new object[] { apiPath }/*, new[] { t2_2.GetProperty("Name") }, new[] { routeName }*/);
@@ -307,8 +310,8 @@ namespace Senparc.CO2NET.WebApi
 
                         il.Emit(OpCodes.Nop); // the first one in arguments list
                         il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
-                        //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
-                      
+                                                  //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
+
 
                         //il.Emit(OpCodes.Nop);
                         //il.Emit(OpCodes.Ldarg, 0);
@@ -474,7 +477,7 @@ namespace Senparc.CO2NET.WebApi
             WriteLog("", true);
             WriteLog($"==== Begin BuildWebApi for {category} ====", true);
 
-            if (apiBindGroup.Count() == 0 || !WeixinApiAssemblyNames.ContainsKey(category))
+            if (apiBindGroup.Count() == 0 || !ApiAssemblyNames.ContainsKey(category))
             {
                 WriteLog($"apiBindGroup 不存在可用对象: {category}");
                 return 0;
@@ -487,7 +490,7 @@ namespace Senparc.CO2NET.WebApi
             var sourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(sourceName);
 
             var useXml = sourceStream?.Length > 0;
-            var assembleName = WeixinApiAssemblyNames[category];
+            var assembleName = ApiAssemblyNames[category];
             ConcurrentDictionary<string, DocMembersCollectionValue> docMembersCollection = new ConcurrentDictionary<string, DocMembersCollectionValue>();
             XDocument document = null;
             if (useXml)
@@ -518,7 +521,7 @@ namespace Senparc.CO2NET.WebApi
                             //记录接口信息，用于搜索
                             var isAsync = docMethodInfo.MethodName.EndsWith("Async", StringComparison.OrdinalIgnoreCase) ||
                                             docMethodInfo.MethodName.Contains("Async``", StringComparison.OrdinalIgnoreCase);//是否是异步方法
-                            _findWeixinApiService.RecordApiItem(category, docMethodInfo.MethodName, docMethodInfo.ParamsPart,
+                            _findWeixinApiService.Value.RecordApiItem(category, docMethodInfo.MethodName, docMethodInfo.ParamsPart,
                                 x.Element("summary")?.Value, isAsync);
                         }
                     }
@@ -637,7 +640,7 @@ namespace Senparc.CO2NET.WebApi
 
             #endregion
 
-            WeixinApiAssemblyCollection[category] = dynamicAssembly.Mb.Assembly;//储存程序集
+            ApiAssemblyCollection[category] = dynamicAssembly.Mb.Assembly;//储存程序集
 
             var timeCost = SystemTime.NowDiff(dt1);
 
@@ -670,86 +673,11 @@ namespace Senparc.CO2NET.WebApi
         /// 获取 WeixinApiAssembly 程序集对象
         /// </summary>
         /// <returns></returns>
-        public Assembly GetWeixinApiAssembly(string category)
+        public Assembly GetApiAssembly(string category)
         {
-            return WeixinApiAssemblyCollection[category];
+            return ApiAssemblyCollection[category];
         }
 
-        /// <summary>
-        /// 初始化动态API
-        /// </summary>
-        /// <param name="appDataPath">App_Data 文件夹路径</param>
-        public void InitDynamicApi(IMvcCoreBuilder builder, string appDataPath)
-        {
-            //预载入程序集，确保在下一步 RegisterApiBind() 可以顺利读取所有接口
-            //bool preLoad = typeof(Senparc.Weixin.MP.AdvancedAPIs.AddGroupResult).ToString() != null
-            //    && typeof(Senparc.Weixin.WxOpen.AdvancedAPIs.CustomApi).ToString() != null
-            //    && typeof(Senparc.Weixin.Open.AccountAPIs.AccountApi).ToString() != null
-            //    && typeof(Senparc.Weixin.TenPay.V3.TenPayV3).ToString() != null
-            //    && typeof(Senparc.Weixin.Work.AdvancedAPIs.AppApi).ToString() != null;
 
-            bool preLoad = true;
-
-            //确保 ApiBind 已经执行
-            Senparc.CO2NET.WebApi.Register.RegisterApiBind(preLoad);//参数为 true，确保重试绑定成功
-
-            //确保目录存在
-            TryCreateDir(appDataPath);
-
-            var dt1 = SystemTime.Now;
-
-            var weixinApis = ApiBind.ApiBindInfoCollection.Instance.GetGroupedCollection();
-
-            ConcurrentDictionary<string, (int apiCount, double costMs)> assemblyBuildStat = new ConcurrentDictionary<string, (int, double)>();
-
-            List<Task> taskList = new List<Task>();
-
-            //因为模块数量比较少，这里使用异步反而会开销略大
-            //WeixinApiAssemblyNames.Keys.AsParallel().ForAll(async category =>
-            //WeixinApiAssemblyNames.Keys.ToList().ForEach(category =>
-            foreach (var category in WeixinApiAssemblyNames.Keys)
-            {
-                var wrapperTask = Task.Factory.StartNew(async () =>
-                {
-                    //此处使用 Task 效率并不比 Keys.ToList() 方法快
-                    WriteLog($"get weixinApis groups: {weixinApis.Count()}, now dealing with: {category}");
-                    var dtStart = SystemTime.Now;
-                    var apiBindGroup = weixinApis.FirstOrDefault(z => z.Key == category);
-
-                    var apiCount = await BuildWebApi(apiBindGroup).ConfigureAwait(false);
-                    var weixinApiAssembly = GetWeixinApiAssembly(category);
-
-                    builder.AddApplicationPart(weixinApiAssembly);//程序部件：https://docs.microsoft.com/zh-cn/aspnet/core/mvc/advanced/app-parts?view=aspnetcore-2.2
-
-                    assemblyBuildStat[category] = (apiCount: apiCount, costMs: SystemTime.DiffTotalMS(dtStart));
-                });
-                taskList.Add(wrapperTask.Unwrap());
-            }
-
-            Task.WaitAll(taskList.ToArray());
-
-            #region 统计数据
-            var totalCost = SystemTime.DiffTotalMS(dt1);
-
-            //Func<object, int, string> outputResult = (text, length) => string.Format($"{{0,{length}}}", text);
-
-            WriteLog("");
-            WriteLog(string.Format("{0,25} | {1,15}| {2,15} |{3,15}", "Category Name", "API Count", "Cost Time", "Average"));
-            WriteLog(new string('-', 80));
-            foreach (var item in assemblyBuildStat)
-            {
-                var apiCount = item.Value.apiCount;
-                var cost = item.Value.costMs;
-                var avg = Math.Round(cost / apiCount, 3);
-                WriteLog(string.Format("{0,25} | {1,15}| {2,15} |{3,15}", item.Key, apiCount, $"{cost}ms", $"{avg}ms"));
-            }
-            WriteLog(new string('=', 80));
-            var totalApi = assemblyBuildStat.Values.Sum(z => z.apiCount);
-            WriteLog(string.Format("{0,25} | {1,15}| {2,15} |{3,15}", $"Total", $"API Count:{totalApi}", $"Cost:{totalCost}ms", $""));
-            WriteLog($"Total Average Cost: {Math.Round(totalCost / totalApi, 4)} ms \t\tTask Count: {_taskCount}");
-            WriteLog("");
-
-            #endregion
-        }
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Senparc.CO2NET.WebApi
 {
-    public class FindWeixinApiService
+    public class FindApiService
     {
         /// <summary>
         /// 微信 API 文档记录

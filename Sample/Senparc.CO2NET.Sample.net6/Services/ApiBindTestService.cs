@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
 using Senparc.CO2NET.Exceptions;
+using Senparc.CO2NET.WebApi;
 
 namespace Senparc.CO2NET.Sample.net6.Services
 {
@@ -29,7 +30,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
         /// <summary>
         /// 动态构建API代码
         /// </summary>
-        public void DynamicBuild(IServiceCollection services)
+        public void DynamicBuild(IServiceCollection services, IMvcCoreBuilder builder)
         {
             AssemblyName dynamicApiAssembly = new AssemblyName("DynamicTests");
             //AppDomain currentDomain = Thread.GetDomain();
@@ -176,6 +177,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 Console.WriteLine("result:" + result);
                 Console.WriteLine("MethodName: " + string.Join('|', ctrl.GetType().GetMethod("Tests").GetCustomAttributes().Select(z => z.GetType().Name)));
             }
+            builder.AddApplicationPart(mb.Assembly);
         }
     }
 

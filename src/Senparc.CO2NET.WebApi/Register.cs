@@ -77,10 +77,10 @@ namespace Senparc.CO2NET.WebApi
                                 foreach (var attr in attrs)
                                 {
                                     var apiBindAttr = attr as ApiBindAttribute;
-                                    if (!WebApiEngine.WeixinApiAssemblyNames.ContainsKey(apiBindAttr.Category))
+                                    if (!WebApiEngine.ApiAssemblyNames.ContainsKey(apiBindAttr.Category))
                                     {
                                         var newNameSpace = $"Senparc.DynamicWebApi.{Regex.Replace(apiBindAttr.Category, @"[\s\.\(\)]", "")}";//TODO:可以换成缓存命名空间等更加特殊的前缀
-                                        var addSuccess = WebApiEngine.WeixinApiAssemblyNames.TryAdd(apiBindAttr.Category, newNameSpace);
+                                        var addSuccess = WebApiEngine.ApiAssemblyNames.TryAdd(apiBindAttr.Category, newNameSpace);
                                         if (!addSuccess)
                                         {
                                             SenparcTrace.SendCustomLog($"动态API未添加成功！", $"信息：[{apiBindAttr.Category} - {newNameSpace}]");
