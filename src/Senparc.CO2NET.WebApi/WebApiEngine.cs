@@ -129,7 +129,7 @@ namespace Senparc.CO2NET.WebApi
         /// </summary>
         private void BuildApiForOneThread(IGrouping<string, KeyValuePair<string, ApiBindInfo>> apiBindGroup,
             KeyValuePair<string, ApiBindInfo>[] apiBindInfoBlock, ConcurrentDictionary<string, string> apiMethodName, string keyName,
-            TypeBuilder tb, ConcurrentDictionary<string, DocMembersCollectionValue> docMembersCollection, int apiIndex)
+            TypeBuilder tb, FieldBuilder fbServiceProvider, ConcurrentDictionary<string, DocMembersCollectionValue> docMembersCollection, int apiIndex)
         {
             foreach (var apiBindInfo in apiBindInfoBlock)
             {
@@ -172,7 +172,7 @@ namespace Senparc.CO2NET.WebApi
                     WriteLog($"\t search API[{apiIndex}]: {keyName} > {apiBindInfo.Key} -> {methodName} \t\t Parameters Count: {parameters.Count()}\t\t", true);
 
                     MethodBuilder setPropMthdBldr =
-                        tb.DefineMethod(methodName, MethodAttributes.Public | MethodAttributes.Virtual,
+                        tb.DefineMethod(methodName + (apiMethodInfo.IsStatic ? "_IsStatic" : "_IsEntity"), MethodAttributes.Public | MethodAttributes.Virtual,
                         apiMethodInfo.ReturnType, //返回类型
                         parameters.Select(z => z.ParameterType).ToArray()//输入参数
                         );
@@ -302,7 +302,7 @@ namespace Senparc.CO2NET.WebApi
                     {
                         //非静态方法
 
-                        il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
+                        //il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
                         //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
                         il.Emit(OpCodes.Nop); // the first one in arguments list
                         for (int i = 0; i < parameters.Length; i++)
@@ -312,15 +312,31 @@ namespace Senparc.CO2NET.WebApi
                             il.Emit(OpCodes.Ldarg, i + 1); // the first one in arguments list
                         }
 
-                        //WriteLog($"\t get static method: {methodInfo.Name}\t returnType:{methodInfo.ReturnType}");
+                        var invokeClassType = methodInfo.DeclaringType;
 
-                        il.Emit(OpCodes.Call, methodInfo);
 
-                        ////if (apiMethodInfo.GetType() == apiMethodInfo.DeclaringType)//注意：此处使用不同的方法，会出现不同的异常
-                        //if (typeof(Senparc.Weixin.MP.CommonAPIs.CommonApi) == methodInfo.DeclaringType)
-                        //    il.Emit(OpCodes.Call, methodInfo);
-                        //else
-                        //    il.Emit(OpCodes.Callvirt, methodInfo);
+                        il.Emit(OpCodes.Nop);
+                        il.Emit(OpCodes.Ldarg, 0);
+
+
+                        il.Emit(OpCodes.Ldfld, fbServiceProvider);
+
+                        il.Emit(OpCodes.Ldtoken, invokeClassType);
+                        il.Emit(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle"));
+
+                        il.Emit(OpCodes.Callvirt, typeof(IServiceProvider).GetMethod("GetService"));
+                        il.Emit(OpCodes.Isinst, invokeClassType);
+                        il.Emit(OpCodes.Stloc, 0);
+                        il.Emit(OpCodes.Ldloc, 0);
+                        il.Emit(OpCodes.Ldarg, 1);
+                        il.Emit(OpCodes.Ldarg, 2);
+                        il.Emit(OpCodes.Callvirt, methodInfo);
+                        il.Emit(OpCodes.Stloc, local);
+                        //il.Emit(OpCodes.Br_S, lblEnd);
+                        //il.MarkLabel(lblEnd);
+                        il.Emit(OpCodes.Ldloc, local);
+                        il.Emit(OpCodes.Ret);
+
 
                         if (methodInfo.ReturnType != typeof(void))
                         {
@@ -435,7 +451,7 @@ namespace Senparc.CO2NET.WebApi
             //    new[] { t2_0.GetProperty("GroupName") }, new[] { t2_2_groupName });
             //tb.SetCustomAttribute(t2_2_tagAttrBuilder);
 
-            return new BuildDynamicAssemblyResult(dynamicAssemblyBuilder, mb, tb, controllerKeyName);
+            return new BuildDynamicAssemblyResult(dynamicAssemblyBuilder, mb, tb, fbServiceProvider, controllerKeyName);
         }
 
         /// <summary>
@@ -581,7 +597,8 @@ namespace Senparc.CO2NET.WebApi
 
                     #region 创建 API 方法
 
-                    BuildApiForOneThread(apiBindGroup, apiBindInfoBlock, apiMethodName, dynamicAssembly.ControllerKeyName, dynamicAssembly.Tb, docMembersCollection, apiIndex);
+                    BuildApiForOneThread(apiBindGroup, apiBindInfoBlock, apiMethodName, dynamicAssembly.ControllerKeyName, dynamicAssembly.Tb,
+                        dynamicAssembly.FbServiceProvider, docMembersCollection, apiIndex);
 
                     #endregion
                 });

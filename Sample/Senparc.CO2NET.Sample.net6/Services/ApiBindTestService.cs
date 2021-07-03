@@ -19,7 +19,8 @@ namespace Senparc.CO2NET.Sample.net6.Services
         {
             this._serviceProvider = serviceProvider;
         }
-        //[ApiBind("CO2NET", "ApiBindTest.TestApi")]
+        
+        [ApiBind("CO2NET", "ApiBindTest.TestApi")]
         public string TestApi(string name, int value)
         {
             return $"[from ApiBindTestService.TestApi]{name}:{value}";
@@ -119,10 +120,6 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 //实例方法
                 il.Emit(OpCodes.Nop);
                 il.Emit(OpCodes.Ldarg, 0);
-
-                //il.Emit(OpCodes.Ldarg, 1);
-                //il.Emit(OpCodes.Stloc, 0);
-                //il.Emit(OpCodes.Ldloc, 0);
 
 
                 il.Emit(OpCodes.Ldfld, fbServiceProvider);
