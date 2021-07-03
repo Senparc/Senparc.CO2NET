@@ -172,7 +172,7 @@ namespace Senparc.CO2NET.WebApi
                     WriteLog($"\t search API[{apiIndex}]: {keyName} > {apiBindInfo.Key} -> {methodName} \t\t Parameters Count: {parameters.Count()}\t\t", true);
 
                     MethodBuilder setPropMthdBldr =
-                        tb.DefineMethod(methodName + (apiMethodInfo.IsStatic ? "_IsStatic" : "_IsEntity"), MethodAttributes.Public | MethodAttributes.Virtual,
+                        tb.DefineMethod(methodName + (apiMethodInfo.IsStatic ? "_StaticApi" : "_NotStaticApi"), MethodAttributes.Public | MethodAttributes.Virtual,
                         apiMethodInfo.ReturnType, //返回类型
                         parameters.Select(z => z.ParameterType).ToArray()//输入参数
                         );
@@ -193,7 +193,8 @@ namespace Senparc.CO2NET.WebApi
                     //[Route("/wxapi/...", Name="xxx")]
                     var t2_4 = typeof(RouteAttribute);
                     //var routeName = apiBindInfo.Value.ApiBindAttribute.Name.Split('.')[0];
-                    var apiPath = $"/wxapi/{keyName}/{apiBindGroupName}/{apiName}";
+                    var showStaticApiState = $"-{(apiMethodInfo.IsStatic ? "_StaticApi" : "_NotStaticApi")}";
+                    var apiPath = $"/wxapi/{keyName}/{apiBindGroupName}/{apiName}{showStaticApiState}";
                     var routeAttrBuilder = new CustomAttributeBuilder(t2_4.GetConstructor(new Type[] { typeof(string) }),
                         new object[] { apiPath }/*, new[] { t2_2.GetProperty("Name") }, new[] { routeName }*/);
                     setPropMthdBldr.SetCustomAttribute(routeAttrBuilder);
@@ -301,22 +302,16 @@ namespace Senparc.CO2NET.WebApi
                     else
                     {
                         //非静态方法
-
-                        //il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
-                        //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
-                        il.Emit(OpCodes.Nop); // the first one in arguments list
-                        for (int i = 0; i < parameters.Length; i++)
-                        {
-                            var p = parameters[i];
-                            //WriteLog($"\t\t Ldarg: {p.Name}\t isOptional:{p.IsOptional}\t defaultValue:{p.DefaultValue}");
-                            il.Emit(OpCodes.Ldarg, i + 1); // the first one in arguments list
-                        }
-
                         var invokeClassType = methodInfo.DeclaringType;
 
 
-                        il.Emit(OpCodes.Nop);
-                        il.Emit(OpCodes.Ldarg, 0);
+                        il.Emit(OpCodes.Nop); // the first one in arguments list
+                        il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
+                        //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
+                      
+
+                        //il.Emit(OpCodes.Nop);
+                        //il.Emit(OpCodes.Ldarg, 0);
 
 
                         il.Emit(OpCodes.Ldfld, fbServiceProvider);
@@ -328,15 +323,17 @@ namespace Senparc.CO2NET.WebApi
                         il.Emit(OpCodes.Isinst, invokeClassType);
                         il.Emit(OpCodes.Stloc, 0);
                         il.Emit(OpCodes.Ldloc, 0);
-                        il.Emit(OpCodes.Ldarg, 1);
-                        il.Emit(OpCodes.Ldarg, 2);
-                        il.Emit(OpCodes.Callvirt, methodInfo);
-                        il.Emit(OpCodes.Stloc, local);
-                        //il.Emit(OpCodes.Br_S, lblEnd);
-                        //il.MarkLabel(lblEnd);
-                        il.Emit(OpCodes.Ldloc, local);
-                        il.Emit(OpCodes.Ret);
 
+                        for (int i = 0; i < parameters.Length; i++)
+                        {
+                            var p = parameters[i];
+                            //WriteLog($"\t\t Ldarg: {p.Name}\t isOptional:{p.IsOptional}\t defaultValue:{p.DefaultValue}");
+                            il.Emit(OpCodes.Ldarg, i + 1); // the first one in arguments list
+                        }
+                        il.Emit(OpCodes.Callvirt, methodInfo);
+                        //il.Emit(OpCodes.Stloc, local);
+                        //il.Emit(OpCodes.Ldloc, local);
+                        //il.Emit(OpCodes.Ret);
 
                         if (methodInfo.ReturnType != typeof(void))
                         {
