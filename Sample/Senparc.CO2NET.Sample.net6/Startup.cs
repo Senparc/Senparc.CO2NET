@@ -23,7 +23,7 @@ using System.Reflection;
 using Swashbuckle.AspNetCore.Annotations;
 using Senparc.CO2NET.Sample.net6.Services;
 
-namespace Senparc.CO2NET.Sample.netcore3
+namespace Senparc.CO2NET.Sample.net6
 {
     public class Startup
     {
