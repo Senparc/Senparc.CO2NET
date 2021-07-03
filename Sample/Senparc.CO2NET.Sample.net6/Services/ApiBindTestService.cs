@@ -18,13 +18,14 @@ namespace Senparc.CO2NET.Sample.net6.Services
         }
 
         [ApiBind("CO2NET", "ApiBindTest.TestApi")]
+        [MyTestAttribute("TestCopyAttrFromTestApi")]
         public string TestApi(string name, int value)
         {
             return $"[from ApiBindTestService.TestApi]{name}:{value}";
         }
 
         /// <summary>
-        /// 动态构建API代码，核心代码测试
+        /// 动态构建API代码，部分核心代码测试
         /// </summary>
         public void DynamicBuild(IServiceCollection services, IMvcCoreBuilder builder)
         {
@@ -165,7 +166,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 Console.WriteLine(ctrl.GetType());
                 var testMethod = ctrl.GetType().GetMethod("Tests");
                 Console.WriteLine(testMethod.GetParameters().Count());
-                var result = testMethod.Invoke(ctrl, new object?[] { "来自 ApiBindTestService.DynamicBuild() 方法，看到此信息表明自动生成 API 已成功", 1 });
+                var result = testMethod.Invoke(ctrl, new object[] { "来自 ApiBindTestService.DynamicBuild() 方法，看到此信息表明自动生成 API 已成功", 1 });
                 Console.WriteLine("result:" + result);
                 Console.WriteLine("MethodName: " + string.Join('|', ctrl.GetType().GetMethod("Tests").GetCustomAttributes().Select(z => z.GetType().Name)));
             }
@@ -206,6 +207,18 @@ namespace Senparc.CO2NET.Sample.net6.Services
         public static string TestApi(string name = "Senparc", int value = 999)
         {
             return $"[from StaticApiBindTestService.TestApi]{name}:{value}";
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class MyTestAttribute : Attribute
+    {
+        public string Name { get; set; }
+        public MyTestAttribute(string name)
+        {
+            Name = name;
+            //输出 TypeId，用于确认当前特性是非被复制到动态 API，并被调用
+            Console.WriteLine($"MyTestAttribute [{Name}] TypeId Hash:{this.TypeId.GetHashCode()}");
         }
     }
 }

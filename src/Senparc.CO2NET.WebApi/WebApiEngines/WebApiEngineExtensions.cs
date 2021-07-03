@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,10 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
         /// <param name="services"></param>
         /// <param name="showDetailApiLog"></param>
         /// <param name="taskCount"></param>
-        public static void UseAndInitDynamicApi(this IServiceCollection services, IMvcCoreBuilder builder, string appDataPath, int taskCount = 4, bool showDetailApiLog = false)
+        /// <param name="additionalAttributes"></param>
+        /// <param name="additionalAttributeFunc">是否复制自定义特性（AppBindAttribute 除外）</param>
+        public static void UseAndInitDynamicApi(this IServiceCollection services, IMvcCoreBuilder builder,
+            string appDataPath, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<Attribute>> additionalAttributeFunc = null)
         {
             //预载入程序集，确保在下一步 RegisterApiBind() 可以顺利读取所有接口
             //bool preLoad = typeof(Senparc.Weixin.MP.AdvancedAPIs.AddGroupResult).ToString() != null
@@ -29,6 +33,8 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
 
             services.AddScoped<FindApiService>();
             services.AddScoped<WebApiEngine>(s => new WebApiEngine());
+
+            WebApiEngine.AdditionalAttributeFunc = additionalAttributeFunc;
 
             var webApiEngine = new WebApiEngine(taskCount, showDetailApiLog);
 

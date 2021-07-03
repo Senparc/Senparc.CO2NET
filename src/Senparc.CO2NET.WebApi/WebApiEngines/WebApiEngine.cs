@@ -25,8 +25,14 @@ namespace Senparc.CO2NET.WebApi
         public static ConcurrentDictionary<string, string> ApiAssemblyNames { get; private set; } = new ConcurrentDictionary<string, string>(); //= "WeixinApiAssembly";
         public static ConcurrentDictionary<string, string> ApiAssemblyVersions { get; private set; } = new ConcurrentDictionary<string, string>(); //= "WeixinApiAssembly";
 
+        /// <summary>
+        /// API 方法附加属性
+        /// </summary>
+        public static Func<MethodInfo, IEnumerable<Attribute>> AdditionalAttributeFunc { get; internal set; }
+
         private bool _showDetailApiLog = false;
         private readonly Lazy<FindApiService> _findWeixinApiService;
+        private readonly bool _copyCustomAttributes;
         private int _taskCount;
 
 
@@ -36,9 +42,10 @@ namespace Senparc.CO2NET.WebApi
         /// <param name="findWeixinApiService"></param>
         /// <param name="taskCount">同时执行线程数</param>
         /// <param name="showDetailApiLog"></param>
-        public WebApiEngine(int taskCount = 4, bool showDetailApiLog = false)
+        public WebApiEngine(bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false)
         {
             _findWeixinApiService = new Lazy<FindApiService>(new FindApiService());
+            _copyCustomAttributes = copyCustomAttributes;
             _taskCount = taskCount;
             _showDetailApiLog = showDetailApiLog;
 
@@ -202,11 +209,35 @@ namespace Senparc.CO2NET.WebApi
                         new object[] { apiPath }/*, new[] { t2_2.GetProperty("Name") }, new[] { routeName }*/);
                     setPropMthdBldr.SetCustomAttribute(routeAttrBuilder);
 
+                    //TODO:从ApiBind中自定义
+
                     WriteLog($"added Api path: {apiPath}", true);
 
-                    //[HttpGet]
-                    var t3 = typeof(HttpGetAttribute);
+                    //[HttpPost]
+                    var t3 = typeof(HttpPostAttribute);//默认都使用 Post
                     setPropMthdBldr.SetCustomAttribute(new CustomAttributeBuilder(t3.GetConstructor(new Type[0]), new object[0]));
+
+                    //添加默认已有特性
+                    if (_copyCustomAttributes)
+                    {
+                        var customAttrs = CustomAttributeData.GetCustomAttributes(apiMethodInfo);
+
+                        foreach (var item in customAttrs)
+                        {
+                            if (item.AttributeType == typeof(ApiBindAttribute))
+                            {
+                                continue;
+                            }
+
+                            var attrType = item.GetType();
+                            var attrBuilder = new CustomAttributeBuilder(item.Constructor, item.ConstructorArguments.Select(z => z.Value).ToArray());
+                            setPropMthdBldr.SetCustomAttribute(attrBuilder);
+                        }
+                    }
+                   
+
+                    //添加用户自定义特性
+                    AdditionalAttributeFunc?.Invoke(apiMethodInfo);
 
                     //用户限制  ——  Jeffrey Su 2021.06.18
                     //var t4 = typeof(UserAuthorizeAttribute);//[UserAuthorize("UserOnly")]
@@ -252,7 +283,7 @@ namespace Senparc.CO2NET.WebApi
                         }
                     }
 
-                    //执行具体方法
+                    //执行具体方法（body）
                     var il = setPropMthdBldr.GetILGenerator();
 
                     //FieldBuilder fb = tb.DefineField("id", typeof(System.String), FieldAttributes.Private);
