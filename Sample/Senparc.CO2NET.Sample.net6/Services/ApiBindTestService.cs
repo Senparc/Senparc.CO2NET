@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.Sample.net6.Services
 {
@@ -26,6 +27,12 @@ namespace Senparc.CO2NET.Sample.net6.Services
         public string TestApi(string name, int value)
         {
             return $"[from ApiBindTestService.TestApi]{name}:{value}";
+        }
+
+        [ApiBind("CO2NET", "ApiBindTest.TestApi2")]
+        public string TestApi2(string name, int value)
+        {
+            return $"[from ApiBindTestService.TestApi2]{name}:{value}";
         }
 
         /// <summary>
@@ -100,8 +107,11 @@ namespace Senparc.CO2NET.Sample.net6.Services
             ParameterBuilder pb1 = setPropMthdBldr.DefineParameter(1, ParameterAttributes.None, "name");
             ParameterBuilder pb2 = setPropMthdBldr.DefineParameter(2, ParameterAttributes.None, "val");
 
+            var invokeClassType = typeof(EntityApiBindTestService);
+            var invokeMethodName = "TestApi";//TestApiAsync  or TestApi
+
             //复制特性
-            var customAttrs = CustomAttributeData.GetCustomAttributes(typeof(ApiBindTestService).GetMember("TestApi").First());
+            var customAttrs = CustomAttributeData.GetCustomAttributes(invokeClassType.GetMember(invokeMethodName).First());
 
             foreach (var item in customAttrs)
             {
@@ -119,7 +129,6 @@ namespace Senparc.CO2NET.Sample.net6.Services
 
             if (true)
             {
-                var invokeClassType = typeof(EntityApiBindTestService);
                 //Label lblEnd = il.DefineLabel();
 
                 LocalBuilder local = il.DeclareLocal(typeof(string)); // create a local variable
@@ -145,10 +154,10 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 il.Emit(OpCodes.Ldloc, 0);
                 il.Emit(OpCodes.Ldarg, 1);
                 il.Emit(OpCodes.Ldarg, 2);
-                il.Emit(OpCodes.Callvirt, invokeClassType.GetMethod("TestApi"));
+                il.Emit(OpCodes.Callvirt, invokeClassType.GetMethod(invokeMethodName));
                 il.Emit(OpCodes.Stloc, local);
                 //il.Emit(OpCodes.Br_S, lblEnd);
-                //il.MarkLabel(lblEnd);
+                //il.MarkLabel(lblEnd);     
                 il.Emit(OpCodes.Ldloc, local);
                 il.Emit(OpCodes.Ret);
             }
@@ -178,16 +187,16 @@ namespace Senparc.CO2NET.Sample.net6.Services
             services.AddScoped(myType);
 
             Console.WriteLine($"\t create type:  {myType.Namespace} - {myType.FullName}");
-            using (var scope = services.BuildServiceProvider().CreateScope())
-            {
-                var ctrl = scope.ServiceProvider.GetService(myType);
-                Console.WriteLine(ctrl.GetType());
-                var testMethod = ctrl.GetType().GetMethod("Tests");
-                Console.WriteLine(testMethod.GetParameters().Count());
-                var result = testMethod.Invoke(ctrl, new object[] { "来自 ApiBindTestService.DynamicBuild() 方法，看到此信息表明自动生成 API 已成功", 1 });
-                Console.WriteLine("result:" + result);
-                Console.WriteLine("Attrs Name: " + string.Join('|', ctrl.GetType().GetMethod("Tests").GetCustomAttributes().Select(z => z.GetType().Name)));
-            }
+            //using (var scope = services.BuildServiceProvider().CreateScope())
+            //{
+            //    var ctrl = scope.ServiceProvider.GetService(myType);
+            //    Console.WriteLine(ctrl.GetType());
+            //    var testMethod = ctrl.GetType().GetMethod("Tests");
+            //    Console.WriteLine("testMethod.GetParameters().Count(): " + testMethod.GetParameters().Count());
+            //    var result = testMethod.Invoke(ctrl, new object[] { "来自 ApiBindTestService.DynamicBuild() 方法，看到此信息表明自动生成 API 已成功", 1 });
+            //    Console.WriteLine("result:" + result);
+            //    Console.WriteLine("Attrs Name: " + string.Join('|', ctrl.GetType().GetMethod("Tests").GetCustomAttributes().Select(z => z.GetType().Name)));
+            //}
             builder.AddApplicationPart(mb.Assembly);
         }
     }
@@ -205,6 +214,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
         }
 
         //[ApiBind("CO2NETEntity", "EntityApiBindTest.TestApi")]
+        [MyTest("TestCopyAttrFromTestApi in EntityApiBindTestService class")]
         public string TestApi(string name, int value = 666)
         {
             var addMsg = "";
@@ -213,6 +223,15 @@ namespace Senparc.CO2NET.Sample.net6.Services
             addMsg = testService.TestApi(name, value);
 
             return $"[from EntityApiBindTestService.TestApi]{name}:{value} - {addMsg}";
+        }
+
+        [MyTest("TestCopyAttrFromTestApiAsync in EntityApiBindTestService class")]
+        public static async Task<string> TestApiAsync(string name = "Senparc", int value = 999)
+        {
+            var msg = $"[{SystemTime.Now}] [from StaticApiBindTestService.TestApiAsync] Method";
+            await Task.Delay(1000);
+            msg += $"[{SystemTime.Now}] {name}:{value}";
+            return msg;
         }
     }
 

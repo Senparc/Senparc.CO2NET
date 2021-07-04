@@ -223,7 +223,7 @@ namespace Senparc.CO2NET.WebApi
                         DefaultAction.Delete => typeof(HttpDeleteAttribute),
                         _ => typeof(HttpPostAttribute),//默认都使用 Post
                     };
-                    
+
                     setPropMthdBldr.SetCustomAttribute(new CustomAttributeBuilder(tActionMethod.GetConstructor(new Type[0]), new object[0]));
 
                     //TODO：复制 Class 特性 -> 创建接口或类进行集中接口定义
