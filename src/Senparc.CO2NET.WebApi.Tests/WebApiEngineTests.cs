@@ -6,11 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.CO2NET.WebApi.WebApiEngines;
 
 namespace Senparc.CO2NET.WebApi.Tests
 {
     [TestClass]
-   public class WebApiEngineTests:BaseTest
+    public class WebApiEngineTests : BaseTest
     {
         [ApiBind("CO2NET", "WebApiEngineTests.TestApi")]
         public string TestApi(string name, int value)
@@ -24,8 +25,8 @@ namespace Senparc.CO2NET.WebApi.Tests
         {
             Init();
             var findWeixinApiService = ServiceProvider.GetService<FindApiService>();
-            WebApiEngine wae = new WebApiEngine(findWeixinApiService, 400);
-            wae.UseAndInitDynamicApi(MvcCoreBuilder, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data"));
+            WebApiEngine wae = new WebApiEngine(DefaultAction.Get, copyCustomAttributes: true, taskCount: 400, showDetailApiLog: true);
+            base.ServiceCollection.UseAndInitDynamicApi(MvcCoreBuilder, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data"));
         }
     }
 }
