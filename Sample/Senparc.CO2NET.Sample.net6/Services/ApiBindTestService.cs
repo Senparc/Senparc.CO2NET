@@ -40,6 +40,9 @@ namespace Senparc.CO2NET.Sample.net6.Services
         /// </summary>
         public void DynamicBuild(IServiceCollection services, IMvcCoreBuilder builder)
         {
+
+
+
             AssemblyName dynamicApiAssembly = new AssemblyName("DynamicTests");
             //AppDomain currentDomain = Thread.GetDomain();
             AssemblyBuilder dynamicAssemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(dynamicApiAssembly, AssemblyBuilderAccess.RunAndCollect);
@@ -74,11 +77,18 @@ namespace Senparc.CO2NET.Sample.net6.Services
             ctorIl.Emit(OpCodes.Stfld, fbServiceProvider);
             ctorIl.Emit(OpCodes.Ret);
 
+            var invokeClassType = typeof(EntityApiBindTestService);
+            var invokeMethodName = "TestApiAsync";//TestApiAsync  or TestApi
+            var invokeMethodInfo = invokeClassType.GetMethod(invokeMethodName);
+            Console.WriteLine("======== DynamicBuild Start ========");
+            Console.WriteLine($"invokeClassType: {invokeClassType.Name}");
+            Console.WriteLine($"invokeMethodName: {invokeMethodName}");
+            Console.WriteLine($"invokeMethod ReturnType: {invokeMethodInfo.ReturnType.Name}");
 
             //设置方法
             MethodBuilder setPropMthdBldr =
-                      tb.DefineMethod("Tests", MethodAttributes.Public | MethodAttributes.Virtual,
-                      typeof(string), //返回类型
+                      tb.DefineMethod("Tests", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,
+                      invokeMethodInfo.ReturnType, //返回类型
                       new[] { typeof(string), typeof(int) }//输入参数
                       );
 
@@ -107,11 +117,10 @@ namespace Senparc.CO2NET.Sample.net6.Services
             ParameterBuilder pb1 = setPropMthdBldr.DefineParameter(1, ParameterAttributes.None, "name");
             ParameterBuilder pb2 = setPropMthdBldr.DefineParameter(2, ParameterAttributes.None, "val");
 
-            var invokeClassType = typeof(EntityApiBindTestService);
-            var invokeMethodName = "TestApi";//TestApiAsync  or TestApi
+
 
             //复制特性
-            var customAttrs = CustomAttributeData.GetCustomAttributes(invokeClassType.GetMember(invokeMethodName).First());
+            var customAttrs = CustomAttributeData.GetCustomAttributes(invokeMethodInfo);
 
             foreach (var item in customAttrs)
             {
@@ -154,7 +163,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 il.Emit(OpCodes.Ldloc, 0);
                 il.Emit(OpCodes.Ldarg, 1);
                 il.Emit(OpCodes.Ldarg, 2);
-                il.Emit(OpCodes.Callvirt, invokeClassType.GetMethod(invokeMethodName));
+                il.Emit(OpCodes.Callvirt, invokeMethodInfo);
                 il.Emit(OpCodes.Stloc, local);
                 //il.Emit(OpCodes.Br_S, lblEnd);
                 //il.MarkLabel(lblEnd);     
@@ -187,16 +196,16 @@ namespace Senparc.CO2NET.Sample.net6.Services
             services.AddScoped(myType);
 
             Console.WriteLine($"\t create type:  {myType.Namespace} - {myType.FullName}");
-            //using (var scope = services.BuildServiceProvider().CreateScope())
-            //{
-            //    var ctrl = scope.ServiceProvider.GetService(myType);
-            //    Console.WriteLine(ctrl.GetType());
-            //    var testMethod = ctrl.GetType().GetMethod("Tests");
-            //    Console.WriteLine("testMethod.GetParameters().Count(): " + testMethod.GetParameters().Count());
-            //    var result = testMethod.Invoke(ctrl, new object[] { "来自 ApiBindTestService.DynamicBuild() 方法，看到此信息表明自动生成 API 已成功", 1 });
-            //    Console.WriteLine("result:" + result);
-            //    Console.WriteLine("Attrs Name: " + string.Join('|', ctrl.GetType().GetMethod("Tests").GetCustomAttributes().Select(z => z.GetType().Name)));
-            //}
+            using (var scope = services.BuildServiceProvider().CreateScope())
+            {
+                var ctrl = scope.ServiceProvider.GetService(myType);
+                Console.WriteLine(ctrl.GetType());
+                var testMethod = ctrl.GetType().GetMethod("Tests");
+                Console.WriteLine("testMethod.GetParameters().Count(): " + testMethod.GetParameters().Count());
+                var result = testMethod.Invoke(ctrl, new object[] { "来自 ApiBindTestService.DynamicBuild() 方法，看到此信息表明自动生成 API 已成功", 1 });
+                Console.WriteLine("result:" + result);
+                Console.WriteLine("Attrs Name: " + string.Join('|', ctrl.GetType().GetMethod("Tests").GetCustomAttributes().Select(z => z.GetType().Name)));
+            }
             builder.AddApplicationPart(mb.Assembly);
         }
     }
