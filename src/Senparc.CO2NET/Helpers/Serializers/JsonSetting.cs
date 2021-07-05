@@ -265,7 +265,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
         }
 
         /// <summary>
-        /// JSON 输出设置 构造函数  优先级： ignoreNulls < propertiesToIgnoreNull < typesToIgnoreNull
+        /// JSON 输出设置 构造函数  优先级： ignoreNulls &lt; propertiesToIgnoreNull &lt; typesToIgnoreNull
         /// </summary>
         /// <param name="ignoreNulls">是否忽略具有IJsonIgnoreNull接口，且为Null值的属性。如果为true，符合此条件的属性将不会出现在Json字符串中</param>
         /// <param name="propertiesToIgnoreNull">需要特殊忽略null值的属性名称</param>

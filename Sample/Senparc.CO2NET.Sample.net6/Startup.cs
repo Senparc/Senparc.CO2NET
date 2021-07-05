@@ -1,22 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using Senparc.CO2NET.AspNet;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Cache.Memcached;
 using Senparc.CO2NET.RegisterServices;
-using Senparc.CO2NET.AspNet;
+using Senparc.CO2NET.Sample.net6.Services;
+using Senparc.CO2NET.WebApi;
+using Senparc.CO2NET.WebApi.WebApiEngines;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
-namespace Senparc.CO2NET.Sample.netcore3
+namespace Senparc.CO2NET.Sample.net6
 {
     public class Startup
     {
@@ -34,9 +36,134 @@ namespace Senparc.CO2NET.Sample.netcore3
 
             services.AddMemoryCache();//使用本地缓需要添加
             services.Add(ServiceDescriptor.Singleton(typeof(ILogger<>), typeof(Logger<>)));//使用 Memcached 或 Logger 需要添加
-
+            var builder = services.AddMvcCore();
             //Senparc.CO2NET 全局注册（必须）
             services.AddSenparcGlobalServices(Configuration);
+
+
+            var appDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data");
+            services.UseAndInitDynamicApi(builder, appDataPath, ApiRequestMethod.Get, 400, false, true, m => null);
+
+            //独立测试
+            services.AddScoped(typeof(ApiBindTestService));
+            services.AddScoped(typeof(EntityApiBindTestService));
+            var apiBindTestService = new ApiBindTestService();
+            apiBindTestService.DynamicBuild(services, builder);
+
+            #region Swagger
+
+
+
+            //.NET Core 3.0 for Swagger https://www.thecodebuzz.com/swagger-api-documentation-in-net-core-3-0/
+
+
+            //添加Swagger
+            services.AddSwaggerGen(c =>
+            {
+                //为每个程序集创建文档
+                foreach (var neucharApiDocAssembly in WebApiEngine.ApiAssemblyCollection)
+                {
+                    var version = WebApiEngine.ApiAssemblyVersions[neucharApiDocAssembly.Key]; //neucharApiDocAssembly.Value.ImageRuntimeVersion;
+                    var docName = WebApiEngine.GetDocName(neucharApiDocAssembly.Key);
+                    c.SwaggerDoc(docName, new OpenApiInfo
+                    {
+                        Title = $"CO2NET Dynamic WebApi Engine : {neucharApiDocAssembly.Key}",
+                        Version = $"v{version}",//"v16.5.4"
+                        Description = $"Senparc CO2NET WebApi 动态引擎（{neucharApiDocAssembly.Key} - v{version}）",
+                        //License = new OpenApiLicense()
+                        //{
+                        //    Name = "Apache License Version 2.0",
+                        //    Url = new Uri("https://github.com/JeffreySu/WeiXinMPSDK")
+                        //},
+                        Contact = new OpenApiContact()
+                        {
+                            Email = "zsu@senparc.com",
+                            Name = "Senparc Team",
+                            Url = new Uri("https://www.senparc.com")
+                        },
+                        //TermsOfService = new Uri("https://github.com/JeffreySu/WeiXinMPSDK")
+                    });
+
+                    //if (neucharApiDocAssembly.Key.Contains("WeChat"))
+                    //{
+                    //    c.IncludeXmlComments($"App_Data/ApiDocXml/{WebApiEngine.WeixinApiAssemblyNames[neucharApiDocAssembly.Key]}.xml");
+                    //}
+                }
+
+                ////分组显示  https://www.cnblogs.com/toiv/archive/2018/07/28/9379249.html
+                //c.DocInclusionPredicate((docName, apiDesc) =>
+                //{
+                //    if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo))
+                //    {
+                //        return false;
+                //    }
+
+                //    var versions = methodInfo.DeclaringType
+                //          .GetCustomAttributes(true)
+                //          .OfType<SwaggerOperationAttribute>()
+                //          .Select(z => z.Tags[0].Split(':')[0]);
+
+                //    if (versions.FirstOrDefault() == null)
+                //    {
+                //        return false;//不符合要求的都不显示
+                //    }
+
+                //    //docName: $"{neucharApiDocAssembly.Key}-v1"
+                //    return versions.Any(z => docName.StartsWith(z));
+                //});
+
+                c.OrderActionsBy(z => z.RelativePath);
+                //c.DescribeAllEnumsAsStrings();//枚举显示字符串
+                c.EnableAnnotations();
+                c.DocumentFilter<RemoveVerbsFilter>();
+                c.CustomSchemaIds(x => x.FullName);//规避错误：InvalidOperationException: Can't use schemaId "$JsApiTicketResult" for type "$Senparc.Weixin.Open.Entities.JsApiTicketResult". The same schemaId was already used for type "$Senparc.Weixin.MP.Entities.JsApiTicketResult"
+
+                /* 需要登陆，暂不考虑    —— Jeffrey Su 2021.06.17
+                var oAuthDocName = "oauth2";// WeixinApiService.GetDocName(PlatformType.WeChat_OfficialAccount);
+
+                //添加授权
+                var authorizationUrl = NeuChar.App.AppStore.Config.IsDebug
+                                               //以下是 appPurachase 的 Id，实际应该是 appId
+                                               //? "http://localhost:12222/App/LoginOAuth/Authorize/1002/"
+                                               //: "https://www.neuchar.com/App/LoginOAuth/Authorize/4664/";
+                                               //以下是正确的 appId
+                                               ? "http://localhost:12222/App/LoginOAuth/Authorize?appId=xxx"
+                                               : "https://www.neuchar.com/App/LoginOAuth/Authorize?appId=3035";
+
+                c.AddSecurityDefinition(oAuthDocName,//"Bearer" 
+                    new OpenApiSecurityScheme
+                    {
+                        Description = "请输入带有Bearer开头的Token",
+                        Name = oAuthDocName,// "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.OAuth2,
+                        //OpenIdConnectUrl = new Uri("https://www.neuchar.com/"),
+                        Flows = new OpenApiOAuthFlows()
+                        {
+                            Implicit = new OpenApiOAuthFlow()
+                            {
+                                AuthorizationUrl = new Uri(authorizationUrl),
+                                Scopes = new Dictionary<string, string> { { "swagger_api", "Demo API - full access" } }
+                            }
+                        }
+                    });
+
+                //认证方式，此方式为全局添加
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    { new OpenApiSecurityScheme(){ Name =oAuthDocName//"Bearer"
+                    }, new List<string>() }
+                    //{ "Bearer", Enumerable.Empty<string>() }
+                });
+
+                //c.OperationFilter<AuthResponsesOperationFilter>();//AuthorizeAttribute过滤
+
+                */
+
+            });
+            #endregion
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,18 +181,9 @@ namespace Senparc.CO2NET.Sample.netcore3
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-
 
             // 启动 CO2NET 全局注册，必须！
             app.UseSenparcGlobal(env, senparcSetting.Value, register =>
@@ -75,7 +193,7 @@ namespace Senparc.CO2NET.Sample.netcore3
                     #region 全局缓存配置（按需）
 
                     //当同一个分布式缓存同时服务于多个网站（应用程序池）时，可以使用命名空间将其隔离（非必须）
-                    register.ChangeDefaultCacheNamespace("CO2NETCache.netcore-3.1");
+                    register.ChangeDefaultCacheNamespace("CO2NETCache.net6.0");
 
                     #region 配置和使用 Redis
 
@@ -147,6 +265,41 @@ namespace Senparc.CO2NET.Sample.netcore3
 
             #endregion
             );
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                //c.DocumentTitle = "Senparc Weixin SDK Demo API";
+                c.InjectJavascript("/lib/jquery/dist/jquery.min.js");
+                c.InjectJavascript("/js/swagger.js");
+                //c.InjectJavascript("/js/tongji.js");
+                c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+
+                foreach (var co2netApiDocAssembly in WebApiEngine.ApiAssemblyCollection)
+                {
+
+                    //TODO:真实的动态版本号
+                    var verion = WebApiEngine.ApiAssemblyVersions[co2netApiDocAssembly.Key]; //neucharApiDocAssembly.Value.ImageRuntimeVersion;
+                    var docName = WebApiEngine.GetDocName(co2netApiDocAssembly.Key);
+
+                    //Console.WriteLine($"\tAdd {docName}");
+
+                    c.SwaggerEndpoint($"/swagger/{docName}/swagger.json", $"{co2netApiDocAssembly.Key} v{verion}");
+                }
+
+                //OAuth     https://www.cnblogs.com/miskis/p/10083985.html
+                c.OAuthClientId("e65ea785b96b442a919965ccf857aba3");//客服端名称
+                c.OAuthAppName("微信 API Swagger 文档 "); // 描述
+            });
+
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+
         }
 
         /// <summary>
@@ -207,5 +360,97 @@ namespace Senparc.CO2NET.Sample.netcore3
 
             return exContainerCacheStrategies;
         }
+
+
+        class RemoveVerbsFilter : IDocumentFilter
+        {
+            //public void Apply(SwaggerDocument swaggerDoc, SchemaRegistry schemaRegistry, IApiExplorer apiExplorer)
+            //{
+            //    foreach (PathItem path in swaggerDoc.paths.Values)
+            //    {
+            //        path.delete = null;
+            //        //path.get = null; // leaving GET in
+            //        path.head = null;
+            //        path.options = null;
+            //        path.patch = null;
+            //        path.post = null;
+            //        path.put = null;
+            //    }
+            //}
+
+            public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+            {
+                //每次切换定义，都需要经过比较长的时间才到达这里
+
+                return;
+                string platformType;
+                var title = swaggerDoc.Info.Title;
+
+                //if (title.Contains(PlatformType.WeChat_OfficialAccount.ToString()))
+                //{
+                //    platformType = PlatformType.WeChat_OfficialAccount.ToString();
+                //}
+                //else if (title.Contains(PlatformType.WeChat_Work.ToString()))
+                //{
+                //    platformType = PlatformType.WeChat_Work.ToString();
+                //}
+                //else if (title.Contains(PlatformType.WeChat_Open.ToString()))
+                //{
+                //    platformType = PlatformType.WeChat_Open.ToString();
+                //}
+                //else if (title.Contains(PlatformType.WeChat_MiniProgram.ToString()))
+                //{
+                //    platformType = PlatformType.WeChat_MiniProgram.ToString();
+                //}
+                ////else if (title.Contains(PlatformType.General.ToString()))
+                ////{
+                ////    platformType = PlatformType.General.ToString();
+                ////}
+                //else
+                //{
+                //    throw new NotImplementedException($"未提供的 PlatformType 类型，Title：{title}");
+                //}
+
+                //var pathList = swaggerDoc.Paths.Keys.ToList();
+
+                //foreach (var path in pathList)
+                //{
+                //    if (!path.Contains(platformType))
+                //    {
+                //        //移除非当前模块的API对象
+                //        swaggerDoc.Paths.Remove(path);
+                //    }
+                //}
+
+                //SwaggerOperationAttribute
+                //移除Schema对象
+                //var toRemoveSchema = context.SchemaRepository.Schemas.Where(z => !z.Key.Contains(platformType)).ToList();//结果为全部删除，仅测试
+                //foreach (var schema in toRemoveSchema)
+                //{
+                //    context.SchemaRepository.Schemas.Remove(schema.Key);
+                //}
+            }
+        }
+
+        //public class AuthResponsesOperationFilter : IOperationFilter
+        //{
+        //    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        //    {
+        //        //获取是否添加登录特性
+        //        var authAttributes = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
+        //         .Union(context.MethodInfo.GetCustomAttributes(true))
+        //         .OfType<AuthorizeAttribute>().Any();
+
+        //        if (authAttributes)
+        //        {
+        //            operation.Responses.Add("401", new OpenApiResponse { Description = "暂无访问权限" });
+        //            operation.Responses.Add("403", new OpenApiResponse { Description = "禁止访问" });
+        //            operation.Security = new List<OpenApiSecurityRequirement>
+        //            {
+        //                new OpenApiSecurityRequirement { { new OpenApiSecurityScheme() {  Name= "oauth2" }, new[] { "swagger_api" } }}
+        //            };
+        //        }
+        //    }
+        //}
     }
 }
