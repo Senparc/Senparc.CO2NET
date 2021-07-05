@@ -41,6 +41,16 @@ namespace Senparc.CO2NET.Sample.net6.Services
         public void DynamicBuild(IServiceCollection services, IMvcCoreBuilder builder)
         {
 
+            var invokeClassType = typeof(EntityApiBindTestService);
+            //var invokeClassType = typeof(StaticApiBindTestService);
+            var invokeMethodName = "TestApiAsync";//TestApiAsync  or TestApi
+            var invokeMethodInfo = invokeClassType.GetMethod(invokeMethodName);
+            Console.WriteLine("======== DynamicBuild Start ========");
+            Console.WriteLine($"invokeClassType: {invokeClassType.Name}");
+            Console.WriteLine($"invokeMethodName: {invokeMethodName}");
+            Console.WriteLine($"invokeMethod ReturnType: {invokeMethodInfo.ReturnType.Name}");
+
+            #region 构造程序集
 
 
             AssemblyName dynamicApiAssembly = new AssemblyName("DynamicTests");
@@ -63,6 +73,10 @@ namespace Senparc.CO2NET.Sample.net6.Services
             //私有变量
             var fbServiceProvider = tb.DefineField("_serviceProvider", typeof(IServiceProvider), FieldAttributes.Private | FieldAttributes.InitOnly);
 
+            #endregion
+
+            #region 设置构造函数
+
             //设置构造函数
             var ctorBuilder = tb.DefineConstructor(MethodAttributes.Public, CallingConventions.HasThis, new[] { typeof(IServiceProvider) });
             var ctorIl = ctorBuilder.GetILGenerator();
@@ -77,13 +91,9 @@ namespace Senparc.CO2NET.Sample.net6.Services
             ctorIl.Emit(OpCodes.Stfld, fbServiceProvider);
             ctorIl.Emit(OpCodes.Ret);
 
-            var invokeClassType = typeof(EntityApiBindTestService);
-            var invokeMethodName = "TestApiAsync";//TestApiAsync  or TestApi
-            var invokeMethodInfo = invokeClassType.GetMethod(invokeMethodName);
-            Console.WriteLine("======== DynamicBuild Start ========");
-            Console.WriteLine($"invokeClassType: {invokeClassType.Name}");
-            Console.WriteLine($"invokeMethodName: {invokeMethodName}");
-            Console.WriteLine($"invokeMethod ReturnType: {invokeMethodInfo.ReturnType.Name}");
+            #endregion
+
+            #region 设置方法
 
             //设置方法
             MethodBuilder setPropMthdBldr =
@@ -133,14 +143,17 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 setPropMthdBldr.SetCustomAttribute(attrBuilder);
             }
 
+            #endregion
+
+            #region 设置方法体（Body）
+
             //执行具体方法
             var il = setPropMthdBldr.GetILGenerator();
+            LocalBuilder local = il.DeclareLocal(invokeMethodInfo.ReturnType); // create a local variable
 
-            if (true)
+            if (invokeClassType == typeof(EntityApiBindTestService) || !invokeMethodInfo.IsStatic)
             {
                 //Label lblEnd = il.DefineLabel();
-
-                LocalBuilder local = il.DeclareLocal(typeof(string)); // create a local variable
 
                 /* 最简洁方法（独立使用）
                 il.Emit(OpCodes.Nop);
@@ -173,13 +186,11 @@ namespace Senparc.CO2NET.Sample.net6.Services
             else
             {
                 //静态方法调用
-                var methodInfo = typeof(StaticApiBindTestService).GetMethod("TestApi");
-                LocalBuilder local = il.DeclareLocal(methodInfo.ReturnType); // create a local variable
 
                 il.Emit(OpCodes.Nop); // the first one in arguments list
                 il.Emit(OpCodes.Ldarg, 1); // the first one in arguments list
                 il.Emit(OpCodes.Ldarg, 2);
-                il.Emit(OpCodes.Call, methodInfo);
+                il.Emit(OpCodes.Call, invokeMethodInfo);
                 il.Emit(OpCodes.Stloc, local); // set local variable
                 il.Emit(OpCodes.Ldloc, local); // load local variable to stack 
                 //il.Emit(OpCodes.Stloc, 1);
@@ -190,10 +201,15 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 il.Emit(OpCodes.Ret);
             }
 
+
+            #endregion
+
             var t = tb.CreateType();
             TypeInfo objectTypeInfo = tb.CreateTypeInfo();
             var myType = objectTypeInfo.AsType();
             services.AddScoped(myType);
+            builder.AddApplicationPart(mb.Assembly);
+
 
             Console.WriteLine($"\t create type:  {myType.Namespace} - {myType.FullName}");
             using (var scope = services.BuildServiceProvider().CreateScope())
@@ -206,7 +222,6 @@ namespace Senparc.CO2NET.Sample.net6.Services
                 Console.WriteLine("result:" + result);
                 Console.WriteLine("Attrs Name: " + string.Join('|', ctrl.GetType().GetMethod("Tests").GetCustomAttributes().Select(z => z.GetType().Name)));
             }
-            builder.AddApplicationPart(mb.Assembly);
         }
     }
 
@@ -235,11 +250,11 @@ namespace Senparc.CO2NET.Sample.net6.Services
         }
 
         [MyTest("TestCopyAttrFromTestApiAsync in EntityApiBindTestService class")]
-        public static async Task<string> TestApiAsync(string name = "Senparc", int value = 999)
+        public async Task<string> TestApiAsync(string name = "Senparc", int value = 999)
         {
-            var msg = $"[{SystemTime.Now}] [from StaticApiBindTestService.TestApiAsync] Method";
+            var msg = $"[{SystemTime.Now:HH:mm:ss.ffff}] [from EntityApiBindTestService.TestApiAsync] Method";
             await Task.Delay(1000);
-            msg += $"[{SystemTime.Now}] {name}:{value}";
+            msg += $"[{SystemTime.Now:HH:mm:ss.ffff}] {name}:{value}";
             return msg;
         }
     }
@@ -253,6 +268,15 @@ namespace Senparc.CO2NET.Sample.net6.Services
         public static string TestApi(string name = "Senparc", int value = 999)
         {
             return $"[from StaticApiBindTestService.TestApi]{name}:{value}";
+        }
+
+        [MyTest("TestCopyAttrFromTestApiAsync in StaticApiBindTestService class")]
+        public static async Task<string> TestApiAsync(string name = "Senparc", int value = 999)
+        {
+            var msg = $"[{SystemTime.Now:HH:mm:ss.ffff}] [from StaticApiBindTestService.TestApiAsync] Method";
+            await Task.Delay(1000);
+            msg += $"[{SystemTime.Now:HH:mm:ss.ffff}] {name}:{value}";
+            return msg;
         }
     }
 
