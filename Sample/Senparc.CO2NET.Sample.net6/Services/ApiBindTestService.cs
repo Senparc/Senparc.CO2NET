@@ -35,6 +35,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
             var msg = $"[{SystemTime.Now:HH:mm:ss.ffff}] [from ApiBindTestService.TestApiAsync] Method";
             await Task.Delay(1000);
             msg += $"[{SystemTime.Now:HH:mm:ss.ffff}] {name}:{value}";
+            return msg;
         }
 
         /// <summary>
