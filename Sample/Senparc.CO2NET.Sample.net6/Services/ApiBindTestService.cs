@@ -21,7 +21,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
         {
         }
 
-        [ApiBind("CO2NET", "ApiBindTest.TestApi")]
+        [ApiBind("CO2NET", "ApiBindTest.TestApi", WebApi.ApiRequestMethod.Get)]
         [MyTest("TestCopyAttrFromTestApi")]
         //[AuthorizeAttribute()]
         public string TestApi(string name, int value)
@@ -29,10 +29,12 @@ namespace Senparc.CO2NET.Sample.net6.Services
             return $"[from ApiBindTestService.TestApi]{name}:{value}";
         }
 
-        [ApiBind("CO2NET", "ApiBindTest.TestApi2")]
-        public string TestApi2(string name, int value)
+        [ApiBind("CO2NET", "ApiBindTest.TestApiAsync", WebApi.ApiRequestMethod.Post)]
+        public async Task<string> TestApiAsync(string name, int value)
         {
-            return $"[from ApiBindTestService.TestApi2]{name}:{value}";
+            var msg = $"[{SystemTime.Now:HH:mm:ss.ffff}] [from ApiBindTestService.TestApiAsync] Method";
+            await Task.Delay(1000);
+            msg += $"[{SystemTime.Now:HH:mm:ss.ffff}] {name}:{value}";
         }
 
         /// <summary>

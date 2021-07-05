@@ -23,7 +23,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
         /// <param name="additionalAttributes"></param>
         /// <param name="additionalAttributeFunc">是否复制自定义特性（AppBindAttribute 除外）</param>
         public static void UseAndInitDynamicApi(this IServiceCollection services, IMvcCoreBuilder builder,
-            string appDataPath, DefaultAction defaultAction = DefaultAction.Post, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
+            string appDataPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
         {
             //预载入程序集，确保在下一步 RegisterApiBind() 可以顺利读取所有接口
             //bool preLoad = typeof(Senparc.Weixin.MP.AdvancedAPIs.AddGroupResult).ToString() != null
@@ -32,12 +32,14 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
             //    && typeof(Senparc.Weixin.TenPay.V3.TenPayV3).ToString() != null
             //    && typeof(Senparc.Weixin.Work.AdvancedAPIs.AppApi).ToString() != null;
 
+            _ = defaultRequestMethod != ApiRequestMethod.GlobalDefault ? true : throw new Exception($"{nameof(defaultRequestMethod)} 不能作为默认请求类型！");
+
             services.AddScoped<FindApiService>();
             services.AddScoped<WebApiEngine>(s => new WebApiEngine());
 
             WebApiEngine.AdditionalAttributeFunc = additionalAttributeFunc;
 
-            var webApiEngine = new WebApiEngine(defaultAction, copyCustomAttributes, taskCount, showDetailApiLog);
+            var webApiEngine = new WebApiEngine(defaultRequestMethod, copyCustomAttributes, taskCount, showDetailApiLog);
 
             bool preLoad = true;
 

@@ -30,7 +30,7 @@ namespace Senparc.CO2NET.WebApi
 
         private bool _showDetailApiLog = false;
         private readonly Lazy<FindApiService> _findWeixinApiService;
-        private readonly DefaultAction _defaultAction;
+        private readonly ApiRequestMethod _defaultRequestMethod;
         private readonly bool _copyCustomAttributes;
         private int _taskCount;
         private Type _typeOfApiBind = typeof(ApiBindAttribute);
@@ -42,10 +42,10 @@ namespace Senparc.CO2NET.WebApi
         /// <param name="showDetailApiLog"></param>
         /// <param name="copyCustomAttributes"></param>
         /// <param name="defaultAction">默认请求类型，如 Post，Get</param>
-        public WebApiEngine(DefaultAction defaultAction = DefaultAction.Post, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false)
+        public WebApiEngine(ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false)
         {
             _findWeixinApiService = new Lazy<FindApiService>(new FindApiService());
-            _defaultAction = defaultAction;
+            _defaultRequestMethod = defaultRequestMethod;
             _copyCustomAttributes = copyCustomAttributes;
             _taskCount = taskCount;
             _showDetailApiLog = showDetailApiLog;
@@ -148,10 +148,10 @@ namespace Senparc.CO2NET.WebApi
 
                 try
                 {
-                    if (apiIndex > 9999)//200-250
-                    {
-                        return;//用于小范围分析
-                    }
+                    //if (apiIndex > 9999)//200-250
+                    //{
+                    //    return;//用于小范围分析
+                    //}
 
                     var category = apiBindGroup.Key;
 
@@ -188,8 +188,6 @@ namespace Senparc.CO2NET.WebApi
                         parameters.Select(z => z.ParameterType).ToArray()//输入参数
                         );
 
-                    //TODO:引入Swagger
-
                     //Controller已经使用过一次SwaggerOperationAttribute
                     var t2_3 = typeof(SwaggerOperationAttribute);
                     var tagName = new[] { $"{keyName}:{apiBindGroupName}" };
@@ -215,14 +213,12 @@ namespace Senparc.CO2NET.WebApi
                     WriteLog($"added Api path: {apiPath}", true);
 
                     //[HttpPost]
-                    Type tActionMethod = _defaultAction switch
+                    var specialMethod = apiBindInfo.Value.ApiBindAttribute.ApiRequestMethod;
+                    if (specialMethod == ApiRequestMethod.GlobalDefault)
                     {
-                        DefaultAction.Post => typeof(HttpPostAttribute),
-                        DefaultAction.Get => typeof(HttpGetAttribute),
-                        DefaultAction.Put => typeof(HttpPutAttribute),
-                        DefaultAction.Delete => typeof(HttpDeleteAttribute),
-                        _ => typeof(HttpPostAttribute),//默认都使用 Post
-                    };
+                        specialMethod = _defaultRequestMethod;//使用全局默认
+                    }
+                    Type tActionMethod = GetRequestMethodAttribute(specialMethod);
 
                     setPropMthdBldr.SetCustomAttribute(new CustomAttributeBuilder(tActionMethod.GetConstructor(new Type[0]), new object[0]));
 
@@ -646,13 +642,13 @@ namespace Senparc.CO2NET.WebApi
 
                     apiIndex++;
 
-                #region 创建 API 方法
+                    #region 创建 API 方法
 
-                BuildApiForOneThread(apiBindGroup, apiBindInfoBlock, apiMethodName, dynamicAssembly.ControllerKeyName, dynamicAssembly.Tb,
-                dynamicAssembly.FbServiceProvider, docMembersCollection, apiIndex);
+                    BuildApiForOneThread(apiBindGroup, apiBindInfoBlock, apiMethodName, dynamicAssembly.ControllerKeyName, dynamicAssembly.Tb,
+                    dynamicAssembly.FbServiceProvider, docMembersCollection, apiIndex);
 
-                #endregion
-            });
+                    #endregion
+                });
                 taskList.Add(apiTask);
             }
 
@@ -729,6 +725,26 @@ namespace Senparc.CO2NET.WebApi
             return ApiAssemblyCollection[category];
         }
 
+        /// <summary>
+        /// 通过 ApiRequestMethod 枚举获取对应的 Http 请求特性
+        /// </summary>
+        /// <param name="apiRequestMethod"></param>
+        /// <returns></returns>
+        public Type GetRequestMethodAttribute(ApiRequestMethod apiRequestMethod)
+        {
+            return apiRequestMethod switch
+            {
+                ApiRequestMethod.GlobalDefault => throw new CO2NET.Exceptions.HttpException($"{nameof(ApiRequestMethod.GlobalDefault)} 不是有效的请求类型"),
+                ApiRequestMethod.Get => typeof(HttpGetAttribute),
+                ApiRequestMethod.Head => typeof(HttpHeadAttribute),
+                ApiRequestMethod.Post => typeof(HttpPostAttribute),
+                ApiRequestMethod.Put => typeof(HttpPutAttribute),
+                ApiRequestMethod.Delete => typeof(HttpDeleteAttribute),
+                ApiRequestMethod.Options => typeof(HttpOptionsAttribute),
+                ApiRequestMethod.Patch => typeof(HttpPatchAttribute),
+                _ => typeof(HttpPostAttribute),//默认都使用 Post
+            };
+        }
 
     }
 }
