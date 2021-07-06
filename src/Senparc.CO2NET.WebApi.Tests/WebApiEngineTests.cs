@@ -26,7 +26,7 @@ namespace Senparc.CO2NET.WebApi.Tests
             Init();
             var findWeixinApiService = ServiceProvider.GetService<FindApiService>();
             WebApiEngine wae = new WebApiEngine(ApiRequestMethod.Get, copyCustomAttributes: true, taskCount: 400, showDetailApiLog: true);
-            base.ServiceCollection.UseAndInitDynamicApi(MvcCoreBuilder, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data"));
+            base.ServiceCollection.AddAndInitDynamicApi(MvcCoreBuilder, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data"));
         }
     }
 }

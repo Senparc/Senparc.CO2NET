@@ -2,14 +2,14 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <Version>0.2-beta1</Version>
+    <Version>0.2.1-beta1</Version>
     <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
     <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <Description>
 			Senparc.CO2NET.WebApi 应用性能管理
 		</Description>
-    <Copyright>Senparc Copyright © 2004~2020</Copyright>
+    <Copyright>Senparc Copyright © 2004~2021</Copyright>
     <PackageTags>WebApi,.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
     <Authors>Senparc</Authors>
     <Owners>Senparc</Owners>
