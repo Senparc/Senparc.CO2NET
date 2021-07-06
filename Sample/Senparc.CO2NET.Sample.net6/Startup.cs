@@ -42,7 +42,7 @@ namespace Senparc.CO2NET.Sample.net6
 
 
             var appDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data");
-            services.UseAndInitDynamicApi(builder, appDataPath, ApiRequestMethod.Get, 400, false, true, m => null);
+            services.AddAndInitDynamicApi(builder, appDataPath, ApiRequestMethod.Get, 400, false, true, m => null);
 
             //∂¿¡¢≤‚ ‘
             services.AddScoped(typeof(ApiBindTestService));

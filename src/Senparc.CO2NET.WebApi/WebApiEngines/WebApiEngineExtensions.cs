@@ -22,7 +22,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
         /// <param name="taskCount"></param>
         /// <param name="additionalAttributes"></param>
         /// <param name="additionalAttributeFunc">是否复制自定义特性（AppBindAttribute 除外）</param>
-        public static void UseAndInitDynamicApi(this IServiceCollection services, IMvcCoreBuilder builder,
+        public static void AddAndInitDynamicApi(this IServiceCollection services, IMvcCoreBuilder builder,
             string appDataPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
         {
             //预载入程序集，确保在下一步 RegisterApiBind() 可以顺利读取所有接口
