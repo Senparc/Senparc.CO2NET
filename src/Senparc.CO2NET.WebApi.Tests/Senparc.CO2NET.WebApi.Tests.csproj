@@ -13,7 +13,9 @@
 		<PackageReference Include="coverlet.collector" Version="3.0.2" />
 		<PackageReference Include="Moq" Version="4.16.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0-preview.3.21201.4" />
-		<PackageReference Include="Senparc.Weixin.WxOpen" Version="3.11.501" />
+		<PackageReference Include="Senparc.Weixin.MP" Version="16.13.0-beta1" />
+		<PackageReference Include="Senparc.Weixin.Open" Version="4.10.0-beta1" />
+		<PackageReference Include="Senparc.Weixin.WxOpen" Version="3.12.0-beta1" />
 
 	</ItemGroup>
 

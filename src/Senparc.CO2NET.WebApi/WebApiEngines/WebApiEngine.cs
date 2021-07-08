@@ -71,7 +71,7 @@ namespace Senparc.CO2NET.WebApi
         {
             if (!hideLog || _showDetailApiLog)
             {
-                Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId:00}] {SystemTime.Now:yyyy-MM-dd HH:ss:mm.ffff}\t\t{msg}");
+                Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId:00}] {SystemTime.Now:yyyy-MM-dd HH:mm:ss.ffff}\t\t{msg}");
             }
         }
 
@@ -585,6 +585,8 @@ namespace Senparc.CO2NET.WebApi
             var dynamicAssembly = BuildDynamicAssembly(assembleName, apiBindGroup);
 
             #endregion
+
+            //TODO：开放所有类型
 
             var apiBindFilterList = apiBindGroup.Where(z => !z.Value.ApiBindAttribute.Name.EndsWith("Async")
                                      && z.Value.MethodInfo.ReturnType != typeof(Task<>)

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <Version>0.2.1-beta1</Version>
+    <Version>0.2.1-beta2</Version>
     <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
     <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -23,6 +23,7 @@
     <Configurations>Debug;Release;Test</Configurations>
     <PackageReleaseNotes>
 			v0.1 创世
+			v0.2 完成 WebApiEngine 第一代核心版本
 </PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

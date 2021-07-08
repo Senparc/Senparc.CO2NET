@@ -12,8 +12,6 @@
 			<Version>2.2.8</Version>
 		</PackageReference>
 
-		<PackageReference Include="Senparc.Weixin.WxOpen" Version="3.11.501" />
-
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.APM\Senparc.CO2NET.APM.csproj" />
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.CsRedis\Senparc.CO2NET.Cache.CsRedis.csproj" />

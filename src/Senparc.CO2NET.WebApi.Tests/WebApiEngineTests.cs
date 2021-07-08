@@ -1,12 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Senparc.CO2NET.Utilities;
 using Senparc.CO2NET.WebApi.WebApiEngines;
+using System;
+using System.IO;
 
 namespace Senparc.CO2NET.WebApi.Tests
 {
@@ -24,9 +21,11 @@ namespace Senparc.CO2NET.WebApi.Tests
         public void InitDynamicApiTest()
         {
             Init();
+            string load = "" + typeof(Senparc.Weixin.MP.Register) + typeof(Senparc.Weixin.WxOpen.Register) + typeof(Senparc.Weixin.Open.Register);
+
             var findWeixinApiService = ServiceProvider.GetService<FindApiService>();
-            WebApiEngine wae = new WebApiEngine(ApiRequestMethod.Get, copyCustomAttributes: true, taskCount: 400, showDetailApiLog: true);
-            base.ServiceCollection.AddAndInitDynamicApi(MvcCoreBuilder, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data"));
+            var appDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data");// ServerUtility.ContentRootMapPath("~/App_Data");
+            base.ServiceCollection.AddAndInitDynamicApi(MvcCoreBuilder, appDataPath, taskCount: 400);
         }
     }
 }

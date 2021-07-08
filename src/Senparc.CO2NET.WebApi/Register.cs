@@ -94,7 +94,7 @@ namespace Senparc.CO2NET.WebApi
                     catch (Exception ex)
                     {
                         errorCount++;
-                        SenparcTrace.SendCustomLog("RegisterApiBind() 自动扫描程序集报告（非程序异常）：" + assembly.FullName, ex.ToString());
+                        SenparcTrace.SendCustomLog("RegisterApiBind() 自动扫描程序集报告（即使出现错误，非程序异常）：" + assembly.FullName, ex.ToString());
                     }
                 }
 
