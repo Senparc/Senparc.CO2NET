@@ -21,7 +21,7 @@ namespace Senparc.CO2NET.WebApi.Tests
         public void InitDynamicApiTest()
         {
             Init();
-            string load = "" + typeof(Senparc.Weixin.MP.Register) + typeof(Senparc.Weixin.WxOpen.Register) + typeof(Senparc.Weixin.Open.Register);
+            //string load = "" + typeof(Senparc.Weixin.MP.Register) + typeof(Senparc.Weixin.WxOpen.Register) + typeof(Senparc.Weixin.Open.Register);
 
             var findWeixinApiService = ServiceProvider.GetService<FindApiService>();
             var appDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data");// ServerUtility.ContentRootMapPath("~/App_Data");

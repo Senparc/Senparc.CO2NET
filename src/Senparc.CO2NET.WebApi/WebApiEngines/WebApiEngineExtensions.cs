@@ -25,6 +25,39 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
         public static void AddAndInitDynamicApi(this IServiceCollection services, IMvcCoreBuilder builder,
             string appDataPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
         {
+            AddAndInitDynamicApi(services, (builder, null), appDataPath, defaultRequestMethod, taskCount, showDetailApiLog, copyCustomAttributes, additionalAttributeFunc);
+        }
+
+
+        /// <summary>
+        /// 初始化动态API
+        /// </summary>
+        /// <param name="appDataPath">App_Data 文件夹路径</param>
+        /// <param name="builder"></param>
+        /// <param name="services"></param>
+        /// <param name="showDetailApiLog"></param>
+        /// <param name="taskCount"></param>
+        /// <param name="additionalAttributes"></param>
+        /// <param name="additionalAttributeFunc">是否复制自定义特性（AppBindAttribute 除外）</param>
+        public static void AddAndInitDynamicApi(this IServiceCollection services, IMvcBuilder builder,
+            string appDataPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
+        {
+            AddAndInitDynamicApi(services, (null, builder), appDataPath, defaultRequestMethod, taskCount, showDetailApiLog, copyCustomAttributes, additionalAttributeFunc);
+        }
+
+        /// <summary>
+        /// 初始化动态API
+        /// </summary>
+        /// <param name="appDataPath">App_Data 文件夹路径</param>
+        /// <param name="builder"></param>
+        /// <param name="services"></param>
+        /// <param name="showDetailApiLog"></param>
+        /// <param name="taskCount"></param>
+        /// <param name="additionalAttributes"></param>
+        /// <param name="additionalAttributeFunc">是否复制自定义特性（AppBindAttribute 除外）</param>
+        private static void AddAndInitDynamicApi(this IServiceCollection services, (IMvcCoreBuilder coreBuilder, IMvcBuilder builder) builder,
+            string appDataPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
+        {
             //预载入程序集，确保在下一步 RegisterApiBind() 可以顺利读取所有接口
             //bool preLoad = typeof(Senparc.Weixin.MP.AdvancedAPIs.AddGroupResult).ToString() != null
             //    && typeof(Senparc.Weixin.WxOpen.AdvancedAPIs.CustomApi).ToString() != null
@@ -72,7 +105,15 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
                     var apiCount = await webApiEngine.BuildWebApi(apiBindGroup).ConfigureAwait(false);
                     var apiAssembly = webApiEngine.GetApiAssembly(category);
 
-                    builder.AddApplicationPart(apiAssembly);//程序部件：https://docs.microsoft.com/zh-cn/aspnet/core/mvc/advanced/app-parts?view=aspnetcore-2.2
+                    //程序部件：https://docs.microsoft.com/zh-cn/aspnet/core/mvc/advanced/app-parts?view=aspnetcore-2.2
+                    if (builder.coreBuilder != null)
+                    {
+                        builder.coreBuilder.AddApplicationPart(apiAssembly);
+                    }
+                    else
+                    {
+                        builder.builder.AddApplicationPart(apiAssembly);
+                    }
 
                     assemblyBuildStat[category] = (apiCount: apiCount, costMs: SystemTime.DiffTotalMS(dtStart));
                 });

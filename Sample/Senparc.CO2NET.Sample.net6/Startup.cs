@@ -44,11 +44,12 @@ namespace Senparc.CO2NET.Sample.net6
             var appDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data");
             services.AddAndInitDynamicApi(builder, appDataPath, ApiRequestMethod.Get, 400, false, true, m => null);
 
-            //独立测试
+            #region 独立测试
             services.AddScoped(typeof(ApiBindTestService));
             services.AddScoped(typeof(EntityApiBindTestService));
             var apiBindTestService = new ApiBindTestService();
             apiBindTestService.DynamicBuild(services, builder);
+            #endregion
 
             #region Swagger
 
@@ -256,14 +257,14 @@ namespace Senparc.CO2NET.Sample.net6
                     #endregion
                 },
 
-            #region 扫描自定义扩展缓存
+                #region 扫描自定义扩展缓存
 
                 //自动扫描自定义扩展缓存（二选一）
                 autoScanExtensionCacheStrategies: true //默认为 true，可以不传入
-                                                       //指定自定义扩展缓存（二选一）
-                                                       //autoScanExtensionCacheStrategies: false, extensionCacheStrategiesFunc: () => GetExCacheStrategies(senparcSetting.Value)
+                //指定自定义扩展缓存（二选一）
+                //autoScanExtensionCacheStrategies: false, extensionCacheStrategiesFunc: () => GetExCacheStrategies(senparcSetting.Value)
 
-            #endregion
+                 #endregion
             );
 
             app.UseSwagger();
