@@ -40,7 +40,7 @@ namespace Senparc.CO2NET.Sample.net6
             //Senparc.CO2NET È«¾Ö×¢²á£¨±ØÐë£©
             services.AddSenparcGlobalServices(Configuration);
 
-            string load = "" + typeof(Senparc.Weixin.MP.Register);
+            //string load = "" + typeof(Senparc.Weixin.MP.Register);
             Senparc.NeuChar.Register.AddNeuChar();
 
 

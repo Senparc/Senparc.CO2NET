@@ -1,4 +1,5 @@
-﻿using Senparc.CO2NET.ApiBind;
+﻿using Microsoft.Extensions.DependencyModel;
+using Senparc.CO2NET.ApiBind;
 using Senparc.CO2NET.Trace;
 using System;
 using System.Collections.Generic;
@@ -42,8 +43,20 @@ namespace Senparc.CO2NET.WebApi
 
                 //查找所有扩展缓存
                 var scanTypesCount = 0;
-
-                var assembiles = AppDomain.CurrentDomain.GetAssemblies();
+                var assembiles = DependencyContext.Default.RuntimeLibraries.Select(z =>
+                {
+                    try
+                    {
+                        return Assembly.Load(new AssemblyName(z.Name));
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                });
+                //AppDomain.CurrentDomain.GetAssemblies();
+                //Assembly.GetEntryAssembly().GetReferencedAssemblies().Select(Assembly.Load)
+                //DependencyContext.Default.CompileLibraries.Select(z => Assembly.Load(z.Name))
 
                 var errorCount = 0;
 
@@ -51,7 +64,10 @@ namespace Senparc.CO2NET.WebApi
 
                 foreach (var assembly in assembiles)
                 {
-
+                    if (assembly == null)
+                    {
+                        continue;
+                    }
                     try
                     {
                         scanTypesCount++;
