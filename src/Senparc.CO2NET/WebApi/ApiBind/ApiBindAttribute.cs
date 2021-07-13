@@ -1,8 +1,11 @@
-﻿using Senparc.CO2NET.WebApi;
+﻿using Senparc.CO2NET.Extensions;
+using Senparc.CO2NET.WebApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Senparc.CO2NET
@@ -51,5 +54,8 @@ namespace Senparc.CO2NET
             Name = name;
             ApiRequestMethod = apiRequestMethod;
         }
+
+       
+
     }
 }

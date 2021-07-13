@@ -95,11 +95,12 @@ namespace Senparc.CO2NET.WebApi
                                     var apiBindAttr = attr as ApiBindAttribute;
                                     if (!WebApiEngine.ApiAssemblyNames.ContainsKey(apiBindAttr.Category))
                                     {
-                                        var newNameSpace = $"Senparc.DynamicWebApi.{Regex.Replace(apiBindAttr.Category, @"[\s\.\(\)]", "")}";//TODO:可以换成缓存命名空间等更加特殊的前缀
-                                        var addSuccess = WebApiEngine.ApiAssemblyNames.TryAdd(apiBindAttr.Category, newNameSpace);
+                                        //TODO:可以增加缓存命名空间等更加特殊的前缀
+                                        var dynamicCategory = apiBindAttr.GetDynamicCategory(method);// $"Senparc.DynamicWebApi.{Regex.Replace(apiBindAttr.Category, @"[\s\.\(\)]", "")}";
+                                        var addSuccess = WebApiEngine.ApiAssemblyNames.TryAdd(apiBindAttr.Category, dynamicCategory);
                                         if (!addSuccess)
                                         {
-                                            SenparcTrace.SendCustomLog($"动态API未添加成功！", $"信息：[{apiBindAttr.Category} - {newNameSpace}]");
+                                            SenparcTrace.SendCustomLog($"动态API未添加成功！", $"信息：[{apiBindAttr.Category} - {dynamicCategory}]");
                                         }
                                     }
                                     ApiBindInfoCollection.Instance.Add(method, apiBindAttr);
