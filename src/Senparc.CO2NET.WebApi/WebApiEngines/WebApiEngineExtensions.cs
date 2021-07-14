@@ -77,7 +77,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
             bool preLoad = true;
 
             //确保 ApiBind 已经执行扫描和注册过程
-            Senparc.CO2NET.WebApi.Register.RegisterApiBind(preLoad);//参数为 true，确保重试绑定成功
+            services.AddApiBind(preLoad);//参数为 true，确保重试绑定成功
 
             //确保目录存在
             webApiEngine.TryCreateDir(appDataPath);
@@ -146,6 +146,6 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
             #endregion
         }
 
-       
+
     }
 }

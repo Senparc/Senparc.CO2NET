@@ -104,8 +104,11 @@ namespace Senparc.CO2NET.WebApi
         /// <summary>
         /// 从 xml 中获取方法名和参数的正则
         /// </summary>
-        private static Regex regex = new Regex(@"(M\:)(?<docName>[^(]+)(?<paramsPart>\({1}.+\){1})", RegexOptions.Compiled);
-
+        private static Regex regexForDoc = new Regex(@"(M\:)(?<docName>[^(]+)(?<paramsPart>\({1}.+\){1})", RegexOptions.Compiled);
+        /// <summary>
+        /// 从 apiBindInfo.Value.GlobalName 中匹配需要替换的关键字福
+        /// </summary>
+        private static Regex regexForMethodName = new Regex(@"[\.\-/:]", RegexOptions.Compiled);
 
         /// <summary>
         /// 获取 DocName
@@ -115,7 +118,7 @@ namespace Senparc.CO2NET.WebApi
         public DocMethodInfo GetDocMethodInfo(XAttribute nameAttr)
         {
             var pattern = @"(M\:)(?<docName>[^(]+)(?<paramsPart>\({1}.+\){1})";
-            var result = regex.Match(pattern);
+            var result = regexForDoc.Match(pattern);
             if (result.Success && result.Groups["docName"] != null && result.Groups["paramsPart"] != null)
             {
                 return new DocMethodInfo(result.Groups["docName"].Value, result.Groups["paramsPart"].Value);
@@ -162,7 +165,7 @@ namespace Senparc.CO2NET.WebApi
                     }
 
                     //当前方法名称
-                    var methodName = apiBindInfo.Value.GlobalName.Replace(".", "_").Replace("-", "_").Replace("/", "_");
+                    var methodName = regexForMethodName.Replace(apiBindInfo.Value.GlobalName, "_");
                     var apiBindGlobalName = apiBindInfo.Value.GlobalName.Split('.')[0];
                     var apiBindName = apiBindInfo.Value.Name.Split('.')[0];
                     var indexOfApiGroupDot = apiBindInfo.Value.GlobalName.IndexOf(".");
@@ -433,7 +436,7 @@ namespace Senparc.CO2NET.WebApi
 
             //储存 API
             //_apiCollection[category] = new Dictionary<string, ApiBindInfo>(apiBindGroup);
-            var controllerKeyName = category.ToString();//不要随意改规则，全局需要保持一致
+            var controllerKeyName = category.Replace(":","_");//不要随意改规则，全局需要保持一致
 
             WriteLog($"search key: {category} -> {controllerKeyName}", true);
 

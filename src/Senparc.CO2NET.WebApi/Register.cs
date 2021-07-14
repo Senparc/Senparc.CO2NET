@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyModel;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyModel;
 using Senparc.CO2NET.ApiBind;
 using Senparc.CO2NET.Trace;
 using System;
@@ -10,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace Senparc.CO2NET.WebApi
 {
-    public class Register
+    public static class Register
     {
         /// <summary>
         /// 是否API绑定已经执行完
@@ -26,7 +27,7 @@ namespace Senparc.CO2NET.WebApi
         /// 自动扫描并注册 ApiBind
         /// </summary>
         /// <param name="forceBindAgain">是否强制重刷新</param>
-        public static void RegisterApiBind(bool forceBindAgain)
+        internal static void AddApiBind(this IServiceCollection serviceCollection, bool forceBindAgain)
         {
             var dt1 = SystemTime.Now;
 
@@ -88,7 +89,8 @@ namespace Senparc.CO2NET.WebApi
 
                             //判断 type 是否有 ApiBind 标记
                             var typeAttrs = type.GetCustomAttributes(typeof(ApiBindAttribute), false);
-                            var coverAllMethods = false;
+                            var coverAllMethods = false;//class 上已经有覆盖所有方法的 [ApiBind] 特性标签
+                            var choosenClass = false;//当前 class 内有需要被引用的对象（且当前 class 可以被实例化）
                             if (typeAttrs?.Length > 0)
                             {
                                 //type 中具有标记，所有的方法都归档
@@ -100,6 +102,10 @@ namespace Senparc.CO2NET.WebApi
                             foreach (var method in methods)
                             {
                                 var methodAttrs = method.GetCustomAttributes(typeof(ApiBindAttribute), false);
+                                if (!choosenClass && !method.IsStatic)
+                                {
+                                    choosenClass = coverAllMethods ||  methodAttrs?.Length > 0;//TODO 注意忽略的对象
+                                }
                                 if (methodAttrs?.Length > 0)
                                 {
                                     //覆盖 type 的绑定信息
@@ -121,7 +127,12 @@ namespace Senparc.CO2NET.WebApi
                                 {
                                     //忽略
                                 }
+                            }
 
+                            if (choosenClass)
+                            {
+                                //当前类不是静态类，且内部方法被引用，需要进行 DI 配置
+                                serviceCollection.AddScoped(type);
                             }
                         }
                     }
