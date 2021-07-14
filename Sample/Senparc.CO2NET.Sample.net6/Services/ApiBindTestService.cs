@@ -24,7 +24,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
         [ApiBind("CO2NET", "ApiBindTest.TestApi", WebApi.ApiRequestMethod.Get)]
         [MyTest("TestCopyAttrFromTestApi")]
         //[AuthorizeAttribute()]
-        public string TestApi(string name, int value)
+        public string TestApi(string name = "Senparc", int value = 678)
         {
             return $"[from ApiBindTestService.TestApi]{name}:{value}";
         }
@@ -259,6 +259,47 @@ namespace Senparc.CO2NET.Sample.net6.Services
             await Task.Delay(1000);
             msg += $"[{SystemTime.Now:HH:mm:ss.ffff}] {name}:{value}";
             return msg;
+        }
+    }
+
+    /// <summary>
+    /// 类上进行 ApiBind 绑定的测试
+    /// </summary>
+    [ApiBind("ClassCover")]
+    public class ApiBindCoverService2
+    {
+        public string TestApiWithoutAttr(string name = "Senparc", int value = 900)
+        {
+            return $"[from ApiBindCoverService.TestApiWithoutAttr]{name}:{value}";
+        }
+
+        [IgnoreApiBind]//忽略，不会出现在 API 列表中
+        public string TestApiWithoutAttr_Ignore(string name = "Senparc", int value = 900)
+        {
+            return $"[from ApiBindCoverService.TestApiWithoutAttr_Ignore]{name}:{value}";
+        }
+
+        [ApiBind(Ignore = true)]//忽略，不会出现在 API 列表中
+        public string TestApiWithoutAttr_Ignore2(string name = "Senparc", int value = 900)
+        {
+            return $"[from ApiBindCoverService.TestApiWithoutAttr_Ignore2]{name}:{value}";
+        }
+
+
+        [ApiBind("Mine", "ApiBindCoverService.TestApi", ApiRequestMethod = WebApi.ApiRequestMethod.Get)]
+        public string TestApi(string name = "Senparc", int value = 910)
+        {
+            return $"[from ApiBindCoverService.TestApi_Get]{name}:{value}";
+        }
+
+        /// <summary>
+        /// name 定义重名
+        /// </summary>
+        /// <returns></returns>
+        [ApiBind("Mine", "ApiBindCoverService.TestApi", ApiRequestMethod = WebApi.ApiRequestMethod.Post)]
+        public string TestApiSameName(string name = "Senparc", int value = 920)
+        {
+            return $"[from ApiBindCoverService.TestApi_Get2]{name}:{value}";
         }
     }
 

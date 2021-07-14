@@ -1,15 +1,28 @@
-﻿using Senparc.CO2NET.ApiBind;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2021 Senparc
+
+    文件名：Register.cs
+    文件功能描述：WebApi 注册
+
+
+    创建标识：Senparc - 20210627
+
+----------------------------------------------------------------*/
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyModel;
+using Senparc.CO2NET.ApiBind;
 using Senparc.CO2NET.Trace;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Senparc.CO2NET.WebApi
 {
-    public class Register
+    /// <summary>
+    /// WebApi 注册
+    /// </summary>
+    public static class Register
     {
         /// <summary>
         /// 是否API绑定已经执行完
@@ -25,7 +38,7 @@ namespace Senparc.CO2NET.WebApi
         /// 自动扫描并注册 ApiBind
         /// </summary>
         /// <param name="forceBindAgain">是否强制重刷新</param>
-        public static void RegisterApiBind(bool forceBindAgain)
+        internal static void AddApiBind(this IServiceCollection serviceCollection, bool forceBindAgain)
         {
             var dt1 = SystemTime.Now;
 
@@ -42,8 +55,20 @@ namespace Senparc.CO2NET.WebApi
 
                 //查找所有扩展缓存
                 var scanTypesCount = 0;
-
-                var assembiles = AppDomain.CurrentDomain.GetAssemblies();
+                var assembiles = DependencyContext.Default.RuntimeLibraries.Select(z =>
+                {
+                    try
+                    {
+                        return Assembly.Load(new AssemblyName(z.Name));
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                });
+                //AppDomain.CurrentDomain.GetAssemblies();
+                //Assembly.GetEntryAssembly().GetReferencedAssemblies().Select(Assembly.Load)
+                //DependencyContext.Default.CompileLibraries.Select(z => Assembly.Load(z.Name))
 
                 var errorCount = 0;
 
@@ -51,7 +76,11 @@ namespace Senparc.CO2NET.WebApi
 
                 foreach (var assembly in assembiles)
                 {
-
+                    if (assembly == null)
+                    {
+                        continue;
+                    }
+                    var assemblyName = assembly.GetName().Name;
                     try
                     {
                         scanTypesCount++;
@@ -62,39 +91,73 @@ namespace Senparc.CO2NET.WebApi
 
                         foreach (var type in classTypes)
                         {
-
                             if (/*type.IsAbstract || 静态类会被识别为 IsAbstract*/
                                 !type.IsPublic || !type.IsClass || type.IsEnum)
                             {
                                 continue;
                             }
 
+                            //判断 type 是否有 ApiBind 标记
+                            var typeAttrs = type.GetCustomAttributes(typeof(ApiBindAttribute), false);
+                            var coverAllMethods = false;//class 上已经有覆盖所有方法的 [ApiBind] 特性标签
+                            var choosenClass = false;//当前 class 内有需要被引用的对象（且当前 class 可以被实例化）
+                            if (typeAttrs?.Length > 0)
+                            {
+                                //type 中具有标记，所有的方法都归档
+                                coverAllMethods = true;
+                            }
+
                             var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Static /*| BindingFlags.Static | BindingFlags.InvokeMethod*/);
 
                             foreach (var method in methods)
                             {
-                                var attrs = method.GetCustomAttributes(typeof(ApiBindAttribute), false);
-                                foreach (var attr in attrs)
+                                var methodAttrs = method.GetCustomAttributes(typeof(ApiBindAttribute), false);
+
+                                if (methodAttrs.FirstOrDefault(z => (z as ApiBindAttribute).Ignore) != null
+                                    || method.GetCustomAttribute(typeof(IgnoreApiBindAttribute)) != null)
                                 {
-                                    var apiBindAttr = attr as ApiBindAttribute;
-                                    if (!WebApiEngine.ApiAssemblyNames.ContainsKey(apiBindAttr.Category))
-                                    {
-                                        var newNameSpace = $"Senparc.DynamicWebApi.{Regex.Replace(apiBindAttr.Category, @"[\s\.\(\)]", "")}";//TODO:可以换成缓存命名空间等更加特殊的前缀
-                                        var addSuccess = WebApiEngine.ApiAssemblyNames.TryAdd(apiBindAttr.Category, newNameSpace);
-                                        if (!addSuccess)
-                                        {
-                                            SenparcTrace.SendCustomLog($"动态API未添加成功！", $"信息：[{apiBindAttr.Category} - {newNameSpace}]");
-                                        }
-                                    }
-                                    ApiBindInfoCollection.Instance.Add(method, apiBindAttr);
+                                    //忽略
+                                    continue;
                                 }
+
+                                if (!choosenClass && !method.IsStatic)
+                                {
+                                    choosenClass = coverAllMethods || methodAttrs?.Length > 0;//TODO 注意忽略的对象
+                                }
+                                if (methodAttrs?.Length > 0)
+                                {
+                                    //覆盖 type 的绑定信息
+                                    foreach (var attr in methodAttrs)
+                                    {
+                                        AddApiBindInfo(ApiBindOn.Method, attr as ApiBindAttribute, assemblyName, method);
+                                    }
+                                    //TODO:检查需要忽略的对象
+                                }
+                                else if (coverAllMethods)
+                                {
+                                    //使用 type 的绑定信息
+                                    foreach (var attr in typeAttrs)
+                                    {
+                                        AddApiBindInfo(ApiBindOn.Class, attr as ApiBindAttribute, assemblyName, method);
+                                    }
+                                }
+                                else
+                                {
+                                    //忽略
+                                }
+                            }
+
+                            if (choosenClass)
+                            {
+                                //当前类不是静态类，且内部方法被引用，需要进行 DI 配置
+                                serviceCollection.AddScoped(type);
                             }
                         }
                     }
                     catch (Exception ex)
                     {
                         errorCount++;
-                        SenparcTrace.SendCustomLog("RegisterApiBind() 自动扫描程序集报告（非程序异常）：" + assembly.FullName, ex.ToString());
+                        SenparcTrace.SendCustomLog("RegisterApiBind() 自动扫描程序集报告（即使出现错误，非程序异常）：" + assembly.FullName, ex.ToString());
                     }
                 }
 
@@ -102,6 +165,25 @@ namespace Senparc.CO2NET.WebApi
 
                 Console.WriteLine($"RegisterApiBind Time: {SystemTime.DiffTotalMS(dt1)}ms, Api Count:{ApiBindInfoCollection.Instance.Count()}, Error Count: {errorCount}");
             }
+
+
+        }
+
+        private static void AddApiBindInfo(ApiBindOn apiBindOn, ApiBindAttribute apiBindAttr, string assemblyName, MethodInfo method)
+        {
+            var categoryName = apiBindAttr.GetCategoryName(assemblyName);
+            if (!WebApiEngine.ApiAssemblyNames.ContainsKey(categoryName))
+            {
+                //TODO:可以增加缓存命名空间等更加特殊的前缀
+                var dynamicCategory = apiBindAttr.GetDynamicCategory(method, assemblyName);
+
+                var addSuccess = WebApiEngine.ApiAssemblyNames.TryAdd(categoryName, dynamicCategory);
+                if (!addSuccess)
+                {
+                    SenparcTrace.SendCustomLog($"动态API未添加成功！", $"信息：[{categoryName} - {dynamicCategory}]");
+                }
+            }
+            ApiBindInfoCollection.Instance.Add(apiBindOn, categoryName, method, apiBindAttr);
         }
     }
 }

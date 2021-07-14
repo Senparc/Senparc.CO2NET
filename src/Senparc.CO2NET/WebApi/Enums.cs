@@ -17,4 +17,13 @@
         //Trace,
         Patch
     }
+
+    /// <summary>
+    /// ApiBind 属性作用范围
+    /// </summary>
+    public enum ApiBindOn
+    {
+        Class,
+        Method
+    }
 }

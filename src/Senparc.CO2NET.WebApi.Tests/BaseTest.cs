@@ -12,13 +12,14 @@ using System;
 using System.IO;
 using System.Text;
 using Senparc.CO2NET.AspNet;
+using Senparc.CO2NET.Cache;
 
 namespace Senparc.CO2NET.WebApi.Tests
 {
     [TestClass]
     public class BaseTest
     {
-        public IServiceCollection ServiceCollection { get; }
+        public IServiceCollection ServiceCollection { get; set; }
         public IServiceProvider ServiceProvider { get; set; }
         public IConfiguration Configuration { get; set; }
         public IMvcCoreBuilder MvcCoreBuilder { get; set; }
@@ -49,21 +50,27 @@ namespace Senparc.CO2NET.WebApi.Tests
         /// </summary>
         public void RegisterServiceCollection()
         {
-            var serviceCollection = new ServiceCollection();
+            ServiceCollection = new ServiceCollection();
             var configBuilder = new ConfigurationBuilder();
             //configBuilder.AddJsonFile("appsettings.json", false, false);
             var config = configBuilder.Build();
             Configuration = config;
 
-            _senparcSetting = new SenparcSetting() { IsDebug = true };
-            //config.GetSection("SenparcSetting").Bind(_senparcSetting);
 
-            MvcCoreBuilder = serviceCollection.AddMvcCore();
+            ServiceCollection.AddSenparcGlobalServices(config);
+
+            _senparcSetting = new SenparcSetting() { IsDebug = true };
+            config.GetSection("SenparcSetting").Bind(_senparcSetting);
+
+            ServiceCollection.AddMemoryCache();//Ê¹ÓÃÄÚ´æ»º´æ
+
+
+            MvcCoreBuilder = ServiceCollection.AddMvcCore();
 
             //WebApiEngine wae = new WebApiEngine(new FindWeixinApiService(), 400);
             //wae.InitDynamicApi(builder, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data"));
 
-            ServiceProvider = serviceCollection.BuildServiceProvider();
+            ServiceProvider = ServiceCollection.BuildServiceProvider();
         }
 
         /// <summary>

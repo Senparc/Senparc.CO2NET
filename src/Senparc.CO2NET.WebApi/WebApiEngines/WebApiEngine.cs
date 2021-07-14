@@ -1,4 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2021 Senparc
+
+    文件名：WebApiEngine.cs
+    文件功能描述：WebApi 自动生成引擎
+
+
+    创建标识：Senparc - 20210627
+
+----------------------------------------------------------------*/
+
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Concurrent;
@@ -14,14 +25,15 @@ using System.Xml.Linq;
 
 namespace Senparc.CO2NET.WebApi
 {
-    public class WebApiEngine
+    /// <summary>
+    /// WebApi 自动生成引擎
+    /// </summary>
+    public partial class WebApiEngine
     {
-        //private static ConcurrentDictionary<string, Dictionary<string, ApiBindInfo>> _apiCollection = new ConcurrentDictionary<string, Dictionary<string, ApiBindInfo>>();
-
         public static ConcurrentDictionary<string, Assembly> ApiAssemblyCollection { get; set; } = new ConcurrentDictionary<string, Assembly>();
 
-        public static ConcurrentDictionary<string, string> ApiAssemblyNames { get; private set; } = new ConcurrentDictionary<string, string>(); //= "WeixinApiAssembly";
-        public static ConcurrentDictionary<string, string> ApiAssemblyVersions { get; private set; } = new ConcurrentDictionary<string, string>(); //= "WeixinApiAssembly";
+        public static ConcurrentDictionary<string, string> ApiAssemblyNames { get; private set; } = new ConcurrentDictionary<string, string>();
+        public static ConcurrentDictionary<string, string> ApiAssemblyVersions { get; private set; } = new ConcurrentDictionary<string, string>();
 
         /// <summary>
         /// API 方法附加属性
@@ -49,17 +61,6 @@ namespace Senparc.CO2NET.WebApi
             _copyCustomAttributes = copyCustomAttributes;
             _taskCount = taskCount;
             _showDetailApiLog = showDetailApiLog;
-
-            //测试时关闭部分模块
-
-            //TODO：注册预载入模块
-
-            //WeixinApiAssemblyNames[PlatformType.WeChat_OfficialAccount] = $"NeuCharDocApi.{PlatformType.WeChat_OfficialAccount}";
-            //WeixinApiAssemblyNames[PlatformType.WeChat_MiniProgram] = $"NeuCharDocApi.{PlatformType.WeChat_MiniProgram}";
-            //WeixinApiAssemblyNames[PlatformType.WeChat_Open] = $"NeuCharDocApi.{PlatformType.WeChat_Open}";
-            //WeixinApiAssemblyNames[PlatformType.WeChat_Work] = $"NeuCharDocApi.{WeCPlatformType.WeChat_Work}";
-            //WeixinApiAssemblyNames[PlatformType.General] = $"NeuCharDocApi.{PlatformType.General}";
-            //WeixinApiAssemblyNames[PlatformType.WeChat_Tenpay] = $"NeuCharDocApi.{PlatformType.WeChat_Tenpay}";
         }
 
         /// <summary>
@@ -71,74 +72,208 @@ namespace Senparc.CO2NET.WebApi
         {
             if (!hideLog || _showDetailApiLog)
             {
-                Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId:00}] {SystemTime.Now:yyyy-MM-dd HH:ss:mm.ffff}\t\t{msg}");
+                Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId:00}] {SystemTime.Now:yyyy-MM-dd HH:mm:ss.ffff}\t\t{msg}");
             }
         }
 
+        #region 创建动态程序集相关
+
+
         /// <summary>
-        /// 获取全局统一 docName
+        /// 从 apiBindInfo.Value.GlobalName 中匹配需要替换的关键字福
         /// </summary>
-        /// <param name="category"></param>
-        /// <returns></returns>
-        public static string GetDocName(string category)
+        private static Regex regexForMethodName = new Regex(@"[\.\-/:]", RegexOptions.Compiled);
+
+        /// <summary>
+        /// 创建动态 WebApi
+        /// </summary>
+        public async Task<int> BuildWebApi(IGrouping<string, KeyValuePair<string, ApiBindInfo>> apiBindGroup)
         {
-            return $"{category}-v{ApiAssemblyVersions[category]}";
-        }
+            var category = apiBindGroup.Key;
+            var dt1 = SystemTime.Now;
+            WriteLog("", true);
+            WriteLog($"==== Begin BuildWebApi for {category} ====", true);
 
-
-        /// <summary>
-        /// 检查并创建物理目录
-        /// </summary>
-        /// <param name="appDataPath">App_Data 文件夹路径</param>
-        internal void TryCreateDir(string appDataPath)
-        {
-            var dir = Path.Combine(/*SiteConfig.WebRootPath, "..", "App_Data",*/ appDataPath, "ApiDocXml");// ServerUtility.ContentRootMapPath("~/App_Data/ApiDocXml");
-            WriteLog($"检查目录：{dir}");
-            if (!Directory.Exists(dir))
+            if (apiBindGroup.Count() == 0 || !ApiAssemblyNames.ContainsKey(category))
             {
-                Directory.CreateDirectory(dir);
-                WriteLog($"创建目录：{dir}");
-            }
-        }
-
-        /// <summary>
-        /// 从 xml 中获取方法名和参数的正则
-        /// </summary>
-        private static Regex regex = new Regex(@"(M\:)(?<docName>[^(]+)(?<paramsPart>\({1}.+\){1})", RegexOptions.Compiled);
-
-
-        /// <summary>
-        /// 获取 DocName
-        /// </summary>
-        /// <param name="nameAttr"></param>
-        /// <returns></returns>
-        public DocMethodInfo GetDocMethodInfo(XAttribute nameAttr)
-        {
-            var pattern = @"(M\:)(?<docName>[^(]+)(?<paramsPart>\({1}.+\){1})";
-            var result = regex.Match(pattern);
-            if (result.Success && result.Groups["docName"] != null && result.Groups["paramsPart"] != null)
-            {
-                return new DocMethodInfo(result.Groups["docName"].Value, result.Groups["paramsPart"].Value);
+                WriteLog($"apiBindGroup 不存在可用对象: {category}");
+                return 0;
             }
 
-            return new DocMethodInfo(null, null);
+            var groupStartTime = SystemTime.Now;
 
-            //以下方法速度略慢：
-            /*
-            if (xmlAttr.StartsWith("M:"))
+            var xmlFileName = $"{apiBindGroup.First().Value.MethodInfo.DeclaringType.Assembly.GetName().Name}.xml";//XML 文件名
+            var sourceName = $"Senparc.Xncf.WeixinManager.App_Data.ApiDocXml.{xmlFileName}";//嵌入资源地址
+            var sourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(sourceName);
+
+            var useXml = sourceStream?.Length > 0;
+            var assembleName = ApiAssemblyNames[category];
+            ConcurrentDictionary<string, DocMembersCollectionValue> docMembersCollection = new ConcurrentDictionary<string, DocMembersCollectionValue>();
+            XDocument document = null;
+            if (useXml)
             {
-                var methodLastIndex = xmlAttr.IndexOf("(");
-                return (xmlAttr[2..methodLastIndex], xmlAttr[methodLastIndex..]);
+
+                document = await XDocument.LoadAsync(sourceStream, LoadOptions.None, Task.Factory.CancellationToken);
+                //XDocument document = XDocument.Load(sourceStream, LoadOptions.None);
+                var root = document.Root;
+                root.Element("assembly").Element("name").Value = assembleName;
+                var docMembers = GetXmlMembers(root);// root.Element("members").Elements("member");
+
+                double dtlong = 0;
+
+                //var dtDoc = SystemTime.Now;
+                await foreach (var x in docMembers)
+                {
+                    if (x.HasAttributes)
+                    {
+                        var nameAttr = x.FirstAttribute;
+                        var dt00 = SystemTime.Now;
+                        var docMethodInfo = GetDocMethodInfo(nameAttr);
+                        dtlong += SystemTime.DiffTotalMS(dt00);
+                        if (docMethodInfo.MethodName != null && docMethodInfo.ParamsPart != null)
+                        {
+                            //记录索引信息
+                            docMembersCollection[docMethodInfo.MethodName] = new DocMembersCollectionValue(/*x, */nameAttr, docMethodInfo.ParamsPart);
+
+                            //记录接口信息，用于搜索
+                            var isAsync = docMethodInfo.MethodName.EndsWith("Async", StringComparison.OrdinalIgnoreCase) ||
+                                            docMethodInfo.MethodName.Contains("Async``", StringComparison.OrdinalIgnoreCase);//是否是异步方法
+                            _findWeixinApiService.Value.RecordApiItem(category, docMethodInfo.MethodName, docMethodInfo.ParamsPart,
+                                x.Element("summary")?.Value, isAsync);
+                        }
+                    }
+                }
             }
 
-            return (null, null);
-            */
+            //WriteLog($"docMembersCollection init cost:{SystemTime.DiffTotalMS(dtDoc)}ms");
+
+            //WriteLog("Document Root Name:" + root.Name);
+            //WriteLog($"find docMembers:{docMembers.Count()}");
+
+            #region 动态创建程序集
+
+            var dynamicAssembly = BuildDynamicAssembly(assembleName, apiBindGroup);
+
+            #endregion
+
+            //TODO：开放所有类型
+
+            var apiBindFilterList = apiBindGroup.Where(z => //!z.Value.GlobalName.EndsWith("Async")
+                                                            //&& z.Value.MethodInfo.ReturnType != typeof(Task<>)
+                                                            //&& 
+                                     z.Value.MethodInfo.ReturnType != typeof(void)
+                                     && !z.Value.MethodInfo.IsGenericMethod //SemanticApi.SemanticSend 是泛型方法
+
+                                     //临时过滤 IEnumerable 对象   —— Jeffrey Su 2021.06.17
+                                     && !z.Value.MethodInfo.GetParameters().Any(z =>
+                                                        z.IsOut ||
+                                                        z.ParameterType.Name.Contains("IEnumerable") ||
+                                                        z.ParameterType.Name.Contains("IList`1")))
+                                .OrderBy(z => z.Value.GlobalName)
+                                .ToArray();
+
+            //把 CommonApi 提前到头部
+            //Func<KeyValuePair<string, ApiBindInfo>, bool> funcCommonApi = z => z.Value.ApiBindAttribute.Name.StartsWith("CommonApi.");
+            //var commonApiList = filterList.Where(z => funcCommonApi(z)).ToList();
+            //filterList.RemoveAll(z => funcCommonApi(z));
+            //filterList.InsertRange(0, commonApiList);
+
+            int apiIndex = 0;
+            ConcurrentDictionary<string, string> apiMethodName = new ConcurrentDictionary<string, string>();
+
+            List<Task> taskList = new List<Task>();
+
+            //预分配每个线程需要领取的任务（索引范围）
+            var apiFilterMaxIndex = apiBindFilterList.Length - 1;//最大索引
+            var avgBlockCount = (int)((apiBindFilterList.Length - 1) / _taskCount);//每个线程（块）领取的平均数量
+            var lastEndIndex = -1;//上一个块的结束索引
+
+            for (int taskIndex = 0; taskIndex < _taskCount; taskIndex++)
+            {
+                if (lastEndIndex >= apiFilterMaxIndex)
+                {
+                    break;//已经排满，终止
+                }
+
+                var blockStart = Math.Min(lastEndIndex + 1, apiFilterMaxIndex);//当前块起始索引
+                var blockEnd = 0;//当前快结束索引
+                if (taskIndex == _taskCount - 1 || /*最后一个快，一直分配到最后（解决余数问题）*/
+                    avgBlockCount == 0                  /*如果API总数比线程数还要少，则只够一个模块*/)
+                {
+                    blockEnd = apiFilterMaxIndex;//
+                }
+                else
+                {
+                    blockEnd = Math.Min(blockStart + avgBlockCount, apiFilterMaxIndex);//非最后一个快，取平均数量
+                }
+                lastEndIndex = blockEnd;//记录当前快位置
+
+                var apiTask = Task.Factory.StartNew(() =>
+                {
+                    Range blockRange = blockStart..(blockEnd + 1);
+                    var apiBindInfoBlock = apiBindFilterList[blockRange];//截取一段，分配给当前任务
+
+                    apiIndex++;
+
+                    #region 创建 API 方法
+
+                    BuildApiMethodForOneThread(apiBindGroup, apiBindInfoBlock, apiMethodName, dynamicAssembly.ControllerKeyName, dynamicAssembly.Tb,
+                    dynamicAssembly.FbServiceProvider, docMembersCollection, apiIndex);
+
+                    #endregion
+                });
+                taskList.Add(apiTask);
+            }
+
+            await Task.WhenAll(taskList);
+
+            WriteLog("Api Task Count:" + taskList.Count, true);
+
+            TypeInfo objectTypeInfo = dynamicAssembly.Tb.CreateTypeInfo();
+            var myType = objectTypeInfo.AsType();
+
+            WriteLog($"\t create type:  {myType.Namespace} - {myType.FullName}");
+
+            //WeixinApiAssembly = myType.Assembly;//注意：此处会重复赋值相同的对象，不布偶股影响效率
+
+            #region 保存新的 Xml 文件
+            if (useXml)
+            {
+                var newDocFileName = $"App_Data/ApiDocXml/{assembleName}.xml";
+                try
+                {
+                    //using (XmlWriter xw = XmlWriter.Create(newDocFile, new XmlWriterSettings() { Async = true }))
+                    //{
+                    //    await document.SaveAsync(xw, new CancellationToken()).ConfigureAwait(false);//保存
+                    //}
+                    document.Save(newDocFileName);
+
+                    WriteLog($"new document file saved: {newDocFileName}, assembly cost:{SystemTime.NowDiff(groupStartTime)}");
+                }
+                catch (Exception ex)
+                {
+                    WriteLog($"save document xml faild: {ex.Message}\r\n{ex.ToString()}");
+                }
+
+            }
+
+
+            #endregion
+
+            ApiAssemblyCollection[category] = dynamicAssembly.Mb.Assembly;//储存程序集
+
+            var timeCost = SystemTime.NowDiff(dt1);
+
+            WriteLog($"==== Finish BuildWebApi for {category} / Total Time: {timeCost.TotalMilliseconds:###,###} ms ====");
+            WriteLog("");
+
+            return apiMethodName.Count;
         }
 
         /// <summary>
-        /// 生成单个线程（或 Task任务）的 API 操作（最小粒度）
+        /// 生成单个线程（或 Task任务）的 API 方法（Method），最小粒度
         /// </summary>
-        private void BuildApiForOneThread(IGrouping<string, KeyValuePair<string, ApiBindInfo>> apiBindGroup,
+        private void BuildApiMethodForOneThread(IGrouping<string, KeyValuePair<string, ApiBindInfo>> apiBindGroup,
             KeyValuePair<string, ApiBindInfo>[] apiBindInfoBlock, ConcurrentDictionary<string, string> apiMethodName, string keyName,
             TypeBuilder tb, FieldBuilder fbServiceProvider, ConcurrentDictionary<string, DocMembersCollectionValue> docMembersCollection, int apiIndex)
         {
@@ -162,10 +297,11 @@ namespace Senparc.CO2NET.WebApi
                     }
 
                     //当前方法名称
-                    var methodName = apiBindInfo.Value.ApiBindAttribute.Name.Replace(".", "_").Replace("-", "_").Replace("/", "_");
-                    var apiBindGroupName = apiBindInfo.Value.ApiBindAttribute.Name.Split('.')[0];
-                    var indexOfApiGroupDot = apiBindInfo.Value.ApiBindAttribute.Name.IndexOf(".");
-                    var apiName = apiBindInfo.Value.ApiBindAttribute.Name.Substring(indexOfApiGroupDot + 1, apiBindInfo.Value.ApiBindAttribute.Name.Length - indexOfApiGroupDot - 1);
+                    var methodName = regexForMethodName.Replace(apiBindInfo.Value.GlobalName, "_");
+                    var apiBindGlobalName = apiBindInfo.Value.GlobalName.Split('.')[0];
+                    var apiBindName = apiBindInfo.Value.Name.Split('.')[0];
+                    var indexOfApiGroupDot = apiBindInfo.Value.GlobalName.IndexOf(".");
+                    var apiName = apiBindInfo.Value.GlobalName.Substring(indexOfApiGroupDot + 1, apiBindInfo.Value.GlobalName.Length - indexOfApiGroupDot - 1);
 
                     //确保名称不会有重复
                     while (apiMethodName.ContainsKey(methodName))
@@ -190,7 +326,7 @@ namespace Senparc.CO2NET.WebApi
 
                     //Controller已经使用过一次SwaggerOperationAttribute
                     var t2_3 = typeof(SwaggerOperationAttribute);
-                    var tagName = new[] { $"{keyName}:{apiBindGroupName}" };
+                    var tagName = new[] { $"{keyName}:{apiBindName}" };
                     var tagAttrBuilder = new CustomAttributeBuilder(t2_3.GetConstructor(new Type[] { typeof(string), typeof(string) }),
                         new object[] { (string)null, (string)null },
                         new[] { t2_3.GetProperty("Tags") }, new[] { tagName });
@@ -199,11 +335,12 @@ namespace Senparc.CO2NET.WebApi
 
                     //TODO:
 
-                    //[Route("/wxapi/...", Name="xxx")]
+                    //[Route("/api/...", Name="xxx")]
                     var t2_4 = typeof(RouteAttribute);
                     //var routeName = apiBindInfo.Value.ApiBindAttribute.Name.Split('.')[0];
                     var showStaticApiState = $"{(apiMethodInfo.IsStatic ? "_StaticApi" : "_NonStaticApi")}";
-                    var apiPath = $"/wxapi/{keyName}/{apiBindGroupName}/{apiName}{showStaticApiState}";
+                    var apiBindGroupNamePath = apiBindName.Replace(":", "_");
+                    var apiPath = $"/api/{keyName}/{apiBindGroupNamePath}/{apiName}{showStaticApiState}";
                     var routeAttrBuilder = new CustomAttributeBuilder(t2_4.GetConstructor(new Type[] { typeof(string) }),
                         new object[] { apiPath }/*, new[] { t2_2.GetProperty("Name") }, new[] { routeName }*/);
                     setPropMthdBldr.SetCustomAttribute(routeAttrBuilder);
@@ -300,105 +437,11 @@ namespace Senparc.CO2NET.WebApi
                     }
 
                     //执行具体方法（body）
-                    var il = setPropMthdBldr.GetILGenerator();
-
-                    //FieldBuilder fb = tb.DefineField("id", typeof(System.String), FieldAttributes.Private);
-
-                    var methodInfo = apiMethodInfo;
-
-                    LocalBuilder local = null;
-                    if (methodInfo.ReturnType != typeof(void))
-                    {
-                        //il.Emit(OpCodes.Ldstr, "The I.M implementation of C");
-                        local = il.DeclareLocal(apiMethodInfo.ReturnType); // create a local variable
-                                                                           //il.Emit(OpCodes.Ldarg_0);
-                                                                           //动态创建字段   
-                    }
-
-                    if (methodInfo.IsStatic)
-                    {
-                        //静态方法
-
-
-                        //il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
-                        //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
-                        il.Emit(OpCodes.Nop); // the first one in arguments list
-                        for (int i = 0; i < parameters.Length; i++)
-                        {
-                            var p = parameters[i];
-                            //WriteLog($"\t\t Ldarg: {p.Name}\t isOptional:{p.IsOptional}\t defaultValue:{p.DefaultValue}");
-                            il.Emit(OpCodes.Ldarg, i + 1); // the first one in arguments list
-                        }
-
-                        //WriteLog($"\t get static method: {methodInfo.Name}\t returnType:{methodInfo.ReturnType}");
-
-                        il.Emit(OpCodes.Call, methodInfo);
-
-                        ////if (apiMethodInfo.GetType() == apiMethodInfo.DeclaringType)//注意：此处使用不同的方法，会出现不同的异常
-                        //if (typeof(Senparc.Weixin.MP.CommonAPIs.CommonApi) == methodInfo.DeclaringType)
-                        //    il.Emit(OpCodes.Call, methodInfo);
-                        //else
-                        //    il.Emit(OpCodes.Callvirt, methodInfo);
-
-                        if (methodInfo.ReturnType != typeof(void))
-                        {
-                            il.Emit(OpCodes.Stloc, local); // set local variable
-                            il.Emit(OpCodes.Ldloc, local); // load local variable to stack 
-                                                           //il.Emit(OpCodes.Pop);
-                        }
-
-                        il.Emit(OpCodes.Ret);
-                    }
-                    else
-                    {
-                        //非静态方法
-                        var invokeClassType = methodInfo.DeclaringType;
-
-
-                        il.Emit(OpCodes.Nop); // the first one in arguments list
-                        il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
-                                                  //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
-
-
-                        //il.Emit(OpCodes.Nop);
-                        //il.Emit(OpCodes.Ldarg, 0);
-
-
-                        il.Emit(OpCodes.Ldfld, fbServiceProvider);
-
-                        il.Emit(OpCodes.Ldtoken, invokeClassType);
-                        il.Emit(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle"));
-
-                        il.Emit(OpCodes.Callvirt, typeof(IServiceProvider).GetMethod("GetService"));
-                        il.Emit(OpCodes.Isinst, invokeClassType);
-                        il.Emit(OpCodes.Stloc, 0);
-                        il.Emit(OpCodes.Ldloc, 0);
-
-                        for (int i = 0; i < parameters.Length; i++)
-                        {
-                            var p = parameters[i];
-                            //WriteLog($"\t\t Ldarg: {p.Name}\t isOptional:{p.IsOptional}\t defaultValue:{p.DefaultValue}");
-                            il.Emit(OpCodes.Ldarg, i + 1); // the first one in arguments list
-                        }
-                        il.Emit(OpCodes.Callvirt, methodInfo);
-                        //il.Emit(OpCodes.Stloc, local);
-                        //il.Emit(OpCodes.Ldloc, local);
-                        //il.Emit(OpCodes.Ret);
-
-                        if (methodInfo.ReturnType != typeof(void))
-                        {
-                            il.Emit(OpCodes.Stloc, local); // set local variable
-                            il.Emit(OpCodes.Ldloc, local); // load local variable to stack 
-                                                           //il.Emit(OpCodes.Pop);
-                        }
-
-                        il.Emit(OpCodes.Ret);
-                    }
-
+                    BuildMethodBody(apiMethodInfo, setPropMthdBldr, parameters, fbServiceProvider);
 
                     //var dt1 = SystemTime.Now;
                     //修改XML文档
-                    BuildXmlDoc(methodName, methodInfo, tb, docMembersCollection);
+                    BuildXmlDoc(methodName, apiMethodInfo, tb, docMembersCollection);
                     //WriteLog($"methodName 文档修改耗时：{SystemTime.DiffTotalMS(dt1)}ms");
                 }
                 catch (Exception ex)
@@ -408,6 +451,111 @@ namespace Senparc.CO2NET.WebApi
                 }
                 #endregion
 
+            }
+        }
+
+        /// <summary>
+        /// 创建 API 方法内部调用
+        /// </summary>
+        /// <param name="apiMethodInfo"></param>
+        /// <param name="setPropMthdBldr"></param>
+        /// <param name="parameters"></param>
+        /// <param name="fbServiceProvider"></param>
+        private void BuildMethodBody(MethodInfo apiMethodInfo, MethodBuilder setPropMthdBldr, ParameterInfo[] parameters, FieldBuilder fbServiceProvider)
+        {
+            //执行具体方法（body）
+            var il = setPropMthdBldr.GetILGenerator();
+
+            //FieldBuilder fb = tb.DefineField("id", typeof(System.String), FieldAttributes.Private);
+
+            //var methodInfo = apiMethodInfo;
+            LocalBuilder local = null;
+            if (apiMethodInfo.ReturnType != typeof(void))
+            {
+                //il.Emit(OpCodes.Ldstr, "The I.M implementation of C");
+                local = il.DeclareLocal(apiMethodInfo.ReturnType); // create a local variable
+                                                                   //il.Emit(OpCodes.Ldarg_0);
+                                                                   //动态创建字段   
+            }
+
+            if (apiMethodInfo.IsStatic)
+            {
+                //静态方法
+
+
+                //il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
+                //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
+                il.Emit(OpCodes.Nop); // the first one in arguments list
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    var p = parameters[i];
+                    //WriteLog($"\t\t Ldarg: {p.Name}\t isOptional:{p.IsOptional}\t defaultValue:{p.DefaultValue}");
+                    il.Emit(OpCodes.Ldarg, i + 1); // the first one in arguments list
+                }
+
+                //WriteLog($"\t get static method: {methodInfo.Name}\t returnType:{methodInfo.ReturnType}");
+
+                il.Emit(OpCodes.Call, apiMethodInfo);
+
+                ////if (apiMethodInfo.GetType() == apiMethodInfo.DeclaringType)//注意：此处使用不同的方法，会出现不同的异常
+                //if (typeof(Senparc.Weixin.MP.CommonAPIs.CommonApi) == methodInfo.DeclaringType)
+                //    il.Emit(OpCodes.Call, methodInfo);
+                //else
+                //    il.Emit(OpCodes.Callvirt, methodInfo);
+
+                if (apiMethodInfo.ReturnType != typeof(void))
+                {
+                    il.Emit(OpCodes.Stloc, local); // set local variable
+                    il.Emit(OpCodes.Ldloc, local); // load local variable to stack 
+                                                   //il.Emit(OpCodes.Pop);
+                }
+
+                il.Emit(OpCodes.Ret);
+            }
+            else
+            {
+                //非静态方法
+                var invokeClassType = apiMethodInfo.DeclaringType;
+
+
+                il.Emit(OpCodes.Nop); // the first one in arguments list
+                il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
+                                          //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
+
+
+                //il.Emit(OpCodes.Nop);
+                //il.Emit(OpCodes.Ldarg, 0);
+
+
+                il.Emit(OpCodes.Ldfld, fbServiceProvider);
+
+                il.Emit(OpCodes.Ldtoken, invokeClassType);
+                il.Emit(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle"));
+
+                il.Emit(OpCodes.Callvirt, typeof(IServiceProvider).GetMethod("GetService"));
+                il.Emit(OpCodes.Isinst, invokeClassType);
+                il.Emit(OpCodes.Stloc, 0);
+                il.Emit(OpCodes.Ldloc, 0);
+
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    var p = parameters[i];
+                    //WriteLog($"\t\t Ldarg: {p.Name}\t isOptional:{p.IsOptional}\t defaultValue:{p.DefaultValue}");
+                    il.Emit(OpCodes.Ldarg, i + 1); // the first one in arguments list
+                }
+                il.Emit(OpCodes.Callvirt, apiMethodInfo);
+                //il.Emit(OpCodes.Stloc, local);
+                //il.Emit(OpCodes.Ldloc, local);
+                //il.Emit(OpCodes.Ret);
+
+                if (apiMethodInfo.ReturnType != typeof(void))
+                {
+                    il.Emit(OpCodes.Stloc, local); // set local variable
+                    il.Emit(OpCodes.Ldloc, local); // load local variable to stack 
+                                                   //il.Emit(OpCodes.Pop);
+                }
+
+                il.Emit(OpCodes.Ret);
             }
         }
 
@@ -431,7 +579,7 @@ namespace Senparc.CO2NET.WebApi
 
             //储存 API
             //_apiCollection[category] = new Dictionary<string, ApiBindInfo>(apiBindGroup);
-            var controllerKeyName = category.ToString();//不要随意改规则，全局需要保持一致
+            var controllerKeyName = category.Replace(":", "_");//不要随意改规则，全局需要保持一致
 
             WriteLog($"search key: {category} -> {controllerKeyName}", true);
 
@@ -457,7 +605,7 @@ namespace Senparc.CO2NET.WebApi
             ctorIl.Emit(OpCodes.Ret);
 
             //ConstructorBuilder constructor = tb.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
-            //多个Get参数放在同一个Controller中可能发生问题：NotSupportedException: HTTP method "GET" & path "wxapi/WeChat_OfficialAccount/CommonApi_CreateMenu" overloaded by actions - WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly),WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly). Actions require unique method/path combination for OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+            //多个Get参数放在同一个Controller中可能发生问题：NotSupportedException: HTTP method "GET" & path "api/WeChat_OfficialAccount/CommonApi_CreateMenu" overloaded by actions - WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly),WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly). Actions require unique method/path combination for OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
 
             /*以下方法如果遇到参数含有 IEnumerable<T> 参数，会抛出异常：
              * InvalidOperationException: Action 'WeChat_MiniProgramController.TcbApi_UpdateIndex (NeuCharDocApi.WeChat_MiniProgram)' has more than one parameter that was specified or inferred as bound from request body. Only one parameter per action may be bound from body. Inspect the following parameters, and use 'FromQueryAttribute' to specify bound from query, 'FromRouteAttribute' to specify bound from route, and 'FromBodyAttribute' for parameters to be bound from body:
@@ -474,7 +622,7 @@ namespace Senparc.CO2NET.WebApi
 
 
             var t2 = typeof(RouteAttribute);
-            tb.SetCustomAttribute(new CustomAttributeBuilder(t2.GetConstructor(new Type[] { typeof(string) }), new object[] { $"/wxapi/{controllerKeyName}" }));
+            tb.SetCustomAttribute(new CustomAttributeBuilder(t2.GetConstructor(new Type[] { typeof(string) }), new object[] { $"/api/{controllerKeyName}" }));
 
             //添加Controller级别的分类（暂时无效果）
 
@@ -501,220 +649,6 @@ namespace Senparc.CO2NET.WebApi
             return new BuildDynamicAssemblyResult(dynamicAssemblyBuilder, mb, tb, fbServiceProvider, controllerKeyName);
         }
 
-        /// <summary>
-        /// 获取 XML 中所有 Member
-        /// </summary>
-        /// <param name="root"></param>
-        /// <returns></returns>
-        private async IAsyncEnumerable<XElement> GetXmlMembers(XElement root)
-        {
-            foreach (var item in root.Element("members").Elements("member"))
-            {
-                yield return item;
-            }
-        }
-
-        /// <summary>
-        /// 创建动态 WebApi
-        /// </summary>
-        public async Task<int> BuildWebApi(IGrouping<string, KeyValuePair<string, ApiBindInfo>> apiBindGroup)
-        {
-            var category = apiBindGroup.Key;
-            var dt1 = SystemTime.Now;
-            WriteLog("", true);
-            WriteLog($"==== Begin BuildWebApi for {category} ====", true);
-
-            if (apiBindGroup.Count() == 0 || !ApiAssemblyNames.ContainsKey(category))
-            {
-                WriteLog($"apiBindGroup 不存在可用对象: {category}");
-                return 0;
-            }
-
-            var groupStartTime = SystemTime.Now;
-
-            var xmlFileName = $"{apiBindGroup.First().Value.MethodInfo.DeclaringType.Assembly.GetName().Name}.xml";//XML 文件名
-            var sourceName = $"Senparc.Xncf.WeixinManager.App_Data.ApiDocXml.{xmlFileName}";//嵌入资源地址
-            var sourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(sourceName);
-
-            var useXml = sourceStream?.Length > 0;
-            var assembleName = ApiAssemblyNames[category];
-            ConcurrentDictionary<string, DocMembersCollectionValue> docMembersCollection = new ConcurrentDictionary<string, DocMembersCollectionValue>();
-            XDocument document = null;
-            if (useXml)
-            {
-
-                document = await XDocument.LoadAsync(sourceStream, LoadOptions.None, Task.Factory.CancellationToken);
-                //XDocument document = XDocument.Load(sourceStream, LoadOptions.None);
-                var root = document.Root;
-                root.Element("assembly").Element("name").Value = assembleName;
-                var docMembers = GetXmlMembers(root);// root.Element("members").Elements("member");
-
-                double dtlong = 0;
-
-                //var dtDoc = SystemTime.Now;
-                await foreach (var x in docMembers)
-                {
-                    if (x.HasAttributes)
-                    {
-                        var nameAttr = x.FirstAttribute;
-                        var dt00 = SystemTime.Now;
-                        var docMethodInfo = GetDocMethodInfo(nameAttr);
-                        dtlong += SystemTime.DiffTotalMS(dt00);
-                        if (docMethodInfo.MethodName != null && docMethodInfo.ParamsPart != null)
-                        {
-                            //记录索引信息
-                            docMembersCollection[docMethodInfo.MethodName] = new DocMembersCollectionValue(/*x, */nameAttr, docMethodInfo.ParamsPart);
-
-                            //记录接口信息，用于搜索
-                            var isAsync = docMethodInfo.MethodName.EndsWith("Async", StringComparison.OrdinalIgnoreCase) ||
-                                            docMethodInfo.MethodName.Contains("Async``", StringComparison.OrdinalIgnoreCase);//是否是异步方法
-                            _findWeixinApiService.Value.RecordApiItem(category, docMethodInfo.MethodName, docMethodInfo.ParamsPart,
-                                x.Element("summary")?.Value, isAsync);
-                        }
-                    }
-                }
-            }
-
-            //WriteLog($"docMembersCollection init cost:{SystemTime.DiffTotalMS(dtDoc)}ms");
-
-            //WriteLog("Document Root Name:" + root.Name);
-            //WriteLog($"find docMembers:{docMembers.Count()}");
-
-            #region 动态创建程序集
-
-            var dynamicAssembly = BuildDynamicAssembly(assembleName, apiBindGroup);
-
-            #endregion
-
-            var apiBindFilterList = apiBindGroup.Where(z => !z.Value.ApiBindAttribute.Name.EndsWith("Async")
-                                     && z.Value.MethodInfo.ReturnType != typeof(Task<>)
-                                     && z.Value.MethodInfo.ReturnType != typeof(void)
-                                     && !z.Value.MethodInfo.IsGenericMethod //SemanticApi.SemanticSend 是泛型方法
-
-                                     //临时过滤 IEnumerable 对象   —— Jeffrey Su 2021.06.17
-                                     && !z.Value.MethodInfo.GetParameters().Any(z =>
-                                                        z.IsOut ||
-                                                        z.ParameterType.Name.Contains("IEnumerable") ||
-                                                        z.ParameterType.Name.Contains("IList`1")))
-                                .OrderBy(z => z.Value.ApiBindAttribute.Name)
-                                .ToArray();
-
-            //把 CommonApi 提前到头部
-            //Func<KeyValuePair<string, ApiBindInfo>, bool> funcCommonApi = z => z.Value.ApiBindAttribute.Name.StartsWith("CommonApi.");
-            //var commonApiList = filterList.Where(z => funcCommonApi(z)).ToList();
-            //filterList.RemoveAll(z => funcCommonApi(z));
-            //filterList.InsertRange(0, commonApiList);
-
-            int apiIndex = 0;
-            ConcurrentDictionary<string, string> apiMethodName = new ConcurrentDictionary<string, string>();
-
-            List<Task> taskList = new List<Task>();
-
-            //预分配每个线程需要领取的任务（索引范围）
-            var apiFilterMaxIndex = apiBindFilterList.Length - 1;//最大索引
-            var avgBlockCount = (int)((apiBindFilterList.Length - 1) / _taskCount);//每个线程（块）领取的平均数量
-            var lastEndIndex = -1;//上一个块的结束索引
-
-            for (int taskIndex = 0; taskIndex < _taskCount; taskIndex++)
-            {
-                if (lastEndIndex >= apiFilterMaxIndex)
-                {
-                    break;//已经排满，终止
-                }
-
-                var blockStart = Math.Min(lastEndIndex + 1, apiFilterMaxIndex);//当前块起始索引
-                var blockEnd = 0;//当前快结束索引
-                if (taskIndex == _taskCount - 1 || /*最后一个快，一直分配到最后（解决余数问题）*/
-                    avgBlockCount == 0                  /*如果API总数比线程数还要少，则只够一个模块*/)
-                {
-                    blockEnd = apiFilterMaxIndex;//
-                }
-                else
-                {
-                    blockEnd = Math.Min(blockStart + avgBlockCount, apiFilterMaxIndex);//非最后一个快，取平均数量
-                }
-                lastEndIndex = blockEnd;//记录当前快位置
-
-                var apiTask = Task.Factory.StartNew(() =>
-                {
-                    Range blockRange = blockStart..(blockEnd + 1);
-                    var apiBindInfoBlock = apiBindFilterList[blockRange];//截取一段，分配给当前任务
-
-                    apiIndex++;
-
-                    #region 创建 API 方法
-
-                    BuildApiForOneThread(apiBindGroup, apiBindInfoBlock, apiMethodName, dynamicAssembly.ControllerKeyName, dynamicAssembly.Tb,
-                    dynamicAssembly.FbServiceProvider, docMembersCollection, apiIndex);
-
-                    #endregion
-                });
-                taskList.Add(apiTask);
-            }
-
-            await Task.WhenAll(taskList);
-
-            WriteLog("Api Task Count:" + taskList.Count, true);
-
-            TypeInfo objectTypeInfo = dynamicAssembly.Tb.CreateTypeInfo();
-            var myType = objectTypeInfo.AsType();
-
-            WriteLog($"\t create type:  {myType.Namespace} - {myType.FullName}");
-
-            //WeixinApiAssembly = myType.Assembly;//注意：此处会重复赋值相同的对象，不布偶股影响效率
-
-            #region 保存新的 Xml 文件
-            if (useXml)
-            {
-                var newDocFileName = $"App_Data/ApiDocXml/{assembleName}.xml";
-                try
-                {
-                    //using (XmlWriter xw = XmlWriter.Create(newDocFile, new XmlWriterSettings() { Async = true }))
-                    //{
-                    //    await document.SaveAsync(xw, new CancellationToken()).ConfigureAwait(false);//保存
-                    //}
-                    document.Save(newDocFileName);
-
-                    WriteLog($"new document file saved: {newDocFileName}, assembly cost:{SystemTime.NowDiff(groupStartTime)}");
-                }
-                catch (Exception ex)
-                {
-                    WriteLog($"save document xml faild: {ex.Message}\r\n{ex.ToString()}");
-                }
-
-            }
-
-
-            #endregion
-
-            ApiAssemblyCollection[category] = dynamicAssembly.Mb.Assembly;//储存程序集
-
-            var timeCost = SystemTime.NowDiff(dt1);
-
-            WriteLog($"==== Finish BuildWebApi for {category} / Total Time: {timeCost.TotalMilliseconds:###,###} ms ====");
-            WriteLog("");
-
-            return apiMethodName.Count;
-        }
-
-        private void BuildXmlDoc(string methodName, MethodInfo methodInfo, TypeBuilder tb, ConcurrentDictionary<string, DocMembersCollectionValue> docMembersCollection)
-        {
-            //生成文档
-            var docMethodName = $"{methodInfo.DeclaringType.FullName}.{methodInfo.Name}";//以(结尾确定匹配到完整的方法名
-
-            WriteLog($"\t search for docName:  {docMethodName}");//\t\tSDK Method：{apiMethodInfo.ToString()}
-
-            if (docMembersCollection.ContainsKey(docMethodName))
-            {
-                var docMethodInfo = docMembersCollection[docMethodName];
-                // like: "M:Senparc.Weixin.MP.AdvancedAPIs.AnalysisApi.GetArticleSummary(System.String,System.String,System.String,System.Int32)"
-                var newAttrName = $"M:{tb.FullName}.{methodName}{docMethodInfo.ParamsPart}";
-
-                docMethodInfo.NameAttr.SetValue(newAttrName);
-                //WriteLog($"\t change document name:  {attr.Value} -> {newAttrName}");
-            }
-        }
-
 
         /// <summary>
         /// 获取 WeixinApiAssembly 程序集对象
@@ -730,7 +664,7 @@ namespace Senparc.CO2NET.WebApi
         /// </summary>
         /// <param name="apiRequestMethod"></param>
         /// <returns></returns>
-        public Type GetRequestMethodAttribute(ApiRequestMethod apiRequestMethod)
+        private Type GetRequestMethodAttribute(ApiRequestMethod apiRequestMethod)
         {
             return apiRequestMethod switch
             {
@@ -745,6 +679,8 @@ namespace Senparc.CO2NET.WebApi
                 _ => typeof(HttpPostAttribute),//默认都使用 Post
             };
         }
+
+        #endregion
 
     }
 }
