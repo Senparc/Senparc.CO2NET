@@ -1,16 +1,27 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2021 Senparc
+
+    文件名：Register.cs
+    文件功能描述：WebApi 注册
+
+
+    创建标识：Senparc - 20210627
+
+----------------------------------------------------------------*/
+
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
 using Senparc.CO2NET.ApiBind;
 using Senparc.CO2NET.Trace;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Senparc.CO2NET.WebApi
 {
+    /// <summary>
+    /// WebApi 注册
+    /// </summary>
     public static class Register
     {
         /// <summary>
@@ -104,7 +115,7 @@ namespace Senparc.CO2NET.WebApi
                                 var methodAttrs = method.GetCustomAttributes(typeof(ApiBindAttribute), false);
                                 if (!choosenClass && !method.IsStatic)
                                 {
-                                    choosenClass = coverAllMethods ||  methodAttrs?.Length > 0;//TODO 注意忽略的对象
+                                    choosenClass = coverAllMethods || methodAttrs?.Length > 0;//TODO 注意忽略的对象
                                 }
                                 if (methodAttrs?.Length > 0)
                                 {

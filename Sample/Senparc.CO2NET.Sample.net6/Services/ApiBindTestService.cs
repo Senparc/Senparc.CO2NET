@@ -265,23 +265,17 @@ namespace Senparc.CO2NET.Sample.net6.Services
     /// <summary>
     /// 类上进行 ApiBind 绑定的测试
     /// </summary>
-    //[ApiBind("ClassCover")]
+    [ApiBind("ClassCover")]
     public class ApiBindCoverService2
     {
-        public ApiBindCoverService2() { }
-        //public string TestApiWithoutAttr(string name = "Senparc", int value = 999)
-        //{
-        //    return $"[from ApiBindCoverService.TestApiWithoutAttr]{name}:{value}";
-        //}
-
-        [ApiBind("Mine", "ApiBindCoverService.TestApiPost", ApiRequestMethod = WebApi.ApiRequestMethod.Post)]
-        public string TestApiPost(string name = "Senparc", int value = 900)
+        public string TestApiWithoutAttr(string name = "Senparc", int value = 900)
         {
-            return $"[from ApiBindCoverService.TestApi_Post]{name}:{value}";
+            return $"[from ApiBindCoverService.TestApiWithoutAttr]{name}:{value}";
         }
 
-        [ApiBind("Mine", "ApiBindCoverService.TestApiGet", ApiRequestMethod = WebApi.ApiRequestMethod.Get)]
-        public string TestApiGet(string name = "Senparc", int value = 910)
+
+        [ApiBind("Mine", "ApiBindCoverService.TestApi", ApiRequestMethod = WebApi.ApiRequestMethod.Get)]
+        public string TestApi(string name = "Senparc", int value = 910)
         {
             return $"[from ApiBindCoverService.TestApi_Get]{name}:{value}";
         }
@@ -289,11 +283,9 @@ namespace Senparc.CO2NET.Sample.net6.Services
         /// <summary>
         /// name 定义重名
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
         /// <returns></returns>
-        [ApiBind("Mine", "ApiBindCoverService.TestApiGet", ApiRequestMethod = WebApi.ApiRequestMethod.Get)]
-        public string TestApiGet2(string name = "Senparc", int value = 920)
+        [ApiBind("Mine", "ApiBindCoverService.TestApi", ApiRequestMethod = WebApi.ApiRequestMethod.Post)]
+        public string TestApiSameName(string name = "Senparc", int value = 920)
         {
             return $"[from ApiBindCoverService.TestApi_Get2]{name}:{value}";
         }

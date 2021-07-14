@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.WebApi.WebApiEngines
 {
+    /// <summary>
+    /// WebApiEngine 扩展方法
+    /// </summary>
     public static class WebApiEngineExtensions
     {
         /// <summary>

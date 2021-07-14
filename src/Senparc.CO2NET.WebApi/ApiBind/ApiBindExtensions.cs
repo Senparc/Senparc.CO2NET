@@ -1,7 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2021 Senparc
+
+    文件名：ApiBindExtensions.cs
+    文件功能描述：ApiBindAttribute 的扩展方法
+
+
+    创建标识：Senparc - 20210713
+
+----------------------------------------------------------------*/
+
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Senparc.CO2NET.WebApi
@@ -28,16 +36,5 @@ namespace Senparc.CO2NET.WebApi
             }
             return newNameSpace;
         }
-
-
-        ///// <summary>
-        ///// 获取
-        ///// </summary>
-        ///// <param name="methodInfo"></param>
-        ///// <returns></returns>
-        //public string GetCategory(MethodInfo methodInfo)
-        //{
-        //    return Category ?? $"{methodInfo.DeclaringType.Namespace}";
-        //}
     }
 }
