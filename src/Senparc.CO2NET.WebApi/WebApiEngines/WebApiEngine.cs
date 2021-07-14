@@ -163,7 +163,8 @@ namespace Senparc.CO2NET.WebApi
 
                     //当前方法名称
                     var methodName = apiBindInfo.Value.GlobalName.Replace(".", "_").Replace("-", "_").Replace("/", "_");
-                    var apiBindGroupName = apiBindInfo.Value.GlobalName.Split('.')[0];
+                    var apiBindGlobalName = apiBindInfo.Value.GlobalName.Split('.')[0];
+                    var apiBindName = apiBindInfo.Value.Name.Split('.')[0];
                     var indexOfApiGroupDot = apiBindInfo.Value.GlobalName.IndexOf(".");
                     var apiName = apiBindInfo.Value.GlobalName.Substring(indexOfApiGroupDot + 1, apiBindInfo.Value.GlobalName.Length - indexOfApiGroupDot - 1);
 
@@ -190,7 +191,7 @@ namespace Senparc.CO2NET.WebApi
 
                     //Controller已经使用过一次SwaggerOperationAttribute
                     var t2_3 = typeof(SwaggerOperationAttribute);
-                    var tagName = new[] { $"{keyName}:{apiBindGroupName}" };
+                    var tagName = new[] { $"{keyName}:{apiBindName}" };
                     var tagAttrBuilder = new CustomAttributeBuilder(t2_3.GetConstructor(new Type[] { typeof(string), typeof(string) }),
                         new object[] { (string)null, (string)null },
                         new[] { t2_3.GetProperty("Tags") }, new[] { tagName });
@@ -199,11 +200,12 @@ namespace Senparc.CO2NET.WebApi
 
                     //TODO:
 
-                    //[Route("/wxapi/...", Name="xxx")]
+                    //[Route("/api/...", Name="xxx")]
                     var t2_4 = typeof(RouteAttribute);
                     //var routeName = apiBindInfo.Value.ApiBindAttribute.Name.Split('.')[0];
                     var showStaticApiState = $"{(apiMethodInfo.IsStatic ? "_StaticApi" : "_NonStaticApi")}";
-                    var apiPath = $"/wxapi/{keyName}/{apiBindGroupName}/{apiName}{showStaticApiState}";
+                    var apiBindGroupNamePath = apiBindName.Replace(":", "_");
+                    var apiPath = $"/api/{keyName}/{apiBindGroupNamePath}/{apiName}{showStaticApiState}";
                     var routeAttrBuilder = new CustomAttributeBuilder(t2_4.GetConstructor(new Type[] { typeof(string) }),
                         new object[] { apiPath }/*, new[] { t2_2.GetProperty("Name") }, new[] { routeName }*/);
                     setPropMthdBldr.SetCustomAttribute(routeAttrBuilder);
@@ -457,7 +459,7 @@ namespace Senparc.CO2NET.WebApi
             ctorIl.Emit(OpCodes.Ret);
 
             //ConstructorBuilder constructor = tb.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
-            //多个Get参数放在同一个Controller中可能发生问题：NotSupportedException: HTTP method "GET" & path "wxapi/WeChat_OfficialAccount/CommonApi_CreateMenu" overloaded by actions - WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly),WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly). Actions require unique method/path combination for OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+            //多个Get参数放在同一个Controller中可能发生问题：NotSupportedException: HTTP method "GET" & path "api/WeChat_OfficialAccount/CommonApi_CreateMenu" overloaded by actions - WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly),WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly). Actions require unique method/path combination for OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
 
             /*以下方法如果遇到参数含有 IEnumerable<T> 参数，会抛出异常：
              * InvalidOperationException: Action 'WeChat_MiniProgramController.TcbApi_UpdateIndex (NeuCharDocApi.WeChat_MiniProgram)' has more than one parameter that was specified or inferred as bound from request body. Only one parameter per action may be bound from body. Inspect the following parameters, and use 'FromQueryAttribute' to specify bound from query, 'FromRouteAttribute' to specify bound from route, and 'FromBodyAttribute' for parameters to be bound from body:
@@ -474,7 +476,7 @@ namespace Senparc.CO2NET.WebApi
 
 
             var t2 = typeof(RouteAttribute);
-            tb.SetCustomAttribute(new CustomAttributeBuilder(t2.GetConstructor(new Type[] { typeof(string) }), new object[] { $"/wxapi/{controllerKeyName}" }));
+            tb.SetCustomAttribute(new CustomAttributeBuilder(t2.GetConstructor(new Type[] { typeof(string) }), new object[] { $"/api/{controllerKeyName}" }));
 
             //添加Controller级别的分类（暂时无效果）
 

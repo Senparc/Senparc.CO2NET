@@ -43,7 +43,6 @@ namespace Senparc.CO2NET.Sample.net6
             //string load = "" + typeof(Senparc.Weixin.MP.Register);
             Senparc.NeuChar.Register.AddNeuChar();
 
-
             var appDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data");
             services.AddAndInitDynamicApi(builder, appDataPath, ApiRequestMethod.Get, 400, false, true, m => null);
 
