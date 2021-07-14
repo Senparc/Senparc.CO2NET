@@ -262,6 +262,21 @@ namespace Senparc.CO2NET.Sample.net6.Services
         }
     }
 
+    [ApiBind("ClassCover")]
+    public class ApiBindCoverService
+    {
+        public string TestApi(string name = "Senparc", int value = 999)
+        {
+            return $"[from ApiBindCoverService.TestApi]{name}:{value}";
+        }
+
+        [ApiBind(null, "ApiBindCoverService.TestApiDefine", ApiRequestMethod = WebApi.ApiRequestMethod.Post)]
+        public string TestApi2(string name = "Senparc", int value = 999)
+        {
+            return $"[from ApiBindCoverService.TestApi]{name}:{value}";
+        }
+    }
+
     /// <summary>
     /// 用于测试自动生成的 WebApi 方法内调用静态方法
     /// </summary>
