@@ -91,7 +91,6 @@ namespace Senparc.CO2NET.WebApi
 
                         foreach (var type in classTypes)
                         {
-
                             if (/*type.IsAbstract || 静态类会被识别为 IsAbstract*/
                                 !type.IsPublic || !type.IsClass || type.IsEnum)
                             {
@@ -113,6 +112,14 @@ namespace Senparc.CO2NET.WebApi
                             foreach (var method in methods)
                             {
                                 var methodAttrs = method.GetCustomAttributes(typeof(ApiBindAttribute), false);
+
+                                if (methodAttrs.FirstOrDefault(z => (z as ApiBindAttribute).Ignore) != null
+                                    || method.GetCustomAttribute(typeof(IgnoreApiBindAttribute)) != null)
+                                {
+                                    //忽略
+                                    continue;
+                                }
+
                                 if (!choosenClass && !method.IsStatic)
                                 {
                                     choosenClass = coverAllMethods || methodAttrs?.Length > 0;//TODO 注意忽略的对象

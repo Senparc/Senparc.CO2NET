@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <Version>0.2.1-beta3</Version>
+    <Version>0.2.1-preview1</Version>
     <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
     <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>

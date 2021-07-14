@@ -1,12 +1,17 @@
-﻿using Senparc.CO2NET.Extensions;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2021 Senparc
+
+    文件名：ApiBindAttribute.cs
+    文件功能描述：ApiBindAttribute 特性
+
+
+    创建标识：Senparc - 20210627
+
+----------------------------------------------------------------*/
+
 using Senparc.CO2NET.WebApi;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Senparc.CO2NET
 {
@@ -19,11 +24,15 @@ namespace Senparc.CO2NET
         /// <summary>
         /// 目录（平台类型），用于输出 API 的 Url 时分组
         /// </summary>
-        public string Category { private get; set; }
+        private string Category { get; set; }
         /// <summary>
         /// 平台内唯一名称（请使用宇宙唯一名称，如： [namespace].[ClassName].[MethodName]）
         /// </summary>
-        public string Name { private get; set; }
+        private string Name { get; set; }
+        /// <summary>
+        /// 是否忽略当前标签
+        /// </summary>
+        public bool Ignore { get; set; }
 
         public ApiRequestMethod ApiRequestMethod { get; set; }
 
@@ -31,6 +40,12 @@ namespace Senparc.CO2NET
         /// ApiBindAttributes 构造函数
         /// </summary>
         public ApiBindAttribute() { }
+
+        internal ApiBindAttribute(bool ignore)
+        {
+            Ignore = ignore;
+        }
+
 
         /// <summary>
         /// 自动绑定属性

@@ -24,7 +24,7 @@ namespace Senparc.CO2NET.Sample.net6.Services
         [ApiBind("CO2NET", "ApiBindTest.TestApi", WebApi.ApiRequestMethod.Get)]
         [MyTest("TestCopyAttrFromTestApi")]
         //[AuthorizeAttribute()]
-        public string TestApi(string name="Senparc", int value=678)
+        public string TestApi(string name = "Senparc", int value = 678)
         {
             return $"[from ApiBindTestService.TestApi]{name}:{value}";
         }
@@ -271,6 +271,18 @@ namespace Senparc.CO2NET.Sample.net6.Services
         public string TestApiWithoutAttr(string name = "Senparc", int value = 900)
         {
             return $"[from ApiBindCoverService.TestApiWithoutAttr]{name}:{value}";
+        }
+
+        [IgnoreApiBind]//忽略，不会出现在 API 列表中
+        public string TestApiWithoutAttr_Ignore(string name = "Senparc", int value = 900)
+        {
+            return $"[from ApiBindCoverService.TestApiWithoutAttr_Ignore]{name}:{value}";
+        }
+
+        [ApiBind(Ignore = true)]//忽略，不会出现在 API 列表中
+        public string TestApiWithoutAttr_Ignore2(string name = "Senparc", int value = 900)
+        {
+            return $"[from ApiBindCoverService.TestApiWithoutAttr_Ignore2]{name}:{value}";
         }
 
 

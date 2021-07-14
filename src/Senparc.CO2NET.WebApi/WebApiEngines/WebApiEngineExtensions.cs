@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Senparc.CO2NET.ApiBind;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -87,7 +88,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
 
             var dt1 = SystemTime.Now;
 
-            var apiGroups = ApiBind.ApiBindInfoCollection.Instance.GetGroupedCollection();
+            var apiGroups = ApiBindInfoCollection.Instance.GetGroupedCollection();
 
             ConcurrentDictionary<string, (int apiCount, double costMs)> assemblyBuildStat = new ConcurrentDictionary<string, (int, double)>();
 
