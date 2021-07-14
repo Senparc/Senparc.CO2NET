@@ -34,6 +34,7 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 
 ----------------------------------------------------------------*/
 
+using Senparc.CO2NET.WebApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,20 +94,22 @@ namespace Senparc.CO2NET.ApiBind
         /// </summary>
         /// <param name="method"></param>
         /// <param name="apiBindAttr"></param>
-        public void Add(MethodInfo method, ApiBindAttribute apiBindAttr)
+        public void Add(ApiBindOn apiBindOn, string cagtegory, MethodInfo method, ApiBindAttribute apiBindAttr)
         {
-            var name = GetGlobalName(apiBindAttr.Category, apiBindAttr.Name);
+            var category = apiBindAttr.GetCategoryName(method);
+            var name = apiBindAttr.GetName(method);
+            var globalName = GetGlobalName(category, name);
 
-            var finalName = name;
+            var finalGlobalName = globalName;
             var suffix = 0;
             //确保名称不会重复
-            while (base.ContainsKey(finalName))
+            while (base.ContainsKey(finalGlobalName))
             {
                 suffix++;
-                finalName = name + suffix.ToString("00");
+                finalGlobalName = globalName + suffix.ToString("00");
             }
 
-            base.Add(finalName, new ApiBindInfo(apiBindAttr, method));
+            base.Add(finalGlobalName, new ApiBindInfo(apiBindOn, cagtegory, finalGlobalName, apiBindAttr, method));
         }
 
         /// <summary>
@@ -130,7 +133,7 @@ namespace Senparc.CO2NET.ApiBind
         /// <returns></returns>
         public IEnumerable<IGrouping<string, KeyValuePair<string, ApiBindInfo>>> GetGroupedCollection()
         {
-            var apiGroups = ApiBindInfoCollection.Instance.GroupBy(z => z.Value.ApiBindAttribute.Category);
+            var apiGroups = ApiBindInfoCollection.Instance.GroupBy(z => z.Value.Category);
             return apiGroups;
         }
     }

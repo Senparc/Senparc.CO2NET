@@ -68,6 +68,7 @@ namespace Senparc.CO2NET.WebApi
                     {
                         continue;
                     }
+                    var assemblyName = assembly.GetName().Name;
                     try
                     {
                         scanTypesCount++;
@@ -85,26 +86,42 @@ namespace Senparc.CO2NET.WebApi
                                 continue;
                             }
 
+                            //判断 type 是否有 ApiBind 标记
+                            var typeAttrs = type.GetCustomAttributes(typeof(ApiBindAttribute), false);
+                            var coverAllMethods = false;
+                            if (typeAttrs?.Length > 0)
+                            {
+                                //type 中具有标记，所有的方法都归档
+                                coverAllMethods = true;
+                            }
+
                             var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Static /*| BindingFlags.Static | BindingFlags.InvokeMethod*/);
 
                             foreach (var method in methods)
                             {
-                                var attrs = method.GetCustomAttributes(typeof(ApiBindAttribute), false);
-                                foreach (var attr in attrs)
+                                var methodAttrs = method.GetCustomAttributes(typeof(ApiBindAttribute), false);
+                                if (methodAttrs?.Length > 0)
                                 {
-                                    var apiBindAttr = attr as ApiBindAttribute;
-                                    if (!WebApiEngine.ApiAssemblyNames.ContainsKey(apiBindAttr.Category))
+                                    //覆盖 type 的绑定信息
+                                    foreach (var attr in methodAttrs)
                                     {
-                                        //TODO:可以增加缓存命名空间等更加特殊的前缀
-                                        var dynamicCategory = apiBindAttr.GetDynamicCategory(method);// $"Senparc.DynamicWebApi.{Regex.Replace(apiBindAttr.Category, @"[\s\.\(\)]", "")}";
-                                        var addSuccess = WebApiEngine.ApiAssemblyNames.TryAdd(apiBindAttr.Category, dynamicCategory);
-                                        if (!addSuccess)
-                                        {
-                                            SenparcTrace.SendCustomLog($"动态API未添加成功！", $"信息：[{apiBindAttr.Category} - {dynamicCategory}]");
-                                        }
+                                        AddApiBindInfo(ApiBindOn.Method, attr as ApiBindAttribute, assemblyName, method);
                                     }
-                                    ApiBindInfoCollection.Instance.Add(method, apiBindAttr);
+                                    //TODO:检查需要忽略的对象
                                 }
+                                else if (coverAllMethods)
+                                {
+                                    //使用 type 的绑定信息
+                                    foreach (var attr in typeAttrs)
+                                    {
+                                        AddApiBindInfo(ApiBindOn.Class, attr as ApiBindAttribute, assemblyName, method);
+                                    }
+                                }
+                                else
+                                {
+                                    //忽略
+                                }
+
                             }
                         }
                     }
@@ -119,6 +136,25 @@ namespace Senparc.CO2NET.WebApi
 
                 Console.WriteLine($"RegisterApiBind Time: {SystemTime.DiffTotalMS(dt1)}ms, Api Count:{ApiBindInfoCollection.Instance.Count()}, Error Count: {errorCount}");
             }
+
+
+        }
+
+        private static void AddApiBindInfo(ApiBindOn apiBindOn, ApiBindAttribute apiBindAttr, string assemblyName, MethodInfo method)
+        {
+            var categoryName = apiBindAttr.GetCategoryName(assemblyName);
+            if (!WebApiEngine.ApiAssemblyNames.ContainsKey(categoryName))
+            {
+                //TODO:可以增加缓存命名空间等更加特殊的前缀
+                var dynamicCategory = apiBindAttr.GetDynamicCategory(method, assemblyName);
+
+                var addSuccess = WebApiEngine.ApiAssemblyNames.TryAdd(categoryName, dynamicCategory);
+                if (!addSuccess)
+                {
+                    SenparcTrace.SendCustomLog($"动态API未添加成功！", $"信息：[{categoryName} - {dynamicCategory}]");
+                }
+            }
+            ApiBindInfoCollection.Instance.Add(apiBindOn, categoryName, method, apiBindAttr);
         }
     }
 }

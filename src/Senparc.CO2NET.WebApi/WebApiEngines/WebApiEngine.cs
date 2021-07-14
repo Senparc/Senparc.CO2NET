@@ -162,10 +162,10 @@ namespace Senparc.CO2NET.WebApi
                     }
 
                     //当前方法名称
-                    var methodName = apiBindInfo.Value.ApiBindAttribute.Name.Replace(".", "_").Replace("-", "_").Replace("/", "_");
-                    var apiBindGroupName = apiBindInfo.Value.ApiBindAttribute.Name.Split('.')[0];
-                    var indexOfApiGroupDot = apiBindInfo.Value.ApiBindAttribute.Name.IndexOf(".");
-                    var apiName = apiBindInfo.Value.ApiBindAttribute.Name.Substring(indexOfApiGroupDot + 1, apiBindInfo.Value.ApiBindAttribute.Name.Length - indexOfApiGroupDot - 1);
+                    var methodName = apiBindInfo.Value.GlobalName.Replace(".", "_").Replace("-", "_").Replace("/", "_");
+                    var apiBindGroupName = apiBindInfo.Value.GlobalName.Split('.')[0];
+                    var indexOfApiGroupDot = apiBindInfo.Value.GlobalName.IndexOf(".");
+                    var apiName = apiBindInfo.Value.GlobalName.Substring(indexOfApiGroupDot + 1, apiBindInfo.Value.GlobalName.Length - indexOfApiGroupDot - 1);
 
                     //确保名称不会有重复
                     while (apiMethodName.ContainsKey(methodName))
@@ -588,9 +588,10 @@ namespace Senparc.CO2NET.WebApi
 
             //TODO：开放所有类型
 
-            var apiBindFilterList = apiBindGroup.Where(z => !z.Value.ApiBindAttribute.Name.EndsWith("Async")
-                                     && z.Value.MethodInfo.ReturnType != typeof(Task<>)
-                                     && z.Value.MethodInfo.ReturnType != typeof(void)
+            var apiBindFilterList = apiBindGroup.Where(z => //!z.Value.GlobalName.EndsWith("Async")
+                                     //&& z.Value.MethodInfo.ReturnType != typeof(Task<>)
+                                     //&& 
+                                     z.Value.MethodInfo.ReturnType != typeof(void)
                                      && !z.Value.MethodInfo.IsGenericMethod //SemanticApi.SemanticSend 是泛型方法
 
                                      //临时过滤 IEnumerable 对象   —— Jeffrey Su 2021.06.17
@@ -598,7 +599,7 @@ namespace Senparc.CO2NET.WebApi
                                                         z.IsOut ||
                                                         z.ParameterType.Name.Contains("IEnumerable") ||
                                                         z.ParameterType.Name.Contains("IList`1")))
-                                .OrderBy(z => z.Value.ApiBindAttribute.Name)
+                                .OrderBy(z => z.Value.GlobalName)
                                 .ToArray();
 
             //把 CommonApi 提前到头部

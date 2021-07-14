@@ -84,7 +84,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
 
             var dt1 = SystemTime.Now;
 
-            var weixinApis = ApiBind.ApiBindInfoCollection.Instance.GetGroupedCollection();
+            var apiGroups = ApiBind.ApiBindInfoCollection.Instance.GetGroupedCollection();
 
             ConcurrentDictionary<string, (int apiCount, double costMs)> assemblyBuildStat = new ConcurrentDictionary<string, (int, double)>();
 
@@ -98,9 +98,9 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
                 var wrapperTask = Task.Factory.StartNew(async () =>
                 {
                     //此处使用 Task 效率并不比 Keys.ToList() 方法快
-                    webApiEngine.WriteLog($"get weixinApis groups: {weixinApis.Count()}, now dealing with: {category}");
+                    webApiEngine.WriteLog($"get API groups: {apiGroups.Count()}, now dealing with: {category}");
                     var dtStart = SystemTime.Now;
-                    var apiBindGroup = weixinApis.FirstOrDefault(z => z.Key == category);
+                    var apiBindGroup = apiGroups.FirstOrDefault(z => z.Key == category);
 
                     var apiCount = await webApiEngine.BuildWebApi(apiBindGroup).ConfigureAwait(false);
                     var apiAssembly = webApiEngine.GetApiAssembly(category);

@@ -13,17 +13,17 @@ namespace Senparc.CO2NET
     /// <summary>
     /// 自动绑定属性
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     public class ApiBindAttribute : Attribute
     {
         /// <summary>
         /// 目录（平台类型），用于输出 API 的 Url 时分组
         /// </summary>
-        public string Category { get; set; }
+        public string Category { private get; set; }
         /// <summary>
         /// 平台内唯一名称（请使用宇宙唯一名称，如： [namespace].[ClassName].[MethodName]）
         /// </summary>
-        public string Name { get; set; }
+        public string Name { private get; set; }
 
         public ApiRequestMethod ApiRequestMethod { get; set; }
 
@@ -55,7 +55,30 @@ namespace Senparc.CO2NET
             ApiRequestMethod = apiRequestMethod;
         }
 
-       
+        /// <summary>
+        /// 获取不为空的可显示、使用的Category名称
+        /// </summary>
+        /// <param name="realAssemblyName">真实的当前程序集的名称（AssemblyName.Name）</param>
+        /// <returns></returns>
+        public string GetCategoryName(string realAssemblyName)
+        {
+            return Category ?? realAssemblyName;
+        }
+
+        /// <summary>
+        /// 获取不为空的可显示、使用的Category名称
+        /// </summary>
+        /// <param name="realAssemblyName">真实的当前程序集的名称（AssemblyName.Name）</param>
+        /// <returns></returns>
+        public string GetCategoryName(MethodInfo methodInfo)
+        {
+            return GetCategoryName(methodInfo.DeclaringType.Assembly.GetName().Name);
+        }
+
+        public string GetName(MethodInfo methodInfo)
+        {
+            return Name ?? $"{methodInfo.DeclaringType.Name}.{methodInfo.Name}";
+        }
 
     }
 }
