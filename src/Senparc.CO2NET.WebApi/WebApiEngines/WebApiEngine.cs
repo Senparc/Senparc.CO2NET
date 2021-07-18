@@ -46,21 +46,25 @@ namespace Senparc.CO2NET.WebApi
         private readonly bool _copyCustomAttributes;
         private int _taskCount;
         private Type _typeOfApiBind = typeof(ApiBindAttribute);
+        private Type _baseApiControllerType;
 
         /// <summary>
         /// WebApiEngine
         /// </summary>
+        /// <param name="defaultRequestMethod">默认请求方式</param>
+        /// <param name="baseApiControllerType">全局 ApiController 的基类，默认为 ControllerBase</param>
         /// <param name="taskCount">同时执行线程数</param>
         /// <param name="showDetailApiLog"></param>
         /// <param name="copyCustomAttributes"></param>
         /// <param name="defaultAction">默认请求类型，如 Post，Get</param>
-        public WebApiEngine(ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false)
+        public WebApiEngine(ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false)
         {
             _findWeixinApiService = new Lazy<FindApiService>(new FindApiService());
             _defaultRequestMethod = defaultRequestMethod;
             _copyCustomAttributes = copyCustomAttributes;
             _taskCount = taskCount;
             _showDetailApiLog = showDetailApiLog;
+            _baseApiControllerType = baseApiControllerType ?? typeof(ControllerBase);
         }
 
         /// <summary>
@@ -585,7 +589,15 @@ namespace Senparc.CO2NET.WebApi
 
             //动态创建类 XXController
             var controllerClassName = $"{controllerKeyName}Controller";
-            TypeBuilder tb = mb.DefineType(controllerClassName, TypeAttributes.Public, typeof(ControllerBase) /*typeof(Controller)*/);
+            Type baseApiControllerType = apiBindGroup
+                                            .Where(z => z.Value.BaseApiControllerType != null)
+                                            .OrderByDescending(z => z.Value.BaseApiControllerOrder)
+                                            .Take(1)
+                                            .Select(z => z.Value.BaseApiControllerType)
+                                            .FirstOrDefault()
+                                         ?? this._baseApiControllerType;
+
+            TypeBuilder tb = mb.DefineType(controllerClassName, TypeAttributes.Public, baseApiControllerType /*typeof(ControllerBase)*/ /*typeof(Controller)*/);
 
             //私有变量
             var fbServiceProvider = tb.DefineField("_serviceProvider", typeof(IServiceProvider), FieldAttributes.Private | FieldAttributes.InitOnly);

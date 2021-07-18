@@ -29,6 +29,15 @@ namespace Senparc.CO2NET
 
         public string Name { get; private set; }
 
+        /// <summary>
+        /// ApiController 的基类，默认为 ControllerBase
+        /// </summary>
+        public Type BaseApiControllerType { get; set; }
+        /// <summary>
+        /// ApiController 的基类排序，最后会使用数字最大的一个（支持负数）
+        /// </summary>
+        public short BaseApiControllerOrder { get; set; }
+
         ///// <summary>
         ///// 绑定 API 方法对象信息
         ///// </summary>
@@ -52,12 +61,14 @@ namespace Senparc.CO2NET
         //TODO: 添加 ignore 忽略属性
         //TODO: 根据模块可以进行忽略或开启
 
-        public ApiBindInfo(ApiBindOn apiBindOn, string category, string globalName, string name, ApiBindAttribute apiBindAttribute, MethodInfo methodInfo)
+        public ApiBindInfo(ApiBindOn apiBindOn, string category, string globalName, string name, Type baseApiControllerType, short baseApiControllerOrder, ApiBindAttribute apiBindAttribute, MethodInfo methodInfo)
         {
             ApiBindOn = apiBindOn;
             Category = category;
             GlobalName = globalName;
             Name = name;
+            BaseApiControllerType = baseApiControllerType;
+            BaseApiControllerOrder = baseApiControllerOrder;
             ApiBindAttribute = apiBindAttribute;
             MethodInfo = methodInfo;
             ClassType = methodInfo.DeclaringType;

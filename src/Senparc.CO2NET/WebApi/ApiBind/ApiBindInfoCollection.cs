@@ -109,7 +109,7 @@ namespace Senparc.CO2NET.ApiBind
                 finalGlobalName = globalName + suffix.ToString("00");
             }
 
-            base.Add(finalGlobalName, new ApiBindInfo(apiBindOn, cagtegory, finalGlobalName, name, apiBindAttr, method));
+            base.Add(finalGlobalName, new ApiBindInfo(apiBindOn, cagtegory, finalGlobalName, name, apiBindAttr.BaseApiControllerType, apiBindAttr.BaseApiControllerOrder, apiBindAttr, method));
         }
 
         /// <summary>
