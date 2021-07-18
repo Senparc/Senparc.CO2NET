@@ -28,7 +28,7 @@ namespace Senparc.CO2NET.WebApi
             string categoryName = attr.GetCategoryName(realAssemblyName);
             if (!string.IsNullOrEmpty(categoryName))
             {
-                newNameSpace = $"Senparc.DynamicWebApi.{Regex.Replace(categoryName, @"[\s\.\(\)]", "")}";//TODO:可以换成缓存命名空间等更加特殊的前缀
+                newNameSpace = $"Senparc.DynamicWebApi.{Regex.Replace(categoryName, @"[\s\(\)]", "")}";//TODO:可以换成缓存命名空间等更加特殊的前缀
             }
             else
             {
