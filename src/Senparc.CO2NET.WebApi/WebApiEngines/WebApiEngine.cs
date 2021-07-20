@@ -40,6 +40,7 @@ namespace Senparc.CO2NET.WebApi
         /// </summary>
         public static Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> AdditionalAttributeFunc { get; internal set; }
 
+        private string _docXmlPath;
         private bool _showDetailApiLog = false;
         private readonly Lazy<FindApiService> _findWeixinApiService;
         private readonly ApiRequestMethod _defaultRequestMethod;
@@ -57,8 +58,9 @@ namespace Senparc.CO2NET.WebApi
         /// <param name="showDetailApiLog"></param>
         /// <param name="copyCustomAttributes"></param>
         /// <param name="defaultAction">默认请求类型，如 Post，Get</param>
-        public WebApiEngine(ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false)
+        public WebApiEngine(string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false)
         {
+            _docXmlPath = docXmlPath;
             _findWeixinApiService = new Lazy<FindApiService>(new FindApiService());
             _defaultRequestMethod = defaultRequestMethod;
             _copyCustomAttributes = copyCustomAttributes;
@@ -107,17 +109,27 @@ namespace Senparc.CO2NET.WebApi
             var groupStartTime = SystemTime.Now;
 
             var xmlFileName = $"{apiBindGroup.First().Value.MethodInfo.DeclaringType.Assembly.GetName().Name}.xml";//XML 文件名
-            var sourceName = $"Senparc.Xncf.WeixinManager.App_Data.ApiDocXml.{xmlFileName}";//嵌入资源地址
-            var sourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(sourceName);
 
-            var useXml = sourceStream?.Length > 0;
+            #region 使用内嵌资源
+            //var sourceName = $"Senparc.Xncf.WeixinManager.App_Data.ApiDocXml.{xmlFileName}";//嵌入资源地址
+            //var sourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(sourceName);
+            //var useXml = sourceStream?.Length > 0;
+            #endregion
+
+            var xmlFilePath = Path.Combine(_docXmlPath, xmlFileName);
+            var useXml = File.Exists(xmlFilePath);
+
+
             var assembleName = ApiAssemblyNames[category];
             ConcurrentDictionary<string, DocMembersCollectionValue> docMembersCollection = new ConcurrentDictionary<string, DocMembersCollectionValue>();
             XDocument document = null;
             if (useXml)
             {
-
-                document = await XDocument.LoadAsync(sourceStream, LoadOptions.None, Task.Factory.CancellationToken);
+                //document = await XDocument.LoadAsync(sourceStream, LoadOptions.None, Task.Factory.CancellationToken);//使用内嵌资源
+                using (var fs = new FileStream(xmlFilePath, FileMode.Open))
+                {
+                    document = await XDocument.LoadAsync(fs, LoadOptions.None, Task.Factory.CancellationToken);
+                }
                 //XDocument document = XDocument.Load(sourceStream, LoadOptions.None);
                 var root = document.Root;
                 root.Element("assembly").Element("name").Value = assembleName;
@@ -362,8 +374,6 @@ namespace Senparc.CO2NET.WebApi
                     Type tActionMethod = GetRequestMethodAttribute(specialMethod);
 
                     setPropMthdBldr.SetCustomAttribute(new CustomAttributeBuilder(tActionMethod.GetConstructor(new Type[0]), new object[0]));
-
-                    //TODO：复制 Class 特性 -> 创建接口或类进行集中接口定义
 
                     //添加默认已有特性
                     if (_copyCustomAttributes)
