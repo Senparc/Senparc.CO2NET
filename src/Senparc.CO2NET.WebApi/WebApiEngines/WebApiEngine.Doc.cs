@@ -28,12 +28,11 @@ namespace Senparc.CO2NET.WebApi
         /// <param name="appDataPath">App_Data 文件夹路径</param>
         internal void TryCreateDir(string appDataPath)
         {
-            var dir = Path.Combine(/*SiteConfig.WebRootPath, "..", "App_Data",*/ appDataPath, "ApiDocXml");// ServerUtility.ContentRootMapPath("~/App_Data/ApiDocXml");
-            WriteLog($"检查目录：{dir}");
-            if (!Directory.Exists(dir))
+            WriteLog($"检查目录：{appDataPath}");
+            if (!Directory.Exists(appDataPath))
             {
-                Directory.CreateDirectory(dir);
-                WriteLog($"创建目录：{dir}");
+                Directory.CreateDirectory(appDataPath);
+                WriteLog($"创建目录：{appDataPath}");
             }
         }
 

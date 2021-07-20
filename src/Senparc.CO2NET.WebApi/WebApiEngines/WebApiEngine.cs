@@ -255,7 +255,7 @@ namespace Senparc.CO2NET.WebApi
             #region 保存新的 Xml 文件
             if (useXml)
             {
-                var newDocFileName = $"App_Data/ApiDocXml/{assembleName}.xml";
+                var newDocFileName = Path.Combine(_docXmlPath, $"{assembleName}.xml");
                 try
                 {
                     //using (XmlWriter xw = XmlWriter.Create(newDocFile, new XmlWriterSettings() { Async = true }))

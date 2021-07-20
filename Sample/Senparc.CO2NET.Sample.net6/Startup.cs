@@ -44,7 +44,7 @@ namespace Senparc.CO2NET.Sample.net6
 
             //Senparc.NeuChar.Register.AddNeuChar();
 
-            var docXmlPath = Path.Combine(WebHostEnvironment.ContentRootPath, "App_Data");
+            var docXmlPath = Path.Combine(WebHostEnvironment.ContentRootPath, "App_Data", "ApiDocXml");
             services.AddAndInitDynamicApi(builder, docXmlPath, ApiRequestMethod.Get, null, 400, false, true, m => null);
 
             #region ∂¿¡¢≤‚ ‘
@@ -89,11 +89,11 @@ namespace Senparc.CO2NET.Sample.net6
                     });
 
                     //c.DocumentFilter<TagDescriptionsDocumentFilter>();
-                    var docXmlPath = Path.Combine(WebHostEnvironment.ContentRootPath, $"App_Data\\ApiDocXml\\{WebApiEngine.ApiAssemblyNames[apiAssembly.Key]}.xml");
-                    Console.WriteLine("docXmlPath:"+ docXmlPath);
-                    if (File.Exists(docXmlPath))
+                    var docXmlFile = Path.Combine(docXmlPath, $"{WebApiEngine.ApiAssemblyNames[apiAssembly.Key]}.xml");
+                    Console.WriteLine("docXmlFile:" + docXmlFile);
+                    if (File.Exists(docXmlFile))
                     {
-                        c.IncludeXmlComments(docXmlPath);
+                        c.IncludeXmlComments(docXmlFile);
                     }
                 }
 
