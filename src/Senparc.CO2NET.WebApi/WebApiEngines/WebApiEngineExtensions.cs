@@ -134,6 +134,9 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
 
             Task.WaitAll(taskList.ToArray());
 
+            //保存 XML文件
+            webApiEngine.SaveDynamicApiXml();
+
             #region 统计数据
             var totalCost = SystemTime.DiffTotalMS(dt1);
 

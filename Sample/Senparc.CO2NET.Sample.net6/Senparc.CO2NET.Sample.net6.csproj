@@ -2,6 +2,11 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<AssemblyName>Senparc.CO2NET.Sample</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup>
+		<DocumentationFile>App_Data\ApiDocXml\Senparc.CO2NET.Sample.xml</DocumentationFile>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
 	<ItemGroup>

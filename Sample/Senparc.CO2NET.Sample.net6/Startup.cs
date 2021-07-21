@@ -89,11 +89,9 @@ namespace Senparc.CO2NET.Sample.net6
                     });
 
                     //c.DocumentFilter<TagDescriptionsDocumentFilter>();
-                    var docXmlFile = Path.Combine(docXmlPath, $"{WebApiEngine.ApiAssemblyNames[apiAssembly.Key]}.xml");
-                    Console.WriteLine("docXmlFile:" + docXmlFile);
+                    var docXmlFile = Path.Combine(WebApiEngine.GetDynamicFilePath(docXmlPath), $"{WebApiEngine.ApiAssemblyNames[apiAssembly.Key]}.xml");
                     if (File.Exists(docXmlFile))
                     {
-                        Console.WriteLine("Existed");
                         c.IncludeXmlComments(docXmlFile);
                     }
                 }

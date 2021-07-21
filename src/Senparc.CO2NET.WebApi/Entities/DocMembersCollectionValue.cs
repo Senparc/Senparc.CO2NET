@@ -17,7 +17,7 @@ namespace Senparc.CO2NET.WebApi
         ///// <summary>
         ///// Xml 节点
         ///// </summary>
-        //public XElement Element => NameAttr.Parent;
+        public XElement Element => NameAttr.Parent;
         /// <summary>
         /// name 属性，如： name="M:Senparc.Weixin.MP.AdvancedAPIs.AnalysisApi.GetArticleSummary(System.String,System.String,System.String,System.Int32)"
         /// </summary>

@@ -21,6 +21,12 @@ namespace Senparc.CO2NET.Sample.net6.Services
         {
         }
 
+        /// <summary>
+        /// 测试方法转接口
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [ApiBind("CO2NET", "ApiBindTest.TestApi", WebApi.ApiRequestMethod.Get)]
         [MyTest("TestCopyAttrFromTestApi")]
         //[AuthorizeAttribute()]
@@ -29,10 +35,31 @@ namespace Senparc.CO2NET.Sample.net6.Services
             return $"[from ApiBindTestService.TestApi]{name}:{value}";
         }
 
+        /// <summary>
+        /// 测试异步方法转接口
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [ApiBind("CO2NET", "ApiBindTest.TestApiAsync", WebApi.ApiRequestMethod.Post)]
         public async Task<string> TestApiAsync(string name, int value)
         {
             var msg = $"[{SystemTime.Now:HH:mm:ss.ffff}] [from ApiBindTestService.TestApiAsync] Method";
+            await Task.Delay(1000);
+            msg += $"[{SystemTime.Now:HH:mm:ss.ffff}] {name}:{value}";
+            return msg;
+        }
+
+        /// <summary>
+        /// 模拟加入 WeChat_OfficialAccount 的接口
+        /// </summary>
+        /// <param name="name">这里填写名称</param>
+        /// <param name="value">这里填写值</param>
+        /// <returns></returns>
+        [ApiBind("WeChat_OfficialAccount", "A-WexinApi", WebApi.ApiRequestMethod.Post)]
+        public static async Task<string> WexinApi(string name, int value)
+        {
+            var msg = $"[{SystemTime.Now:HH:mm:ss.ffff}] [from WeChat_OfficialAccount.WexinApi] Method";
             await Task.Delay(1000);
             msg += $"[{SystemTime.Now:HH:mm:ss.ffff}] {name}:{value}";
             return msg;
