@@ -57,7 +57,6 @@ namespace Senparc.CO2NET.Sample.net6
             #region Swagger
 
 
-
             //.NET Core 3.0 for Swagger https://www.thecodebuzz.com/swagger-api-documentation-in-net-core-3-0/
 
 
