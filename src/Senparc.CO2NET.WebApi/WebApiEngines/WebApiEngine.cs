@@ -51,6 +51,8 @@ namespace Senparc.CO2NET.WebApi
         private Type _typeOfApiBind = typeof(ApiBindAttribute);
         private Type _baseApiControllerType;
 
+        public bool BuildXml => _docXmlPath != null;
+
         /// <summary>
         /// WebApiEngine
         /// </summary>

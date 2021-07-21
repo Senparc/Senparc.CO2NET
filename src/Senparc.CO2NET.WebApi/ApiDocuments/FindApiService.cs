@@ -26,7 +26,7 @@ namespace Senparc.CO2NET.WebApi
             {
                 throw new ArgumentException($"“{nameof(fullMethodName)}”不能为 null 或空白。", nameof(fullMethodName));
             }
-
+            
             if (string.IsNullOrWhiteSpace(paramsPart))
             {
                 throw new ArgumentException($"“{nameof(paramsPart)}”不能为 null 或空白。", nameof(paramsPart));

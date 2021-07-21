@@ -20,7 +20,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
         /// <summary>
         /// 初始化动态API
         /// </summary>
-        /// <param name="docXmlPath">App_Data 文件夹路径</param>
+        /// <param name="docXmlPath">XML 文档文件夹路径，如果传入 null，则不自动生成 XML 说明文件</param>
         /// <param name="builder"></param>
         /// <param name="services"></param>
         /// <param name="defaultRequestMethod">默认请求方式</param>
@@ -28,6 +28,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
         /// <param name="showDetailApiLog"></param>
         /// <param name="taskCount"></param>
         /// <param name="additionalAttributes"></param>
+        /// <param name="buildXml">是否创建动态 API 对应的 XML 注释文件</param>
         /// <param name="additionalAttributeFunc">是否复制自定义特性（AppBindAttribute 除外）</param>
         public static void AddAndInitDynamicApi(this IServiceCollection services, IMvcCoreBuilder builder,
             string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
@@ -70,17 +71,10 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
             string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null,
             int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
         {
-            //预载入程序集，确保在下一步 RegisterApiBind() 可以顺利读取所有接口
-            //bool preLoad = typeof(Senparc.Weixin.MP.AdvancedAPIs.AddGroupResult).ToString() != null
-            //    && typeof(Senparc.Weixin.WxOpen.AdvancedAPIs.CustomApi).ToString() != null
-            //    && typeof(Senparc.Weixin.Open.AccountAPIs.AccountApi).ToString() != null
-            //    && typeof(Senparc.Weixin.TenPay.V3.TenPayV3).ToString() != null
-            //    && typeof(Senparc.Weixin.Work.AdvancedAPIs.AppApi).ToString() != null;
-
             _ = defaultRequestMethod != ApiRequestMethod.GlobalDefault ? true : throw new Exception($"{nameof(defaultRequestMethod)} 不能作为默认请求类型！");
 
             services.AddScoped<FindApiService>();
-            services.AddScoped<WebApiEngine>(s => new WebApiEngine(docXmlPath));
+            services.AddScoped(s => new WebApiEngine(docXmlPath));
 
             WebApiEngine.AdditionalAttributeFunc = additionalAttributeFunc;
 
@@ -92,7 +86,10 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
             services.AddApiBind(preLoad);//参数为 true，确保重试绑定成功
 
             //确保目录存在
-            webApiEngine.TryCreateDir(docXmlPath);
+            if (webApiEngine.BuildXml)
+            {
+                webApiEngine.TryCreateDir(docXmlPath);
+            }
 
             var dt1 = SystemTime.Now;
 

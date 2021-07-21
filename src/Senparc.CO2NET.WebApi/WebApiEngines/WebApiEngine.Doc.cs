@@ -31,7 +31,7 @@ namespace Senparc.CO2NET.WebApi
         /// <param name="appDataPath">App_Data 文件夹路径</param>
         internal void TryCreateDir(string appDataPath)
         {
-            WriteLog($"检查目录：{appDataPath}");
+            //WriteLog($"检查目录：{appDataPath}");
             if (!Directory.Exists(appDataPath))
             {
                 Directory.CreateDirectory(appDataPath);
@@ -84,10 +84,6 @@ namespace Senparc.CO2NET.WebApi
                 yield return item;
             }
         }
-
-        //TODO:添加 XML 载入的开关选项
-
-
         class ApiXmlInfo
         {
             public XDocument Document { get; set; }
@@ -111,6 +107,11 @@ namespace Senparc.CO2NET.WebApi
         /// <returns></returns>
         private async Task BuildXmlDoc(string category, string methodName, MethodInfo methodInfo, TypeBuilder tb)
         {
+            if (!BuildXml)
+            {
+                return;
+            }
+
             //查找文档是否已经缓存
             var sourceAssemblyName = methodInfo.DeclaringType.Assembly.GetName().Name;
             if (omitApiXmlList.ContainsKey(sourceAssemblyName))
@@ -282,6 +283,11 @@ namespace Senparc.CO2NET.WebApi
         /// <returns></returns>
         internal void SaveDynamicApiXml()
         {
+            if (!BuildXml)
+            {
+                return;
+            }
+
             var dynamicFilePath = GetDynamicFilePath(_docXmlPath);
             if (!Directory.Exists(dynamicFilePath))
             {
