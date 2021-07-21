@@ -7,13 +7,13 @@ using Senparc.CO2NET.Tests.TestEntities;
 namespace Senparc.CO2NET.Tests.Helpers
 {
     [TestClass]
-    public class MutipleCacheTestHelperTests
+    public class MutipleCacheTestHelperTests : BaseTest
     {
         [TestMethod]
         public void MutipleCacheTestHelperTest()
         {
-            BaseTest.RegisterServiceStart();//自动注册Redis，也可以手动注册
-            BaseTest.RegisterServiceCollection();
+            //BaseTest.RegisterServiceStart();//自动注册Redis，也可以手动注册
+            //BaseTest.RegisterServiceCollection();
 
             var exCache = TestExtensionCacheStrategy.Instance;//完成领域缓存注册
             var exRedisCache = TestExtensionRedisCacheStrategy.Instance;//完成Redis领域缓存注册
@@ -28,7 +28,7 @@ namespace Senparc.CO2NET.Tests.Helpers
                     var testExCache = CacheStrategyFactory.GetExtensionCacheStrategyInstance(new TestCacheDomain());
                     var baseCache = testExCache.BaseCacheStrategy();
 
-                    Console.WriteLine("当前扩展缓存策略："+ baseCache.GetType());
+                    Console.WriteLine("当前扩展缓存策略：" + baseCache.GetType());
                 }
                 catch (Exception ex)
                 {

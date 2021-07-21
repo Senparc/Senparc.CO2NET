@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-
+		<AssemblyName>Senparc.CO2NET.Tests</AssemblyName>
 		<IsPackable>false</IsPackable>
 
 		<Configurations>Debug;Release;Test</Configurations>

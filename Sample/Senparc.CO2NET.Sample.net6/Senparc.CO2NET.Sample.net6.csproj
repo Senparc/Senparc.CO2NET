@@ -2,6 +2,11 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<AssemblyName>Senparc.CO2NET.Sample</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup>
+		<DocumentationFile>App_Data\ApiDocXml\Senparc.CO2NET.Sample.xml</DocumentationFile>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -12,7 +17,7 @@
 			<Version>2.2.8</Version>
 		</PackageReference>
 
-		<!--<PackageReference Include="Senparc.Weixin.MP" Version="16.13.0-beta3" />-->
+		<PackageReference Include="Senparc.Weixin.MP" Version="16.13.1-preview1" />
 
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.APM\Senparc.CO2NET.APM.csproj" />
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />

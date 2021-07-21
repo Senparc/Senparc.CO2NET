@@ -6,7 +6,7 @@ using Senparc.CO2NET.Helpers;
 namespace Senparc.CO2NET.Tests.Helpers
 {
     [TestClass]
-    public class FileHelperTests
+    public class FileHelperTests:BaseTest
     {
         [TestMethod]
         public void GetFileStreamTest()
@@ -22,7 +22,7 @@ namespace Senparc.CO2NET.Tests.Helpers
         [TestMethod]
         public void DownLoadFileFromUrlTest()
         {
-            var url = "https://sdk.weixin.senparc.com//images/v2/ewm_01.png";
+            var url = "https://sdk.weixin.senparc.com/images/v2/ewm_01.png";
             var savePath = UnitTestHelper.RootPath + $"TestEntities\\download-{SystemTime.Now.ToString("yyyyMMdd-HHmmss")}.jpg";
 
             FileHelper.DownLoadFileFromUrl(BaseTest.serviceProvider, url, savePath);

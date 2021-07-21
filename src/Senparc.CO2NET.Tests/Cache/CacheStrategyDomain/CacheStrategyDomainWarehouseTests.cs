@@ -31,6 +31,7 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
             Assert.IsInstanceOfType(testCacheStrategy, typeof(TestExtensionCacheStrategy));
 
             var baseCache = testCacheStrategy.BaseCacheStrategy();
+
             Assert.IsInstanceOfType(baseCache, objectCache.GetType());
 
 

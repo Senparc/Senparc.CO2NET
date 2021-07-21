@@ -29,7 +29,8 @@ namespace Senparc.CO2NET.Tests.Helpers
         {
             var result = GpsHelper.GetLatitudeDifference(100);
             Console.WriteLine(result);
-            Assert.AreEqual("0.900900900900901", result.ToString());
+            //Assert.AreEqual("0.900900900900901", result.ToString());
+            Assert.AreEqual("0.9009009009009009", result.ToString());
         }
 
 
@@ -38,7 +39,8 @@ namespace Senparc.CO2NET.Tests.Helpers
         {
             var result = GpsHelper.GetLongitudeDifference(100);
             Console.WriteLine(result);
-            Assert.AreEqual("0.909090909090909", result.ToString());
+            //Assert.AreEqual("0.909090909090909", result.ToString());
+            Assert.AreEqual("0.9090909090909091", result.ToString());
         }
 
     }

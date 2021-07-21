@@ -22,12 +22,14 @@ namespace Senparc.CO2NET.Sample.net6
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            WebHostEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment WebHostEnvironment { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -42,9 +44,8 @@ namespace Senparc.CO2NET.Sample.net6
 
             //Senparc.NeuChar.Register.AddNeuChar();
 
-
-            var appDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data");
-            services.AddAndInitDynamicApi(builder, appDataPath, ApiRequestMethod.Get, 400, false, true, m => null);
+            var docXmlPath = Path.Combine(WebHostEnvironment.ContentRootPath, "App_Data", "ApiDocXml");
+            services.AddAndInitDynamicApi(builder, docXmlPath, ApiRequestMethod.Get, null, 400, false, true, m => null);
 
             #region 独立测试
             services.AddScoped(typeof(ApiBindTestService));
@@ -64,15 +65,15 @@ namespace Senparc.CO2NET.Sample.net6
             services.AddSwaggerGen(c =>
             {
                 //为每个程序集创建文档
-                foreach (var neucharApiDocAssembly in WebApiEngine.ApiAssemblyCollection)
+                foreach (var apiAssembly in WebApiEngine.ApiAssemblyCollection)
                 {
-                    var version = WebApiEngine.ApiAssemblyVersions[neucharApiDocAssembly.Key]; //neucharApiDocAssembly.Value.ImageRuntimeVersion;
-                    var docName = WebApiEngine.GetDocName(neucharApiDocAssembly.Key);
+                    var version = WebApiEngine.ApiAssemblyVersions[apiAssembly.Key]; //neucharApiDocAssembly.Value.ImageRuntimeVersion;
+                    var docName = WebApiEngine.GetDocName(apiAssembly.Key);
                     c.SwaggerDoc(docName, new OpenApiInfo
                     {
-                        Title = $"CO2NET Dynamic WebApi Engine : {neucharApiDocAssembly.Key}",
+                        Title = $"CO2NET Dynamic WebApi Engine : {apiAssembly.Key}",
                         Version = $"v{version}",//"v16.5.4"
-                        Description = $"Senparc CO2NET WebApi 动态引擎（{neucharApiDocAssembly.Key} - v{version}）",
+                        Description = $"Senparc CO2NET WebApi 动态引擎（{apiAssembly.Key} - v{version}）",
                         //License = new OpenApiLicense()
                         //{
                         //    Name = "Apache License Version 2.0",
@@ -87,10 +88,12 @@ namespace Senparc.CO2NET.Sample.net6
                         //TermsOfService = new Uri("https://github.com/JeffreySu/WeiXinMPSDK")
                     });
 
-                    //if (neucharApiDocAssembly.Key.Contains("WeChat"))
-                    //{
-                    //    c.IncludeXmlComments($"App_Data/ApiDocXml/{WebApiEngine.WeixinApiAssemblyNames[neucharApiDocAssembly.Key]}.xml");
-                    //}
+                    //c.DocumentFilter<TagDescriptionsDocumentFilter>();
+                    var docXmlFile = Path.Combine(WebApiEngine.GetDynamicFilePath(docXmlPath), $"{WebApiEngine.ApiAssemblyNames[apiAssembly.Key]}.xml");
+                    if (File.Exists(docXmlFile))
+                    {
+                        c.IncludeXmlComments(docXmlFile);
+                    }
                 }
 
                 ////分组显示  https://www.cnblogs.com/toiv/archive/2018/07/28/9379249.html
@@ -165,7 +168,6 @@ namespace Senparc.CO2NET.Sample.net6
 
             });
             #endregion
-
 
         }
 
@@ -259,14 +261,14 @@ namespace Senparc.CO2NET.Sample.net6
                     #endregion
                 },
 
-                #region 扫描自定义扩展缓存
+            #region 扫描自定义扩展缓存
 
                 //自动扫描自定义扩展缓存（二选一）
                 autoScanExtensionCacheStrategies: true //默认为 true，可以不传入
-                //指定自定义扩展缓存（二选一）
-                //autoScanExtensionCacheStrategies: false, extensionCacheStrategiesFunc: () => GetExCacheStrategies(senparcSetting.Value)
+                                                       //指定自定义扩展缓存（二选一）
+                                                       //autoScanExtensionCacheStrategies: false, extensionCacheStrategiesFunc: () => GetExCacheStrategies(senparcSetting.Value)
 
-                 #endregion
+            #endregion
             );
 
             app.UseSwagger();
@@ -455,5 +457,17 @@ namespace Senparc.CO2NET.Sample.net6
         //        }
         //    }
         //}
+
+        // public class TagDescriptionsDocumentFilter : IDocumentFilter
+        // {
+        //     public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+        //     {
+        //         swaggerDoc.Tags = new List<OpenApiTag> {
+        //     new OpenApiTag { Name = "Products", Description = "Browse/manage the product cata,og" },
+        //     new OpenApiTag { Name = "Orders", Description = "Submit orders" },
+        //};
+        //     }
+        // }
+
     }
 }
