@@ -93,6 +93,7 @@ namespace Senparc.CO2NET.Sample.net6
                     Console.WriteLine("docXmlFile:" + docXmlFile);
                     if (File.Exists(docXmlFile))
                     {
+                        Console.WriteLine("Existed");
                         c.IncludeXmlComments(docXmlFile);
                     }
                 }

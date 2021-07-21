@@ -48,8 +48,8 @@ namespace Senparc.CO2NET.WebApi
         /// <returns></returns>
         public DocMethodInfo GetDocMethodInfo(XAttribute nameAttr)
         {
-            var pattern = @"(M\:)(?<docName>[^(]+)(?<paramsPart>\({1}.+\){1})";
-            var result = regexForDoc.Match(pattern);
+            //var pattern = @"(M\:)(?<docName>[^(]+)(?<paramsPart>\({1}.+\){1})";
+            var result = regexForDoc.Match(nameAttr.Value);
             if (result.Success && result.Groups["docName"] != null && result.Groups["paramsPart"] != null)
             {
                 return new DocMethodInfo(result.Groups["docName"].Value, result.Groups["paramsPart"].Value);
@@ -88,7 +88,7 @@ namespace Senparc.CO2NET.WebApi
             //生成文档
             var docMethodName = $"{methodInfo.DeclaringType.FullName}.{methodInfo.Name}";//以(结尾确定匹配到完整的方法名
 
-            WriteLog($"\t search for docName:  {docMethodName}");//\t\tSDK Method：{apiMethodInfo.ToString()}
+            //WriteLog($"\t search for docName:  {docMethodName}");//\t\tSDK Method：{apiMethodInfo.ToString()}
 
             if (docMembersCollection.ContainsKey(docMethodName))
             {

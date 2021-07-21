@@ -116,9 +116,11 @@ namespace Senparc.CO2NET.WebApi
             //var useXml = sourceStream?.Length > 0;
             #endregion
 
-            var xmlFilePath = Path.Combine(_docXmlPath, xmlFileName);
-            var useXml = File.Exists(xmlFilePath);
+            //TODO:根据不同程序集，缓存并读取
 
+            var xmlFilePath = Path.Combine(_docXmlPath, xmlFileName);
+            Console.WriteLine("xmlFilePath:" + xmlFilePath);
+            var useXml = File.Exists(xmlFilePath);
 
             var assembleName = ApiAssemblyNames[category];
             ConcurrentDictionary<string, DocMembersCollectionValue> docMembersCollection = new ConcurrentDictionary<string, DocMembersCollectionValue>();
@@ -128,7 +130,7 @@ namespace Senparc.CO2NET.WebApi
                 //document = await XDocument.LoadAsync(sourceStream, LoadOptions.None, Task.Factory.CancellationToken);//使用内嵌资源
                 using (var fs = new FileStream(xmlFilePath, FileMode.Open))
                 {
-                    document = await XDocument.LoadAsync(fs, LoadOptions.None, Task.Factory.CancellationToken);
+                    document = await XDocument.LoadAsync(fs, LoadOptions.None, Task.Factory.CancellationToken).ConfigureAwait(false);
                 }
                 //XDocument document = XDocument.Load(sourceStream, LoadOptions.None);
                 var root = document.Root;
@@ -150,6 +152,7 @@ namespace Senparc.CO2NET.WebApi
                         {
                             //记录索引信息
                             docMembersCollection[docMethodInfo.MethodName] = new DocMembersCollectionValue(/*x, */nameAttr, docMethodInfo.ParamsPart);
+                            //Console.WriteLine("record docMembersCollection:" + docMethodInfo.MethodName);
 
                             //记录接口信息，用于搜索
                             var isAsync = docMethodInfo.MethodName.EndsWith("Async", StringComparison.OrdinalIgnoreCase) ||
@@ -335,7 +338,7 @@ namespace Senparc.CO2NET.WebApi
                     WriteLog($"\t search API[{apiIndex}]: {keyName} > {apiBindInfo.Key} -> {methodName} \t\t Parameters Count: {parameters.Count()}\t\t", true);
 
                     MethodBuilder setPropMthdBldr =
-                        tb.DefineMethod(methodName + (apiMethodInfo.IsStatic ? "_StaticApi" : "_NotStaticApi"), MethodAttributes.Public | MethodAttributes.Virtual,
+                        tb.DefineMethod(methodName/* + (apiMethodInfo.IsStatic ? "_StaticApi" : "_NotStaticApi")*/, MethodAttributes.Public | MethodAttributes.Virtual,
                         apiMethodInfo.ReturnType, //返回类型
                         parameters.Select(z => z.ParameterType).ToArray()//输入参数
                         );
