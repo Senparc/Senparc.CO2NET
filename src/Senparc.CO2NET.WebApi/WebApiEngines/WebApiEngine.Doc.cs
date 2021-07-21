@@ -134,7 +134,7 @@ namespace Senparc.CO2NET.WebApi
             //生成文档
             var docMethodName = $"{methodInfo.DeclaringType.FullName}.{methodInfo.Name}";//以(结尾确定匹配到完整的方法名
 
-            WriteLog($"\t search for docName:  {docMethodName}");//\t\tSDK Method：{apiMethodInfo.ToString()}
+            //WriteLog($"\t search for docName:  {docMethodName}");//\t\tSDK Method：{apiMethodInfo.ToString()}
 
             if (apiXmlInfo.DocMembersCollection.ContainsKey(docMethodName))
             {
