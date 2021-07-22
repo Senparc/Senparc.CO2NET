@@ -56,9 +56,7 @@ namespace Senparc.CO2NET.Sample.net6
 
             #region Swagger
 
-
             //.NET Core 3.0 for Swagger https://www.thecodebuzz.com/swagger-api-documentation-in-net-core-3-0/
-
 
             //添加Swagger
             services.AddSwaggerGen(c =>
@@ -260,14 +258,14 @@ namespace Senparc.CO2NET.Sample.net6
                     #endregion
                 },
 
-            #region 扫描自定义扩展缓存
+                #region 扫描自定义扩展缓存
 
                 //自动扫描自定义扩展缓存（二选一）
                 autoScanExtensionCacheStrategies: true //默认为 true，可以不传入
                                                        //指定自定义扩展缓存（二选一）
                                                        //autoScanExtensionCacheStrategies: false, extensionCacheStrategiesFunc: () => GetExCacheStrategies(senparcSetting.Value)
 
-            #endregion
+                #endregion
             );
 
             app.UseSwagger();

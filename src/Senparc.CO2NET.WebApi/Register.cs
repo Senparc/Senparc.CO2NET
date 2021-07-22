@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyModel;
 using Senparc.CO2NET.ApiBind;
 using Senparc.CO2NET.Trace;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -28,11 +29,16 @@ namespace Senparc.CO2NET.WebApi
         /// 是否API绑定已经执行完
         /// </summary>
         public static bool RegisterApiBindFinished { get; private set; } = false;
+        /// <summary>
+        /// 需要忽略处理的 Catetory 名称
+        /// </summary>
+        public static List<string> OmitCategoryList = new List<string>();
 
         /// <summary>
         /// RegisterApiBind 执行锁
         /// </summary>
-        private static object RegisterApiBindLck = new object();
+        private static object RegisterApiBindLock = new object();
+
 
         /// <summary>
         /// 自动扫描并注册 ApiBind
@@ -44,7 +50,7 @@ namespace Senparc.CO2NET.WebApi
 
             //var cacheStragegy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             //using (cacheStragegy.BeginCacheLock("Senparc.NeuChar.Register", "RegisterApiBind"))
-            lock (RegisterApiBindLck)//由于使用的是本地内存进行记录，所以这里不需要使用同步锁，这样就不需要依“缓存注册”等先决条件
+            lock (RegisterApiBindLock)//由于使用的是本地内存进行记录，所以这里不需要使用同步锁，这样就不需要依“缓存注册”等先决条件
             {
                 if (RegisterApiBindFinished == true && forceBindAgain == false)
                 {
@@ -98,10 +104,14 @@ namespace Senparc.CO2NET.WebApi
                             }
 
                             //判断 type 是否有 ApiBind 标记
-                            var typeAttrs = type.GetCustomAttributes(typeof(ApiBindAttribute), false);
+                            var typeAttrs = type.GetCustomAttributes(typeof(ApiBindAttribute), false)
+                                                .Select(z => z as ApiBindAttribute);
+                            var omitType = typeAttrs.FirstOrDefault(z => CheckOmitCategory(z, assemblyName)) != null;//默认忽略整个类
+
+
                             var coverAllMethods = false;//class 上已经有覆盖所有方法的 [ApiBind] 特性标签
                             var choosenClass = false;//当前 class 内有需要被引用的对象（且当前 class 可以被实例化）
-                            if (typeAttrs?.Length > 0)
+                            if (typeAttrs?.Count() > 0)
                             {
                                 //type 中具有标记，所有的方法都归档
                                 coverAllMethods = true;
@@ -111,25 +121,34 @@ namespace Senparc.CO2NET.WebApi
 
                             foreach (var method in methods)
                             {
-                                var methodAttrs = method.GetCustomAttributes(typeof(ApiBindAttribute), false);
+                                var methodAttrs = method.GetCustomAttributes(typeof(ApiBindAttribute), false)
+                                                        .Select(z => z as ApiBindAttribute);
 
                                 if (methodAttrs.FirstOrDefault(z => (z as ApiBindAttribute).Ignore) != null
-                                    || method.GetCustomAttribute(typeof(IgnoreApiBindAttribute)) != null)
+                                    || method.GetCustomAttribute(typeof(IgnoreApiBindAttribute)) != null
+                                    || methodAttrs.FirstOrDefault(z => CheckOmitCategory(z, assemblyName)) != null)
                                 {
-                                    //忽略
+                                    //主动标记忽略
+                                    continue;
+                                }
+
+                                if (omitType
+                                    && methodAttrs.FirstOrDefault(z => CheckOmitCategory(z, assemblyName)) != null)
+                                {
+                                    //类已经被忽略，当前方法没有提供可以避开忽略的 Category，因此也被忽略
                                     continue;
                                 }
 
                                 if (!choosenClass && !method.IsStatic)
                                 {
-                                    choosenClass = coverAllMethods || methodAttrs?.Length > 0;//TODO 注意忽略的对象
+                                    choosenClass = coverAllMethods || methodAttrs?.Count() > 0;//TODO 注意忽略的对象
                                 }
-                                if (methodAttrs?.Length > 0)
+                                if (methodAttrs?.Count() > 0)
                                 {
                                     //覆盖 type 的绑定信息
                                     foreach (var attr in methodAttrs)
                                     {
-                                        AddApiBindInfo(ApiBindOn.Method, attr as ApiBindAttribute, assemblyName, method);
+                                        AddApiBindInfo(ApiBindOn.Method, attr, assemblyName, method);
                                     }
                                     //TODO:检查需要忽略的对象
                                 }
@@ -138,7 +157,7 @@ namespace Senparc.CO2NET.WebApi
                                     //使用 type 的绑定信息
                                     foreach (var attr in typeAttrs)
                                     {
-                                        AddApiBindInfo(ApiBindOn.Class, attr as ApiBindAttribute, assemblyName, method);
+                                        AddApiBindInfo(ApiBindOn.Class, attr, assemblyName, method);
                                     }
                                 }
                                 else
@@ -184,6 +203,21 @@ namespace Senparc.CO2NET.WebApi
                 }
             }
             ApiBindInfoCollection.Instance.Add(apiBindOn, categoryName, method, apiBindAttr);
+        }
+
+        /// <summary>
+        /// 检查当前 Catetory 是否需要忽略
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
+        private static bool CheckOmitCategory(ApiBindAttribute attr, string realAssemblyName)
+        {
+            if (string.IsNullOrEmpty(realAssemblyName))
+            {
+                return true;
+            }
+            var categoryName = attr.GetCategoryName(realAssemblyName);
+            return categoryName == null || OmitCategoryList.Contains(categoryName);
         }
     }
 }
