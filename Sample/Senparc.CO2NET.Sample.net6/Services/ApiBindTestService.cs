@@ -351,6 +351,52 @@ namespace Senparc.CO2NET.Sample.net6.Services
         }
     }
 
+    /// <summary>
+    /// 通过代码额外增加的类
+    /// </summary>
+    public class AdditionalType
+    {
+        /// <summary>
+        /// 这个方法将通过“额外类”被注入
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string TestApi(string name = "Senparc", int value = 666)
+        {
+            return $"[from AdditionalType.TestApi]{name}:{value}";
+        }
+
+        /// <summary>
+        /// 这个方法也将通过“额外类”被注入
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string TestApi2(string name = "Senparc", int value = 666)
+        {
+            return $"[from AdditionalType.TestApi2]{name}:{value}";
+        }
+    }
+
+
+    /// <summary>
+    /// 通过代码额外增加的方法
+    /// </summary>
+    public class AdditionalMethod
+    {
+        /// <summary>
+        /// 这个方法将通过“额外方法”被注入
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string TestApi(string name = "Senparc", int value = 666)
+        {
+            return $"[from AdditionalMethod.TestApi]{name}:{value}";
+        }
+    }
+
     [AttributeUsage(AttributeTargets.Method)]
     public class MyTestAttribute : Attribute
     {
@@ -371,4 +417,5 @@ namespace Senparc.CO2NET.Sample.net6.Services
 
         }
     }
+
 }

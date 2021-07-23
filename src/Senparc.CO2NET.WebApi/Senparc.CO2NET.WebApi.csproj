@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <Version>0.2.3.1-preview3</Version>
+    <Version>0.2.4-preview3</Version>
     <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
     <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -25,6 +25,7 @@
 		v0.1 创世
 		v0.2 完成 WebApiEngine 第一代核心版本
 		v0.2.3 完成 WebApiEngine 第二代核心版本，全面支持动态 API 集成和集成和对应 XML 生成
+		v0.2.4 添加可额外注入的类或方法
 </PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

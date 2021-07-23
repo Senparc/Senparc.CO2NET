@@ -35,6 +35,16 @@ namespace Senparc.CO2NET.WebApi
         public static List<string> OmitCategoryList = new List<string>();
 
         /// <summary>
+        /// 额外的方法
+        /// </summary>
+        public static Dictionary<MethodInfo, string> AdditionalMethods = new Dictionary<MethodInfo, string>();
+
+        /// <summary>
+        /// 额外的方法
+        /// </summary>
+        public static Dictionary<Type, string> AdditionalClasses = new Dictionary<Type, string>();
+
+        /// <summary>
         /// RegisterApiBind 执行锁
         /// </summary>
         private static object RegisterApiBindLock = new object();
@@ -105,13 +115,19 @@ namespace Senparc.CO2NET.WebApi
 
                             //判断 type 是否有 ApiBind 标记
                             var typeAttrs = type.GetCustomAttributes(typeof(ApiBindAttribute), false)
-                                                .Select(z => z as ApiBindAttribute);
+                                                .Select(z => z as ApiBindAttribute).ToList();
                             var omitType = typeAttrs.FirstOrDefault(z => CheckOmitCategory(z, assemblyName)) != null;//默认忽略整个类
 
 
                             var coverAllMethods = false;//class 上已经有覆盖所有方法的 [ApiBind] 特性标签
                             var choosenClass = false;//当前 class 内有需要被引用的对象（且当前 class 可以被实例化）
-                            if (typeAttrs?.Count() > 0)
+
+                            if (typeAttrs.Count() == 0 && CheckAdditionalClass(type, out string classCategory))
+                            {
+                                typeAttrs.Add(new ApiBindAttribute(classCategory));//此类被运行时指定
+                            }
+
+                            if (typeAttrs.Count() > 0)
                             {
                                 //type 中具有标记，所有的方法都归档
                                 coverAllMethods = true;
@@ -122,11 +138,16 @@ namespace Senparc.CO2NET.WebApi
                             foreach (var method in methods)
                             {
                                 var methodAttrs = method.GetCustomAttributes(typeof(ApiBindAttribute), false)
-                                                        .Select(z => z as ApiBindAttribute);
+                                                        .Select(z => z as ApiBindAttribute).ToList();
 
-                                if (methodAttrs.FirstOrDefault(z => (z as ApiBindAttribute).Ignore) != null
-                                    || method.GetCustomAttribute(typeof(IgnoreApiBindAttribute)) != null
-                                    || methodAttrs.FirstOrDefault(z => CheckOmitCategory(z, assemblyName)) != null)
+                                if (methodAttrs.Count() == 0 && CheckAdditionalMethod(method, out string methodCategory))
+                                {
+                                    methodAttrs.Add(new ApiBindAttribute(methodCategory));//此方法被运行时指定，优先级最高，可以忽略其他忽略标签
+                                }
+                                else if (methodAttrs.FirstOrDefault(z => (z as ApiBindAttribute).Ignore) != null         //包含忽略参数
+                                        || method.GetCustomAttribute(typeof(IgnoreApiBindAttribute)) != null            //包含忽略标签
+                                        || methodAttrs.FirstOrDefault(z => CheckOmitCategory(z, assemblyName)) != null  //被要求忽略
+                                        )
                                 {
                                     //主动标记忽略
                                     continue;
@@ -218,6 +239,38 @@ namespace Senparc.CO2NET.WebApi
             }
             var categoryName = attr.GetCategoryName(realAssemblyName);
             return categoryName == null || OmitCategoryList.Contains(categoryName);
+        }
+
+        /// <summary>
+        /// 检查是否为额外增加的类
+        /// </summary>
+        /// <param name="classType"></param>
+        /// <returns></returns>
+        private static bool CheckAdditionalClass(Type classType, out string cagetory)
+        {
+            if (classType == null)
+            {
+                cagetory = null;
+                return false;
+            }
+
+            return AdditionalClasses.TryGetValue(classType, out cagetory);
+        }
+
+        /// <summary>
+        /// 检查是否为额外增加的方法
+        /// </summary>
+        /// <param name="methodInfo"></param>
+        /// <returns></returns>
+        private static bool CheckAdditionalMethod(MethodInfo methodInfo, out string cagetory)
+        {
+            if (methodInfo == null)
+            {
+                cagetory = null;
+                return false;
+            }
+
+            return AdditionalMethods.TryGetValue(methodInfo, out cagetory);
         }
     }
 }

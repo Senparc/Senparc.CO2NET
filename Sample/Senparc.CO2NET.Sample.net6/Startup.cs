@@ -17,8 +17,9 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
-namespace Senparc.CO2NET.Sample.net6
+namespace Senparc.CO2NET.Sample
 {
     public class Startup
     {
@@ -45,7 +46,14 @@ namespace Senparc.CO2NET.Sample.net6
             //Senparc.NeuChar.Register.AddNeuChar();
 
             //忽略测试
-            //Senparc.CO2NET.WebApi.Register.OmitCategoryList.Add("ClassCover");
+            Senparc.CO2NET.WebApi.Register.OmitCategoryList.Add(NeuChar.PlatformType.WeChat_OfficialAccount.ToString());
+
+            //额外增加测试
+            Senparc.CO2NET.WebApi.Register.AdditionalClasses.Add(typeof(AdditionalType), "Additional");
+            Senparc.CO2NET.WebApi.Register.AdditionalMethods.Add(typeof(AdditionalMethod).GetMethod("TestApi"), "Additional");
+
+            Senparc.CO2NET.WebApi.Register.AdditionalMethods.Add(typeof(Senparc.CO2NET.HttpUtility.RequestUtility).GetMethods().FirstOrDefault(z => z.Name.Contains("HttpGet")), "Additional");
+
 
             var docXmlPath = Path.Combine(WebHostEnvironment.ContentRootPath, "App_Data", "ApiDocXml");
             services.AddAndInitDynamicApi(builder, docXmlPath, ApiRequestMethod.Get, null, 400, false, true, m => null);
@@ -261,14 +269,14 @@ namespace Senparc.CO2NET.Sample.net6
                     #endregion
                 },
 
-                #region 扫描自定义扩展缓存
+            #region 扫描自定义扩展缓存
 
                 //自动扫描自定义扩展缓存（二选一）
                 autoScanExtensionCacheStrategies: true //默认为 true，可以不传入
                                                        //指定自定义扩展缓存（二选一）
                                                        //autoScanExtensionCacheStrategies: false, extensionCacheStrategiesFunc: () => GetExCacheStrategies(senparcSetting.Value)
 
-                #endregion
+            #endregion
             );
 
             app.UseSwagger();
