@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Senparc.CO2NET.AspNet;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Cache.Memcached;
+using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Sample.net6.Services;
 using Senparc.CO2NET.WebApi;
@@ -18,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Senparc.CO2NET.Sample.net6
+namespace Senparc.CO2NET.Sample
 {
     public class Startup
     {
@@ -42,10 +43,20 @@ namespace Senparc.CO2NET.Sample.net6
             //Senparc.CO2NET 全局注册（必须）
             services.AddSenparcGlobalServices(Configuration);
 
-            //Senparc.NeuChar.Register.AddNeuChar();
+            #region WebApiEngine
+
+            //忽略测试，注释掉以下代码后，可看到微信公众号SDK接口及注释信息
+            WebApi.Register.OmitCategoryList.Add(NeuChar.PlatformType.WeChat_OfficialAccount.ToString());
+
+            //额外增加测试
+            WebApi.Register.AdditionalClasses.Add(typeof(AdditionalType), "Additional");
+            WebApi.Register.AdditionalMethods.Add(typeof(AdditionalMethod).GetMethod("TestApi"), "Additional");
+            WebApi.Register.AdditionalMethods.Add(typeof(EncryptHelper).GetMethod("GetMD5", new[] { typeof(string), typeof(string) }), "Additional");
 
             var docXmlPath = Path.Combine(WebHostEnvironment.ContentRootPath, "App_Data", "ApiDocXml");
             services.AddAndInitDynamicApi(builder, docXmlPath, ApiRequestMethod.Get, null, 400, false, true, m => null);
+
+            #endregion
 
             #region 独立测试
             services.AddScoped(typeof(ApiBindTestService));
@@ -258,14 +269,14 @@ namespace Senparc.CO2NET.Sample.net6
                     #endregion
                 },
 
-                #region 扫描自定义扩展缓存
+            #region 扫描自定义扩展缓存
 
                 //自动扫描自定义扩展缓存（二选一）
                 autoScanExtensionCacheStrategies: true //默认为 true，可以不传入
                                                        //指定自定义扩展缓存（二选一）
                                                        //autoScanExtensionCacheStrategies: false, extensionCacheStrategiesFunc: () => GetExCacheStrategies(senparcSetting.Value)
 
-                #endregion
+            #endregion
             );
 
             app.UseSwagger();
