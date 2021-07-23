@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Senparc.CO2NET.Sample
 {
@@ -43,20 +44,20 @@ namespace Senparc.CO2NET.Sample
             //Senparc.CO2NET 全局注册（必须）
             services.AddSenparcGlobalServices(Configuration);
 
-            //Senparc.NeuChar.Register.AddNeuChar();
+            #region WebApiEngine
 
-            //忽略测试
+            //忽略测试，注释掉以下代码后，可看到微信公众号SDK接口及注释信息
             Senparc.CO2NET.WebApi.Register.OmitCategoryList.Add(NeuChar.PlatformType.WeChat_OfficialAccount.ToString());
 
             //额外增加测试
             Senparc.CO2NET.WebApi.Register.AdditionalClasses.Add(typeof(AdditionalType), "Additional");
             Senparc.CO2NET.WebApi.Register.AdditionalMethods.Add(typeof(AdditionalMethod).GetMethod("TestApi"), "Additional");
-
-            Senparc.CO2NET.WebApi.Register.AdditionalMethods.Add(typeof(Senparc.CO2NET.HttpUtility.RequestUtility).GetMethods().FirstOrDefault(z => z.Name.Contains("HttpGet")), "Additional");
-
+            Senparc.CO2NET.WebApi.Register.AdditionalMethods.Add(typeof(Senparc.CO2NET.Helpers.EncryptHelper).GetMethod("GetMD5", new[] { typeof(string), typeof(string)}), "Additional");
 
             var docXmlPath = Path.Combine(WebHostEnvironment.ContentRootPath, "App_Data", "ApiDocXml");
             services.AddAndInitDynamicApi(builder, docXmlPath, ApiRequestMethod.Get, null, 400, false, true, m => null);
+
+            #endregion
 
             #region 独立测试
             services.AddScoped(typeof(ApiBindTestService));
