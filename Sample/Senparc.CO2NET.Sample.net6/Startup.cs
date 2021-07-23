@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Senparc.CO2NET.AspNet;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Cache.Memcached;
+using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Sample.net6.Services;
 using Senparc.CO2NET.WebApi;
@@ -17,8 +18,6 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Senparc.CO2NET.Sample
 {
@@ -47,12 +46,12 @@ namespace Senparc.CO2NET.Sample
             #region WebApiEngine
 
             //忽略测试，注释掉以下代码后，可看到微信公众号SDK接口及注释信息
-            Senparc.CO2NET.WebApi.Register.OmitCategoryList.Add(NeuChar.PlatformType.WeChat_OfficialAccount.ToString());
+            WebApi.Register.OmitCategoryList.Add(NeuChar.PlatformType.WeChat_OfficialAccount.ToString());
 
             //额外增加测试
-            Senparc.CO2NET.WebApi.Register.AdditionalClasses.Add(typeof(AdditionalType), "Additional");
-            Senparc.CO2NET.WebApi.Register.AdditionalMethods.Add(typeof(AdditionalMethod).GetMethod("TestApi"), "Additional");
-            Senparc.CO2NET.WebApi.Register.AdditionalMethods.Add(typeof(Senparc.CO2NET.Helpers.EncryptHelper).GetMethod("GetMD5", new[] { typeof(string), typeof(string)}), "Additional");
+            WebApi.Register.AdditionalClasses.Add(typeof(AdditionalType), "Additional");
+            WebApi.Register.AdditionalMethods.Add(typeof(AdditionalMethod).GetMethod("TestApi"), "Additional");
+            WebApi.Register.AdditionalMethods.Add(typeof(EncryptHelper).GetMethod("GetMD5", new[] { typeof(string), typeof(string) }), "Additional");
 
             var docXmlPath = Path.Combine(WebHostEnvironment.ContentRootPath, "App_Data", "ApiDocXml");
             services.AddAndInitDynamicApi(builder, docXmlPath, ApiRequestMethod.Get, null, 400, false, true, m => null);
