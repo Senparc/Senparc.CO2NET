@@ -44,6 +44,9 @@ namespace Senparc.CO2NET.Sample.net6
 
             //Senparc.NeuChar.Register.AddNeuChar();
 
+            //ºöÂÔ²âÊÔ
+            //Senparc.CO2NET.WebApi.Register.OmitCategoryList.Add("ClassCover");
+
             var docXmlPath = Path.Combine(WebHostEnvironment.ContentRootPath, "App_Data", "ApiDocXml");
             services.AddAndInitDynamicApi(builder, docXmlPath, ApiRequestMethod.Get, null, 400, false, true, m => null);
 
