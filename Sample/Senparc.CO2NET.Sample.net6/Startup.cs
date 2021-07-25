@@ -83,13 +83,14 @@ namespace Senparc.CO2NET.Sample
                     c.SwaggerDoc(docName, new OpenApiInfo
                     {
                         Title = $"CO2NET Dynamic WebApi Engine : {apiAssembly.Key}",
-                        Version = $"v{version}",//"v16.5.4"
+                        //Version = $"v{version}",//"v16.5.4"
                         Description = $"Senparc CO2NET WebApi 动态引擎（{apiAssembly.Key} - v{version}）",
                         //License = new OpenApiLicense()
                         //{
                         //    Name = "Apache License Version 2.0",
                         //    Url = new Uri("https://github.com/JeffreySu/WeiXinMPSDK")
                         //},
+                         
                         Contact = new OpenApiContact()
                         {
                             Email = "zsu@senparc.com",
@@ -116,26 +117,26 @@ namespace Senparc.CO2NET.Sample
                     }
 
                     //获取方法上的特性
-                    var versions = methodInfo.GetCustomAttributes(true)
+                    var catalogNames = methodInfo.GetCustomAttributes(true)
                                               .OfType<SwaggerOperationAttribute>()
                                               .Select(z => z.Tags[0].Split(':')[0]);
 
-                    if (versions?.Count() == 0)
+                    if (catalogNames?.Count() == 0)
                     {
                         //获取类上的特性
-                        versions = methodInfo.DeclaringType.GetCustomAttributes(true)
+                        catalogNames = methodInfo.DeclaringType.GetCustomAttributes(true)
                         .OfType<SwaggerOperationAttribute>()
                           .Select(z => z.Tags[0].Split(':')[0]);
                     }
 
-                    if (versions?.Count() == 0)
+                    if (catalogNames?.Count() == 0)
                     {
                         return false;//不符合要求的都不显示
                     }
 
 
                     //docName: $"{neucharApiDocAssembly.Key}-v1"
-                    return versions.Any(z => docName.StartsWith(z));
+                    return catalogNames.Any(z => docName.StartsWith(z));
                 });
 
                 c.OrderActionsBy(z => z.RelativePath);
@@ -302,14 +303,13 @@ namespace Senparc.CO2NET.Sample
 
                 foreach (var co2netApiDocAssembly in WebApiEngine.ApiAssemblyCollection)
                 {
-
                     //TODO:真实的动态版本号
-                    var verion = WebApiEngine.ApiAssemblyVersions[co2netApiDocAssembly.Key]; //neucharApiDocAssembly.Value.ImageRuntimeVersion;
+                    var version = WebApiEngine.ApiAssemblyVersions[co2netApiDocAssembly.Key]; //neucharApiDocAssembly.Value.ImageRuntimeVersion;
                     var docName = WebApiEngine.GetDocName(co2netApiDocAssembly.Key);
 
                     //Console.WriteLine($"\tAdd {docName}");
 
-                    c.SwaggerEndpoint($"/swagger/{docName}/swagger.json", $"{co2netApiDocAssembly.Key} v{verion}");
+                    c.SwaggerEndpoint($"/swagger/{docName}/swagger.json", $"{co2netApiDocAssembly.Key}");
                 }
 
                 //OAuth     https://www.cnblogs.com/miskis/p/10083985.html
@@ -406,7 +406,6 @@ namespace Senparc.CO2NET.Sample
             public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
             {
                 //每次切换定义，都需要经过比较长的时间才到达这里
-
                 return;
                 string platformType;
                 var title = swaggerDoc.Info.Title;

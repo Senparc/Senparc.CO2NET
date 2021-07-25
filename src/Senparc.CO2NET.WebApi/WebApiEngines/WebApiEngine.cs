@@ -257,8 +257,11 @@ namespace Senparc.CO2NET.WebApi
 
                     WriteLog($"\t search API[{apiIndex}]: {keyName} > {apiBindInfo.Key} -> {methodName} \t\t Parameters Count: {parameters.Count()}\t\t", true);
 
+                    //添加静态方法的标记
+                    string showStaticApiState = null;//$"{(apiMethodInfo.IsStatic ? "_StaticApi" : "_NonStaticApi")}";
+
                     MethodBuilder setPropMthdBldr =
-                        tb.DefineMethod(methodName/* + (apiMethodInfo.IsStatic ? "_StaticApi" : "_NotStaticApi")*/, MethodAttributes.Public | MethodAttributes.Virtual,
+                        tb.DefineMethod(methodName/* + showStaticApiState*/, MethodAttributes.Public | MethodAttributes.Virtual,
                         apiMethodInfo.ReturnType, //返回类型
                         parameters.Select(z => z.ParameterType).ToArray()//输入参数
                         );
@@ -277,7 +280,6 @@ namespace Senparc.CO2NET.WebApi
                     //[Route("/api/...", Name="xxx")]
                     var t2_4 = typeof(RouteAttribute);
                     //var routeName = apiBindInfo.Value.ApiBindAttribute.Name.Split('.')[0];
-                    var showStaticApiState = $"{(apiMethodInfo.IsStatic ? "_StaticApi" : "_NonStaticApi")}";
                     var apiBindGroupNamePath = apiBindName.Replace(":", "_");
                     var apiNamePath = apiName.Replace(":", "_");
                     var apiPath = $"/api/{keyName}/{apiBindGroupNamePath}/{apiNamePath}{showStaticApiState}";
