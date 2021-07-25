@@ -22,7 +22,8 @@ namespace Senparc.CO2NET.WebApi
         /// <returns></returns>
         public static string GetDocName(string category)
         {
-            return $"{category}-v{ApiAssemblyVersions[category]}";
+            //return $"{category}-v{ApiAssemblyVersions[category]}";
+            return category;
         }
 
         /// <summary>

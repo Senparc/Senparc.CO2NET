@@ -1,47 +1,47 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <Version>0.2.4-preview3</Version>
-    <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
-    <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
-    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-    <Description>
+	<PropertyGroup>
+		<TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+		<Version>0.2.4.1-preview3</Version>
+		<LangVersion>latest</LangVersion>
+		<AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
+		<RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<Description>
 			Senparc.CO2NET.WebApi 应用性能管理
 		</Description>
-    <Copyright>Senparc Copyright © 2004~2021</Copyright>
-    <PackageTags>WebApi,.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
-    <Authors>Senparc</Authors>
-    <Owners>Senparc</Owners>
-    <PackageLicenseUrl>https://github.com/Senparc/Senparc.CO2NET/blob/master/license.md</PackageLicenseUrl>
-    <ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
-    <Title>Senparc.CO2NET.WebApi.dll</Title>
-    <Summary>Senparc.CO2NET.WebApi</Summary>
-    <PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
-    <PackageIconUrl>http://sdk.weixin.senparc.com/Images/Logo.jpg</PackageIconUrl>
-    <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
-    <Configurations>Debug;Release;Test</Configurations>
-    <PackageReleaseNotes>
-		v0.1 创世
-		v0.2 完成 WebApiEngine 第一代核心版本
-		v0.2.3 完成 WebApiEngine 第二代核心版本，全面支持动态 API 集成和集成和对应 XML 生成
-		v0.2.4 添加可额外注入的类或方法
-</PackageReleaseNotes>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>..\BuildOutPut</OutputPath>
-    <DefineConstants>TRACE;RELEASE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\BuildOutPut</OutputPath>
-    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.WebApi.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+		<Copyright>Senparc Copyright © 2004~2021</Copyright>
+		<PackageTags>WebApi,.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
+		<Authors>Senparc</Authors>
+		<Owners>Senparc</Owners>
+		<PackageLicenseUrl>https://github.com/Senparc/Senparc.CO2NET/blob/master/license.md</PackageLicenseUrl>
+		<ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
+		<Title>Senparc.CO2NET.WebApi.dll</Title>
+		<Summary>Senparc.CO2NET.WebApi</Summary>
+		<PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
+		<PackageIconUrl>http://sdk.weixin.senparc.com/Images/Logo.jpg</PackageIconUrl>
+		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
+		<Configurations>Debug;Release;Test</Configurations>
+		<PackageReleaseNotes>
+			v0.1 创世
+			v0.2 完成 WebApiEngine 第一代核心版本
+			v0.2.3 完成 WebApiEngine 第二代核心版本，全面支持动态 API 集成和集成和对应 XML 生成
+			v0.2.4 添加可额外注入的类或方法
+		</PackageReleaseNotes>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<OutputPath>..\BuildOutPut</OutputPath>
+		<DefineConstants>TRACE;RELEASE</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+		<OutputPath>..\BuildOutPut</OutputPath>
+		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+		<DocumentationFile>..\BuildOutPut\Senparc.CO2NET.WebApi.xml</DocumentationFile>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<ErrorReport>prompt</ErrorReport>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+	<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
 		<OutputPath>..\BuildOutPut\</OutputPath>
 		<DocumentationFile>..\BuildOutPut\net45\Senparc.CO2NET.WebApi.xml</DocumentationFile>
 	</PropertyGroup>
@@ -49,12 +49,12 @@
 		<OutputPath>..\BuildOutPut\</OutputPath>
 		<DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.WebApi.xml</DocumentationFile>
 	</PropertyGroup>-->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' "></ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
-  </ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' "></ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+	</ItemGroup>
 </Project>

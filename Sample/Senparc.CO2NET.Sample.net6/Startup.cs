@@ -14,10 +14,13 @@ using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Sample.net6.Services;
 using Senparc.CO2NET.WebApi;
 using Senparc.CO2NET.WebApi.WebApiEngines;
+using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace Senparc.CO2NET.Sample
 {
@@ -104,27 +107,36 @@ namespace Senparc.CO2NET.Sample
                     }
                 }
 
-                ////分组显示  https://www.cnblogs.com/toiv/archive/2018/07/28/9379249.html
-                //c.DocInclusionPredicate((docName, apiDesc) =>
-                //{
-                //    if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo))
-                //    {
-                //        return false;
-                //    }
+                //分组显示  https://www.cnblogs.com/toiv/archive/2018/07/28/9379249.html
+                c.DocInclusionPredicate((docName, apiDesc) =>
+                {
+                    if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo))
+                    {
+                        return false;
+                    }
 
-                //    var versions = methodInfo.DeclaringType
-                //          .GetCustomAttributes(true)
-                //          .OfType<SwaggerOperationAttribute>()
-                //          .Select(z => z.Tags[0].Split(':')[0]);
+                    //获取方法上的特性
+                    var versions = methodInfo.GetCustomAttributes(true)
+                                              .OfType<SwaggerOperationAttribute>()
+                                              .Select(z => z.Tags[0].Split(':')[0]);
 
-                //    if (versions.FirstOrDefault() == null)
-                //    {
-                //        return false;//不符合要求的都不显示
-                //    }
+                    if (versions?.Count() == 0)
+                    {
+                        //获取类上的特性
+                        versions = methodInfo.DeclaringType.GetCustomAttributes(true)
+                        .OfType<SwaggerOperationAttribute>()
+                          .Select(z => z.Tags[0].Split(':')[0]);
+                    }
 
-                //    //docName: $"{neucharApiDocAssembly.Key}-v1"
-                //    return versions.Any(z => docName.StartsWith(z));
-                //});
+                    if (versions?.Count() == 0)
+                    {
+                        return false;//不符合要求的都不显示
+                    }
+
+
+                    //docName: $"{neucharApiDocAssembly.Key}-v1"
+                    return versions.Any(z => docName.StartsWith(z));
+                });
 
                 c.OrderActionsBy(z => z.RelativePath);
                 //c.DescribeAllEnumsAsStrings();//枚举显示字符串
