@@ -207,6 +207,36 @@ namespace Senparc.CO2NET.WebApi
 
         }
 
+        /// <summary>
+        /// 添加需要忽略的分类
+        /// </summary>
+        /// <param name="categoryName"></param>
+        public static void AddOmitCategory(string categoryName)
+        {
+            OmitCategoryList.Add(categoryName);
+        }
+
+        /// <summary>
+        /// 添加额外方法
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <param name="methodInfo"></param>
+        public static void AddAdditionalMethod(string categoryName, MethodInfo methodInfo)
+        {
+            AdditionalMethods.Add(methodInfo, categoryName);
+        }
+
+        /// <summary>
+        /// 添加额外类
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <param name="methodInfo"></param>
+        public static void AddAdditionalMethod(string categoryName, Type classType)
+        {
+            AdditionalClasses.Add(classType, categoryName);
+        }
+
+
         private static void AddApiBindInfos(ApiBindOn apiBindOn, IEnumerable<ApiBindAttribute> apiBindAttrs, string assemblyName, MethodInfo method)
         {
             foreach (var attr in apiBindAttrs)
