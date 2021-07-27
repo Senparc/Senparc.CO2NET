@@ -144,7 +144,7 @@ namespace Senparc.CO2NET.WebApi
                                 {
                                     methodAttrs.Add(new ApiBindAttribute(methodCategory));//此方法被运行时指定，优先级最高，可以忽略其他忽略标签
                                 }
-                                else if (methodAttrs.FirstOrDefault(z => (z as ApiBindAttribute).Ignore) != null         //包含忽略参数
+                                else if (methodAttrs.FirstOrDefault(z => z.Ignore) != null         //包含忽略参数
                                         || method.GetCustomAttribute(typeof(IgnoreApiBindAttribute)) != null            //包含忽略标签
                                         || methodAttrs.FirstOrDefault(z => CheckOmitCategory(z, assemblyName)) != null  //被要求忽略
                                         )

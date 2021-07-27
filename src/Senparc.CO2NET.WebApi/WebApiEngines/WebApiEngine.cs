@@ -304,7 +304,12 @@ namespace Senparc.CO2NET.WebApi
                     //添加默认已有特性
                     if (_copyCustomAttributes)
                     {
-                        var customAttrs = CustomAttributeData.GetCustomAttributes(apiMethodInfo);
+                        //类上的自定义特性     TODO：缓存以增加效率
+                        var classAttrs = CustomAttributeData.GetCustomAttributes(apiMethodInfo.DeclaringType);
+                        //当前方法的自定义特性
+                        var customAttrs = CustomAttributeData.GetCustomAttributes(apiMethodInfo).ToList();
+                        //叠加类和特性的方法
+                        customAttrs.InsertRange(0, classAttrs);
 
                         foreach (var item in customAttrs)
                         {
