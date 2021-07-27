@@ -94,6 +94,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
             var dt1 = SystemTime.Now;
 
             var apiGroups = ApiBindInfoCollection.Instance.GetGroupedCollection();
+            var apiGouupsCount = apiGroups.Count();
 
             ConcurrentDictionary<string, (int apiCount, double costMs)> assemblyBuildStat = new ConcurrentDictionary<string, (int, double)>();
 
@@ -102,12 +103,15 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
             //因为模块数量比较少，这里使用异步反而会开销略大
             //WeixinApiAssemblyNames.Keys.AsParallel().ForAll(async category =>
             //WeixinApiAssemblyNames.Keys.ToList().ForEach(category =>
-            foreach (var category in WebApiEngine.ApiAssemblyNames.Keys)
+            var keys = WebApiEngine.ApiAssemblyNames.Keys.ToList();
+            for (int i = 0; i < keys.Count; i++)
             {
+                var category = keys[i];
+                var threadIndex = i;
                 var wrapperTask = Task.Factory.StartNew(async () =>
                 {
                     //此处使用 Task 效率并不比 Keys.ToList() 方法快
-                    webApiEngine.WriteLog($"get API groups: {apiGroups.Count()}, now dealing with: {category}");
+                    webApiEngine.WriteLog($"Get API Groups: {threadIndex + 1}/{apiGouupsCount}, now dealing with: {category}");
                     var dtStart = SystemTime.Now;
                     var apiBindGroup = apiGroups.FirstOrDefault(z => z.Key == category);
 
@@ -128,6 +132,10 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
                 });
                 taskList.Add(wrapperTask.Unwrap());
             }
+            //foreach (var category in WebApiEngine.ApiAssemblyNames.Keys)
+            //{
+
+            //}
 
             Task.WaitAll(taskList.ToArray());
 

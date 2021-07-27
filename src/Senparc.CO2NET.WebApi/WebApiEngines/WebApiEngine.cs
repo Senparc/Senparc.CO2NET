@@ -185,7 +185,7 @@ namespace Senparc.CO2NET.WebApi
 
                     #endregion
                 });
-                taskList.Add(apiTask);
+                taskList.Add(apiTask.Unwrap());
             }
 
             await Task.WhenAll(taskList);

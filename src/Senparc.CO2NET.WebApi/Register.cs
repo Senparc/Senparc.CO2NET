@@ -181,7 +181,7 @@ namespace Senparc.CO2NET.WebApi
                                 }
                                 else
                                 {
-                                    //忽略
+                                    //忽略当前方法
                                 }
                             }
 
