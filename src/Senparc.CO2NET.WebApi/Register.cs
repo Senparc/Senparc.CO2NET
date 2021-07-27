@@ -170,20 +170,14 @@ namespace Senparc.CO2NET.WebApi
 
                                 if (isApiMethod)
                                 {
-                                    //覆盖 type 的绑定信息
-                                    foreach (var attr in methodAttrs)
-                                    {
-                                        AddApiBindInfo(ApiBindOn.Method, attr, assemblyName, method);
-                                    }
+                                    //覆盖 classType 的绑定信息
+                                    AddApiBindInfos(ApiBindOn.Method, methodAttrs, assemblyName, method);
                                     //TODO:检查需要忽略的对象
                                 }
                                 else if (coverAllMethods)
                                 {
-                                    //使用 type 的绑定信息
-                                    foreach (var attr in typeAttrs)
-                                    {
-                                        AddApiBindInfo(ApiBindOn.Class, attr, assemblyName, method);
-                                    }
+                                    //使用 classType 的绑定信息
+                                    AddApiBindInfos(ApiBindOn.Method, typeAttrs, assemblyName, method);
                                 }
                                 else
                                 {
@@ -211,6 +205,14 @@ namespace Senparc.CO2NET.WebApi
             }
 
 
+        }
+
+        private static void AddApiBindInfos(ApiBindOn apiBindOn, IEnumerable<ApiBindAttribute> apiBindAttrs, string assemblyName, MethodInfo method)
+        {
+            foreach (var attr in apiBindAttrs)
+            {
+                AddApiBindInfo(apiBindOn, attr, assemblyName, method);
+            }
         }
 
         private static void AddApiBindInfo(ApiBindOn apiBindOn, ApiBindAttribute apiBindAttr, string assemblyName, MethodInfo method)
