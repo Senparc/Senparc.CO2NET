@@ -185,7 +185,7 @@ namespace Senparc.CO2NET.WebApi
 
                     #endregion
                 });
-                taskList.Add(apiTask);
+                taskList.Add(apiTask.Unwrap());
             }
 
             await Task.WhenAll(taskList);
@@ -304,7 +304,22 @@ namespace Senparc.CO2NET.WebApi
                     //添加默认已有特性
                     if (_copyCustomAttributes)
                     {
-                        var customAttrs = CustomAttributeData.GetCustomAttributes(apiMethodInfo);
+                        //类上的自定义特性     TODO：缓存以增加效率
+                        var classAttrs = CustomAttributeData.GetCustomAttributes(apiMethodInfo.DeclaringType).ToList();
+                        //反转数组
+                        classAttrs.Reverse();
+
+                        //当前方法的自定义特性
+                        var customAttrs = CustomAttributeData.GetCustomAttributes(apiMethodInfo).ToList();
+                        foreach (var classAttr in classAttrs)
+                        {
+                            if (customAttrs.FirstOrDefault(z => z.AttributeType == classAttr.AttributeType) == null)
+                            {
+                                customAttrs.Insert(0, classAttr);
+                            }
+                        }
+
+                        //叠加类和特性的方法
 
                         foreach (var item in customAttrs)
                         {

@@ -328,6 +328,10 @@ namespace Senparc.CO2NET.Sample.net6.Services
         {
             return $"[from ApiBindCoverService.TestApi_Get2]{name}:{value}";
         }
+
+        public static string StaticMethod() {
+            return "sss";
+        }
     }
 
     /// <summary>

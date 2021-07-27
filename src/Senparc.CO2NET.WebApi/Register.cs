@@ -105,16 +105,16 @@ namespace Senparc.CO2NET.WebApi
                                     //            z.Name.EndsWith("apis", StringComparison.OrdinalIgnoreCase))
                                     .ToArray();
 
-                        foreach (var type in classTypes)
+                        foreach (var classType in classTypes)
                         {
                             if (/*type.IsAbstract || 静态类会被识别为 IsAbstract*/
-                                !type.IsPublic || !type.IsClass || type.IsEnum)
+                                !classType.IsPublic || !classType.IsClass || classType.IsEnum)
                             {
                                 continue;
                             }
 
                             //判断 type 是否有 ApiBind 标记
-                            var typeAttrs = type.GetCustomAttributes(typeof(ApiBindAttribute), false)
+                            var typeAttrs = classType.GetCustomAttributes(typeof(ApiBindAttribute), false)
                                                 .Select(z => z as ApiBindAttribute).ToList();
                             var omitType = typeAttrs.FirstOrDefault(z => CheckOmitCategory(z, assemblyName)) != null;//默认忽略整个类
 
@@ -122,7 +122,7 @@ namespace Senparc.CO2NET.WebApi
                             var coverAllMethods = false;//class 上已经有覆盖所有方法的 [ApiBind] 特性标签
                             var choosenClass = false;//当前 class 内有需要被引用的对象（且当前 class 可以被实例化）
 
-                            if (typeAttrs.Count() == 0 && CheckAdditionalClass(type, out string classCategory))
+                            if (typeAttrs.Count() == 0 && CheckAdditionalClass(classType, out string classCategory))
                             {
                                 typeAttrs.Add(new ApiBindAttribute(classCategory));//此类被运行时指定
                             }
@@ -133,18 +133,20 @@ namespace Senparc.CO2NET.WebApi
                                 coverAllMethods = true;
                             }
 
-                            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Static /*| BindingFlags.Static | BindingFlags.InvokeMethod*/);
+                            var methods = classType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Static /*| BindingFlags.Static | BindingFlags.InvokeMethod*/);
 
                             foreach (var method in methods)
                             {
                                 var methodAttrs = method.GetCustomAttributes(typeof(ApiBindAttribute), false)
                                                         .Select(z => z as ApiBindAttribute).ToList();
 
-                                if (methodAttrs.Count() == 0 && CheckAdditionalMethod(method, out string methodCategory))
+                                var isApiMethod = methodAttrs.Count() > 0;//当前方法需要进行 API 处理
+
+                                if (!isApiMethod && CheckAdditionalMethod(method, out string methodCategory))
                                 {
                                     methodAttrs.Add(new ApiBindAttribute(methodCategory));//此方法被运行时指定，优先级最高，可以忽略其他忽略标签
                                 }
-                                else if (methodAttrs.FirstOrDefault(z => (z as ApiBindAttribute).Ignore) != null         //包含忽略参数
+                                else if (methodAttrs.FirstOrDefault(z => z.Ignore) != null                              //包含忽略参数
                                         || method.GetCustomAttribute(typeof(IgnoreApiBindAttribute)) != null            //包含忽略标签
                                         || methodAttrs.FirstOrDefault(z => CheckOmitCategory(z, assemblyName)) != null  //被要求忽略
                                         )
@@ -160,37 +162,33 @@ namespace Senparc.CO2NET.WebApi
                                     continue;
                                 }
 
-                                if (!choosenClass && !method.IsStatic)
+                                //判断当前 class 是否包含可用的方法，如果包含，需要标记并进行后期处理
+                                if (!choosenClass)
                                 {
-                                    choosenClass = coverAllMethods || methodAttrs?.Count() > 0;//TODO 注意忽略的对象
+                                    choosenClass = coverAllMethods || isApiMethod;//TODO 注意忽略的对象
                                 }
-                                if (methodAttrs?.Count() > 0)
+
+                                if (isApiMethod)
                                 {
-                                    //覆盖 type 的绑定信息
-                                    foreach (var attr in methodAttrs)
-                                    {
-                                        AddApiBindInfo(ApiBindOn.Method, attr, assemblyName, method);
-                                    }
+                                    //覆盖 classType 的绑定信息
+                                    AddApiBindInfos(ApiBindOn.Method, methodAttrs, assemblyName, method);
                                     //TODO:检查需要忽略的对象
                                 }
                                 else if (coverAllMethods)
                                 {
-                                    //使用 type 的绑定信息
-                                    foreach (var attr in typeAttrs)
-                                    {
-                                        AddApiBindInfo(ApiBindOn.Class, attr, assemblyName, method);
-                                    }
+                                    //使用 classType 的绑定信息
+                                    AddApiBindInfos(ApiBindOn.Method, typeAttrs, assemblyName, method);
                                 }
                                 else
                                 {
-                                    //忽略
+                                    //忽略当前方法
                                 }
                             }
 
                             if (choosenClass)
                             {
                                 //当前类不是静态类，且内部方法被引用，需要进行 DI 配置
-                                serviceCollection.AddScoped(type);
+                                serviceCollection.AddScoped(classType);
                             }
                         }
                     }
@@ -207,6 +205,44 @@ namespace Senparc.CO2NET.WebApi
             }
 
 
+        }
+
+        /// <summary>
+        /// 添加需要忽略的分类
+        /// </summary>
+        /// <param name="categoryName"></param>
+        public static void AddOmitCategory(string categoryName)
+        {
+            OmitCategoryList.Add(categoryName);
+        }
+
+        /// <summary>
+        /// 添加额外方法
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <param name="methodInfo"></param>
+        public static void AddAdditionalMethod(string categoryName, MethodInfo methodInfo)
+        {
+            AdditionalMethods.Add(methodInfo, categoryName);
+        }
+
+        /// <summary>
+        /// 添加额外类
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <param name="methodInfo"></param>
+        public static void AddAdditionalMethod(string categoryName, Type classType)
+        {
+            AdditionalClasses.Add(classType, categoryName);
+        }
+
+
+        private static void AddApiBindInfos(ApiBindOn apiBindOn, IEnumerable<ApiBindAttribute> apiBindAttrs, string assemblyName, MethodInfo method)
+        {
+            foreach (var attr in apiBindAttrs)
+            {
+                AddApiBindInfo(apiBindOn, attr, assemblyName, method);
+            }
         }
 
         private static void AddApiBindInfo(ApiBindOn apiBindOn, ApiBindAttribute apiBindAttr, string assemblyName, MethodInfo method)
