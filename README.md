@@ -13,7 +13,7 @@
 | Memcached 基础库 | Senparc.CO2NET.Cache.Memcached   | [![Senparc.CO2NET.Cache.Memcached][4.1]][4.2]    [![Senparc.CO2NET.Cache.Memcached][nuget-img-base-memcached]][nuget-url-base-memcached]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
 | WebApi（新） | Senparc.CO2NET.WebApi   | [![Senparc.CO2NET.WebApi][5.1]][5.2]    [![Senparc.CO2NET.Cache.Memcached][nuget-img-base-memcached]][nuget-url-base-memcached]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
 
-![.NET Core 2.0][core20Y] 同时支持 .NET Standard 2.0+ 及 .NET Core 2.2+
+![.NET Core 2.0][core20Y] 同时支持 .NET Standard 2.0+ 及 .NET Core 2.1/3.1、.NET 5.0/6.0
 
 > CO2NET 将逐步停止对 .NET Framework 4.0 及以下版本的支持。
 
