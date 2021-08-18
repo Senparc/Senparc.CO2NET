@@ -139,9 +139,12 @@ namespace Senparc.CO2NET.Cache
 
         public override void UnLock()
         {
-            lock (lookPoolLock)
+            if (LockSuccessful)
             {
-                LockPool.Remove(_resourceName);
+                lock (lookPoolLock)
+                {
+                    LockPool.Remove(_resourceName);
+                }
             }
         }
 
