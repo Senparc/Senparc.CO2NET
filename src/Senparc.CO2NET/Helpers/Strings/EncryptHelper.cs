@@ -52,6 +52,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -137,6 +138,8 @@ namespace Senparc.CO2NET.Helpers
         /// <returns></returns>
         public static string GetSha1(Stream stream, bool toUpper = true, Encoding encoding = null)
         {
+            stream.Seek(0, SeekOrigin.Begin);
+
             var sha1 = SHA1.Create();
             var sha1Arr = sha1.ComputeHash(stream);
             StringBuilder enText = new StringBuilder();
@@ -287,7 +290,7 @@ namespace Senparc.CO2NET.Helpers
         /// <returns></returns>
         public static string GetMD5(Stream stream, bool toUpper = true, Encoding encoding = null)
         {
-            encoding = encoding ?? Encoding.UTF8;
+            encoding ??= Encoding.UTF8;
             stream.Position = 0;
 
             System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
