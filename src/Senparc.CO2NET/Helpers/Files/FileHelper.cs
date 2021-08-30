@@ -48,12 +48,15 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20200530
     修改描述：v1.3.110 添加 FileHelper.TryCreateDirectory() 方法
 
-----------------------------------------------------------------*/
+    修改标识：Senparc - 20210831
+    修改描述：v1.5.1 添加 FileHelper 中 GetFileHash 方法
 
+----------------------------------------------------------------*/
 
 
 using System;
 using System.IO;
+using System.Text;
 
 namespace Senparc.CO2NET.Helpers
 {
@@ -72,7 +75,7 @@ namespace Senparc.CO2NET.Helpers
             FileStream fileStream = null;
             if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
             {
-                fileStream = new FileStream(fileName, FileMode.Open,FileAccess.Read, FileShare.ReadWrite);
+                fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             }
             return fileStream;
         }
@@ -83,7 +86,7 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="serviceProvider"></param>
         /// <param name="url"></param>
         /// <param name="fullFilePathAndName"></param>
-        public static void DownLoadFileFromUrl(IServiceProvider serviceProvider,string url, string fullFilePathAndName)
+        public static void DownLoadFileFromUrl(IServiceProvider serviceProvider, string url, string fullFilePathAndName)
         {
             using (FileStream fs = new FileStream(fullFilePathAndName, FileMode.OpenOrCreate))
             {
@@ -134,5 +137,58 @@ namespace Senparc.CO2NET.Helpers
                 Directory.CreateDirectory(dir);
             }
         }
+
+        #region 文件指纹
+
+
+        /// <summary>
+        /// 获取文件的 HASH 值
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="type">SHA1 或 MD5，必须为大写</param>
+        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <param name="encoding">默认为：utf8</param>
+        public static string GetFileHash(string filePath, string type = "SHA1", bool toUpper = true, Encoding encoding = null)
+        {
+            var stream = new FileStream(filePath, FileMode.Open);
+            try
+            {
+                return GetFileHash(filePath, type, toUpper, encoding);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                stream.Close();
+            }
+        }
+
+        /// <summary>
+        /// 获取文件的 HASH 值
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="type">SHA1 或 MD5，必须为大写</param>
+        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <param name="encoding">默认为：utf8</param>
+        public static string GetFileHash(Stream stream, string type = "SHA1", bool toUpper = true, Encoding encoding = null)
+        {
+            switch (type)
+            {
+                case "SHA1":
+                    {
+                        return EncryptHelper.GetSha1(stream, toUpper, encoding);
+                    }
+                case "MD5":
+                    {
+                        return EncryptHelper.GetMD5(stream, toUpper, encoding);
+                    }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type));
+            }
+        }
+
+        #endregion
     }
 }
