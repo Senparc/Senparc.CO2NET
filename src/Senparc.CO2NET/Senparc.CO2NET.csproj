@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net45;netstandard2.0;netstandard2.1</TargetFrameworks>
-		<Version>1.5.1-preview3</Version>
+		<Version>1.5.2-preview3</Version>
 		<LangVersion>8.0</LangVersion>
 		<AssemblyName>Senparc.CO2NET</AssemblyName>
 		<RootNamespace>Senparc.CO2NET</RootNamespace>
@@ -109,8 +109,8 @@
 			v1.3.201 更新 Senparc.CO2NET.HttpUtility.Get.Download() 方法，修正 filename 判断正则表达式
 			v1.4.400 修复 Download 方法 bug
 
-			v1.5.1
-			1、增加和丰富 EncryptHelper 中加密方法（SHA1、AesGcmDecrypt）
+			v1.5.2
+			1、增加和丰富 EncryptHelper 中加密方法（SHA1、AesGcmDecrypt、CRC32）
 			2、添加 FileHelper 中 GetFileHash 方法
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>

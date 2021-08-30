@@ -44,16 +44,18 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改描述：v5.0.0 引入 Senparc.CO2NET
 
     修改标识：Senparc - 20210831
-    修改描述：v1.5.1 增加和丰富 EncryptHelper 中加密方法（SHA1、AesGcmDecrypt）
+    修改描述：v1.5.1 增加和丰富 EncryptHelper 中加密方法（SHA1、AesGcmDecrypt、CRC32）
 
 ----------------------------------------------------------------*/
 
 
+using Senparc.CO2NET.HttpUtility;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -134,9 +136,8 @@ namespace Senparc.CO2NET.Helpers
         /// </summary>
         /// <param name="stream">流</param>
         /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
-        /// <param name="encoding">编码</param>
         /// <returns></returns>
-        public static string GetSha1(Stream stream, bool toUpper = true, Encoding encoding = null)
+        public static string GetSha1(Stream stream, bool toUpper = true)
         {
             stream.Seek(0, SeekOrigin.Begin);
 
@@ -285,12 +286,10 @@ namespace Senparc.CO2NET.Helpers
         /// 获取MD5签名结果
         /// </summary>
         /// <param name="stream">Stream</param>
-        /// <param name="encoding">默认为：utf8</param>
         /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
         /// <returns></returns>
-        public static string GetMD5(Stream stream, bool toUpper = true, Encoding encoding = null)
+        public static string GetMD5(Stream stream, bool toUpper = true)
         {
-            encoding ??= Encoding.UTF8;
             stream.Position = 0;
 
             System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
@@ -315,6 +314,54 @@ namespace Senparc.CO2NET.Helpers
         public static string GetLowerMD5(string encypStr, Encoding encoding)
         {
             return GetMD5(encypStr, encoding).ToLower();
+        }
+
+        #endregion
+
+        #region CRC32
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="encypStr">需要加密的字符串</param>
+        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public static string GetCrc32(string encypStr, bool toUpper = true, Encoding encoding = null)
+        {
+            encoding ??= Encoding.UTF8;
+            Crc32 calculator = new Crc32();
+            byte[] buffer = calculator.ComputeHash(encoding.GetBytes(encypStr));
+            calculator.Clear();
+            //将字节数组转换成十六进制的字符串形式
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                sb.Append(buffer[i].ToString("x2"));
+            }
+
+            return toUpper ? toUpper.ToString().ToUpper() : sb.ToString();
+        }
+
+        /// <summary>
+        /// 获取 CRC32 加密字符串
+        /// </summary>
+        /// <param name="encypStr">需要加密的字符串</param>
+        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <returns></returns>
+        public static string GetCrc32(Stream stream, bool toUpper = true)
+        {
+            Crc32 calculator = new Crc32();
+            byte[] buffer = calculator.ComputeHash(stream);
+            calculator.Clear();
+            //将字节数组转换成十六进制的字符串形式
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                sb.Append(buffer[i].ToString("x2"));
+            }
+
+            return toUpper ? toUpper.ToString().ToUpper() : sb.ToString();
         }
 
         #endregion

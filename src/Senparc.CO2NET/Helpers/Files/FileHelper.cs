@@ -169,20 +169,24 @@ namespace Senparc.CO2NET.Helpers
         /// 获取文件的 HASH 值
         /// </summary>
         /// <param name="stream"></param>
-        /// <param name="type">SHA1 或 MD5，必须为大写</param>
+        /// <param name="type">SHA1 或 MD5 或 CRC32，必须为大写</param>
         /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
         /// <param name="encoding">默认为：utf8</param>
-        public static string GetFileHash(Stream stream, string type = "SHA1", bool toUpper = true, Encoding encoding = null)
+        public static string GetFileHash(Stream stream, string type = "SHA1", bool toUpper = true)
         {
             switch (type)
             {
                 case "SHA1":
                     {
-                        return EncryptHelper.GetSha1(stream, toUpper, encoding);
+                        return EncryptHelper.GetSha1(stream, toUpper);
                     }
                 case "MD5":
                     {
-                        return EncryptHelper.GetMD5(stream, toUpper, encoding);
+                        return EncryptHelper.GetMD5(stream, toUpper);
+                    }
+                case "CRC32":
+                    {
+                        return EncryptHelper.GetCrc32(stream, toUpper);
                     }
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type));
