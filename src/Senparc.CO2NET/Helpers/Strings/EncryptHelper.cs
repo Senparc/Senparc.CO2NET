@@ -43,13 +43,19 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20180601
     修改描述：v5.0.0 引入 Senparc.CO2NET
 
+    修改标识：Senparc - 20210831
+    修改描述：v1.5.1 增加和丰富 EncryptHelper 中加密方法（SHA1、AesGcmDecrypt、CRC32）
+
 ----------------------------------------------------------------*/
 
 
+using Senparc.CO2NET.HttpUtility;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -77,7 +83,7 @@ namespace Senparc.CO2NET.Helpers
                 enText.AppendFormat("{0:x2}", b);
             }
 
-            return enText.ToString();
+            return GetSha1(encypStr, false);
 
             //byte[] strRes = Encoding.Default.GetBytes(encypStr);
             //HashAlgorithm iSHA = new SHA1CryptoServiceProvider();
@@ -87,6 +93,71 @@ namespace Senparc.CO2NET.Helpers
             //{
             //    enText.AppendFormat("{0:x2}", iByte);
             //}
+        }
+
+        /// <summary>
+        /// 采用SHA-1算法加密字符串（默认大写）
+        /// </summary>
+        /// <param name="encypStr">需要加密的字符串</param>
+        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <param name="encoding">编码</param>
+        /// <returns></returns>
+        public static string GetSha1(string encypStr, bool toUpper = true, Encoding encoding = null)
+        {
+            encoding ??= Encoding.UTF8;
+            var sha1 = SHA1.Create();
+            var sha1Arr = sha1.ComputeHash(encoding.GetBytes(encypStr));
+            StringBuilder enText = new StringBuilder();
+            foreach (var b in sha1Arr)
+            {
+                enText.AppendFormat("{0:x2}", b);
+            }
+            if (!toUpper)
+            {
+                return enText.ToString();
+            }
+            else
+            {
+                return enText.ToString().ToUpper();
+            }
+
+            //byte[] strRes = Encoding.Default.GetBytes(encypStr);
+            //HashAlgorithm iSHA = new SHA1CryptoServiceProvider();
+            //strRes = iSHA.ComputeHash(strRes);
+            //StringBuilder enText = new StringBuilder();
+            //foreach (byte iByte in strRes)
+            //{
+            //    enText.AppendFormat("{0:x2}", iByte);
+            //}
+        }
+
+        /// <summary>
+        /// 采用SHA-1算法加密流（默认大写）
+        /// </summary>
+        /// <param name="stream">流</param>
+        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <returns></returns>
+        public static string GetSha1(Stream stream, bool toUpper = true)
+        {
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var sha1 = SHA1.Create();
+            var sha1Arr = sha1.ComputeHash(stream);
+            StringBuilder enText = new StringBuilder();
+            foreach (var b in sha1Arr)
+            {
+                enText.AppendFormat("{0:x2}", b);
+            }
+
+            var result = enText.ToString();
+            if (!toUpper)
+            {
+                return result;
+            }
+            else
+            {
+                return result.ToUpper();
+            }
         }
 
         #region 弃用算法
@@ -176,7 +247,6 @@ namespace Senparc.CO2NET.Helpers
             catch
             {
                 inputBye = Encoding.GetEncoding("utf-8").GetBytes(encypStr);
-
             }
             outputBye = m5.ComputeHash(inputBye);
 
@@ -216,12 +286,10 @@ namespace Senparc.CO2NET.Helpers
         /// 获取MD5签名结果
         /// </summary>
         /// <param name="stream">Stream</param>
-        /// <param name="encoding">默认为：utf8</param>
         /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
         /// <returns></returns>
-        public static string GetMD5(Stream stream, bool toUpper = true, Encoding encoding = null)
+        public static string GetMD5(Stream stream, bool toUpper = true)
         {
-            encoding = encoding ?? Encoding.UTF8;
             stream.Position = 0;
 
             System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
@@ -246,6 +314,54 @@ namespace Senparc.CO2NET.Helpers
         public static string GetLowerMD5(string encypStr, Encoding encoding)
         {
             return GetMD5(encypStr, encoding).ToLower();
+        }
+
+        #endregion
+
+        #region CRC32
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="encypStr">需要加密的字符串</param>
+        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public static string GetCrc32(string encypStr, bool toUpper = true, Encoding encoding = null)
+        {
+            encoding ??= Encoding.UTF8;
+            Crc32 calculator = new Crc32();
+            byte[] buffer = calculator.ComputeHash(encoding.GetBytes(encypStr));
+            calculator.Clear();
+            //将字节数组转换成十六进制的字符串形式
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                sb.Append(buffer[i].ToString("x2"));
+            }
+
+            return toUpper ? toUpper.ToString().ToUpper() : sb.ToString();
+        }
+
+        /// <summary>
+        /// 获取 CRC32 加密字符串
+        /// </summary>
+        /// <param name="encypStr">需要加密的字符串</param>
+        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <returns></returns>
+        public static string GetCrc32(Stream stream, bool toUpper = true)
+        {
+            Crc32 calculator = new Crc32();
+            byte[] buffer = calculator.ComputeHash(stream);
+            calculator.Clear();
+            //将字节数组转换成十六进制的字符串形式
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                sb.Append(buffer[i].ToString("x2"));
+            }
+
+            return toUpper ? toUpper.ToString().ToUpper() : sb.ToString();
         }
 
         #endregion
@@ -337,7 +453,6 @@ namespace Senparc.CO2NET.Helpers
         }
         #endregion
 
-
         #region AES - CEB
 
         /// <summary>
@@ -421,28 +536,67 @@ namespace Senparc.CO2NET.Helpers
             aes.Key = bKey;
             //aes.IV = _iV;  
             CryptoStream cryptoStream = new CryptoStream(mStream, aes.CreateDecryptor(), CryptoStreamMode.Read);
-            try
+            using (var sr = new StreamReader(cryptoStream))
             {
-                byte[] tmp = new byte[encryptedBytes.Length + 32];
-                int len = cryptoStream.Read(tmp, 0, encryptedBytes.Length + 32);
-                byte[] ret = new byte[len];
-                Array.Copy(tmp, 0, ret, 0, len);
-                return Encoding.UTF8.GetString(ret);
+                var str = sr.ReadToEnd();
+                return str;
             }
-            finally
-            {
-#if NET45
-                cryptoStream.Close();
-                mStream.Close();
-                aes.Clear();
-#else
-                //cryptoStream.();
-                //mStream.Close();
-                //aes.Clear();
-#endif
-            }
+
+            //            try
+            //            {
+            //                byte[] tmp = new byte[encryptedBytes.Length + 32];
+            //                int len = cryptoStream.Read(tmp, 0, encryptedBytes.Length + 32);
+            //                byte[] ret = new byte[len];
+            //                Array.Copy(tmp, 0, ret, 0, len);
+            //                var cc = cryptoStream.Length;
+            //                return Encoding.UTF8.GetString(ret);
+            //            }
+            //            finally
+            //            {
+            //#if NET45
+            //                cryptoStream.Close();
+            //                mStream.Close();
+            //                aes.Clear();
+            //#else
+            //                //cryptoStream.();
+            //                //mStream.Close();
+            //                //aes.Clear();
+            //#endif
+            //            }
         }
 
         #endregion
+
+#if NETSTANDARD2_1_OR_GREATER
+        #region AES - GCM
+        //TODO:单元测试
+
+        /// <summary>
+        /// 解密微信支付接口 ciphertext 内容
+        /// </summary>
+        /// <returns></returns>
+        public static string AesGcmDecrypt(string aes_key, string nonce, string associated_data, string content)
+        {
+            //将解密所需数据转换为Bytes
+            var keyBytes = Encoding.UTF8.GetBytes(aes_key);
+            var nonceBytes = Encoding.UTF8.GetBytes(nonce);
+            var associatedBytes = associated_data == null ? null : Encoding.UTF8.GetBytes(associated_data);
+
+            //AEAD_AES_256_GCM 解密
+            var encryptedBytes = Convert.FromBase64String(content);
+            //tag size is 16
+            var cipherBytes = encryptedBytes[..^16];
+            var tag = encryptedBytes[^16..];
+            var decryptedData = new byte[cipherBytes.Length];
+            using var cipher = new AesGcm(keyBytes);
+            cipher.Decrypt(nonceBytes, cipherBytes, tag, decryptedData, associatedBytes);
+            var decrypted_string = Encoding.UTF8.GetString(decryptedData);
+
+            return decrypted_string;
+        }
+
+
+        #endregion
+#endif
     }
 }

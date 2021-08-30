@@ -82,6 +82,7 @@ namespace Senparc.CO2NET.WebApi
                         return null;
                     }
                 });
+
                 //AppDomain.CurrentDomain.GetAssemblies();
                 //Assembly.GetEntryAssembly().GetReferencedAssemblies().Select(Assembly.Load)
                 //DependencyContext.Default.CompileLibraries.Select(z => Assembly.Load(z.Name))

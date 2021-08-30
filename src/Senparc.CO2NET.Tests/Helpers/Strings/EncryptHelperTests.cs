@@ -1,7 +1,9 @@
+using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Helpers;
 using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Senparc.CO2NET.Tests.Helpers
@@ -110,7 +112,23 @@ namespace Senparc.CO2NET.Tests.Helpers
 
         }
 
+        [TestMethod]
+        public void AESEncryptForTenpayV3Test()
+        {
+            var key = "TheKey";
+            {
+                //TenPayV3£¨¾É£©ÖÐµÄ req_info
+                var input = "6scm3lyoIZj2YLSVosQsd7xziXw9vJb9w9A5jY0LUNM0O5g9T3MoNgJ5A2xXD26M44rPjGsQXLYxIIxMJWWLPmdXef0xq+b1XKMaKA49H/ft1+82bKPNQS9dYK7RBQ6cvfFjBJMrSvseyWE5ASGfMLg9psnMdU1sC7DMSRSxMRrw7Vzkuvu2QWbK1SA26fehtqHphKoW1pZNy7fDnQb3j+vUeZTDhzbc2g0kspo9JQS60p0L79Aj9Gl15OTreXEplMi4nAU/E4ULptjtF+ylicF0pHKmjsjMufSxYnaBaGZmLlioaigZt1RTWBO90D2NmodFCm7muyGcuCbdfvLhB6Yde8KfVM/yhnC0b42iwi0ASwjCA+jlVIm9ys6Wxrz1lSAXcRF06+ySXgGRXBMpdIitW59Hx4zS0UIATXes9U1TDaZXGYrZDZM02GkqYAX4KiqpmhKC+PNtGrtbPNZbwWWtSl+UE6h4QyPv2cPdRPRMyGlzabauriMiNALF8bDaNTn6K1Nf3tA3nKWh1oemvjCYvT9+mUI8jnyEsXVjnakCOJyKoCIzNgJwliUIV4GXPIauWPFbbG3Tbtm8AAv3FC1yAvdustwLreiXOvOXgvZnSXIV4xLgUfjFWzoc9crwMXd8gJJFW0YAjhF+78WJ4yvDklg/oZnlXUo/ZEnjRdM2AxVTaAHuVNyi3tGMBDustRotkLbAKlR/GW/GaQRF0t8fagJJrEvbOkyrA+NUTCTHOpJ2Yi4YWoj9M2Zar4cXkKixOkx+PpgKMgMffOEnFAe1oTxI8ZwOrxgAjN8O9kPoXecQ2TaP4OyN/4vNxMZMjM/ksmSgAilvEj91PYLme4MY5WjUunLQxdiNx2ZgJj4+b1xyN+thQaYjN34XM97Ao7xZxVlexxN3SspOUvtKQ9Wn3T6c9UAgl184yNYrV/ZJ2xWwpeVyL1H/h29tQxxBjg1SIA1wLda3fRvWIszpqL5OWVUMzQztE4egmVuU8txrMkAEqOhFE1cdzIm7GFJL08IZnMslEs0em/+tJIw8igmQvihNrKwgtDbR78Lsrv84Tpll9qL76PqLrgqaYQuU";
 
+                var md5Str = EncryptHelper.GetLowerMD5(key, Encoding.UTF8);
+                var result = EncryptHelper.AESDecrypt(input, md5Str);
+
+                Console.WriteLine(result);
+            }
+
+
+
+        }
         #endregion
 
     }
