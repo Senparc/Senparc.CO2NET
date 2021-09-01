@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net45;net461;netstandard2.0</TargetFrameworks>
-    <Version>3.11-preview3</Version>
+    <Version>3.11.1-preview3</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -22,85 +22,86 @@
     <PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
     <PackageIconUrl>http://sdk.weixin.senparc.com/Images/Logo.jpg</PackageIconUrl>
     <PackageReleaseNotes>
-      v0.1.0
-      提供分布式缓存支持
-      由于StackExchange.Redis库的bug，.NET 4.0版本暂时未提供
+		v0.1.0
+		提供分布式缓存支持
+		由于StackExchange.Redis库的bug，.NET 4.0版本暂时未提供
 
-      v0.1.1
-      优化缓存策略，改进删除方法。
+		v0.1.1
+		优化缓存策略，改进删除方法。
 
-      v0.2.0
-      重构缓存策略，提供分布锁
+		v0.2.0
+		重构缓存策略，提供分布锁
 
-      v0.2.1
-      优化方法和接口
+		v0.2.1
+		优化方法和接口
 
-      v0.0.2
-      重构缓存键命名空间规则，添加Config.DefaultCacheNamespace
+		v0.0.2
+		重构缓存键命名空间规则，添加Config.DefaultCacheNamespace
 
-      v0.2.3
-      发布稳定版本
+		v0.2.3
+		发布稳定版本
 
-      v1.0.0
-      修改缓存策略，将储存类型由String改为Hash
+		v1.0.0
+		修改缓存策略，将储存类型由String改为Hash
 
-      v1.1.0
-      重构缓存，添加ObjectCacheStrategy
+		v1.1.0
+		重构缓存，添加ObjectCacheStrategy
 
-      v1.2.0 重构分布式锁
-      v1.2.1 提供.net core版本
-      v1.2.2 同时提供.net core及.net 4.6.1版本
+		v1.2.0 重构分布式锁
+		v1.2.1 提供.net core版本
+		v1.2.2 同时提供.net core及.net 4.6.1版本
 
-      v1.3.0 支持 .NET Core
+		v1.3.0 支持 .NET Core
 
-      v1.4.0-beta1 支持.NET Core 2.0
+		v1.4.0-beta1 支持.NET Core 2.0
 
-      v1.5.0 停止对 .net core 1.1 生成的独立版本
-      v1.5.1 提供 RegisterServices 进行快捷注册
+		v1.5.0 停止对 .net core 1.1 生成的独立版本
+		v1.5.1 提供 RegisterServices 进行快捷注册
 
-      v1.6.0 提供 .NET Core 下的完整二进制序列化支持（支持委托参数）
-      v1.6.1 优化二进制序列化支持
+		v1.6.0 提供 .NET Core 下的完整二进制序列化支持（支持委托参数）
+		v1.6.1 优化二进制序列化支持
 
-      v1.7.0-rc1 支持 .NET Core 2.1.0-rc1-final
-      v1.7.2-rc1 为 .net core 2.1 改进条件编译
+		v1.7.0-rc1 支持 .NET Core 2.1.0-rc1-final
+		v1.7.2-rc1 为 .net core 2.1 改进条件编译
 
-      v1.7.5 发布支持 .net core 2.1 的正式版
+		v1.7.5 发布支持 .net core 2.1 的正式版
 
-      v2.0.0 引入 Senparc.CO2NET，支持 Senparc.Weixin v5.0
+		v2.0.0 引入 Senparc.CO2NET，支持 Senparc.Weixin v5.0
 
-      ======== CO2NET 移植 ========
+		======== CO2NET 移植 ========
 
-      v2.0.0 重构 Redis 缓存策略
-      v2.0.1 支持 CO2NET v0.1.1
-      v2.0.2 支持 CO2NET v0.1.2
-      v2.0.3 支持 CO2NET v0.1.3
-      v2.0.5 支持 CO2NET v0.1.5
-      v2.0.9 支持 CO2NET v0.1.9
+		v2.0.0 重构 Redis 缓存策略
+		v2.0.1 支持 CO2NET v0.1.1
+		v2.0.2 支持 CO2NET v0.1.2
+		v2.0.3 支持 CO2NET v0.1.3
+		v2.0.5 支持 CO2NET v0.1.5
+		v2.0.9 支持 CO2NET v0.1.9
 
-      v3.0.0
-      1、分离 HashSet 和 Key-Value 两种不同格式的缓存：RedisHashSetObjectCacheStrategy 以及 RedisObjectCacheStrategy
-      2、提供缓存过期新策略
+		v3.0.0
+		1、分离 HashSet 和 Key-Value 两种不同格式的缓存：RedisHashSetObjectCacheStrategy 以及 RedisObjectCacheStrategy
+		2、提供缓存过期新策略
 
-      v3.1.0
-      1、Register.RegisterCacheRedis 标记为过期
-      2、新增 Register.SetConfigurationOption() 方法
-      3、新增 Register.UseKeyValueRedisNow() 方法
-      4、新增 Register.UseHashRedisNow() 方法CO2NET.Cache.Memcached：
-      5、Redis 缓存服务连接信息实现从 Config.SenparcSetting 自动获取信息并注册）
-      v3.2.0 StackExchange.Redis 升级到 2.0.513
-      v3.3.0 使用 .NETStandard2.0 统一支持 .NET Core，放弃对 .NET Core 1.x 的单独适配
-      v3.4.0 支持 .net 4.6.1 版本
-      v3.4.3 升级 StackExchange.Redis 到最新版本
-      v3.5.0 提供缓存异步接口
-      v3.5.1 使用 .ConfigureAwait(false) 避免异步锁死的情况
-      v3.5.4
-      1、fix bug：GetServer().Keys() 方法添加 database 索引值
-      2、为 GetServer().Keys() 方法约束获取上限：99999
-      v3.5.5 支持新版本 CO2NET，提供带符号的 nuget 包（.snupkg)
-      v3.6.0 支持新版本 CO2NET，支持 .NET Core 3.0
-      v3.6.102 支持新版本 CO2NET
-      v3.6.103 支持新版本 CO2NET，优化异步方法
-</PackageReleaseNotes>
+		v3.1.0
+		1、Register.RegisterCacheRedis 标记为过期
+		2、新增 Register.SetConfigurationOption() 方法
+		3、新增 Register.UseKeyValueRedisNow() 方法
+		4、新增 Register.UseHashRedisNow() 方法CO2NET.Cache.Memcached：
+		5、Redis 缓存服务连接信息实现从 Config.SenparcSetting 自动获取信息并注册）
+		v3.2.0 StackExchange.Redis 升级到 2.0.513
+		v3.3.0 使用 .NETStandard2.0 统一支持 .NET Core，放弃对 .NET Core 1.x 的单独适配
+		v3.4.0 支持 .net 4.6.1 版本
+		v3.4.3 升级 StackExchange.Redis 到最新版本
+		v3.5.0 提供缓存异步接口
+		v3.5.1 使用 .ConfigureAwait(false) 避免异步锁死的情况
+		v3.5.4
+		1、fix bug：GetServer().Keys() 方法添加 database 索引值
+		2、为 GetServer().Keys() 方法约束获取上限：99999
+		v3.5.5 支持新版本 CO2NET，提供带符号的 nuget 包（.snupkg)
+		v3.6.0 支持新版本 CO2NET，支持 .NET Core 3.0
+		v3.6.102 支持新版本 CO2NET
+		v3.6.103 支持新版本 CO2NET，优化异步方法
+		v3.11.1 BaseRedisObjectCacheStrategy 析构函数进行 null 值判断
+	</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>

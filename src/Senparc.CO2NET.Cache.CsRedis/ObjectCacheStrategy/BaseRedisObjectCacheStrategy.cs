@@ -13,6 +13,11 @@
     修改标识：Senparc - 20190413
     修改描述：v3.5.0 提供缓存异步接口
 
+    ======== 从 Senparc.CO2NET.Cache.Redis 移植 ========
+
+    修改标识：Senparc - 20210901
+    修改描述：v0.5.1 析构函数进行 null 值判断
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -66,7 +71,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         /// </summary>
         ~BaseRedisObjectCacheStrategy()
         {
-            Client.Dispose();//释放
+            Client?.Dispose();//释放
         }
 
 
