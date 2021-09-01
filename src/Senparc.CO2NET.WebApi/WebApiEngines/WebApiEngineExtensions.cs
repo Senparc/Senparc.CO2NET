@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.CO2NET.ApiBind;
+using Senparc.CO2NET.Trace;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -110,25 +111,33 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
                 var threadIndex = i;
                 var wrapperTask = Task.Factory.StartNew(async () =>
                 {
-                    //此处使用 Task 效率并不比 Keys.ToList() 方法快
-                    webApiEngine.WriteLog($"Get API Groups: {threadIndex + 1}/{apiGouupsCount}, now dealing with: {category}");
-                    var dtStart = SystemTime.Now;
-                    var apiBindGroup = apiGroups.FirstOrDefault(z => z.Key == category);
-
-                    var apiCount = await webApiEngine.BuildWebApi(apiBindGroup).ConfigureAwait(false);
-                    var apiAssembly = webApiEngine.GetApiAssembly(category);
-
-                    //程序部件：https://docs.microsoft.com/zh-cn/aspnet/core/mvc/advanced/app-parts?view=aspnetcore-2.2
-                    if (builder.coreBuilder != null)
+                    try
                     {
-                        builder.coreBuilder.AddApplicationPart(apiAssembly);
-                    }
-                    else
-                    {
-                        builder.builder.AddApplicationPart(apiAssembly);
-                    }
 
-                    assemblyBuildStat[category] = (apiCount: apiCount, costMs: SystemTime.DiffTotalMS(dtStart));
+                        //此处使用 Task 效率并不比 Keys.ToList() 方法快
+                        webApiEngine.WriteLog($"Get API Groups: {threadIndex + 1}/{apiGouupsCount}, now dealing with: {category}");
+                        var dtStart = SystemTime.Now;
+                        var apiBindGroup = apiGroups.FirstOrDefault(z => z.Key == category);
+
+                        var apiCount = await webApiEngine.BuildWebApi(apiBindGroup).ConfigureAwait(false);
+                        var apiAssembly = webApiEngine.GetApiAssembly(category);
+
+                        //程序部件：https://docs.microsoft.com/zh-cn/aspnet/core/mvc/advanced/app-parts?view=aspnetcore-2.2
+                        if (builder.coreBuilder != null)
+                        {
+                            builder.coreBuilder.AddApplicationPart(apiAssembly);
+                        }
+                        else
+                        {
+                            builder.builder.AddApplicationPart(apiAssembly);
+                        }
+
+                        assemblyBuildStat[category] = (apiCount: apiCount, costMs: SystemTime.DiffTotalMS(dtStart));
+                    }
+                    catch (Exception ex)
+                    {
+                        SenparcTrace.BaseExceptionLog(ex);
+                    }
                 });
                 taskList.Add(wrapperTask.Unwrap());
             }

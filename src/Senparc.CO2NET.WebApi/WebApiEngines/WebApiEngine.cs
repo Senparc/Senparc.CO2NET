@@ -396,7 +396,7 @@ namespace Senparc.CO2NET.WebApi
 
                     //var dt1 = SystemTime.Now;
                     //修改XML文档
-                    await BuildXmlDoc(category, methodName, apiMethodInfo, tb);
+                    //await BuildXmlDoc(category, methodName, apiMethodInfo, tb);
                     //WriteLog($"methodName 文档修改耗时：{SystemTime.DiffTotalMS(dt1)}ms");
                 }
                 catch (Exception ex)
