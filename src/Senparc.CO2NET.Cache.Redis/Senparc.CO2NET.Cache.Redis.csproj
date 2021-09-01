@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net45;net461;netstandard2.0</TargetFrameworks>
-    <Version>3.11.1-preview3</Version>
+    <Version>3.11.2-preview3</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -100,7 +100,7 @@
 		v3.6.0 支持新版本 CO2NET，支持 .NET Core 3.0
 		v3.6.102 支持新版本 CO2NET
 		v3.6.103 支持新版本 CO2NET，优化异步方法
-		v3.11.1 BaseRedisObjectCacheStrategy 析构函数进行 null 值判断
+		v3.11.2 BaseRedisObjectCacheStrategy 析构函数进行 null 值判断，并添加 "#{Cache_Redis_Configuration}#" 过滤判断
 	</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>

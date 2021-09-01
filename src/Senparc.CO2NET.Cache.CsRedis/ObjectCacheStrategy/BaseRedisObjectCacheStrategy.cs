@@ -43,7 +43,8 @@ namespace Senparc.CO2NET.Cache.CsRedis
             //自动注册连接字符串信息
             if (string.IsNullOrEmpty(RedisManager.ConfigurationOption) &&
                 !string.IsNullOrEmpty(Config.SenparcSetting.Cache_Redis_Configuration) &&
-                Config.SenparcSetting.Cache_Redis_Configuration != "Redis配置")
+                Config.SenparcSetting.Cache_Redis_Configuration != "Redis配置" &&
+                Config.SenparcSetting.Cache_Redis_Configuration != "#{Cache_Redis_Configuration}#")
             {
                 RedisManager.ConfigurationOption = Config.SenparcSetting.Cache_Redis_Configuration;
             }
