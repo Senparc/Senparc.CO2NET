@@ -57,7 +57,7 @@ namespace Senparc.CO2NET.Sample
             WebApi.Register.AdditionalMethods.Add(typeof(EncryptHelper).GetMethod("GetMD5", new[] { typeof(string), typeof(string) }), "Additional");
 
             var docXmlPath = Path.Combine(WebHostEnvironment.ContentRootPath, "App_Data", "ApiDocXml");
-            services.AddAndInitDynamicApi(builder, docXmlPath, ApiRequestMethod.Get, null, 400, false, true, m => null);
+            services.AddAndInitDynamicApi(builder, docXmlPath, ApiRequestMethod.Get, null, 400, false, true, m => null, forbiddenExternalAccess: true);
 
             #endregion
 
@@ -90,7 +90,7 @@ namespace Senparc.CO2NET.Sample
                         //    Name = "Apache License Version 2.0",
                         //    Url = new Uri("https://github.com/JeffreySu/WeiXinMPSDK")
                         //},
-                         
+
                         Contact = new OpenApiContact()
                         {
                             Email = "zsu@senparc.com",
