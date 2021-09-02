@@ -63,7 +63,7 @@ namespace Senparc.CO2NET.WebApi
         /// <param name="showDetailApiLog"></param>
         /// <param name="copyCustomAttributes"></param>
         /// <param name="defaultAction">默认请求类型，如 Post，Get</param>
-        /// <param name="forbiddenExternalAccess">是否允许外部访问，默认为 false，只允许本机访问相关 API</param>
+        /// <param name="forbiddenExternalAccess">是否允许外部访问，默认为 false，只允许本机访问自动生成的 WebApi</param>
         public WebApiEngine(string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false, bool forbiddenExternalAccess = true)
         {
             _docXmlPath = docXmlPath;

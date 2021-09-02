@@ -27,7 +27,7 @@ namespace Senparc.CO2NET.WebApi.ActionFilters
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (!_forbiddenExternalAccess && context.HttpContext.Request.IsLocal())
+            if (_forbiddenExternalAccess && !context.HttpContext.Request.IsLocal())
             {
                 throw new ForbiddenExternalAccessException();
             }
