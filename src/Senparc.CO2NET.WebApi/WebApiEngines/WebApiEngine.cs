@@ -10,6 +10,7 @@
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
+using Senparc.CO2NET.WebApi.ActionFilters;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Concurrent;
@@ -62,15 +63,17 @@ namespace Senparc.CO2NET.WebApi
         /// <param name="showDetailApiLog"></param>
         /// <param name="copyCustomAttributes"></param>
         /// <param name="defaultAction">默认请求类型，如 Post，Get</param>
-        public WebApiEngine(string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false)
+        /// <param name="forbiddenExternalAccess">是否允许外部访问，默认为 false，只允许本机访问相关 API</param>
+        public WebApiEngine(string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false, bool forbiddenExternalAccess = true)
         {
             _docXmlPath = docXmlPath;
             _findWeixinApiService = new Lazy<FindApiService>(new FindApiService());
             _defaultRequestMethod = defaultRequestMethod;
+            _baseApiControllerType = baseApiControllerType ?? typeof(ControllerBase);
             _copyCustomAttributes = copyCustomAttributes;
             _taskCount = taskCount;
             _showDetailApiLog = showDetailApiLog;
-            _baseApiControllerType = baseApiControllerType ?? typeof(ControllerBase);
+            Register.ForbiddenExternalAccess = forbiddenExternalAccess;
         }
 
         /// <summary>
@@ -586,6 +589,16 @@ namespace Senparc.CO2NET.WebApi
 
             var t2 = typeof(RouteAttribute);
             tb.SetCustomAttribute(new CustomAttributeBuilder(t2.GetConstructor(new Type[] { typeof(string) }), new object[] { $"/api/{controllerKeyName}" }));
+
+            //TODO:Unit Test
+            //[ForbiddenExternalAccess]
+            if (Register.ForbiddenExternalAccess)
+            {
+                var forbiddenExternalAsyncAttr = typeof(ForbiddenExternalAccessAsyncFilter);
+                tb.SetCustomAttribute(new CustomAttributeBuilder(forbiddenExternalAsyncAttr.GetConstructor(new Type[0]), new object[0] { }));//只需要一个，和ForbiddenExternalAccessFilter两者可互换
+                //var forbiddenExternalAttr = typeof(ForbiddenExternalAccessFilter);
+                //tb.SetCustomAttribute(new CustomAttributeBuilder(forbiddenExternalAttr.GetConstructor(new Type[0]), new object[0] { }));
+            }
 
             //添加Controller级别的分类（暂时无效果）
 

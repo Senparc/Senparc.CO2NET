@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Senparc.CO2NET.ApiBind;
 using Senparc.CO2NET.Trace;
 using System;
@@ -8,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.WebApi.WebApiEngines
@@ -31,10 +29,11 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
         /// <param name="additionalAttributes"></param>
         /// <param name="buildXml">是否创建动态 API 对应的 XML 注释文件</param>
         /// <param name="additionalAttributeFunc">是否复制自定义特性（AppBindAttribute 除外）</param>
+        /// <param name="forbiddenExternalAccess">是否允许外部访问，默认为 false，只允许本机访问相关 API</param>
         public static void AddAndInitDynamicApi(this IServiceCollection services, IMvcCoreBuilder builder,
-            string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
+            string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null, bool forbiddenExternalAccess = true)
         {
-            AddAndInitDynamicApi(services, (builder, null), docXmlPath, defaultRequestMethod, baseApiControllerType, taskCount, showDetailApiLog, copyCustomAttributes, additionalAttributeFunc);
+            AddAndInitDynamicApi(services, (builder, null), docXmlPath, defaultRequestMethod, baseApiControllerType, taskCount, showDetailApiLog, copyCustomAttributes, additionalAttributeFunc, forbiddenExternalAccess);
         }
 
 
@@ -50,10 +49,11 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
         /// <param name="taskCount"></param>
         /// <param name="additionalAttributes"></param>
         /// <param name="additionalAttributeFunc">是否复制自定义特性（AppBindAttribute 除外）</param>
+        /// <param name="forbiddenExternalAccess">是否允许外部访问，默认为 false，只允许本机访问相关 API</param>
         public static void AddAndInitDynamicApi(this IServiceCollection services, IMvcBuilder builder,
-            string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
+            string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null, bool forbiddenExternalAccess = true)
         {
-            AddAndInitDynamicApi(services, (null, builder), docXmlPath, defaultRequestMethod, baseApiControllerType, taskCount, showDetailApiLog, copyCustomAttributes, additionalAttributeFunc);
+            AddAndInitDynamicApi(services, (null, builder), docXmlPath, defaultRequestMethod, baseApiControllerType, taskCount, showDetailApiLog, copyCustomAttributes, additionalAttributeFunc, forbiddenExternalAccess);
         }
 
         /// <summary>
@@ -68,9 +68,10 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
         /// <param name="taskCount"></param>
         /// <param name="additionalAttributes"></param>
         /// <param name="additionalAttributeFunc">是否复制自定义特性（AppBindAttribute 除外）</param>
+        /// <param name="forbiddenExternalAccess">是否允许外部访问，默认为 false，只允许本机访问相关 API</param>
         private static void AddAndInitDynamicApi(this IServiceCollection services, (IMvcCoreBuilder coreBuilder, IMvcBuilder builder) builder,
             string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null,
-            int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
+            int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null, bool forbiddenExternalAccess = true)
         {
             _ = defaultRequestMethod != ApiRequestMethod.GlobalDefault ? true : throw new Exception($"{nameof(defaultRequestMethod)} 不能作为默认请求类型！");
 
@@ -79,7 +80,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
 
             WebApiEngine.AdditionalAttributeFunc = additionalAttributeFunc;
 
-            var webApiEngine = new WebApiEngine(docXmlPath, defaultRequestMethod, baseApiControllerType, copyCustomAttributes, taskCount, showDetailApiLog);
+            var webApiEngine = new WebApiEngine(docXmlPath, defaultRequestMethod, baseApiControllerType, copyCustomAttributes, taskCount, showDetailApiLog, forbiddenExternalAccess);
 
             bool preLoad = true;
 
