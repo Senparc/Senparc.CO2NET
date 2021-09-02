@@ -24,7 +24,11 @@ namespace Senparc.CO2NET.WebApi.Tests
             var findWeixinApiService = ServiceProvider.GetService<FindApiService>();
             var docXmlPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\", "App_Data","ApiDocXml"));// ServerUtility.ContentRootMapPath("~/App_Data");
             Console.WriteLine("Test docXmlPath:" + docXmlPath);
-            base.ServiceCollection.AddAndInitDynamicApi(MvcCoreBuilder, docXmlPath, taskCount: 400);
+            base.ServiceCollection.AddAndInitDynamicApi(MvcCoreBuilder, options =>
+            {
+                options.DocXmlPath = docXmlPath;
+                options.TaskCount = 400;
+            });
         }
     }
 

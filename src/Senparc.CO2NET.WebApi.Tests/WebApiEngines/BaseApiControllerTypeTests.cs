@@ -19,7 +19,11 @@ namespace Senparc.CO2NET.WebApi.Tests.WebApiEngines
             base.Init();//初始化
 
             var appDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data");// ServerUtility.ContentRootMapPath("~/App_Data");
-            base.ServiceCollection.AddAndInitDynamicApi(MvcCoreBuilder, appDataPath, taskCount: 400);
+            base.ServiceCollection.AddAndInitDynamicApi(MvcCoreBuilder, options =>
+            {
+                options.DocXmlPath = appDataPath; 
+                options.TaskCount = 400;
+            });
 
             {
                 var assembly = WebApiEngine.ApiAssemblyCollection.First(z => z.Key == "BaseApiControllerTypeTest").Value;

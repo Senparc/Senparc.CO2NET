@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-		<Version>0.2.5.9-preview3</Version>
+		<Version>0.2.6-preview3</Version>
 		<LangVersion>latest</LangVersion>
 		<AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
 		<RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
@@ -28,6 +28,7 @@
 			v0.2.4 添加可额外注入的类或方法
 			v0.2.5 优化异步线程执行
 			v0.2.5.7 添加 ForbiddenExternalAccess 参数，设置是否允许外部访问
+			v0.2.6 添加 WebApiEngineOptions
 		</PackageReleaseNotes>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

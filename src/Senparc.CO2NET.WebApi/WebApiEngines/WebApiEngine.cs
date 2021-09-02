@@ -43,37 +43,38 @@ namespace Senparc.CO2NET.WebApi
 
         public static string GetDynamicFilePath(string apiXmlPath) => Path.Combine(apiXmlPath, "DynamicFiles");
 
-        private string _docXmlPath;
+        internal string DocXmlPath { get; set; }
+        internal int TaskCount { get; set; }
+
         private bool _showDetailApiLog = false;
         private readonly Lazy<FindApiService> _findWeixinApiService;
         private readonly ApiRequestMethod _defaultRequestMethod;
         private readonly bool _copyCustomAttributes;
-        private int _taskCount;
         private Type _typeOfApiBind = typeof(ApiBindAttribute);
         private Type _baseApiControllerType;
 
-        public bool BuildXml => _docXmlPath != null;
+        public bool BuildXml => DocXmlPath != null;
 
         /// <summary>
         /// WebApiEngine
         /// </summary>
-        /// <param name="defaultRequestMethod">默认请求方式</param>
-        /// <param name="baseApiControllerType">全局 ApiController 的基类，默认为 ControllerBase</param>
-        /// <param name="taskCount">同时执行线程数</param>
-        /// <param name="showDetailApiLog"></param>
-        /// <param name="copyCustomAttributes"></param>
-        /// <param name="defaultAction">默认请求类型，如 Post，Get</param>
-        /// <param name="forbiddenExternalAccess">是否允许外部访问，默认为 false，只允许本机访问自动生成的 WebApi</param>
-        public WebApiEngine(string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false, bool forbiddenExternalAccess = true)
+        /// <param name="options"> WebApiEngine 配置</param>
+        public WebApiEngine(Action<WebApiEngineOptions> options = null)
         {
-            _docXmlPath = docXmlPath;
+            WebApiEngineOptions opt = new();
+            options?.Invoke(opt);
+
+            _ = opt.DefaultRequestMethod == ApiRequestMethod.GlobalDefault ? throw new Exception($"{nameof(opt.DefaultRequestMethod)} 不能作为默认请求类型！") : true;
+
+            DocXmlPath = opt.DocXmlPath;
             _findWeixinApiService = new Lazy<FindApiService>(new FindApiService());
-            _defaultRequestMethod = defaultRequestMethod;
-            _baseApiControllerType = baseApiControllerType ?? typeof(ControllerBase);
-            _copyCustomAttributes = copyCustomAttributes;
-            _taskCount = taskCount;
-            _showDetailApiLog = showDetailApiLog;
-            Register.ForbiddenExternalAccess = forbiddenExternalAccess;
+            _defaultRequestMethod = opt.DefaultRequestMethod;
+            _baseApiControllerType = opt.BaseApiControllerType ?? typeof(ControllerBase);
+            _copyCustomAttributes = opt.CopyCustomAttributes;
+            TaskCount = opt.TaskCount;
+            _showDetailApiLog = opt.ShowDetailApiLog;
+            Register.ForbiddenExternalAccess = opt.ForbiddenExternalAccess;
+            WebApiEngine.AdditionalAttributeFunc = opt.AdditionalAttributeFunc;
         }
 
         /// <summary>
@@ -151,10 +152,10 @@ namespace Senparc.CO2NET.WebApi
 
             //预分配每个线程需要领取的任务（索引范围）
             var apiFilterMaxIndex = apiBindFilterList.Length - 1;//最大索引
-            var avgBlockCount = (int)((apiBindFilterList.Length - 1) / _taskCount);//每个线程（块）领取的平均数量
+            var avgBlockCount = (int)((apiBindFilterList.Length - 1) / TaskCount);//每个线程（块）领取的平均数量
             var lastEndIndex = -1;//上一个块的结束索引
 
-            for (int taskIndex = 0; taskIndex < _taskCount; taskIndex++)
+            for (int taskIndex = 0; taskIndex < TaskCount; taskIndex++)
             {
                 if (lastEndIndex >= apiFilterMaxIndex)
                 {
@@ -163,7 +164,7 @@ namespace Senparc.CO2NET.WebApi
 
                 var blockStart = Math.Min(lastEndIndex + 1, apiFilterMaxIndex);//当前块起始索引
                 var blockEnd = 0;//当前快结束索引
-                if (taskIndex == _taskCount - 1 || /*最后一个快，一直分配到最后（解决余数问题）*/
+                if (taskIndex == TaskCount - 1 || /*最后一个快，一直分配到最后（解决余数问题）*/
                     avgBlockCount == 0                  /*如果API总数比线程数还要少，则只够一个模块*/)
                 {
                     blockEnd = apiFilterMaxIndex;//
