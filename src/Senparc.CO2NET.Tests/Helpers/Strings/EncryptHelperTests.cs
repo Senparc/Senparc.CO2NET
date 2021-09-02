@@ -108,8 +108,6 @@ namespace Senparc.CO2NET.Tests.Helpers
                 Console.WriteLine("CEB decrypt£º" + cebResult);
                 Assert.AreEqual(encypStr, cebResult);
             }
-
-
         }
 
         [TestMethod]
@@ -125,9 +123,6 @@ namespace Senparc.CO2NET.Tests.Helpers
 
                 Console.WriteLine(result);
             }
-
-
-
         }
         #endregion
 

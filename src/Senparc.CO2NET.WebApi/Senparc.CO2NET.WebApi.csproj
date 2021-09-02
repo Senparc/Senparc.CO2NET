@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-		<Version>0.2.6-preview3</Version>
+		<Version>0.2.7-preview3</Version>
 		<LangVersion>latest</LangVersion>
 		<AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
 		<RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>

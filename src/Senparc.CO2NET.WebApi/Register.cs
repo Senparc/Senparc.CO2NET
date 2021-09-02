@@ -45,9 +45,9 @@ namespace Senparc.CO2NET.WebApi
         public static Dictionary<Type, string> AdditionalClasses = new Dictionary<Type, string>();
 
         /// <summary>
-        /// 是否禁止外部访问
+        /// 是否禁止外部访问，默认为 true
         /// </summary>
-        public static bool ForbiddenExternalAccess = false;
+        public static bool ForbiddenExternalAccess { get; set; } = true;
 
         /// <summary>
         /// RegisterApiBind 执行锁
