@@ -45,6 +45,11 @@ namespace Senparc.CO2NET.WebApi
         public static Dictionary<Type, string> AdditionalClasses = new Dictionary<Type, string>();
 
         /// <summary>
+        /// 是否禁止外部访问，默认为 true
+        /// </summary>
+        public static bool ForbiddenExternalAccess { get; set; } = true;
+
+        /// <summary>
         /// RegisterApiBind 执行锁
         /// </summary>
         private static object RegisterApiBindLock = new object();
@@ -121,7 +126,7 @@ namespace Senparc.CO2NET.WebApi
 
 
                             var coverAllMethods = false;//class 上已经有覆盖所有方法的 [ApiBind] 特性标签
-                            var choosenClass = false;//当前 class 内有需要被引用的对象（且当前 class 可以被实例化）
+                            var hasChildApiAndNonStaticClass = false;//当前 class 内有需要被引用的对象（且当前 class 可以被实例化）
 
                             if (typeAttrs.Count() == 0 && CheckAdditionalClass(classType, out string classCategory))
                             {
@@ -164,9 +169,9 @@ namespace Senparc.CO2NET.WebApi
                                 }
 
                                 //判断当前 class 是否包含可用的方法，如果包含，需要标记并进行后期处理
-                                if (!choosenClass)
+                                if (!hasChildApiAndNonStaticClass)
                                 {
-                                    choosenClass = coverAllMethods || isApiMethod;//TODO 注意忽略的对象
+                                    hasChildApiAndNonStaticClass = coverAllMethods || isApiMethod;//TODO 注意忽略的对象
                                 }
 
                                 if (isApiMethod)
@@ -186,7 +191,8 @@ namespace Senparc.CO2NET.WebApi
                                 }
                             }
 
-                            if (choosenClass)
+                            var isStaticClass = classType.IsAbstract && classType.IsSealed;
+                            if (hasChildApiAndNonStaticClass && !isStaticClass)
                             {
                                 //当前类不是静态类，且内部方法被引用，需要进行 DI 配置
                                 serviceCollection.AddScoped(classType);

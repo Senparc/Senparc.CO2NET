@@ -267,6 +267,13 @@ namespace Senparc.CO2NET.Sample.net6.Services
             this._serviceProvider = serviceProvider;
         }
 
+        /// <summary>
+        /// 用于测试自动生成的 WebApi 方法内调用非静态方法（同步方法），并且包含 IServiceProvider，使用 DI 自动注入。
+        /// <para>同时测试自定义 Attribute</para>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         //[ApiBind("CO2NETEntity", "EntityApiBindTest.TestApi")]
         [MyTest("TestCopyAttrFromTestApi in EntityApiBindTestService class")]
         public string TestApi(string name, int value = 666)
@@ -279,6 +286,13 @@ namespace Senparc.CO2NET.Sample.net6.Services
             return $"[from EntityApiBindTestService.TestApi]{name}:{value} - {addMsg}";
         }
 
+        /// <summary>
+        /// 用于测试自动生成的 WebApi 方法内调用非静态方法（异步方法），并且包含 IServiceProvider，使用 DI 自动注入。
+        /// <para>同时测试自定义 Attribute</para>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [MyTest("TestCopyAttrFromTestApiAsync in EntityApiBindTestService class")]
         public async Task<string> TestApiAsync(string name = "Senparc", int value = 999)
         {
@@ -295,42 +309,82 @@ namespace Senparc.CO2NET.Sample.net6.Services
     [ApiBind("ClassCover")]
     public class ApiBindCoverService2
     {
+        /// <summary>
+        /// 从 class 继承 ApiBind
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public string TestApiWithoutAttr(string name = "Senparc", int value = 900)
         {
-            return $"[from ApiBindCoverService.TestApiWithoutAttr]{name}:{value}";
-        }
-
-        [IgnoreApiBind]//忽略，不会出现在 API 列表中
-        public string TestApiWithoutAttr_Ignore(string name = "Senparc", int value = 900)
-        {
-            return $"[from ApiBindCoverService.TestApiWithoutAttr_Ignore]{name}:{value}";
-        }
-
-        [ApiBind(Ignore = true)]//忽略，不会出现在 API 列表中
-        public string TestApiWithoutAttr_Ignore2(string name = "Senparc", int value = 900)
-        {
-            return $"[from ApiBindCoverService.TestApiWithoutAttr_Ignore2]{name}:{value}";
-        }
-
-
-        [ApiBind("Mine", "ApiBindCoverService.TestApi", ApiRequestMethod = WebApi.ApiRequestMethod.Get)]
-        public string TestApi(string name = "Senparc", int value = 910)
-        {
-            return $"[from ApiBindCoverService.TestApi_Get]{name}:{value}";
+            return $"[from ApiBindCoverService2.TestApiWithoutAttr]{name}:{value}";
         }
 
         /// <summary>
-        /// name 定义重名
+        /// 忽略，不会出现在 API 列表中
         /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        [ApiBind("Mine", "ApiBindCoverService.TestApi", ApiRequestMethod = WebApi.ApiRequestMethod.Post)]
-        public string TestApiSameName(string name = "Senparc", int value = 920)
+        [IgnoreApiBind]
+        public string TestApiWithoutAttr_Ignore(string name = "Senparc", int value = 900)
         {
-            return $"[from ApiBindCoverService.TestApi_Get2]{name}:{value}";
+            return $"[from ApiBindCoverService2.TestApiWithoutAttr_Ignore]{name}:{value}";
         }
 
+        /// <summary>
+        /// 忽略，不会出现在 API 列表中
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [ApiBind(Ignore = true)]
+        public string TestApiWithoutAttr_Ignore2(string name = "Senparc", int value = 900)
+        {
+            return $"[from ApiBindCoverService2.TestApiWithoutAttr_Ignore2]{name}:{value}";
+        }
+
+        /// <summary>
+        /// 重写 ApiBind，使用 GET 方法
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [ApiBind("Mine", "ApiBindCoverService2.TestApi", ApiRequestMethod = WebApi.ApiRequestMethod.Get)]
+        public string TestApi(string name = "Senparc", int value = 910)
+        {
+            return $"[from ApiBindCoverService2.TestApi_Get]{name}:{value}";
+        }
+
+        /// <summary>
+        /// 重写 ApiBind，自定义 Catetory 参数，使其和其他定义同名，将被自动改名，使用 GET 方法
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [ApiBind("Mine", "ApiBindCoverService2.TestApi", ApiRequestMethod = WebApi.ApiRequestMethod.Get)]
+        public string TestApiSameName(string name = "Senparc", int value = 920)
+        {
+            return $"[from ApiBindCoverService2.TestApi_Get2]{name}:{value}";
+        }
+
+
+        /// <summary>
+        /// 重写 ApiBind，name 设置后，可以融入和同类自动生成的 API，看上去无差别
+        /// </summary>
+        /// <returns></returns>
+        [ApiBind("ClassCover", "ApiBindCoverService2.RewriteApiBind", ApiRequestMethod = WebApi.ApiRequestMethod.Post)]
+        public string RewriteApiBind(string name = "Senparc", int value = 920)
+        {
+            return $"[from ApiBindCoverService2.RewriteApiBind]{name}:{value}";
+        }
+
+        /// <summary>
+        /// 静态类，自动继承 class 配置
+        /// </summary>
+        /// <returns></returns>
         public static string StaticMethod() {
-            return "sss";
+            return "ClassCover.StaticMethod";
         }
     }
 
@@ -340,11 +394,23 @@ namespace Senparc.CO2NET.Sample.net6.Services
     public static class StaticApiBindTestService
     {
         //[ApiBind("CO2NETStatic", "StaticApiBindTest.TestApi")]
+        /// <summary>
+        /// 用于测试自动生成的 WebApi 方法内调用静态方法
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static string TestApi(string name = "Senparc", int value = 999)
         {
             return $"[from StaticApiBindTestService.TestApi]{name}:{value}";
         }
 
+        /// <summary>
+        /// 用于测试自动生成的 WebApi 方法内调用静态方法 + 自定义 Attribute
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [MyTest("TestCopyAttrFromTestApiAsync in StaticApiBindTestService class")]
         public static async Task<string> TestApiAsync(string name = "Senparc", int value = 999)
         {

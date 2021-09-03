@@ -13,6 +13,9 @@
     修改标识：Senparc - 20190413
     修改描述：v3.5.0 提供缓存异步接口
 
+    修改标识：Senparc - 20210901
+    修改描述：v3.11.1 BaseRedisObjectCacheStrategy 析构函数进行 null 值判断
+
 ----------------------------------------------------------------*/
 
 using StackExchange.Redis;
@@ -42,7 +45,8 @@ namespace Senparc.CO2NET.Cache.Redis
             //自动注册连接字符串信息
             if (string.IsNullOrEmpty(RedisManager.ConfigurationOption) &&
                 !string.IsNullOrEmpty(Config.SenparcSetting.Cache_Redis_Configuration) &&
-                Config.SenparcSetting.Cache_Redis_Configuration != "Redis配置")
+                Config.SenparcSetting.Cache_Redis_Configuration != "Redis配置" &&
+                Config.SenparcSetting.Cache_Redis_Configuration != "#{Cache_Redis_Configuration}#")
             {
                 RedisManager.ConfigurationOption = Config.SenparcSetting.Cache_Redis_Configuration;
             }
@@ -70,7 +74,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// </summary>
         ~BaseRedisObjectCacheStrategy()
         {
-            Client.Dispose();//释放
+            Client?.Dispose();//释放
         }
 
 

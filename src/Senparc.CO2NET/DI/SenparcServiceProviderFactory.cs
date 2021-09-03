@@ -16,7 +16,7 @@ namespace Senparc.CO2NET
         public IServiceProvider CreateServiceProvider(IServiceContainer containerBuilder)
         {
             //SenparcDI.GlobalServiceProvider = containerBuilder;
-            Console.WriteLine(containerBuilder.GetHashCode());
+            //Console.WriteLine(containerBuilder.GetHashCode());
             return containerBuilder;
         }
     }

@@ -176,7 +176,7 @@ namespace Senparc.CO2NET.WebApi
                     if (!sourceApiXmlCollection.ContainsKey(sourceAssemblyName))
                     {
                         var xmlFileName = $"{sourceAssemblyName}.xml";//XML 文件名
-                        var xmlFilePath = Path.Combine(_docXmlPath, xmlFileName);
+                        var xmlFilePath = Path.Combine(DocXmlPath, xmlFileName);
                         if (File.Exists(xmlFilePath))
                         {
                             apiXmlInfo = new();
@@ -289,7 +289,7 @@ namespace Senparc.CO2NET.WebApi
                 return;
             }
 
-            var dynamicFilePath = GetDynamicFilePath(_docXmlPath);
+            var dynamicFilePath = GetDynamicFilePath(DocXmlPath);
             if (!Directory.Exists(dynamicFilePath))
             {
                 Directory.CreateDirectory(dynamicFilePath);

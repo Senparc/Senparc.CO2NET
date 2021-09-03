@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Senparc.CO2NET.ApiBind;
+using Senparc.CO2NET.Trace;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.WebApi.WebApiEngines
@@ -23,17 +23,10 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
         /// <param name="docXmlPath">XML 文档文件夹路径，如果传入 null，则不自动生成 XML 说明文件</param>
         /// <param name="builder"></param>
         /// <param name="services"></param>
-        /// <param name="defaultRequestMethod">默认请求方式</param>
-        /// <param name="baseApiControllerType">全局 ApiController 的基类，默认为 ControllerBase</param>
-        /// <param name="showDetailApiLog"></param>
-        /// <param name="taskCount"></param>
-        /// <param name="additionalAttributes"></param>
-        /// <param name="buildXml">是否创建动态 API 对应的 XML 注释文件</param>
-        /// <param name="additionalAttributeFunc">是否复制自定义特性（AppBindAttribute 除外）</param>
-        public static void AddAndInitDynamicApi(this IServiceCollection services, IMvcCoreBuilder builder,
-            string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
+        /// <param name="options"> WebApiEngine 配置</param>
+        public static void AddAndInitDynamicApi(this IServiceCollection services, IMvcCoreBuilder builder, Action<WebApiEngineOptions> options = null)
         {
-            AddAndInitDynamicApi(services, (builder, null), docXmlPath, defaultRequestMethod, baseApiControllerType, taskCount, showDetailApiLog, copyCustomAttributes, additionalAttributeFunc);
+            AddAndInitDynamicApi(services, (builder, null), options);
         }
 
 
@@ -43,16 +36,10 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
         /// <param name="docXmlPath">App_Data 文件夹路径</param>
         /// <param name="builder"></param>
         /// <param name="services"></param>
-        /// <param name="defaultRequestMethod">默认请求方式</param>
-        /// <param name="baseApiControllerType">全局 ApiController 的基类，默认为 ControllerBase</param>
-        /// <param name="showDetailApiLog"></param>
-        /// <param name="taskCount"></param>
-        /// <param name="additionalAttributes"></param>
-        /// <param name="additionalAttributeFunc">是否复制自定义特性（AppBindAttribute 除外）</param>
-        public static void AddAndInitDynamicApi(this IServiceCollection services, IMvcBuilder builder,
-            string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
+        /// <param name="options"> WebApiEngine 配置</param>
+        public static void AddAndInitDynamicApi(this IServiceCollection services, IMvcBuilder builder, Action<WebApiEngineOptions> options = null)
         {
-            AddAndInitDynamicApi(services, (null, builder), docXmlPath, defaultRequestMethod, baseApiControllerType, taskCount, showDetailApiLog, copyCustomAttributes, additionalAttributeFunc);
+            AddAndInitDynamicApi(services, (null, builder), options);
         }
 
         /// <summary>
@@ -61,24 +48,15 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
         /// <param name="docXmlPath">App_Data 文件夹路径</param>
         /// <param name="builder"></param>
         /// <param name="services"></param>
-        /// <param name="defaultRequestMethod">默认请求方式</param>
-        /// <param name="baseApiControllerType">全局 ApiController 的基类，默认为 ControllerBase</param>
-        /// <param name="showDetailApiLog"></param>
-        /// <param name="taskCount"></param>
-        /// <param name="additionalAttributes"></param>
-        /// <param name="additionalAttributeFunc">是否复制自定义特性（AppBindAttribute 除外）</param>
-        private static void AddAndInitDynamicApi(this IServiceCollection services, (IMvcCoreBuilder coreBuilder, IMvcBuilder builder) builder,
-            string docXmlPath, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null,
-            int taskCount = 4, bool showDetailApiLog = false, bool copyCustomAttributes = true, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null)
+        /// <param name="options"> WebApiEngine 配置</param>
+        private static void AddAndInitDynamicApi(this IServiceCollection services, 
+                                                      (IMvcCoreBuilder coreBuilder, IMvcBuilder builder) builder, 
+                                                      Action<WebApiEngineOptions> options = null)
         {
-            _ = defaultRequestMethod != ApiRequestMethod.GlobalDefault ? true : throw new Exception($"{nameof(defaultRequestMethod)} 不能作为默认请求类型！");
-
             services.AddScoped<FindApiService>();
-            services.AddScoped(s => new WebApiEngine(docXmlPath));
+            services.AddScoped(s => new WebApiEngine(options));
 
-            WebApiEngine.AdditionalAttributeFunc = additionalAttributeFunc;
-
-            var webApiEngine = new WebApiEngine(docXmlPath, defaultRequestMethod, baseApiControllerType, copyCustomAttributes, taskCount, showDetailApiLog);
+            var webApiEngine = new WebApiEngine(options);
 
             bool preLoad = true;
 
@@ -88,7 +66,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
             //确保目录存在
             if (webApiEngine.BuildXml)
             {
-                webApiEngine.TryCreateDir(docXmlPath);
+                webApiEngine.TryCreateDir(webApiEngine.DocXmlPath);
             }
 
             var dt1 = SystemTime.Now;
@@ -110,25 +88,33 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
                 var threadIndex = i;
                 var wrapperTask = Task.Factory.StartNew(async () =>
                 {
-                    //此处使用 Task 效率并不比 Keys.ToList() 方法快
-                    webApiEngine.WriteLog($"Get API Groups: {threadIndex + 1}/{apiGouupsCount}, now dealing with: {category}");
-                    var dtStart = SystemTime.Now;
-                    var apiBindGroup = apiGroups.FirstOrDefault(z => z.Key == category);
-
-                    var apiCount = await webApiEngine.BuildWebApi(apiBindGroup).ConfigureAwait(false);
-                    var apiAssembly = webApiEngine.GetApiAssembly(category);
-
-                    //程序部件：https://docs.microsoft.com/zh-cn/aspnet/core/mvc/advanced/app-parts?view=aspnetcore-2.2
-                    if (builder.coreBuilder != null)
+                    try
                     {
-                        builder.coreBuilder.AddApplicationPart(apiAssembly);
-                    }
-                    else
-                    {
-                        builder.builder.AddApplicationPart(apiAssembly);
-                    }
 
-                    assemblyBuildStat[category] = (apiCount: apiCount, costMs: SystemTime.DiffTotalMS(dtStart));
+                        //此处使用 Task 效率并不比 Keys.ToList() 方法快
+                        webApiEngine.WriteLog($"Get API Groups: {threadIndex + 1}/{apiGouupsCount}, now dealing with: {category}");
+                        var dtStart = SystemTime.Now;
+                        var apiBindGroup = apiGroups.FirstOrDefault(z => z.Key == category);
+
+                        var apiCount = await webApiEngine.BuildWebApi(apiBindGroup).ConfigureAwait(false);
+                        var apiAssembly = webApiEngine.GetApiAssembly(category);
+
+                        //程序部件：https://docs.microsoft.com/zh-cn/aspnet/core/mvc/advanced/app-parts?view=aspnetcore-2.2
+                        if (builder.coreBuilder != null)
+                        {
+                            builder.coreBuilder.AddApplicationPart(apiAssembly);
+                        }
+                        else
+                        {
+                            builder.builder.AddApplicationPart(apiAssembly);
+                        }
+
+                        assemblyBuildStat[category] = (apiCount: apiCount, costMs: SystemTime.DiffTotalMS(dtStart));
+                    }
+                    catch (Exception ex)
+                    {
+                        SenparcTrace.BaseExceptionLog(ex);
+                    }
                 });
                 taskList.Add(wrapperTask.Unwrap());
             }
@@ -160,7 +146,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
             webApiEngine.WriteLog(new string('=', 80));
             var totalApi = assemblyBuildStat.Values.Sum(z => z.apiCount);
             webApiEngine.WriteLog(string.Format("{0,25} | {1,15}| {2,15} |{3,15}", $"Total", $"API Count:{totalApi}", $"Cost:{totalCost}ms", $""));
-            webApiEngine.WriteLog($"Total Average Cost: {Math.Round(totalCost / totalApi, 4)} ms \t\tTask Count: {taskCount}");
+            webApiEngine.WriteLog($"Total Average Cost: {Math.Round(totalCost / totalApi, 4)} ms \t\tTask Count: {webApiEngine.TaskCount}");
             webApiEngine.WriteLog("");
 
             #endregion
