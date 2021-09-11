@@ -82,11 +82,7 @@ namespace Senparc.CO2NET.Extensions
         /// <returns></returns>
         public static bool IsNullOrWhiteSpace(this string str)
         {
-#if NET35
-            return string.IsNullOrEmpty(str.Trim());
-#else
             return string.IsNullOrWhiteSpace(str);
-#endif
         }
 
         /// <summary>

@@ -122,12 +122,7 @@ namespace Senparc.CO2NET.Cache
                 return;
             }
 
-#if !NET35 && !NET40
-            //UnLockAsync();
             UnLockAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-#else
-            UnLock();//TODO：这里使用使用的是同步方法，可以改成根据调用 LockAsync 方法的情况主动调用异步方法
-#endif
 
             if (disposing)
             {
@@ -166,7 +161,6 @@ namespace Senparc.CO2NET.Cache
         #endregion
 
         #region 异步方法
-#if !NET35 && !NET40
 
         //protected async Task<ICacheLock> LockNowAsync()
         //{
@@ -185,7 +179,6 @@ namespace Senparc.CO2NET.Cache
 
         public abstract Task UnLockAsync();
 
-#endif
         #endregion
 
     }

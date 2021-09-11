@@ -93,11 +93,7 @@ namespace Senparc.CO2NET.Helpers
                 HttpUtility.Get.Download(
                     serviceProvider,
                     url, fs);
-#if NET35
-                fs.Flush();
-#else
                 fs.Flush(true);
-#endif
             }
         }
 

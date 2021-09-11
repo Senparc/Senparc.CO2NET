@@ -114,7 +114,6 @@ namespace Senparc.CO2NET.Cache.Redis
         #endregion
 
         #region 异步方法
-#if !NET35 && !NET40
 
         public abstract Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
 
@@ -132,7 +131,6 @@ namespace Senparc.CO2NET.Cache.Redis
 
         public abstract Task UpdateAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
 
-#endif
         #endregion
 
 

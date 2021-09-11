@@ -43,10 +43,7 @@ using System.Text;
 using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Trace;
 using Senparc.CO2NET.Exceptions;
-
-#if !NET35 && !NET40
 using System.Net.Http;
-#endif
 
 namespace Senparc.CO2NET.HttpUtility
 {

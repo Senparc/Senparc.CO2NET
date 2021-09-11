@@ -69,7 +69,7 @@ namespace Senparc.CO2NET.Utilities
         /// </summary>
         /// <param name="httpRequest"></param>
         /// <returns></returns>
-#if NET40 || NET45
+#if NET45
         public static string GetUserAgent(HttpRequestBase httpRequest)
 #else
         public static string GetUserAgent(HttpRequest httpRequest)

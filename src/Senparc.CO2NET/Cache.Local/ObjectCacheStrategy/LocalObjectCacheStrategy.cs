@@ -168,7 +168,7 @@ namespace Senparc.CO2NET.Cache
             var cacheKey = GetFinalKey(key, isFullKey);
             _cache.Remove(cacheKey);
 
-#if !NET35 && !NET40 && !NET45
+#if !NET45
             //移除key
             var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
             if (CheckExisted(keyStoreFinalKey, true))
@@ -294,8 +294,6 @@ namespace Senparc.CO2NET.Cache
         #endregion
 
         #region 异步方法
-#if !NET35 && !NET40
-
         public async Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
             await Task.Factory.StartNew(() => Set(key, value, expiry, isFullKey)).ConfigureAwait(false);
@@ -344,7 +342,6 @@ namespace Senparc.CO2NET.Cache
         {
             await Task.Factory.StartNew(() => Update(key, value, expiry, isFullKey)).ConfigureAwait(false);
         }
-#endif
         #endregion
 
         #endregion
@@ -356,12 +353,10 @@ namespace Senparc.CO2NET.Cache
             return LocalCacheLock.CreateAndLock(this, resourceName, key, retryCount, retryDelay);
         }
 
-#if !NET35 && !NET40
         public override async Task<ICacheLock> BeginCacheLockAsync(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
             return await LocalCacheLock.CreateAndLockAsync(this, resourceName, key, retryCount, retryDelay).ConfigureAwait(false);
         }
-#endif
         #endregion
 
     }

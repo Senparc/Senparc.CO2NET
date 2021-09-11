@@ -152,7 +152,6 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
         }
 
-        //#if !NET35 && !NET40
         /// <summary>
         /// 从Url下载，并保存到指定目录
         /// </summary>
@@ -239,10 +238,8 @@ namespace Senparc.CO2NET.HttpUtility
             }
 #endif
         }
-        //#endif
         #endregion
 
-#if !NET35 && !NET40
         #region 异步方法
 
         /// <summary>
@@ -352,7 +349,6 @@ namespace Senparc.CO2NET.HttpUtility
             }
         }
         #endregion
-#endif
 
     }
 }
