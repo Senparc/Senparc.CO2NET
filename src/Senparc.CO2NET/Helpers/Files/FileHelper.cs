@@ -167,7 +167,6 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="stream"></param>
         /// <param name="type">SHA1 或 MD5 或 CRC32，必须为大写</param>
         /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
-        /// <param name="encoding">默认为：utf8</param>
         public static string GetFileHash(Stream stream, string type = "SHA1", bool toUpper = true)
         {
             switch (type)

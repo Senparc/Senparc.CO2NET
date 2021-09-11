@@ -32,6 +32,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
               2、更新构造函数
               3、重构方法
 
+    修改标识：Senparc - 20210911
+    修改描述：v1.5.2 LocalCacheLock释放锁之前增加是否锁成功的判断
+
 ----------------------------------------------------------------*/
 
 using Senparc.CO2NET.Trace;
