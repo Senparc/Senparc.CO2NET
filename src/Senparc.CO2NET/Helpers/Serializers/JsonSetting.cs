@@ -243,7 +243,6 @@ namespace Senparc.CO2NET.Helpers.Serializers
     //        }
     //    }
 
-#if true || NET35 || NET40 || NET45
     public class JsonSettingWrap : JsonSerializerSettings
     {
         public JsonSettingWrap() : this(null)
@@ -458,7 +457,6 @@ namespace Senparc.CO2NET.Helpers.Serializers
             return base.CreateContract(objectType);
         }
     }
-#endif
 
     //#endif
 }

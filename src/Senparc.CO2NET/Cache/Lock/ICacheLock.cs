@@ -71,7 +71,6 @@ namespace Senparc.CO2NET.Cache
         #endregion
 
         #region 异步方法
-#if !NET35 && !NET40
 
         /// <summary>
         /// 开始锁
@@ -83,7 +82,6 @@ namespace Senparc.CO2NET.Cache
         /// </summary>
         Task UnLockAsync();
 
-#endif
         #endregion
 
     }

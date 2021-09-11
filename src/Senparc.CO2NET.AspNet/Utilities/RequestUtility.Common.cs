@@ -357,7 +357,6 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
 
         #endregion
 
-#if !NET35 && !NET40
         #region 异步方法
 
         /// <summary>
@@ -397,7 +396,6 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         }
 #endif
         #endregion
-#endif
 
         #region 只需要使用同步的方法
 

@@ -64,7 +64,6 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
         ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan());
 
-#if !NET35 && !NET40
         /// <summary>
         /// 【异步方法】创建一个（分布）锁
         /// </summary>
@@ -74,7 +73,6 @@ namespace Senparc.CO2NET.Cache
         /// <param name="retryDelay">重试延时</param>
         /// <returns></returns>
         Task<ICacheLock> BeginCacheLockAsync(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan());
-#endif
     }
 
     /// <summary>
@@ -167,7 +165,6 @@ namespace Senparc.CO2NET.Cache
         #endregion
 
         #region 异步方法
-#if !NET35 && !NET40
 
         /// <summary>
         /// 【异步方法】添加指定ID的对象
@@ -229,7 +226,6 @@ namespace Senparc.CO2NET.Cache
         /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
         /// <param name="expiry">过期时间</param>
         Task UpdateAsync(TKey key, TValue value, TimeSpan? expiry = null, bool isFullKey = false);
-#endif
         #endregion
     }
 }

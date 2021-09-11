@@ -123,7 +123,6 @@ namespace Senparc.CO2NET.Cache.Memcached
         #endregion
 
         #region 异步方法
-#if !NET35 && !NET40
 
         /// <summary>
         /// 【异步方法】创建 MemcachedCacheLock 实例，并立即尝试获得锁
@@ -209,7 +208,6 @@ namespace Senparc.CO2NET.Cache.Memcached
 #endif
         }
 
-#endif
         #endregion
     }
 }

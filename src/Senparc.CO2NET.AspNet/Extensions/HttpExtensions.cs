@@ -110,7 +110,6 @@ namespace Microsoft.AspNetCore.Http
             return address != null && address.ToString() != NullIpAddress;
         }
 
-
         /// <summary>
         /// Determines whether the specified HTTP request is an AJAX request.
         /// </summary>

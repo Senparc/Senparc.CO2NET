@@ -106,7 +106,6 @@ namespace Senparc.CO2NET.Utilities
 
         #endregion
 
-#if !NET35 && !NET40
         #region 异步方法
 
         /// <summary>
@@ -163,8 +162,6 @@ namespace Senparc.CO2NET.Utilities
         }
 
         #endregion
-#endif
-
 
     }
 }

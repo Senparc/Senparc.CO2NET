@@ -29,7 +29,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     
 ----------------------------------------------------------------*/
 
-#if NET40 || NET45
+#if NET45
 
 using System;
 using System.Collections.Generic;

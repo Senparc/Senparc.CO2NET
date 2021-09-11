@@ -425,7 +425,6 @@ namespace Senparc.CO2NET.Cache.Memcached
         #endregion
 
         #region 异步方法
-#if !NET35 && !NET40
 
 #if NET45
 
@@ -613,7 +612,6 @@ namespace Senparc.CO2NET.Cache.Memcached
             await SetAsync(key, value, expiry, isFullKey).ConfigureAwait(false);
         }
 
-#endif
 #endif
         #endregion
 

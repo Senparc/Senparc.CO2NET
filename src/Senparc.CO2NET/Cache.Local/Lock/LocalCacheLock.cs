@@ -32,6 +32,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
               2、更新构造函数
               3、重构方法
 
+    修改标识：Senparc - 20210911
+    修改描述：v1.5.2 LocalCacheLock释放锁之前增加是否锁成功的判断
+
 ----------------------------------------------------------------*/
 
 using Senparc.CO2NET.Trace;
@@ -139,17 +142,18 @@ namespace Senparc.CO2NET.Cache
 
         public override void UnLock()
         {
-            lock (lookPoolLock)
+            if (LockSuccessful)
             {
-                LockPool.Remove(_resourceName);
+                lock (lookPoolLock)
+                {
+                    LockPool.Remove(_resourceName);
+                }
             }
         }
 
         #endregion
 
         #region 异步方法
-#if !NET35 && !NET40
-
 
         /// <summary>
         /// 【异步方法】创建 LocalCacheLock 实例，并立即尝试获得锁
@@ -173,12 +177,12 @@ namespace Senparc.CO2NET.Cache
             return Lock();//此处使用同步方法，完成锁定
         }
 
-        public override Task UnLockAsync()
+        public override async Task UnLockAsync()
         {
             UnLock();
-            return System.Threading.Tasks.TaskExtension.CompletedTask();
+            //return System.Threading.Tasks.TaskExtension.CompletedTask();
+            return;
         }
-#endif
         #endregion
     }
 }
