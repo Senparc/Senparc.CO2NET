@@ -1,18 +1,14 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Senparc.CO2NET;
+using Senparc.CO2NET.AspNet;
 using Senparc.CO2NET.RegisterServices;
 using System;
 using System.IO;
 using System.Text;
-using Senparc.CO2NET.AspNet;
-using Senparc.CO2NET.Cache;
 
 namespace Senparc.CO2NET.WebApi.Tests
 {
