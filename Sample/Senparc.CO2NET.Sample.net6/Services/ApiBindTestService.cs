@@ -312,8 +312,8 @@ namespace Senparc.CO2NET.Sample.net6.Services
         /// <summary>
         /// 从 class 继承 ApiBind
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
+        /// <param name="name">默认值：Senparc</param>
+        /// <param name="value">默认值：900</param>
         /// <returns></returns>
         public string TestApiWithoutAttr(string name = "Senparc", int value = 900)
         {
