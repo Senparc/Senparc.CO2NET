@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-    <Version>0.2.7-preview4</Version>
+    <TargetFrameworks>netstandard2.1;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <Version>0.2.8-preview4</Version>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
     <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
@@ -22,14 +22,15 @@
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
     <PackageReleaseNotes>
-			v0.1 创世
-			v0.2 完成 WebApiEngine 第一代核心版本
-			v0.2.3 完成 WebApiEngine 第二代核心版本，全面支持动态 API 集成和集成和对应 XML 生成
-			v0.2.4 添加可额外注入的类或方法
-			v0.2.5 优化异步线程执行
-			v0.2.5.7 添加 ForbiddenExternalAccess 参数，设置是否允许外部访问
-			v0.2.6 添加 WebApiEngineOptions
-</PackageReleaseNotes>
+		v0.1 创世
+		v0.2 完成 WebApiEngine 第一代核心版本
+		v0.2.3 完成 WebApiEngine 第二代核心版本，全面支持动态 API 集成和集成和对应 XML 生成
+		v0.2.4 添加可额外注入的类或方法
+		v0.2.5 优化异步线程执行
+		v0.2.5.7 添加 ForbiddenExternalAccess 参数，设置是否允许外部访问
+		v0.2.6 添加 WebApiEngineOptions
+		v0.2.8 提供 .NET Standard 2.1 版本
+	</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\BuildOutPut</OutputPath>
