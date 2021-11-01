@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net45;net461;netstandard2.0</TargetFrameworks>
-    <Version>2.7-preview4</Version>
+    <Version>2.7-preview4.1</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis.RedLock</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis.RedLock</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -20,7 +20,7 @@
     <PackageLicenseUrl>https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md</PackageLicenseUrl>
     <ProjectUrl>https://github.com/JeffreySu/redlock-cs</ProjectUrl>
     <Title>Senparc.CO2NET.Cache.Redis.RedLock.dll</Title>
-    <Summary>微信公众号SDK for C#</Summary>
+    <Summary>Redis Cache（StackExchange） RedLock for CO2NET C#</Summary>
     <PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
     <PackageIconUrl>http://sdk.weixin.senparc.com/Images/Logo.jpg</PackageIconUrl>
     <PackageReleaseNotes>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0;netcoreapp3.1;net6.0</TargetFrameworks>
-    <Version>3.9-preview4</Version>
+    <Version>3.9-preview4.1</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Memcached</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Memcached</RootNamespace>
     <Description>微信公众账号 - Memcached 模块
@@ -16,7 +16,7 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
     <PackageLicenseUrl>https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md</PackageLicenseUrl>
     <ProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</ProjectUrl>
     <Title>Senparc.CO2NET.Cache.Memcached.dll</Title>
-    <Summary>微信公众号SDK for C#</Summary>
+    <Summary>Memcached Cache for CO2NET C#</Summary>
     <PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
     <PackageIconUrl>http://sdk.weixin.senparc.com/Images/Logo.jpg</PackageIconUrl>
     <PackageReleaseNotes>
