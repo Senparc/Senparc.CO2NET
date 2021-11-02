@@ -37,7 +37,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 ----------------------------------------------------------------*/
 
-#if !NET45
+#if !NET451
 
 using Microsoft.AspNetCore.Http.Features;
 using System;

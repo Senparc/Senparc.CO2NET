@@ -70,7 +70,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
 
-#if !NET451
+#if !NET4511
 
         /// <summary>
         /// 获取 HttpClientHandler 对象

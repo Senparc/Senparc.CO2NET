@@ -62,7 +62,7 @@ namespace Senparc.CO2NET.Utilities
             }
             
             var t = typeof(T);
-#if NET451
+#if NET4511
             if (t.IsGenericType)
 #else
             if (t.GetTypeInfo().IsGenericType)

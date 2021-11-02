@@ -162,7 +162,7 @@ namespace Senparc.CO2NET.Cache.Memcached
                  try
                  {
                      var ttl = base.GetTotalTtl(_retryCount, _retryDelay);
-#if NET45
+#if NET451
                      var storeResult = await Task.Factory.StartNew(() => _mamcachedStrategy.Cache.Store(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl))).ConfigureAwait(false);
                      if (storeResult)
 #else
@@ -201,7 +201,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         public override async Task UnLockAsync()
         {
             var key = _mamcachedStrategy.GetFinalKey(_resourceName);
-#if NET45
+#if NET451
             await Task.Factory.StartNew(() => _mamcachedStrategy.Cache.Remove(key)).ConfigureAwait(false);
 #else
             await _mamcachedStrategy.Cache.RemoveAsync(key).ConfigureAwait(false);

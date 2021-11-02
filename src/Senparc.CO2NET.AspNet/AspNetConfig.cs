@@ -1,4 +1,4 @@
-﻿#if !NET45
+﻿#if !NET451
 using Microsoft.AspNetCore.Hosting;
 #endif 
 using System;

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net45;net461;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net451;net461;netstandard2.0</TargetFrameworks>
     <Version>2.8</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis.RedLock</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis.RedLock</RootNamespace>
@@ -72,9 +72,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net451|AnyCPU'">
     <OutputPath>..\..\..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\..\..\BuildOutPut\net45\Senparc.CO2NET.Cache.Redis.RedLock.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\BuildOutPut\net451\Senparc.CO2NET.Cache.Redis.RedLock.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
     <OutputPath>..\..\..\BuildOutPut\</OutputPath>
@@ -84,7 +84,7 @@
     <OutputPath>..\..\..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\..\..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.Redis.RedLock.xml</DocumentationFile>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">

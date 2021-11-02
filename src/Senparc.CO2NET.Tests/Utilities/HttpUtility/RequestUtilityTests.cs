@@ -104,7 +104,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
                 cookieContainer, stream, useAjax: true);
 
             Assert.IsNotNull(result);
-#if !NET45
+#if !NET451
             var resultString = result.Result.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             Console.WriteLine("resultString : \t{0}", resultString);
 #endif

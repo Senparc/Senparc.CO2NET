@@ -61,7 +61,7 @@ namespace Senparc.CO2NET.Threads
             {
                 var mq = new SenparcMessageQueue();
 
-#if NET451
+#if NET4511
                 System.Diagnostics.Trace.WriteLine(string.Format("SenparcMessageQueueThreadUtility执行析构函数"));
                 System.Diagnostics.Trace.WriteLine(string.Format("当前队列数量：{0}", mq.GetCount()));
 #endif
@@ -71,7 +71,7 @@ namespace Senparc.CO2NET.Threads
             catch (Exception ex)
             {
                 //此处可以添加日志
-#if NET451
+#if NET4511
 
                 System.Diagnostics.Trace.WriteLine(string.Format("SenparcMessageQueueThreadUtility执行析构函数错误：{0}", ex.Message));
 #endif

@@ -46,7 +46,7 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
-#if NET451
+#if NET4511
 using System.Web.Script.Serialization;
 #else
 using Newtonsoft.Json;
@@ -91,7 +91,7 @@ namespace Senparc.CO2NET.Helpers
         public static T GetObject<T>(this string jsonString)
         {
             return (T)Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString, typeof(T));
-            //#if NET451
+            //#if NET4511
             //            JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
             //            return jsSerializer.Deserialize<T>(jsonString);
             //#else
@@ -125,7 +125,7 @@ namespace Senparc.CO2NET.Helpers
         //                return null;
         //            }
 
-        //#if !NET451
+        //#if !NET4511
         //            ////二进制序列化方案
         //            //using (MemoryStream memoryStream = new MemoryStream())
         //            //{
@@ -170,7 +170,7 @@ namespace Senparc.CO2NET.Helpers
         //                return default(T);
         //            }
 
-        //#if !NET451
+        //#if !NET4511
         //            ////二进制序列化方案
         //            //using (MemoryStream memoryStream = new MemoryStream(stream))
         //            //{
