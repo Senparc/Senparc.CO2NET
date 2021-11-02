@@ -42,6 +42,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
     修改标识：Senparc - 20180911
     修改描述：v0.8.10 提供 Config.HostingEnvironment 属性 
+
+    修改标识：Senparc - 20211101
+    修改描述：v1.6 修改 RootDictionaryPath 名为 RootDirectoryPath
    
 ----------------------------------------------------------------*/
 
@@ -115,37 +118,48 @@ namespace Senparc.CO2NET
             }
         }
 
-        private static string _rootDictionaryPath = null;
+        private static string _rootDirectoryPath = null;
 
         /// <summary>
         /// 网站根目录绝对路径
         /// </summary>
-        public static string RootDictionaryPath
+        public static string RootDirectoryPath
         {
             get
             {
-                if (_rootDictionaryPath == null)
+
+                if (_rootDirectoryPath == null)
                 {
 #if NET45
                     var appPath = AppDomain.CurrentDomain.BaseDirectory;
 
                     if (Regex.Match(appPath, $@"[\\/]$", RegexOptions.Compiled).Success)
                     {
-                        _rootDictionaryPath = appPath;//
+                        _rootDirectoryPath = appPath;//
                         //_rootDictionaryPath = appPath.Substring(0, appPath.Length - 1);
 
                     }
 #else
-                    _rootDictionaryPath = AppContext.BaseDirectory;
+                    _rootDirectoryPath = AppContext.BaseDirectory;
 #endif
                 }
 
-                return _rootDictionaryPath;
+                return _rootDirectoryPath;
             }
             set
             {
-                _rootDictionaryPath = value;
+                _rootDirectoryPath = value;
             }
+        }
+
+        /// <summary>
+        /// 网站根目录绝对路径
+        /// </summary>
+        [Obsolete("请使用 RootDirectoryPath 属性")]
+        public static string RootDictionaryPath
+        {
+            get => RootDirectoryPath;
+            set => RootDirectoryPath = value;
         }
     }
 }
