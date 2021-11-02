@@ -63,7 +63,7 @@ namespace Senparc.CO2NET.Helpers
 
         public int Compare(object x, object y)
         {
-#if NET45
+#if NET451
             byte[] xBytes = System.Text.Encoding.Default.GetBytes(x.ToString());
             byte[] yBytes = System.Text.Encoding.Default.GetBytes(y.ToString());
 #else
