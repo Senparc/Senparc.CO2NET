@@ -1,4 +1,4 @@
-﻿#if !NET4511
+﻿#if !NET451
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.ComponentModel.Design;

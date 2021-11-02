@@ -130,7 +130,7 @@ namespace Senparc.CO2NET
 
                 if (_rootDirectoryPath == null)
                 {
-#if NET4511
+#if NET451
                     var appPath = AppDomain.CurrentDomain.BaseDirectory;
 
                     if (Regex.Match(appPath, $@"[\\/]$", RegexOptions.Compiled).Success)

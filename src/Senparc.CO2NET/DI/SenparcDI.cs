@@ -25,7 +25,7 @@
 
 ----------------------------------------------------------------*/
 
-#if !NET4511
+#if !NET451
 using System;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;

@@ -46,7 +46,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 ----------------------------------------------------------------*/
 
 
-#if !NET4511
+#if !NET451
 using Microsoft.Extensions.DependencyInjection;
 #endif
 
@@ -77,7 +77,7 @@ namespace Senparc.CO2NET.RegisterServices
             Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
         }
 
-#if !NET4511
+#if !NET451
 
         /// <summary>
         /// 单个实例引用全局的 ServiceCollection

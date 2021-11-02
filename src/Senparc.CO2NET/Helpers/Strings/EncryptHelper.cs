@@ -171,7 +171,7 @@ namespace Senparc.CO2NET.Helpers
         //        public static string GetSha1(string str)
         //        {
         //            //建立SHA1对象
-        //#if NET4511
+        //#if NET451
         //            SHA1 sha = new SHA1CryptoServiceProvider();
         //#else
         //            SHA1 sha = SHA1.Create();
@@ -229,7 +229,7 @@ namespace Senparc.CO2NET.Helpers
         {
             string retStr;
 
-#if NET4511
+#if NET451
             MD5CryptoServiceProvider m5 = new MD5CryptoServiceProvider();
 #else
             MD5 m5 = MD5.Create();
@@ -274,7 +274,7 @@ namespace Senparc.CO2NET.Helpers
                 //使用UTF-8编码
                 return GetMD5("utf-8", Encoding.GetEncoding(charset));
 
-                //#if NET4511
+                //#if NET451
                 //                inputBye = Encoding.GetEncoding("GB2312").GetBytes(encypStr);
                 //#else
                 //                inputBye = Encoding.GetEncoding(936).GetBytes(encypStr);
@@ -378,7 +378,7 @@ namespace Senparc.CO2NET.Helpers
         public static byte[] AESEncrypt(byte[] inputdata, byte[] iv, string strKey)
         {
             //分组加密算法   
-#if NET4511
+#if NET451
             SymmetricAlgorithm des = Rijndael.Create();
 #else
             SymmetricAlgorithm des = Aes.Create();
@@ -415,7 +415,7 @@ namespace Senparc.CO2NET.Helpers
         /// <returns></returns>
         public static byte[] AESDecrypt(byte[] inputdata, byte[] iv, string strKey)
         {
-#if NET4511
+#if NET451
             SymmetricAlgorithm des = Rijndael.Create();
 #else
             SymmetricAlgorithm des = Aes.Create();
@@ -479,7 +479,7 @@ namespace Senparc.CO2NET.Helpers
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);
 
 
-            //#if NET4511
+            //#if NET451
             //            SymmetricAlgorithm des = Rijndael.Create();
             //#else
             //            SymmetricAlgorithm des = Aes.Create();
@@ -524,7 +524,7 @@ namespace Senparc.CO2NET.Helpers
 
 
             //RijndaelManaged aes = new RijndaelManaged();
-#if NET4511
+#if NET451
             SymmetricAlgorithm aes = Rijndael.Create();
 #else
             SymmetricAlgorithm aes = Aes.Create();
@@ -553,7 +553,7 @@ namespace Senparc.CO2NET.Helpers
             //            }
             //            finally
             //            {
-            //#if NET4511
+            //#if NET451
             //                cryptoStream.Close();
             //                mStream.Close();
             //                aes.Clear();

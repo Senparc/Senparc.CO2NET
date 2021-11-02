@@ -29,7 +29,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
  ----------------------------------------------------------------*/
 
-#if !NET4511
+#if !NET451
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 #endif
@@ -45,7 +45,7 @@ namespace Senparc.CO2NET.Cache
     /// </summary>
     public static class LocalObjectCacheHelper
     {
-#if NET4511
+#if NET451
         /// <summary>
         /// 所有数据集合的列表
         /// </summary>
