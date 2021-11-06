@@ -18,7 +18,7 @@ namespace Senparc.CO2NET.Exceptions
     /// <summary>
     /// 异常基类
     /// </summary>
-#if NET45
+#if NET451
     public class BaseException : ApplicationException
 #else
     public class BaseException : Exception

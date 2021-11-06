@@ -1,4 +1,4 @@
-﻿#if !NET45
+﻿#if !NET451
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 #endif
@@ -16,7 +16,7 @@ namespace Senparc.CO2NET.AspNet
     /// </summary>
     public static class Register
     {
-#if !NET45
+#if !NET451
 
         /// <summary>
         /// 开始 Senparc.CO2NET 初始化参数流程（ASP.NET Core)

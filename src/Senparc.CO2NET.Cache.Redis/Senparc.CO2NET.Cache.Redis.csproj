@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net45;net461;netstandard2.0</TargetFrameworks>
-    <Version>3.11.2-preview4</Version>
+    <TargetFrameworks>net451;net461;netstandard2.0</TargetFrameworks>
+    <Version>3.12</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -18,7 +18,7 @@
     <PackageLicenseUrl>https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md</PackageLicenseUrl>
     <ProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</ProjectUrl>
     <Title>Senparc.CO2NET.Cache.Redis.dll</Title>
-    <Summary>微信公众号SDK for C#</Summary>
+    <Summary>Redis Cache（StackExchange） for CO2NET C#</Summary>
     <PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
     <PackageIconUrl>http://sdk.weixin.senparc.com/Images/Logo.jpg</PackageIconUrl>
     <PackageReleaseNotes>
@@ -101,8 +101,8 @@
 		v3.6.102 支持新版本 CO2NET
 		v3.6.103 支持新版本 CO2NET，优化异步方法
 		v3.11.2 BaseRedisObjectCacheStrategy 析构函数进行 null 值判断，并添加 "#{Cache_Redis_Configuration}#" 过滤判断
-	   </PackageReleaseNotes>
-     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
+</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -118,9 +118,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net451|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\net45\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\net451\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
@@ -142,7 +142,7 @@
     <!--<PackageReference Include="Senparc.CO2NET.Cache.Redis.RedLock" Version="0.1.0" />-->
     <PackageReference Include="BinaryFormatter" Version="2.1.4" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">

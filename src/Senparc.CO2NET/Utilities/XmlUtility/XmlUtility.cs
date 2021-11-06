@@ -144,7 +144,7 @@ namespace Senparc.CO2NET.Utilities
             {
                 return XDocument.Load(xr);
             }
-//#if NET45
+//#if NET451
 //            using (XmlReader xr = XmlReader.Create(stream))
 //            {
 //                return XDocument.Load(xr);

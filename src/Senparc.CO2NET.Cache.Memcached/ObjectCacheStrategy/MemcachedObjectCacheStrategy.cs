@@ -37,7 +37,7 @@ using Enyim.Caching.Configuration;
 using Enyim.Caching.Memcached;
 using Senparc.CO2NET.Exceptions;
 
-#if !NET45
+#if !NET451
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
@@ -93,7 +93,7 @@ namespace Senparc.CO2NET.Cache.Memcached
                     }
                 }
 
-#if !NET45
+#if !NET451
                 if (dic.Count() > 0)
                 {
                     SenparcDI.GlobalServiceCollection.AddSenparcMemcached(options =>
@@ -161,7 +161,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             //                //var cache = new MemcachedClient(config);'
 
 
-            //#if NET45 || NET461
+            //#if NET451 || NET461
             //                var cache = new MemcachedClient(config);
             //#else
             //                var cache = new MemcachedClient(null, config);
@@ -196,7 +196,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         MemcachedObjectCacheStrategy(/*ILoggerFactory loggerFactory, IOptions<MemcachedClientOptions> optionsAccessor*/)
         {
             _config = GetMemcachedClientConfiguration();
-#if NET45 //|| NET461
+#if NET451 //|| NET461
             Cache = new MemcachedClient(_config);
 #else
             var serviceProvider = SenparcDI.GlobalServiceCollection.BuildServiceProvider();
@@ -227,7 +227,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         #region 配置
 
-#if NET45
+#if NET451
         private static MemcachedClientConfiguration GetMemcachedClientConfiguration()
 #else
         private static MemcachedClientConfiguration GetMemcachedClientConfiguration(/*ILoggerFactory loggerFactory, IOptions<MemcachedClientOptions> optionsAccessor*/)
@@ -235,7 +235,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         {
             //每次都要新建
 
-#if NET45
+#if NET451
             var config = new MemcachedClientConfiguration();
             foreach (var server in _serverlist)
             {
@@ -426,7 +426,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         #region 异步方法
 
-#if NET45
+#if NET451
 
         //当前使用的 Memcached 插件在 .NET 4.5 下未提供异步方法
 

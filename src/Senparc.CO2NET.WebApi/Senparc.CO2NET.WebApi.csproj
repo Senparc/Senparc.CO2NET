@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-    <Version>0.2.8-preview4</Version>
+    <Version>0.3</Version>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
     <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
@@ -30,7 +30,7 @@
 		v0.2.5.7 添加 ForbiddenExternalAccess 参数，设置是否允许外部访问
 		v0.2.6 添加 WebApiEngineOptions
 		v0.2.8 提供 .NET Standard 2.1 版本
-	</PackageReleaseNotes>
+</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\BuildOutPut</OutputPath>
@@ -45,9 +45,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+  <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net451|AnyCPU'">
 		<OutputPath>..\BuildOutPut\</OutputPath>
-		<DocumentationFile>..\BuildOutPut\net45\Senparc.CO2NET.WebApi.xml</DocumentationFile>
+		<DocumentationFile>..\BuildOutPut\net451\Senparc.CO2NET.WebApi.xml</DocumentationFile>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
 		<OutputPath>..\BuildOutPut\</OutputPath>

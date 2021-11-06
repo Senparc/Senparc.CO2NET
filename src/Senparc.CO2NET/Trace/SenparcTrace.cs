@@ -109,7 +109,7 @@ namespace Senparc.CO2NET.Trace
             using (await Cache.BeginCacheLockAsync(LockName, "").ConfigureAwait(false))
             {
                 string logDir;
-#if NET45
+#if NET451
                 logDir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "App_Data", "SenparcTraceLog");
 #else
                 //var logDir = Path.Combine(AppContext.BaseDirectory, "App_Data", "SenparcTraceLog");
