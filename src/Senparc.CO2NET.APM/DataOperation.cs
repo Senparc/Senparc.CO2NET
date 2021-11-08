@@ -94,7 +94,7 @@ namespace Senparc.CO2NET.APM
             if (!keyList.Contains(kindName))
             {
                 keyList.Add(kindName);
-                await cacheStragety.SetAsync(kindNameKey, keyList, isFullKey: true).ConfigureAwait(false); ;//永久储存
+                await cacheStragety.SetAsync(kindNameKey, keyList, isFullKey: true).ConfigureAwait(false);//永久储存
             }
 
             KindNameStore[_domain][kindName] = SystemTime.Now;
