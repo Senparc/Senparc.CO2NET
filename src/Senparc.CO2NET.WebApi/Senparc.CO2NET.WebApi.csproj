@@ -45,15 +45,6 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net451|AnyCPU'">
-		<OutputPath>..\BuildOutPut\</OutputPath>
-		<DocumentationFile>..\BuildOutPut\net451\Senparc.CO2NET.WebApi.xml</DocumentationFile>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-		<OutputPath>..\BuildOutPut\</OutputPath>
-		<DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.WebApi.xml</DocumentationFile>
-	</PropertyGroup>-->
-  <!--<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' "></ItemGroup>-->
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.2.3" />
