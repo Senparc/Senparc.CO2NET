@@ -5,7 +5,7 @@ using System;
 namespace Senparc.CO2NET.Tests.Cache.Local.Lock
 {
     [TestClass]
-    public class LocalCacheLockTests
+    public class LocalCacheLockTests:BaseTest
     {
         [TestMethod]
         public void LocalCacheLockTest()
