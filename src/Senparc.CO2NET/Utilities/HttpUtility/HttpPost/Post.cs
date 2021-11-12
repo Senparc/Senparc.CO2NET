@@ -294,7 +294,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                     cer,
 #endif
-                    useAjax, null, timeOut).ConfigureAwait(false); ;
+                    useAjax, null, timeOut).ConfigureAwait(false);
 
                 afterReturnText?.Invoke(url, returnText);
 
@@ -339,7 +339,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, null, timeOut, checkValidationResult).ConfigureAwait(false); ;
+                useAjax, null, timeOut, checkValidationResult).ConfigureAwait(false);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -382,7 +382,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, null, timeOut).ConfigureAwait(false); ;
+                useAjax, null, timeOut).ConfigureAwait(false);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);

@@ -689,7 +689,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false); ;
+                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false);
         }
 
 
@@ -746,7 +746,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false); ;
+                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false);
 
             var response = senparcResponse.Result;//获取响应信息
 
