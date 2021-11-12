@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net451;netstandard2.0;netcoreapp3.1;net6.0</TargetFrameworks>
-    <Version>3.10</Version>
+    <Version>4.0</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Memcached</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Memcached</RootNamespace>
     <Description>微信公众账号 - Memcached 模块
@@ -164,21 +164,14 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
       <Version>1.0.0.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net451' ">
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.0" />
-    <PackageReference Include="EnyimMemcachedCore" Version="2.1.10" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.2" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' or '$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net6.0' ">
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="EnyimMemcachedCore" Version="2.5.3" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <!--<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' or '$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net6.0' ">
+    <PackageReference Include="EnyimMemcachedCore" Version="2.5.3" />
+  </ItemGroup>-->
   <ItemGroup>
     <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
   </ItemGroup>

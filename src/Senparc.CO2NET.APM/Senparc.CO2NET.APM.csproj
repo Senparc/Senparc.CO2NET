@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net451;netstandard2.0</TargetFrameworks>
-    <Version>0.12</Version>
+    <Version>1.0</Version>
     <AssemblyName>Senparc.CO2NET.APM</AssemblyName>
     <RootNamespace>Senparc.CO2NET.APM</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>

@@ -21,12 +21,12 @@
   <ItemGroup>
 	  <PackageReference Include="MessagePack" Version="1.7.3.4" />
 	  <PackageReference Include="MessagePackAnalyzer" Version="1.6.0" />
-	  <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0-preview.3.21201.4" />
+	  <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
 	  <PackageReference Include="Moq" Version="4.9.0" />
 	  <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
 	  <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
-	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0-preview.3.21201.4" />
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 
 	  <PackageReference Include="Microsoft.Net.Http.Headers">
 		  <Version>2.2.8</Version>

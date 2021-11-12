@@ -34,7 +34,7 @@ namespace Senparc.CO2NET.APM.Tests
             dataOperation.SetAsync("访问量", 1, dateTime: SystemTime.Now.AddMinutes(-1)).Wait();
             dataOperation.SetAsync("访问量", 1, dateTime: SystemTime.Now.AddMinutes(-1)).Wait();
 
-            dataOperation.SetAsync("访问量", 1, dateTime: SystemTime.Now);//当前分钟，将不被收集
+            dataOperation.SetAsync("访问量", 1, dateTime: SystemTime.Now);//当前分钟，将不被收集  //.Wait()
 
 
         }

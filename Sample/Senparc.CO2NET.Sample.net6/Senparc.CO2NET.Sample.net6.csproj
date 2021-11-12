@@ -11,13 +11,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0-preview.3.21201.4" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 
 		<PackageReference Include="Microsoft.Net.Http.Headers">
 			<Version>2.2.8</Version>
 		</PackageReference>
 
-		<PackageReference Include="Senparc.Weixin.MP" Version="16.15.500-preview4.1" />
+		<PackageReference Include="Senparc.Weixin.MP" Version="16.16.0" />
 
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.APM\Senparc.CO2NET.APM.csproj" />
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
@@ -27,9 +27,9 @@
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.WebApi\Senparc.CO2NET.WebApi.csproj" />
 		<ProjectReference Include="..\..\src\Senparc.CO2NET\Senparc.CO2NET.csproj" />
 
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
-		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.2.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.2.3" />
 	</ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ using System;
 namespace Senparc.CO2NET.Tests.Cache.CacheStrategy
 {
     [TestClass]
-    public class BaseCacheStrategyTests
+    public class BaseCacheStrategyTests : BaseTest
     {
         [TestMethod]
         public void BaseCacheStrategyTest()
