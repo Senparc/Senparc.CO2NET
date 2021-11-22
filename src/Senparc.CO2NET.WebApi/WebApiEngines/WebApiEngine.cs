@@ -7,9 +7,13 @@
 
     创建标识：Senparc - 20210627
 
+    修改标识：Senparc - 20211122
+    修改描述：v1.1 提供参数属性同步复制到动态 Api 的能力
+   
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Senparc.CO2NET.WebApi.ActionFilters;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
@@ -324,7 +328,6 @@ namespace Senparc.CO2NET.WebApi
                         }
 
                         //叠加类和特性的方法
-
                         foreach (var item in customAttrs)
                         {
                             if (item.AttributeType == _typeOfApiBind)
@@ -360,27 +363,64 @@ namespace Senparc.CO2NET.WebApi
                     //setPropMthdBldr.SetReturnType(apiMethodInfo.ReturnType);
 
                     //设置参数
-                    var boundType = false;
+                    var boundSourceMetadata = false;//参数使用了[FromBody]等特性标记
+                    var boundClassType = false;//参数中已经绑定了 class 复杂类型
                     //定义其他参数
                     for (int i = 0; i < parameters.Length; i++)
                     {
                         var p = parameters[i];
                         ParameterBuilder pb = setPropMthdBldr.DefineParameter(i + 1/*从1开始，0为返回值*/, p.Attributes, p.Name);
                         //处理参数，反之出现复杂类型的参数，抛出异常：InvalidOperationException: Action 'WeChat_OfficialAccountController.CardApi_GetOrderList (WeixinApiAssembly)' has more than one parameter that was specified or inferred as bound from request body. Only one parameter per action may be bound from body. Inspect the following parameters, and use 'FromQueryAttribute' to specify bound from query, 'FromRouteAttribute' to specify bound from route, and 'FromBodyAttribute' for parameters to be bound from body:
-                        if (p.ParameterType.IsClass)
+
+
+                        boundSourceMetadata = boundSourceMetadata || typeof(IBindingSourceMetadata).IsAssignableFrom(p.ParameterType);
+
+                        //复制添加单个参数上的所有特性
+                        try
                         {
-                            if (boundType == false)
+                            var paramAttrs = p.CustomAttributes;// CustomAttributeData.GetCustomAttributes(p.ParameterType).ToList();
+                            foreach (var item in paramAttrs)
                             {
-                                //第一个绑定，可以不处理
-                                boundType = true;
+                                var attrBuilder = new CustomAttributeBuilder(item.Constructor, item.ConstructorArguments.Select(z => z.Value).ToArray());
+                                pb.SetCustomAttribute(attrBuilder);
                             }
-                            else
+                        }
+                        catch (Exception)
+                        {
+                            //TODO：收集错误信息
+                            //throw;
+                        }
+
+                        try
+                        {
+                            if (p.ParameterType.IsClass && !boundClassType)
                             {
-                                //第二个开始使用标签
+                                boundClassType = true;//第一个绑定，可以不处理
+                            }
+                            else if (boundClassType && !boundSourceMetadata)
+                            {
+                                //第二个开始使用标签     TODO：可以自定义更多的类型
                                 var tFromQuery = typeof(FromQueryAttribute);
                                 pb.SetCustomAttribute(new CustomAttributeBuilder(tFromQuery.GetConstructor(new Type[0]), new object[0]));
                             }
+
+                            //if (!boundSourceMetadata && p.ParameterType.IsClass)
+                            //{
+                            //    if (boundClassType == false)
+                            //    {
+                                    
+                            //    }
+                            //    else
+                            //    {
+                                    
+                            //    }
+                            //}
                         }
+                        catch (Exception)
+                        {
+                            //throw;
+                        }
+
                         try
                         {
                             //设置默认值

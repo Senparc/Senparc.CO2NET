@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-    <Version>1.0</Version>
+    <Version>1.1</Version>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
     <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
@@ -30,7 +30,8 @@
 		v0.2.5.7 添加 ForbiddenExternalAccess 参数，设置是否允许外部访问
 		v0.2.6 添加 WebApiEngineOptions
 		v0.2.8 提供 .NET Standard 2.1 版本
-</PackageReleaseNotes>
+		v1.1 提供参数属性同步复制到动态 Api 的能力
+	</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\BuildOutPut</OutputPath>
@@ -48,6 +49,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.2.3" />
+    <!--<PackageReference Include="System.Reflection.Emit" Version="4.7.0" />-->
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
