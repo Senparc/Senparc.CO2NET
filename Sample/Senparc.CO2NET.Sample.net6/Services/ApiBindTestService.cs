@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -383,7 +384,8 @@ namespace Senparc.CO2NET.Sample.net6.Services
         /// 静态类，自动继承 class 配置
         /// </summary>
         /// <returns></returns>
-        public static string StaticMethod() {
+        public static string StaticMethod()
+        {
             return "ClassCover.StaticMethod";
         }
     }
@@ -485,6 +487,62 @@ namespace Senparc.CO2NET.Sample.net6.Services
             //}
             //Console.WriteLine("-------------");
 
+        }
+    }
+
+
+    /// <summary>
+    /// 参数带 Attribute
+    /// </summary>
+    [ApiController]
+    public class ParameterAttribute
+    {
+        /// <summary>
+        /// 参数带 Attribute 测试
+        /// </summary>
+        /// <param name="requestData"></param>
+        /// <returns></returns>
+        [ApiBind(ApiRequestMethod = WebApi.ApiRequestMethod.Post)]
+        public static string ParameterAttributeTest([FromBody]RequestData requestData1)
+        {
+            /* 
+             * 可用 PostMan 等工具测试：
+             * curl --location --request POST 'https://localhost:44351/api/Senparc.CO2NET.Sample/ParameterAttribute/CO2NET.Sample_ParameterAttribute.ParameterAttributeTest' \
+               --header 'Content-Type: application/json' \
+               --data-raw '{
+                   "UserName": "SenparcCoreAdmin96",
+                   "Password": "743e815e2"
+                }'
+             *
+             *  结果:SenparcCoreAdmin96:743e815e2 -- 2021/11/22 21:11:14 +08:00
+             */
+
+            return $"{requestData1.UserName}:{requestData1.Password} -- {SystemTime.Now}";
+        }
+
+
+    }
+    public class RequestData
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+    }
+
+    [ApiController]
+    [Route("[controller]")]
+    public class NormalApi : ControllerBase
+    {
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody]RequestData request)
+        {
+            return Content($"{request.UserName}:{request.Password} -- {SystemTime.Now}");
+        }
+
+        [HttpGet("login2")]
+        public IActionResult Login2(RequestData request)
+        {
+            return Content($"{request.UserName}:{request.Password}");
         }
     }
 
