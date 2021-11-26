@@ -134,18 +134,18 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
             //Func<object, int, string> outputResult = (text, length) => string.Format($"{{0,{length}}}", text);
 
             webApiEngine.WriteLog("");
-            webApiEngine.WriteLog(string.Format("{0,25} | {1,15}| {2,15} |{3,15}", "Category Name", "API Count", "Cost Time", "Average"));
-            webApiEngine.WriteLog(new string('-', 80));
+            webApiEngine.WriteLog(string.Format("{0,35} | {1,15}| {2,15} |{3,15}", "Category Name", "API Count", "Cost Time", "Average"));
+            webApiEngine.WriteLog(new string('-', 90));
             foreach (var item in assemblyBuildStat)
             {
                 var apiCount = item.Value.apiCount;
                 var cost = item.Value.costMs;
                 var avg = Math.Round(cost / apiCount, 3);
-                webApiEngine.WriteLog(string.Format("{0,25} | {1,15}| {2,15} |{3,15}", item.Key, apiCount, $"{cost}ms", $"{avg}ms"));
+                webApiEngine.WriteLog(string.Format("{0,35} | {1,15}| {2,15} |{3,15}", item.Key, apiCount, $"{cost}ms", $"{avg}ms"));
             }
-            webApiEngine.WriteLog(new string('=', 80));
+            webApiEngine.WriteLog(new string('=', 90));
             var totalApi = assemblyBuildStat.Values.Sum(z => z.apiCount);
-            webApiEngine.WriteLog(string.Format("{0,25} | {1,15}| {2,15} |{3,15}", $"Total", $"API Count:{totalApi}", $"Cost:{totalCost}ms", $""));
+            webApiEngine.WriteLog(string.Format("{0,35} | {1,15}| {2,15} |{3,15}", $"Total", $"API Count:{totalApi}", $"Cost:{totalCost}ms", $""));
             webApiEngine.WriteLog($"Total Average Cost: {Math.Round(totalCost / totalApi, 4)} ms \t\tTask Count: {webApiEngine.TaskCount}");
             webApiEngine.WriteLog("");
 
