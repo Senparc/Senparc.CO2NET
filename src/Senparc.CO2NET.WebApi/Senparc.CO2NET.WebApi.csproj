@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-    <Version>1.1.2</Version>
+    <Version>1.1.3</Version>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
     <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
@@ -32,6 +32,7 @@
 		v0.2.8 提供 .NET Standard 2.1 版本
 		v1.1 提供参数属性同步复制到动态 Api 的能力
 		v1.1.2 优化文档提取正则表达式
+		v1.1.3 添加 AddApiControllerAttribute 选项，默认为 true
 	</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

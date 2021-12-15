@@ -56,6 +56,7 @@ namespace Senparc.CO2NET.WebApi
         private readonly bool _copyCustomAttributes;
         private Type _typeOfApiBind = typeof(ApiBindAttribute);
         private Type _baseApiControllerType;
+        private bool _addApiControllerAttribute = true;
 
         public bool BuildXml => DocXmlPath != null;
 
@@ -77,6 +78,7 @@ namespace Senparc.CO2NET.WebApi
             _copyCustomAttributes = opt.CopyCustomAttributes;
             TaskCount = opt.TaskCount;
             _showDetailApiLog = opt.ShowDetailApiLog;
+            _addApiControllerAttribute = opt.AddApiControllerAttribute;
             Register.ForbiddenExternalAccess = opt.ForbiddenExternalAccess;
             WebApiEngine.AdditionalAttributeFunc = opt.AdditionalAttributeFunc;
         }
@@ -408,11 +410,11 @@ namespace Senparc.CO2NET.WebApi
                             //{
                             //    if (boundClassType == false)
                             //    {
-                                    
+
                             //    }
                             //    else
                             //    {
-                                    
+
                             //    }
                             //}
                         }
@@ -619,9 +621,11 @@ namespace Senparc.CO2NET.WebApi
             IEnumerable<CreateIndex> create_indexes
             IEnumerable<DropIndex> drop_indexes
              */
-            //var t = typeof(ApiControllerAttribute);
-            //tb.SetCustomAttribute(new CustomAttributeBuilder(t.GetConstructor(new Type[0]), new object[0]));
-
+            if (_addApiControllerAttribute)
+            {
+                var t = typeof(ApiControllerAttribute);
+                tb.SetCustomAttribute(new CustomAttributeBuilder(t.GetConstructor(new Type[0]), new object[0]));
+            }
 
             //暂时取消登录验证  —— Jeffrey Su 2021.06.18
             //var t_0 = typeof(AuthorizeAttribute);

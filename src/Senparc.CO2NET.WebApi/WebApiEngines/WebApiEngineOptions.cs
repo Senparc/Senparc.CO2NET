@@ -19,8 +19,8 @@ namespace Senparc.CO2NET.WebApi
         /// <param name="defaultAction">默认请求类型，如 Post，Get</param>
         /// <param name="additionalAttributeFunc">额外需要绑定的特性</param>
         /// <param name="forbiddenExternalAccess">是否允许外部访问，默认为 false，只允许本机访问自动生成的 WebApi</param>
-
-        public WebApiEngineOptions(string docXmlPath = null, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null, bool forbiddenExternalAccess = true)
+        /// <param name="addApiControllerAttribute">知否在自动生成的接口类（Controller）上自动添加 [ApiController] 标签</param>
+        public WebApiEngineOptions(string docXmlPath = null, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null, bool forbiddenExternalAccess = true, bool addApiControllerAttribute = true)
         {
             DocXmlPath = docXmlPath;
             DefaultRequestMethod = defaultRequestMethod;
@@ -30,6 +30,7 @@ namespace Senparc.CO2NET.WebApi
             ShowDetailApiLog = showDetailApiLog;
             AdditionalAttributeFunc = additionalAttributeFunc;
             ForbiddenExternalAccess = forbiddenExternalAccess;
+            AddApiControllerAttribute = addApiControllerAttribute;
         }
 
         /// <summary>
@@ -64,5 +65,6 @@ namespace Senparc.CO2NET.WebApi
         /// 是否允许外部访问，默认为 false，只允许本机访问自动生成的 WebApi
         /// </summary>
         public bool ForbiddenExternalAccess { get; set; }
+        public bool AddApiControllerAttribute { get; }
     }
 }
