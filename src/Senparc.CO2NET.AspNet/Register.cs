@@ -8,6 +8,10 @@ using System.Collections.Generic;
 using System.Text;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.RegisterServices;
+#if NETSTANDARD2_0_OR_GREATER
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
+#endif
 
 namespace Senparc.CO2NET.AspNet
 {
@@ -36,11 +40,13 @@ namespace Senparc.CO2NET.AspNet
 #else
             Microsoft.Extensions.Hosting.IHostEnvironment/*IWebHostEnvironment*/ env,
 #endif
-            SenparcSetting senparcSetting,
-            Action<RegisterService> registerConfigure,
+            SenparcSetting senparcSetting = null,
+            Action<RegisterService> registerConfigure = null,
             bool autoScanExtensionCacheStrategies = false,
             Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
         {
+            senparcSetting = senparcSetting ?? registerService.ApplicationServices.GetService<IOptions<SenparcSetting>>().Value;
+
             //初始化全局 RegisterService 对象，并储存 SenparcSetting 信息
             var register = Senparc.CO2NET.AspNet.RegisterServices.
                             RegisterService.Start(env, senparcSetting);
