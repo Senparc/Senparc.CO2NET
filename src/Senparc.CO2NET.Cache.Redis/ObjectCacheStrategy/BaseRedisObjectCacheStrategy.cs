@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：BaseRedisObjectCacheStrategy.cs
     文件功能描述：所有Redis基础缓存策略的基类
