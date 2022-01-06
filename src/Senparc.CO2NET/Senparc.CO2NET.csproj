@@ -113,7 +113,6 @@
 			1、增加和丰富 EncryptHelper 中加密方法（SHA1、AesGcmDecrypt、CRC32）
 			2、添加 FileHelper 中 GetFileHash 方法
 			3、LocalCacheLock释放锁之前增加是否锁成功的判断
-			v1.6 提供
 </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
