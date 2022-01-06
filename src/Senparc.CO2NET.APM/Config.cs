@@ -1,6 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿/*----------------------------------------------------------------
+    Copyright(C) 2022 Senparc
+
+    文件名：Config.cs
+    文件功能描述：APM 配置
+
+
+    创建标识：Senparc - 201801113
+
+    修改标识：Senparc - 20220106
+    修改描述：v1.1 默认停用 APM（EnableAPM = false）
+
+----------------------------------------------------------------*/
+
+using System;
 
 namespace Senparc.CO2NET.APM
 {
@@ -17,6 +29,6 @@ namespace Senparc.CO2NET.APM
         /// <summary>
         /// 启用 APM
         /// </summary>
-        public static bool EnableAPM = true;
+        public static bool EnableAPM = false;
     }
 }
