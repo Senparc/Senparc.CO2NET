@@ -17,6 +17,6 @@ namespace Senparc.CO2NET.APM
         /// <summary>
         /// 启用 APM
         /// </summary>
-        public static bool EnableAPM = true;
+        public static bool EnableAPM = false;
     }
 }
