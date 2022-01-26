@@ -105,13 +105,13 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="checkValidationResult"></param>
         /// <param name="contentType"></param>
         /// <returns></returns>
-        public static HttpWebRequest HttpPost_Common_Net45(string url, CookieContainer cookieContainer = null,
+        public static HttpWebRequest HttpPost_Common_Net45(string url, string method, CookieContainer cookieContainer = null,
             Stream postStream = null, Dictionary<string, string> fileDictionary = null, string refererUrl = null,
             Encoding encoding = null, X509Certificate2 cer = null, bool useAjax = false, Dictionary<string, string> headerAddition = null,
             int timeOut = Config.TIME_OUT, bool checkValidationResult = false, string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "POST";
+            request.Method = method.ToUpper();// "POST";
             request.Timeout = timeOut;
             request.Proxy = _webproxy;
             if (cer != null)
@@ -125,7 +125,7 @@ namespace Senparc.CO2NET.HttpUtility
                   new RemoteCertificateValidationCallback(CheckValidationResult);
             }
 
-        #region 处理Form表单文件上传
+            #region 处理Form表单文件上传
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
             {
@@ -223,7 +223,7 @@ namespace Senparc.CO2NET.HttpUtility
                     //contentType = "application/x-www-form-urlencoded";
                 }
             }
-        #endregion
+            #endregion
 
             request.ContentType = contentType;
             request.ContentLength = postStream != null ? postStream.Length : 0;
@@ -286,7 +286,7 @@ namespace Senparc.CO2NET.HttpUtility
             HttpClient client = senparcHttpClient.Client;
             HttpClientHeader(client, refererUrl, useAjax, headerAddition, timeOut);
 
-            #region 处理Form表单文件上传
+        #region 处理Form表单文件上传
 
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
@@ -374,7 +374,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             //HttpContentHeader(hc, timeOut);
-            #endregion
+        #endregion
 
             if (!string.IsNullOrEmpty(refererUrl))
             {
@@ -592,7 +592,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
 #if NET451
-            var request = HttpPost_Common_Net45(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+            var request = HttpPost_Common_Net45(url, "POST", cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
 
             #region 输入二进制流
             if (postStream != null && postStream.Length > 0)
@@ -886,7 +886,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
 #if NET451
-            var request = HttpPost_Common_Net45(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+            var request = HttpPost_Common_Net45(url, "POST", cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
 
             #region 输入二进制流
             if (postStream != null && postStream.Length > 0)
