@@ -84,9 +84,6 @@ namespace Senparc.CO2NET.HttpUtility
     {
         #region 静态公共方法
 
-
-
-
 #if NET45
 
         /// <summary>
@@ -621,10 +618,17 @@ namespace Senparc.CO2NET.HttpUtility
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             return new SenparcHttpResponse(response);
 #else
-            HttpContent hc;
-            var client = HttpPost_Common_NetCore(serviceProvider, url, out hc, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+            var client = HttpPost_Common_NetCore(serviceProvider, url, out HttpContent hc, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+            HttpResponseMessage response;
 
-            var response = client.PostAsync(url, hc).ConfigureAwait(false).GetAwaiter().GetResult();//获取响应信息
+            using (var cts = new System.Threading.CancellationTokenSource(timeOut))
+            {
+                try
+                {
+                    response = client.PostAsync(url, hc, cancellationToken: cts.Token).ConfigureAwait(false).GetAwaiter().GetResult();//获取响应信息
+                }
+                catch { throw; }
+            }
 
             HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
 
@@ -916,10 +920,17 @@ namespace Senparc.CO2NET.HttpUtility
             HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync().ConfigureAwait(false));
             return new SenparcHttpResponse(response);
 #else
-            HttpContent hc;
-            var client = HttpPost_Common_NetCore(serviceProvider, url, out hc, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+            var client = HttpPost_Common_NetCore(serviceProvider, url, out HttpContent hc, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+            HttpResponseMessage response;
 
-            var response = await client.PostAsync(url, hc).ConfigureAwait(false);//获取响应信息
+            using (var cts = new System.Threading.CancellationTokenSource(timeOut))
+            {
+                try
+                {
+                    response = await client.PostAsync(url, hc, cancellationToken: cts.Token).ConfigureAwait(false);//获取响应信息
+                }
+                catch { throw; }
+            }
 
             HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
 
