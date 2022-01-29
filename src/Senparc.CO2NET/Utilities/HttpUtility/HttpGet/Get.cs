@@ -328,6 +328,8 @@ namespace Senparc.CO2NET.HttpUtility
             System.Net.Http.HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
 #endif
             //httpClient.Timeout = TimeSpan.FromMilliseconds(timeOut);  // 此处建议不要直接修改httpClient的Timeout属性，因为这是该Client的全局共享值，会影响同Client实例下的其他请求超时时间
+            // 微软技术文档原文链接【https://docs.microsoft.com/zh-cn/dotnet/api/system.net.http.httpclient.timeout?f1url=%3FappId%3DDev16IDEF1%26l%3DZH-CN%26k%3Dk(System.Net.Http.HttpClient.Timeout);k(DevLang-csharp)%26rd%3Dtrue&view=net-6.0】
+            // 文档提到“使用此实例的所有请求都将使用相同的超时值 HttpClient 。 你还可以使用任务上的为单个请求设置不同的超时 CancellationTokenSource 。”
             using (var cts = new System.Threading.CancellationTokenSource(timeOut))
             {
                 try
