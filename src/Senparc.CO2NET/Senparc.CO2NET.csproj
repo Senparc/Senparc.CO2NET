@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net451;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>2.0</Version>
+    <Version>2.0.1</Version>
     <LangVersion>8.0</LangVersion>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
@@ -16,12 +16,12 @@
     <PackageTags>.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
     <Authors>Senparc</Authors>
     <Owners>Senparc</Owners>
-    <PackageLicenseUrl>https://github.com/Senparc/Senparc.CO2NET/blob/master/license.md</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
     <Title>Senparc.CO2NET.dll</Title>
     <Summary>Senparc.CO2NET 公共基础库</Summary>
     <PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
-    <PackageIconUrl>http://sdk.weixin.senparc.com/Images/Logo.jpg</PackageIconUrl>
+    <PackageIcon>icon.jpg</PackageIcon>
     <PackageReleaseNotes>
 			v0.1.0 构建基础代码，从 Senparc.Weixin 分离公共代码
 			v0.1.1 优化代码，单元测试接近100%覆盖
@@ -146,6 +146,9 @@
     <OutputPath>..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\BuildOutPut\netstandard2.1\Senparc.CO2NET.xml</DocumentationFile>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include=".\icon.jpg" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Remove="Utilities\Cache\**" />
     <EmbeddedResource Remove="Utilities\Cache\**" />
