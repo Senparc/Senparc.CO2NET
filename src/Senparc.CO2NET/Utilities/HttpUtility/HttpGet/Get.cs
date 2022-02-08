@@ -160,7 +160,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="filePathName">保存文件的路径，如果下载文件包含文件名，按照文件名储存，否则将分配Ticks随机文件名</param>
         /// <param name="timeOut">超时时间</param>
         /// <returns></returns>
-        public static string Download(IServiceProvider serviceProvider, string url, string filePathName, int timeOut = 999)
+        public static string Download(IServiceProvider serviceProvider, string url, string filePathName, int timeOut = Config.TIME_OUT)
         {
             var dir = Path.GetDirectoryName(filePathName) ?? "/";
             Directory.CreateDirectory(dir);
@@ -206,35 +206,42 @@ namespace Senparc.CO2NET.HttpUtility
 
 #else
             System.Net.Http.HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
-            using (var responseMessage = httpClient.GetAsync(url).Result)
+            using (var cts = new System.Threading.CancellationTokenSource(timeOut))
             {
-                if (responseMessage.StatusCode == HttpStatusCode.OK)
+                try
                 {
-                    string responseFileName = null;
-                    //ContentDisposition可能会为Null
-                    if (responseMessage.Content.Headers.ContentDisposition != null &&
-                        responseMessage.Content.Headers.ContentDisposition.FileName != null &&
-                        responseMessage.Content.Headers.ContentDisposition.FileName != "\"\"")
+                    using (var responseMessage = httpClient.GetAsync(url, cancellationToken: cts.Token).Result)
                     {
-                        responseFileName = Path.Combine(dir, responseMessage.Content.Headers.ContentDisposition.FileName.Trim('"'));
-                    }
-
-                    var fullName = responseFileName ?? Path.Combine(dir, GetRandomFileName());
-                    using (var fs = File.Open(fullName, FileMode.Create))
-                    {
-                        using (var responseStream = responseMessage.Content.ReadAsStreamAsync().Result)
+                        if (responseMessage.StatusCode == HttpStatusCode.OK)
                         {
-                            responseStream.CopyTo(fs);
-                            fs.Flush();
+                            string responseFileName = null;
+                            //ContentDisposition可能会为Null
+                            if (responseMessage.Content.Headers.ContentDisposition != null &&
+                                responseMessage.Content.Headers.ContentDisposition.FileName != null &&
+                                responseMessage.Content.Headers.ContentDisposition.FileName != "\"\"")
+                            {
+                                responseFileName = Path.Combine(dir, responseMessage.Content.Headers.ContentDisposition.FileName.Trim('"'));
+                            }
+
+                            var fullName = responseFileName ?? Path.Combine(dir, GetRandomFileName());
+                            using (var fs = File.Open(fullName, FileMode.Create))
+                            {
+                                using (var responseStream = responseMessage.Content.ReadAsStreamAsync().Result)
+                                {
+                                    responseStream.CopyTo(fs);
+                                    fs.Flush();
+                                }
+                            }
+                            return fullName;
+
+                        }
+                        else
+                        {
+                            return null;
                         }
                     }
-                    return fullName;
-
                 }
-                else
-                {
-                    return null;
-                }
+                catch { throw; }
             }
 #endif
         }
@@ -317,35 +324,44 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             System.Net.Http.HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
 #endif
-            httpClient.Timeout = TimeSpan.FromMilliseconds(timeOut);
-            using (var responseMessage = await httpClient.GetAsync(url).ConfigureAwait(false))
+            //httpClient.Timeout = TimeSpan.FromMilliseconds(timeOut);  // 此处建议不要直接修改httpClient的Timeout属性，因为这是该Client的全局共享值，会影响同Client实例下的其他请求超时时间
+            // 微软技术文档原文链接【https://docs.microsoft.com/zh-cn/dotnet/api/system.net.http.httpclient.timeout?f1url=%3FappId%3DDev16IDEF1%26l%3DZH-CN%26k%3Dk(System.Net.Http.HttpClient.Timeout);k(DevLang-csharp)%26rd%3Dtrue&view=net-6.0】
+            // 文档提到“使用此实例的所有请求都将使用相同的超时值 HttpClient 。 你还可以使用任务上的为单个请求设置不同的超时 CancellationTokenSource 。”
+            using (var cts = new System.Threading.CancellationTokenSource(timeOut))
             {
-                if (responseMessage.StatusCode == HttpStatusCode.OK)
+                try
                 {
-                    string responseFileName = null;
-                    //ContentDisposition可能会为Null
-                    if (responseMessage.Content.Headers.ContentDisposition != null &&
-                        responseMessage.Content.Headers.ContentDisposition.FileName != null &&
-                        responseMessage.Content.Headers.ContentDisposition.FileName != "\"\"")
+                    using (var responseMessage = await httpClient.GetAsync(url, cancellationToken: cts.Token).ConfigureAwait(false))
                     {
-                        responseFileName = Path.Combine(dir, responseMessage.Content.Headers.ContentDisposition.FileName.Trim('"'));
-                    }
-
-                    var fullName = responseFileName ?? Path.Combine(dir, GetRandomFileName());
-                    using (var fs = File.Open(fullName, FileMode.Create))
-                    {
-                        using (var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                        if (responseMessage.StatusCode == HttpStatusCode.OK)
                         {
-                            await responseStream.CopyToAsync(fs).ConfigureAwait(false);
-                            await fs.FlushAsync().ConfigureAwait(false);
+                            string responseFileName = null;
+                            //ContentDisposition可能会为Null
+                            if (responseMessage.Content.Headers.ContentDisposition != null &&
+                                responseMessage.Content.Headers.ContentDisposition.FileName != null &&
+                                responseMessage.Content.Headers.ContentDisposition.FileName != "\"\"")
+                            {
+                                responseFileName = Path.Combine(dir, responseMessage.Content.Headers.ContentDisposition.FileName.Trim('"'));
+                            }
+
+                            var fullName = responseFileName ?? Path.Combine(dir, GetRandomFileName());
+                            using (var fs = File.Open(fullName, FileMode.Create))
+                            {
+                                using (var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                                {
+                                    await responseStream.CopyToAsync(fs).ConfigureAwait(false);
+                                    await fs.FlushAsync().ConfigureAwait(false);
+                                }
+                            }
+                            return fullName;
+                        }
+                        else
+                        {
+                            return null;
                         }
                     }
-                    return fullName;
                 }
-                else
-                {
-                    return null;
-                }
+                catch { throw; }
             }
         }
         #endregion
