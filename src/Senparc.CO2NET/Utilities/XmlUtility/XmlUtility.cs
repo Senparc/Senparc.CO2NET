@@ -43,6 +43,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20180601
     修改描述：v0.1.0 移植 XmlUtility
 
+    修改标识：Senparc - 20220208
+    修改描述：v2.0.2 添加 XmlUtility.Deserialize() 重写方法
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -66,13 +69,21 @@ namespace Senparc.CO2NET.Utilities
         /// </summary>
         /// <param name="xml">XML字符串</param>
         /// <returns></returns>
-        public static object Deserialize<T>(string xml)
+        public static object Deserialize(Type type, string xml, string rootNodeName = null)
         {
             try
             {
                 using (StringReader sr = new StringReader(xml))
                 {
-                    XmlSerializer xmldes = new XmlSerializer(typeof(T));
+                    XmlSerializer xmldes;
+                    if (rootNodeName != null)
+                    {
+                        xmldes=new XmlSerializer(type, new XmlRootAttribute(rootNodeName));
+                    }
+                    else
+                    {
+                        xmldes = new XmlSerializer(type);
+                    }
                     return xmldes.Deserialize(sr);
                 }
             }
@@ -81,6 +92,16 @@ namespace Senparc.CO2NET.Utilities
                 Console.WriteLine(e);
                 return null;
             }
+        }
+
+        /// <summary>
+        /// 反序列化
+        /// </summary>
+        /// <param name="xml">XML字符串</param>
+        /// <returns></returns>
+        public static object Deserialize<T>(string xml)
+        {
+            return Deserialize(typeof(T), xml);
         }
 
         /// <summary>
@@ -144,18 +165,18 @@ namespace Senparc.CO2NET.Utilities
             {
                 return XDocument.Load(xr);
             }
-//#if NET451
-//            using (XmlReader xr = XmlReader.Create(stream))
-//            {
-//                return XDocument.Load(xr);
-//            }
-//#else
-//            using (var sr = new StreamReader(stream))
-//            {
-//                var xml = sr.ReadToEnd();
-//                return XDocument.Parse(xml);
-//            }
-//#endif
+            //#if NET451
+            //            using (XmlReader xr = XmlReader.Create(stream))
+            //            {
+            //                return XDocument.Load(xr);
+            //            }
+            //#else
+            //            using (var sr = new StreamReader(stream))
+            //            {
+            //                var xml = sr.ReadToEnd();
+            //                return XDocument.Parse(xml);
+            //            }
+            //#endif
         }
 
     }
