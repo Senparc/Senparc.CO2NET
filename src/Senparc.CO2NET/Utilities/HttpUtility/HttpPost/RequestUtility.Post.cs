@@ -50,6 +50,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190811
     修改描述：v0.8.7 RequestUtility.Post() 方法添加新功能：使用文件流模拟 Form 表单提交
 
+    修改标识：554393109 - 20220208
+    修改描述：v2.0.3 修改HttpClient请求超时的实现方式
 ----------------------------------------------------------------*/
 
 using System;

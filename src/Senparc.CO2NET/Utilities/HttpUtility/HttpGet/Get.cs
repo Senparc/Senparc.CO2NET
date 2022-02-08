@@ -58,6 +58,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20210606
     修改描述：v1.4.400 修复 Download 方法 bug
 
+    修改标识：554393109 - 20220208
+    修改描述：v2.0.3 修改HttpClient请求超时的实现方式
+
 ----------------------------------------------------------------*/
 
 
