@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
     
     文件名：ReflectionHelper.cs
     文件功能描述：反射帮助类
@@ -86,7 +86,7 @@ namespace Senparc.CO2NET.Helpers
             {
                 string fullName = nameSpace + "." + className;//命名空间.类型名
                                                               //此为第一种写法
-#if !NET45
+#if !NET451
                 //object ect = Assembly.Load(new AssemblyName(assemblyName)).CreateInstance(fullName);//加载程序集，创建程序集里面的 命名空间.类型名 实例s
 
                 //.net core 2.1这种方法也已经支持

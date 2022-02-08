@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：RedisObjectCacheStrategy.cs
     文件功能描述：Redis的Object类型容器缓存（Key为String类型）。
@@ -225,7 +225,6 @@ namespace Senparc.CO2NET.Cache.Redis
 
 
         #region 异步方法
-#if !NET35 && !NET40
 
         /// <summary>
         /// 
@@ -339,7 +338,6 @@ namespace Senparc.CO2NET.Cache.Redis
             await SetAsync(key, value, expiry, isFullKey).ConfigureAwait(false);
         }
 
-#endif
         #endregion
 
         #endregion

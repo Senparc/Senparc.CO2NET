@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：RegisterService.cs
     文件功能描述：Senparc.CO2NET SDK 快捷注册流程
@@ -46,7 +46,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 ----------------------------------------------------------------*/
 
 
-#if !NET45
+#if !NET451
 using Microsoft.Extensions.DependencyInjection;
 #endif
 
@@ -77,7 +77,7 @@ namespace Senparc.CO2NET.RegisterServices
             Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
         }
 
-#if !NET45
+#if !NET451
 
         /// <summary>
         /// 单个实例引用全局的 ServiceCollection

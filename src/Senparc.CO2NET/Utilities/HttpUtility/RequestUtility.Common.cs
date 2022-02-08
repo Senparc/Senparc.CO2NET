@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：RequestUtility.cs
     文件功能描述：获取请求结果
@@ -79,7 +79,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.WebProxy;
-#if NET45
+#if NET451
 using System.Web;
 #else
 using System.Net.Http;
@@ -96,7 +96,7 @@ namespace Senparc.CO2NET.HttpUtility
     {
         #region 代理
 
-#if NET45
+#if NET451
         private static System.Net.WebProxy _webproxy = null;
         /// <summary>
         /// 设置Web代理
@@ -175,7 +175,7 @@ namespace Senparc.CO2NET.HttpUtility
             return true;
         }
 
-#if NET45
+#if NET451
         /// <summary>
         /// 设置HTTP头
         /// </summary>
@@ -334,7 +334,6 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-#if !NET35 && !NET40
         #region 异步方法
 
         /// <summary>
@@ -351,7 +350,6 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         #endregion
-#endif
 
         #region 只需要使用同步的方法
 

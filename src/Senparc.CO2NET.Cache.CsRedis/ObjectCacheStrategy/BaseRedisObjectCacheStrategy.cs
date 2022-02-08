@@ -13,6 +13,11 @@
     修改标识：Senparc - 20190413
     修改描述：v3.5.0 提供缓存异步接口
 
+    ======== 从 Senparc.CO2NET.Cache.Redis 移植 ========
+
+    修改标识：Senparc - 20210901
+    修改描述：v0.5.1 析构函数进行 null 值判断
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -38,7 +43,8 @@ namespace Senparc.CO2NET.Cache.CsRedis
             //自动注册连接字符串信息
             if (string.IsNullOrEmpty(RedisManager.ConfigurationOption) &&
                 !string.IsNullOrEmpty(Config.SenparcSetting.Cache_Redis_Configuration) &&
-                Config.SenparcSetting.Cache_Redis_Configuration != "Redis配置")
+                Config.SenparcSetting.Cache_Redis_Configuration != "Redis配置" &&
+                Config.SenparcSetting.Cache_Redis_Configuration != "#{Cache_Redis_Configuration}#")
             {
                 RedisManager.ConfigurationOption = Config.SenparcSetting.Cache_Redis_Configuration;
             }
@@ -66,7 +72,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         /// </summary>
         ~BaseRedisObjectCacheStrategy()
         {
-            Client.Dispose();//释放
+            Client?.Dispose();//释放
         }
 
 
@@ -95,7 +101,6 @@ namespace Senparc.CO2NET.Cache.CsRedis
         #endregion
 
         #region 异步方法
-#if !NET35 && !NET40
 
         public abstract Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
 
@@ -113,7 +118,6 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
         public abstract Task UpdateAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
 
-#endif
         #endregion
 
 

@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：XmlDocument_XxeFixed.cs
     文件功能描述：解决 XXE 漏洞，继承自 XmlDocument 对象，自动将 XmlResolver 设为 null

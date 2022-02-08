@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.HttpUtility;
-using Senparc.CO2NET.Sample.netcore3.Models;
+using Senparc.CO2NET.Sample.net6.Models;
 using Senparc.CO2NET.Trace;
 using Senparc.CO2NET.Utilities.HttpUtility.HttpPost;
 
-namespace Senparc.CO2NET.Sample.netcore3.Controllers
+namespace Senparc.CO2NET.Sample.net6.Controllers
 {
     public class HomeController : Controller
     {

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Senparc.CO2NET.Sample.netcore3
+namespace Senparc.CO2NET.Sample.net6
 {
     public class Program
     {

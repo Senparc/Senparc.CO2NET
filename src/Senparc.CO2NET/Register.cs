@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：Register.cs
     文件功能描述：Senparc.CO2NET 快捷注册流程（包括Thread、TraceLog等）
@@ -25,7 +25,7 @@ using Senparc.CO2NET.Cache;
 using System.Collections.Generic;
 using System.Linq;
 using Senparc.CO2NET.Helpers;
-using Senparc.CO2NET.Extensions;
+using Senparc.CO2NET.Extensions; 
 
 
 namespace Senparc.CO2NET
@@ -89,7 +89,7 @@ namespace Senparc.CO2NET
             return registerService;
         }
 
-#if !NET45
+#if !NET451
 
         /// <summary>
         /// 开始 Senparc.CO2NET 初始化参数流程

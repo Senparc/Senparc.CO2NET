@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：LocalContainerCacheStrategy.cs
     文件功能描述：本地容器缓存。
@@ -48,7 +48,7 @@ using System.Text;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Exceptions;
 using System.Threading.Tasks;
-#if NET45
+#if NET451
 using System.Web;
 #else
 using Microsoft.Extensions.Caching.Memory;
@@ -65,7 +65,7 @@ namespace Senparc.CO2NET.Cache
     {
         #region 数据源
 
-#if NET45
+#if NET451
         private System.Web.Caching.Cache _cache = LocalObjectCacheHelper.LocalObjectCache;
 #else
         private IMemoryCache _cache = LocalObjectCacheHelper.LocalObjectCache;
@@ -129,7 +129,7 @@ namespace Senparc.CO2NET.Cache
 
             var finalKey = base.GetFinalKey(key, isFullKey);
 
-#if NET45
+#if NET451
             _cache[finalKey] = value;
 #else
             var newKey = !CheckExisted(finalKey, true);
@@ -168,7 +168,7 @@ namespace Senparc.CO2NET.Cache
             var cacheKey = GetFinalKey(key, isFullKey);
             _cache.Remove(cacheKey);
 
-#if !NET35 && !NET40 && !NET45
+#if !NET451
             //移除key
             var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
             if (CheckExisted(keyStoreFinalKey, true))
@@ -196,7 +196,7 @@ namespace Senparc.CO2NET.Cache
 
             var cacheKey = GetFinalKey(key, isFullKey);
 
-#if NET45
+#if NET451
             return _cache[cacheKey];
 #else
             return _cache.Get(cacheKey);
@@ -224,7 +224,7 @@ namespace Senparc.CO2NET.Cache
 
             var cacheKey = GetFinalKey(key, isFullKey);
 
-#if NET45
+#if NET451
             return (T)_cache[cacheKey];
 #else
             return _cache.Get<T>(cacheKey);
@@ -234,7 +234,7 @@ namespace Senparc.CO2NET.Cache
         public IDictionary<string, object> GetAll()
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
-#if NET45
+#if NET451
             IDictionaryEnumerator cacheEnum = System.Web.HttpRuntime.Cache.GetEnumerator();
 
             while (cacheEnum.MoveNext())
@@ -261,7 +261,7 @@ namespace Senparc.CO2NET.Cache
         {
             var cacheKey = GetFinalKey(key, isFullKey);
 
-#if NET45
+#if NET451
             return _cache.Get(cacheKey) != null;
 #else
             return _cache.Get(cacheKey) != null;
@@ -270,7 +270,7 @@ namespace Senparc.CO2NET.Cache
 
         public long GetCount()
         {
-#if NET45
+#if NET451
             return _cache.Count;
 #else
             var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
@@ -294,8 +294,6 @@ namespace Senparc.CO2NET.Cache
         #endregion
 
         #region 异步方法
-#if !NET35 && !NET40
-
         public async Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
             await Task.Factory.StartNew(() => Set(key, value, expiry, isFullKey)).ConfigureAwait(false);
@@ -344,7 +342,6 @@ namespace Senparc.CO2NET.Cache
         {
             await Task.Factory.StartNew(() => Update(key, value, expiry, isFullKey)).ConfigureAwait(false);
         }
-#endif
         #endregion
 
         #endregion
@@ -356,12 +353,10 @@ namespace Senparc.CO2NET.Cache
             return LocalCacheLock.CreateAndLock(this, resourceName, key, retryCount, retryDelay);
         }
 
-#if !NET35 && !NET40
         public override async Task<ICacheLock> BeginCacheLockAsync(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
             return await LocalCacheLock.CreateAndLockAsync(this, resourceName, key, retryCount, retryDelay).ConfigureAwait(false);
         }
-#endif
         #endregion
 
     }

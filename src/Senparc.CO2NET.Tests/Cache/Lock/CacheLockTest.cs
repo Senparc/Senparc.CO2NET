@@ -15,7 +15,7 @@ namespace Senparc.CO2NET.Cache.Lock
         /// <summary>
         /// 测试 Parallel 和 Thread 的并行数量
         /// </summary>
-        [TestMethod]
+        //[TestMethod]
         public void TestParallelThreadsRunAtSameTime()
         {
             var dt1 = SystemTime.Now;

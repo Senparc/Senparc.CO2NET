@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：BaseCacheStrategy.cs
     文件功能描述：泛型缓存策略基类。
@@ -73,7 +73,6 @@ namespace Senparc.CO2NET.Cache
         public abstract ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan());
 
 
-#if !NET35 && !NET40
         /// <summary>
         /// 【异步方法】创建一个（分布）锁
         /// </summary>
@@ -83,6 +82,5 @@ namespace Senparc.CO2NET.Cache
         /// <param name="retryDelay">重试延时</param>
         /// <returns></returns>
         public abstract Task<ICacheLock> BeginCacheLockAsync(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan());
-#endif
     }
 }

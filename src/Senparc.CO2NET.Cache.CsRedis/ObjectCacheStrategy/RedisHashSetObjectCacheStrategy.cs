@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2019 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2021 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -355,9 +355,6 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
 
         #region 异步方法
-#if !NET35 && !NET40
-
-
 
         /// <summary>
         /// 
@@ -518,7 +515,6 @@ namespace Senparc.CO2NET.Cache.CsRedis
             await SetAsync(key, value, expiry, isFullKey).ConfigureAwait(false);
         }
 
-#endif
         #endregion
 
         #endregion

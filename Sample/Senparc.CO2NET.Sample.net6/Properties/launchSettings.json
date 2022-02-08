@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Senparc.CO2NET.Sample.netcore3": {
+    "Senparc.CO2NET.Sample.net6": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

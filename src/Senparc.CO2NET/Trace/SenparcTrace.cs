@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
   
     文件名：SenparcTrace.cs
     文件功能描述：Senparc.CO2NET 日志记录
@@ -109,16 +109,11 @@ namespace Senparc.CO2NET.Trace
             using (await Cache.BeginCacheLockAsync(LockName, "").ConfigureAwait(false))
             {
                 string logDir;
-#if NET35
-                logDir = Path.Combine(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "App_Data"), "SenparcTraceLog");
-#else
-
-#if NET40 || NET45 || NET461
+#if NET451
                 logDir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "App_Data", "SenparcTraceLog");
 #else
                 //var logDir = Path.Combine(AppContext.BaseDirectory, "App_Data", "SenparcTraceLog");
                 logDir = Path.Combine(Senparc.CO2NET.Config.RootDictionaryPath, "App_Data", "SenparcTraceLog");
-#endif
 #endif
 
                 if (!Directory.Exists(logDir))

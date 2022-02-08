@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：LocalObjectCacheHelper.cs
     文件功能描述：全局静态数据源帮助类。
@@ -29,7 +29,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
  ----------------------------------------------------------------*/
 
-#if !NET45
+#if !NET451
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 #endif
@@ -45,7 +45,7 @@ namespace Senparc.CO2NET.Cache
     /// </summary>
     public static class LocalObjectCacheHelper
     {
-#if NET45
+#if NET451
         /// <summary>
         /// 所有数据集合的列表
         /// </summary>

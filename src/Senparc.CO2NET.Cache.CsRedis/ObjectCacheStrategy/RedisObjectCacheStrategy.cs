@@ -235,7 +235,6 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
 
         #region 异步方法
-#if !NET35 && !NET40
 
         /// <summary>
         /// 
@@ -349,7 +348,6 @@ namespace Senparc.CO2NET.Cache.CsRedis
             await SetAsync(key, value, expiry, isFullKey).ConfigureAwait(false);
         }
 
-#endif
         #endregion
 
         #endregion

@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
     
     文件名：SerializerHelper.cs
     文件功能描述：unicode解码
@@ -46,7 +46,7 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
-#if NET45
+#if NET451
 using System.Web.Script.Serialization;
 #else
 using Newtonsoft.Json;
@@ -91,7 +91,7 @@ namespace Senparc.CO2NET.Helpers
         public static T GetObject<T>(this string jsonString)
         {
             return (T)Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString, typeof(T));
-            //#if NET45
+            //#if NET451
             //            JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
             //            return jsSerializer.Deserialize<T>(jsonString);
             //#else
@@ -125,7 +125,7 @@ namespace Senparc.CO2NET.Helpers
         //                return null;
         //            }
 
-        //#if !NET45
+        //#if !NET451
         //            ////二进制序列化方案
         //            //using (MemoryStream memoryStream = new MemoryStream())
         //            //{
@@ -170,7 +170,7 @@ namespace Senparc.CO2NET.Helpers
         //                return default(T);
         //            }
 
-        //#if !NET45
+        //#if !NET451
         //            ////二进制序列化方案
         //            //using (MemoryStream memoryStream = new MemoryStream(stream))
         //            //{

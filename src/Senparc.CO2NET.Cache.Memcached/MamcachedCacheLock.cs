@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：RedisCacheLock.cs
     文件功能描述：本地锁
@@ -123,7 +123,6 @@ namespace Senparc.CO2NET.Cache.Memcached
         #endregion
 
         #region 异步方法
-#if !NET35 && !NET40
 
         /// <summary>
         /// 【异步方法】创建 MemcachedCacheLock 实例，并立即尝试获得锁
@@ -163,7 +162,7 @@ namespace Senparc.CO2NET.Cache.Memcached
                  try
                  {
                      var ttl = base.GetTotalTtl(_retryCount, _retryDelay);
-#if NET45
+#if NET451
                      var storeResult = await Task.Factory.StartNew(() => _mamcachedStrategy.Cache.Store(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl))).ConfigureAwait(false);
                      if (storeResult)
 #else
@@ -202,14 +201,13 @@ namespace Senparc.CO2NET.Cache.Memcached
         public override async Task UnLockAsync()
         {
             var key = _mamcachedStrategy.GetFinalKey(_resourceName);
-#if NET45
+#if NET451
             await Task.Factory.StartNew(() => _mamcachedStrategy.Cache.Remove(key)).ConfigureAwait(false);
 #else
             await _mamcachedStrategy.Cache.RemoveAsync(key).ConfigureAwait(false);
 #endif
         }
 
-#endif
         #endregion
     }
 }

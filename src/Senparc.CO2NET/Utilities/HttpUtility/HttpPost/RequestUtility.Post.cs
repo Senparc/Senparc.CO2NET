@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：RequestUtility.Post.cs
     文件功能描述：获取请求结果（Post）
@@ -63,13 +63,13 @@ using System.Threading.Tasks;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.Utilities.HttpUtility.HttpPost;
 
-#if NET45
+#if NET451
 using System.Web;
 #else
 using System.Net.Http;
 using System.Net.Http.Headers;
 #endif
-#if !NET45
+#if !NET451
 using Senparc.CO2NET.WebProxy;
 using Senparc.CO2NET.Exceptions;
 using System.Linq;
@@ -84,7 +84,7 @@ namespace Senparc.CO2NET.HttpUtility
     {
         #region 静态公共方法
 
-#if NET45
+#if NET451
 
         /// <summary>
         /// 给.NET Framework使用的HttpPost请求公共设置方法
@@ -237,7 +237,7 @@ namespace Senparc.CO2NET.HttpUtility
 
 #endif
 
-#if !NET45
+#if !NET451
         /// <summary>
         /// 给.NET Core使用的HttpPost请求公共设置方法
         /// </summary>
@@ -406,7 +406,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null,
             Encoding encoding = null,
-#if !NET45
+#if !NET451
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -422,7 +422,7 @@ namespace Senparc.CO2NET.HttpUtility
             return HttpPost(
                 serviceProvider,
                 url, cookieContainer, ms, null, null, encoding,
-#if !NET45
+#if !NET451
                 certName,
 #else
                 cer,
@@ -452,7 +452,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
-#if !NET45
+#if !NET451
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -468,7 +468,7 @@ namespace Senparc.CO2NET.HttpUtility
             var senparcResponse = HttpResponsePost(
                 serviceProvider,
                 url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
-#if !NET45
+#if !NET451
                 certName,
 #else
                 cer,
@@ -478,7 +478,7 @@ namespace Senparc.CO2NET.HttpUtility
             var response = senparcResponse.Result;//获取响应信息
 
 
-#if NET45
+#if NET451
 
             #region 已经使用方法重用
             /*
@@ -569,7 +569,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
-#if !NET45
+#if !NET451
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -588,7 +588,7 @@ namespace Senparc.CO2NET.HttpUtility
                 postStream = new MemoryStream();
             }
 
-#if NET45
+#if NET451
             var request = HttpPost_Common_Net45(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
 
             #region 输入二进制流
@@ -651,7 +651,6 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-#if !NET35 && !NET40
         #region 异步方法
 
         /// <summary>
@@ -673,7 +672,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null,
             Dictionary<string, string> formData = null, Encoding encoding = null,
-#if !NET45
+#if !NET451
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -689,12 +688,12 @@ namespace Senparc.CO2NET.HttpUtility
             return await HttpPostAsync(
                 serviceProvider,
                 url, cookieContainer, ms, null, null, encoding,
-#if !NET45
+#if !NET451
                 certName,
 #else
                 cer,
 #endif
-                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false); ;
+                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false);
         }
 
 
@@ -720,7 +719,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
-#if !NET45
+#if !NET451
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -746,12 +745,12 @@ namespace Senparc.CO2NET.HttpUtility
             var senparcResponse = await HttpResponsePostAsync(
                 serviceProvider,
                 url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
-#if !NET45
+#if !NET451
                 certName,
 #else
                 cer,
 #endif
-                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false); ;
+                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false);
 
             var response = senparcResponse.Result;//获取响应信息
 
@@ -760,7 +759,7 @@ namespace Senparc.CO2NET.HttpUtility
             //Console.WriteLine($"{System.Threading.Thread.CurrentThread.Name} - FINISH- {SystemTime.DiffTotalMS(dt1):###,###} ms");
 
 
-#if NET45
+#if NET451
             #region 已经使用方法重用
             /*
 
@@ -871,7 +870,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
-#if !NET45
+#if !NET451
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -890,7 +889,7 @@ namespace Senparc.CO2NET.HttpUtility
                 postStream = new MemoryStream();
             }
 
-#if NET45
+#if NET451
             var request = HttpPost_Common_Net45(url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
 
             #region 输入二进制流
@@ -953,7 +952,6 @@ namespace Senparc.CO2NET.HttpUtility
 
 
         #endregion
-#endif
 
     }
 }

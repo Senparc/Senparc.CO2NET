@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：Get.cs
     文件功能描述：Get
@@ -68,7 +68,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
 using Senparc.CO2NET.Helpers;
-#if NET45
+#if NET451
 using System.Web.Script.Serialization;
 #else
 using Microsoft.Extensions.DependencyInjection;
@@ -132,7 +132,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, Stream stream)
         {
-#if NET45
+#if NET451
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3
             //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
 
@@ -152,7 +152,6 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
         }
 
-        //#if !NET35 && !NET40
         /// <summary>
         /// 从Url下载，并保存到指定目录
         /// </summary>
@@ -166,7 +165,7 @@ namespace Senparc.CO2NET.HttpUtility
             var dir = Path.GetDirectoryName(filePathName) ?? "/";
             Directory.CreateDirectory(dir);
 
-#if NET45
+#if NET451
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
@@ -246,10 +245,8 @@ namespace Senparc.CO2NET.HttpUtility
             }
 #endif
         }
-        //#endif
         #endregion
 
-#if !NET35 && !NET40
         #region 异步方法
 
         /// <summary>
@@ -288,7 +285,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, Stream stream)
         {
-#if NET45
+#if NET451
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3
             //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
 
@@ -322,7 +319,7 @@ namespace Senparc.CO2NET.HttpUtility
             var dir = Path.GetDirectoryName(filePathName) ?? "/";
             Directory.CreateDirectory(dir);
 
-#if NET45
+#if NET451
             System.Net.Http.HttpClient httpClient = new HttpClient();
 #else
             System.Net.Http.HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
@@ -368,7 +365,6 @@ namespace Senparc.CO2NET.HttpUtility
             }
         }
         #endregion
-#endif
 
     }
 }

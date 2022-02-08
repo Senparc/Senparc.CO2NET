@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
     
     文件名：ObjectExtensions.cs
     文件功能描述：对象扩展类
@@ -82,11 +82,7 @@ namespace Senparc.CO2NET.Extensions
         /// <returns></returns>
         public static bool IsNullOrWhiteSpace(this string str)
         {
-#if NET35
-            return string.IsNullOrEmpty(str.Trim());
-#else
             return string.IsNullOrWhiteSpace(str);
-#endif
         }
 
         /// <summary>

@@ -37,7 +37,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 ----------------------------------------------------------------*/
 
-#if !NET45
+#if !NET451
 
 using Microsoft.AspNetCore.Http.Features;
 using System;
@@ -76,11 +76,39 @@ namespace Microsoft.AspNetCore.Http
             return true;
         }
 
+        ///// <summary>
+        ///// 是否是本地请求
+        ///// </summary>
+        ///// <param name="req"></param>
+        ///// <returns></returns>
+        //public static bool IsLocal(this HttpRequest req)
+        //{
+        //    var connection = req.HttpContext.Connection;
+        //    if (connection.RemoteIpAddress != null)
+        //    {
+        //        if (connection.LocalIpAddress != null)
+        //        {
+        //            return connection.RemoteIpAddress.Equals(connection.LocalIpAddress);
+        //        }
+        //        else
+        //        {
+        //            return IPAddress.IsLoopback(connection.RemoteIpAddress);
+        //        }
+        //    }
+
+        //    // for in memory TestServer or when dealing with default connection info
+        //    if (connection.RemoteIpAddress == null && connection.LocalIpAddress == null)
+        //    {
+        //        return true;
+        //    }
+
+        //    return false;
+        //}
+
         private static bool IsSet(this IPAddress address)
         {
             return address != null && address.ToString() != NullIpAddress;
         }
-
 
         /// <summary>
         /// Determines whether the specified HTTP request is an AJAX request.
@@ -176,6 +204,8 @@ namespace Microsoft.AspNetCore.Http
         {
             return httpContext.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress;
         }
+
+        
     }
 }
 #endif

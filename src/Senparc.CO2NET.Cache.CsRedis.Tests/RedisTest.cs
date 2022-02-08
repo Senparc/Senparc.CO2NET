@@ -202,7 +202,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
         //}
 
         [TestMethod]
-        public void StackExchangeRedisExtensionsTest()
+        public void CacheSerializeExtensionTest()
         {
             Console.WriteLine("开始异步测试");
             var threadCount = 100;
@@ -211,23 +211,33 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             {
                 var thread = new Thread(() =>
                 {
-                    var newObj = new ContainerBag()
+                    try
                     {
-                        Key = Guid.NewGuid().ToString(),
-                        Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
-                        AddTime = SystemTime.Now
-                    };
-                    var dtx = SystemTime.Now;
-                    var serializedObj = CacheSerializeExtension.SerializeToCache(newObj);
-                    Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
+                        var newObj = new ContainerBag()
+                        {
+                            Key = Guid.NewGuid().ToString(),
+                            Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                            AddTime = SystemTime.Now
+                        };
+                        var dtx = SystemTime.Now;
+                        var serializedObj = CacheSerializeExtension.SerializeToCache(newObj);
+                        Console.WriteLine($"CacheSerializeExtension.SerializeToCache耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
-                    dtx = SystemTime.Now;
-                    var containerBag = CacheSerializeExtension.DeserializeFromCache<ContainerBag>((string)serializedObj);//11ms
-                    Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
+                        dtx = SystemTime.Now;
+                        var containerBag = CacheSerializeExtension.DeserializeFromCache<ContainerBag>((string)serializedObj);//11ms
+                        Console.WriteLine($"CacheSerializeExtension.DeserializeFromCache耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
-                    Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
-                    Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
-                    finishCount++;
+                        Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
+                        Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                    finally
+                    {
+                        finishCount++;
+                    }
                 });
                 thread.Start();
             }

@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：MemcachedServiceCollectionExtensions.cs
     文件功能描述：Memcached 依赖注入设置。
@@ -10,7 +10,7 @@
 ----------------------------------------------------------------*/
 
 
-#if !NET45
+#if !NET451
 using Enyim.Caching.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.CO2NET.Cache.Memcached;

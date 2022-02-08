@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：Post.cs
     文件功能描述：Post
@@ -64,7 +64,7 @@ using System.Threading.Tasks;
 using Senparc.CO2NET.Helpers;
 using System.Net.Http;
 
-#if NET45
+#if NET451
 using System.Web.Script.Serialization;
 using System.Security.Cryptography.X509Certificates;
 #else
@@ -102,7 +102,7 @@ namespace Senparc.CO2NET.HttpUtility
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null,
             Dictionary<string, string> postDataDictionary = null,
             Encoding encoding = null,
-#if !NET45
+#if !NET451
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -117,7 +117,7 @@ namespace Senparc.CO2NET.HttpUtility
                 string returnText = RequestUtility.HttpPost(
                     serviceProvider,
                     url, cookieContainer, ms, fileDictionary, null, encoding,
-#if !NET45
+#if !NET451
                     certName,
 #else
                     cer,
@@ -150,7 +150,7 @@ namespace Senparc.CO2NET.HttpUtility
         public static T PostGetJson<T>(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null,
-#if !NET45
+#if !NET451
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -161,7 +161,7 @@ namespace Senparc.CO2NET.HttpUtility
             string returnText = RequestUtility.HttpPost(
                 serviceProvider,
                 url, cookieContainer, fileStream, null, null, encoding,
-#if !NET45
+#if !NET451
                 certName,
 #else
                 cer,
@@ -193,7 +193,7 @@ namespace Senparc.CO2NET.HttpUtility
         public static T PostGetJson<T>(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
-#if !NET45
+#if !NET451
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -203,7 +203,7 @@ namespace Senparc.CO2NET.HttpUtility
             string returnText = RequestUtility.HttpPost(
                 serviceProvider,
                 url, cookieContainer, formData, encoding,
-#if !NET45
+#if !NET451
                 certName,
 #else
                 cer,
@@ -228,7 +228,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, string data, Stream stream)
         {
-#if NET45
+#if NET451
             WebClient wc = new WebClient();
             var file = wc.UploadData(url, "POST", Encoding.UTF8.GetBytes(string.IsNullOrEmpty(data) ? "" : data));
             stream.Write(file, 0, file.Length);
@@ -252,7 +252,6 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-#if !NET35 && !NET40
         #region 异步方法
 
         /// <summary>
@@ -275,7 +274,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null, Dictionary<string, string> postDataDictionary = null,
             Encoding encoding = null,
-#if !NET45
+#if !NET451
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -290,12 +289,12 @@ namespace Senparc.CO2NET.HttpUtility
                 string returnText = await RequestUtility.HttpPostAsync(
                     serviceProvider,
                     url, cookieContainer, ms, fileDictionary, null, encoding,
-#if !NET45
+#if !NET451
                     certName,
 #else
                     cer,
 #endif
-                    useAjax, null, timeOut).ConfigureAwait(false); ;
+                    useAjax, null, timeOut).ConfigureAwait(false);
 
                 afterReturnText?.Invoke(url, returnText);
 
@@ -324,7 +323,7 @@ namespace Senparc.CO2NET.HttpUtility
         public static async Task<T> PostGetJsonAsync<T>(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null,
-#if !NET45
+#if !NET451
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -335,12 +334,12 @@ namespace Senparc.CO2NET.HttpUtility
             string returnText = await RequestUtility.HttpPostAsync(
                 serviceProvider,
                 url, cookieContainer, fileStream, null, null, encoding,
-#if !NET45
+#if !NET451
                 certName,
 #else
                 cer,
 #endif
-                useAjax, null, timeOut, checkValidationResult).ConfigureAwait(false); ;
+                useAjax, null, timeOut, checkValidationResult).ConfigureAwait(false);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -368,7 +367,7 @@ namespace Senparc.CO2NET.HttpUtility
         public static async Task<T> PostGetJsonAsync<T>(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
-#if !NET45
+#if !NET451
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -378,12 +377,12 @@ namespace Senparc.CO2NET.HttpUtility
             string returnText = await RequestUtility.HttpPostAsync(
                 serviceProvider,
                 url, cookieContainer, formData, encoding,
-#if !NET45
+#if !NET451
                 certName,
 #else
                 cer,
 #endif
-                useAjax, null, timeOut).ConfigureAwait(false); ;
+                useAjax, null, timeOut).ConfigureAwait(false);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -403,7 +402,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, string data, Stream stream)
         {
-#if NET45
+#if NET451
             WebClient wc = new WebClient();
 
             var fileBytes = await wc.UploadDataTaskAsync(url, "POST", Encoding.UTF8.GetBytes(string.IsNullOrEmpty(data) ? "" : data)).ConfigureAwait(false);
@@ -419,6 +418,5 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         #endregion
-#endif
     }
 }

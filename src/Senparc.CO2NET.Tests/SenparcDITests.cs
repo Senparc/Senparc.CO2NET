@@ -49,8 +49,12 @@ namespace Senparc.CO2NET.Tests
             CacheStrategyFactory.RegisterObjectCacheStrategy(() => LocalObjectCacheStrategy.Instance);
             var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
 
-            var obj1 = cache.Get(key, true);//使用缓存策略获取
-            Assert.IsNotNull(obj1);
+            var obj1 = cache.Get(key, true);//使用缓存策略获取，ServiceProvider不一致，所以不能的得到结果
+            Assert.IsNull(obj1);
+
+            //再次储存
+            cache.Set(key, dt, null, true);
+            obj1 = cache.Get(key, true);
             Assert.AreEqual(dt, obj1);
 
             var obj2 = cache.Get<DateTimeOffset>(key, true);//获取明确类型对象

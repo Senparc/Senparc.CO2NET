@@ -30,7 +30,6 @@ namespace Senparc.CO2NET.Tests
         {
             var serviceCollection = new ServiceCollection();
 
-
             var configBuilder = new ConfigurationBuilder();
             configBuilder.AddJsonFile("appsettings.json", false, false);
             var config = configBuilder.Build();

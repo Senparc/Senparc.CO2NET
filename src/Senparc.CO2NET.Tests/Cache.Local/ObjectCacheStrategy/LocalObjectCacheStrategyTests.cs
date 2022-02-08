@@ -8,7 +8,7 @@ using System;
 namespace Senparc.CO2NET.Tests.Cache.Local
 {
     [TestClass]
-    public class LocalObjectCacheStrategyTests
+    public class LocalObjectCacheStrategyTests :BaseTest
     {
         public LocalObjectCacheStrategyTests()
         {

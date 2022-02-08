@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：DataOperation.cs
     文件功能描述：每一次跟踪日志的对象信息
@@ -94,7 +94,7 @@ namespace Senparc.CO2NET.APM
             if (!keyList.Contains(kindName))
             {
                 keyList.Add(kindName);
-                await cacheStragety.SetAsync(kindNameKey, keyList, isFullKey: true).ConfigureAwait(false); ;//永久储存
+                await cacheStragety.SetAsync(kindNameKey, keyList, isFullKey: true).ConfigureAwait(false);//永久储存
             }
 
             KindNameStore[_domain][kindName] = SystemTime.Now;

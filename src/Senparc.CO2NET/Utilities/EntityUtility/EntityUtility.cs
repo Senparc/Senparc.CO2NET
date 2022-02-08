@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2021 Senparc
+    Copyright (C) 2022 Senparc
 
     文件名：EntityUtility.cs
     文件功能描述：实体工具类
@@ -62,7 +62,7 @@ namespace Senparc.CO2NET.Utilities
             }
             
             var t = typeof(T);
-#if NET45
+#if NET451
             if (t.IsGenericType)
 #else
             if (t.GetTypeInfo().IsGenericType)
