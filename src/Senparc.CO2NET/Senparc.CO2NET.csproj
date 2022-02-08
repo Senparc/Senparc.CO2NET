@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net451;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>2.0.2.1</Version>
+    <Version>2.0.3</Version>
     <LangVersion>8.0</LangVersion>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
@@ -115,6 +115,7 @@
 		3、LocalCacheLock释放锁之前增加是否锁成功的判断
 
 		v2.0.2 添加 XmlUtility.Deserialize() 重写方法
+		v2.0.3 修改HttpClient请求超时的实现方式
 	</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
