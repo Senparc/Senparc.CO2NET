@@ -141,9 +141,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             var handler = HttpClientHelper.GetHttpClientHandler(null, SenparcHttpClientWebProxy, DecompressionMethods.GZip);
 
-
             HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
-
             return httpClient.GetStringAsync(url).Result;
 #endif
         }
@@ -188,11 +186,18 @@ namespace Senparc.CO2NET.HttpUtility
 
             var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
 
-            var response = httpClient.GetAsync(url).GetAwaiter().GetResult();//获取响应信息
+            using (var cts = new System.Threading.CancellationTokenSource(timeOut))
+            {
+                try
+                {
+                    var response = httpClient.GetAsync(url, cancellationToken: cts.Token).GetAwaiter().GetResult();//获取响应信息
 
-            HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
+                    HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
 
-            return response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    return response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                }
+                catch { throw; }
+            }
 #endif
         }
 
@@ -240,15 +245,22 @@ namespace Senparc.CO2NET.HttpUtility
         public static HttpResponseMessage HttpResponseGet(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
-   string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
+            string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
             var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
-            var task = httpClient.GetAsync(url);
-            HttpResponseMessage response = task.Result;
+            using (var cts = new System.Threading.CancellationTokenSource(timeOut))
+            {
+                try
+                {
+                    var task = httpClient.GetAsync(url, cancellationToken: cts.Token);
+                    HttpResponseMessage response = task.Result;
 
-            HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
+                    HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
 
-            return response;
+                    return response;
+                }
+                catch { throw; }
+            }
         }
 
 #endif
@@ -325,13 +337,20 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
 
-            var response = await httpClient.GetAsync(url).ConfigureAwait(false);//获取响应信息
+            using (var cts = new System.Threading.CancellationTokenSource(timeOut))
+            {
+                try
+                {
+                    var response = await httpClient.GetAsync(url, cancellationToken: cts.Token).ConfigureAwait(false);//获取响应信息
 
-            HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
+                    HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
 
-            var retString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var retString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            return retString;
+                    return retString;
+                }
+                catch { throw; }
+            }
 #endif
         }
 
@@ -379,15 +398,22 @@ namespace Senparc.CO2NET.HttpUtility
         public static async Task<HttpResponseMessage> HttpResponseGetAsync(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
-   string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
+            string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
             var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
-            var task = httpClient.GetAsync(url);
-            HttpResponseMessage response = await task;
+            using (var cts = new System.Threading.CancellationTokenSource(timeOut))
+            {
+                try
+                {
+                    var task = httpClient.GetAsync(url, cancellationToken: cts.Token);
+                    HttpResponseMessage response = await task;
 
-            HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
+                    HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
 
-            return response;
+                    return response;
+                }
+                catch { throw; }
+            }
         }
 
 #endif
