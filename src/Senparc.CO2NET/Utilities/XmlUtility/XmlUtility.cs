@@ -68,6 +68,7 @@ namespace Senparc.CO2NET.Utilities
         /// 反序列化
         /// </summary>
         /// <param name="xml">XML字符串</param>
+        /// <param name="rootNodeName"></param>
         /// <returns></returns>
         public static object Deserialize(Type type, string xml, string rootNodeName = null)
         {
@@ -98,18 +99,20 @@ namespace Senparc.CO2NET.Utilities
         /// 反序列化
         /// </summary>
         /// <param name="xml">XML字符串</param>
+        /// <param name="rootNodeName"></param>
         /// <returns></returns>
-        public static object Deserialize<T>(string xml)
+        public static object Deserialize<T>(string xml, string rootNodeName = null)
         {
-            return Deserialize(typeof(T), xml);
+            return Deserialize(typeof(T), xml,rootNodeName);
         }
 
         /// <summary>
         /// 反序列化
         /// </summary>
         /// <param name="stream"></param>
+        /// <param name="rootNodeName"></param>
         /// <returns></returns>
-        public static object Deserialize<T>(Stream stream)
+        public static object Deserialize<T>(Stream stream, string rootNodeName = null)
         {
             XmlSerializer xmldes = new XmlSerializer(typeof(T));
             return xmldes.Deserialize(stream);
