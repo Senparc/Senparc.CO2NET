@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net451;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>2.0.4</Version>
+    <Version>2.0.5.3</Version>
     <LangVersion>8.0</LangVersion>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
@@ -117,6 +117,7 @@
 		v2.0.2 添加 XmlUtility.Deserialize() 重写方法
 		v2.0.3 修改HttpClient请求超时的实现方式
 		v2.0.4 XmlUtility 反序列化（Deserialize） 全面添加 rootNodeName 参数
+		v2.0.5 添加 WaitingFor() 方法
 	</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
