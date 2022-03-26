@@ -148,10 +148,9 @@ namespace Senparc.CO2NET.Helpers
         /// <returns></returns>
         public static async Task WaitingFor(TimeSpan waitingTime, TimeSpan waitingInterval, Action work = null)
         {
+            var startTime = SystemTime.Now;
             while (true)
             {
-                var startTime = SystemTime.Now;
-
                 work?.Invoke();
 
                 var delayTime = Task.Delay(waitingInterval);
