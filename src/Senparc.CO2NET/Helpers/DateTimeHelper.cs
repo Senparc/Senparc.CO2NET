@@ -146,12 +146,14 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="waitingInterval">每次等待间隔</param>
         /// <param name="work">每次等待之前执行的方法（可为空）</param>
         /// <returns></returns>
-        public async Task WaitingFor(TimeSpan waitingTime, TimeSpan waitingInterval, Action work = null)
+        public static async Task WaitingFor(TimeSpan waitingTime, TimeSpan waitingInterval, Action work = null)
         {
             while (true)
             {
                 var startTime = SystemTime.Now;
-                work();
+
+                work?.Invoke();
+
                 var delayTime = Task.Delay(waitingInterval);
 
                 await delayTime;
