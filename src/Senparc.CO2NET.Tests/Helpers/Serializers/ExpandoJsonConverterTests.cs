@@ -5,7 +5,7 @@ using Senparc.CO2NET.Tests.TestEntities;
 
 namespace Senparc.CO2NET.Tests.Helpers
 {
-#if NET451
+#if NET462
 
     [TestClass]
     public class ExpandoJsonConverterTests

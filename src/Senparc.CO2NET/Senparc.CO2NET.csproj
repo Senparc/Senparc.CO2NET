@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net451;netstandard2.0;netstandard2.1</TargetFrameworks>
+		<TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
 		<Version>2.0.5.4</Version>
 		<LangVersion>8.0</LangVersion>
 		<AssemblyName>Senparc.CO2NET</AssemblyName>
@@ -136,9 +136,9 @@
 		<ErrorReport>prompt</ErrorReport>
 		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net451|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
 		<OutputPath>..\BuildOutPut\</OutputPath>
-		<DocumentationFile>..\BuildOutPut\net451\Senparc.CO2NET.xml</DocumentationFile>
+		<DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.xml</DocumentationFile>
 	</PropertyGroup>
 	<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
@@ -168,7 +168,7 @@
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
 	</ItemGroup>
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
 		<Reference Include="System.Core" />
 		<Reference Include="System.Data" />
 		<Reference Include="System.Data.DataSetExtensions" />
@@ -180,7 +180,7 @@
 		<Reference Include="System.Xml.Linq" />
 		<Reference Include="System.Configuration" />
 	</ItemGroup>
-	<ItemGroup Condition=" '$(TargetFramework)' != 'net451'">
+	<ItemGroup Condition=" '$(TargetFramework)' != 'net462'">
 		<!--<FrameworkReference Include="Microsoft.AspNetCore.App" />-->
 		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />

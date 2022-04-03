@@ -29,7 +29,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     
 ----------------------------------------------------------------*/
 
-#if NET451
+#if NET462
 
 using System;
 using System.Collections.Generic;

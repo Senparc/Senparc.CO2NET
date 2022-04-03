@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net451;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Version>1.0.2</Version>
     <AssemblyName>Senparc.CO2NET.AspNet</AssemblyName>
     <RootNamespace>Senparc.CO2NET.AspNet</RootNamespace>
@@ -42,9 +42,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net451|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\net451\Senparc.CO2NET.AspNet..xml</DocumentationFile>
+    <DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.AspNet..xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
@@ -60,11 +60,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net451'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' != 'net451'">
+  <ItemGroup Condition="'$(TargetFramework)' != 'net462'">
     <PackageReference Include="Microsoft.Extensions.Hosting">
       <Version>6.0.0</Version>
     </PackageReference>

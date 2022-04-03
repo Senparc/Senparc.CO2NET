@@ -73,7 +73,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
             var dtx = SystemTime.Now;
 
-#if !NET451
+#if !NET462
             ////二进制序列化方案
             //using (MemoryStream memoryStream = new MemoryStream())
             //{
@@ -121,7 +121,7 @@ namespace Senparc.CO2NET.Cache.Redis
                 return default(T);
             }
 
-#if !NET451
+#if !NET462
             ////二进制序列化方案
             //using (MemoryStream memoryStream = new MemoryStream(stream))
             //{
