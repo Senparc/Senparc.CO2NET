@@ -161,7 +161,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             //                //var cache = new MemcachedClient(config);'
 
 
-            //#if NET462 || NET461
+            //#if NET462
             //                var cache = new MemcachedClient(config);
             //#else
             //                var cache = new MemcachedClient(null, config);
@@ -196,7 +196,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         MemcachedObjectCacheStrategy(/*ILoggerFactory loggerFactory, IOptions<MemcachedClientOptions> optionsAccessor*/)
         {
             _config = GetMemcachedClientConfiguration();
-#if NET462 //|| NET461
+#if NET462
             Cache = new MemcachedClient(_config);
 #else
             var serviceProvider = SenparcDI.GlobalServiceCollection.BuildServiceProvider();
