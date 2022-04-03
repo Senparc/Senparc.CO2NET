@@ -36,6 +36,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改描述：v1.3.108 为 RequestUtility.Get 方法添加 headerAddition 参数
               v1.3.109 添加 HttpResponseGetAsync
 
+    修改标识：554393109 - 20220208
+    修改描述：v2.0.3 修改HttpClient请求超时的实现方式
 ----------------------------------------------------------------*/
 
 using System;
@@ -47,14 +49,14 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Senparc.CO2NET.Helpers;
-#if NET451
+#if NET462
 using System.Web;
 #else
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Extensions.DependencyInjection;
 #endif
-#if !NET451
+#if !NET462
 using Senparc.CO2NET.WebProxy;
 #endif
 
@@ -67,7 +69,7 @@ namespace Senparc.CO2NET.HttpUtility
     {
         #region 公用静态方法
 
-#if NET451
+#if NET462
         /// <summary>
         /// .NET 4.5 版本的HttpWebRequest参数设置
         /// </summary>
@@ -95,7 +97,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 #endif
 
-#if !NET451
+#if !NET462
         /// <summary>
         /// .NET Core 版本的HttpWebRequest参数设置
         /// </summary>
@@ -133,7 +135,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, Encoding encoding = null)
         {
-#if NET451
+#if NET462
             WebClient wc = new WebClient();
             wc.Proxy = _webproxy;
             wc.Encoding = encoding ?? Encoding.UTF8;
@@ -164,7 +166,7 @@ namespace Senparc.CO2NET.HttpUtility
             string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
             string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
-#if NET451
+#if NET462
             HttpWebRequest request = HttpGet_Common_Net45(url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
 
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -201,7 +203,7 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
         }
 
-#if NET451
+#if NET462
 
         /// <summary>
         /// 获取HttpWebResponse或HttpResponseMessage对象，本方法通常用于测试）
@@ -280,7 +282,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, Encoding encoding = null)
         {
-#if NET451
+#if NET462
             WebClient wc = new WebClient();
             wc.Proxy = _webproxy;
             wc.Encoding = encoding ?? Encoding.UTF8;
@@ -316,7 +318,7 @@ namespace Senparc.CO2NET.HttpUtility
             string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
             string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
-#if NET451
+#if NET462
             HttpWebRequest request = HttpGet_Common_Net45(url, cookieContainer, encoding, cer, refererUrl, useAjax, timeOut);
 
             HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync().ConfigureAwait(false));
@@ -354,7 +356,7 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
         }
 
-#if NET451
+#if NET462
 
         /// <summary>
         /// 获取HttpWebResponse或HttpResponseMessage对象，本方法通常用于测试）

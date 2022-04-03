@@ -47,10 +47,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20181227
     修改描述：添加 GetDateTimeOffsetFromXml() 重写方法
 
+    修改标识：Senparc - 20230326
+    修改描述：v2.0.5 添加 WaitingFor() 方法
+
 ----------------------------------------------------------------*/
 
 
 using System;
+using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.Helpers
 {
@@ -133,6 +137,31 @@ namespace Senparc.CO2NET.Helpers
         public static long GetUnixDateTime(DateTime dateTime)
         {
             return (long)(dateTime.ToUniversalTime() - BaseTime).TotalSeconds;
+        }
+
+        /// <summary>
+        /// 自动等待
+        /// </summary>
+        /// <param name="waitingTime">总共等待时间</param>
+        /// <param name="waitingInterval">每次等待间隔</param>
+        /// <param name="work">每次等待之前执行的方法（可为空）</param>
+        /// <returns></returns>
+        public static async Task WaitingFor(TimeSpan waitingTime, TimeSpan waitingInterval, Action work = null)
+        {
+            var startTime = SystemTime.Now;
+            while (true)
+            {
+                work?.Invoke();
+
+                var delayTime = Task.Delay(waitingInterval);
+
+                await delayTime;
+
+                if (SystemTime.NowDiff(startTime) >= waitingTime)
+                {
+                    break;
+                }
+            }
         }
     }
 }

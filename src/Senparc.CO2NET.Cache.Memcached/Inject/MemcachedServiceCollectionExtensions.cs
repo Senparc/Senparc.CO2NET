@@ -10,7 +10,7 @@
 ----------------------------------------------------------------*/
 
 
-#if !NET451
+#if !NET462
 using Enyim.Caching.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.CO2NET.Cache.Memcached;

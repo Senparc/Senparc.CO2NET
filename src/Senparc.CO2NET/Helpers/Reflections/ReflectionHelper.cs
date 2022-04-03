@@ -86,7 +86,7 @@ namespace Senparc.CO2NET.Helpers
             {
                 string fullName = nameSpace + "." + className;//命名空间.类型名
                                                               //此为第一种写法
-#if !NET451
+#if !NET462
                 //object ect = Assembly.Load(new AssemblyName(assemblyName)).CreateInstance(fullName);//加载程序集，创建程序集里面的 命名空间.类型名 实例s
 
                 //.net core 2.1这种方法也已经支持

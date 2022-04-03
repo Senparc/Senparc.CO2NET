@@ -58,6 +58,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20210606
     修改描述：v1.4.400 修复 Download 方法 bug
 
+    修改标识：554393109 - 20220208
+    修改描述：v2.0.3 修改HttpClient请求超时的实现方式
+
 ----------------------------------------------------------------*/
 
 
@@ -68,7 +71,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
 using Senparc.CO2NET.Helpers;
-#if NET451
+#if NET462
 using System.Web.Script.Serialization;
 #else
 using Microsoft.Extensions.DependencyInjection;
@@ -132,7 +135,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, Stream stream)
         {
-#if NET451
+#if NET462
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3
             //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
 
@@ -165,7 +168,7 @@ namespace Senparc.CO2NET.HttpUtility
             var dir = Path.GetDirectoryName(filePathName) ?? "/";
             Directory.CreateDirectory(dir);
 
-#if NET451
+#if NET462
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
@@ -285,7 +288,7 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, Stream stream)
         {
-#if NET451
+#if NET462
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3
             //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
 
@@ -319,7 +322,7 @@ namespace Senparc.CO2NET.HttpUtility
             var dir = Path.GetDirectoryName(filePathName) ?? "/";
             Directory.CreateDirectory(dir);
 
-#if NET451
+#if NET462
             System.Net.Http.HttpClient httpClient = new HttpClient();
 #else
             System.Net.Http.HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
