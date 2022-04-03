@@ -89,7 +89,7 @@ using System.Threading.Tasks;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.WebProxy;
 
-#if NET451
+#if NET462
 using System.Web;
 #else
 using System.Net.Http;
@@ -108,7 +108,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
     {
         #region 代理
 
-#if NET451
+#if NET462
         private static System.Net.WebProxy _webproxy = null;
         /// <summary>
         /// 设置Web代理
@@ -207,7 +207,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
             return true;
         }
 
-#if NET451
+#if NET462
         /// <summary>
         /// 设置HTTP头
         /// </summary>
@@ -372,7 +372,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
             stream.Seek(0, SeekOrigin.Begin);//设置指针读取位置
         }
 
-#if !NET451
+#if !NET462
         /// <summary>
         /// 【异步方法】从 Request.Body 中读取流，并复制到一个独立的 MemoryStream 对象中
         /// </summary>

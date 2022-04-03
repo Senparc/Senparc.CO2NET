@@ -56,7 +56,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.IO;
 
-#if !NET451
+#if !NET462
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -69,14 +69,14 @@ namespace Senparc.CO2NET.RegisterServices
     /// </summary>
     public static class RegisterServiceExtension
     {
-#if !NET451 
+#if !NET462 
 
         /// <summary>
         /// 是否已经进行过全局注册
         /// </summary>
         public static bool SenparcGlobalServicesRegistered { get; set; }
 
-        /// <summary>
+        /// <summary>0781-B2EB0781-B2EB0781-B2EB0781-B2EB0781-B2EB0781-B2EB
         /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程（必须）
         /// </summary>
         /// <param name="serviceCollection">IServiceCollection</param>

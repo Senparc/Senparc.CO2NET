@@ -52,7 +52,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 using System.Web;
 
-#if !NET451
+#if !NET462
 using Microsoft.AspNetCore.Http;
 #endif
 
@@ -69,13 +69,13 @@ namespace Senparc.CO2NET.Utilities
         /// </summary>
         /// <param name="httpRequest"></param>
         /// <returns></returns>
-#if NET451
+#if NET462
         public static string GetUserAgent(HttpRequestBase httpRequest)
 #else
         public static string GetUserAgent(HttpRequest httpRequest)
 #endif
         {
-#if !NET451
+#if !NET462
 
             string userAgent = null;
             var userAgentHeader = httpRequest.Headers["User-Agent"];

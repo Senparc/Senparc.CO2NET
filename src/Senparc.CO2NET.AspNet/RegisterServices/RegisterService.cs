@@ -1,4 +1,4 @@
-﻿#if !NET451
+﻿#if !NET462
 using Microsoft.AspNetCore.Hosting;
 using Senparc.CO2NET.RegisterServices;
 using System;
