@@ -253,8 +253,7 @@ namespace Senparc.CO2NET.HttpUtility
             //    Size = stream.Length,
             //}; // the extra quotes are key here
 
-            var bytes = Encoding.UTF8.GetBytes("EnglishName.xlsx");
-            fileName = Encoding.GetEncoding("ISO-8859-1").GetString(bytes);
+            fileName = Encoding.GetEncoding("ISO-8859-1").GetString(Encoding.UTF8.GetBytes(fileName));
 
             fileContent.Headers.Add("Content-Disposition", $"form-data; name=\"{formName}\"; filename=\"{fileName}\"; filelength={stream.Length}");
             fileContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);

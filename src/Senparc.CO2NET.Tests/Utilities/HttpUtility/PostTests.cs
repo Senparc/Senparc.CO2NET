@@ -150,7 +150,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             var fileDictionary = new Dictionary<string, string>();
             fileDictionary["media"] = "E:\\Senparc项目\\WeiXinMPSDK\\src\\Senparc.Weixin.Work\\Senparc.Weixin.Work.Test\\AdvancedAPIs\\Media\\中文名.txt";
 
-            var uploadResult = CO2NET.HttpUtility.Post.PostFileGetJson<dynamic>(BaseTest.serviceProvider, url, null, fileDictionary, null, null, null, false);
+            var uploadResult = CO2NET.HttpUtility.Post.PostFileGetJsonAsync<dynamic>(BaseTest.serviceProvider, url, null, fileDictionary, null, null, null, false).GetAwaiter().GetResult();
 
             Console.WriteLine(uploadResult);
 
@@ -182,7 +182,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
                 ms.Write(bytes, 0, bytes.Length);
                 ms.Seek(0, SeekOrigin.Begin);
                 var sendUrl = $"https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={accessToken}";
-                var sendResult = Post.PostGetJson<dynamic>(BaseTest.serviceProvider, sendUrl, null, ms);
+                var sendResult = Post.PostGetJsonAsync<dynamic>(BaseTest.serviceProvider, sendUrl, null, ms).GetAwaiter().GetResult();
                 Console.WriteLine("sendResult:");
                 Console.WriteLine(SerializerHelper.GetJsonString(sendResult, jsonSetting));
             }
