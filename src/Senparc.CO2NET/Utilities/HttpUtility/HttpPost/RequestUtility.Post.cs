@@ -55,26 +55,26 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
     修改标识：Senparc - 20220721
     修改描述：v2.1.2 重构 RequestUtility，HttpPost_Common_NetCore() 改为异步方法：HttpPost_Common_NetCoreAsync()
+
 ----------------------------------------------------------------*/
 
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.Utilities.HttpUtility.HttpPost;
+using Senparc.CO2NET.Extensions;
 
 #if NET462
 using System.Web;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 #else
 using System.Net.Http;
 using System.Net.Http.Headers;
-#endif
-#if !NET462
 using Senparc.CO2NET.WebProxy;
 using Senparc.CO2NET.Exceptions;
 using System.Linq;

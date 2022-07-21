@@ -55,7 +55,7 @@ namespace Senparc.CO2NET.HttpUtility
     /// </summary>
     public static class HttpClientHelper
     {
-        internal const string DEFAULT_CONTENT_TYPE = "application/octet-stream";// "text/xml";
+        internal const string DEFAULT_CONTENT_TYPE = "text/xml";//"application/octet-stream"
 
         /// <summary>
         /// 获取 Content
