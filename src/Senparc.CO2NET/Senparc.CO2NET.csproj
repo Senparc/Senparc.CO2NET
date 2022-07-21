@@ -124,6 +124,7 @@
 		1、修改 HttpClientHelper.DEFAULT_CONTENT_TYPE 默认值为 application/octet-stream
 		2、解决发送文件中中文名被微信服务器识别为乱码的问题
 		3、重构 RequestUtility，HttpPost_Common_NetCore() 改为异步方法：HttpPost_Common_NetCoreAsync()
+		4、修复 FileHelper.GetFileHash() 的 bug
 	</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
