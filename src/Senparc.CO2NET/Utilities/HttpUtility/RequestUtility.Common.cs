@@ -67,6 +67,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190928
     修改描述：v1.0.101 RequestUtility.GetRequestMemoryStream() 增加对 .NET Core 3.0 AllowSynchronousIO 的设置
 
+    修改标识：Senparc - 20220721
+    修改描述：v1.0.101 RequestUtility.GetRequestMemoryStream() 增加对 .NET Core 3.0 AllowSynchronousIO 的设置
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -236,15 +239,24 @@ namespace Senparc.CO2NET.HttpUtility
         {
             //fileName = fileName.UrlEncode();
             var fileContent = new StreamContent(stream);
+
             //上传格式参考：
             //https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738729
+            //https://developer.work.weixin.qq.com/document/path/91054
             //https://work.weixin.qq.com/api/doc#10112
-            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-            {
-                Name = "\"{0}\"".FormatWith(formName),
-                FileName = "\"" + fileName + "\"",
-                Size = stream.Length
-            }; // the extra quotes are key here
+
+            //这种方法会对中文名进行编码，腾讯服务器识别不了，如：=_utf-8_B_5Lit5paHLnhsc3g=_=
+            //fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            //{
+            //    Name = $"\"{formName}\"",
+            //    FileName = $"\"{fileName}\"",
+            //    Size = stream.Length,
+            //}; // the extra quotes are key here
+
+            var bytes = Encoding.UTF8.GetBytes("EnglishName.xlsx");
+            fileName = Encoding.GetEncoding("ISO-8859-1").GetString(bytes);
+
+            fileContent.Headers.Add("Content-Disposition", $"form-data; name=\"{formName}\"; filename=\"{fileName}\"; filelength={stream.Length}");
             fileContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             return fileContent;
         }
@@ -271,7 +283,8 @@ namespace Senparc.CO2NET.HttpUtility
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml", 0.9));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("image/webp"));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*", 0.8));
-
+            //client.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("utf-8", 1));
+            
             //HttpContent hc = new StringContent(null);
             //HttpContentHeader(hc, timeOut);
 
@@ -280,7 +293,6 @@ namespace Senparc.CO2NET.HttpUtility
             //httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Chrome", "61.0.3163.100 Safari/537.36"));
 
             //httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"));
-
             client.DefaultRequestHeaders.Add("Timeout", timeOut.ToString());
             client.DefaultRequestHeaders.Add("KeepAlive", "true");
 

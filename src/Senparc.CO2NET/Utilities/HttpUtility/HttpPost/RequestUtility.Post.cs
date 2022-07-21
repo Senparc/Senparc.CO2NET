@@ -92,6 +92,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// 给.NET Framework使用的HttpPost请求公共设置方法
         /// </summary>
         /// <param name="url"></param>
+        /// <param name="method">请求方法，如 POST/GET 等</param>
         /// <param name="cookieContainer"></param>
         /// <param name="postStream"></param>
         /// <param name="fileDictionary">需要上传的文件，Key：对应要上传的Name，Value：本地文件名，或文件内容的Base64编码</param>
@@ -124,7 +125,7 @@ namespace Senparc.CO2NET.HttpUtility
                   new RemoteCertificateValidationCallback(CheckValidationResult);
             }
 
-            #region 处理Form表单文件上传
+        #region 处理Form表单文件上传
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
             {
@@ -222,7 +223,7 @@ namespace Senparc.CO2NET.HttpUtility
                     //contentType = "application/x-www-form-urlencoded";
                 }
             }
-            #endregion
+        #endregion
 
             request.ContentType = contentType;
             request.ContentLength = postStream != null ? postStream.Length : 0;
@@ -285,7 +286,7 @@ namespace Senparc.CO2NET.HttpUtility
             HttpClient client = senparcHttpClient.Client;
             HttpClientHeader(client, refererUrl, useAjax, headerAddition, timeOut);
 
-        #region 处理Form表单文件上传
+            #region 处理Form表单文件上传
 
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
@@ -312,6 +313,7 @@ namespace Senparc.CO2NET.HttpUtility
                         {
                             //fileNameOrFileData 中储存的储存的是 Stream
                             fileName = Path.GetFileName(formFileData.GetAvaliableFileName(SystemTime.NowTicks.ToString()));
+
                         }
                         else
                         {
@@ -339,7 +341,8 @@ namespace Senparc.CO2NET.HttpUtility
                             //multipartFormDataContent.Add(new StreamContent(memoryStream), file.Key, Path.GetFileName(fileName)); //报流已关闭的异常
 
                             memoryStream.Seek(0, SeekOrigin.Begin);
-                            multipartFormDataContent.Add(CreateFileContent(memoryStream, file.Key, fileName), file.Key, fileName);
+                            var streamContent = CreateFileContent(memoryStream, file.Key, fileName, contentType);
+                            multipartFormDataContent.Add(streamContent, file.Key, fileName);
                         }
                     }
                     catch (Exception ex)
@@ -373,7 +376,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             //HttpContentHeader(hc, timeOut);
-        #endregion
+            #endregion
 
             if (!string.IsNullOrEmpty(refererUrl))
             {
