@@ -1,4 +1,5 @@
-﻿#region Apache License Version 2.0
+﻿using Senparc.CO2NET.HttpUtility;
+#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
 Copyright 2021 Suzhou Senparc Network Technology Co.,Ltd.
@@ -27,6 +28,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Senparc.CO2NET.Helpers.Serializers;
 
 namespace Senparc.CO2NET.HttpUtility.Tests
 {
@@ -136,6 +138,55 @@ namespace Senparc.CO2NET.HttpUtility.Tests
 
         }
 
+        [TestMethod()]
+        public void PostFileGetJsonTest()
+        {
+            var agentId = "1000009";
+            var accessToken = "D0pI7JIOdFMfBPZ3QNIdazGupfEFlXNfC8aScj6BS3Vcdk3EjRwWdIJ_cxIQNbMoqdhWjHb6PplzK4tQ88MXz2qCugIhJ82IqBWTF-Q8ggK24QE8-iYB8c2yiSRZkTGirdbDLfZk4ERMs7GhhIkR4UiHplhNjtenXaztHAietRNUhQMhrVbw_vVMFgvYeDiAwzjP1Ntv0KddjWvDaXtscg";
 
+            //上传测试
+            var type = "file";
+            var url = $"https://qyapi.weixin.qq.com/cgi-bin/media/upload?access_token={accessToken}&type={type}";
+            var fileDictionary = new Dictionary<string, string>();
+            fileDictionary["media"] = "E:\\Senparc项目\\WeiXinMPSDK\\src\\Senparc.Weixin.Work\\Senparc.Weixin.Work.Test\\AdvancedAPIs\\Media\\中文名.txt";
+
+            var uploadResult = CO2NET.HttpUtility.Post.PostFileGetJsonAsync<dynamic>(BaseTest.serviceProvider, url, null, fileDictionary, null, null, null, false).GetAwaiter().GetResult();
+
+            Console.WriteLine(uploadResult);
+
+            var mediaId = uploadResult.media_id;
+
+            Console.WriteLine("mediaId:" + mediaId);
+
+            //发送测试
+            var data = new
+            {
+                touser = "001",
+                toparty = (string)null,
+                totag = (string)null,
+                msgtype = "file",
+                agentid = agentId,
+                file = new
+                {
+                    media_id = mediaId
+                },
+                safe = 0,
+                enable_duplicate_check = 0,
+                duplicate_check_interval = 1800
+            };
+            JsonSetting jsonSetting = new JsonSetting(true);
+            var jsonString = SerializerHelper.GetJsonString(data, jsonSetting);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                var bytes = Encoding.UTF8.GetBytes(jsonString);
+                ms.Write(bytes, 0, bytes.Length);
+                ms.Seek(0, SeekOrigin.Begin);
+                var sendUrl = $"https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={accessToken}";
+                var sendResult = Post.PostGetJsonAsync<dynamic>(BaseTest.serviceProvider, sendUrl, null, ms).GetAwaiter().GetResult();
+                Console.WriteLine("sendResult:");
+                Console.WriteLine(SerializerHelper.GetJsonString(sendResult, jsonSetting));
+            }
+
+        }
     }
 }

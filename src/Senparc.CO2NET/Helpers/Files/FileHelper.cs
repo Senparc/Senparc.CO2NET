@@ -51,6 +51,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20210831
     修改描述：v1.5.1 添加 FileHelper 中 GetFileHash 方法
 
+    修改标识：qideqian - 20220721
+    修改描述：v2.1.2 修复 FileHelper.GetFileHash() 的 bug
+
 ----------------------------------------------------------------*/
 
 
@@ -143,13 +146,12 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="filePath"></param>
         /// <param name="type">SHA1 或 MD5，必须为大写</param>
         /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
-        /// <param name="encoding">默认为：utf8</param>
-        public static string GetFileHash(string filePath, string type = "SHA1", bool toUpper = true, Encoding encoding = null)
+        public static string GetFileHash(string filePath, string type = "SHA1", bool toUpper = true)
         {
-            var stream = new FileStream(filePath, FileMode.Open);
+            var stream = GetFileStream(filePath);
             try
             {
-                return GetFileHash(filePath, type, toUpper, encoding);
+                return GetFileHash(stream, type, toUpper);
             }
             catch (Exception)
             {
