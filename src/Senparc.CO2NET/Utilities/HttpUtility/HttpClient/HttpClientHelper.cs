@@ -34,9 +34,6 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190911
     修改描述：v0.8.10 优化 SetResponseCookieContainer() 方法，防止 null 异常（理论上不会出现）
 
-    修改标识：Senparc - 20220719
-    修改描述：v2.1.2 修改 HttpClientHelper.DEFAULT_CONTENT_TYPE 默认值为 application/octet-stream
-
 ----------------------------------------------------------------*/
 
 using System.Collections.Generic;
