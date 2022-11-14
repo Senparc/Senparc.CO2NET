@@ -51,6 +51,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20210831
     修改描述：v1.5.1 添加 FileHelper 中 GetFileHash 方法
 
+    修改标识：qideqian - 20220721
+    修改描述：v2.1.2 修复 FileHelper.GetFileHash() 的 bug
+
 ----------------------------------------------------------------*/
 
 

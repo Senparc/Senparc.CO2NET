@@ -52,7 +52,7 @@ namespace Senparc.CO2NET.HttpUtility
     /// </summary>
     public static class HttpClientHelper
     {
-        internal const string DEFAULT_CONTENT_TYPE = "text/xml";
+        internal const string DEFAULT_CONTENT_TYPE = "text/xml";//"application/octet-stream"
 
         /// <summary>
         /// 获取 Content
@@ -64,7 +64,7 @@ namespace Senparc.CO2NET.HttpUtility
             string contentType = DEFAULT_CONTENT_TYPE;
             if (formData != null && formData.Count > 0)
             {
-                contentType = "application/x-www-form-urlencoded";//如果需要提交表单，则使用特定的ContentType
+                //contentType = "application/x-www-form-urlencoded";//如果需要提交表单，则使用特定的ContentType
             }
             return contentType;
         }

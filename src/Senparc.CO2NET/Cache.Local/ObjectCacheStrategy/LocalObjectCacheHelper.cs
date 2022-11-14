@@ -78,7 +78,7 @@ namespace Senparc.CO2NET.Cache
                         }
                         catch
                         {
-                            throw new CacheException("IMemoryCache 依赖注入未设置！请在 Startup.cs 中或其调用的函数执行了 LocalObjectCacheStrategy.GenerateMemoryCache() 方法！");
+                            throw new CacheException("IMemoryCache 依赖注入未设置！如果您使用的是本地缓存，请确保在 Startup.cs 中执行了 services.AddMemoryCache() 方法！");
                         }
                     }
                 }

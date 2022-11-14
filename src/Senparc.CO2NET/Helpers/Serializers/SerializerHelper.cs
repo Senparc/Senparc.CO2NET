@@ -39,6 +39,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20220331
     修改描述：v2.0.5.4 添加 GetObject() 方法的 settings 参数
 
+    修改标识：Senparc - 20220530
+    修改描述：v2.1.1 添加 GetObject() 更多重写方法
+
 ----------------------------------------------------------------*/
 
 
@@ -90,17 +93,57 @@ namespace Senparc.CO2NET.Helpers
         /// </summary>
         /// <typeparam name="T">反序列化对象类型</typeparam>
         /// <param name="jsonString">JSON字符串</param>
-        /// <param name="settings">JsonSerializerSettings</param>
         /// <returns></returns>
-        public static T GetObject<T>(this string jsonString, Newtonsoft.Json.JsonSerializerSettings settings = null)
+        public static T GetObject<T>(this string jsonString)
         {
-            return (T)Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString, typeof(T), settings);
+            return GetObject<T>(jsonString, null);
             //#if NET462
             //            JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
             //            return jsSerializer.Deserialize<T>(jsonString);
             //#else
             //            return (T)Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString, typeof(T));
             //#endif
+        }
+
+        /// <summary>
+        /// 反序列化到对象
+        /// </summary>
+        /// <typeparam name="T">反序列化对象类型</typeparam>
+        /// <param name="jsonString">JSON字符串</param>
+        /// <param name="settings">JsonSerializerSettings</param>
+        /// <returns></returns>
+        public static T GetObject<T>(this string jsonString, Newtonsoft.Json.JsonSerializerSettings settings = null)
+        {
+            return (T)GetObject(jsonString, typeof(T), settings);
+            //#if NET462
+            //            JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
+            //            return jsSerializer.Deserialize<T>(jsonString);
+            //#else
+            //            return (T)Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString, typeof(T));
+            //#endif
+        }
+
+
+        /// <summary>
+        /// 反序列化到对象
+        /// </summary>
+        /// <param name="jsonString">JSON字符串</param>
+        /// <returns></returns>
+        public static object GetObject(this string jsonString)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString);
+        }
+
+
+        /// <summary>
+        /// 反序列化到对象
+        /// </summary>
+        /// <param name="jsonString">JSON字符串</param>
+        /// <param name="settings">JsonSerializerSettings</param>
+        /// <returns></returns>
+        public static object GetObject(this string jsonString, Newtonsoft.Json.JsonSerializerSettings settings)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString, settings);
         }
 
         /// <summary>
