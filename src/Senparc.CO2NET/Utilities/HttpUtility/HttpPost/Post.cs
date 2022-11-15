@@ -51,6 +51,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190521
     修改描述：v0.7.3 .NET Core 提供多证书注册功能
 
+    修改标识：Senparc - 20221115
+    修改描述：v2.1.3 优化模拟 Form 提交
+
 ----------------------------------------------------------------*/
 
 
@@ -282,6 +285,8 @@ namespace Senparc.CO2NET.HttpUtility
             bool useAjax = false,
             Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
+            var hasFormData = postDataDictionary != null;
+
             using (MemoryStream ms = new MemoryStream())
             {
                 postDataDictionary.FillFormDataStream(ms); //填充formData
@@ -294,7 +299,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                     cer,
 #endif
-                    useAjax, null, timeOut).ConfigureAwait(false);
+                    useAjax, null, hasFormData, timeOut).ConfigureAwait(false);
 
                 afterReturnText?.Invoke(url, returnText);
 
@@ -328,7 +333,8 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             X509Certificate2 cer = null,
 #endif
-            bool useAjax = false, bool checkValidationResult = false, Action<string, string> afterReturnText = null,
+            bool useAjax = false, bool checkValidationResult = false, 
+            Action<string, string> afterReturnText = null,
             int timeOut = Config.TIME_OUT)
         {
             string returnText = await RequestUtility.HttpPostAsync(
@@ -339,7 +345,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, null, timeOut, checkValidationResult).ConfigureAwait(false);
+                useAjax, null, false, timeOut, checkValidationResult).ConfigureAwait(false);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -366,7 +372,8 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static async Task<T> PostGetJsonAsync<T>(
             IServiceProvider serviceProvider,
-            string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
+            string url, CookieContainer cookieContainer = null, 
+            Dictionary<string, string> formData = null, Encoding encoding = null,
 #if !NET462
             string certName = null,
 #else
@@ -374,6 +381,7 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
             bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
+
             string returnText = await RequestUtility.HttpPostAsync(
                 serviceProvider,
                 url, cookieContainer, formData, encoding,

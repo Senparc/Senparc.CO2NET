@@ -36,3 +36,5 @@ obj/*
 /src/Senparc.CO2NET.WebApi.Tests/App_Data/ApiDocXml/Senparc.DynamicWebApi.WeChat_OfficialAccount.xml
 /Sample/Senparc.CO2NET.Sample.net6/App_Data/ApiDocXml/Senparc.CO2NET.Sample.xml
 /Sample/Senparc.CO2NET.Sample.net6/App_Data/ApiDocXml/DynamicFiles
+/Sample/Senparc.CO2NET.Sample.net7/App_Data/ApiDocXml
+/Sample/Senparc.CO2NET.Sample.net7/App_Data/SenparcTraceLog
