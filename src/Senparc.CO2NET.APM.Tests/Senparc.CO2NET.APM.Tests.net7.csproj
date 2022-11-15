@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <Configurations>Debug;Release;Test</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="Moq" Version="4.10.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Senparc.CO2NET.APM\Senparc.CO2NET.APM.csproj" />
+    <ProjectReference Include="..\Senparc.CO2NET.Tests\Senparc.CO2NET.Tests.net6.csproj" />
+    <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+  </ItemGroup>
+
+</Project>
