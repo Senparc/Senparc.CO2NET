@@ -56,6 +56,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20220721
     修改描述：v2.1.2 重构 RequestUtility，HttpPost_Common_NetCore() 改为异步方法：HttpPost_Common_NetCoreAsync()
 
+    修改标识：Senparc - 20221115
+    修改描述：v2.1.3 优化模拟 Form 提交
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -110,7 +113,9 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static HttpWebRequest HttpPost_Common_Net45(string url, string method, CookieContainer cookieContainer = null,
             Stream postStream = null, Dictionary<string, string> fileDictionary = null, string refererUrl = null,
-            Encoding encoding = null, X509Certificate2 cer = null, bool useAjax = false, Dictionary<string, string> headerAddition = null,
+            Encoding encoding = null, X509Certificate2 cer = null, bool useAjax = false,
+            Dictionary<string, string> headerAddition = null,
+            bool hasFormData = false,
             int timeOut = Config.TIME_OUT, bool checkValidationResult = false, string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -128,7 +133,7 @@ namespace Senparc.CO2NET.HttpUtility
                   new RemoteCertificateValidationCallback(CheckValidationResult);
             }
 
-        #region 处理Form表单文件上传
+            #region 处理Form表单文件上传
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
             {
@@ -217,7 +222,12 @@ namespace Senparc.CO2NET.HttpUtility
             {
                 if (postStream.Length > 0)
                 {
-                    if (contentType == HttpClientHelper.DEFAULT_CONTENT_TYPE)
+                    if (hasFormData)
+                    {
+                        // Form 表单提交
+                        contentType = "application/x-www-form-urlencoded";
+                    }
+                    else if (contentType == HttpClientHelper.DEFAULT_CONTENT_TYPE)
                     {
                         //如果ContentType是默认值，则设置成为二进制流
                         contentType = "application/octet-stream";
@@ -226,7 +236,7 @@ namespace Senparc.CO2NET.HttpUtility
                     //contentType = "application/x-www-form-urlencoded";
                 }
             }
-        #endregion
+            #endregion
 
             request.ContentType = contentType;
             request.ContentLength = postStream != null ? postStream.Length : 0;
@@ -267,7 +277,9 @@ namespace Senparc.CO2NET.HttpUtility
             string url, CookieContainer cookieContainer = null,
             Stream postStream = null, Dictionary<string, string> fileDictionary = null, string refererUrl = null,
             Encoding encoding = null, string certName = null, bool useAjax = false, Dictionary<string, string> headerAddition = null,
-            int timeOut = Config.TIME_OUT, bool checkValidationResult = false, string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
+            int timeOut = Config.TIME_OUT, bool checkValidationResult = false,
+            bool hasFormData = false,
+            string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
         {
             //HttpClientHandler handler = HttpClientHelper.GetHttpClientHandler(cookieContainer, SenparcHttpClientWebProxy, DecompressionMethods.GZip);
 
@@ -284,13 +296,14 @@ namespace Senparc.CO2NET.HttpUtility
             //TODO:此处 handler并没有被使用到，因此 cer 实际无法传递（这个也是 .net core 目前针对多 cer 场景的一个问题）
 
             var senparcHttpClient = SenparcHttpClient.GetInstanceByName(serviceProvider, certName);
+
             senparcHttpClient.SetCookie(new Uri(url), cookieContainer);//设置Cookie
 
             HttpClient client = senparcHttpClient.Client;
             HttpContent hc = null;
             HttpClientHeader(client, refererUrl, useAjax, headerAddition, timeOut);
 
-            #region 处理Form表单文件上传
+        #region 处理Form表单文件上传
 
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
@@ -317,7 +330,6 @@ namespace Senparc.CO2NET.HttpUtility
                         {
                             //fileNameOrFileData 中储存的储存的是 Stream
                             fileName = Path.GetFileName(formFileData.GetAvaliableFileName(SystemTime.NowTicks.ToString()));
-
                         }
                         else
                         {
@@ -361,7 +373,12 @@ namespace Senparc.CO2NET.HttpUtility
             {
                 if (postStream.Length > 0)
                 {
-                    if (contentType == HttpClientHelper.DEFAULT_CONTENT_TYPE)
+                    if (hasFormData)
+                    {
+                        // Form 表单提交
+                        contentType = "application/x-www-form-urlencoded";
+                    }
+                    else if (contentType == HttpClientHelper.DEFAULT_CONTENT_TYPE)
                     {
                         //如果ContentType是默认值，则设置成为二进制流
                         contentType = "application/octet-stream";
@@ -370,8 +387,10 @@ namespace Senparc.CO2NET.HttpUtility
                     //contentType = "application/x-www-form-urlencoded";
                 }
 
-                hc = new StreamContent(postStream);
+                postStream.Seek(0, SeekOrigin.Begin);
 
+                hc = new StreamContent(postStream);
+                
                 hc.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 
                 //使用Url格式Form表单Post提交的时候才使用application/x-www-form-urlencoded
@@ -380,14 +399,14 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             //HttpContentHeader(hc, timeOut);
-            #endregion
+        #endregion
 
             if (!string.IsNullOrEmpty(refererUrl))
             {
                 client.DefaultRequestHeaders.Referrer = new Uri(refererUrl);
             }
 
-            return (client,hc);
+            return (client, hc);
         }
 
 #endif
@@ -420,9 +439,12 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             X509Certificate2 cer = null,
 #endif            
-            bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT,
+            bool useAjax = false, Dictionary<string, string> headerAddition = null,
+            int timeOut = Config.TIME_OUT,
             bool checkValidationResult = false)
         {
+            var hasFormData = formData != null;
+
             MemoryStream ms = new MemoryStream();
             formData.FillFormDataStream(ms);//填充formData
 
@@ -436,7 +458,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+                useAjax, headerAddition, timeOut, checkValidationResult, hasFormData, contentType);
         }
 
         /// <summary>
@@ -460,13 +482,14 @@ namespace Senparc.CO2NET.HttpUtility
         public static string HttpPost(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
-            Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
+            Dictionary<string, string> fileDictionary = null, string refererUrl = null,
+            Encoding encoding = null,
 #if !NET462
             string certName = null,
 #else
             X509Certificate2 cer = null,
 #endif
-            bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT, bool checkValidationResult = false,
+            bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT, bool checkValidationResult = false, bool hasFormData = false,
             string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
         {
             if (cookieContainer == null)
@@ -482,7 +505,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+                useAjax, headerAddition, timeOut, checkValidationResult, hasFormData, contentType);
 
             var response = senparcResponse.Result;//获取响应信息
 
@@ -577,14 +600,17 @@ namespace Senparc.CO2NET.HttpUtility
         public static SenparcHttpResponse HttpResponsePost(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
-            Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
+            Dictionary<string, string> fileDictionary = null, string refererUrl = null,
+            Encoding encoding = null,
 #if !NET462
             string certName = null,
 #else
             X509Certificate2 cer = null,
 #endif
             bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT,
-            bool checkValidationResult = false, string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
+            bool checkValidationResult = false,
+            bool hasFormData = false,
+            string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
         {
             if (cookieContainer == null)
             {
@@ -598,7 +624,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
 #if NET462
-            var request = HttpPost_Common_Net45(url, "POST", cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+            var request = HttpPost_Common_Net45(url, "POST", cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, hasFormData, timeOut, checkValidationResult, contentType);
 
             #region 输入二进制流
             if (postStream != null && postStream.Length > 0)
@@ -627,7 +653,7 @@ namespace Senparc.CO2NET.HttpUtility
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             return new SenparcHttpResponse(response);
 #else
-            var httpPost = HttpPost_Common_NetCoreAsync(serviceProvider, url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false).GetAwaiter().GetResult();
+            var httpPost = HttpPost_Common_NetCoreAsync(serviceProvider, url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, hasFormData, contentType).ConfigureAwait(false).GetAwaiter().GetResult();
 
             var client = httpPost.HttpClient;
             var hc = httpPost.HttpContent;
@@ -690,9 +716,12 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             X509Certificate2 cer = null,
 #endif
-            bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT,
+            bool useAjax = false, Dictionary<string, string> headerAddition = null,
+            int timeOut = Config.TIME_OUT,
             bool checkValidationResult = false)
         {
+            var hasFormData = formData != null;
+
             MemoryStream ms = new MemoryStream();
             await formData.FillFormDataStreamAsync(ms).ConfigureAwait(false);//填充formData
 
@@ -706,7 +735,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false);
+                useAjax, headerAddition, hasFormData, timeOut, checkValidationResult, contentType).ConfigureAwait(false);
         }
 
 
@@ -737,7 +766,9 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             X509Certificate2 cer = null,
 #endif
-            bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT, bool checkValidationResult = false,
+            bool useAjax = false, Dictionary<string, string> headerAddition = null,
+            bool hasFormData = false,
+            int timeOut = Config.TIME_OUT, bool checkValidationResult = false,
             string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
         {
             if (cookieContainer == null)
@@ -751,7 +782,6 @@ namespace Senparc.CO2NET.HttpUtility
                 postStream = new MemoryStream();
             }
 
-
             //var dt1 = SystemTime.Now;
             //Console.WriteLine($"{System.Threading.Thread.CurrentThread.Name} - START - {dt1:HH:mm:ss.ffff}");
 
@@ -763,7 +793,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, headerAddition, timeOut, checkValidationResult, contentType).ConfigureAwait(false);
+                useAjax, headerAddition, hasFormData, timeOut, checkValidationResult, contentType).ConfigureAwait(false);
 
             var response = senparcResponse.Result;//获取响应信息
 
@@ -885,8 +915,11 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             X509Certificate2 cer = null,
 #endif
-            bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT,
-            bool checkValidationResult = false, string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
+            bool useAjax = false, Dictionary<string, string> headerAddition = null,
+            bool hasFormData = false,
+            int timeOut = Config.TIME_OUT,
+            bool checkValidationResult = false,
+            string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
         {
             if (cookieContainer == null)
             {
@@ -900,7 +933,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
 #if NET462
-            var request = HttpPost_Common_Net45(url, "POST", cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+            var request = HttpPost_Common_Net45(url, "POST", cookieContainer, postStream, fileDictionary, refererUrl, encoding, cer, useAjax, headerAddition, hasFormData, timeOut, checkValidationResult, contentType);
 
             #region 输入二进制流
             if (postStream != null && postStream.Length > 0)
@@ -929,7 +962,7 @@ namespace Senparc.CO2NET.HttpUtility
             HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync().ConfigureAwait(false));
             return new SenparcHttpResponse(response);
 #else
-            var httpPost = await HttpPost_Common_NetCoreAsync(serviceProvider, url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, contentType);
+            var httpPost = await HttpPost_Common_NetCoreAsync(serviceProvider, url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, hasFormData, contentType);
 
             var client = httpPost.HttpClient;
             var hc = httpPost.HttpContent;

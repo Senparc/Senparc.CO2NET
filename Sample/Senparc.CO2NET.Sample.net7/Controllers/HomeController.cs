@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Senparc.CO2NET.Cache;
@@ -66,7 +69,16 @@ namespace Senparc.CO2NET.Sample.net6.Controllers
         [HttpGet]
         public IActionResult PostParameter()
         {
-            var result = RequestUtility.HttpPost(_serviceProvider, "https://localhost:44351/Home/PostParameter", formData: new Dictionary<string, string>() { { "code", SystemTime.NowTicks.ToString() } });
+            var formData = new Dictionary<string, string>()
+            {
+                { "code", SystemTime.NowTicks.ToString() }
+            };
+
+            var dt = SystemTime.Now;
+
+            var result = RequestUtility.HttpPost(_serviceProvider, "http://localhost:5172/Home/PostParameter", formData: formData);
+
+            result += $" | Cost:{SystemTime.DiffTotalMS(dt)}ms";
             return Content(result);
         }
 
@@ -131,7 +143,7 @@ namespace Senparc.CO2NET.Sample.net6.Controllers
                 fileDictionary["image"] = filePath;
             }
 
-            var url = "https://localhost:44351/Home/PostFile";
+            var url = "http://localhost:5172/Home/PostFile";
             var result = await RequestUtility.HttpPostAsync(_serviceProvider, url, fileDictionary: fileDictionary);//获取图片的base64编码
             var note = byStream != null ? "使用文件流" : "使用文件名";
             var timeCost = SystemTime.NowDiff(dt1);
