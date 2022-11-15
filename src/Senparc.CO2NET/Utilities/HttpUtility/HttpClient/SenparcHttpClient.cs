@@ -33,12 +33,16 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20200220
     修改描述：v1.1.100 重构 SenparcDI
 
+    修改标识：Senparc - 20221115
+    修改描述：v2.1.3 针对 .NET 7.0 处理对 Cookie 的特殊判断
+
 ----------------------------------------------------------------*/
 
 
 #if !NET462
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
+using Senparc.CO2NET.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,7 +102,13 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             var cookieHeader = cookieContainer.GetCookieHeader(uri);
-            Client.DefaultRequestHeaders.Add(HeaderNames.Cookie, cookieHeader);
+
+            // .NET 7 此处如果传入空字符串，会抛异常：
+            // System.FormatException: The format of value '' is invalid.
+            if (!cookieHeader.IsNullOrEmpty())
+            {
+                Client.DefaultRequestHeaders.Add(HeaderNames.Cookie, cookieHeader);
+            }
         }
 
 
