@@ -86,6 +86,7 @@ namespace Senparc.CO2NET.Sample.net6.Controllers
         [HttpPost]
         public IActionResult PostParameter(string code)
         {
+            HttpContext.Response.Cookies.Append("Time", SystemTime.Now.ToString());
             return Content($"已经到达Post目标地址。{SystemTime.Now}, code: {code}");
         }
 
