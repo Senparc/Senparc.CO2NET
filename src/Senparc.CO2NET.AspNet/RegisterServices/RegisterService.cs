@@ -57,9 +57,9 @@ namespace Senparc.CO2NET.AspNet.RegisterServices
                 Senparc.CO2NET.Config.RootDirectoryPath = AppDomain.CurrentDomain.BaseDirectory;
             }
 
-            Senparc.CO2NET.AspNetConfig.HostingEnvironment = env;
+            Senparc.CO2NET.AspNetConfig.HostEnvironment = env;
 
-           
+
             var register = Senparc.CO2NET.RegisterServices.RegisterService.Start(senparcSetting);
             return register;
         }
