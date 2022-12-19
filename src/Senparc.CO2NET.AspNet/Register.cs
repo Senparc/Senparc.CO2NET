@@ -1,14 +1,25 @@
-﻿#if !NET462
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2022 Senparc
+
+    文件名：Register.cs
+    文件功能描述： Senparc.CO2NET.AspNet 基础信息注册
+
+
+    创建标识：Senparc - 20191230
+
+    修改标识：Senparc - 20221219
+    修改描述：v1.1.3 优化 UseSenparcGlobal 方法
+
+----------------------------------------------------------------*/
+
+#if !NET462
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
-#endif
-
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.RegisterServices;
-#if NETSTANDARD2_0_OR_GREATER
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 #endif
@@ -26,7 +37,7 @@ namespace Senparc.CO2NET.AspNet
         /// 开始 Senparc.CO2NET 初始化参数流程（ASP.NET Core)
         /// </summary>
         /// <param name="registerService"></param>
-        /// <param name="env">IHostingEnvironment（.NET Core 2.0） 或 IWebHostEnvironment（.NET Core 3.0）</param>
+        /// <param name="env">IHostingEnvironment（.NET Core 2.0） 或 IWebHostEnvironment（.NET Core 3.0+）</param>
         /// <param name="senparcSetting">SenparcSetting 对象</param>
         /// <param name="registerConfigure">RegisterService 设置</param>
         /// <param name="autoScanExtensionCacheStrategies">是否自动扫描全局的扩展缓存（会增加系统启动时间）</param>
@@ -35,11 +46,7 @@ namespace Senparc.CO2NET.AspNet
         /// <para>如果设置为 null（注意：不适委托返回 null，是整个委托参数为 null），则自动使用反射扫描所有可能存在的扩展缓存策略</para></param>
         /// <returns></returns>
         public static IRegisterService UseSenparcGlobal(this IApplicationBuilder registerService,
-#if NETSTANDARD2_0
             Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/ env,
-#else
-            Microsoft.Extensions.Hosting.IHostEnvironment/*IWebHostEnvironment*/ env,
-#endif
             SenparcSetting senparcSetting = null,
             Action<RegisterService> registerConfigure = null,
             bool autoScanExtensionCacheStrategies = false,
