@@ -22,7 +22,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Copyright (C) 2022 Senparc
 
     文件名：RegisterService.cs
-    文件功能描述：Senparc.Weixin SDK 快捷注册流程
+    文件功能描述：快捷注册类，RegisterService 扩展类
 
 
     创建标识：Senparc - 20180222
