@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>1.1.3.1</Version>
+    <Version>1.1.3.2</Version>
     <AssemblyName>Senparc.CO2NET.AspNet</AssemblyName>
     <RootNamespace>Senparc.CO2NET.AspNet</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -26,7 +26,7 @@
 		v0.4.300.4 提供 GetRequestMemoryStreamAsync() 异步方法
 		v1.0.1 更新 UseSenparcGlobal 参数输入方式
 		v1.1.2 优化 UseSenparcGlobal 方法
-	</PackageReleaseNotes>
+</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
