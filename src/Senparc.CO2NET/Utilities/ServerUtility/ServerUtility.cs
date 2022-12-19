@@ -97,18 +97,18 @@ namespace Senparc.CO2NET.Utilities
                 //if (!Config.RootDictionaryPath.EndsWith("/") || Config.RootDictionaryPath.EndsWith("\\"))
                 var pathSeparator = Path.DirectorySeparatorChar.ToString();
                 var altPathSeparator = Path.AltDirectorySeparatorChar.ToString();
-                if (!Config.RootDictionaryPath.EndsWith(pathSeparator) && !Config.RootDictionaryPath.EndsWith(altPathSeparator))
+                if (!Config.RootDirectoryPath.EndsWith(pathSeparator) && !Config.RootDirectoryPath.EndsWith(altPathSeparator))
                 {
-                    Config.RootDictionaryPath += pathSeparator;
+                    Config.RootDirectoryPath += pathSeparator;
                 }
 
                 if (virtualPath.StartsWith("~/"))
                 {
-                    return virtualPath.Replace("~/", Config.RootDictionaryPath).Replace("/", pathSeparator);
+                    return virtualPath.Replace("~/", Config.RootDirectoryPath).Replace("/", pathSeparator);
                 }
                 else
                 {
-                    return Path.Combine(Config.RootDictionaryPath, virtualPath);
+                    return Path.Combine(Config.RootDirectoryPath, virtualPath);
                 }
             }
         }

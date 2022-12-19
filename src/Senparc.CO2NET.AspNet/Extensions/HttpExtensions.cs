@@ -205,7 +205,6 @@ namespace Microsoft.AspNetCore.Http
             return httpContext.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress;
         }
 
-        
     }
 }
 #endif

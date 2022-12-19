@@ -174,7 +174,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         /// <returns></returns>
         public static Stream GetRequestMemoryStream(this HttpRequest request, bool? allowSynchronousIO = true)
         {
-#if NETSTANDARD2_1
+#if !NET462 
             var syncIOFeature = request.HttpContext.Features.Get<IHttpBodyControlFeature>();
 
             if (syncIOFeature != null && allowSynchronousIO.HasValue)

@@ -32,7 +32,7 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 using Senparc.CO2NET.Exceptions;
 using System;
 
-namespace Senparc.Weixin.Exceptions
+namespace Senparc.CO2NET.Exceptions
 {
     /// <summary>
     /// 接口或方法过期异常

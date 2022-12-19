@@ -27,6 +27,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
     创建标识：Senparc - 20190108
 
+    修改标识：Senparc - 20221219
+    修改描述：统一修改参数 RootDictionaryPath 为 RootDirectoryPath
 
 ----------------------------------------------------------------*/
 
@@ -76,7 +78,7 @@ namespace Senparc.CO2NET.Sample.Consoles
                                                         .UseSenparcGlobal();
 
             Console.WriteLine("完成 RegisterService.Start().UseSenparcGlobal()  启动设置");
-            Console.WriteLine($"设定程序目录为：{Senparc.CO2NET.Config.RootDictionaryPath}");
+            Console.WriteLine($"设定程序目录为：{Senparc.CO2NET.Config.RootDirectoryPath}");
 
             #region CO2NET 全局配置
 

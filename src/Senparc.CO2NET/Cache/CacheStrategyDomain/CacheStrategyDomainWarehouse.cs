@@ -10,12 +10,16 @@
     修改标识：Senparc - 20180707
     修改描述：添加 AutoScanDomainCacheStrategy()、ClearRegisteredDomainExtensionCacheStrategies() 方法
 
+    修改标识：Senparc - 20221219
+    修改描述：v2.1.4 _extensionCacheStrategyInstance 参数修改为 ConcurrentDictionary 类型
+
 ----------------------------------------------------------------*/
 
 using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.Trace;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -68,8 +72,8 @@ namespace Senparc.CO2NET.Cache
     /// </summary>
     public class CacheStrategyDomainWarehouse
     {
-        private static Dictionary<string, CacheStrategyDomainMappingCollection> _extensionCacheStrategyInstance
-            = new Dictionary<string, CacheStrategyDomainMappingCollection>();
+        private static ConcurrentDictionary<string, CacheStrategyDomainMappingCollection> _extensionCacheStrategyInstance
+            = new ConcurrentDictionary<string, CacheStrategyDomainMappingCollection>();
 
 
         /// <summary>
