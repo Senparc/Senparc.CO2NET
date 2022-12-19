@@ -113,7 +113,7 @@ namespace Senparc.CO2NET.Trace
                 logDir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "App_Data", "SenparcTraceLog");
 #else
                 //var logDir = Path.Combine(AppContext.BaseDirectory, "App_Data", "SenparcTraceLog");
-                logDir = Path.Combine(Senparc.CO2NET.Config.RootDictionaryPath, "App_Data", "SenparcTraceLog");
+                logDir = Path.Combine(Senparc.CO2NET.Config.RootDirectoryPath, "App_Data", "SenparcTraceLog");
 #endif
 
                 if (!Directory.Exists(logDir))
