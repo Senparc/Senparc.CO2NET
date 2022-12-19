@@ -25,7 +25,9 @@
 			v0.1.0 构建基础代码，从 Senparc.CO2NET 分离 ASP.NET (以及 ASP.NET Core）代码
 			v0.4.300.4 提供 GetRequestMemoryStreamAsync() 异步方法
 			v1.0.1 更新 UseSenparcGlobal 参数输入方式
-			v1.1.2 优化 UseSenparcGlobal 方法
+			v1.1.2
+			1、优化 UseSenparcGlobal 方法
+			2、添加 .NET 6.0 / 7.0 依赖
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
 		<Configurations>Debug;Release;Test</Configurations>
