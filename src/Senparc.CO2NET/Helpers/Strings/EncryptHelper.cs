@@ -46,6 +46,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20210831
     修改描述：v1.5.1 增加和丰富 EncryptHelper 中加密方法（SHA1、AesGcmDecrypt、CRC32）
 
+    修改标识：Senparc - 20221220
+    修改描述：v2.1.5 新增 EncryptHelper.GetCertString() 以及 GetCertStringFromFile() 方法
+
 ----------------------------------------------------------------*/
 
 
@@ -58,6 +61,7 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Senparc.CO2NET.Helpers
 {
@@ -598,5 +602,30 @@ namespace Senparc.CO2NET.Helpers
 
         #endregion
 #endif
+
+        #region 证书相关
+
+        /// <summary>
+        /// 从证书文件内容中获取证书内容（单行字符串）
+        /// </summary>
+        /// <param name="fileContent"></param>
+        public static string GetCertString(string fileContent)
+        {
+            Regex regex = new Regex(@"(--([^\r\n])+--[\r\n]{0,1})|[\r\n]");
+            var certString = regex.Replace(fileContent, "");
+            return certString;
+        }
+
+        /// <summary>
+        /// 从证书文件中获取证书内容（单行字符串）
+        /// </summary>
+        /// <param name="filePath">文件绝对路径</param>
+        public static string GetCertStringFromFile(string filePath)
+        {
+            var fileContent = File.ReadAllText(filePath);
+            return GetCertString(fileContent);
+        }
+
+        #endregion
     }
 }

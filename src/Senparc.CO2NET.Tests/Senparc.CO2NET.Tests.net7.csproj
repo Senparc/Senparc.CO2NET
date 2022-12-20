@@ -9,7 +9,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="apiclient_key.pem" />
 		<None Remove="appsettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="apiclient_key.pem">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 	<ItemGroup>
