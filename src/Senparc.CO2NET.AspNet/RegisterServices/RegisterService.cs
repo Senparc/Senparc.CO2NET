@@ -45,7 +45,7 @@ namespace Senparc.CO2NET.AspNet.RegisterServices
             {
                 if (env is Microsoft.AspNetCore.Hosting.IHostingEnvironment webHostingEnv)
                 {
-                    Senparc.CO2NET.Config.RootDirectoryPath = webHostingEnv.WebRootPath;
+                    Senparc.CO2NET.Config.RootDirectoryPath = webHostingEnv.ContentRootPath;
                 }
                 else
                 {
