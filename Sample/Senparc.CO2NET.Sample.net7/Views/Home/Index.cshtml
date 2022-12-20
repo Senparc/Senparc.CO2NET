@@ -31,17 +31,29 @@
                 <li>@Html.ActionLink("日志记录测试", "LogTest", "Home", null, new { target = "_blank" })</li>
             </ul>
         </div>
-        
+
     </div>
 
     <div class="row">
         <div class="col-md-12 funcArea">
             <h2>GetRequestMemoryStreamAsync 测试</h2>
-            @using (Html.BeginForm("TestGetRequestMemoryStream", "Home", FormMethod.Post, new { target="_blank" }))
+            @using (Html.BeginForm("TestGetRequestMemoryStream", "Home", FormMethod.Post, new { target = "_blank" }))
             {
                 <div>输入测试内容：<input name="contet" type="text" /> <input type="submit" value="提交" /></div>
                 <div>原理：使用表单 Post 信息，数据，并使用 GetRequestMemoryStreamAsync() 异步方法获取请求 Body 中的所有值。</div>
             }
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 funcArea">
+            <h2>Senparc.CO2NET.Config</h2>
+            <table>
+                <tr><td>IsDebug</td><td>@Senparc.CO2NET.Config.IsDebug</td></tr>
+                <tr><td>RootDictionaryPath</td><td>@Senparc.CO2NET.Config.RootDirectoryPath</td></tr>
+                <tr><td>SenparcSetting</td><td>@Senparc.CO2NET.Extensions.ObjectExtensions.ToJson(Senparc.CO2NET.Config.SenparcSetting,true, new Newtonsoft.Json.JsonSerializerSettings(){ ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore})</td></tr>
+                <tr><td>DefaultCacheNamespace</td><td>@Senparc.CO2NET.Config.DefaultCacheNamespace</td></tr>
+            </table>
         </div>
     </div>
 </div>
