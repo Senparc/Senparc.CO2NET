@@ -54,6 +54,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20221115
     修改描述：v2.1.3 优化模拟 Form 提交
 
+    修改标识：Senparc - 20230110
+    修改描述：v2.1.7 HttpUtility.Post 系列方法提供 contentType 参数
+
 ----------------------------------------------------------------*/
 
 
@@ -98,6 +101,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <param name="fileDictionary">需要Post的文件（Dictionary 的 Key=name，Value=绝对路径）</param>
         /// <param name="postDataDictionary">需要Post的键值对（name,value）</param>
+        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static T PostFileGetJson<T>(
@@ -111,6 +115,7 @@ namespace Senparc.CO2NET.HttpUtility
             X509Certificate2 cer = null,
 #endif
             bool useAjax = false,
+            string contentType = null,
             Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
             using (MemoryStream ms = new MemoryStream())
@@ -125,7 +130,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                     cer,
 #endif
-                    useAjax, null, timeOut);
+                    useAjax, null, timeOut, contentType: contentType);
 
                 afterReturnText?.Invoke(url, returnText);
 
@@ -271,6 +276,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <param name="fileDictionary">需要Post的文件（Dictionary 的 Key=name，Value=绝对路径）</param>
         /// <param name="postDataDictionary">需要Post的键值对（name,value）</param>
+        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static async Task<T> PostFileGetJsonAsync<T>(
@@ -281,8 +287,9 @@ namespace Senparc.CO2NET.HttpUtility
             string certName = null,
 #else
             X509Certificate2 cer = null,
-#endif            
+#endif
             bool useAjax = false,
+            string contentType = null,
             Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
             var hasFormData = postDataDictionary != null;
@@ -299,7 +306,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                     cer,
 #endif
-                    useAjax, null, hasFormData, timeOut).ConfigureAwait(false);
+                    useAjax, null, hasFormData, timeOut, contentType: contentType).ConfigureAwait(false);
 
                 afterReturnText?.Invoke(url, returnText);
 
@@ -323,6 +330,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="useAjax">是否使用Ajax请求</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
+        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
         public static async Task<T> PostGetJsonAsync<T>(
@@ -333,7 +341,8 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             X509Certificate2 cer = null,
 #endif
-            bool useAjax = false, bool checkValidationResult = false, 
+            bool useAjax = false, bool checkValidationResult = false,
+            string contentType = null,
             Action<string, string> afterReturnText = null,
             int timeOut = Config.TIME_OUT)
         {
@@ -345,7 +354,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, null, false, timeOut, checkValidationResult).ConfigureAwait(false);
+                useAjax, null, false, timeOut, checkValidationResult, contentType).ConfigureAwait(false);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -367,19 +376,22 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
         /// <param name="cer">证书，如果不需要则保留null</param>
         /// <param name="useAjax">是否使用Ajax请求</param>
-        /// <param name="timeOut">代理请求超时时间（毫秒）</param>
+        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
+        /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
         public static async Task<T> PostGetJsonAsync<T>(
             IServiceProvider serviceProvider,
-            string url, CookieContainer cookieContainer = null, 
+            string url, CookieContainer cookieContainer = null,
             Dictionary<string, string> formData = null, Encoding encoding = null,
 #if !NET462
             string certName = null,
 #else
             X509Certificate2 cer = null,
 #endif
-            bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
+            bool useAjax = false,
+            string contentType = null,
+            Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
 
             string returnText = await RequestUtility.HttpPostAsync(

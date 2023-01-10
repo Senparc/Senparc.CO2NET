@@ -133,7 +133,7 @@ namespace Senparc.CO2NET.HttpUtility
                   new RemoteCertificateValidationCallback(CheckValidationResult);
             }
 
-            #region 处理Form表单文件上传
+        #region 处理Form表单文件上传
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
             {
@@ -236,7 +236,7 @@ namespace Senparc.CO2NET.HttpUtility
                     //contentType = "application/x-www-form-urlencoded";
                 }
             }
-            #endregion
+        #endregion
 
             request.ContentType = contentType;
             request.ContentLength = postStream != null ? postStream.Length : 0;
@@ -303,12 +303,15 @@ namespace Senparc.CO2NET.HttpUtility
             HttpContent hc = null;
             HttpClientHeader(client, refererUrl, useAjax, headerAddition, timeOut);
 
-        #region 处理Form表单文件上传
+            #region 处理Form表单文件上传
 
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
             {
-                contentType = "multipart/form-data";
+                if (contentType == HttpClientHelper.DEFAULT_CONTENT_TYPE)
+                {
+                    contentType = "multipart/form-data";
+                }
 
                 //通过表单上传文件
                 string boundary = "----" + SystemTime.Now.Ticks.ToString("x");
@@ -390,7 +393,7 @@ namespace Senparc.CO2NET.HttpUtility
                 postStream.Seek(0, SeekOrigin.Begin);
 
                 hc = new StreamContent(postStream);
-                
+
                 hc.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 
                 //使用Url格式Form表单Post提交的时候才使用application/x-www-form-urlencoded
@@ -399,7 +402,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             //HttpContentHeader(hc, timeOut);
-        #endregion
+            #endregion
 
             if (!string.IsNullOrEmpty(refererUrl))
             {
@@ -706,6 +709,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="headerAddition">header 附加信息</param>
         /// <param name="timeOut"></param>
         /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
+        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
         /// <returns></returns>
         public static async Task<string> HttpPostAsync(
             IServiceProvider serviceProvider,
@@ -718,14 +722,17 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
             bool useAjax = false, Dictionary<string, string> headerAddition = null,
             int timeOut = Config.TIME_OUT,
-            bool checkValidationResult = false)
+            bool checkValidationResult = false,
+            string contentType = null
+
+            )
         {
             var hasFormData = formData != null;
 
             MemoryStream ms = new MemoryStream();
             await formData.FillFormDataStreamAsync(ms).ConfigureAwait(false);//填充formData
 
-            string contentType = HttpClientHelper.GetContentType(formData);
+            contentType ??= HttpClientHelper.GetContentType(formData);
 
             return await HttpPostAsync(
                 serviceProvider,
