@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2022 Senparc
+    Copyright (C) 2023 Senparc
 
     文件名：RegisterService.cs
     文件功能描述： Senparc.CO2NET 快捷注册流程
