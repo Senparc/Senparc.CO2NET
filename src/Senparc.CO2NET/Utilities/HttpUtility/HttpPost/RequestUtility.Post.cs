@@ -432,6 +432,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="headerAddition">header 附加信息</param>
         /// <param name="timeOut"></param>
         /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
+        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
         /// <returns></returns>
         public static string HttpPost(
             IServiceProvider serviceProvider,
@@ -444,14 +445,16 @@ namespace Senparc.CO2NET.HttpUtility
 #endif            
             bool useAjax = false, Dictionary<string, string> headerAddition = null,
             int timeOut = Config.TIME_OUT,
-            bool checkValidationResult = false)
+            bool checkValidationResult = false,
+            string contentType = null
+            )
         {
             var hasFormData = formData != null;
 
             MemoryStream ms = new MemoryStream();
             formData.FillFormDataStream(ms);//填充formData
 
-            string contentType = HttpClientHelper.GetContentType(formData);
+            contentType ??= HttpClientHelper.GetContentType(formData);
 
             return HttpPost(
                 serviceProvider,
@@ -597,6 +600,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="headerAddition">header附加信息</param>
         /// <param name="timeOut"></param>
         /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
+        /// <param name="hasFormData"></param>
         /// <param name="contentType"></param>
         /// <param name="refererUrl"></param>
         /// <returns></returns>
