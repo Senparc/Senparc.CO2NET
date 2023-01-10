@@ -151,6 +151,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
         /// <param name="cer">证书，如果不需要则保留null</param>
         /// <param name="useAjax">是否使用Ajax请求</param>
+        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
@@ -163,7 +164,9 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             X509Certificate2 cer = null,
 #endif
-            bool useAjax = false, bool checkValidationResult = false, Action<string, string> afterReturnText = null,
+            bool useAjax = false,
+            string contentType = null,
+            bool checkValidationResult = false, Action<string, string> afterReturnText = null,
             int timeOut = Config.TIME_OUT)
         {
             string returnText = RequestUtility.HttpPost(
@@ -174,7 +177,7 @@ namespace Senparc.CO2NET.HttpUtility
 #else
                 cer,
 #endif
-                useAjax, null, timeOut, checkValidationResult);
+                useAjax, null, timeOut, checkValidationResult, contentType: contentType);
 
             //SenparcTrace.SendApiLog(url, returnText);
             afterReturnText?.Invoke(url, returnText);
@@ -195,6 +198,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
         /// <param name="cer">证书，如果不需要则保留null</param>
         /// <param name="useAjax">是否使用Ajax请求</param>
+        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
@@ -206,7 +210,9 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             X509Certificate2 cer = null,
 #endif
-            bool useAjax = false, Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
+            bool useAjax = false,
+            string contentType = null,
+            Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
         {
             string returnText = RequestUtility.HttpPost(
                 serviceProvider,
