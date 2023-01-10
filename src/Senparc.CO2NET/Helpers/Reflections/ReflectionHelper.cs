@@ -40,6 +40,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20200228
     修改描述：v1.3.102 提供 ReflectionHelper 异常是否记录日志的选项
 
+    修改标识：Senparc - 20230110
+    修改描述：v2.1.6 ReflectionHelper.GetStaticMember() 方法添加找不到目标对象的 null 判断，不再抛出异常
+
 ----------------------------------------------------------------*/
 
 using Senparc.CO2NET.Trace;
@@ -120,16 +123,28 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="memberName">属性名称（忽略大小写）</param>
         /// <param name="recordLog">是否记录日志</param>
         /// <returns></returns>
-        public static object GetStaticMember(string assemblyName, string nameSpace, string className,string memberName,bool recordLog=false)
+        public static object GetStaticMember(string assemblyName, string nameSpace, string className, string memberName, bool recordLog = false)
         {
             try
             {
                 string fullName = nameSpace + "." + className;//命名空间.类型名
                 string path = fullName + "," + assemblyName;//命名空间.类型名,程序集
                 var type = Type.GetType(path);
+
+                if (type == null)
+                {
+                    return null;
+                }
+
                 PropertyInfo[] props = type.GetProperties();
                 var prop = props.FirstOrDefault(z => z.Name.Equals(memberName, StringComparison.OrdinalIgnoreCase));
-                return prop.GetValue(null,null);
+
+                if (prop == null)
+                {
+                    return null;
+                }
+
+                return prop.GetValue(null, null);
             }
             catch (Exception ex)
             {
@@ -154,6 +169,12 @@ namespace Senparc.CO2NET.Helpers
             {
                 PropertyInfo[] props = type.GetProperties();
                 var prop = props.FirstOrDefault(z => z.Name.Equals(memberName, StringComparison.OrdinalIgnoreCase));
+
+                if (prop == null)
+                {
+                    return null;
+                }
+                
                 return prop.GetValue(null, null);
             }
             catch (Exception ex)

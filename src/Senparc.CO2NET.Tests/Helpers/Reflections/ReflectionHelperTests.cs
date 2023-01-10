@@ -41,6 +41,12 @@ namespace Senparc.CO2NET.Tests.Helpers
             var obj = ReflectionHelper.GetStaticMember("Senparc.CO2NET", "Senparc.CO2NET.Cache", "LocalObjectCacheStrategy", "Instance");
             Assert.IsNotNull(obj);
             Assert.IsInstanceOfType(obj, typeof(LocalObjectCacheStrategy));
+
+            var objNotExist = ReflectionHelper.GetStaticMember("Senparc.CO2NET_NOT_EXIST", "Senparc.CO2NET.Cache", "LocalObjectCacheStrategy", "Instance");
+            Assert.IsNull(objNotExist);
+
+            var objNotExist2 = ReflectionHelper.GetStaticMember("Senparc.CO2NET", "Senparc.CO2NET.Cache", "LocalObjectCacheStrategy", "Instance_NOT_EXIST");
+            Assert.IsNull(objNotExist2);
         }
 
 
