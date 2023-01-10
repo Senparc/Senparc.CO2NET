@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
-    <Version>1.2.4.3</Version>
+    <Version>1.2.4.4</Version>
     <AssemblyName>Senparc.CO2NET.APM</AssemblyName>
     <RootNamespace>Senparc.CO2NET.APM</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <Description>
 			Senparc.CO2NET.APM 应用性能管理
 		</Description>
-    <Copyright>Senparc Copyright © 2004~2022</Copyright>
+    <Copyright>Senparc Copyright © 2004~2023</Copyright>
     <PackageTags>APM,.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
     <Authors>Senparc</Authors>
     <Owners>Senparc</Owners>
