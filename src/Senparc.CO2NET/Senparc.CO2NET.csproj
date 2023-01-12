@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>2.1.7.1</Version>
+    <Version>2.1.7.2</Version>
     <LangVersion>8.0</LangVersion>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
@@ -131,6 +131,7 @@
 		v2.1.5 新增 EncryptHelper.GetCertString() 以及 GetCertStringFromFile() 方法
 		v2.1.6 ReflectionHelper.GetStaticMember() 方法添加找不到目标对象的 null 判断，不再抛出异常
 		v2.1.7 HttpUtility.Post 系列方法提供 contentType 参数
+		v2.1.7.2 解决上一版本升级后导致的“The value cannot be null or empty. (Parameter 'mediaType')”异常
 </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
