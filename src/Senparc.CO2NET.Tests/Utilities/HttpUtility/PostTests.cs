@@ -188,5 +188,54 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             }
 
         }
+
+        /// <summary>
+        /// v2.1.7.1 异常修复测试（v2.1.7.2 后，此测试应该通过）
+        /// </summary>
+        [TestMethod()]
+        public void PostGetJsonTestForV2_1_7_1()
+        {
+            /* 针对异常：
+            中间件类型：WxOpenMessageHandlerMiddleware`1
+MessageHandler 类型：CustomWxOpenMessageHandler
+异常信息：Senparc.NeuChar.Exceptions.MessageHandlerException: MessageHandler中Execute()过程发生错误：The value cannot be null or empty. (Parameter 'mediaType')
+ ---> System.ArgumentException: The value cannot be null or empty. (Parameter 'mediaType')
+   at System.Net.Http.Headers.MediaTypeHeaderValue.CheckMediaTypeFormat(String mediaType, String parameterName)
+   at System.Net.Http.Headers.MediaTypeHeaderValue..ctor(String mediaType)
+   at Senparc.CO2NET.HttpUtility.RequestUtility.HttpPost_Common_NetCoreAsync(IServiceProvider serviceProvider, String url, CookieContainer cookieContainer, Stream postStream, Dictionary`2 fileDictionary, String refererUrl, Encoding encoding, String certName, Boolean useAjax, Dictionary`2 headerAddition, Int32 timeOut, Boolean checkValidationResult, Boolean hasFormData, String contentType)
+   at Senparc.CO2NET.HttpUtility.RequestUtility.HttpResponsePostAsync(IServiceProvider serviceProvider, String url, CookieContainer cookieContainer, Stream postStream, Dictionary`2 fileDictionary, String refererUrl, Encoding encoding, String certName, Boolean useAjax, Dictionary`2 headerAddition, Boolean hasFormData, Int32 timeOut, Boolean checkValidationResult, String contentType)
+   at Senparc.CO2NET.HttpUtility.RequestUtility.HttpPostAsync(IServiceProvider serviceProvider, String url, CookieContainer cookieContainer, Stream postStream, Dictionary`2 fileDictionary, String refererUrl, Encoding encoding, String certName, Boolean useAjax, Dictionary`2 headerAddition, Boolean hasFormData, Int32 timeOut, Boolean checkValidationResult, String contentType)
+   at Senparc.CO2NET.HttpUtility.Post.PostGetJsonAsync[T](IServiceProvider serviceProvider, String url, CookieContainer cookieContainer, Stream fileStream, Encoding encoding, String certName, Boolean useAjax, Boolean checkValidationResult, String contentType, Action`2 afterReturnText, Int32 timeOut)
+   at Senparc.Weixin.CommonAPIs.CommonJsonSend.SendAsync[T](String accessToken, String urlFormat, Object data, CommonJsonSendType sendType, Int32 timeOut, Boolean checkValidationResult, JsonSetting jsonSetting, String contentType) in E:\Senparc项目\WeiXinMPSDK\src\Senparc.Weixin\Senparc.Weixin\CommonAPIs\CommonJsonSend.cs:line 254
+   at Senparc.Weixin.CommonAPIs.CommonJsonSend.SendAsync(String accessToken, String urlFormat, Object data, CommonJsonSendType sendType, Int32 timeOut, Boolean checkValidationResult, JsonSetting jsonSetting, String contentType) in E:\Senparc项目\WeiXinMPSDK\src\Senparc.Weixin\Senparc.Weixin\CommonAPIs\CommonJsonSend.cs:line 216
+   at Senparc.Weixin.WxOpen.AdvancedAPIs.CustomApi.<>c__DisplayClass11_0.<<SendTextAsync>b__0>d.MoveNext() in E:\Senparc项目\WeiXinMPSDK\src\Senparc.Weixin.WxOpen\src\Senparc.Weixin.WxOpen\Senparc.Weixin.WxOpen\AdvancedAPIs\Custom\CustomApi.cs:line 277
+--- End of stack trace from previous location ---
+   at Senparc.Weixin.CommonAPIs.ApiHandlerWapper.ApiHandlerWapperBase.TryCommonApiBaseAsync[T](PlatformType platformType, Func`1 accessTokenContainer_GetFirstOrDefaultAppIdAsyncFunc, Func`2 accessTokenContainer_CheckRegisteredAsyncFunc, Func`3 accessTokenContainer_GetAccessTokenResultAsyncFunc, IEnumerable`1 invalidCredentialValues, Func`2 fun, String accessTokenOrAppId, Boolean retryIfFaild) in E:\Senparc项目\WeiXinMPSDK\src\Senparc.Weixin\Senparc.Weixin\CommonAPIs\ApiHandlerWapper\ApiHandlerWapperBase.cs:line 352
+   at Senparc.Weixin.WxOpen.WxOpenApiHandlerWapper.TryCommonApiAsync[T](Func`2 fun, String accessTokenOrAppId, Boolean retryIfFaild) in E:\Senparc项目\WeiXinMPSDK\src\Senparc.Weixin.WxOpen\src\Senparc.Weixin.WxOpen\Senparc.Weixin.WxOpen\CommonAPIs\WxOpenApiHandlerWapper.cs:line 239
+   at Senparc.Weixin.WxOpen.AdvancedAPIs.CustomApi.SendTextAsync(String accessTokenOrAppId, String openId, String content, String businessId, Int32 timeOut) in E:\Senparc项目\WeiXinMPSDK\src\Senparc.Weixin.WxOpen\src\Senparc.Weixin.WxOpen\Senparc.Weixin.WxOpen\AdvancedAPIs\Custom\CustomApi.cs:line 273
+   at Senparc.Weixin.Sample.CommonService.WxOpenMessageHandler.CustomWxOpenMessageHandler.OnEvent_UserEnterTempSessionRequestAsync(RequestMessageEvent_UserEnterTempSession requestMessage) in E:\Senparc项目\WeiXinMPSDK\Samples\All\Senparc.Weixin.Sample.CommonService\MessageHandlers\WxOpenMessageHandler\CustomWxOpenMessageHandler.cs:line 222
+   at Senparc.Weixin.WxOpen.MessageHandlers.WxOpenMessageHandler`1.OnEventRequestAsync(IRequestMessageEventBase requestMessage) in E:\Senparc项目\WeiXinMPSDK\src\Senparc.Weixin.WxOpen\src\Senparc.Weixin.WxOpen\Senparc.Weixin.WxOpen\MessageHandlers\WxOpenMessageHandler.Event.cs:line 248
+   at Senparc.Weixin.WxOpen.MessageHandlers.WxOpenMessageHandler`1.BuildResponseMessageAsync(CancellationToken cancellationToken) in E:\Senparc项目\WeiXinMPSDK\src\Senparc.Weixin.WxOpen\src\Senparc.Weixin.WxOpen\Senparc.Weixin.WxOpen\MessageHandlers\WxOpenMessageHandler.cs:line 335
+   at Senparc.NeuChar.MessageHandlers.MessageHandler`3.ExecuteAsync(CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Senparc.NeuChar.MessageHandlers.MessageHandler`3.ExecuteAsync(CancellationToken cancellationToken)
+   at Senparc.NeuChar.MessageHandlers.MessageHandler`3.ExecuteAsync(CancellationToken cancellationToken)
+   at Senparc.NeuChar.Middlewares.MessageHandlerMiddleware`5.Invoke(HttpContext context)
+*/
+            
+            var url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=<AccessToken>";
+            var data = @"{""touser"":""oeaTy0DgoGq-lyqvTauWVjbIVuP0"",""template_id"":""xWclWkOqDrxEgWF4DExmb9yUe10pfmSSt2KM6pY7ZlU"",""page"":""pages/index/index"",""data"":{""thing1"":{""value"":""微信公众号+小程序快速开发""},""time5"":{""value"":""2023年01月12日 17:32""},""thing6"":{""value"":""盛派网络研究院""},""thing7"":{""value"":""第二部分课程正在准备中，尽情期待""}}}";
+
+            var ms = new MemoryStream();
+            var sw = new StreamWriter(ms);
+            sw.Write(data);
+            sw.Flush();
+
+           var result = HttpUtility.Post.PostGetJsonAsync<dynamic>(BaseTest.serviceProvider, url,null,ms).GetAwaiter().GetResult();
+            Assert.IsNotNull(result);
+            Console.WriteLine(result);
+            
+            sw.Close();
+        }
     }
 }
