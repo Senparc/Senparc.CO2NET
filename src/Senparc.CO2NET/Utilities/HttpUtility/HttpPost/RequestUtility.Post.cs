@@ -59,6 +59,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20221115
     修改描述：v2.1.3 优化模拟 Form 提交
 
+    修改标识：Senparc - 20230128
+    修改描述：v2.1.7.3 继续解决上一版本升级后导致的“The value cannot be null or empty. (Parameter 'mediaType')”异常
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -397,6 +400,8 @@ namespace Senparc.CO2NET.HttpUtility
                 postStream.Seek(0, SeekOrigin.Begin);
 
                 hc = new StreamContent(postStream);
+
+                contentType ??= HttpClientHelper.DEFAULT_CONTENT_TYPE;
 
                 hc.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 
