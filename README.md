@@ -4,6 +4,7 @@
 [![Build status](https://mysenparc.visualstudio.com/Senparc%20SDK/_apis/build/status/CO2NET/Senparc.CO2NET%20-ASP.NET%20Core-CI-clone)](https://mysenparc.visualstudio.com/Senparc%20SDK/_build/latest?definitionId=11)
 [![Build status](https://ci.appveyor.com/api/projects/status/uqhyn9i2x5r300dq/branch/master?svg=true)](https://ci.appveyor.com/project/JeffreySu/senparc-co2net/branch/master)
 [![NuGet](https://img.shields.io/nuget/dt/Senparc.CO2NET.svg)](https://www.nuget.org/packages/Senparc.CO2NET)
+[![license](https://img.shields.io/github/license/JeffreySu/WeiXinMPSDK.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 | 模块功能    |        Nuget 名称          |  Nuget                                                                                | 支持 .NET 版本 
 |------------|----------------------------|---------------------------------------------------------------------------------------|--------------------------------------
@@ -13,7 +14,7 @@
 | Memcached 基础库 | Senparc.CO2NET.Cache.Memcached   | [![Senparc.CO2NET.Cache.Memcached][4.1]][4.2]    [![Senparc.CO2NET.Cache.Memcached][nuget-img-base-memcached]][nuget-url-base-memcached]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
 | WebApi（新） | Senparc.CO2NET.WebApi   | [![Senparc.CO2NET.WebApi][5.1]][5.2]    [![Senparc.CO2NET.Cache.Memcached][nuget-img-base-memcached]][nuget-url-base-memcached]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
 
-![.NET Core 2.0][core20Y] 同时支持 .NET Standard 2.0+ 及 .NET Core 2.1/3.1、.NET 5.0/6.0
+![.NET Core 2.0][core20Y] 同时支持 .NET Standard 2.0+ 及 .NET Core 2.1/3.1、.NET 5.0/6.0/7.0+
 
 > CO2NET 将逐步停止对 .NET Framework 4.0 及以下版本的支持。
 
@@ -80,3 +81,5 @@ PM> Install-Package Senparc.CO2NET
 [抢先预览（2018年6月15日）](http://study.163.com/course/courseLearn.htm?courseId=1004873017&share=2&shareId=400000000353002#/learn/video?lessonId=1052874494&courseId=1004873017)
 
 [使用 CO2NET 初始化微信项目及普通项目（2018年6月22日）](http://study.163.com/course/courseLearn.htm?courseId=1004873017&share=2&shareId=400000000353002#/learn/video?lessonId=1052903157&courseId=1004873017)
+
+
