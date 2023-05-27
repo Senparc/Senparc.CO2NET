@@ -25,6 +25,9 @@
     修改标识：Senparc - 20200220
     修改描述：v1.1.100 重构 SenparcDI
 
+    修改标识：Senparc - 20230527
+    修改描述：v4.1.3 MemcachedObjectCacheStrategy.Get() 方法添加纯字符串的判断
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -36,6 +39,7 @@ using Enyim.Caching;
 using Enyim.Caching.Configuration;
 using Enyim.Caching.Memcached;
 using Senparc.CO2NET.Exceptions;
+using Newtonsoft.Json.Linq;
 
 #if !NET462
 using Microsoft.Extensions.Logging;
@@ -351,9 +355,22 @@ namespace Senparc.CO2NET.Cache.Memcached
             }
 
             var cacheKey = GetFinalKey(key, isFullKey);
-            var json = Cache.Get<string>(cacheKey);
-            var obj = json.DeserializeFromCache();
-            return obj;
+            var value = Cache.Get<string>(cacheKey);
+            if (value != null)
+            {
+                try
+                {
+                    return value.DeserializeFromCache();
+                }
+                catch
+                {
+                    return value;
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
@@ -547,9 +564,23 @@ namespace Senparc.CO2NET.Cache.Memcached
             }
 
             var cacheKey = GetFinalKey(key, isFullKey);
-            var json = await Cache.GetAsync<string>(cacheKey).ConfigureAwait(false);
-            var obj = json?.Value.DeserializeFromCache();
-            return obj;
+            var value = await Cache.GetAsync<string>(cacheKey).ConfigureAwait(false);
+            if (value != null)
+            {
+                try
+                {
+                    return value.Value.DeserializeFromCache();
+                }
+                catch
+                {
+                    return value.Value;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
 

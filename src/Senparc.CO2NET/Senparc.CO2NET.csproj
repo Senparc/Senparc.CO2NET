@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>2.1.7.3</Version>
+    <Version>2.1.8</Version>
     <LangVersion>8.0</LangVersion>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
@@ -133,6 +133,7 @@
 		v2.1.7 HttpUtility.Post 系列方法提供 contentType 参数
 		v2.1.7.2 解决上一版本升级后导致的“The value cannot be null or empty. (Parameter 'mediaType')”异常
 		v2.1.7.3 继续解决上一版本升级后导致的“The value cannot be null or empty. (Parameter 'mediaType')”异常
+		v2.1.8 LocalObjectCacheStrategy.Get() 方法添加纯字符串的判断
 	</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>

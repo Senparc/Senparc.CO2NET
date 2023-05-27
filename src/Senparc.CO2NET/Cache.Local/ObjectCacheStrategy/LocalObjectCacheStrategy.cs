@@ -317,7 +317,14 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
         public async Task<T> GetAsync<T>(string key, bool isFullKey = false)
         {
+#if NET462
             return await Task.Factory.StartNew(() => Get<T>(key, isFullKey)).ConfigureAwait(false);
+#else
+            return await Task.Factory.StartNew(() => Get<T>(key, isFullKey)).ConfigureAwait(false);
+
+            //TODO:使用_cache.GetOrCreateAsync
+#endif
+
         }
 
         public async Task<IDictionary<string, object>> GetAllAsync()

@@ -44,6 +44,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190914
     修改描述：v3.5.4 fix bug：GetServer().Keys() 方法添加 database 索引值
 
+    修改标识：Senparc - 20230527
+    修改描述：v1.1.4 RedisObjectCacheStrategy.Get() 方法添加纯字符串的判断
+
  ----------------------------------------------------------------*/
 
 using System;
@@ -137,7 +140,14 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var value = base.Client.Get(cacheKey);
             if (value != null)
             {
-                return value.ToString().DeserializeFromCache();
+                try
+                {
+                    return value.ToString().DeserializeFromCache();
+                }
+                catch
+                {
+                    return value.ToString();
+                }
             }
             return value;
         }
@@ -265,7 +275,14 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var value = await base.Client.GetAsync(cacheKey).ConfigureAwait(false);
             if (value != null)
             {
-                return value.ToString().DeserializeFromCache();
+                try
+                {
+                    return value.ToString().DeserializeFromCache();
+                }
+                catch
+                {
+                    return value.ToString();
+                }
             }
             return value;
         }
