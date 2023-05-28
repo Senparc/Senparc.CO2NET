@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Tests;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
                         //等待统一开始
                     }
                     var dt1 = SystemTime.Now;
-                    using (var syncLock =cache.BeginCacheLock(lockResourceName, lockGroupKey.ToString(), retryCount, retryDelay))
+                    using (var syncLock = cache.BeginCacheLock(lockResourceName, lockGroupKey.ToString(), retryCount, retryDelay))
                     {
                         var runTime = SystemTime.Now;
                         var waitTime = (runTime - dt1).TotalMilliseconds;
@@ -70,6 +71,24 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             }
 
             Console.WriteLine($"过程结束，总用时：{SystemTime.DiffTotalMS(dtStart)} ms");
+        }
+
+        [TestMethod]
+        public void CacheLockTest()
+        {
+            var cache = RedisObjectCacheStrategy.Instance;//使用 Redis 缓存测试
+            var resourceName = "SenparcTest";
+            var key = "CacheLockTest";
+            using (var cacheLock = cache.BeginCacheLock(resourceName, key, 100, TimeSpan.FromMilliseconds(100)))
+            {
+                //查找内存中的对象
+                var cacheKey = cacheLock.GetLockCacheKey(resourceName, key);
+                Console.WriteLine($"CacheKey: {cacheKey}");
+                var lockObject = cache.Get(cacheKey, true);
+
+                Assert.IsNotNull(lockObject);
+                Console.WriteLine(lockObject.ToJson(true));
+            }
         }
     }
 }

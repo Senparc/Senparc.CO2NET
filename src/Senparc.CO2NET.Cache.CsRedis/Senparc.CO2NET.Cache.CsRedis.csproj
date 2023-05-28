@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
-    <Version>1.1.3.6</Version>
+    <Version>1.1.4</Version>
     <AssemblyName>Senparc.CO2NET.Cache.CsRedis</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.CsRedis</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -24,7 +24,8 @@
     <PackageReleaseNotes>
 		v0.1.0 创世
 		v0.5.2 BaseRedisObjectCacheStrategy 析构函数进行 null 值判断，并添加 "#{Cache_Redis_Configuration}#" 过滤判断
-</PackageReleaseNotes>
+		v1.1.4 RedisObjectCacheStrategy 和 RedisHashSetObjectCacheStrategy.Get() 方法添加纯字符串的判断
+	</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>

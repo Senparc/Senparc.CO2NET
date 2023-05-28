@@ -33,6 +33,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20190412
     修改描述：v0.6.0 提供缓存异步接口
 
+    修改标识：Senparc - 20230527
+    修改描述：v2.1.8 添加 GetLockCacheKey() 方法 
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -74,9 +77,20 @@ namespace Senparc.CO2NET.Cache
         protected BaseCacheLock(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount, TimeSpan? retryDelay)
         {
             _cacheStrategy = strategy;
-            _resourceName = resourceName + key;/*加上Key可以针对某个AppId加锁*/
+            _resourceName = GetLockCacheKey(resourceName,key);/*加上Key可以针对某个AppId加锁*/
             _retryCount = retryCount == null || retryCount == 0 ? DefaultRetryCount : retryCount.Value;
             _retryDelay = retryDelay == null || retryDelay.Value.TotalMilliseconds == 0 ? DefaultRetryDelay : retryDelay.Value;
+        }
+
+        /// <summary>
+        /// 获取换缓存中组合后的 Key
+        /// </summary>
+        /// <param name="resourceName"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string GetLockCacheKey(string resourceName, string key)
+        {
+            return resourceName + key;
         }
 
         /// <summary>

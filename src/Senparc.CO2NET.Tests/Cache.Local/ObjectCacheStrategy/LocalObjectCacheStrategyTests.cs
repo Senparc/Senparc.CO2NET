@@ -2,13 +2,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Cache;
+using Senparc.CO2NET.Cache.CsRedis;
+using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Tests.TestEntities;
 using System;
+using System.Threading;
 
 namespace Senparc.CO2NET.Tests.Cache.Local
 {
     [TestClass]
-    public class LocalObjectCacheStrategyTests :BaseTest
+    public class LocalObjectCacheStrategyTests : BaseTest
     {
         public LocalObjectCacheStrategyTests()
         {
@@ -27,12 +30,15 @@ namespace Senparc.CO2NET.Tests.Cache.Local
         [TestMethod]
         public void CacheLockTest()
         {
-            var cache = LocalObjectCacheStrategy.Instance;
-            using (var cacheLock = cache.BeginCacheLock("SenparcTest", "CacheLockTest", 1, TimeSpan.FromMilliseconds(10)))
+            IBaseObjectCacheStrategy cache = LocalObjectCacheStrategy.Instance;
+            //cache = RedisObjectCacheStrategy.Instance;//使用 Redis 缓存测试
+            var resourceName = "SenparcTest";
+            var key = "CacheLockTest";
+            using (var cacheLock = cache.BeginCacheLock(resourceName, key, 100, TimeSpan.FromMilliseconds(100)))
             {
                 //查找内存中的对象
 
-
+                //独立的 Lock 对象，不适用常规的 ICacheLock
             }
         }
 

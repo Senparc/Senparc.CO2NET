@@ -59,7 +59,7 @@ Senparc.CO2NET 是一个支持 .NET Framework 和 .NET Core 的公共基础扩�
 
 开发者可以直接使用 CO2NET 为项目提供公共基础方法，免去重复准备和维护公共代码的痛苦。
 
-Senparc.CO2NET 已经作为 [Senparc.Weixin SDK](https://github.com/JeffreySu/WeiXinMPSDK)、[SCF](https://github.com/SenparcCoreFramework/SCF) 等 Senparc 系列产品的的基础库被依赖。
+Senparc.CO2NET 已经作为 [Senparc.Weixin SDK](https://github.com/JeffreySu/WeiXinMPSDK)、[NCF](https://github.com/NeuCharFramework/NCF) 等 Senparc 系列产品的的基础库被依赖。
 
 ## 如何使用 Nuget 安装？
 

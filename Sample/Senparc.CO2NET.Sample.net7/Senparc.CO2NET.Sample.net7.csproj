@@ -17,7 +17,7 @@
 			<Version>2.2.8</Version>
 		</PackageReference>
 
-		<PackageReference Include="Senparc.Weixin.MP" Version="16.18.7" />
+		<PackageReference Include="Senparc.Weixin.MP" Version="16.18.11" />
 
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.APM\Senparc.CO2NET.APM.csproj" />
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />

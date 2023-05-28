@@ -19,14 +19,21 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 
-#region Apache License Version 2.0
+/*----------------------------------------------------------------
+    Copyright (C) 2023 Senparc
 
-#endregion Apache License Version 2.0
+    文件名：ICacheLock.cs
+    文件功能描述：CacheLock 接口
+
+
+    创建标识：Senparc - 20180106
+
+    修改标识：Senparc - 20230527
+    修改描述：v2.1.8 添加 GetLockCacheKey() 方法 
+
+----------------------------------------------------------------*/
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.Cache
@@ -55,6 +62,13 @@ namespace Senparc.CO2NET.Cache
         /// <returns>单位：Milliseconds，毫秒</returns>
         double GetTotalTtl(int retryCount, TimeSpan retryDelay);
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="resourceName">resourceName</param>
+        /// <param name="key">key</param>
+        /// <returns></returns>
+        string GetLockCacheKey(string resourceName, string key);
 
         #region 同步方法
 
