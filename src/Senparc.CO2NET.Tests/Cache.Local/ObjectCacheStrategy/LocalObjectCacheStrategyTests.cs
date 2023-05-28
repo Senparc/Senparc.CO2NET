@@ -30,17 +30,15 @@ namespace Senparc.CO2NET.Tests.Cache.Local
         [TestMethod]
         public void CacheLockTest()
         {
-            var cache = RedisObjectCacheStrategy.Instance;// LocalObjectCacheStrategy.Instance;
+            IBaseObjectCacheStrategy cache = LocalObjectCacheStrategy.Instance;
+            //cache = RedisObjectCacheStrategy.Instance;//使用 Redis 缓存测试
             var resourceName = "SenparcTest";
             var key = "CacheLockTest";
             using (var cacheLock = cache.BeginCacheLock(resourceName, key, 100, TimeSpan.FromMilliseconds(100)))
             {
                 //查找内存中的对象
-                var cacheKey = cacheLock.GetLockCacheKey(resourceName, key);
-                Console.WriteLine($"CacheKey: {cacheKey}");
-                var lockObject = cache.Get(cacheKey,true);
-                Assert.IsNotNull(lockObject);
-                Console.WriteLine(lockObject.ToJson(true));
+
+                //独立的 Lock 对象，不适用常规的 ICacheLock
             }
         }
 

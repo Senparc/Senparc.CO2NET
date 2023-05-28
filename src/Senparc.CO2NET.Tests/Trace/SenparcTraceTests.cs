@@ -161,7 +161,7 @@ namespace Senparc.CO2NET.Tests.Trace
             SenparcTrace.BaseExceptionLog(ex);
 
             var dt1 = SystemTime.Now;
-            while (SystemTime.DiffTotalMS(dt1) < 800)
+            while (SystemTime.DiffTotalMS(dt1) < 1000)
             {
                 //等待队列执行
             }

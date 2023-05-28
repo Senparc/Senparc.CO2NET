@@ -35,10 +35,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20210911
     修改描述：v1.5.2 LocalCacheLock释放锁之前增加是否锁成功的判断
 
+    修改标识：Senparc - 20230528
+    修改描述：v2.1.8 LockPool 改为 ConcurrentDictionary
+
 ----------------------------------------------------------------*/
 
 using Senparc.CO2NET.Trace;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -63,9 +67,9 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 锁存放容器   TODO：考虑分布式情况
+        /// 锁存放容器   TODO：考虑分布式情况 —— 直接使用 Redis
         /// </summary>
-        private static Dictionary<string, object> LockPool = new Dictionary<string, object>();
+        private static ConcurrentDictionary<string, object> LockPool = new ConcurrentDictionary<string, object>();
         /// <summary>
         /// 随机数
         /// </summary>
@@ -116,7 +120,7 @@ namespace Senparc.CO2NET.Cache
                         }
                         else
                         {
-                            LockPool.Add(_resourceName, new object());//创建锁
+                            LockPool.TryAdd(_resourceName, new object());//创建锁
                             getLock = true;//取得锁
                         }
                     }
@@ -146,7 +150,7 @@ namespace Senparc.CO2NET.Cache
             {
                 lock (lookPoolLock)
                 {
-                    LockPool.Remove(_resourceName);
+                    LockPool.TryRemove(_resourceName, out _);
                 }
             }
         }
@@ -166,7 +170,7 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
         public static async Task<ICacheLock> CreateAndLockAsync(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount = null, TimeSpan? retryDelay = null)
         {
-           return  await new LocalCacheLock(strategy as LocalObjectCacheStrategy, resourceName, key, retryCount, retryDelay).LockAsync().ConfigureAwait(false);
+            return await new LocalCacheLock(strategy as LocalObjectCacheStrategy, resourceName, key, retryCount, retryDelay).LockAsync().ConfigureAwait(false);
         }
 
         public override async Task<ICacheLock> LockAsync()
