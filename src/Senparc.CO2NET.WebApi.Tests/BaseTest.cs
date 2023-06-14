@@ -6,6 +6,7 @@ using Moq;
 using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
 using Senparc.CO2NET.RegisterServices;
+using Senparc.CO2NET.WebApi.WebApiEngines;
 using System;
 using System.IO;
 using System.Text;
@@ -25,18 +26,18 @@ namespace Senparc.CO2NET.WebApi.Tests
 
         protected Mock<Microsoft.Extensions.Hosting.IHostEnvironment /*IHostingEnvironment*/> _env;
 
-        public BaseTest()
+        public BaseTest(bool initDynamicApi = false)
         {
             _env = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/>();
             _env.Setup(z => z.ContentRootPath).Returns(() => Path.GetFullPath("..\\..\\..\\"));
 
-            //Init();
+            Init(initDynamicApi);
         }
 
-        public void Init()
+        public void Init(bool initDynamicApi = false)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            RegisterServiceCollection();
+            RegisterServiceCollection(initDynamicApi);
             RegisterServiceStart();
             Console.WriteLine("完成 TaseTest 初始化");
         }
@@ -44,7 +45,7 @@ namespace Senparc.CO2NET.WebApi.Tests
         /// <summary>
         /// 注册 IServiceCollection 和 MemoryCache
         /// </summary>
-        public void RegisterServiceCollection()
+        public void RegisterServiceCollection(bool initDynamicApi = false)
         {
             ServiceCollection = new ServiceCollection();
             var configBuilder = new ConfigurationBuilder();
@@ -62,6 +63,11 @@ namespace Senparc.CO2NET.WebApi.Tests
 
 
             MvcCoreBuilder = ServiceCollection.AddMvcCore();
+
+            if (initDynamicApi)
+            {
+                ServiceCollection.AddAndInitDynamicApi(MvcCoreBuilder);
+            }
 
             //WebApiEngine wae = new WebApiEngine(new FindWeixinApiService(), 400);
             //wae.InitDynamicApi(builder, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data"));

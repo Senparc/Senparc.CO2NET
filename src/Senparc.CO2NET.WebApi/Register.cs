@@ -124,6 +124,16 @@ namespace Senparc.CO2NET.WebApi
                                                 .Select(z => z as ApiBindAttribute).ToList();
                             var omitType = typeAttrs.FirstOrDefault(z => CheckOmitCategory(z, assemblyName)) != null;//默认忽略整个类
 
+                            if (typeAttrs.Count > 0 && typeAttrs[0].Ignore)
+                            {
+                                omitType = true;//忽略
+                            }
+
+                            if (omitType)
+                            {
+                                continue;//整个类忽略，不用在继续
+                            }
+
 
                             var coverAllMethods = false;//class 上已经有覆盖所有方法的 [ApiBind] 特性标签
                             var hasChildApiAndNonStaticClass = false;//当前 class 内有需要被引用的对象（且当前 class 可以被实例化）
