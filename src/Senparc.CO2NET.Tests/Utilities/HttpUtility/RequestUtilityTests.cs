@@ -19,15 +19,13 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 #endregion Apache License Version 2.0
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Senparc.CO2NET.AspNet.HttpUtility;
 using Senparc.CO2NET.Tests;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Senparc.CO2NET.Helpers;
 
 namespace Senparc.CO2NET.HttpUtility.Tests
 {
@@ -79,7 +77,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
 
             var cookieContainer = new CookieContainer();
             var accesstoken = "34_WeSuCDgRVtJ0KfPlS0fNdMtBZ4XQDes54MIHt4HlaFkpkItYpLfr0OlfLsntE73eWK_jVifGWxoV2zygK4J2tE6U4eDnNUeLupAkSqf83WMh-6QgNPK9_f6r8xiMlNzVald2l1sKyaQcDPHgSXPlCGAZEW";
-            var url = "https://api.weixin.qq.com/wxa/create_map_poi?access_token="+ accesstoken;
+            var url = "https://api.weixin.qq.com/wxa/create_map_poi?access_token=" + accesstoken;
             var result = RequestUtility.HttpPost(BaseTest.serviceProvider, url,
                 cookieContainer, stream, useAjax: false);
 
@@ -128,7 +126,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var url = "https://localhost:44351/ForTest/PostTest";//使用.NET 4.5的Sample
-                var result = RequestUtility.HttpResponsePost(BaseTest.serviceProvider, url,cookieContainer, stream, useAjax: true);
+                var result = RequestUtility.HttpResponsePost(BaseTest.serviceProvider, url, cookieContainer, stream, useAjax: true);
 
                 Assert.IsNotNull(result);
                 var resultString = result.Result.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -138,6 +136,19 @@ namespace Senparc.CO2NET.HttpUtility.Tests
                 Console.WriteLine($"TestCookie：{cookie["TestCookie"]}，TestCount：{cookie["TestCount"]}\r\n");
             }
 
+        }
+
+        [TestMethod()]
+        public async Task HttpDeleteAsyncTest()
+        {
+            var url = "http://region-9.seetacloud.com:21930/langchain/local_doc_qa/delete_knowledge_base?knowledge_base_id=123";
+
+            var result = await Senparc.CO2NET.HttpUtility.RequestUtility.HttpDeleteAsync(BaseTest.serviceProvider, url, null);
+            await Console.Out.WriteLineAsync(result);
+            Assert.IsTrue(result.Length > 0);
+
+            var typedResult = result.GetObject<dynamic>();
+            Assert.IsTrue(typedResult.msg.ToString().Length > 0);
         }
     }
 }
