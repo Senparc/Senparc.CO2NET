@@ -39,3 +39,4 @@ obj/*
 /Sample/Senparc.CO2NET.Sample.net7/App_Data/ApiDocXml
 /Sample/Senparc.CO2NET.Sample.net7/App_Data/SenparcTraceLog
 *.DS_Store
+/src/ProjectFileManager2
