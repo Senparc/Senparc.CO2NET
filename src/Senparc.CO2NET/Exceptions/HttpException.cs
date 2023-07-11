@@ -14,12 +14,12 @@ using System;
 namespace Senparc.CO2NET.Exceptions
 {
     /// <summary>
-    /// 缓存异常
+    /// HttpClient 等网络请求异常
     /// </summary>
     public class HttpException : BaseException
     {
         /// <summary>
-        /// 缓存异常构造函数
+        /// HttpClient 等网络请求异常 构造函数
         /// </summary>
         /// <param name="message"></param>
         /// <param name="inner"></param>

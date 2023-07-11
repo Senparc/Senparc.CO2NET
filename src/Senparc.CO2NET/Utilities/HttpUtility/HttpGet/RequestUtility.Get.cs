@@ -38,6 +38,10 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
     修改标识：554393109 - 20220208
     修改描述：v2.0.3 修改HttpClient请求超时的实现方式
+
+    修改标识：Senparc - 20230711
+    修改描述：v2.2.1 优化 Http 请求，及时关闭资源
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -143,8 +147,10 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             var handler = HttpClientHelper.GetHttpClientHandler(null, SenparcHttpClientWebProxy, DecompressionMethods.GZip);
 
-            HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
-            return httpClient.GetStringAsync(url).Result;
+            using (HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client)
+            {
+                return httpClient.GetStringAsync(url).Result;
+            }
 #endif
         }
 
@@ -188,17 +194,22 @@ namespace Senparc.CO2NET.HttpUtility
 
             var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
 
-            using (var cts = new System.Threading.CancellationTokenSource(timeOut))
+            using (httpClient)
             {
-                try
+                using (var cts = new System.Threading.CancellationTokenSource(timeOut))
                 {
-                    var response = httpClient.GetAsync(url, cancellationToken: cts.Token).GetAwaiter().GetResult();//获取响应信息
+                    try
+                    {
+                        var response = httpClient.GetAsync(url, cancellationToken: cts.Token).GetAwaiter().GetResult();//获取响应信息
+                        using (response)
+                        {
+                            HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
 
-                    HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
-
-                    return response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                            return response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                        }
+                    }
+                    catch { throw; }
                 }
-                catch { throw; }
             }
 #endif
         }
@@ -295,7 +306,10 @@ namespace Senparc.CO2NET.HttpUtility
             };
 
             HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
-            return await httpClient.GetStringAsync(url).ConfigureAwait(false);
+            using (httpClient)
+            {
+                return await httpClient.GetStringAsync(url).ConfigureAwait(false);
+            }
 #endif
 
         }
@@ -339,19 +353,26 @@ namespace Senparc.CO2NET.HttpUtility
 #else
             var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
 
-            using (var cts = new System.Threading.CancellationTokenSource(timeOut))
+            using (httpClient)
             {
-                try
+                using (var cts = new System.Threading.CancellationTokenSource(timeOut))
                 {
-                    var response = await httpClient.GetAsync(url, cancellationToken: cts.Token).ConfigureAwait(false);//获取响应信息
+                    try
+                    {
+                        var response = await httpClient.GetAsync(url, cancellationToken: cts.Token).ConfigureAwait(false);//获取响应信息
 
-                    HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
+                        using (response)
+                        {
+                            HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
 
-                    var retString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            var retString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                    return retString;
+                            return retString;
+                        }
+
+                    }
+                    catch { throw; }
                 }
-                catch { throw; }
             }
 #endif
         }

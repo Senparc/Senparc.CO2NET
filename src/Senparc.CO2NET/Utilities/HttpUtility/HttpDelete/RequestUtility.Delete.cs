@@ -27,6 +27,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
     创建标识：Senparc - 20230625
 
+    修改标识：Senparc - 20230711
+    修改描述：v2.2.1 优化 Http 请求，及时关闭资源
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -76,8 +79,15 @@ namespace Senparc.CO2NET.HttpUtility
             };
 
             HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
-            var response = await httpClient.DeleteAsync(url).ConfigureAwait(false);
-            return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            using (httpClient)
+            {
+                var response = await httpClient.DeleteAsync(url).ConfigureAwait(false);
+                using (response)
+                {
+                    return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+            }
 #endif
 
         }
