@@ -111,7 +111,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         }
 
         [TestMethod]
-        public void CookieTest()
+        public void PostCookieTest()
         {
             var cookieContainer = new CookieContainer();
             //cookieContainer.Add(new Uri("https://localhost"), new Cookie("TestCount", "20"));
@@ -135,7 +135,28 @@ namespace Senparc.CO2NET.HttpUtility.Tests
                 var cookie = cookieContainer.GetCookies(new Uri("https://localhost:5021"));
                 Console.WriteLine($"TestCookie：{cookie["TestCookie"]}，TestCount：{cookie["TestCount"]}\r\n");
             }
+        }
 
+        [TestMethod]
+        public void GetCookieTest()
+        {
+            var cookieContainer = new CookieContainer();
+            cookieContainer.SetCookies(new Uri("https://localhost:5021/"), "TestCount=100; path=/; domain=localhost; Expires=Tue, 19 Jan 2038 03:14:07 GMT;");
+
+
+            for (int i = 0; i < 3; i++)
+            {
+                var data = "CookieTest";
+
+                var url = $"https://localhost:5021/ForTest/GetTest?data={data}";//使用 Senparc.Weixin SDK 的 Sample
+                var result = RequestUtility.HttpGet(BaseTest.serviceProvider, url, cookieContainer);
+
+                Console.WriteLine("result length: \t{0}", result.Length);
+                Assert.IsTrue(result.Length > 0 && result.StartsWith($"{data} Ajax:"));
+
+                var cookie = cookieContainer.GetCookies(new Uri("https://localhost:5021/ForTest/GetTest"));
+                Console.WriteLine($"TestCookie：{cookie["TestCookie"]}，TestCount：{cookie["TestCount"]}\r\n");
+            }
         }
 
         [TestMethod()]
