@@ -62,6 +62,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20230128
     修改描述：v2.1.7.3 继续解决上一版本升级后导致的“The value cannot be null or empty. (Parameter 'mediaType')”异常
 
+    修改标识：Senparc - 20230711
+    修改描述：v2.2.1 优化 Http 请求，及时关闭资源
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -586,6 +589,9 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             var retString = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+            response.Dispose();
+
             return retString;
 
             //t1.Wait();
@@ -903,6 +909,8 @@ namespace Senparc.CO2NET.HttpUtility
             #endregion
 
             var retString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            
+            response.Dispose();
 
             return retString;
 #endif
