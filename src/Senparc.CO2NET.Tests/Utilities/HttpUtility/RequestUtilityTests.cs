@@ -32,6 +32,8 @@ namespace Senparc.CO2NET.HttpUtility.Tests
     [TestClass()]
     public class RequestUtilityTests : BaseTest
     {
+        private string _domain = "https://sdk.weixin.senparc.com";//本地运行 Senaprc.Weixin SDK Sample(All) https://localhost:5021
+
         [TestMethod()]
         public void SetHttpProxyTest()
         {
@@ -53,7 +55,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             stream.Seek(0, SeekOrigin.Begin);
 
             var cookieContainer = new CookieContainer();
-            var url = "https://localhost:5001/ForTest/PostTest";//使用.NET 4.5的Sample
+            var url = $"{_domain}/ForTest/PostTest";//使用.NET 4.5的Sample
             var result = RequestUtility.HttpPost(BaseTest.serviceProvider, url,
                 cookieContainer, stream, useAjax: true);
 
@@ -97,7 +99,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             stream.Seek(0, SeekOrigin.Begin);
 
             var cookieContainer = new CookieContainer();
-            var url = "https://localhost:5021/ForTest/PostTest";//使用.NET 4.5的Sample
+            var url = $"{_domain}/ForTest/PostTest";//使用.NET 4.5的Sample
             var result = RequestUtility.HttpResponsePost(BaseTest.serviceProvider, url,
                 cookieContainer, stream, useAjax: true);
 
@@ -106,16 +108,16 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             var resultString = result.Result.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             Console.WriteLine("resultString : \t{0}", resultString);
 #endif
-            var cookie = cookieContainer.GetCookies(new Uri("https://localhost:5021"));
+            var cookie = cookieContainer.GetCookies(new Uri($"{_domain}"));
             Console.WriteLine("TestCookie：{0}", cookie["TestCookie"]);
         }
 
         [TestMethod]
-        public void CookieTest()
+        public void PostCookieTest()
         {
             var cookieContainer = new CookieContainer();
             //cookieContainer.Add(new Uri("https://localhost"), new Cookie("TestCount", "20"));
-            cookieContainer.SetCookies(new Uri("https://localhost:5021/ForTest/PostTest"), "TestCount=100; path=/; domain=localhost; Expires=Tue, 19 Jan 2038 03:14:07 GMT;");
+            cookieContainer.SetCookies(new Uri($"{_domain}/ForTest/PostTest"), "TestCount=100; path=/; domain=sdk.weixin.senparc.com; Expires=Tue, 19 Jan 2038 03:14:07 GMT;");
 
             for (int i = 0; i < 3; i++)
             {
@@ -125,17 +127,38 @@ namespace Senparc.CO2NET.HttpUtility.Tests
                 stream.Write(bytes, 0, bytes.Length);
                 stream.Seek(0, SeekOrigin.Begin);
 
-                var url = "https://localhost:5021/ForTest/PostTest";//使用 Senparc.Weixin SDK 的 Sample
+                var url = $"{_domain}/ForTest/PostTest";//使用 Senparc.Weixin SDK 的 Sample
                 var result = RequestUtility.HttpResponsePost(BaseTest.serviceProvider, url, cookieContainer, stream, useAjax: true);
 
                 Assert.IsNotNull(result);
                 var resultString = result.Result.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 Console.WriteLine("resultString : \t{0}", resultString);
 
-                var cookie = cookieContainer.GetCookies(new Uri("https://localhost:5021"));
+                var cookie = cookieContainer.GetCookies(new Uri($"{_domain}"));
                 Console.WriteLine($"TestCookie：{cookie["TestCookie"]}，TestCount：{cookie["TestCount"]}\r\n");
             }
+        }
 
+        [TestMethod]
+        public void GetCookieTest()
+        {
+            var cookieContainer = new CookieContainer();
+            cookieContainer.SetCookies(new Uri($"{_domain}"), "TestCount=100; path=/; domain=sdk.weixin.senparc.com; Expires=Tue, 19 Jan 2038 03:14:07 GMT;");
+
+
+            for (int i = 0; i < 3; i++)
+            {
+                var data = "CookieTest";
+
+                var url = $"{_domain}/ForTest/GetTest?data={data}";//使用 Senparc.Weixin SDK 的 Sample
+                var result = RequestUtility.HttpGet(BaseTest.serviceProvider, url, cookieContainer);
+
+                Console.WriteLine("result length: \t{0}", result.Length);
+                Assert.IsTrue(result.Length > 0 && result.StartsWith($"{data} Ajax:"));
+
+                var cookie = cookieContainer.GetCookies(new Uri($"{_domain}/ForTest/GetTest"));
+                Console.WriteLine($"TestCookie：{cookie["TestCookie"]}，TestCount：{cookie["TestCount"]}\r\n");
+            }
         }
 
         [TestMethod()]

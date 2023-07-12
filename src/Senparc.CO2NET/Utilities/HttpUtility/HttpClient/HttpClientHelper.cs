@@ -77,6 +77,7 @@ namespace Senparc.CO2NET.HttpUtility
         /// </summary>
         /// <param name="cookieContainer"></param>
         /// <param name="webProxy"></param>
+        /// <param name="decompressionMethods"></param>
         /// <returns></returns>
         public static HttpClientHandler GetHttpClientHandler(CookieContainer cookieContainer = null, IWebProxy webProxy = null, DecompressionMethods decompressionMethods = DecompressionMethods.None)
         {
