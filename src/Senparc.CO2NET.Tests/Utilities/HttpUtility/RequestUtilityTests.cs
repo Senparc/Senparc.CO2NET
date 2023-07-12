@@ -108,7 +108,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             var resultString = result.Result.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             Console.WriteLine("resultString : \t{0}", resultString);
 #endif
-            var cookie = cookieContainer.GetCookies(new Uri("https://localhost:5021"));
+            var cookie = cookieContainer.GetCookies(new Uri($"{_domain}"));
             Console.WriteLine("TestCookie：{0}", cookie["TestCookie"]);
         }
 
@@ -117,7 +117,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         {
             var cookieContainer = new CookieContainer();
             //cookieContainer.Add(new Uri("https://localhost"), new Cookie("TestCount", "20"));
-            cookieContainer.SetCookies(new Uri($"{_domain}/ ForTest/PostTest"), "TestCount=100; path=/; domain=localhost; Expires=Tue, 19 Jan 2038 03:14:07 GMT;");
+            cookieContainer.SetCookies(new Uri($"{_domain}/ForTest/PostTest"), "TestCount=100; path=/; domain=sdk.weixin.senparc.com; Expires=Tue, 19 Jan 2038 03:14:07 GMT;");
 
             for (int i = 0; i < 3; i++)
             {
@@ -143,7 +143,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         public void GetCookieTest()
         {
             var cookieContainer = new CookieContainer();
-            cookieContainer.SetCookies(new Uri($"{_domain}"), "TestCount=100; path=/; domain=localhost; Expires=Tue, 19 Jan 2038 03:14:07 GMT;");
+            cookieContainer.SetCookies(new Uri($"{_domain}"), "TestCount=100; path=/; domain=sdk.weixin.senparc.com; Expires=Tue, 19 Jan 2038 03:14:07 GMT;");
 
 
             for (int i = 0; i < 3; i++)
