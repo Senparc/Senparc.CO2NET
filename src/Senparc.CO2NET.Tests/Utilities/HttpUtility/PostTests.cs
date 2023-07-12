@@ -42,17 +42,12 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         {
             //return;//已经通过，但需要连接远程测试，太耗时，常规测试时暂时忽略。
             var url = ApiMpHost + "/cgi-bin/media/upload?access_token=TOKEN&type=image";
-            try
-            {
-                //这里因为参数错误，系统会返回错误信息
-                WxJsonResult resultFail = Post.PostGetJson<WxJsonResult>(BaseTest.serviceProvider, url, cookieContainer: null, formData: null, encoding: null);
-                Assert.Fail();//上一步就应该已经抛出异常
-            }
-            catch (Exception ex)
-            {
-                //实际返回的信息（错误信息）
-                Console.WriteLine(ex.Message);
-            }
+
+            //这里因为参数错误，系统会返回错误信息
+            WxJsonResult resultFail = Post.PostGetJson<WxJsonResult>(BaseTest.serviceProvider, url, cookieContainer: null, formData: null, encoding: null);
+            //Assert.Fail();//上一步就应该已经抛出异常
+            Console.WriteLine(resultFail);
+            Assert.AreEqual(40001, resultFail.errcode);
         }
 
         [TestMethod()]
@@ -61,21 +56,11 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             //return;//已经通过，但需要连接远程测试，太耗时，常规测试时暂时忽略。
             var url = ApiMpHost + "/cgi-bin/media/upload?access_token=TOKEN&type=image";
 
-            try
-            {
-                WxJsonResult resultFail =
-                    await Post.PostGetJsonAsync<WxJsonResult>(BaseTest.serviceProvider, url, cookieContainer: null, formData: null,
-                            encoding: null);
-                //这里因为参数错误，系统会返回错误信息
-                Assert.Fail(); //上一步就应该已经抛出异常
-
-            }
-            catch (Exception ex)
-            {
-                //实际返回的信息（错误信息）
-                Console.WriteLine(ex.Message);
-                Console.WriteLine("Success");
-            }
+            WxJsonResult resultFail =
+                await Post.PostGetJsonAsync<WxJsonResult>(BaseTest.serviceProvider, url, cookieContainer: null, formData: null,
+                        encoding: null);
+            Console.WriteLine(resultFail);
+            Assert.AreEqual(40001, resultFail.errcode);
         }
 
         [TestMethod]
@@ -222,7 +207,7 @@ MessageHandler 类型：CustomWxOpenMessageHandler
    at Senparc.NeuChar.MessageHandlers.MessageHandler`3.ExecuteAsync(CancellationToken cancellationToken)
    at Senparc.NeuChar.Middlewares.MessageHandlerMiddleware`5.Invoke(HttpContext context)
 */
-            
+
             var url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=<AccessToken>";
             var data = @"{""touser"":""oeaTy0DgoGq-lyqvTauWVjbIVuP0"",""template_id"":""xWclWkOqDrxEgWF4DExmb9yUe10pfmSSt2KM6pY7ZlU"",""page"":""pages/index/index"",""data"":{""thing1"":{""value"":""微信公众号+小程序快速开发""},""time5"":{""value"":""2023年01月12日 17:32""},""thing6"":{""value"":""盛派网络研究院""},""thing7"":{""value"":""第二部分课程正在准备中，尽情期待""}}}";
 
@@ -231,10 +216,10 @@ MessageHandler 类型：CustomWxOpenMessageHandler
             sw.Write(data);
             sw.Flush();
 
-           var result = HttpUtility.Post.PostGetJsonAsync<dynamic>(BaseTest.serviceProvider, url,null,ms).GetAwaiter().GetResult();
+            var result = HttpUtility.Post.PostGetJsonAsync<dynamic>(BaseTest.serviceProvider, url, null, ms).GetAwaiter().GetResult();
             Assert.IsNotNull(result);
             Console.WriteLine(result);
-            
+
             sw.Close();
         }
     }
