@@ -146,7 +146,7 @@ https://github.com/JeffreySu/WeiXinMPSDK</Description>
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' != 'net462' ">
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0-rc.2.23480.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0-rc.2.23479.6" />
     <PackageReference Include="EnyimMemcachedCore" Version="2.5.3" />
   </ItemGroup>
   <!--<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' or '$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net6.0' ">

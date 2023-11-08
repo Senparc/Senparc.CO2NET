@@ -11,11 +11,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-
-		<PackageReference Include="Microsoft.Net.Http.Headers">
-			<Version>2.2.8</Version>
-		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0-rc.2.23479.6" />
+		<PackageReference Include="Microsoft.Net.Http.Headers" Version="8.0.0-rc.2.23479.6" />
 
 		<PackageReference Include="Senparc.Weixin.MP" Version="16.18.11" />
 
