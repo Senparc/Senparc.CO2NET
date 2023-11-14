@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
-    <Version>1.2.0-rc.2</Version>
+    <Version>1.2.0</Version>
     <AssemblyName>Senparc.CO2NET.Cache.CsRedis.RedLock</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.CsRedis.RedLock</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
