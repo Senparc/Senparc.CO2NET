@@ -55,6 +55,6 @@
     <None Include="..\..\..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CSRedisCore" Version="3.6.6" />
+    <PackageReference Include="CSRedisCore" Version="3.8.800" />
   </ItemGroup>
 </Project>

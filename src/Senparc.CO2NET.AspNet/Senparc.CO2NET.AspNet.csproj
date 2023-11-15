@@ -68,7 +68,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
     <PackageReference Include="Microsoft.Extensions.Hosting">
-      <Version>7.0.0</Version>
+      <Version>8.0.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net462'">

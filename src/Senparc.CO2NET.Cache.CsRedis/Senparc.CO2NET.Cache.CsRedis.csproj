@@ -64,7 +64,7 @@
   <ItemGroup>
     <!--<PackageReference Include="Senparc.CO2NET.Cache.Redis.RedLock" Version="0.1.0" />-->
     <PackageReference Include="BinaryFormatter" Version="2.1.4" />
-    <PackageReference Include="CSRedisCore" Version="3.6.6" />
+    <PackageReference Include="CSRedisCore" Version="3.8.800" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Senparc.CO2NET.Cache.CsRedis.RedLock\redlock-cs\src\Senparc.CO2NET.Cache.CsRedis.RedLock.csproj" />
