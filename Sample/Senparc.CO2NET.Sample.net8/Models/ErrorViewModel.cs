@@ -1,6 +1,6 @@
 using System;
 
-namespace Senparc.CO2NET.Sample.net6.Models
+namespace Senparc.CO2NET.Sample.net8.Models
 {
     public class ErrorViewModel
     {

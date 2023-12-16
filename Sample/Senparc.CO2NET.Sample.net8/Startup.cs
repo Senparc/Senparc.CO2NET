@@ -11,7 +11,7 @@ using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Cache.Memcached;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.RegisterServices;
-using Senparc.CO2NET.Sample.net6.Services;
+using Senparc.CO2NET.Sample.net8.Services;
 using Senparc.CO2NET.WebApi;
 using Senparc.CO2NET.WebApi.WebApiEngines;
 using Swashbuckle.AspNetCore.Annotations;
@@ -229,7 +229,7 @@ namespace Senparc.CO2NET.Sample
                     #region 全局缓存配置（按需）
 
                     //当同一个分布式缓存同时服务于多个网站（应用程序池）时，可以使用命名空间将其隔离（非必须）
-                    register.ChangeDefaultCacheNamespace("CO2NETCache.net7.0");
+                    register.ChangeDefaultCacheNamespace("CO2NETCache.net8.0");
 
                     #region 配置和使用 Redis
 

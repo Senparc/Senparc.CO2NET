@@ -24,8 +24,8 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"  Version="8.0.0" />
-		<PackageReference Include="Microsoft.Net.Http.Headers"  Version="2.2.8" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.8" />
 
 		<!--<FrameworkReference Include="Microsoft.AspNetCore.App" />-->
 
@@ -37,6 +37,7 @@
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.Memcached\Senparc.CO2NET.Cache.Memcached.csproj" />
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.Redis.RedLock\redlock-cs\src\Senparc.CO2NET.Cache.Redis.RedLock.csproj" />
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.Redis\Senparc.CO2NET.Cache.Redis.csproj" />
+		<ProjectReference Include="..\..\src\Senparc.CO2NET.WebApi\Senparc.CO2NET.WebApi.csproj" />
 		<ProjectReference Include="..\..\src\Senparc.CO2NET\Senparc.CO2NET.csproj" />
 	</ItemGroup>
 

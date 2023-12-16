@@ -92,7 +92,7 @@ namespace Senparc.CO2NET.WebApi
         {
             if (!hideLog || _showDetailApiLog)
             {
-                Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId:00}] {SystemTime.Now:yyyy-MM-dd HH:mm:ss.ffff}\t\t{msg}");
+                Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId:00}] {SystemTime.Now:yyyy-MM-dd HH:mm:ss.ffff}\t{msg}");
             }
         }
 
@@ -265,7 +265,7 @@ namespace Senparc.CO2NET.WebApi
                     //当前 API 的所有参数信息
                     var parameters = apiMethodInfo.GetParameters();
 
-                    WriteLog($"\t search API[{apiIndex}]: {keyName} > {apiBindInfo.Key} -> {methodName} \t\t Parameters Count: {parameters.Count()}\t\t", true);
+                    WriteLog($">search API[{apiIndex}]: {keyName} > {apiBindInfo.Key} -> {methodName} - Parameters: {parameters.Count()}", true);
 
                     //添加静态方法的标记
                     string showStaticApiState = null;//$"{(apiMethodInfo.IsStatic ? "_StaticApi" : "_NonStaticApi")}";

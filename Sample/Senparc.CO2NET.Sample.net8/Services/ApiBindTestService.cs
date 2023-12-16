@@ -11,7 +11,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace Senparc.CO2NET.Sample.net6.Services
+namespace Senparc.CO2NET.Sample.net8.Services
 {
     /// <summary>
     /// 用于测试动态生成 API 的 Service
