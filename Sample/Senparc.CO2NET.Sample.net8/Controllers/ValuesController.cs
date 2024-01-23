@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace Senparc.CO2NET.Sample.net6.Controllers
+namespace Senparc.CO2NET.Sample.net8.Controllers
 {
     [Route("api/[controller]")]
     //[ApiController]

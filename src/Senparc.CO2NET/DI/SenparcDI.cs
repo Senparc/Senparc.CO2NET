@@ -14,13 +14,16 @@
     修改标识：pengweiqhca - 20180802
     修改描述：v0.2.8 添加 SenparcDI.GetIServiceProvider() 方法，以支持其他依赖注入框架
 
-    修改标识：pengweiqhca - 20190118
+    修改标识：Senparc - 20190118
     修改描述：v0.5.2 添加 SenparcDI.GetRequiredService() 方法，提供线程内独立 ServiceProvider 实例
 
-    修改标识：pengweiqhca - 201901527
+    修改标识：Senparc - 201901527
     修改描述：v0.8.2 添加 SenparcDI.ResetGlobalIServiceProvider(this IServiceCollection serviceCollection) 方法
 
-    修改标识：pengweiqhca - 20210702
+    修改标识：Senparc - 20210702
+    修改描述：1.4.400.2 增加 GetService() 方法
+
+    修改标识：Senparc - 20210702
     修改描述：1.4.400.2 增加 GetService() 方法
 
 ----------------------------------------------------------------*/
@@ -92,6 +95,37 @@ namespace Senparc.CO2NET
             return GetServiceProvider().GetService(type);
         }
 
+        /// <summary>
+        /// 通过 GetServiceProvider() 方法执行 .GetService() 方法
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static T GetService<T>()
+        {
+            return GetServiceProvider().GetService<T>();
+        }
+
+
+        /// <summary>
+        /// 通过 GetServiceProvider() 方法执行 .GetRequiredService() 方法
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static T GetRequiredService<T>()
+        {
+            return GetServiceProvider().GetRequiredService<T>();
+        }
+
+
+        /// <summary>
+        /// 通过 GetServiceProvider() 方法执行 .GetRequiredKeyedService() 方法
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object GetRequiredKeyedService(Type serviceType, object? serviceKey)
+        {
+            return GetServiceProvider().GetRequiredKeyedService(serviceType, serviceKey);
+        }
 
         ///// <summary>
         ///// 使用 .net core 默认的 DI 方法获得实例（推荐）
