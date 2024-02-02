@@ -265,7 +265,12 @@ namespace Senparc.CO2NET.WebApi
                     //当前 API 的所有参数信息
                     var parameters = apiMethodInfo.GetParameters();
 
-                    WriteLog($">search API[{apiIndex}]: {keyName} > {apiBindInfo.Key} -> {methodName} - Parameters: {parameters.Count()}", true);
+                    var apiLog = $"> Search DynamicApi[{apiIndex}]: {keyName} > ";
+                    var prefixIndex = apiLog.Length;//用于对其缩进
+                    apiLog += $"{apiBindInfo.Key}";
+
+                    WriteLog(apiLog, true);
+                    WriteLog($"-> {methodName} - Parameters: {parameters.Count()}".PadLeft(prefixIndex), true);
 
                     //添加静态方法的标记
                     string showStaticApiState = null;//$"{(apiMethodInfo.IsStatic ? "_StaticApi" : "_NonStaticApi")}";
@@ -299,7 +304,7 @@ namespace Senparc.CO2NET.WebApi
 
                     //TODO:从ApiBind中自定义
 
-                    WriteLog($"added Api path: {apiPath}", true);
+                    WriteLog($"Added DynamicApi Path: {apiPath}{System.Environment.NewLine}", true);
 
                     //[HttpPost]
                     var specialMethod = apiBindInfo.Value.ApiBindAttribute.ApiRequestMethod;
