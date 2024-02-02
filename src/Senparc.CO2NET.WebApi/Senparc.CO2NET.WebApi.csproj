@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
-    <Version>1.5.2</Version>
+    <Version>1.5.2.1</Version>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
     <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
@@ -35,7 +35,8 @@
 		v1.1.3 添加 AddApiControllerAttribute 选项，默认为 true
 		v1.3 提供 .NET 7.0 支持
 		v1.4.1 使用 [ApiBind(Ignore = false)]，添加完善对整个类的 API 生成忽略忽略
-</PackageReleaseNotes>
+		v1.5.2.1整理日志格式
+	</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\BuildOutPut</OutputPath>
