@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
     
 /*----------------------------------------------------------------
-    Copyright(C) 2017 Senparc
+    Copyright(C) 2024 Senparc
 
     文件名：FlushCache.cs
     文件功能描述：缓存立即生效方法

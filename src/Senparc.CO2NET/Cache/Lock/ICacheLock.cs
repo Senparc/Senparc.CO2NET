@@ -20,7 +20,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 
 /*----------------------------------------------------------------
-    Copyright (C) 2023 Senparc
+    Copyright (C) 2024 Senparc
 
     文件名：ICacheLock.cs
     文件功能描述：CacheLock 接口

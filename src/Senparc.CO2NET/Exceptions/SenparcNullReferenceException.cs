@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright(C) 2019 Senparc
+    Copyright(C) 2024 Senparc
 
     文件名：SenparcNullReferenceException.cs
     文件功能描述：对象为 null 的异常
