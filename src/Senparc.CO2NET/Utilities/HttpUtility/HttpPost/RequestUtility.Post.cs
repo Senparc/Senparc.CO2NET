@@ -310,10 +310,11 @@ namespace Senparc.CO2NET.HttpUtility
             senparcHttpClient.SetCookie(new Uri(url), cookieContainer);//设置Cookie
 
             HttpClient client = senparcHttpClient.Client;
+            client.Timeout = TimeSpan.FromMilliseconds(timeOut);
             HttpContent hc = null;
             HttpClientHeader(client, refererUrl, useAjax, headerAddition, timeOut);
 
-        #region 处理Form表单文件上传
+            #region 处理Form表单文件上传
 
             var formUploadFile = fileDictionary != null && fileDictionary.Count > 0;//是否用Form上传文件
             if (formUploadFile)
@@ -414,7 +415,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 
             //HttpContentHeader(hc, timeOut);
-        #endregion
+            #endregion
 
             if (!string.IsNullOrEmpty(refererUrl))
             {
@@ -909,7 +910,7 @@ namespace Senparc.CO2NET.HttpUtility
             #endregion
 
             var retString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            
+
             response.Dispose();
 
             return retString;
