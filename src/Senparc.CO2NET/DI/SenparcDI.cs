@@ -1,6 +1,6 @@
 ﻿
 /*----------------------------------------------------------------
-    Copyright (C) 2023 Senparc
+    Copyright (C) 2024 Senparc
 
     文件名：SenparcDI.cs
     文件功能描述：针对 .NET Core 的依赖注入扩展类

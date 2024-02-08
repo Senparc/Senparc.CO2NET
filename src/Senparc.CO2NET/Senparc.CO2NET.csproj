@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>2.4.0</Version>
+    <Version>2.4.0.1</Version>
     <LangVersion>8.0</LangVersion>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
@@ -12,7 +12,7 @@
 			Senparc.CO2NET 开源项目：
 			https://github.com/Senparc/Senparc.CO2NET
 		</Description>
-    <Copyright>Senparc Copyright © 2004~2023</Copyright>
+    <Copyright>Senparc Copyright © 2004~2024</Copyright>
     <PackageTags>.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
     <Authors>Senparc</Authors>
     <Owners>Senparc</Owners>

@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright(C) 2019 Senparc
+    Copyright(C) 2024 Senparc
 
     文件名：CacheException.cs
     文件功能描述：缓存异常
