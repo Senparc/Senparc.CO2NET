@@ -6,7 +6,8 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
     {
         internal static IBaseObjectCacheStrategy GetCacheStrategy()
         {
-            DaprStateManager.StoreName = "statestore";
+            DaprStateManager.StateStoreName = "statestore";
+            DaprStateManager.LockStoreName = "lockstore";
             DaprStateManager.HttpEndPoint = "http://localhost:3500";
             CacheStrategyFactory.RegisterObjectCacheStrategy(() => DaprStateObjectCacheStrategy.Instance);
             return CacheStrategyFactory.GetObjectCacheStrategyInstance();

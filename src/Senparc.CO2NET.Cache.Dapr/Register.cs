@@ -1,4 +1,5 @@
 ﻿using Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Senparc.CO2NET.Cache.Dapr
 {
@@ -8,9 +9,10 @@ namespace Senparc.CO2NET.Cache.Dapr
         /// 设置连接字符串（不立即启用）
         /// </summary>
         /// <param name="redisConfigurationString"></param>
-        public static void SetConfigurationOption(string storeName, string httpEndPoint)
+        public static void SetConfigurationOption(string httpEndPoint,string stateStoreName, string lockstoreName)
         {
-            DaprStateManager.StoreName = storeName;
+            DaprStateManager.StateStoreName = stateStoreName;
+            DaprStateManager.LockStoreName = lockstoreName;
             DaprStateManager.HttpEndPoint = httpEndPoint;
         }
 

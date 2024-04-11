@@ -44,7 +44,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
         public async Task<bool> CheckExistedAsync(string key, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
-            var byteStringResult = await Client.GetStateAsync<ByteString?>(DaprStateManager.StoreName, cacheKey);
+            var byteStringResult = await Client.GetStateAsync<ByteString?>(DaprStateManager.StateStoreName, cacheKey);
             return byteStringResult != null;
         }
 
@@ -56,7 +56,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
         public async Task<object> GetAsync(string key, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key,isFullKey);
-            return await Client.GetStateAsync<object>(DaprStateManager.StoreName, cacheKey);
+            return await Client.GetStateAsync<object>(DaprStateManager.StateStoreName, cacheKey);
         }
 
         public T Get<T>(string key, bool isFullKey = false)
@@ -67,7 +67,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
         public async Task<T> GetAsync<T>(string key, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key,isFullKey);
-            return await Client.GetStateAsync<T>(DaprStateManager.StoreName, cacheKey);
+            return await Client.GetStateAsync<T>(DaprStateManager.StateStoreName, cacheKey);
         }
 
         [Obsolete("此方法不被支持，不要使用", true)]
@@ -108,7 +108,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
         public async Task RemoveFromCacheAsync(string key, bool isFullKey = false)
         {
             var cacheKey = GetFinalKey(key, isFullKey);
-            await Client.DeleteStateAsync(DaprStateManager.StoreName, cacheKey);
+            await Client.DeleteStateAsync(DaprStateManager.StateStoreName, cacheKey);
         }
 
         public void Set(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
@@ -122,7 +122,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
 
             if (expiry == null)
             {
-                await Client.SaveStateAsync(DaprStateManager.StoreName, cacheKey, value);
+                await Client.SaveStateAsync(DaprStateManager.StateStoreName, cacheKey, value);
                 return;
             }
 
@@ -135,7 +135,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
 
             IReadOnlyDictionary<string, string> readOnlyMetaData = metadata.ToImmutableDictionary();
 
-            await Client.SaveStateAsync(DaprStateManager.StoreName, cacheKey, value, null, readOnlyMetaData);
+            await Client.SaveStateAsync(DaprStateManager.StateStoreName, cacheKey, value, null, readOnlyMetaData);
             return;
         }
 
@@ -164,18 +164,18 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
                 throw new ArgumentException("retryCount乘以retryDelay所得时间不能小于1秒");
             }
 
-            await Client.Lock(DaprStateManager.StoreName, resourceName, key, (int)cacheLock.GetTotalTtl(retryCount, retryDelay));
+            await Client.Lock(DaprStateManager.LockStoreName, resourceName, key, (int)cacheLock.GetTotalTtl(retryCount, retryDelay));
             return cacheLock;
         }
 
         internal async void CacheUnlock(string resourceName, string key)
         {
-            Client.Unlock(DaprStateManager.StoreName, resourceName, key).GetAwaiter().GetResult();
+            CacheUnlockAsync(resourceName, key).GetAwaiter().GetResult();
         }
 
         internal async Task CacheUnlockAsync(string resourceName, string key)
         {
-            await Client.Unlock(DaprStateManager.StoreName, resourceName, key);
+            await Client.Unlock(DaprStateManager.LockStoreName, resourceName, key);
         }
     }
 }

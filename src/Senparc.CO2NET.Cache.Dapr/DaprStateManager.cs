@@ -2,7 +2,9 @@
 {
     public class DaprStateManager
     {
-        public static string StoreName { get; set; }
+        public static string StateStoreName { get; set; }
+
+        public static string LockStoreName { get; set; }
 
         public static string HttpEndPoint { get; set; }
     }

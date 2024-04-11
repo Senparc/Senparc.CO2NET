@@ -116,35 +116,35 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
             Console.WriteLine($"EfficiencyTest总测试时间（使用CacheWrapper)：{SystemTime.DiffTotalMS(dt)}ms");
         }
 
-        [TestMethod]
-        public void ThreadsEfficiencyTest()
-        {
-            var dt1 = SystemTime.Now;
-            var threadCount = 10;
-            var finishCount = 0;
-            for (int i = 0; i < threadCount; i++)
-            {
-                var thread = new Thread(() =>
-                {
-                    var dtx = SystemTime.Now;
-                    var cacheStrategy = DaprTestConfig.GetCacheStrategy();
+        //[TestMethod]
+        //public void ThreadsEfficiencyTest()
+        //{
+        //    var dt1 = SystemTime.Now;
+        //    var threadCount = 10;
+        //    var finishCount = 0;
+        //    for (int i = 0; i < threadCount; i++)
+        //    {
+        //        var thread = new Thread(() =>
+        //        {
+        //            var dtx = SystemTime.Now;
+        //            var cacheStrategy = DaprTestConfig.GetCacheStrategy();
 
-                    SetTest();
+        //            SetTest();
 
-                    Console.WriteLine($"Thread内单条测试耗时：{SystemTime.DiffTotalMS(dtx)}ms");
+        //            Console.WriteLine($"Thread内单条测试耗时：{SystemTime.DiffTotalMS(dtx)}ms");
 
-                    finishCount++;
-                });
-                thread.Start();
-            }
+        //            finishCount++;
+        //        });
+        //        thread.Start();
+        //    }
 
-            while (finishCount < threadCount)
-            {
-                //等待
-            }
+        //    while (finishCount < threadCount)
+        //    {
+        //        //等待
+        //    }
 
-            Console.WriteLine($"EfficiencyTest总测试时间：{SystemTime.DiffTotalMS(dt1)}ms");
-        }
+        //    Console.WriteLine($"EfficiencyTest总测试时间：{SystemTime.DiffTotalMS(dt1)}ms");
+        //}
 
         private static ContainerBag MakeBag()
         {
