@@ -58,7 +58,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
 
         public async Task<object> GetAsync(string key, bool isFullKey = false)
         {
-            var cacheKey = GetFinalKey(key);
+            var cacheKey = GetFinalKey(key,isFullKey);
             return await Client.GetStateAsync<object>(DaprStateManager.StoreName, cacheKey);
         }
 
@@ -69,7 +69,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
 
         public async Task<T> GetAsync<T>(string key, bool isFullKey = false)
         {
-            var cacheKey = GetFinalKey(key);
+            var cacheKey = GetFinalKey(key,isFullKey);
             return await Client.GetStateAsync<T>(DaprStateManager.StoreName, cacheKey);
         }
 
