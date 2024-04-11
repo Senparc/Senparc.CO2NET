@@ -29,7 +29,7 @@ namespace Senparc.CO2NET.Cache.Dapr
 
         public override void UnLock()
         {
-            UnLockAsync().GetAwaiter();
+            _strategy.CacheUnlock(_resourceName, _key);
         }
 
         public async override Task UnLockAsync()

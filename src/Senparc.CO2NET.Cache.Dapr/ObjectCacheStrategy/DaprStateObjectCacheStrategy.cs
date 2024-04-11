@@ -1,6 +1,5 @@
 ﻿using Dapr.Client;
 using Google.Protobuf;
-using Senparc.CO2NET.Cache.Dapr;
 using System.Collections.Immutable;
 
 namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
@@ -39,9 +38,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
 
         public bool CheckExisted(string key, bool isFullKey = false)
         {
-            var asyncTask = CheckExistedAsync(key, isFullKey);
-            asyncTask.ConfigureAwait(false);
-            return asyncTask.Result;
+            return CheckExistedAsync(key, isFullKey).GetAwaiter().GetResult();
         }
 
         public async Task<bool> CheckExistedAsync(string key, bool isFullKey = false)
@@ -105,7 +102,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
 
         public void RemoveFromCache(string key, bool isFullKey = false)
         {
-            RemoveFromCacheAsync(key, isFullKey).GetAwaiter();
+            RemoveFromCacheAsync(key, isFullKey).GetAwaiter().GetResult();
         }
 
         public async Task RemoveFromCacheAsync(string key, bool isFullKey = false)
@@ -116,7 +113,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
 
         public void Set(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
-            SetAsync(key, value, expiry, isFullKey).GetAwaiter();
+            SetAsync(key, value, expiry, isFullKey).GetAwaiter().GetResult();
         }
 
         public async Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
@@ -171,7 +168,12 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
             return cacheLock;
         }
 
-        public async Task CacheUnlockAsync(string resourceName, string key)
+        internal async void CacheUnlock(string resourceName, string key)
+        {
+            Client.Unlock(DaprStateManager.StoreName, resourceName, key).GetAwaiter().GetResult();
+        }
+
+        internal async Task CacheUnlockAsync(string resourceName, string key)
         {
             await Client.Unlock(DaprStateManager.StoreName, resourceName, key);
         }
