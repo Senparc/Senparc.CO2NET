@@ -1,5 +1,4 @@
-using MessagePack;
-using Senparc.CO2NET.Cache.Dapr.Tests;
+ï»¿using MessagePack;
 using System.Runtime.CompilerServices;
 
 namespace Senparc.CO2NET.Cache.Dapr.Tests
@@ -21,7 +20,7 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(bag.AddTime, result.AddTime);
 
-            Console.WriteLine($"SetTestµ¥Ìõ²âÊÔºÄÊ±£º{SystemTime.DiffTotalMS(bag.AddTime)}ms");
+            Console.WriteLine($"SetTestå•æ¡æµ‹è¯•è€—æ—¶ï¼š{SystemTime.DiffTotalMS(bag.AddTime)}ms");
         }
 
         [TestMethod]
@@ -38,7 +37,7 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(bag.AddTime, result.AddTime);
 
-            Console.WriteLine($"SetTestµ¥Ìõ²âÊÔºÄÊ±£º{SystemTime.DiffTotalMS(bag.AddTime)}ms");
+            Console.WriteLine($"SetTestå•æ¡æµ‹è¯•è€—æ—¶ï¼š{SystemTime.DiffTotalMS(bag.AddTime)}ms");
         }
 
         [TestMethod]
@@ -51,11 +50,11 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
 
             cacheStrategy.Set(key, bag, TimeSpan.FromSeconds(100));
 
-            Thread.Sleep(1000);//µÈ´ı
+            Thread.Sleep(1000);//ç­‰å¾…
             var result = cacheStrategy.Get(key);
-            Assert.IsNotNull(result);//Î´¹ıÆÚ
+            Assert.IsNotNull(result);//æœªè¿‡æœŸ
 
-            cacheStrategy.Update(key, bag, TimeSpan.FromSeconds(1));//ÖØĞÂÉèÖÃÊ±¼ä
+            cacheStrategy.Update(key, bag, TimeSpan.FromSeconds(1));//é‡æ–°è®¾ç½®æ—¶é—´
             result = cacheStrategy.Get(key);
             Assert.IsNotNull(result);
 
@@ -63,7 +62,7 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
             Assert.IsNotNull(strongEntity);
             Assert.AreEqual(bag.AddTime, strongEntity.AddTime);
 
-            Thread.Sleep(1000);//ÈÃ»º´æ¹ıÆÚ
+            Thread.Sleep(1000);//è®©ç¼“å­˜è¿‡æœŸ
             result = cacheStrategy.Get(key);
             Assert.IsNull(result);
         }
@@ -85,7 +84,7 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(bag.AddTime, result.AddTime);
 
-            Thread.Sleep(1000);//ÈÃ»º´æ¹ıÆÚ
+            Thread.Sleep(1000);//è®©ç¼“å­˜è¿‡æœŸ
             entity = await cacheStrategy.GetAsync<ContainerBag>(key);
             Assert.IsNull(entity);
         }
