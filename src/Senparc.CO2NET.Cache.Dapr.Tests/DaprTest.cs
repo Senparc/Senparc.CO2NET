@@ -1,5 +1,5 @@
 using MessagePack;
-using Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy;
+using Senparc.CO2NET.Cache.Dapr.Tests;
 using System.Runtime.CompilerServices;
 
 namespace Senparc.CO2NET.Cache.Dapr.Tests
@@ -7,41 +7,10 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
     [TestClass]
     public class DaprTest
     {
-        [MessagePackObject(keyAsPropertyName: true)]
-        public class ContainerBag
-        {
-            [Key(0)]
-            public string Key { get; set; }
-            [Key(1)]
-            public string Name { get; set; }
-            [Key(2)]
-            public DateTimeOffset AddTime { get; set; }
-        }
-
-        private static string Me([CallerMemberName] string caller = "") => caller;
-
-        private static IBaseObjectCacheStrategy GetCacheStrategy()
-        {
-            DaprStateManager.StoreName = "statestore";
-            DaprStateManager.HttpEndPoint = "http://localhost:3500";
-            CacheStrategyFactory.RegisterObjectCacheStrategy(() => DaprStateObjectCacheStrategy.Instance);
-            return CacheStrategyFactory.GetObjectCacheStrategyInstance();
-        }
-
-        private static ContainerBag MakeBag()
-        {
-            return new ContainerBag()
-            {
-                Key = Guid.NewGuid().ToString(),
-                Name = "",
-                AddTime = SystemTime.Now
-            };
-        }
-
         [TestMethod]
         public void SetTest()
         {
-            var cacheStrategy = GetCacheStrategy();
+            var cacheStrategy = DaprTestConfig.GetCacheStrategy();
 
             var key = Me();
             var bag = MakeBag();
@@ -58,7 +27,7 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
         [TestMethod]
         public async Task SetAsyncTest()
         {
-            var cacheStrategy = GetCacheStrategy();
+            var cacheStrategy = DaprTestConfig.GetCacheStrategy();
 
             var key = Me();
             var bag = MakeBag();
@@ -75,7 +44,7 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
         [TestMethod]
         public void ExpiryTest()
         {
-            var cacheStrategy = GetCacheStrategy();
+            var cacheStrategy = DaprTestConfig.GetCacheStrategy();
 
             var key = Me();
             var bag = MakeBag();
@@ -102,7 +71,7 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
         [TestMethod]
         public async Task ExpiryAsyncTest()
         {
-            var cacheStrategy = GetCacheStrategy();
+            var cacheStrategy = DaprTestConfig.GetCacheStrategy();
 
             var key = Me();
             var bag = MakeBag();
@@ -120,5 +89,28 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
             entity = await cacheStrategy.GetAsync<ContainerBag>(key);
             Assert.IsNull(entity);
         }
+
+        [MessagePackObject(keyAsPropertyName: true)]
+        private class ContainerBag
+        {
+            [Key(0)]
+            public string Key { get; set; }
+            [Key(1)]
+            public string Name { get; set; }
+            [Key(2)]
+            public DateTimeOffset AddTime { get; set; }
+        }
+
+        private static ContainerBag MakeBag()
+        {
+            return new ContainerBag()
+            {
+                Key = Guid.NewGuid().ToString(),
+                Name = "",
+                AddTime = SystemTime.Now
+            };
+        }
+
+        private static string Me([CallerMemberName] string caller = "") => caller;
     }
 }
