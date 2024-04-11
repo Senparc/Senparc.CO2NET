@@ -50,19 +50,22 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
 
             cacheStrategy.Set(key, bag, TimeSpan.FromSeconds(100));
 
-            Thread.Sleep(1000);//等待
+            //1s后缓存不应该过期
+            Thread.Sleep(1000);
             var result = cacheStrategy.Get(key);
-            Assert.IsNotNull(result);//未过期
+            Assert.IsNotNull(result);
 
-            cacheStrategy.Update(key, bag, TimeSpan.FromSeconds(1));//重新设置时间
+            //重新设置缓存生存时间为1s
+            cacheStrategy.Update(key, bag, TimeSpan.FromSeconds(1));
             result = cacheStrategy.Get(key);
             Assert.IsNotNull(result);
 
             var strongEntity = cacheStrategy.Get<ContainerBag>(key);
             Assert.IsNotNull(strongEntity);
             Assert.AreEqual(bag.AddTime, strongEntity.AddTime);
-
-            Thread.Sleep(1000);//让缓存过期
+            
+            //等待1s让缓存过期
+            Thread.Sleep(1000);
             result = cacheStrategy.Get(key);
             Assert.IsNull(result);
         }
@@ -84,7 +87,8 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(bag.AddTime, result.AddTime);
 
-            Thread.Sleep(1000);//让缓存过期
+            //缓存1s后过期
+            Thread.Sleep(1000);
             entity = await cacheStrategy.GetAsync<ContainerBag>(key);
             Assert.IsNull(entity);
         }
