@@ -39,11 +39,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Memcached", "Memcached", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.AspNet", "Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj", "{B6CC5D8D-5AD6-42F0-96C6-7EB5B55DE195}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DaprState", "DaprState", "{E29559AA-AD7F-4358-83C3-2A55E5AF86F1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dapr", "Dapr", "{E29559AA-AD7F-4358-83C3-2A55E5AF86F1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.Dapr", "Senparc.CO2NET.Cache.Dapr\Senparc.CO2NET.Cache.Dapr.csproj", "{A47212ED-B0CC-4E29-9E2B-23BEAF638586}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.CO2NET.Cache.Dapr.Tests", "Senparc.CO2NET.Cache.Dapr.Tests\Senparc.CO2NET.Cache.Dapr.Tests.csproj", "{7522AC39-F9B9-466D-A836-980E7E47F72A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Cache.Dapr.Tests", "Senparc.CO2NET.Cache.Dapr.Tests\Senparc.CO2NET.Cache.Dapr.Tests.csproj", "{7522AC39-F9B9-466D-A836-980E7E47F72A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
