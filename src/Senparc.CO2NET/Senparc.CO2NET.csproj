@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>2.4.0.1</Version>
+    <Version>2.4.1</Version>
     <LangVersion>8.0</LangVersion>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
@@ -138,6 +138,7 @@
 		v2.3.0 适配 .NET 8.0
 		v2.3.1 添加 app.UseSenparcGlobal 扩展方法
 		v2.4.0 添加 SenparcDI.GetService&lt;T&gt;()、SenparcDI.GetRequiredService&lt;T&gt;()、SenparcDI.GetRequreidKeyedService()方法
+		v2.4.1 SenparcDI.GetServiceProvider() 方法添加 refresh 参数
 	</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>

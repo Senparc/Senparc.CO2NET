@@ -68,9 +68,14 @@ namespace Senparc.CO2NET
         /// 从 GlobalServiceCollection 重新 Build，生成新的 IServiceProvider
         /// </summary>
         /// <returns></returns>
-        public static IServiceProvider GetServiceProvider()
+        public static IServiceProvider GetServiceProvider(bool refresh = false)
         {
-            return GlobalServiceCollection.BuildServiceProvider();
+            if (_globalServiceProvider != null && !refresh)
+            {
+                return _globalServiceProvider;
+            }
+            _globalServiceProvider = GlobalServiceCollection.BuildServiceProvider();
+            return _globalServiceProvider;
         }
 
         /// <summary>

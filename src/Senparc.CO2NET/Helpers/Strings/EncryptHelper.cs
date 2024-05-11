@@ -49,6 +49,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20221220
     修改描述：v2.1.5 新增 EncryptHelper.GetCertString() 以及 GetCertStringFromFile() 方法
 
+    修改标识：Senparc - 20240511
+    修改描述：v2.4.1 SenparcDI.GetServiceProvider() 方法添加 refresh 参数
+
 ----------------------------------------------------------------*/
 
 

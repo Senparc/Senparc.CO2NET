@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="MessagePack" Version="1.7.3.4" />
+	  <PackageReference Include="MessagePack" Version="2.5.140" />
 	  <PackageReference Include="MessagePackAnalyzer" Version="1.6.0" />
 	  <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
