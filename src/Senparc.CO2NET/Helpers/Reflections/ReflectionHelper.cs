@@ -186,5 +186,27 @@ namespace Senparc.CO2NET.Helpers
                 return null;
             }
         }
+
+        /// <summary>
+        /// 查看类型是否具有不带参数的构造函数
+        /// </summary>
+        /// <param name="type">查看类型</param>
+        /// <returns></returns>
+        public static bool HasParameterlessConstructor(Type type)
+        {
+            // 获取所有公共和非公共的构造函数  
+            ConstructorInfo[] constructors = type.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+            // 检查是否存在不带参数的构造函数  
+            foreach (ConstructorInfo constructor in constructors)
+            {
+                if (constructor.GetParameters().Length == 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
