@@ -1,0 +1,36 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "dapr-workflow" ]
+  pull_request:
+    branches: [ "dapr-workflow" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: dapr tool installer
+      uses: dapr/setup-dapr@v2
+      with:
+        version: 1.13.0
+    - name: Initialize Dapr
+      run: |
+        dapr init --runtime-version=1.13.0
+        dapr --version
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
