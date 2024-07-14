@@ -35,5 +35,5 @@ jobs:
         dapr init --runtime-version=1.13.0
         dapr --version
     - name: Test
-      run: dapr run --app-id myapp --dapr-http-port 3500 dotnet test --no-build --verbosity normal
+      run: dapr run --app-id myapp --dapr-http-port 3500 -- dotnet test --no-build --verbosity normal
       working-directory: ./src
