@@ -1,4 +1,6 @@
-﻿using Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy;
+﻿using System;
+using System.Threading.Tasks;
+using Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy;
 
 namespace Senparc.CO2NET.Cache.Dapr
 {
