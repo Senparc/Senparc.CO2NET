@@ -34,6 +34,19 @@ jobs:
       run: |
         dapr init --runtime-version=1.13.0
         dapr --version
+    - name: Create lockstore Component File
+      run: |
+        echo "apiVersion: dapr.io/v1alpha1
+        kind: Component
+        metadata:
+          name: lockstore
+        spec:
+          type: lock.redis
+          metadata:
+            - name: redisHost
+              value: 'localhost:6379'
+            - name: redisPassword
+              value: ''" > ~/.dapr/components/lockstore.yaml
     - name: Test
       run: dapr run --app-id myapp --dapr-http-port 3500 -- dotnet test --no-build --verbosity normal
       working-directory: ./src
