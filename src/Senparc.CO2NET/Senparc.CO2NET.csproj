@@ -213,4 +213,7 @@
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="8.0.0" Condition=" '$(TargetFramework)' == 'net8.0'" />
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.0" Condition=" '$(TargetFramework)' != 'net8.0'" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\HttpUtility\HttpPut\" />
+  </ItemGroup>
 </Project>
