@@ -1,3 +1,6 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Senparc.CO2NET.MagicObject.Tests
@@ -51,6 +54,8 @@ namespace Senparc.CO2NET.MagicObject.Tests
             Assert.AreEqual(2, changes.Count);
             Assert.IsTrue(changes.ContainsKey("Name"));
             Assert.IsTrue(changes.ContainsKey("Age"));
+            Assert.AreEqual("Bob", _mo.Get(z => z.Name).NewValue);
+            Assert.AreEqual(25, _mo.Get(z => z.Age).NewValue);
         }
 
         [TestMethod]
