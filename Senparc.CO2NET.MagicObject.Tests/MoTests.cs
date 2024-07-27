@@ -1,3 +1,4 @@
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -120,6 +121,23 @@ namespace Senparc.CO2NET.MagicObject.Tests
             Assert.AreEqual("Charlie", resultAfterRestore.OldValue);
             Assert.AreEqual("Charlie", resultAfterRestore.NewValue);
             Assert.IsFalse(resultAfterRestore.IsChanged);
+        }
+
+        [TestMethod]
+        public void TestRevertChanges()
+        {
+            // Act  
+            Assert.IsFalse(_mo.HasChanges());
+
+            _mo.Set(x => x.Name, "I'm Jeffrey");
+            Assert.IsTrue(_mo.HasChanges());
+            Assert.AreEqual("I'm Jeffrey", _mo.Get(z => z.Name).NewValue);
+
+            _mo.RevertChanges();
+
+            // Assert  
+            Assert.AreEqual("Alice", _mo.Get(z => z.Name).NewValue);
+            Assert.IsFalse(_mo.HasChanges());
         }
     }
 }

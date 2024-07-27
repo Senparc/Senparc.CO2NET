@@ -20,7 +20,7 @@ namespace Senparc.CO2NET.MagicObject
     public class MO<T>
     {
         private T OriginalObject { get; set; }
-        private T NewObject { get; set; }
+        private T Object { get; set; }
         private Dictionary<string, PropertyChangeResult<object>> _changes;
         private T _snapshot;
 
@@ -28,8 +28,8 @@ namespace Senparc.CO2NET.MagicObject
 
         public MO(T obj)
         {
-            OriginalObject = obj;
-            NewObject = Clone(obj);
+            OriginalObject = Clone(obj);
+            Object = obj;
             _changes = new Dictionary<string, PropertyChangeResult<object>>();
         }
 
@@ -53,7 +53,7 @@ namespace Senparc.CO2NET.MagicObject
 
                 if (!Equals(originalValue, newValue))
                 {
-                    propertyInfo.SetValue(NewObject, newValue);
+                    propertyInfo.SetValue(Object, newValue);
                     var changeResult = new PropertyChangeResult<object>
                     {
                         OldValue = originalValue,
@@ -78,7 +78,7 @@ namespace Senparc.CO2NET.MagicObject
             if (expression.Body is MemberExpression memberExpression && memberExpression.Member is PropertyInfo propertyInfo)
             {
                 var originalValue = (TValue)propertyInfo.GetValue(_snapshot != null ? _snapshot : OriginalObject);
-                var newValue = (TValue)propertyInfo.GetValue(NewObject);
+                var newValue = (TValue)propertyInfo.GetValue(Object);
 
                 return new PropertyChangeResult<TValue>
                 {
@@ -100,7 +100,7 @@ namespace Senparc.CO2NET.MagicObject
 
         public void Reset()
         {
-            NewObject = Clone(OriginalObject);
+            Object = Clone(OriginalObject);
             _changes.Clear();
         }
 
@@ -132,14 +132,14 @@ namespace Senparc.CO2NET.MagicObject
 
         public void TakeSnapshot()
         {
-            _snapshot = Clone(NewObject);
+            _snapshot = Clone(Object);
         }
 
         public void RestoreSnapshot()
         {
             if (_snapshot != null)
             {
-                NewObject = Clone(_snapshot);
+                Object = Clone(_snapshot);
                 _changes.Clear();
             }
         }
@@ -149,5 +149,20 @@ namespace Senparc.CO2NET.MagicObject
             var cloneMethod = source.GetType().GetMethod("MemberwiseClone", BindingFlags.Instance | BindingFlags.NonPublic);
             return (T)cloneMethod.Invoke(source, null);
         }
+
+        public void RevertChanges()
+        {
+            var properties = OriginalObject.GetType().GetProperties();
+            foreach (var property in properties)
+            {
+                if (property.CanWrite)
+                {
+                    var originalValue = property.GetValue(OriginalObject);
+                    property.SetValue(Object, originalValue);
+                }
+            }
+            _changes.Clear();
+        }
+
     }
 }
