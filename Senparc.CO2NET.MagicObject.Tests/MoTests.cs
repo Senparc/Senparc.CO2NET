@@ -43,6 +43,7 @@ namespace Senparc.CO2NET.MagicObject.Tests
             Assert.AreEqual("Alice", result.OldValue);
             Assert.AreEqual("Alice", result.NewValue);
             Assert.IsFalse(result.IsChanged);
+            Assert.IsFalse(result.HasShapshot);
         }
 
         [TestMethod]
@@ -107,20 +108,38 @@ namespace Senparc.CO2NET.MagicObject.Tests
         [TestMethod]
         public void TakeSnapshot_RestoreSnapshot()
         {
+            //_person = new Person { Name = "Alice", Age = 30 };
+
+            Assert.IsFalse(_mo.HasChanges());
+
             _mo.Set(p => p.Name, "Charlie");
+            Console.WriteLine(_mo.Get(z => z.Age).SnapshotValue);
+            Assert.IsFalse(_mo.Get(z => z.Age).HasShapshot);
+            Assert.IsNull(_mo.Get(z => z.Name).SnapshotValue);
+            Assert.AreEqual(0, _mo.Get(z => z.Age).SnapshotValue);//仍然会返回默认值
+            Assert.IsTrue(_mo.HasChanges());
+
             _mo.TakeSnapshot();
+
+            Assert.IsTrue(_mo.Get(z => z.Age).HasShapshot);
+            Assert.AreEqual( 30,_mo.Get(z => z.Age).SnapshotValue);
 
             _mo.Set(p => p.Name, "Dave");
             var resultBeforeRestore = _mo.Get(p => p.Name);
-            Assert.AreEqual("Charlie", resultBeforeRestore.OldValue);
+            Assert.AreEqual("Alice", resultBeforeRestore.OldValue);
+            Assert.AreEqual("Charlie", resultBeforeRestore.SnapshotValue);
             Assert.AreEqual("Dave", resultBeforeRestore.NewValue);
             Assert.IsTrue(resultBeforeRestore.IsChanged);
 
             _mo.RestoreSnapshot();
+            Assert.IsTrue(_mo.Get(z => z.Age).HasShapshot);//快照本身不会被清除
+
             var resultAfterRestore = _mo.Get(p => p.Name);
-            Assert.AreEqual("Charlie", resultAfterRestore.OldValue);
+            Assert.AreEqual("Alice", resultAfterRestore.OldValue);
+            Assert.AreEqual("Charlie", resultBeforeRestore.SnapshotValue);
             Assert.AreEqual("Charlie", resultAfterRestore.NewValue);
-            Assert.IsFalse(resultAfterRestore.IsChanged);
+            Assert.IsTrue(resultAfterRestore.IsChanged);
+            Assert.IsFalse(_mo.HasChanges());
         }
 
         [TestMethod]

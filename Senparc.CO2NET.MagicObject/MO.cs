@@ -5,18 +5,6 @@ using System.Reflection;
 
 namespace Senparc.CO2NET.MagicObject
 {
-    public class PropertyChangeResult<TValue>
-    {
-        public TValue OldValue { get; set; }
-        public TValue NewValue { get; set; }
-        public bool IsChanged { get; set; }
-
-        public override string ToString()
-        {
-            return IsChanged ? $"{OldValue} -> {NewValue}" : NewValue?.ToString();
-        }
-    }
-
     public class MO<T>
     {
         private T OriginalObject { get; set; }
@@ -77,14 +65,20 @@ namespace Senparc.CO2NET.MagicObject
         {
             if (expression.Body is MemberExpression memberExpression && memberExpression.Member is PropertyInfo propertyInfo)
             {
-                var originalValue = (TValue)propertyInfo.GetValue(_snapshot != null ? _snapshot : OriginalObject);
+                var hasSnapshot = _snapshot != null;
+
+                var originalValue = (TValue)propertyInfo.GetValue(OriginalObject);
+
+                TValue? snapshptValue = hasSnapshot ? (TValue?)propertyInfo.GetValue(_snapshot) : default;
                 var newValue = (TValue)propertyInfo.GetValue(Object);
 
                 return new PropertyChangeResult<TValue>
                 {
                     OldValue = originalValue,
+                    SnapshotValue = snapshptValue,
                     NewValue = newValue,
-                    IsChanged = !Equals(originalValue, newValue)
+                    IsChanged = /*hasSnapshot ? Equals(snapshptValue, newValue) :*/ !Equals(originalValue, newValue),
+                    HasShapshot = hasSnapshot
                 };
             }
             else
