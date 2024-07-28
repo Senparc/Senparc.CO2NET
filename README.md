@@ -12,7 +12,9 @@
 | APM 模块 | Senparc.CO2NET.APM   | [![Senparc.CO2NET.APM][2.1]][2.2]    [![Senparc.CO2NET.APM][nuget-img-base-apm]][nuget-url-base-apm]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
 | Redis 基础库 | Senparc.CO2NET.Cache.Redis   | [![Senparc.CO2NET.Cache.Redis][3.1]][3.2]    [![Senparc.CO2NET.Cache.Redis][nuget-img-base-redis]][nuget-url-base-redis]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
 | Memcached 基础库 | Senparc.CO2NET.Cache.Memcached   | [![Senparc.CO2NET.Cache.Memcached][4.1]][4.2]    [![Senparc.CO2NET.Cache.Memcached][nuget-img-base-memcached]][nuget-url-base-memcached]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
-| WebApi（新） | Senparc.CO2NET.WebApi   | [![Senparc.CO2NET.WebApi][5.1]][5.2]    [![Senparc.CO2NET.Cache.Memcached][nuget-img-base-memcached]][nuget-url-base-memcached]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
+| WebApi（新） | Senparc.CO2NET.WebApi   | [![Senparc.CO2NET.WebApi][5.1]][5.2]    [![Senparc.CO2NET.WebApi][nuget-img-base-memcached]][nuget-url-base-memcached]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
+| MagicObject（新） | Senparc.CO2NET.MagicObject   | [![Senparc.CO2NET.MagicObject][6.1]][6.2]    [![Senparc.CO2NET.MagicObject][nuget-img-base-magic-object]][nuget-url-base-magic-object]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.5][net45Y]    ![.NET Core 2.0][core20Y]
+
 
 ![.NET Core 2.0][core20Y] 同时支持 .NET Standard 2.0+ 及 .NET Core 2.1/3.1、.NET 5.0/6.0/7.0/8.0+
 
@@ -29,7 +31,8 @@
 [4.2]: https://www.nuget.org/packages/Senparc.CO2NET.Cache.Memcached
 [5.1]: https://img.shields.io/nuget/v/Senparc.CO2NET.WebApi.svg?style=flat
 [5.2]: https://www.nuget.org/packages/Senparc.CO2NET.WebApi
-
+[6.1]: https://img.shields.io/nuget/v/Senparc.CO2NET.MagicObject.svg?style=flat
+[6.2]: https://www.nuget.org/packages/Senparc.CO2NET.MagicObject
 
 [net35Y]: https://img.shields.io/badge/3.5-Y-brightgreen.svg
 [net35N]: https://img.shields.io/badge/3.5-N-lightgrey.svg
@@ -55,6 +58,11 @@
 [nuget-url-base-redis]: https://www.nuget.org/packages/Senparc.CO2NET.Cache.Redis
 [nuget-img-base-memcached]: https://img.shields.io/nuget/dt/Senparc.CO2NET.Cache.Memcached.svg
 [nuget-url-base-memcached]: https://www.nuget.org/packages/Senparc.CO2NET.Cache.Memcached
+[nuget-img-base-webapi]: https://img.shields.io/nuget/dt/Senparc.CO2NET.WebApi.svg
+[nuget-url-base-webapi]: https://www.nuget.org/packages/Senparc.CO2NET.WebApi
+[nuget-img-base-magic-object]: https://img.shields.io/nuget/dt/Senparc.CO2NET.MagicObject.svg
+[nuget-url-base-magic-object]: https://www.nuget.org/packages/Senparc.CO2NET.MagicObject
+
 
 Senparc.CO2NET 是一个支持 .NET Framework 和 .NET Core 的公共基础扩展库，包含常规开发所需要的基础帮助类。
 
