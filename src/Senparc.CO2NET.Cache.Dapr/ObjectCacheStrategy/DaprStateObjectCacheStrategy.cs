@@ -1,6 +1,9 @@
-﻿using Dapr.Client;
+﻿using System;
+using Dapr.Client;
 using Google.Protobuf;
 using System.Collections.Immutable;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
 {
