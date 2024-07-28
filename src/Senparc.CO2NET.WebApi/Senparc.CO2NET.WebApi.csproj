@@ -1,69 +1,76 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
-    <Version>1.5.3</Version>
-    <LangVersion>latest</LangVersion>
-    <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
-    <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
-    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-    <Description>
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.1;net6.0;net8.0</TargetFrameworks>
+		<Version>1.6.0-beta1</Version>
+		<LangVersion>latest</LangVersion>
+		<AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
+		<RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<Description>
 			Senparc.CO2NET.WebApi 应用性能管理
 		</Description>
-    <Copyright>Senparc Copyright © 2004~2023</Copyright>
-    <PackageTags>WebApi,.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
-    <Authors>Senparc</Authors>
-    <Owners>Senparc</Owners>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
-    <Title>Senparc.CO2NET.WebApi.dll</Title>
-    <Summary>Senparc.CO2NET.WebApi</Summary>
-    <PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
-    <PackageIcon>icon.jpg</PackageIcon>
-    <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
-    <Configurations>Debug;Release;Test</Configurations>
-    <PackageReleaseNotes>
-		v0.1 创世
-		v0.2 完成 WebApiEngine 第一代核心版本
-		v0.2.3 完成 WebApiEngine 第二代核心版本，全面支持动态 API 集成和集成和对应 XML 生成
-		v0.2.4 添加可额外注入的类或方法
-		v0.2.5 优化异步线程执行
-		v0.2.5.7 添加 ForbiddenExternalAccess 参数，设置是否允许外部访问
-		v0.2.6 添加 WebApiEngineOptions
-		v0.2.8 提供 .NET Standard 2.1 版本
-		v1.1 提供参数属性同步复制到动态 Api 的能力
-		v1.1.2 优化文档提取正则表达式
-		v1.1.3 添加 AddApiControllerAttribute 选项，默认为 true
-		v1.3 提供 .NET 7.0 支持
-		v1.4.1 使用 [ApiBind(Ignore = false)]，添加完善对整个类的 API 生成忽略忽略
-		v1.5.2.1整理日志格式
-	</PackageReleaseNotes>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>..\BuildOutPut</OutputPath>
-    <DefineConstants>TRACE;RELEASE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\BuildOutPut</OutputPath>
-    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.WebApi.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
-    <!--<PackageReference Include="System.Reflection.Emit" Version="4.7.0" />-->
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
-    <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1" />
-  </ItemGroup>
+		<Copyright>Senparc Copyright © 2004~2023</Copyright>
+		<PackageTags>WebApi,.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
+		<Authors>Senparc</Authors>
+		<Owners>Senparc</Owners>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
+		<Title>Senparc.CO2NET.WebApi.dll</Title>
+		<Summary>Senparc.CO2NET.WebApi</Summary>
+		<PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
+		<PackageIcon>icon.jpg</PackageIcon>
+		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
+		<Configurations>Debug;Release;Test</Configurations>
+		<PackageReleaseNotes>
+			v0.1 创世
+			v0.2 完成 WebApiEngine 第一代核心版本
+			v0.2.3 完成 WebApiEngine 第二代核心版本，全面支持动态 API 集成和集成和对应 XML 生成
+			v0.2.4 添加可额外注入的类或方法
+			v0.2.5 优化异步线程执行
+			v0.2.5.7 添加 ForbiddenExternalAccess 参数，设置是否允许外部访问
+			v0.2.6 添加 WebApiEngineOptions
+			v0.2.8 提供 .NET Standard 2.1 版本
+			v1.1 提供参数属性同步复制到动态 Api 的能力
+			v1.1.2 优化文档提取正则表达式
+			v1.1.3 添加 AddApiControllerAttribute 选项，默认为 true
+			v1.3 提供 .NET 7.0 支持
+			v1.4.1 使用 [ApiBind(Ignore = false)]，添加完善对整个类的 API 生成忽略忽略
+			v1.5.2.1整理日志格式
+			v1.6.0
+			1、删除 .NET 7.0 TargetFramework；增加 .NET 8.0 TargetFramework
+			2、移除 Microsoft.AspNetCore.Mvc.Core 的引用
+			2、引用最新的 Senparc.CO2NET.AspNet，.NET 6.0 和 .NET 8.0 程序集不再依赖 Microsoft.AspNetCore.Hosting.Abstractions 和 Microsoft.AspNetCore.Http.Abstractions
+		</PackageReleaseNotes>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<OutputPath>..\BuildOutPut</OutputPath>
+		<DefineConstants>TRACE;RELEASE</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+		<OutputPath>..\BuildOutPut</OutputPath>
+		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+		<DocumentationFile>..\BuildOutPut\Senparc.CO2NET.WebApi.xml</DocumentationFile>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<ErrorReport>prompt</ErrorReport>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
+		<!--<PackageReference Include="System.Reflection.Emit" Version="4.7.0" />-->
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.1'">
+		<PackageReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="8.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
+		<ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+	</ItemGroup>
 </Project>

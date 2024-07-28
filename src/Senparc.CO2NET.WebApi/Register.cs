@@ -10,7 +10,6 @@
 ----------------------------------------------------------------*/
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyModel;
 using Senparc.CO2NET.ApiBind;
 using Senparc.CO2NET.Trace;
 using System;
@@ -76,7 +75,8 @@ namespace Senparc.CO2NET.WebApi
 
                 //查找所有扩展缓存
                 var scanTypesCount = 0;
-                var assembiles = DependencyContext.Default.RuntimeLibraries.Select(z =>
+
+                var assembiles = Microsoft.Extensions.DependencyModel.DependencyContext.Default.RuntimeLibraries.Select(z =>
                 {
                     try
                     {
