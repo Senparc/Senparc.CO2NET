@@ -53,7 +53,7 @@ namespace Senparc.CO2NET.MagicObject.Tests
             _mo.Set(p => p.Age, 25);
 
             var changes = _mo.GetChanges();
-            Assert.AreEqual(2, changes.Count);
+            Assert.AreEqual(2, changes.Count());
             Assert.IsTrue(changes.ContainsKey("Name"));
             Assert.IsTrue(changes.ContainsKey("Age"));
             Assert.AreEqual("Bob", _mo.Get(z => z.Name).NewValue);
