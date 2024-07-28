@@ -10,10 +10,12 @@
     修改标识：Senparc - 20221219
     修改描述：v1.1.3 优化 UseSenparcGlobal 方法
 
+    修改标识：Senparc - 20240728
+    修改描述：v1.4.0 .NET 6.0 和 .NET 8.0 程序集不再依赖 Microsoft.AspNetCore.Hosting.Abstractions 和 Microsoft.AspNetCore.Http.Abstractions
+
 ----------------------------------------------------------------*/
 
 #if !NET462
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using System;
 using System.Collections.Generic;

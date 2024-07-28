@@ -11,10 +11,14 @@
     修改描述：v1.1.3 优化 RegisterService.StartStart() 方法，根据 env 
                      参数自动判断是否为网站项目，并获取运行根目录
 
+    修改标识：Senparc - 20240728
+    修改描述：v1.4.0 .NET 6.0 和 .NET 8.0 程序集不再依赖 Microsoft.AspNetCore.Hosting.Abstractions 和 Microsoft.AspNetCore.Http.Abstractions
+
 ----------------------------------------------------------------*/
 
 
 #if !NET462
+
 using Microsoft.AspNetCore.Hosting;
 using Senparc.CO2NET.RegisterServices;
 using System;
@@ -43,7 +47,11 @@ namespace Senparc.CO2NET.AspNet.RegisterServices
             //提供网站根目录
             if (env != null && env.ContentRootPath != null)
             {
+#if NETSTANDARD2_0 || NETSTANDARD2_1
                 if (env is Microsoft.AspNetCore.Hosting.IHostingEnvironment webHostingEnv)
+#else
+                if (env is IWebHostEnvironment webHostingEnv)
+#endif
                 {
                     Senparc.CO2NET.Config.RootDirectoryPath = webHostingEnv.ContentRootPath;
                 }
