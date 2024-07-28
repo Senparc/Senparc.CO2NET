@@ -50,6 +50,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20230326
     修改描述：v2.0.5 添加 WaitingFor() 方法
 
+    修改标识：Senparc - 20240728
+    修改描述：v2.4.3 优化 GetDateTimeOffsetFromXml 方法，增加 timezoneId 参数
+
 ----------------------------------------------------------------*/
 
 
@@ -93,10 +96,16 @@ namespace Senparc.CO2NET.Helpers
         /// </summary>
         /// <param name="dateTimeFromXml">微信DateTime</param>
         /// <returns></returns>
-        public static DateTimeOffset GetDateTimeOffsetFromXml(long dateTimeFromXml)
+        public static DateTimeOffset GetDateTimeOffsetFromXml(long dateTimeFromXml, string timezoneId = "China Standard Time")
         {
-            return BaseTime.AddSeconds(dateTimeFromXml).ToLocalTime();
+            DateTimeOffset utcDateTime = BaseTime.AddSeconds(dateTimeFromXml);
+            Console.WriteLine($"UTC Time: {utcDateTime}");
+            TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById(timezoneId);
+            DateTimeOffset localDateTime = TimeZoneInfo.ConvertTime(utcDateTime, timeZone);
+            Console.WriteLine($"Local Time ({timezoneId}): {localDateTime}");
+            return localDateTime;
         }
+
 
         /// <summary>
         /// 转换微信DateTimeOffset时间到C#时间
