@@ -34,7 +34,7 @@
 		v0.5.0 支持 .NET Core 3.0
 		v0.5.102 支持新版本 CO2NET
 		v0.6.102 支持新版本 CO2NET
-		v1.1 默认停用 APM（EnableAPM = false）
+		v1.1.0 默认停用 APM（EnableAPM = false）
 </PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
