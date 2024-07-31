@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Xml.Linq;
 
 namespace Senparc.CO2NET.MagicObject.Tests
 {
@@ -28,11 +29,50 @@ namespace Senparc.CO2NET.MagicObject.Tests
         [TestMethod]
         public void Set_SingleProperty_ChangesTracked()
         {
+            var dt = SystemTime.Now;
+
             _mo.Set(p => p.Name, "Bob");
 
+            var dt0 = SystemTime.Now;
+
             var result = _mo.Get(p => p.Name);
+
+            var dt1 = SystemTime.Now;
+
+            Console.WriteLine("Set 单次耗时(ms)：" + (dt0 - dt).TotalMilliseconds);
+            Console.WriteLine("Get 单次耗时(ms)：" + (dt1 - dt0).TotalMilliseconds);
+
+            var dt2 = SystemTime.Now;
+
+            for (var i = 0; i < 1000; i++)
+            {
+                _mo.Set(p => p.Name, "Bob" + i);
+                var resultX = _mo.Get(p => p.Name);
+            }
+            Console.WriteLine("1000 次 Set+Get 耗时(ms)：" + (SystemTime.DiffTotalMS(dt2)));
+
+            _mo.Set(p => p.Name, "Bob");
+
+            var dtS3 = SystemTime.Now;
+            Person person = new Person { Name = "Alice", Age = 30 };
+            person.Name = "Bob";
+            var result2 = person.Name;
+            var dtE3 = SystemTime.Now;
+            Console.WriteLine("原始方法 单次 Get+Set 耗时(ms)：" + (dtE3 - dtS3).TotalMilliseconds);
+
+
+            var dt4 = DateTime.Now;
+            for (var i = 0; i < 1000; i++)
+            {
+                person.Name = "Bob" + i;
+                var resultX = person.Name;
+            }
+            Console.WriteLine("1000 次 原始方法 耗时(ms)：" + SystemTime.DiffTotalMS(dt4));
+
+
             Assert.AreEqual("Alice", result.OldValue);
             Assert.AreEqual("Bob", result.NewValue);
+            Assert.AreEqual("Bob", _person.Name);
             Assert.IsTrue(result.IsChanged);
         }
 
@@ -63,8 +103,12 @@ namespace Senparc.CO2NET.MagicObject.Tests
         [TestMethod]
         public void Reset_ResetsObjectStateAndClearsChanges()
         {
+            Assert.AreSame(_mo.Object, _person);
+
             _mo.Set(p => p.Name, "Bob");
             _mo.Reset();
+
+            Assert.AreNotSame(_mo.Object, _person);
 
             var result = _mo.Get(p => p.Name);
             Assert.AreEqual("Alice", result.NewValue);
@@ -122,7 +166,7 @@ namespace Senparc.CO2NET.MagicObject.Tests
             _mo.TakeSnapshot();
 
             Assert.IsTrue(_mo.Get(z => z.Age).HasShapshot);
-            Assert.AreEqual( 30,_mo.Get(z => z.Age).SnapshotValue);
+            Assert.AreEqual(30, _mo.Get(z => z.Age).SnapshotValue);
 
             _mo.Set(p => p.Name, "Dave");
             var resultBeforeRestore = _mo.Get(p => p.Name);
@@ -140,6 +184,10 @@ namespace Senparc.CO2NET.MagicObject.Tests
             Assert.AreEqual("Charlie", resultAfterRestore.NewValue);
             Assert.IsTrue(resultAfterRestore.IsChanged);
             Assert.IsFalse(_mo.HasChanges());
+
+            //适用对象覆盖
+
+            //TODO
         }
 
         [TestMethod]
@@ -151,11 +199,15 @@ namespace Senparc.CO2NET.MagicObject.Tests
             _mo.Set(x => x.Name, "I'm Jeffrey");
             Assert.IsTrue(_mo.HasChanges());
             Assert.AreEqual("I'm Jeffrey", _mo.Get(z => z.Name).NewValue);
+            Assert.AreEqual("I'm Jeffrey", _person.Name);
 
             _mo.RevertChanges();
 
             // Assert  
+            Assert.AreSame(_mo.Object, _person);
+
             Assert.AreEqual("Alice", _mo.Get(z => z.Name).NewValue);
+            Assert.AreEqual("Alice", _person.Name);
             Assert.IsFalse(_mo.HasChanges());
         }
     }
