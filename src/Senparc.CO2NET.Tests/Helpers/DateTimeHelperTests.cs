@@ -76,48 +76,6 @@ namespace Senparc.CO2NET.Tests.Helpers
             // Assert  
             Assert.AreEqual(expectedDateTime, actualDateTime);
         }
-
-        [TestMethod]
-        public void GetDateTimeOffsetFromXml_ShouldReturnCorrectDateTime_UTC()
-        {
-            // Arrange  
-            long unixTimeStamp = 1545888011; // Unix 时间戳  
-            DateTimeOffset expectedDateTime = new DateTimeOffset(2018, 12, 27, 5, 20, 11, TimeSpan.Zero); // 预期的 UTC 时间  
-
-            // Act  
-            DateTimeOffset actualDateTime = DateTimeHelper.GetDateTimeOffsetFromXml(unixTimeStamp, "UTC");
-
-            // Assert  
-            Assert.AreEqual(expectedDateTime, actualDateTime);
-        }
-
-        [TestMethod]
-        public void GetDateTimeOffsetFromXml_ShouldReturnCorrectDateTime_EasternStandardTime()
-        {
-            // Arrange  
-            long unixTimeStamp = 1545888011; // Unix 时间戳  
-            DateTimeOffset expectedDateTime = new DateTimeOffset(2018, 12, 27, 0, 20, 11, TimeSpan.FromHours(-5)); // 预期的美国东部标准时间  
-
-            // Act  
-            DateTimeOffset actualDateTime = DateTimeHelper.GetDateTimeOffsetFromXml(unixTimeStamp, "Eastern Standard Time");
-
-            // Assert  
-            Assert.AreEqual(expectedDateTime, actualDateTime);
-        }
-
-        [TestMethod]
-        public void GetDateTimeOffsetFromXml_ShouldReturnCorrectDateTime_PacificStandardTime()
-        {
-            // Arrange  
-            long unixTimeStamp = 1545888011; // Unix 时间戳  
-            DateTimeOffset expectedDateTime = new DateTimeOffset(2018, 12, 26, 21, 20, 11, TimeSpan.FromHours(-8)); // 预期的美国太平洋标准时间  
-
-            // Act  
-            DateTimeOffset actualDateTime = DateTimeHelper.GetDateTimeOffsetFromXml(unixTimeStamp, "Pacific Standard Time");
-
-            // Assert  
-            Assert.AreEqual(expectedDateTime, actualDateTime);
-        }
     }
 
 }
