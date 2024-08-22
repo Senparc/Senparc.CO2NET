@@ -55,6 +55,8 @@ using Senparc.CO2NET.HttpUtility;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.IO;
+using Senparc.CO2NET.Cache;
+
 
 #if !NET462
 using System.Net.Http;
@@ -87,6 +89,8 @@ namespace Senparc.CO2NET.RegisterServices
         {
             SenparcDI.GlobalServiceCollection = serviceCollection;
             serviceCollection.Configure<SenparcSetting>(configuration.GetSection("SenparcSetting"));
+
+            serviceCollection.AddTransient<IBaseObjectCacheStrategy>(s => CacheStrategyFactory.GetObjectCacheStrategyInstance());
 
             // .net core 3.0 HttpClient 文档参考：https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/http-requests?view=aspnetcore-3.0
             //配置 HttpClient，可使用 Head 自定义 Cookie
