@@ -57,6 +57,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 
 using System;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.Helpers
@@ -96,11 +97,31 @@ namespace Senparc.CO2NET.Helpers
         /// </summary>
         /// <param name="dateTimeFromXml">微信DateTime</param>
         /// <returns></returns>
-        public static DateTimeOffset GetDateTimeOffsetFromXml(long dateTimeFromXml, string timezoneId = "China Standard Time")
+        public static DateTimeOffset GetDateTimeOffsetFromXml(long dateTimeFromXml,
+            string timezoneId = "China Standard Time"
+#if !NET462
+            , IRuntimeInformation runtimeInformation = null
+#endif
+            )
         {
             DateTimeOffset utcDateTime = BaseTime.AddSeconds(dateTimeFromXml);
             Console.WriteLine($"UTC Time: {utcDateTime}");
-            TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById(timezoneId);
+
+            string ianaTimeZoneId;
+            if (runtimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                ianaTimeZoneId = TimeZoneConverter.WindowsToIana(timezoneId);
+            }
+            else if (runtimeInformation.IsOSPlatform(OSPlatform.Linux) || runtimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                ianaTimeZoneId = timezoneId;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException();
+            }
+
+            TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById(ianaTimeZoneId);
             DateTimeOffset localDateTime = TimeZoneInfo.ConvertTime(utcDateTime, timeZone);
             Console.WriteLine($"Local Time ({timezoneId}): {localDateTime}");
             return localDateTime;
