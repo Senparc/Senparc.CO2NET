@@ -156,7 +156,12 @@ register.RegisterTraceLog(ConfigTraceLog);//配置TraceLog
 Console.WriteLine("Hello CO2NET!");
 Console.WriteLine($"Total initialization time: {SystemTime.DiffTotalMS(dt1)}ms");
 
-Console.WriteLine($"当前缓存策略: {CacheStrategyFactory.GetObjectCacheStrategyInstance()}");
+var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+Console.WriteLine($"当前缓存策略: {cacheStrategy}");
+var servierProviderScope = services.BuildServiceProvider().CreateScope();
+var cache = servierProviderScope.ServiceProvider.GetRequiredService<IBaseObjectCacheStrategy>();
+Console.WriteLine($"依赖注入缓存策略: {cache}（{(cache == cacheStrategy ? "成功" : "失败")}）");
+
 
 Console.WriteLine($"SenparcSetting: {Config.SenparcSetting.ToJson(true)}");
 
