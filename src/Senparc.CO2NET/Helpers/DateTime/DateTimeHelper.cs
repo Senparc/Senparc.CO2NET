@@ -51,7 +51,10 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改描述：v2.0.5 添加 WaitingFor() 方法
 
     修改标识：Senparc - 20240728
-    修改描述：v2.4.3 优化 GetDateTimeOffsetFromXml 方法，增加 timezoneId 参数
+    修改描述：v2.4.3 优化 GetDateTimeOffsetFromXml() 方法，增加 timezoneId 参数
+
+    修改标识：Senparc - 20240824
+    修改描述：v2.5.1 还原 GetDateTimeOffsetFromXml() 方法 #297 感谢 @zhaoyangguang
 
 ----------------------------------------------------------------*/
 
@@ -97,34 +100,11 @@ namespace Senparc.CO2NET.Helpers
         /// </summary>
         /// <param name="dateTimeFromXml">微信DateTime</param>
         /// <returns></returns>
-        public static DateTimeOffset GetDateTimeOffsetFromXml(long dateTimeFromXml,
-            string timezoneId = "China Standard Time"
-#if !NET462
-            , IRuntimeInformation runtimeInformation = null
-#endif
-            )
+        public static DateTimeOffset GetDateTimeOffsetFromXml(long dateTimeFromXml)
         {
-            DateTimeOffset utcDateTime = BaseTime.AddSeconds(dateTimeFromXml);
-            Console.WriteLine($"UTC Time: {utcDateTime}");
-
-            string ianaTimeZoneId;
-            if (runtimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                ianaTimeZoneId = TimeZoneConverter.WindowsToIana(timezoneId);
-            }
-            else if (runtimeInformation.IsOSPlatform(OSPlatform.Linux) || runtimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                ianaTimeZoneId = timezoneId;
-            }
-            else
-            {
-                throw new PlatformNotSupportedException();
-            }
-
-            TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById(ianaTimeZoneId);
-            DateTimeOffset localDateTime = TimeZoneInfo.ConvertTime(utcDateTime, timeZone);
-            Console.WriteLine($"Local Time ({timezoneId}): {localDateTime}");
-            return localDateTime;
+            //DateTimeOffset utcDateTime = BaseTime.AddSeconds(dateTimeFromXml);
+            DateTimeOffset utcDateTime = DateTimeOffset.FromUnixTimeSeconds(dateTimeFromXml);
+            return utcDateTime;
         }
 
 
