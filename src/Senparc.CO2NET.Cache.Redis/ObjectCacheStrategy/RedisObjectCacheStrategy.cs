@@ -47,6 +47,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20230527
     修改描述：v4.1.3 RedisObjectCacheStrategy 方法添加纯字符串的判断
 
+    修改标识：Senparc - 20240910
+    修改描述：v4.2.5 修复 GetAllByPrefixAsync(key) 方法会自动获取所有 Key 的 bug
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -370,7 +373,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// </summary>
         public IList<T> GetAllByPrefix<T>(string key)
         {
-            var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
+            var keyPattern = GetFinalKey(key);//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
             var keys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern, pageSize: 99999);
             List<T> list = new List<T>();
             foreach (var fullKey in keys)
@@ -391,7 +394,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// </summary>
         public async Task<IList<T>> GetAllByPrefixAsync<T>(string key)
         {
-            var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
+            var keyPattern = GetFinalKey(key);//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
             var keys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern, pageSize: 99999);
             List<T> list = new List<T>();
             foreach (var fullKey in keys)

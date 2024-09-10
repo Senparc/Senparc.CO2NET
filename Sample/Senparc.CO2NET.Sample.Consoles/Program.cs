@@ -162,8 +162,13 @@ var servierProviderScope = services.BuildServiceProvider().CreateScope();
 var cache = servierProviderScope.ServiceProvider.GetRequiredService<IBaseObjectCacheStrategy>();
 Console.WriteLine($"依赖注入缓存策略: {cache}（{(cache == cacheStrategy ? "成功" : "失败")}）");
 
+//存入缓存
+await cache.SetAsync("Setting", Config.SenparcSetting);
 
-Console.WriteLine($"SenparcSetting: {Config.SenparcSetting.ToJson(true)}");
+//读取缓存
+var settingFromCache = await cache.GetAsync<SenparcSetting>("Setting");
+
+Console.WriteLine($"从缓读取 SenparcSetting: {settingFromCache.ToJson(true)}");
 
 
 Console.ReadLine();
