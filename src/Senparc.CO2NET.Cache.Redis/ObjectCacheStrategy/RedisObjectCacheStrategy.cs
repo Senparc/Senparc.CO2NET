@@ -373,7 +373,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// </summary>
         public IList<T> GetAllByPrefix<T>(string key)
         {
-            var keyPattern = GetFinalKey(key);//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
+            var keyPattern = GetFinalKey(key + "*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
             var keys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern, pageSize: 99999);
             List<T> list = new List<T>();
             foreach (var fullKey in keys)
@@ -394,7 +394,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// </summary>
         public async Task<IList<T>> GetAllByPrefixAsync<T>(string key)
         {
-            var keyPattern = GetFinalKey(key);//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
+            var keyPattern = GetFinalKey(key + "*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
             var keys = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern, pageSize: 99999);
             List<T> list = new List<T>();
             foreach (var fullKey in keys)
