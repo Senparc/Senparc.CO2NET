@@ -97,7 +97,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
             throw new NotImplementedException();
         }
 
-        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
+        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法", true)]
         public void InsertToCache(string key, object value, TimeSpan? expiry = null)
         {
             Set(key, value, expiry);

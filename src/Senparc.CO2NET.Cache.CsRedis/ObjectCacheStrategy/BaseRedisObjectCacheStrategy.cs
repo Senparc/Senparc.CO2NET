@@ -79,7 +79,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         #region 同步方法
 
 
-        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
+        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法", true)]
         public abstract void InsertToCache(string key, object value, TimeSpan? expiry = null);
         public abstract void Set(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
 
@@ -94,6 +94,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         public abstract bool CheckExisted(string key, bool isFullKey = false);
 
         public abstract long GetCount();
+        public abstract long GetCount(string prefix);
 
         public abstract void Update(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
 
@@ -115,12 +116,14 @@ namespace Senparc.CO2NET.Cache.CsRedis
         public abstract Task<bool> CheckExistedAsync(string key, bool isFullKey = false);
 
         public abstract Task<long> GetCountAsync();
+        public abstract Task<long> GetCountAsync(string prefix);
 
         public abstract Task UpdateAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
 
         #endregion
 
 
+        #region 同步锁
 
         public override ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {
@@ -132,5 +135,6 @@ namespace Senparc.CO2NET.Cache.CsRedis
             return await RedisCacheLock.CreateAndLockAsync(this, resourceName, key, retryCount, retryDelay).ConfigureAwait(false);
         }
 
+        #endregion
     }
 }
