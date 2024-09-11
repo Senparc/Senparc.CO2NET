@@ -98,7 +98,7 @@ namespace Senparc.CO2NET.Cache
         /// <param name="key">缓存键</param>
         /// <param name="value">缓存值</param>
         /// <param name="expiry">过期时间</param>
-        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
+        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法", true)]
         void InsertToCache(TKey key, TValue value, TimeSpan? expiry = null);
 
         /// <summary>

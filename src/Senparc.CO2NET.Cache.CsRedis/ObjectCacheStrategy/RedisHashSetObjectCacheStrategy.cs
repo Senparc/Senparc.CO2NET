@@ -273,13 +273,23 @@ namespace Senparc.CO2NET.Cache.CsRedis
         }
 
         /// <summary>
-        /// 获取所有缓存项计数（最多 99999 条）
+        /// 获取所有缓存项计数
         /// </summary>
         /// <returns></returns>
 
         public override long GetCount()
         {
-            var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
+            return GetCount(null);
+        }
+
+        /// <summary>
+        /// 获取所有缓存项计数
+        /// </summary>
+        /// <returns></returns>
+
+        public override long GetCount(string prefix)
+        {
+            var keyPattern = GetFinalKey(prefix + "*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
             var count = base.Client.Keys(/*database: Client.GetDatabase().Database,*/ pattern: keyPattern/*, pageSize: 99999*/).Count();
             return count;
         }
@@ -290,7 +300,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="expiry"></param>
-        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
+        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法", true)]
         public override void InsertToCache(string key, object value, TimeSpan? expiry = null)
         {
             Set(key, value, expiry, false);
@@ -468,6 +478,11 @@ namespace Senparc.CO2NET.Cache.CsRedis
             return Task.Factory.StartNew(() => GetCount());
         }
 
+        public override Task<long> GetCountAsync(string prefix)
+        {
+            return Task.Factory.StartNew(() => GetCount(""));
+        }
+
         /// <summary>
         /// 设置对象。注意：过期时间对 HashSet 无效！
         /// </summary>
@@ -540,7 +555,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         /// <summary>
         /// _cache.HashGetAll()
         /// </summary>
-        public Dictionary<string,string> HashGetAll(string key)
+        public Dictionary<string, string> HashGetAll(string key)
         {
             return base.Client.HGetAll(key);
         }

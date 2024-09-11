@@ -193,14 +193,28 @@ namespace Senparc.CO2NET.Cache.Redis
         //TODO: 提供 GetAllKeys() 方法
 
 
+        /// <summary>
+        /// 获取所有缓存项计数（最多 99999 条）
+        /// </summary>
+        /// <returns></returns>
         public override long GetCount()
         {
-            var keyPattern = GetFinalKey("*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
-            var count = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern, pageSize: 99999).Count();
+            return GetCount(null);
+        }
+
+        /// <summary>
+        /// 获取所有缓存项计数（最多 99999 条）
+        /// </summary>
+        /// <returns></returns>
+
+        public override long GetCount(string prefix)
+        {
+            var keyPattern = GetFinalKey(prefix + "*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]
+            var count = GetServer().Keys(database: Client.GetDatabase().Database, pattern: keyPattern, pageSize: 99999).LongCount();
             return count;
         }
 
-        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法")]
+        [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法", true)]
         public override void InsertToCache(string key, object value, TimeSpan? expiry = null)
         {
             Set(key, value, expiry, false);
@@ -326,11 +340,13 @@ namespace Senparc.CO2NET.Cache.Redis
             }
             return dic;
         }
-
-
         public override Task<long> GetCountAsync()
         {
             return Task.Factory.StartNew(() => GetCount());
+        }
+        public override Task<long> GetCountAsync(string prefix)
+        {
+            return Task.Factory.StartNew(() => GetCount(""));
         }
 
         public override async Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
