@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 		<PropertyGroup>
-				<TargetFrameworks>netstandard2.1;net6.0;net8.0</TargetFrameworks>
-				<Version>1.6.3</Version>
+				<TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
+				<Version>1.7.0</Version>
 				<LangVersion>latest</LangVersion>
 				<AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
 				<RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
@@ -42,6 +42,7 @@
 			2、移除 Microsoft.AspNetCore.Mvc.Core 的引用
 			2、引用最新的 Senparc.CO2NET.AspNet，.NET 6.0 和 .NET 8.0 程序集不再依赖 Microsoft.AspNetCore.Hosting.Abstractions 和 Microsoft.AspNetCore.Http.Abstractions
 			[2024-09-11] v1.6.3 更新 Cache, remove InsertToCache(), add Count(prefix)
+			[2024-10-07] v1.7.0 停止对 .NET 6.0 的支持
 </PackageReleaseNotes>
 		</PropertyGroup>
 		<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
