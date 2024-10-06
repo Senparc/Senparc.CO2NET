@@ -20,7 +20,7 @@
 ![.NET Core 2.0][core20Y] : 同时支持 .NET Standard 2.0+ 及 .NET Core 2.1/3.1、.NET 5.0/6.0/7.0/8.0+
 
 > [!NOTE]
-> CO2NET 已步停止对 .NET Framework 4.0 / .NET 6.0 及以下版本的独立版本支持（TFM），但新版本将继续根据 .NET 特性保持向下兼容。
+> CO2NET 已停止对 .NET Framework 4.0 / .NET 6.0 及以下版本的独立版本支持（TFM），但新版本将继续根据 .NET 特性保持向下兼容。
 
 [1.1]: https://img.shields.io/nuget/v/Senparc.CO2NET.svg?style=flat
 [1.2]: https://www.nuget.org/packages/Senparc.CO2NET
