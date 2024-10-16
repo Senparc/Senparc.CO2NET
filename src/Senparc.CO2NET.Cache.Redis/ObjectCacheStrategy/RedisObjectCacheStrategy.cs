@@ -346,7 +346,7 @@ namespace Senparc.CO2NET.Cache.Redis
         }
         public override Task<long> GetCountAsync(string prefix)
         {
-            return Task.Factory.StartNew(() => GetCount(""));
+            return Task.Factory.StartNew(() => GetCount(prefix));
         }
 
         public override async Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
