@@ -21,32 +21,32 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2020 Senparc
 
-    文件名：BrowserUtility.cs
-    文件功能描述：浏览器公共类
+    FileName：BrowserUtility.cs
+    File Function Description：Browser utility class
 
 
-    创建标识：Senparc - 20150419
+    Creation Identifier：Senparc - 20150419
 
-    修改标识：Senparc - 20161219
-    修改描述：v4.9.6 修改错别字：Browser->Browser
+    Modification Identifier：Senparc - 20161219
+    Modification Description：v4.9.6 Corrected typo: Browser->Browser
 
-    修改标识：Senparc - 20161219
-    修改描述：v4.11.2 修改SideInWeixinBrowser判断逻辑
+    Modification Identifier：Senparc - 20161219
+    Modification Description：v4.11.2 Modified SideInWeixinBrowser logic
 
-    修改标识：Senparc - 20180513
-    修改描述：v4.11.2 1、增加对小程序请求的判断方法 SideInWeixinMiniProgram()
-                      2、添加 GetUserAgent() 方法
+    Modification Identifier：Senparc - 20180513
+    Modification Description：v4.11.2 1. Added method to determine mini program requests SideInWeixinMiniProgram()
+                      2. Added GetUserAgent() method
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/Utilities/BrowserUtility.cs  ----
 
-    修改标识：Senparc - 20180531
-    修改描述：v0.1.0 移植 BrowserUtility
+    Modification Identifier：Senparc - 20180531
+    Modification Description：v0.1.0 Ported BrowserUtility
 
-    -- 从 CO2NET 移植到 CO2NET.AspNet --
+    -- Ported from CO2NET to CO2NET.AspNet --
     
-    修改标识：Senparc - 20180721
-    修改描述：v0.1.0  从 CO2NET 移植到 CO2NET.AspNet
+    Modification Identifier：Senparc - 20180721
+    Modification Description：v0.1.0  Ported from CO2NET to CO2NET.AspNet
 
 ----------------------------------------------------------------*/
 
@@ -60,12 +60,12 @@ using Microsoft.AspNetCore.Http;
 namespace Senparc.CO2NET.Utilities
 {
     /// <summary>
-    /// 浏览器公共类
+    /// Browser utility class
     /// </summary>
     public class BrowserUtility
     {
         /// <summary>
-        /// 获取 Headers 中的 User-Agent 字符串
+        /// Get the User-Agent string from Headers
         /// </summary>
         /// <param name="httpRequest"></param>
         /// <returns></returns>
