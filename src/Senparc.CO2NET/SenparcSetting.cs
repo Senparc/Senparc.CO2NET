@@ -1,38 +1,38 @@
-﻿/*----------------------------------------------------------------
+/*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：SenparcSetting.cs
-    文件功能描述：CO2NET 全局设置
+    File Name: SenparcSetting.cs
+    File Function Description: CO2NET Global Settings
 
-    创建标识：Senparc - 20180704
+    Creation Identifier: Senparc - 20180704
 
-    修改标识：Senparc - 20180707
-    修改描述：v0.1.9 增加带 isDebug 参数的构造函数
+    Modification Identifier: Senparc - 20180707
+    Modification Description: v0.1.9 Added constructor with isDebug parameter
 
-    修改标识：Senparc - 20180707
-    修改描述：v0.1.11 提供 BuildFromWebConfig() 方法
+    Modification Identifier: Senparc - 20180707
+    Modification Description: v0.1.11 Provided BuildFromWebConfig() method
 
 ----------------------------------------------------------------*/
 
 namespace Senparc.CO2NET
 {
     /// <summary>
-    /// CO2NET 全局设置
+    /// CO2NET Global Settings
     /// </summary>
     public class SenparcSetting
     {
         /// <summary>
-        /// 是否出于Debug状态
+        /// Indicates whether it is in Debug state
         /// </summary>
         public bool IsDebug { get; set; }
 
         /// <summary>
-        /// 默认缓存键的第一级命名空间，默认值：DefaultCache
+        /// The first-level namespace for default cache keys, default value: DefaultCache
         /// </summary>
         public string DefaultCacheNamespace { get; set; }
 
         /// <summary>
-        /// Senparc 统一代理标识
+        /// Senparc unified proxy identifier
         /// </summary>
         public string SenparcUnionAgentKey { get; set; }
 
@@ -40,12 +40,12 @@ namespace Senparc.CO2NET
         #region 分布式缓存
 
         /// <summary>
-        /// Redis连接字符串
+        /// Redis connection string
         /// </summary>
         public string Cache_Redis_Configuration { get; set; }
 
         /// <summary>
-        /// Memcached连接字符串
+        /// Memcached connection string
         /// </summary>
         public string Cache_Memcached_Configuration { get; set; }
 
@@ -54,7 +54,7 @@ namespace Senparc.CO2NET
 
 
         /// <summary>
-        /// SenparcSetting 构造函数
+        /// SenparcSetting constructor
         /// </summary>
         public SenparcSetting() : this(false)
         {
@@ -62,7 +62,7 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// SenparcSetting 构造函数
+        /// SenparcSetting constructor
         /// </summary>
         public SenparcSetting(bool isDebug)
         {
@@ -71,9 +71,9 @@ namespace Senparc.CO2NET
 
 #if NET462
         /// <summary>
-        /// 从 Web.Config 文件自动生成 SenparcSetting
+        /// Automatically generate SenparcSetting from Web.Config file
         /// </summary>
-        /// <param name="isDebug">设置 CO2NET 全局的 Debug 状态 </param>
+        /// <param name="isDebug">Set the global Debug state for CO2NET</param>
         /// <returns></returns>
         public static SenparcSetting BuildFromWebConfig(bool isDebug)
         {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -8,13 +8,13 @@ namespace Senparc.CO2NET.Tests
     public static class UnitTestHelper
     {
         /// <summary>
-        /// 根目录地址
+        /// Root directory address
         /// </summary>
         public static string RootPath => Path.GetFullPath("..\\..\\..\\");
 
 
         /// <summary>
-        /// 检查关键字存在
+        /// Check for keyword existence
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="keywords"></param>

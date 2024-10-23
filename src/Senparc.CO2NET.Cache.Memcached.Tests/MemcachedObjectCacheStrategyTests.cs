@@ -11,7 +11,7 @@ namespace Senparc.CO2NET.Cache.Memcached.Tests
             var str = "localhost:12211;localhost:12345";
             MemcachedObjectCacheStrategy.RegisterServerList(str);
 
-            //由于是private方法，这里只能确认是否有异常，或者进行读写测试
+            // This method is private and is only used to check for exceptions or perform assertions
         }
     }
 }

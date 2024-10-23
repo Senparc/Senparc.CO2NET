@@ -1,4 +1,4 @@
-﻿#region Apache License Version 2.0
+#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
 Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
@@ -21,17 +21,17 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
   
-    文件名：Enums.cs
-    文件功能描述：枚举配置文件
+    FileName: Enums.cs
+    File Function Description: Enum configuration file
     
     
-    创建标识：Senparc - 20180602
+    Creation Identifier: Senparc - 20180602
  
-    修改标识：Senparc - 20180704
-    修改描述：v0.5.1.1 添加 Sex.未设置 枚举值
+    Modification Identifier: Senparc - 20180704
+    Modification Description: v0.5.1.1 Added Sex.NotSet enum value
 
-    修改标识：Senparc - 20190507
-    修改描述：v0.7.1 添加 DayOfWeekString、DILifecycleType 配置和枚举
+    Modification Identifier: Senparc - 20190507
+    Modification Description: v0.7.1 Added DayOfWeekString, DILifecycleType configuration and enums
 
 
 ----------------------------------------------------------------*/
@@ -39,12 +39,12 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 namespace Senparc.CO2NET
 {
     /// <summary>
-    /// 枚举
+    /// Enum
     /// </summary>
     public static class Enums
     {
         /// <summary>
-        /// 星期
+        /// Weekday
         /// </summary>
         public static readonly string[] DayOfWeekString = new[]
         {
@@ -59,40 +59,40 @@ namespace Senparc.CO2NET
     }
 
     /// <summary>
-    /// 缓存类型
+    /// Cache type
     /// </summary>
     public enum CacheType
     {
         /// <summary>
-        /// 本地运行时缓存（单机）
+        /// Local runtime cache (single machine)
         /// </summary>
         Local,
         /// <summary>
-        /// Redis缓存（支持分布式）
+        /// Redis cache (supports distributed)
         /// </summary>
         Redis,
         /// <summary>
-        /// Memcached（支持分布式）
+        /// Memcached (supports distributed)
         /// </summary>
         Memcached
     }
 
     /// <summary>
-    /// 用户信息中的性别（sex）
+    /// Gender in user information (sex)
     /// </summary>
     public enum Sex
     {
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释   
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member   
         未知 = 0,
         未设置 = 0,
         男 = 1,
         女 = 2,
         其他 = 3
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 
     /// <summary>
-    /// 依赖注入的生命周期
+    /// Lifecycle of dependency injection
     /// </summary>
     public enum DILifecycleType
     {

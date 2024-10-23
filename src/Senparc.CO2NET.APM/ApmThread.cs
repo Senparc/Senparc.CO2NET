@@ -1,22 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
 namespace Senparc.CO2NET.APM
 {
     /// <summary>
-    /// APM 线程
+    /// APM thread
     /// </summary>
     public class ApmThread
     {
         private DateTimeOffset LastRecordTime = DateTime.MinValue;
 
         /// <summary>
-        /// 打开 CPU 状态监控
+        /// Enable CPU status monitoring
         /// </summary>
         public bool OpenCpuWatch { get; set; } = false;
         /// <summary>
-        /// 打开内存状态监控
+        /// Enable memory status monitoring
         /// </summary>
         public bool OpenMemoryWatch { get; set; } = false;
 
@@ -27,9 +27,9 @@ namespace Senparc.CO2NET.APM
             {
                 if (DataHelper.IsLaterMinute(LastRecordTime, SystemTime.Now))
                 {
-                    //进行统计并清理多余数据
+                    //Perform statistics and clean up excess data
 
-                    //进行数据清理
+                    //Perform data cleanup
 
 
 
@@ -37,7 +37,7 @@ namespace Senparc.CO2NET.APM
                     LastRecordTime = SystemTime.Now;
                 }
 
-                Thread.Sleep(1000 * 10);//间隔1分钟以内
+                Thread.Sleep(1000 * 10);//Within 1 minute interval
             }
         }
     }

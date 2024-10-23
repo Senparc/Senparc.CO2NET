@@ -15,25 +15,25 @@ namespace Senparc.CO2NET.Tests
         [TestMethod]
         public void IsDebugTest()
         {
-            //debug=true 状态下会记录日志
+            //debug=true state, record log
             {
                 Config.IsDebug = true;
                 Assert.AreEqual(true, Config.IsDebug);
 
                 var guid = Guid.NewGuid().ToString();
                 SenparcTrace.SendCustomLog("IsDebugTest:Debug", guid);
-                Thread.Sleep(1500);//通过队列写入需要等待
+                Thread.Sleep(1500);//Need to wait for write completion
                 Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(SenparcTraceTests.LogFilePath, guid));
             }
 
-            //debug=false 状态下不会记录日志
+            //debug=false state, do not record log
             {
                 Config.IsDebug = false;
                 Assert.AreEqual(false, Config.IsDebug);
 
                 var guid = Guid.NewGuid().ToString();
                 SenparcTrace.SendCustomLog("IsDebugTest:Not Debug", guid);
-                Thread.Sleep(1500);//通过队列写入需要等待
+                Thread.Sleep(1500);//Need to wait for write completion
                 Assert.IsFalse(UnitTestHelper.CheckKeywordsExist(SenparcTraceTests.LogFilePath, guid));
             }
         }

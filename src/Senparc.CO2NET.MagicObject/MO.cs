@@ -1,4 +1,4 @@
-﻿#region Apache License Version 2.0
+#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
 Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
@@ -21,14 +21,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
   
-    文件名：Enums.cs
-    文件功能描述：枚举配置文件
+    FileName: Enums.cs
+    File Function Description: Enum configuration file
     
     
-    创建标识：MO - 20240730
+    Creation Identifier: MO - 20240730
  
-    修改标识：Senparc - 20240731
-    修改描述：v0.0.2 将 MO.OriginObject 和 MO.Object 属性设为 public
+    Modification Identifier: Senparc - 20240731
+    Modification Description: v0.0.2 Set MO.OriginObject and MO.Object properties to public
 
 ----------------------------------------------------------------*/
 
@@ -40,7 +40,7 @@ using System.Reflection;
 namespace Senparc.CO2NET.MagicObject
 {
     /// <summary>
-    /// MagicObject 对象
+    /// MagicObject object
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class MO<T>
@@ -61,11 +61,11 @@ namespace Senparc.CO2NET.MagicObject
         }
 
         /// <summary>
-        /// 设置属性值
+        /// Set property value
         /// </summary>
         /// <typeparam name="TValue"></typeparam>
-        /// <param name="expression">需要设置属性的对象</param>
-        /// <param name="value">值</param>
+        /// <param name="expression">Object whose property needs to be set</param>
+        /// <param name="value">Value</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         public MO<T> Set<TValue>(Expression<Func<T, TValue>> expression, TValue value)
@@ -108,10 +108,10 @@ namespace Senparc.CO2NET.MagicObject
         }
 
         /// <summary>
-        /// 获取属性值
+        /// Get property value
         /// </summary>
         /// <typeparam name="TValue"></typeparam>
-        /// <param name="expression">需要获取的属性</param>
+        /// <param name="expression">Property to be retrieved</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         public PropertyChangeResult<TValue> Get<TValue>(Expression<Func<T, TValue>> expression)
@@ -141,7 +141,7 @@ namespace Senparc.CO2NET.MagicObject
         }
 
         /// <summary>
-        /// 获取所有的修改
+        /// Get all modifications
         /// </summary>
         /// <returns></returns>
         public Dictionary<string, PropertyChangeResult<object>> GetChanges()
@@ -150,8 +150,8 @@ namespace Senparc.CO2NET.MagicObject
         }
 
         /// <summary>
-        /// 使用旧对象的副本覆盖当前对象（注意将丢失对原有对象的引用，请慎重使用）
-        /// <para>如果不希望丢失对原有对象的引用，请使用 <see cref="RevertChanges"/> 方法</para>
+        /// Overwrite the current object with a copy of the old object (note that the reference to the original object will be lost, use with caution)
+        /// <para>If you do not want to lose the reference to the original object, use the <see cref="RevertChanges"/> method</para>
         /// </summary>
         public void Reset()
         {
@@ -160,7 +160,7 @@ namespace Senparc.CO2NET.MagicObject
         }
 
         /// <summary>
-        /// 检查是否具有修改
+        /// Check for modifications
         /// </summary>
         /// <returns></returns>
         public bool HasChanges()
@@ -169,7 +169,7 @@ namespace Senparc.CO2NET.MagicObject
         }
 
         /// <summary>
-        /// 批量设置属性值
+        /// Batch set property values
         /// </summary>
         /// <param name="properties"></param>
         /// <exception cref="ArgumentException"></exception>
@@ -194,7 +194,7 @@ namespace Senparc.CO2NET.MagicObject
 
 
         /// <summary>
-        /// 获取快照
+        /// Get snapshot
         /// </summary>
         public void TakeSnapshot()
         {
@@ -202,9 +202,9 @@ namespace Senparc.CO2NET.MagicObject
         }
 
         /// <summary>
-        /// 将快照还原到对象
+        /// Restore snapshot to object
         /// </summary>
-        /// <param name="keepObjectInstance">是否保持当前对象引用，如果为否，将使用 Clone 的旧对象</param>
+        /// <param name="keepObjectInstance">Whether to keep the current object reference, if not, the old object of Clone will be used</param>
         public void RestoreSnapshot(bool keepObjectInstance = true)
         {
             if (_snapshot != null)
@@ -222,7 +222,7 @@ namespace Senparc.CO2NET.MagicObject
         }
 
         /// <summary>
-        /// 克隆对象
+        /// Clone object
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
@@ -246,7 +246,7 @@ namespace Senparc.CO2NET.MagicObject
         }
 
         /// <summary>
-        /// 在当前引用对象基础上，还原所有修改（不会改变引用对象）
+        /// Restore all modifications on the basis of the current reference object (will not change the reference object)
         /// </summary>
         public void RevertChanges()
         {

@@ -18,8 +18,8 @@ namespace Senparc.CO2NET.APM.Tests
 
         private void BuildTestData(DataOperation dataOperation)
         {
-            dataOperation.SetAsync("内存", 4567, dateTime: SystemTime.Now.AddDays(-1)).Wait();//上一天的数据
-            dataOperation.SetAsync("内存", 6789, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
+            dataOperation.SetAsync("Memory", 4567, dateTime: SystemTime.Now.AddDays(-1)).Wait();//A simple example
+            dataOperation.SetAsync("Memory", 6789, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
 
             dataOperation.SetAsync("CPU", .65, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
             dataOperation.SetAsync("CPU", .78, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
@@ -27,14 +27,14 @@ namespace Senparc.CO2NET.APM.Tests
             dataOperation.SetAsync("CPU", .92, dateTime: SystemTime.Now.AddMinutes(-1)).Wait();
             dataOperation.SetAsync("CPU", .48, dateTime: SystemTime.Now.AddMinutes(-1)).Wait();
 
-            dataOperation.SetAsync("访问量", 1, dateTime: SystemTime.Now.AddMinutes(-3)).Wait();
-            dataOperation.SetAsync("访问量", 1, dateTime: SystemTime.Now.AddMinutes(-3)).Wait();
-            dataOperation.SetAsync("访问量", 1, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
-            dataOperation.SetAsync("访问量", 1, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
-            dataOperation.SetAsync("访问量", 1, dateTime: SystemTime.Now.AddMinutes(-1)).Wait();
-            dataOperation.SetAsync("访问量", 1, dateTime: SystemTime.Now.AddMinutes(-1)).Wait();
+            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-3)).Wait();
+            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-3)).Wait();
+            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
+            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
+            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-1)).Wait();
+            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-1)).Wait();
 
-            dataOperation.SetAsync("访问量", 1, dateTime: SystemTime.Now);//当前分钟，将不被收集  //.Wait()
+            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now);//Current task, blocking the space  //.Wait()
 
 
         }
@@ -45,13 +45,13 @@ namespace Senparc.CO2NET.APM.Tests
             DataOperation dataOperation = new DataOperation(domainPrefix + "SetAndGetTest");
             BuildTestData(dataOperation);
 
-            var memoryData = dataOperation.GetDataItemListAsync("内存").Result;
+            var memoryData = dataOperation.GetDataItemListAsync("锟节达拷").Result;
             Assert.AreEqual(2, memoryData.Count);
 
             var cpuData = dataOperation.GetDataItemListAsync("CPU").Result;
             Assert.AreEqual(5, cpuData.Count);
 
-            var viewData = dataOperation.GetDataItemListAsync("访问量").Result;
+            var viewData = dataOperation.GetDataItemListAsync("锟斤拷锟斤拷锟斤拷").Result;
             Assert.AreEqual(7, viewData.Count);
         }
 
@@ -61,24 +61,24 @@ namespace Senparc.CO2NET.APM.Tests
         {
             DataOperation dataOperation = new DataOperation(domainPrefix + "ReadAndCleanDataItemsTest");
             BuildTestData(dataOperation);
-            var result = dataOperation.ReadAndCleanDataItemsAsync(true, false).Result;//清除所有当前分钟前的过期数据
+            var result = dataOperation.ReadAndCleanDataItemsAsync(true, false).Result;//Processing the current task before the previous task
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Count);//内存、CPU、访问量3个分类
+            Assert.AreEqual(3, result.Count);//Memory and CPU resources, limited to 3 units
             Console.WriteLine(result.ToJson());
             Console.WriteLine("===============");
 
-            //立即获取，检查是否已经清空当前分钟之前的数据
-            var memoryData = dataOperation.GetDataItemListAsync("内存").Result;
+            //Check if the current task has received the previous task
+            var memoryData = dataOperation.GetDataItemListAsync("锟节达拷").Result;
             Assert.AreEqual(0, memoryData.Count);
 
             var cpuData = dataOperation.GetDataItemListAsync("CPU").Result;
             Assert.AreEqual(0, cpuData.Count);
 
-            var viewData = dataOperation.GetDataItemListAsync("访问量").Result;
-            Assert.AreEqual(1, viewData.Count);//当前分钟的缓存不会被清除
+            var viewData = dataOperation.GetDataItemListAsync("锟斤拷锟斤拷锟斤拷").Result;
+            Assert.AreEqual(1, viewData.Count);//The current task will not be interrupted
 
-            //模拟当前时间
+            //Simulate current time
 
         }
 
@@ -87,24 +87,24 @@ namespace Senparc.CO2NET.APM.Tests
         {
             DataOperation dataOperation = new DataOperation(domainPrefix + "ReadAndCleanDataItems_KeepTodayDataTest");
             BuildTestData(dataOperation);
-            var result = dataOperation.ReadAndCleanDataItemsAsync(true, true).Result;//只清除今天之前的记录
+            var result = dataOperation.ReadAndCleanDataItemsAsync(true, true).Result;//Only record before the previous task
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Count);//内存、CPU、访问量3个分类
+            Assert.AreEqual(3, result.Count);//Memory and CPU resources, limited to 3 units
             Console.WriteLine(result.ToJson());
             Console.WriteLine("===============");
 
-            //立即获取，检查是否已经清空当前分钟之前的数据
-            var memoryData = dataOperation.GetDataItemListAsync("内存").Result;
-            Assert.AreEqual(1, memoryData.Count);//删除1条昨天的数据
+            //Check if the current task has received the previous task
+            var memoryData = dataOperation.GetDataItemListAsync("锟节达拷").Result;
+            Assert.AreEqual(1, memoryData.Count);//Delete 1 element from the list
 
             var cpuData = dataOperation.GetDataItemListAsync("CPU").Result;
-            Assert.AreEqual(5, cpuData.Count);//当天数据全部保留
+            Assert.AreEqual(5, cpuData.Count);//Clear all elements in the list
 
-            var viewData = dataOperation.GetDataItemListAsync("访问量").Result;
-            Assert.AreEqual(7, viewData.Count);//当天数据全部保留
+            var viewData = dataOperation.GetDataItemListAsync("锟斤拷锟斤拷锟斤拷").Result;
+            Assert.AreEqual(7, viewData.Count);//Clear all elements in the list
 
-            //模拟当前时间
+            //Simulate current time
 
         }
     }

@@ -1,14 +1,14 @@
-﻿/*----------------------------------------------------------------
+/*----------------------------------------------------------------
     Copyright(C) 2024 Senparc
 
-    文件名：Config.cs
-    文件功能描述：APM 配置
+    FileName: Config.cs
+    File Function Description: APM Configuration
 
 
-    创建标识：Senparc - 201801113
+    Creation Identifier: Senparc - 201801113
 
-    修改标识：Senparc - 20220106
-    修改描述：v1.1 默认停用 APM（EnableAPM = false）
+    Modification Identifier: Senparc - 20220106
+    Modification Description: v1.1 APM disabled by default (EnableAPM = false)
 
 ----------------------------------------------------------------*/
 
@@ -17,17 +17,17 @@ using System;
 namespace Senparc.CO2NET.APM
 {
     /// <summary>
-    /// APM 配置
+    /// APM Configuration
     /// </summary>
     public class Config
     {
         /// <summary>
-        /// APM 信息自动过期时间（默认为20分钟）
+        /// APM information auto-expiration time (default is 20 minutes)
         /// </summary>
-        public static TimeSpan DataExpire = TimeSpan.FromMinutes(20);//20分钟
+        public static TimeSpan DataExpire = TimeSpan.FromMinutes(20);//20 minutes
 
         /// <summary>
-        /// 启用 APM
+        /// Enable APM
         /// </summary>
         public static bool EnableAPM = false;
     }

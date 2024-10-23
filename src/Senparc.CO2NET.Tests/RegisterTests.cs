@@ -23,14 +23,14 @@ namespace Senparc.CO2NET.Tests
             Config.DefaultCacheNamespace = guid;
             Assert.AreEqual(guid, Config.DefaultCacheNamespace);
 
-            //测试缓存中实际的key
+            //The actual key for the dialog
             var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var cacheKey = cache.GetFinalKey("key");
             Console.WriteLine(cacheKey);
             Assert.IsTrue(cacheKey.Contains($":{guid}:"));
 
             Config.DefaultCacheNamespace = null;
-            Assert.AreEqual("DefaultCache", Config.DefaultCacheNamespace);//返回默认值
+            Assert.AreEqual("DefaultCache", Config.DefaultCacheNamespace);//Default value
         }
 
         [TestMethod]
@@ -58,12 +58,12 @@ namespace Senparc.CO2NET.Tests
         {
             registerTraceLogActionRun = true;
 
-            SenparcTrace.SendCustomLog("Test系统日志", "Test系统启动");//只在Senparc.CO2NET.Config.IsDebug = true的情况下生效
+            SenparcTrace.SendCustomLog("Test System Log", "Test System Start");//Only effective when Senparc.CO2NET.Config.IsDebug = true
 
-            //自定义日志记录回调
+            //Automatically record logs
             SenparcTrace.OnLogFunc = () =>
             {
-                //加入每次触发Log后需要执行的代码
+                //Code to be executed every time Log is called
             };
         }
 
@@ -80,7 +80,7 @@ namespace Senparc.CO2NET.Tests
             Assert.AreEqual(true, Config.SenparcSetting.IsDebug);
             Assert.AreEqual(true, Config.IsDebug);
 
-            //测试缓存注册过程
+            //Notes for the dialog
 
             Func<IList<IDomainExtensionCacheStrategy>> func = () =>
             {

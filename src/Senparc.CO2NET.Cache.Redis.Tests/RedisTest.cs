@@ -48,7 +48,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 
-            Console.WriteLine($"SetTestµ¥Ìõ²âÊÔºÄÊ±£º{SystemTime.DiffTotalMS(dt)}ms");
+            Console.WriteLine($"SetTestï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½Ê±ï¿½ï¿½{SystemTime.DiffTotalMS(dt)}ms");
         }
 
         [TestMethod]
@@ -75,7 +75,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 
-            Console.WriteLine($"SetTestµ¥Ìõ²âÊÔºÄÊ±£º{SystemTime.DiffTotalMS(dt)}ms");
+            Console.WriteLine($"SetTestï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½Ê±ï¿½ï¿½{SystemTime.DiffTotalMS(dt)}ms");
         }
 
         [TestMethod]
@@ -93,11 +93,11 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                 AddTime = dt
             };
             cacheStrategy.Set(key, value, TimeSpan.FromSeconds(100));
-            Thread.Sleep(1000);//µÈ´ý
+            Thread.Sleep(1000);//Waiting
             var entity = cacheStrategy.Get(key);
-            Assert.IsNotNull(entity);//Î´¹ýÆÚ
+            Assert.IsNotNull(entity);//Not processed
 
-            cacheStrategy.Update(key, value, TimeSpan.FromSeconds(1));//ÖØÐÂÉèÖÃÊ±¼ä
+            cacheStrategy.Update(key, value, TimeSpan.FromSeconds(1));//Processing time
             entity = cacheStrategy.Get(key);
             Assert.IsNotNull(entity);
 
@@ -105,7 +105,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Assert.IsNotNull(strongEntity);
             Assert.AreEqual(dt, strongEntity.AddTime);
 
-            Thread.Sleep(1000);//ÈÃ»º´æ¹ýÆÚ
+            Thread.Sleep(1000);//User input
             entity = cacheStrategy.Get(key);
             Assert.IsNull(entity);
         }
@@ -132,12 +132,12 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Assert.IsNotNull(strongEntity);
             Assert.AreEqual(dt, strongEntity.AddTime);
 
-            Thread.Sleep(1000);//ÈÃ»º´æ¹ýÆÚ
+            Thread.Sleep(1000);//User input
             entity = cacheStrategy.GetAsync(key).Result;
             Assert.IsNull(entity);
         }
 
-        #region ÐÔÄÜÏà¹Ø²âÊÔ
+        #region ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½
 
         [TestMethod]
         public void EfficiencyTest()
@@ -148,7 +148,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                 SetTest();
             }
 
-            Console.WriteLine($"EfficiencyTest×Ü²âÊÔÊ±¼ä£¨Ê¹ÓÃCacheWrapper)£º{SystemTime.DiffTotalMS(dt1)}ms");
+            Console.WriteLine($"EfficiencyTestï¿½Ü²ï¿½ï¿½ï¿½Ê±ï¿½ä£¨Ê¹ï¿½ï¿½CacheWrapper)ï¿½ï¿½{SystemTime.DiffTotalMS(dt1)}ms");
         }
 
         //[TestMethod]
@@ -186,7 +186,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
         //            Assert.AreEqual(dt.Ticks, containerBag.AddTime.Ticks);
 
 
-        //            Console.WriteLine($"ThreadÄÚµ¥Ìõ²âÊÔºÄÊ±£º{SystemTime.DiffTotalMS(dtx)}ms");
+        //            Console.WriteLine($"Thread processing time after cache: {SystemTime.DiffTotalMS(dtx)}ms");
 
         //            finishCount++;
         //        });
@@ -195,16 +195,16 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
         //    while (finishCount < threadCount)
         //    {
-        //        //µÈ´ý
+        //        //Waiting
         //    }
 
-        //    Console.WriteLine($"EfficiencyTest×Ü²âÊÔÊ±¼ä£º{SystemTime.DiffTotalMS(dt1)}ms");
+        //    Console.WriteLine($"EfficiencyTest total time: {SystemTime.DiffTotalMS(dt1)}ms");
         //}
 
         [TestMethod]
         public void StackExchangeRedisExtensionsTest()
         {
-            Console.WriteLine("¿ªÊ¼Òì²½²âÊÔ");
+            Console.WriteLine("ï¿½ï¿½Ê¼ï¿½ì²½ï¿½ï¿½ï¿½ï¿½");
             var threadCount = 100;
             var finishCount = 0;
             for (int i = 0; i < threadCount; i++)
@@ -219,11 +219,11 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                     };
                     var dtx = SystemTime.Now;
                     var serializedObj = StackExchangeRedisExtensions.Serialize(newObj);
-                    Console.WriteLine($"StackExchangeRedisExtensions.SerializeºÄÊ±£º{SystemTime.DiffTotalMS(dtx)}ms");
+                    Console.WriteLine($"StackExchangeRedisExtensions.Serializeï¿½ï¿½Ê±ï¿½ï¿½{SystemTime.DiffTotalMS(dtx)}ms");
 
                     dtx = SystemTime.Now;
                     var containerBag = StackExchangeRedisExtensions.Deserialize<ContainerBag>((RedisValue)serializedObj);//11ms
-                    Console.WriteLine($"StackExchangeRedisExtensions.DeserializeºÄÊ±£º{SystemTime.DiffTotalMS(dtx)}ms");
+                    Console.WriteLine($"StackExchangeRedisExtensions.Deserializeï¿½ï¿½Ê±ï¿½ï¿½{SystemTime.DiffTotalMS(dtx)}ms");
 
                     Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
                     Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
@@ -234,7 +234,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
             while (finishCount < threadCount)
             {
-                //µÈ´ý
+                //Waiting
             }
 
 
@@ -248,17 +248,17 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
                 };
                 var dtx = SystemTime.Now;
                 var serializedObj = StackExchangeRedisExtensions.Serialize(newObj);
-                Console.WriteLine($"StackExchangeRedisExtensions.SerializeºÄÊ±£º{SystemTime.DiffTotalMS(dtx)}ms");
+                Console.WriteLine($"StackExchangeRedisExtensions.Serializeï¿½ï¿½Ê±ï¿½ï¿½{SystemTime.DiffTotalMS(dtx)}ms");
 
                 dtx = SystemTime.Now;
                 var containerBag = StackExchangeRedisExtensions.Deserialize<ContainerBag>((RedisValue)serializedObj);//11ms
-                Console.WriteLine($"StackExchangeRedisExtensions.DeserializeºÄÊ±£º{SystemTime.DiffTotalMS(dtx)}ms");
+                Console.WriteLine($"StackExchangeRedisExtensions.Deserializeï¿½ï¿½Ê±ï¿½ï¿½{SystemTime.DiffTotalMS(dtx)}ms");
 
                 Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
             };
 
-            Console.WriteLine("¿ªÊ¼Í¬²½²âÊÔ");
+            Console.WriteLine("ï¿½ï¿½Ê¼Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             for (int i = 0; i < 10; i++)
             {
                 action();
@@ -282,7 +282,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             //                PrimitiveObjectResolver.Instance
             //);
 
-            Console.WriteLine("¿ªÊ¼Òì²½²âÊÔ");
+            Console.WriteLine("ï¿½ï¿½Ê¼ï¿½ì²½ï¿½ï¿½ï¿½ï¿½");
             var threadCount = 10;
             var finishCount = 0;
             for (int i = 0; i < threadCount; i++)
@@ -298,11 +298,11 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
                     var dtx = SystemTime.Now;
                     var serializedObj = MessagePackSerializer.Serialize(newObj/*, NativeDateTimeResolver.Instance*/);
-                    Console.WriteLine($"MessagePackSerializer.Serialize ºÄÊ±£º{SystemTime.DiffTotalMS(dtx)}ms");
+                    Console.WriteLine($"MessagePackSerializer.Serialize ï¿½ï¿½Ê±ï¿½ï¿½{SystemTime.DiffTotalMS(dtx)}ms");
 
                     dtx = SystemTime.Now;
                     var containerBag = MessagePackSerializer.Deserialize<ContainerBag>(serializedObj);//11ms
-                    Console.WriteLine($"MessagePackSerializer.Deserialize ºÄÊ±£º{SystemTime.DiffTotalMS(dtx)}ms");
+                    Console.WriteLine($"MessagePackSerializer.Deserialize ï¿½ï¿½Ê±ï¿½ï¿½{SystemTime.DiffTotalMS(dtx)}ms");
 
                     Console.WriteLine(containerBag.AddTime.ToUniversalTime());
 
@@ -315,7 +315,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
             while (finishCount < threadCount)
             {
-                //µÈ´ý
+                //Waiting
             }
         }
 
@@ -336,7 +336,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             //                PrimitiveObjectResolver.Instance
             //);
 
-            Console.WriteLine("¿ªÊ¼Òì²½²âÊÔ");
+            Console.WriteLine("ï¿½ï¿½Ê¼ï¿½ì²½ï¿½ï¿½ï¿½ï¿½");
             var threadCount = 50;
             var finishCount = 0;
             for (int i = 0; i < threadCount; i++)
@@ -352,11 +352,11 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
                     var dtx = SystemTime.Now;
                     var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(newObj);
-                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.SerializeObject ºÄÊ±£º{SystemTime.DiffTotalMS(dtx)}ms");
+                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.SerializeObject ï¿½ï¿½Ê±ï¿½ï¿½{SystemTime.DiffTotalMS(dtx)}ms");
 
                     dtx = SystemTime.Now;
                     var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<ContainerBag>(serializedObj);//11ms
-                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.DeserializeObject ºÄÊ±£º{SystemTime.DiffTotalMS(dtx)}ms");
+                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.DeserializeObject ï¿½ï¿½Ê±ï¿½ï¿½{SystemTime.DiffTotalMS(dtx)}ms");
 
                     Console.WriteLine(containerBag.AddTime.ToUniversalTime());
 
@@ -369,7 +369,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
             while (finishCount < threadCount)
             {
-                //µÈ´ý
+                //Waiting
             }
         }
 

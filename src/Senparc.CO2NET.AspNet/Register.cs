@@ -1,19 +1,18 @@
-﻿/*----------------------------------------------------------------
+/*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：Register.cs
-    文件功能描述： Senparc.CO2NET.AspNet 基础信息注册
+    FileName: Register.cs
+    File Function Description: Senparc.CO2NET.AspNet Basic Information Registration
 
+    Creation Identifier: Senparc - 20191230
 
-    创建标识：Senparc - 20191230
+    Modification Identifier: Senparc - 20221219
+    Modification Description: v1.1.3 Optimize UseSenparcGlobal method
 
-    修改标识：Senparc - 20221219
-    修改描述：v1.1.3 优化 UseSenparcGlobal 方法
+    Modification Identifier: Senparc - 20240728
+    Modification Description: v1.4.0 .NET 6.0 and .NET 8.0 assemblies no longer depend on Microsoft.AspNetCore.Hosting.Abstractions and Microsoft.AspNetCore.Http.Abstractions
 
-    修改标识：Senparc - 20240728
-    修改描述：v1.4.0 .NET 6.0 和 .NET 8.0 程序集不再依赖 Microsoft.AspNetCore.Hosting.Abstractions 和 Microsoft.AspNetCore.Http.Abstractions
-
-----------------------------------------------------------------*/
+----------------------------------------------------------------*/
 
 #if !NET462
 using Microsoft.AspNetCore.Builder;
@@ -29,23 +28,23 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Senparc.CO2NET.AspNet
 {
     /// <summary>
-    /// Senparc.CO2NET.AspNet 基础信息注册
+    /// Senparc.CO2NET.AspNet Basic Information Registration
     /// </summary>
     public static class Register
     {
 #if !NET462
 
         /// <summary>
-        /// 开始 Senparc.CO2NET 初始化参数流程（ASP.NET Core)
+        /// Start Senparc.CO2NET initialization parameter process (ASP.NET Core)
         /// </summary>
         /// <param name="registerService"></param>
-        /// <param name="env">IHostingEnvironment（.NET Core 2.0） 或 IWebHostEnvironment（.NET Core 3.0+）</param>
-        /// <param name="senparcSetting">SenparcSetting 对象</param>
-        /// <param name="registerConfigure">RegisterService 设置</param>
-        /// <param name="autoScanExtensionCacheStrategies">是否自动扫描全局的扩展缓存（会增加系统启动时间）</param>
-        /// <param name="extensionCacheStrategiesFunc"><para>需要手动注册的扩展缓存策略</para>
-        /// <para>（LocalContainerCacheStrategy、RedisContainerCacheStrategy、MemcacheContainerCacheStrategy已经自动注册），</para>
-        /// <para>如果设置为 null（注意：不适委托返回 null，是整个委托参数为 null），则自动使用反射扫描所有可能存在的扩展缓存策略</para></param>
+        /// <param name="env">IHostingEnvironment (.NET Core 2.0) or IWebHostEnvironment (.NET Core 3.0+)</param>
+        /// <param name="senparcSetting">SenparcSetting object</param>
+        /// <param name="registerConfigure">RegisterService settings</param>
+        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time)</param>
+        /// <param name="extensionCacheStrategiesFunc"><para>Extension cache strategies that need to be manually registered</para>
+        /// <para>(LocalContainerCacheStrategy, RedisContainerCacheStrategy, MemcacheContainerCacheStrategy are already automatically registered),</para>
+        /// <para>If set to null (note: not delegate returns null, but the entire delegate parameter is null), it will automatically use reflection to scan all possible extension cache strategies</para></param>
         /// <returns></returns>
         public static IRegisterService UseSenparcGlobal(this IApplicationBuilder registerService,
             Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/ env,
@@ -56,7 +55,7 @@ namespace Senparc.CO2NET.AspNet
         {
             senparcSetting = senparcSetting ?? registerService.ApplicationServices.GetService<IOptions<SenparcSetting>>().Value;
 
-            //初始化全局 RegisterService 对象，并储存 SenparcSetting 信息
+            //Initialize the global RegisterService object and store SenparcSetting information
             var register = Senparc.CO2NET.AspNet.RegisterServices.
                             RegisterService.Start(env, senparcSetting);
 

@@ -1,22 +1,23 @@
-﻿/*----------------------------------------------------------------
+/*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：Register.cs
-    文件功能描述：Senparc.CO2NET 快捷注册流程（包括Thread、TraceLog等）
+    FileName: Register.cs
+    File Function Description: Senparc.CO2NET quick registration process (including Thread, TraceLog, etc.)
 
 
-    创建标识：Senparc - 20180222
+    Creation Identifier: Senparc - 20180222
 
-    修改标识：Senparc - 20180516
-    修改描述：优化 RegisterService
+    Modification Identifier: Senparc - 20180516
+    Modification Description: Optimize RegisterService
 
-    修改标识：Senparc - 20180704
-    修改描述：v0.1.6.1 添加 Register.UseSenparcGlobal() 方法
+    Modification Identifier: Senparc - 20180704
+    Modification Description: v0.1.6.1 Add Register.UseSenparcGlobal() method
 
-    修改标识：Senparc - 20180707
-    修改描述：v0.1.9 UseSenparcGlobal() 方法删除 senparcSetting 参数，因为在 RegisterService.Start 中已经提供
+    Modification Identifier: Senparc - 20180707
+    Modification Description: v0.1.9 Remove senparcSetting parameter from UseSenparcGlobal() method, as it is already provided in RegisterService.Start
 
 ----------------------------------------------------------------*/
+
 
 using System;
 using Senparc.CO2NET.Threads;
@@ -32,15 +33,15 @@ using Microsoft.Extensions.Configuration;
 namespace Senparc.CO2NET
 {
     /// <summary>
-    /// Senparc.CO2NET 基础信息注册
+    /// Senparc.CO2NET basic information registration
     /// </summary>
     public static class Register
     {
         /// <summary>
-        /// 修改默认缓存命名空间
+        /// Modify the default cache namespace
         /// </summary>
         /// <param name="registerService">RegisterService</param>
-        /// <param name="customNamespace">自定义命名空间名称</param>
+        /// <param name="customNamespace">Custom namespace name</param>
         /// <returns></returns>
         public static IRegisterService ChangeDefaultCacheNamespace(this IRegisterService registerService, string customNamespace)
         {
@@ -50,18 +51,18 @@ namespace Senparc.CO2NET
 
 
         /// <summary>
-        /// 注册 Threads 的方法（如果不注册此线程，则AccessToken、JsTicket等都无法使用SDK自动储存和管理）
+        /// Method to register Threads (if this thread is not registered, AccessToken, JsTicket, etc. cannot use SDK for automatic storage and management)
         /// </summary>
         /// <param name="registerService">RegisterService</param>
         /// <returns></returns>
         public static IRegisterService RegisterThreads(this IRegisterService registerService)
         {
-            ThreadUtility.Register();//如果不注册此线程，则AccessToken、JsTicket等都无法使用SDK自动储存和管理。
+            ThreadUtility.Register();// If this thread is not registered, AccessToken, JsTicket, etc. cannot use SDK for automatic storage and management.
             return registerService;
         }
 
         /// <summary>
-        /// 注册 TraceLog 的方法
+        /// Method to register TraceLog
         /// </summary>
         /// <param name="registerService">RegisterService</param>
         /// <param name="action"></param>
@@ -73,17 +74,17 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// 开始 Senparc.CO2NET 初始化参数流程
+        /// Start Senparc.CO2NET initialization parameter process
         /// </summary>
         /// <param name="registerService"></param>
-        /// <param name="autoScanExtensionCacheStrategies">是否自动扫描全局的扩展缓存（会增加系统启动时间）</param>
-        /// <param name="extensionCacheStrategiesFunc"><para>需要手动注册的扩展缓存策略</para>
-        /// <para>（LocalContainerCacheStrategy、RedisContainerCacheStrategy、MemcacheContainerCacheStrategy已经自动注册），</para>
-        /// <para>如果设置为 null（注意：不适委托返回 null，是整个委托参数为 null），则自动使用反射扫描所有可能存在的扩展缓存策略</para></param>
+        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time)</param>
+        /// <param name="extensionCacheStrategiesFunc"><para>Extension cache strategies that need to be manually registered</para>
+        /// <para>(LocalContainerCacheStrategy, RedisContainerCacheStrategy, MemcacheContainerCacheStrategy are already automatically registered),</para>
+        /// <para>If set to null (note: not delegate returning null, but the entire delegate parameter is null), it will automatically use reflection to scan all possible extension cache strategies</para></param>
         /// <returns></returns>
         public static IRegisterService UseSenparcGlobal(this IRegisterService registerService, bool autoScanExtensionCacheStrategies = false, Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
         {
-            //注册扩展缓存策略
+            // Register extension cache strategies
             CacheStrategyDomainWarehouse.AutoScanDomainCacheStrategy(autoScanExtensionCacheStrategies, extensionCacheStrategiesFunc);
 
             return registerService;
@@ -94,14 +95,14 @@ namespace Senparc.CO2NET
 #if !NET462
 
         /// <summary>
-        /// 开始 Senparc.CO2NET 初始化参数流程
+        /// Start Senparc.CO2NET initialization parameter process
         /// </summary>
-        /// <param name="senparcSetting">SenparcSetting 对象</param>
-        /// <param name="registerConfigure">RegisterService 设置</param>
-        /// <param name="autoScanExtensionCacheStrategies">是否自动扫描全局的扩展缓存（会增加系统启动时间）</param>
-        /// <param name="extensionCacheStrategiesFunc"><para>需要手动注册的扩展缓存策略</para>
-        /// <para>（LocalContainerCacheStrategy、RedisContainerCacheStrategy、MemcacheContainerCacheStrategy已经自动注册），</para>
-        /// <para>如果设置为 null（注意：不适委托返回 null，是整个委托参数为 null），则自动使用反射扫描所有可能存在的扩展缓存策略</para></param>
+        /// <param name="senparcSetting">SenparcSetting object</param>
+        /// <param name="registerConfigure">RegisterService settings</param>
+        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time)</param>
+        /// <param name="extensionCacheStrategiesFunc"><para>Extension cache strategies that need to be manually registered</para>
+        /// <para>(LocalContainerCacheStrategy, RedisContainerCacheStrategy, MemcacheContainerCacheStrategy are already automatically registered),</para>
+        /// <para>If set to null (note: not delegate returning null, but the entire delegate parameter is null), it will automatically use reflection to scan all possible extension cache strategies</para></param>
         /// <returns></returns>
         public static IRegisterService UseSenparcGlobal(
             SenparcSetting senparcSetting,
@@ -109,7 +110,7 @@ namespace Senparc.CO2NET
             bool autoScanExtensionCacheStrategies = false,
             Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
         {
-            //初始化全局 RegisterService 对象，并储存 SenparcSetting 信息
+            // Initialize global RegisterService object and store SenparcSetting information
             var register = RegisterService.Start(senparcSetting);
             RegisterService.Object = register;
 
@@ -120,15 +121,15 @@ namespace Senparc.CO2NET
 
 
         /// <summary>
-        /// 开始 Senparc.CO2NET 初始化参数流程
+        /// Start Senparc.CO2NET initialization parameter process
         /// </summary>
         /// <param name="app">configuration source</param>
-        /// <param name="senparcSetting">SenparcSetting 对象</param>
-        /// <param name="registerConfigure">RegisterService 设置</param>
-        /// <param name="autoScanExtensionCacheStrategies">是否自动扫描全局的扩展缓存（会增加系统启动时间）</param>
-        /// <param name="extensionCacheStrategiesFunc"><para>需要手动注册的扩展缓存策略</para>
-        /// <para>（LocalContainerCacheStrategy、RedisContainerCacheStrategy、MemcacheContainerCacheStrategy已经自动注册），</para>
-        /// <para>如果设置为 null（注意：不适委托返回 null，是整个委托参数为 null），则自动使用反射扫描所有可能存在的扩展缓存策略</para></param>
+        /// <param name="senparcSetting">SenparcSetting object</param>
+        /// <param name="registerConfigure">RegisterService settings</param>
+        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time)</param>
+        /// <param name="extensionCacheStrategiesFunc"><para>Extension cache strategies that need to be manually registered</para>
+        /// <para>(LocalContainerCacheStrategy, RedisContainerCacheStrategy, MemcacheContainerCacheStrategy are already automatically registered),</para>
+        /// <para>If set to null (note: not delegate returning null, but the entire delegate parameter is null), it will automatically use reflection to scan all possible extension cache strategies</para></param>
         /// <returns></returns>
         public static (IConfigurationRoot app, IRegisterService registerService) UseSenparcGlobal(
             this IConfigurationRoot app,

@@ -24,7 +24,7 @@ namespace Senparc.CO2NET.Tests
         }
 
         /// <summary>
-        /// 注册 IServiceCollection 和 MemoryCache
+        /// Register IServiceCollection and MemoryCache
         /// </summary>
         public static void RegisterServiceCollection()
         {
@@ -38,17 +38,17 @@ namespace Senparc.CO2NET.Tests
             _senparcSetting = new SenparcSetting() { IsDebug = true };
             config.GetSection("SenparcSetting").Bind(_senparcSetting);
 
-            serviceCollection.AddMemoryCache();//使用内存缓存
+            serviceCollection.AddMemoryCache();//Use memory cache
 
             serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
         /// <summary>
-        /// 注册 RegisterService.Start()
+        /// Register RegisterService.Start()
         /// </summary>
         public static void RegisterServiceStart(bool autoScanExtensionCacheStrategies = false)
         {
-            //注册
+            //Register
             var mockEnv = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
 
@@ -57,28 +57,28 @@ namespace Senparc.CO2NET.Tests
 
             registerService.ChangeDefaultCacheNamespace("Senparc.CO2NET Tests");
 
-            //配置全局使用Redis缓存（按需，独立）
+            //Global use of Redis cache (recommended)
             var redisConfigurationStr = _senparcSetting.Cache_Redis_Configuration;
-            var useRedis = !string.IsNullOrEmpty(redisConfigurationStr) && redisConfigurationStr != "#{Cache_Redis_Configuration}#"/*默认值，不启用*/;
-            if (useRedis)//这里为了方便不同环境的开发者进行配置，做成了判断的方式，实际开发环境一般是确定的，这里的if条件可以忽略
+            var useRedis = !string.IsNullOrEmpty(redisConfigurationStr) && redisConfigurationStr != "#{Cache_Redis_Configuration}#"/*Default value configuration*/;
+            if (useRedis)//This is to handle different project requirements and judgment methods, providing a precise model, avoiding if statements and later modifications
             {
-                /* 说明：
-                 * 1、Redis 的连接字符串信息会从 Config.SenparcSetting.Cache_Redis_Configuration 自动获取并注册，如不需要修改，下方方法可以忽略
-                /* 2、如需手动修改，可以通过下方 SetConfigurationOption 方法手动设置 Redis 链接信息（仅修改配置，不立即启用）
+                /* Explanation
+                 * 1. Redis configuration string information is automatically retrieved from Config.SenparcSetting.Cache_Redis_Configuration, no need to modify, update is easy
+                /* 2. If manual modification is needed, use the SetConfigurationOption method to manually set Redis configuration information, easy to modify and update
                  */
                 Senparc.CO2NET.Cache.Redis.Register.SetConfigurationOption(redisConfigurationStr);
-                Console.WriteLine("完成 Redis 设置");
+                Console.WriteLine("Finish Redis Config");
 
 
-                //以下会立即将全局缓存设置为 Redis
-                Senparc.CO2NET.Cache.Redis.Register.UseKeyValueRedisNow();//键值对缓存策略（推荐）
-                Console.WriteLine("启用 Redis UseKeyValue 策略");
+                //Global cache strategy is set to Redis
+                Senparc.CO2NET.Cache.Redis.Register.UseKeyValueRedisNow();//Recommended for high concurrency scenarios
+                Console.WriteLine("Start Redis UseKeyValue Strategy");
 
-                //Senparc.CO2NET.Cache.Redis.Register.UseHashRedisNow();//HashSet储存格式的缓存策略
+                //Senparc.CO2NET.Cache.Redis.Register.UseHashRedisNow(); // Use HashSet method for caching
 
-                //也可以通过以下方式自定义当前需要启用的缓存策略
-                //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//键值对
-                //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisHashSetObjectCacheStrategy.Instance);//HashSet
+                //You can also use the following method to set the current cache strategy
+                //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance); // Default
+                //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisHashSetObjectCacheStrategy.Instance); // HashSet
             }
         }
     }

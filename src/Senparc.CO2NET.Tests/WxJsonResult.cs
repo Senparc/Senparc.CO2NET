@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,7 +10,7 @@ namespace Senparc.CO2NET.Tests
 
 
         /// <summary>
-        /// 返回结果信息
+        /// Return result information
         /// </summary>
         public virtual string errmsg { get; set; }
 
