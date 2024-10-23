@@ -21,26 +21,26 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
   
-    文件名：SenparcTrace.cs
-    文件功能描述：Senparc.CO2NET 日志记录
+    FileName：SenparcTrace.cs
+    File Function Description：Senparc.CO2NET Logging
     
     
-    创建标识：Senparc - 20180602
+    Creation Identifier：Senparc - 20180602
  
-    修改标识：Senparc - 20180721
-    修改描述：v0.2.1 增加 SenparcTrace.BaseExceptionLog(Exception ex) 重写方法
+    Modification Identifier：Senparc - 20180721
+    Modification Description：v0.2.1 Added SenparcTrace.BaseExceptionLog(Exception ex) override method
  
-    修改标识：Senparc - 201801118
-    修改描述：v0.3.0 升级 SenparcTrace，使用队列
+    Modification Identifier：Senparc - 201801118
+    Modification Description：v0.3.0 Upgraded SenparcTrace to use queue
 
-    修改标识：Senparc - 20181227
-    修改描述：v0.4.4 提供 SenparcTrace.RecordAPMLog 参数
+    Modification Identifier：Senparc - 20181227
+    Modification Description：v0.4.4 Provided SenparcTrace.RecordAPMLog parameter
 
-    修改标识：Senparc - 20181227
-    修改描述：v0.8.9 提供 AutoUnlockLogFile 参数，并针对日志文件可能被占用的情况尝试自动解锁
+    Modification Identifier：Senparc - 20181227
+    Modification Description：v0.8.9 Provided AutoUnlockLogFile parameter, and attempted to auto-unlock in case the log file is occupied
 
-    修改标识：Senparc - 20181227
-    修改描述：v0.8.9 提供 AutoUnlockLogFile 参数，并针对日志文件可能被占用的情况尝试自动解锁
+    Modification Identifier：Senparc - 20181227
+    Modification Description：v0.8.9 Provided AutoUnlockLogFile parameter, and attempted to auto-unlock in case the log file is occupied
 
 ----------------------------------------------------------------*/
 
@@ -56,53 +56,53 @@ using System.Threading;
 namespace Senparc.CO2NET.Trace
 {
     /// <summary>
-    /// Senparc.CO2NET 日志记录
+    /// Senparc.CO2NET Logging
     /// </summary>
     public class SenparcTrace
     {
         /// <summary>
-        /// 统一日志锁名称
+        /// Unified log lock name
         /// </summary>
         const string LockName = "SenparcTraceLock";
 
 
         /// <summary>
-        /// 记录BaseException日志时需要执行的任务
+        /// Task to be executed when recording BaseException log
         /// </summary>
         public static Action<BaseException> OnBaseExceptionFunc;
 
         /// <summary>
-        /// 执行所有日志记录操作时执行的任务（发生在记录日志之后）
+        /// Task executed when performing all log recording operations (occurs after logging)
         /// </summary>
         public static Action OnLogFunc;
 
         /// <summary>
-        /// 是否开放每次 APM 录入的记录，默认为关闭（当 Senparc.CO2ENT.APM 启用时有效）
+        /// Whether to enable recording for each APM entry, default is off (effective when Senparc.CO2ENT.APM is enabled)
         /// </summary>
         public static bool RecordAPMLog { get; set; } = false;
 
         /// <summary>
-        /// 是否自动解锁可能发生的日志文件被占用情况，如果为 true，则启用（触发时会立即进行 GC 操作，消耗部分系统资源，一般不会影响系统整体性能），如果为 false，则在文件使用冲突发生时抛出异常，放弃日志写入。
-        /// （注意：如果多个站点或应用程序使用相同的日志文件目录，请务必开启此项）
+        /// Whether to automatically unlock the log file that may be occupied, if true, it will be enabled (GC operation will be performed immediately upon triggering, consuming some system resources, generally not affecting overall system performance), if false, an exception will be thrown when file usage conflict occurs, abandoning log writing.
+        /// (Note: If multiple sites or applications use the same log file directory, be sure to enable this option)
         /// </summary>
         public static bool AutoUnlockLogFile { get; set; } = true;
 
         #region 私有方法
 
         /// <summary>
-        /// Senparc.Weixin全局统一的缓存策略
+        /// Senparc.Weixin global unified caching strategy
         /// </summary>
         private static IBaseObjectCacheStrategy Cache
         {
             get
             {
-                //使用工厂模式或者配置进行动态加载
+                //Use factory pattern or configuration for dynamic loading
                 return CacheStrategyFactory.GetObjectCacheStrategyInstance();
             }
         }
 
         /// <summary>
-        /// 队列执行逻辑
+        /// Queue execution logic
         /// </summary>
         protected static Action<string> _queue = async (logStr) =>
         {
@@ -121,25 +121,25 @@ namespace Senparc.CO2NET.Trace
                     Directory.CreateDirectory(logDir);
                 }
 
-                //TODO：可以进行合并写入
+                //TODO: Can be merged for writing
 
                 string logFile = Path.Combine(logDir, string.Format("SenparcTrace-{0}.log", SystemTime.Now.ToString("yyyyMMdd")));
 
 
-                //判断文件被占用情况
+                //Check file occupation status
                 if (AutoUnlockLogFile)
                 {
-                    const int maxRetryTimes = 3;//最大重试次数
-                    const int retryDelayTimeMillinSeconds = 100;//每次重试后等待的时间（毫秒）
+                    const int maxRetryTimes = 3;//Maximum retry count
+                    const int retryDelayTimeMillinSeconds = 100;//Wait time after each retry (milliseconds)
 
-                    //立即进行回收
+                    //Immediate recycling
                     for (int i = 0; i < maxRetryTimes; i++)
                     {
                         if (FileHelper.FileInUse(logFile))
                         {
-                            //说明：
-                            //1、回收文件占用的方法有许多方案，以下两行 GC 命令同时使用的参考见：https://stackoverflow.com/questions/4128211/system-io-ioexception-the-process-cannot-access-the-file-file-name
-                            //2、针对 .NET Core 如果有更好的差异化的方法，欢迎 PR：https://github.com/JeffreySu/WeiXinMPSDK。
+                            //Description:
+                            //1. There are many methods to recycle file occupation, the following two GC commands are used simultaneously as referenced here: https://stackoverflow.com/questions/4128211/system-io-ioexception-the-process-cannot-access-the-file-file-name
+                            //2. For .NET Core, if there are better differentiated methods, PRs are welcome: https://github.com/JeffreySu/WeiXinMPSDK.
                             GC.Collect();
                             GC.WaitForPendingFinalizers();
 
@@ -148,7 +148,7 @@ namespace Senparc.CO2NET.Trace
                             {
                                 while (SystemTime.NowDiff(dt).TotalMilliseconds < retryDelayTimeMillinSeconds)
                                 {
-                                    //如果不是最后一次尝试，则等待一段时间再进入下一步
+                                    //If not the last attempt, wait for a while before proceeding to the next step
                                 }
                             }
                         }
@@ -173,7 +173,7 @@ namespace Senparc.CO2NET.Trace
                 }
                 catch (Exception)
                 {
-                    //写入失败
+                    //Write failed
                     //throw;
                 }
 
@@ -192,13 +192,13 @@ namespace Senparc.CO2NET.Trace
         };
 
         /// <summary>
-        /// 结束日志记录
+        /// End logging
         /// </summary>
         protected static Action<SenparcTraceItem> _logEndActon = (traceItem) =>
         {
             var logStr = traceItem.GetFullLog();
             SenparcMessageQueue messageQueue = new SenparcMessageQueue();
-            var key = $"{SystemTime.Now.Ticks.ToString()}{traceItem.ThreadId.ToString()}{logStr.Length.ToString()}";//确保全局唯一
+            var key = $"{SystemTime.Now.Ticks.ToString()}{traceItem.ThreadId.ToString()}{logStr.Length.ToString()}";//Ensure global uniqueness
             messageQueue.Add(key, () => _queue(logStr));
         };
 
@@ -207,19 +207,19 @@ namespace Senparc.CO2NET.Trace
         #region 日志记录
 
         /// <summary>
-        /// 系统日志
+        /// System log
         /// </summary>
-        /// <param name="message">日志内容</param>
+        /// <param name="message">Log content</param>
         public static void Log(string message)
         {
             SendCustomLog("系统日志", message);
         }
 
         /// <summary>
-        /// 自定义日志
+        /// Custom log
         /// </summary>
-        /// <param name="typeName">日志类型</param>
-        /// <param name="content">日志内容</param>
+        /// <param name="typeName">Log type</param>
+        /// <param name="content">Log content</param>
         public static void SendCustomLog(string typeName, string content)
         {
             if (!Config.IsDebug)
@@ -234,7 +234,7 @@ namespace Senparc.CO2NET.Trace
         }
 
         /// <summary>
-        /// API请求日志（接收结果）
+        /// API request log (receive result)
         /// </summary>
         /// <param name="url"></param>
         /// <param name="returnText"></param>
@@ -247,14 +247,14 @@ namespace Senparc.CO2NET.Trace
 
             using (var traceItem = new SenparcTraceItem(_logEndActon, "接口调用"))
             {
-                //TODO:从源头加入AppId
+                //TODO: Add AppId from the source
                 traceItem.Log("URL：{0}", url);
                 traceItem.Log("Result：\r\n{0}", returnText);
             }
         }
 
         /// <summary>
-        /// API请求日志（Post发送消息）
+        /// API request log (Post send message)
         /// </summary>
         /// <param name="url"></param>
         /// <param name="data"></param>
@@ -279,7 +279,7 @@ namespace Senparc.CO2NET.Trace
 
 
         /// <summary>
-        /// BaseException 日志
+        /// BaseException log
         /// </summary>
         /// <param name="ex"></param>
         public static void BaseExceptionLog(Exception ex)
@@ -288,7 +288,7 @@ namespace Senparc.CO2NET.Trace
         }
 
         /// <summary>
-        /// BaseException 日志
+        /// BaseException log
         /// </summary>
         /// <param name="ex"></param>
         public static void BaseExceptionLog(BaseException ex)

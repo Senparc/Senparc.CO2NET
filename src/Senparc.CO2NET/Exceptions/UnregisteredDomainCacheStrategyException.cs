@@ -1,13 +1,13 @@
 ﻿/*----------------------------------------------------------------
     Copyright(C) 2024 Senparc
 
-    文件名：UnregisteredDomainCacheStrategyException.cs
-    文件功能描述：领域缓存未注册异常
+    FileName：UnregisteredDomainCacheStrategyException.cs
+    File Function Description：Unregistered domain cache exception
 
-    创建标识：Senparc - 20180707
+    Creation Identifier：Senparc - 20180707
 
-    修改标识：Senparc - 20180721
-    修改描述：v0.1.1 修复 RegisterService.Start() 的 isDebug 设置始终为 true 的问题
+    Modification Identifier：Senparc - 20180721
+    Modification Description：v0.1.1 Fixed the issue where isDebug in RegisterService.Start() was always set to true
 
 
 ----------------------------------------------------------------*/
@@ -21,12 +21,12 @@ using System.Text;
 namespace Senparc.CO2NET.Exceptions
 {
     /// <summary>
-    /// 领域缓存未注册异常
+    /// Unregistered domain cache exception
     /// </summary>
     public class UnregisteredDomainCacheStrategyException : CacheException
     {
         /// <summary>
-        /// UnregisteredDomainCacheStrategyException 构造函数
+        /// UnregisteredDomainCacheStrategyException constructor
         /// </summary>
         /// <param name="domainCacheStrategyType"></param>
         /// <param name="objectCacheStrategyType"></param>

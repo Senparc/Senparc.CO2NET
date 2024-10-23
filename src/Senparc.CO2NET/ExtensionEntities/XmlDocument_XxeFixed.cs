@@ -1,11 +1,11 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：XmlDocument_XxeFixed.cs
-    文件功能描述：解决 XXE 漏洞，继承自 XmlDocument 对象，自动将 XmlResolver 设为 null
+    FileName：XmlDocument_XxeFixed.cs
+    File Function Description：Resolve XXE vulnerability, inherit from XmlDocument object, automatically set XmlResolver to null
 
 
-    创建标识：Senparc - 20180704
+    Creation Identifier：Senparc - 20180704
 
 ----------------------------------------------------------------*/
 
@@ -18,12 +18,12 @@ using System.Xml;
 namespace Senparc.CO2NET.ExtensionEntities
 {
     /// <summary>
-    /// 解决 XXE 漏洞，自动将 XmlResolver 设为 null
+    /// Resolve XXE vulnerability, automatically set XmlResolver to null
     /// </summary>
     public class XmlDocument_XxeFixed : XmlDocument
     {
         /// <summary>
-        /// 构造函数
+        /// Constructor
         /// </summary>
         public XmlDocument_XxeFixed(XmlResolver xmlResolver = null)
         {

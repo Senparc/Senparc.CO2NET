@@ -2,29 +2,29 @@
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：SenparcDI.cs
-    文件功能描述：针对 .NET Core 的依赖注入扩展类
+    FileName: SenparcDI.cs
+    File Function Description: Dependency injection extension class for .NET Core
 
-    创建标识：Senparc - 20180714
+    Creation Identifier: Senparc - 20180714
 
 
-    修改标识：Senparc - 20180802
-    修改描述：v0.2.5 提供当前类中的方法对 netstandard2.0 的完整支持
+    Modification Identifier: Senparc - 20180802
+    Modification Description: v0.2.5 Provide full support for netstandard2.0 in the methods of this class
 
-    修改标识：pengweiqhca - 20180802
-    修改描述：v0.2.8 添加 SenparcDI.GetIServiceProvider() 方法，以支持其他依赖注入框架
+    Modification Identifier: pengweiqhca - 20180802
+    Modification Description: v0.2.8 Add SenparcDI.GetIServiceProvider() method to support other dependency injection frameworks
 
-    修改标识：Senparc - 20190118
-    修改描述：v0.5.2 添加 SenparcDI.GetRequiredService() 方法，提供线程内独立 ServiceProvider 实例
+    Modification Identifier: Senparc - 20190118
+    Modification Description: v0.5.2 Add SenparcDI.GetRequiredService() method to provide independent ServiceProvider instances within threads
 
-    修改标识：Senparc - 201901527
-    修改描述：v0.8.2 添加 SenparcDI.ResetGlobalIServiceProvider(this IServiceCollection serviceCollection) 方法
+    Modification Identifier: Senparc - 201901527
+    Modification Description: v0.8.2 Add SenparcDI.ResetGlobalIServiceProvider(this IServiceCollection serviceCollection) method
 
-    修改标识：Senparc - 20210702
-    修改描述：1.4.400.2 增加 GetService() 方法
+    Modification Identifier: Senparc - 20210702
+    Modification Description: 1.4.400.2 Add GetService() method
 
-    修改标识：Senparc - 20210702
-    修改描述：1.4.400.2 增加 GetService() 方法
+    Modification Identifier: Senparc - 20210702
+    Modification Description: 1.4.400.2 Add GetService() method
 
 ----------------------------------------------------------------*/
 
@@ -37,7 +37,7 @@ using Senparc.CO2NET.Cache;
 namespace Senparc.CO2NET
 {
     /// <summary>
-    /// 针对 .NET Core 的依赖注入扩展类
+    /// Dependency injection extension class for .NET Core
     /// </summary>
     public static class SenparcDI
     {
@@ -45,12 +45,12 @@ namespace Senparc.CO2NET
         public const string SENPARC_DI_THREAD_SERVICE_SCOPE = "___SenparcDIThreadScope";
 
         /// <summary>
-        /// 全局 ServiceCollection
+        /// Global ServiceCollection
         /// </summary>
         public static IServiceCollection GlobalServiceCollection { get; set; }
 
         ///// <summary>
-        ///// 创建一个新的 ServiceCollection 对象
+        ///// Create a new ServiceCollection object
         ///// </summary>
         ///// <returns></returns>
         //public static IServiceCollection GetServiceCollection()
@@ -65,7 +65,7 @@ namespace Senparc.CO2NET
 
 
         /// <summary>
-        /// 从 GlobalServiceCollection 重新 Build，生成新的 IServiceProvider
+        /// Rebuild from GlobalServiceCollection to generate a new IServiceProvider
         /// </summary>
         /// <returns></returns>
         public static IServiceProvider GetServiceProvider()
@@ -74,7 +74,7 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// 从 GlobalServiceCollection 重新 Build，生成新的 IServiceProvider
+        /// Rebuild from GlobalServiceCollection to generate a new IServiceProvider
         /// </summary>
         /// <returns></returns>
         public static IServiceProvider GetServiceProvider(bool refresh = false)
@@ -88,7 +88,7 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// 线程内的 单一 Scope 范围 ServiceScope
+        /// Single Scope ServiceScope within the thread
         /// </summary>
         public static IServiceScope ThreadServiceScope
         {
@@ -100,7 +100,7 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// 通过 GetServiceProvider() 方法执行 .GetService() 方法
+        /// Execute .GetService() method via GetServiceProvider() method
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -110,7 +110,7 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// 通过 GetServiceProvider() 方法执行 .GetService() 方法
+        /// Execute .GetService() method via GetServiceProvider() method
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -121,7 +121,7 @@ namespace Senparc.CO2NET
 
 
         /// <summary>
-        /// 通过 GetServiceProvider() 方法执行 .GetRequiredService() 方法
+        /// Execute .GetRequiredService() method via GetServiceProvider() method
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -132,7 +132,7 @@ namespace Senparc.CO2NET
 
 
         /// <summary>
-        /// 通过 GetServiceProvider() 方法执行 .GetRequiredKeyedService() 方法
+        /// Execute .GetRequiredKeyedService() method via GetServiceProvider() method
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -142,8 +142,8 @@ namespace Senparc.CO2NET
         }
 
         ///// <summary>
-        ///// 使用 .net core 默认的 DI 方法获得实例（推荐）
-        ///// <para>如果未注册，抛出异常 </para>
+        ///// Use .net core default DI method to get instance (recommended)
+        ///// <para>If not registered, throw an exception </para>
         ///// </summary>
         ///// <typeparam name="T"></typeparam>
         ///// <returns></returns>
@@ -172,7 +172,7 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// 通过 GetServiceProvider() 方法执行 .GetService() 方法
+        /// Execute .GetService() method via GetServiceProvider() method
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -183,8 +183,8 @@ namespace Senparc.CO2NET
 
 
         ///// <summary>
-        ///// 使用 .net core 默认的 DI 方法获得实例（推荐）
-        ///// <para>如果未注册，抛出异常 </para>
+        ///// Use .net core default DI method to get instance (recommended)
+        ///// <para>If not registered, throw an exception </para>
         ///// </summary>
         ///// <typeparam name="T"></typeparam>
         ///// <returns></returns>

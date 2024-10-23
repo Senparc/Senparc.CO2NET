@@ -1,69 +1,69 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：SystemTime.cs
-    文件功能描述：用于从 DateTimeOffset 进行扩展，方便进行单元测试
+    FileName：SystemTime.cs
+    File Function Description：Extension from DateTimeOffset for easier unit testing
 
 
-    创建标识：Senparc - 20181113
+    Creation Identifier：Senparc - 20181113
 
-    修改标识：Senparc - 20181226
-    修改描述：1、将 DateTime 改为 DateTimeOffset
-              2、添加 Today 属性
+    Modification Identifier：Senparc - 20181226
+    Modification Description：1. Changed DateTime to DateTimeOffset
+              2. Added Today property
 
 
-    修改标识：Senparc - 20190427
-    修改描述：v0.6.1 添加 NowTicks 属性
+    Modification Identifier：Senparc - 20190427
+    Modification Description：v0.6.1 Added NowTicks property
 
-    修改标识：Senparc - 20190507
-    修改描述：v0.7.1 添加 NowDiff 属性
+    Modification Identifier：Senparc - 20190507
+    Modification Description：v0.7.1 Added NowDiff property
     
-    修改标识：Senparc - 20190914
-    修改描述：v0.9.0 添加 SystemTime.UtcDateTime 属性
+    Modification Identifier：Senparc - 20190914
+    Modification Description：v0.9.0 Added SystemTime.UtcDateTime property
 
-    修改标识：Senparc - 20191001
-    修改描述：v1.0.102 添加更多 SystemTime 辅助方法
+    Modification Identifier：Senparc - 20191001
+    Modification Description：v1.0.102 Added more SystemTime helper methods
 
 ----------------------------------------------------------------*/
 
 namespace System
 {
     /// <summary>
-    /// 时间扩展类
+    /// Time extension class
     /// </summary>
     public static class SystemTime
     {
         ///// <summary>
-        ///// 返回 Now 方法
+        ///// Returns Now method
         ///// </summary>
         //public static Func<DateTime> GetNow = () => SystemTime.Now;
 
         /// <summary>
-        /// 当前时间
+        /// Current time
         /// </summary>
         public static DateTimeOffset Now => DateTimeOffset.Now;
 
         /// <summary>
-        /// 当前时间的 UTC DateTime 类型
+        /// Current time in UTC DateTime type
         /// </summary>
         public static DateTime UtcDateTime => DateTimeOffset.Now.UtcDateTime;
 
         /// <summary>
-        /// 当天零点时间，从 SystemTime.Now.Date 获得
+        /// Midnight time of the day, obtained from SystemTime.Now.Date
         /// </summary>
         public static DateTime Today => Now.Date;
 
         /// <summary>
-        /// 获取当前时间的 Ticks
+        /// Get current time Ticks
         /// </summary>
         public static long NowTicks => Now.Ticks;
 
 
 
         /// <summary>
-        /// 获取 TimeSpan
+        /// Get TimeSpan
         /// </summary>
-        /// <param name="compareTime">当前时间 - compareTime</param>
+        /// <param name="compareTime">Current time - compareTime</param>
         /// <returns></returns>
         public static TimeSpan NowDiff(DateTimeOffset compareTime)
         {
@@ -71,9 +71,9 @@ namespace System
         }
 
         /// <summary>
-        /// 获取 TotalMilliseconds 时间差
+        /// Get TotalMilliseconds time difference
         /// </summary>
-        /// <param name="compareTime">当前时间 - compareTime</param>
+        /// <param name="compareTime">Current time - compareTime</param>
         /// <returns></returns>
         public static double DiffTotalMS(DateTimeOffset compareTime)
         {
@@ -82,10 +82,10 @@ namespace System
 
 
         /// <summary>
-        /// 获取 TotalMilliseconds 时间差
+        /// Get TotalMilliseconds time difference
         /// </summary>
-        /// <param name="compareTime">当前时间 - compareTime</param>
-        /// <param name="format">对 TotalMilliseconds 结果进行 ToString([format]) 中的参数</param>
+        /// <param name="compareTime">Current time - compareTime</param>
+        /// <param name="format">Parameter for ToString([format]) on TotalMilliseconds result</param>
         /// <returns></returns>
         public static string DiffTotalMS(DateTimeOffset compareTime, string format)
         {
@@ -93,9 +93,9 @@ namespace System
         }
 
         /// <summary>
-        /// 获取 TimeSpan
+        /// Get TimeSpan
         /// </summary>
-        /// <param name="compareTime">当前时间 - compareTime</param>
+        /// <param name="compareTime">Current time - compareTime</param>
         /// <returns></returns>
         public static TimeSpan NowDiff(DateTime compareTime)
         {
@@ -103,9 +103,9 @@ namespace System
         }
 
         /// <summary>
-        /// 获取 TotalMilliseconds 时间差
+        /// Get TotalMilliseconds time difference
         /// </summary>
-        /// <param name="compareTime">当前时间 - compareTime</param>
+        /// <param name="compareTime">Current time - compareTime</param>
         /// <returns></returns>
         public static double DiffTotalMS(DateTime compareTime)
         {
@@ -113,17 +113,17 @@ namespace System
         }
 
         /// <summary>
-        /// 获取 TotalMilliseconds 时间差
+        /// Get TotalMilliseconds time difference
         /// </summary>
-        /// <param name="compareTime">当前时间 - compareTime</param>
-        /// <param name="format">对 TotalMilliseconds 结果进行 ToString([format]) 中的参数</param>
+        /// <param name="compareTime">Current time - compareTime</param>
+        /// <param name="format">Parameter for ToString([format]) on TotalMilliseconds result</param>
         /// <returns></returns>
         public static string DiffTotalMS(DateTime compareTime, string format)
         {
             return NowDiff(compareTime).TotalMilliseconds.ToString(format);
         }
 
-        //TODO：添加更多实用方法
+        //TODO: Add more utility methods
 
     }
 }

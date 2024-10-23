@@ -1,13 +1,13 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：WebCodingExtensions.cs
-    文件功能描述：网页编码扩展类
+    FileName：WebCodingExtensions.cs
+    File Function Description：Web encoding extension class
 
-    创建标识：Senparc - 20180602
+    Creation Identifier：Senparc - 20180602
 
-    修改标识：Senparc - 20181217
-    修改描述：v0.4.1 为 UrlEncode() 和 UrlDecode() 方法添加在 .net framework 环境下的编码类型选择
+    Modification Identifier：Senparc - 20181217
+    Modification Description：v0.4.1 Added encoding type selection for UrlEncode() and UrlDecode() methods in .net framework environment
 
 ----------------------------------------------------------------*/
 
@@ -21,12 +21,12 @@ namespace Senparc.CO2NET.Extensions
 {
 
     /// <summary>
-    /// 用于网页的HTML、Url编码/解码
+    /// HTML and URL encoding/decoding for web pages
     /// </summary>
     public static class WebCodingExtensions
     {
         /// <summary>
-        /// 封装System.Web.HttpUtility.HtmlEncode
+        /// Encapsulates System.Web.HttpUtility.HtmlEncode
         /// </summary>
         /// <param name="html"></param>
         /// <returns></returns>
@@ -39,7 +39,7 @@ namespace Senparc.CO2NET.Extensions
 #endif
         }
         /// <summary>
-        /// 封装System.Web.HttpUtility.HtmlDecode
+        /// Encapsulates System.Web.HttpUtility.HtmlDecode
         /// </summary>
         /// <param name="html"></param>
         /// <returns></returns>
@@ -54,11 +54,11 @@ namespace Senparc.CO2NET.Extensions
 
 #if NET462
         /// <summary>
-        /// 封装 System.Web.HttpUtility.UrlEncode
-        /// <para>注意：.NET Core 转义后字母为大写</para>
+        /// Encapsulates System.Web.HttpUtility.UrlEncode
+        /// <para>Note: In .NET Core, escaped letters are uppercase</para>
         /// </summary>
         /// <param name="url"></param>
-        /// <param name="encoding">编码，默认为 UTF8</param>
+        /// <param name="encoding">Encoding, default is UTF8</param>
         /// <returns></returns>
         public static string UrlEncode(this string url, Encoding encoding = null)
         {
@@ -67,23 +67,23 @@ namespace Senparc.CO2NET.Extensions
         }
 #else
         /// <summary>
-        /// 封装 WebUtility.UrlEncode
-        /// <para>注意：.NET Core 转义后字母为大写</para>
+        /// Encapsulates WebUtility.UrlEncode
+        /// <para>Note: In .NET Core, escaped letters are uppercase</para>
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
         public static string UrlEncode(this string url)
         {
-            return WebUtility.UrlEncode(url);//转义后字母为大写
+            return WebUtility.UrlEncode(url);// Escaped letters are uppercase
         }
 #endif
 
 #if NET462
         /// <summary>
-        /// 封装System.Web.HttpUtility.UrlDecode
+        /// Encapsulates System.Web.HttpUtility.UrlDecode
         /// </summary>
         /// <param name="url"></param>
-        /// <param name="encoding">编码，默认为 UTF8</param>
+        /// <param name="encoding">Encoding, default is UTF8</param>
         /// <returns></returns>
         public static string UrlDecode(this string url, Encoding encoding = null)
         {
@@ -92,7 +92,7 @@ namespace Senparc.CO2NET.Extensions
         }
 #else
         /// <summary>
-        /// 封装 WebUtility.UrlDecode
+        /// Encapsulates WebUtility.UrlDecode
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
@@ -104,9 +104,9 @@ namespace Senparc.CO2NET.Extensions
 
 
         /// <summary>
-        /// <para>将 URL 中的参数名称/值编码为合法的格式。</para>
-        /// <para>可以解决类似这样的问题：假设参数名为 tvshow, 参数值为 Tom&amp;Jerry，如果不编码，可能得到的网址： http://a.com/?tvshow=Tom&amp;Jerry&amp;year=1965 编码后则为：http://a.com/?tvshow=Tom%26Jerry&amp;year=1965 </para>
-        /// <para>实践中经常导致问题的字符有：'&amp;', '?', '=' 等</para>
+        /// <para>Encodes parameter names/values in the URL to a valid format.</para>
+        /// <para>Can solve issues like: If the parameter name is tvshow and the value is Tom&amp;Jerry, without encoding, the URL might be: http://a.com/?tvshow=Tom&amp;Jerry&amp;year=1965. After encoding: http://a.com/?tvshow=Tom%26Jerry&amp;year=1965 </para>
+        /// <para>Characters that often cause issues in practice: '&amp;', '?', '=' etc.</para>
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>

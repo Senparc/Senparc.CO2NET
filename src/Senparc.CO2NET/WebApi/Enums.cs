@@ -1,8 +1,8 @@
 ﻿namespace Senparc.CO2NET.WebApi
 {
     /// <summary>
-    /// 默认 API 的请求方式
-    /// <para>参考：<see href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods"/></para>
+    /// Default API request method
+    /// <para>Reference: <see href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods"/></para>
     /// </summary>
     public enum ApiRequestMethod
     {
@@ -19,7 +19,7 @@
     }
 
     /// <summary>
-    /// ApiBind 属性作用范围
+    /// Scope of ApiBind attribute
     /// </summary>
     public enum ApiBindOn
     {

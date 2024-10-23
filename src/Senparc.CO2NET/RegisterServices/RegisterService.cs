@@ -21,27 +21,27 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：RegisterService.cs
-    文件功能描述：Senparc.CO2NET 快捷注册流程
+    FileName：RegisterService.cs
+    File Function Description：Senparc.CO2NET quick registration process
 
 
-    创建标识：Senparc - 20180222
+    Creation Identifier：Senparc - 20180222
 
-    修改标识：Senparc - 20180517
-    修改描述：完善 .net core 注册流程
+    Modification Identifier：Senparc - 20180517
+    Modification Description：Improve .net core registration process
 
-    修改标识：Senparc - 20180517
-    修改描述：v0.1.1 修复 RegisterService.Start() 的 isDebug 设置始终为 true 的问题
+    Modification Identifier：Senparc - 20180517
+    Modification Description：v0.1.1 Fix the issue where isDebug in RegisterService.Start() is always set to true
 
-    修改标识：Senparc - 20180517
-    修改描述：v0.1.9 1、RegisterService 取消 public 的构造函数，统一使用 RegisterService.Start() 初始化
-                     2、.net framework 和 .net core 版本统一强制在构造函数中要求提供 SenparcSetting 参数
+    Modification Identifier：Senparc - 20180517
+    Modification Description：v0.1.9 1. Remove public constructor from RegisterService, use RegisterService.Start() for initialization
+                     2. Unified requirement for SenparcSetting parameter in constructors for both .net framework and .net core versions
   
-    修改标识：Senparc - 20190108
-    修改描述：v0.5.0 添加 Start() 重写方法，提供 .NET Core Console 的全面支持
+    Modification Identifier：Senparc - 20190108
+    Modification Description：v0.5.0 Add Start() override method to provide full support for .NET Core Console
 
-    修改标识：Senparc - 20180911
-    修改描述：v0.8.10 RegisterService.Start() 方法开始记录 evn 参数到 Config.HostingEnvironment 属性 
+    Modification Identifier：Senparc - 20180911
+    Modification Description：v0.8.10 RegisterService.Start() method starts recording evn parameter to Config.HostingEnvironment property 
    
 ----------------------------------------------------------------*/
 
@@ -55,7 +55,7 @@ using System;
 namespace Senparc.CO2NET.RegisterServices
 {
     /// <summary>
-    /// 快捷注册接口
+    /// Quick registration interface
     /// </summary>
     public interface IRegisterService
     {
@@ -63,7 +63,7 @@ namespace Senparc.CO2NET.RegisterServices
     }
 
     /// <summary>
-    /// 快捷注册类，IRegisterService的默认实现
+    /// Quick registration class, default implementation of IRegisterService
     /// </summary>
     public class RegisterService : IRegisterService
     {
@@ -73,19 +73,19 @@ namespace Senparc.CO2NET.RegisterServices
 
         private RegisterService(SenparcSetting senparcSetting)
         {
-            //Senparc.CO2NET SDK 配置
+            //Senparc.CO2NET SDK configuration
             Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
         }
 
 #if !NET462
 
         /// <summary>
-        /// 单个实例引用全局的 ServiceCollection
+        /// Single instance referencing global ServiceCollection
         /// </summary>
         public IServiceCollection ServiceCollection => SenparcDI.GlobalServiceCollection;
 
         /// <summary>
-        /// 开始 Senparc.CO2NET SDK 初始化参数流程（.NET Core）
+        /// Start Senparc.CO2NET SDK initialization parameter process (.NET Core)
         /// </summary>
         /// <param name="senparcSetting"></param>
         /// <returns></returns>
@@ -93,26 +93,26 @@ namespace Senparc.CO2NET.RegisterServices
         {
             var register = new RegisterService(senparcSetting);
 
-            //如果不注册此线程，则AccessToken、JsTicket等都无法使用SDK自动储存和管理。
-            register.RegisterThreads();//默认把线程注册好
+            //If this thread is not registered, AccessToken, JsTicket, etc. cannot use the SDK for automatic storage and management.
+            register.RegisterThreads();//Register the thread by default
 
             return register;
         }
 
 #else
         /// <summary>
-        /// 开始 Senparc.CO2NET SDK 初始化参数流程
+        /// Start Senparc.CO2NET SDK initialization parameter process
         /// </summary>
         /// <returns></returns>
         public static RegisterService Start(SenparcSetting senparcSetting)
         {
             var register = new RegisterService(senparcSetting);
 
-            //提供网站根目录
+            //Provide website root directory
             Senparc.CO2NET.Config.RootDirectoryPath = AppDomain.CurrentDomain.BaseDirectory;
 
-            //如果不注册此线程，则AccessToken、JsTicket等都无法使用SDK自动储存和管理。
-            register.RegisterThreads();//默认把线程注册好
+            //If this thread is not registered, AccessToken, JsTicket, etc. cannot use the SDK for automatic storage and management.
+            register.RegisterThreads();//Register the thread by default
             
             return register;
         }

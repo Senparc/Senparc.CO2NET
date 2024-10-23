@@ -1,11 +1,11 @@
 ﻿/*----------------------------------------------------------------
     Copyright(C) 2024 Senparc
 
-    文件名：FormFileData.cs
-    文件功能描述：FormFileData 的异常
+    FileName: FormFileData.cs
+    File Function Description: Exception of FormFileData
 
 
-    创建标识：Senparc - 20190811
+    Creation Identifier: Senparc - 20190811
 
 ----------------------------------------------------------------*/
 
@@ -15,14 +15,14 @@ using System;
 namespace Senparc.CO2NET.Exceptions
 {
     /// <summary>
-    /// FormFileData 的异常
+    /// Exception of FormFileData
     /// </summary>
     public class FileValueException : BaseException
     {
         /// <summary>
-        /// FormFileData 的异常
+        /// Exception of FormFileData
         /// </summary>
-        /// <param name="formFileData">FormFileData实体，不可为 null</param>
+        /// <param name="formFileData">FormFileData entity, cannot be null</param>
         /// <param name="message"></param>
         /// <param name="inner"></param>
         /// <param name="logged"></param>
