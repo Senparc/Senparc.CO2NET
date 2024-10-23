@@ -16,7 +16,7 @@
     Modification Identifier: Senparc - 20180707
     Modification Description: v0.1.9 Remove senparcSetting parameter from UseSenparcGlobal() method, as it is already provided in RegisterService.Start
 
-----------------------------------------------------------------*/
+----------------------------------------------------------------*/
 
 
 
