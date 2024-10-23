@@ -1,4 +1,4 @@
-#if !NET462
+﻿#if !NET462
 using Microsoft.AspNetCore.Hosting;
 #endif 
 using System;
