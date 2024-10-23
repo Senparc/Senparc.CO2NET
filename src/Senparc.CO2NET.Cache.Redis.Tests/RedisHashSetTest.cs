@@ -35,7 +35,7 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 
-            Console.WriteLine($"HashSet-SetTestµ•Ãı≤‚ ‘∫ƒ ±£∫{SystemTime.DiffTotalMS(dt)}ms");
+            Console.WriteLine($"HashSet-SetTest single test duration: {SystemTime.DiffTotalMS(dt)}ms");
         }
     }
 }

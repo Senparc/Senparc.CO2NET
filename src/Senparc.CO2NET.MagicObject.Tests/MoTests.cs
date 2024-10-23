@@ -39,17 +39,16 @@ namespace Senparc.CO2NET.MagicObject.Tests
 
             var dt1 = SystemTime.Now;
 
-            Console.WriteLine("Set µ¥´ÎºÄÊ±(ms)£º" + (dt0 - dt).TotalMilliseconds);
-            Console.WriteLine("Get µ¥´ÎºÄÊ±(ms)£º" + (dt1 - dt0).TotalMilliseconds);
+            Console.WriteLine("Set single operation duration (ms): " + (dt0 - dt).TotalMilliseconds);
+            Console.WriteLine("Get single operation duration (ms): " + (dt1 - dt0).TotalMilliseconds);
 
             var dt2 = SystemTime.Now;
-
             for (var i = 0; i < 1000; i++)
             {
                 _mo.Set(p => p.Name, "Bob" + i);
                 var resultX = _mo.Get(p => p.Name);
             }
-            Console.WriteLine("1000 ´Î Set+Get ºÄÊ±(ms)£º" + (SystemTime.DiffTotalMS(dt2)));
+            Console.WriteLine("1000 Set+Get operations duration (ms): " + (SystemTime.DiffTotalMS(dt2)));
 
             _mo.Set(p => p.Name, "Bob");
 
@@ -58,7 +57,7 @@ namespace Senparc.CO2NET.MagicObject.Tests
             person.Name = "Bob";
             var result2 = person.Name;
             var dtE3 = SystemTime.Now;
-            Console.WriteLine("Ô­Ê¼·½·¨ µ¥´Î Get+Set ºÄÊ±(ms)£º" + (dtE3 - dtS3).TotalMilliseconds);
+            Console.WriteLine("Original method single Get+Set duration (ms): " + (dtE3 - dtS3).TotalMilliseconds);
 
 
             var dt4 = DateTime.Now;
@@ -67,7 +66,7 @@ namespace Senparc.CO2NET.MagicObject.Tests
                 person.Name = "Bob" + i;
                 var resultX = person.Name;
             }
-            Console.WriteLine("1000 ´Î Ô­Ê¼·½·¨ ºÄÊ±(ms)£º" + SystemTime.DiffTotalMS(dt4));
+            Console.WriteLine("1000 original method operations duration (ms): " + SystemTime.DiffTotalMS(dt4));
 
 
             Assert.AreEqual("Alice", result.OldValue);
@@ -160,7 +159,7 @@ namespace Senparc.CO2NET.MagicObject.Tests
             Console.WriteLine(_mo.Get(z => z.Age).SnapshotValue);
             Assert.IsFalse(_mo.Get(z => z.Age).HasShapshot);
             Assert.IsNull(_mo.Get(z => z.Name).SnapshotValue);
-            Assert.AreEqual(0, _mo.Get(z => z.Age).SnapshotValue);//ÈÔÈ»»á·µ»ØÄ¬ÈÏÖµ
+            Assert.AreEqual(0, _mo.Get(z => z.Age).SnapshotValue);//é»˜è®¤ä¼šè¿”å›žé»˜è®¤å€¼
             Assert.IsTrue(_mo.HasChanges());
 
             _mo.TakeSnapshot();
@@ -176,7 +175,7 @@ namespace Senparc.CO2NET.MagicObject.Tests
             Assert.IsTrue(resultBeforeRestore.IsChanged);
 
             _mo.RestoreSnapshot();
-            Assert.IsTrue(_mo.Get(z => z.Age).HasShapshot);//¿ìÕÕ±¾Éí²»»á±»Çå³ý
+            Assert.IsTrue(_mo.Get(z => z.Age).HasShapshot);//è¯¥å­—æ®µå°†è¢«åˆ é™¤
 
             var resultAfterRestore = _mo.Get(p => p.Name);
             Assert.AreEqual("Alice", resultAfterRestore.OldValue);
@@ -185,7 +184,7 @@ namespace Senparc.CO2NET.MagicObject.Tests
             Assert.IsTrue(resultAfterRestore.IsChanged);
             Assert.IsFalse(_mo.HasChanges());
 
-            //ÊÊÓÃ¶ÔÏó¸²¸Ç
+            //è®¾ç½®å¯¹è±¡å±žæ€§
 
             //TODO
         }
