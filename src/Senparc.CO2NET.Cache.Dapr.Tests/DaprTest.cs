@@ -1,4 +1,4 @@
-using MessagePack;
+﻿using MessagePack;
 using System.Runtime.CompilerServices;
 
 namespace Senparc.CO2NET.Cache.Dapr.Tests

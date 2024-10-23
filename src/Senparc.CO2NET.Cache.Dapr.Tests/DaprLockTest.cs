@@ -1,4 +1,4 @@
-namespace Senparc.CO2NET.Cache.Dapr.Tests
+﻿namespace Senparc.CO2NET.Cache.Dapr.Tests
 {
     [TestClass]
     public class DaprLockTest
