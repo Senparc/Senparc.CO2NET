@@ -21,14 +21,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：MinuteData.cs
-    文件功能描述：打包统计的每分钟数据
+    FileName：MinuteData.cs
+    File Function Description：Packaged statistical data per minute
 
 
-    创建标识：Senparc - 20181117
+    Creation Identifier：Senparc - 20181117
 
-    修改标识：Senparc - 20181226
-    修改描述：v0.4.3 修改 DateTime 为 DateTimeOffset
+    Modification Identifier：Senparc - 20181226
+    Modification Description：v0.4.3 changed DateTime to DateTimeOffset
 
  ----------------------------------------------------------------*/
 
@@ -40,38 +40,38 @@ using System.Text;
 namespace Senparc.CO2NET.APM
 {
     /// <summary>
-    /// 打包统计的每分钟数据
+    /// Packaged statistical data per minute
     /// </summary>
     public class MinuteData
     {
         public string KindName { get; set; }
         /// <summary>
-        /// 统计时间段，精确到分钟
+        /// Statistical time period, accurate to the minute
         /// </summary>
         public DateTimeOffset Time { get; set; }
 
         /// <summary>
-        /// 开始数值
+        /// Starting value
         /// </summary>
         public double StartValue { get; set; }
         /// <summary>
-        /// 末尾数值
+        /// Ending value
         /// </summary>
         public double EndValue { get; set; }
         /// <summary>
-        /// 最高值
+        /// Maximum value
         /// </summary>
         public double HighestValue { get; set; }
         /// <summary>
-        /// 最低值
+        /// Minimum value
         /// </summary>
         public double LowestValue { get; set; }
         /// <summary>
-        /// 数值总和
+        /// Total value
         /// </summary>
         public double SumValue { get; set; }
         /// <summary>
-        /// 统计到的数值样本数量
+        /// Number of statistical value samples
         /// </summary>
         public int SampleSize { get; set; }
     }

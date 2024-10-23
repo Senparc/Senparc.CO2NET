@@ -21,19 +21,19 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2020 Senparc COCONET
 
-    文件名：HttpExtensions.cs
-    文件功能描述：ASP.NET Core 中的 Http 一系列扩展
+    FileName：HttpExtensions.cs
+    File Function Description：A series of Http extensions in ASP.NET Core
 
 
-    创建标识：Senparc - 20180526
+    Creation Identifier：Senparc - 20180526
 
-    修改标识：Senparc - 20180721
-    修改描述：v0.2.2  添加对 NETSTANDARD2_0 的支持
+    Modification Identifier：Senparc - 20180721
+    Modification Description：v0.2.2  Added support for NETSTANDARD2_0
 
-    -- 从 CO2NET 移植到 CO2NET.AspNet --
+    -- Migrated from CO2NET to CO2NET.AspNet --
     
-    修改标识：Senparc - 20180721
-    修改描述：v0.1.0  从 CO2NET 移植到 CO2NET.AspNet
+    Modification Identifier：Senparc - 20180721
+    Modification Description：v0.1.0  Migrated from CO2NET to CO2NET.AspNet
 
 ----------------------------------------------------------------*/
 
@@ -56,7 +56,7 @@ namespace Microsoft.AspNetCore.Http
         private const string NullIpAddress = "::1";
 
         /// <summary>
-        /// 是否是本地请求
+        /// Determines whether it is a local request
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
@@ -77,7 +77,7 @@ namespace Microsoft.AspNetCore.Http
         }
 
         ///// <summary>
-        ///// 是否是本地请求
+        ///// Determines whether it is a local request
         ///// </summary>
         ///// <param name="req"></param>
         ///// <returns></returns>
@@ -129,7 +129,7 @@ namespace Microsoft.AspNetCore.Http
         }
 
         /// <summary>
-        /// 通常是以/开头的完整路径
+        /// Usually a full path starting with /
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -142,7 +142,7 @@ namespace Microsoft.AspNetCore.Http
         }
 
         /// <summary>
-        /// 获取来源页面
+        /// Get the source page
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -152,32 +152,32 @@ namespace Microsoft.AspNetCore.Http
         }
 
         /// <summary>
-        /// 返回绝对地址
+        /// Return absolute address
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         public static string AbsoluteUri(this HttpRequest request)
         {
-            string schemeUpper = request.Scheme.ToUpper();//协议（大写）
+            string schemeUpper = request.Scheme.ToUpper();//Protocol (uppercase)
             var host = request.Host.Host;
-            var port = request.Host.Port ?? -1;//端口（.NET Core 中有可能会出现null）
-            string portSetting = null;//Url中的端口部分
-            if (port == -1 || //这个条件只有在 .net core 中， Host.Port == null 的情况下才会发生
+            var port = request.Host.Port ?? -1;//Port (may be null in .NET Core)
+            string portSetting = null;//Port part in Url
+            if (port == -1 || //This condition only occurs in .net core when Host.Port == null
                 (schemeUpper == "HTTP" && port == 80) ||
                 (schemeUpper == "HTTPS" && port == 443))
             {
-                portSetting = "";//使用默认值
+                portSetting = "";//Use default value
             }
             else
             {
-                portSetting = ":" + port;//添加端口
+                portSetting = ":" + port;//Add port
             }
 
             var absoluteUri = string.Concat(
                           request.Scheme,
                           "://",
-                          host,//不包含端口号
-                          portSetting,//端口号
+                          host,//Without port number
+                          portSetting,//Port number
                           request.PathBase.ToUriComponent(),
                           request.Path.ToUriComponent(),
                           request.QueryString.ToUriComponent());
@@ -186,7 +186,7 @@ namespace Microsoft.AspNetCore.Http
         }
 
         /// <summary>
-        /// 获取客户端信息
+        /// Get client information
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -196,7 +196,7 @@ namespace Microsoft.AspNetCore.Http
         }
 
         /// <summary>
-        /// 获取客户端地址（IP）
+        /// Get client address (IP)
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>

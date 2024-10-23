@@ -1,11 +1,11 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2023 Senparc
 
-    文件名：ApiBindExtensions.cs
-    文件功能描述：ApiBindAttribute 的扩展方法
+    FileName: ApiBindExtensions.cs
+    File Function Description: Extension methods for ApiBindAttribute
 
 
-    创建标识：Senparc - 20210713
+    Creation Identifier: Senparc - 20210713
 
 ----------------------------------------------------------------*/
 
@@ -17,10 +17,10 @@ namespace Senparc.CO2NET.WebApi
     public static class ApiBindExtensions
     {
         /// <summary>
-        /// 获取动态程序集的命名空间
+        /// Get the namespace of the dynamic assembly
         /// </summary>
         /// <param name="methodInfo"></param>
-        /// <param name="realAssemblyName">真实的当前程序集的名称（AssemblyName.Name）</param>
+        /// <param name="realAssemblyName">The real name of the current assembly (AssemblyName.Name)</param>
         /// <returns></returns>
         public static string GetDynamicCategory(this ApiBindAttribute attr, MethodInfo methodInfo, string realAssemblyName)
         {
@@ -28,7 +28,7 @@ namespace Senparc.CO2NET.WebApi
             string categoryName = attr.GetCategoryName(realAssemblyName);
             if (!string.IsNullOrEmpty(categoryName))
             {
-                newNameSpace = $"Senparc.DynamicWebApi.{Regex.Replace(categoryName, @"[\s\(\)]", "")}";//TODO:可以换成缓存命名空间等更加特殊的前缀
+                newNameSpace = $"Senparc.DynamicWebApi.{Regex.Replace(categoryName, @"[\s\(\)]", "")}";//TODO: Can be replaced with cached namespace or other more specific prefixes
             }
             else
             {

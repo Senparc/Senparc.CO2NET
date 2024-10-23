@@ -21,14 +21,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：DataHelper.cs
-    文件功能描述：数据帮助类
+    FileName：DataHelper.cs
+    File Function Description：Data Helper Class
 
 
-    创建标识：Senparc - 20180602
+    Creation Identifier：Senparc - 20180602
 
-    修改标识：Senparc - 20181226
-    修改描述：v0.4.3 修改 DateTime 为 DateTimeOffset
+    Modification Identifier：Senparc - 20181226
+    Modification Description：v0.4.3 Change DateTime to DateTimeOffset
 
  ----------------------------------------------------------------*/
 
@@ -42,13 +42,13 @@ using System.Text;
 namespace Senparc.CO2NET.APM
 {
     /// <summary>
-    /// 数据帮助类
+    /// Data Helper Class
     /// </summary>
     public class DataHelper
     {
 
         /// <summary>
-        /// 确保已经到达下一分钟
+        /// Ensure it has reached the next minute
         /// </summary>
         /// <param name="lastTime"></param>
         /// <param name="currentDateTime"></param>
@@ -63,7 +63,7 @@ namespace Senparc.CO2NET.APM
         }
 
         /// <summary>
-        /// 获取CPU信息
+        /// Get CPU information
         /// </summary>
         /// <returns></returns>
         public static object GetCPUCounter()
@@ -78,13 +78,13 @@ namespace Senparc.CO2NET.APM
             dynamic Value_2 = pc.NextValue();
             return Value_2;
 #else
-            Process[] p = Process.GetProcesses();//获取进程信息
+            Process[] p = Process.GetProcesses();//Get process information
             Int64 totalMem = 0;
             string info = "";
             foreach (Process pr in p)
             {
                 totalMem += pr.WorkingSet64 / 1024;
-                info += pr.ProcessName + "内存：-----------" + (pr.WorkingSet64 / 1024).ToString() + "KB\r\n";//得到进程内存
+                info += pr.ProcessName + "内存：-----------" + (pr.WorkingSet64 / 1024).ToString() + "KB\r\n";//Get process memory
             }
             return info;
 #endif
@@ -92,7 +92,7 @@ namespace Senparc.CO2NET.APM
         }
 
         /// <summary>
-        /// 获取 系统名称
+        /// Get system name
         /// </summary>
         /// <returns></returns>
         public static string GetOSPlatform()

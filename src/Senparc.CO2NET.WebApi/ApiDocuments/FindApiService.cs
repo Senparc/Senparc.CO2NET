@@ -7,12 +7,12 @@ namespace Senparc.CO2NET.WebApi
     public class FindApiService
     {
         /// <summary>
-        /// API 文档记录
+        /// API documentation record
         /// </summary>
         public static List<ApiItem> ApiItemList { get; set; } = new List<ApiItem>();
 
         /// <summary>
-        /// 添加 API 记录
+        /// Add API record
         /// </summary>
         /// <param name="platformType"></param>
         /// <param name="fullMethodName"></param>
@@ -38,7 +38,7 @@ namespace Senparc.CO2NET.WebApi
         }
 
         /// <summary>
-        /// 搜索结果
+        /// Search results
         /// </summary>
         /// <param name="category"></param>
         /// <param name="isAsync"></param>

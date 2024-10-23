@@ -21,28 +21,28 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2020 Senparc
 
-    文件名：RedisObjectCacheStrategy.cs
-    文件功能描述：Redis的Object类型容器缓存（Key为String类型）。
+    FileName: RedisObjectCacheStrategy.cs
+    File Function Description: Redis Object type container cache (Key is of String type).
 
 
-    创建标识：Senparc - 20161024
+    Creation Identifier: Senparc - 20161024
 
-    修改标识：Senparc - 20170205
-    修改描述：v0.2.0 重构分布式锁
+    Modification Identifier: Senparc - 20170205
+    Modification Description: v0.2.0 Refactor distributed lock
 
-    修改标识：Senparc - 20170205
-    修改描述： v3.0.0 RedisObjectCacheStrategy 重命名为 RedisHashSetObjectCacheStrategy，分离 HashSet 数据结构
-      1、分离 HashSet 和 Key-Value 两种不同格式的缓存：RedisHashSetObjectCacheStrategy 以及 RedisObjectCacheStrategy
-      2、提供缓存过期新策略
+    Modification Identifier: Senparc - 20170205
+    Modification Description: v3.0.0 RedisObjectCacheStrategy renamed to RedisHashSetObjectCacheStrategy, separating HashSet data structure
+      1. Separate HashSet and Key-Value two different formats of cache: RedisHashSetObjectCacheStrategy and RedisObjectCacheStrategy
+      2. Provide new cache expiration strategy
 
-    修改标识：Senparc - 20190418
-    修改描述：v3.5.0 提供  HashGetAllAsync() 异步方法
+    Modification Identifier: Senparc - 20190418
+    Modification Description: v3.5.0 Provide HashGetAllAsync() asynchronous method
 
-    修改标识：Senparc - 20190914
-    修改描述：v3.5.4 fix bug：GetServer().Keys() 方法添加 database 索引值
+    Modification Identifier: Senparc - 20190914
+    Modification Description: v3.5.4 fix bug: GetServer().Keys() method adds database index value
 
-    修改标识：Senparc - 20230527
-    修改描述：v1.1.4 RedisHashSetObjectCacheStrategy.Get() 方法添加纯字符串的判断
+    Modification Identifier: Senparc - 20230527
+    Modification Description: v1.1.4 RedisHashSetObjectCacheStrategy.Get() method adds pure string judgment
 
 ----------------------------------------------------------------*/
 
@@ -58,13 +58,13 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Cache.CsRedis
 {
     /// <summary>
-    /// Redis的Object类型容器缓存（Key为String类型）
+    /// Redis Object type container cache (Key is of String type)
     /// </summary>
     public class RedisHashSetObjectCacheStrategy : BaseRedisObjectCacheStrategy
     //where TContainerBag : class, IBaseContainerBag, new()
     {
         /// <summary>
-        /// Hash储存的Key和Field集合
+        /// Key and Field collection stored in Hash
         /// </summary>
         protected class HashKeyAndField
         {
@@ -75,19 +75,19 @@ namespace Senparc.CO2NET.Cache.CsRedis
         #region 单例
 
         /// <summary>
-        /// Redis 缓存策略
+        /// Redis cache strategy
         /// </summary>
         RedisHashSetObjectCacheStrategy() : base()
         {
 
         }
 
-        //静态SearchCache
+        //Static SearchCache
         public static RedisHashSetObjectCacheStrategy Instance
         {
             get
             {
-                return Nested.instance;//返回Nested类中的静态成员instance
+                return Nested.instance;//Return static member instance in Nested class
             }
         }
 
@@ -96,7 +96,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             static Nested()
             {
             }
-            //将instance设为一个初始化的BaseCacheStrategy新实例
+            //Set instance to a new initialized BaseCacheStrategy instance
             internal static readonly RedisHashSetObjectCacheStrategy instance = new RedisHashSetObjectCacheStrategy();
         }
 
@@ -104,7 +104,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
 
         /// <summary>
-        /// 获取Hash储存的Key和Field
+        /// Get Key and Field stored in Hash
         /// </summary>
         /// <param name="key"></param>
         /// <param name="isFullKey"></param>
@@ -122,7 +122,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
             var hashKeyAndField = new HashKeyAndField()
             {
                 Key = finalFullKey.Substring(0, index),
-                Field = finalFullKey.Substring(index + 1/*排除:号*/, finalFullKey.Length - index - 1)
+                Field = finalFullKey.Substring(index + 1/*Exclude colon*/, finalFullKey.Length - index - 1)
             };
             return hashKeyAndField;
         }
@@ -136,7 +136,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         /// 
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="isFullKey">是否已经是完整的Key</param>
+        /// <param name="isFullKey">Whether it is already a complete Key</param>
         /// <returns></returns>
         public override bool CheckExisted(string key, bool isFullKey = false)
         {
@@ -209,7 +209,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
         //public IDictionary<string, TBag> GetAll<TBag>() where TBag : IBaseContainerBag
         //{
-        //    #region 旧方法（没有使用Hash之前）
+        //    #region Old method (before using Hash)
 
         //    //var itemCacheKey = ContainerHelper.GetItemCacheKey(typeof(TBag), "*");   
         //    ////var keyPattern = string.Format("*{0}", itemCacheKey);
@@ -234,15 +234,15 @@ namespace Senparc.CO2NET.Cache.CsRedis
         //    #endregion
 
         //    var key = ContainerHelper.GetItemCacheKey(typeof(TBag), "");
-        //    key = key.Substring(0, key.Length - 1);//去掉:号
-        //    key = GetFinalKey(key);//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
+        //    key = key.Substring(0, key.Length - 1);//Remove colon
+        //    key = GetFinalKey(key);//Get Key with Senparc:DefaultCache: prefix ([DefaultCache] configurable)
 
         //    var list = _cache.HashGetAll(key);
         //    var dic = new Dictionary<string, TBag>();
 
         //    foreach (var hashEntry in list)
         //    {
-        //        var fullKey = key + ":" + hashEntry.Name;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
+        //        var fullKey = key + ":" + hashEntry.Name;//Most complete finalKey (can be used for LocalCache), restore complete Key, format: [namespace]:[Key]
         //        dic[fullKey] = StackExchangeRedisExtensions.Deserialize<TBag>(hashEntry.Value);
         //    }
 
@@ -250,12 +250,12 @@ namespace Senparc.CO2NET.Cache.CsRedis
         //}
 
         /// <summary>
-        /// 注意：此方法获取的object为直接储存在缓存中，序列化之后的Value（最多 99999 条）
+        /// Note: The object obtained by this method is directly stored in the cache, serialized Value (up to 99999 items)
         /// </summary>
         /// <returns></returns>
         public override IDictionary<string, object> GetAll()
         {
-            var keyPrefix = GetFinalKey("");//Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
+            var keyPrefix = GetFinalKey("");//Senparc:DefaultCache: prefix Key ([DefaultCache] configurable)
             var dic = new Dictionary<string, object>();
 
             var hashKeys = base.Client.Keys(/*database: Client.GetDatabase().Database,*/ pattern: keyPrefix + "*"/*, pageSize: 99999*/);
@@ -265,7 +265,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
                 foreach (var hashEntry in list)
                 {
-                    var fullKey = redisKey.ToString() + ":" + hashEntry.Key;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
+                    var fullKey = redisKey.ToString() + ":" + hashEntry.Key;//Most complete finalKey (can be used for LocalCache), restore complete Key, format: [namespace]:[Key]
                     dic[fullKey] = hashEntry.Value.ToString().DeserializeFromCache();
                 }
             }
@@ -273,7 +273,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         }
 
         /// <summary>
-        /// 获取所有缓存项计数
+        /// Get all cache item counts
         /// </summary>
         /// <returns></returns>
 
@@ -283,19 +283,19 @@ namespace Senparc.CO2NET.Cache.CsRedis
         }
 
         /// <summary>
-        /// 获取所有缓存项计数
+        /// Get all cache item counts
         /// </summary>
         /// <returns></returns>
 
         public override long GetCount(string prefix)
         {
-            var keyPattern = GetFinalKey(prefix + "*");//获取带Senparc:DefaultCache:前缀的Key（[DefaultCache]         
+            var keyPattern = GetFinalKey(prefix + "*");//Get Key with Senparc:DefaultCache: prefix ([DefaultCache]         
             var count = base.Client.Keys(/*database: Client.GetDatabase().Database,*/ pattern: keyPattern/*, pageSize: 99999*/).Count();
             return count;
         }
 
         /// <summary>
-        /// 插入对象。注意：过期时间对 HashSet 无效！
+        /// Insert object. Note: Expiration time is invalid for HashSet!
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -307,7 +307,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         }
 
         /// <summary>
-        /// 设置对象。注意：过期时间对 HashSet 无效！
+        /// Set object. Note: Expiration time is invalid for HashSet!
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -325,21 +325,21 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
             //if (value is IDictionary)
             //{
-            //    //Dictionary类型
+            //    //Dictionary type
             //}
 
             //_cache.StringSet(cacheKey, value.Serialize());
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, value.Serialize());
 
 
-            //StackExchangeRedisExtensions.Serialize效率非常差
+            //StackExchangeRedisExtensions.Serialize is very inefficient
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
 
             var json = value.SerializeToCache();
             base.Client.HSet(hashKeyAndField.Key, hashKeyAndField.Field, json);
 
             //#if DEBUG
-            //            var value1 = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);//正常情况下可以得到 //_cache.GetValue(cacheKey);
+            //            var value1 = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);//Normally can get //_cache.GetValue(cacheKey);
             //#endif
         }
 
@@ -353,13 +353,13 @@ namespace Senparc.CO2NET.Cache.CsRedis
             //var cacheKey = GetFinalKey(key, isFullKey);
             var hashKeyAndField = this.GetHashKeyAndField(key);
 
-            SenparcMessageQueue.OperateQueue();//延迟缓存立即生效
-            //_cache.KeyDelete(cacheKey);//删除键
-            base.Client.HDel(hashKeyAndField.Key, hashKeyAndField.Field);//删除项
+            SenparcMessageQueue.OperateQueue();//Delayed cache takes effect immediately
+            //_cache.KeyDelete(cacheKey);//Delete key
+            base.Client.HDel(hashKeyAndField.Key, hashKeyAndField.Field);//Delete item
         }
 
         /// <summary>
-        /// 更新对象。注意：过期时间对 HashSet 无效！
+        /// Update object. Note: Expiration time is invalid for HashSet!
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -380,7 +380,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         /// 
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="isFullKey">是否已经是完整的Key</param>
+        /// <param name="isFullKey">Whether it is already a complete Key</param>
         /// <returns></returns>
         public override async Task<bool> CheckExistedAsync(string key, bool isFullKey = false)
         {
@@ -450,12 +450,12 @@ namespace Senparc.CO2NET.Cache.CsRedis
         }
 
         /// <summary>
-        /// 注意：此方法获取的object为直接储存在缓存中，序列化之后的Value（最多 99999 条）
+        /// Note: The object obtained by this method is directly stored in the cache, serialized Value (up to 99999 items)
         /// </summary>
         /// <returns></returns>
         public override async Task<IDictionary<string, object>> GetAllAsync()
         {
-            var keyPrefix = GetFinalKey("");//Senparc:DefaultCache:前缀的Key（[DefaultCache]可配置）
+            var keyPrefix = GetFinalKey("");//Senparc:DefaultCache: prefix Key ([DefaultCache] configurable)
             var dic = new Dictionary<string, object>();
 
             var hashKeys = base.Client.Keys(/*database: Client.GetDatabase().Database,*/ pattern: keyPrefix + "*"/*, pageSize: 99999*/);
@@ -465,7 +465,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
                 foreach (var hashEntry in list)
                 {
-                    var fullKey = redisKey.ToString() + ":" + hashEntry.Key;//最完整的finalKey（可用于LocalCache），还原完整Key，格式：[命名空间]:[Key]
+                    var fullKey = redisKey.ToString() + ":" + hashEntry.Key;//Most complete finalKey (can be used for LocalCache), restore complete Key, format: [namespace]:[Key]
                     dic[fullKey] = hashEntry.Value.ToString().DeserializeFromCache();
                 }
             }
@@ -484,7 +484,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         }
 
         /// <summary>
-        /// 设置对象。注意：过期时间对 HashSet 无效！
+        /// Set object. Note: Expiration time is invalid for HashSet!
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -502,21 +502,21 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
             //if (value is IDictionary)
             //{
-            //    //Dictionary类型
+            //    //Dictionary type
             //}
 
             //_cache.StringSet(cacheKey, value.Serialize());
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, value.Serialize());
 
 
-            //StackExchangeRedisExtensions.Serialize效率非常差
+            //StackExchangeRedisExtensions.Serialize is very inefficient
             //_cache.HashSet(hashKeyAndField.Key, hashKeyAndField.Field, StackExchangeRedisExtensions.Serialize(value));
 
             var json = value.SerializeToCache();
             await base.Client.HSetAsync(hashKeyAndField.Key, hashKeyAndField.Field, json).ConfigureAwait(false);
 
             //#if DEBUG
-            //            var value1 = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);//正常情况下可以得到 //_cache.GetValue(cacheKey);
+            //            var value1 = _cache.HashGet(hashKeyAndField.Key, hashKeyAndField.Field);//Normally can get //_cache.GetValue(cacheKey);
             //#endif
         }
 
@@ -530,13 +530,13 @@ namespace Senparc.CO2NET.Cache.CsRedis
             //var cacheKey = GetFinalKey(key, isFullKey);
             var hashKeyAndField = this.GetHashKeyAndField(key);
 
-            SenparcMessageQueue.OperateQueue();//延迟缓存立即生效
-                                               //_cache.KeyDelete(cacheKey);//删除键
-            await base.Client.HDelAsync(hashKeyAndField.Key, hashKeyAndField.Field).ConfigureAwait(false);//删除项
+            SenparcMessageQueue.OperateQueue();//Delayed cache takes effect immediately
+                                               //_cache.KeyDelete(cacheKey);//Delete key
+            await base.Client.HDelAsync(hashKeyAndField.Key, hashKeyAndField.Field).ConfigureAwait(false);//Delete item
         }
 
         /// <summary>
-        /// 更新对象。注意：过期时间对 HashSet 无效！
+        /// Update object. Note: Expiration time is invalid for HashSet!
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
