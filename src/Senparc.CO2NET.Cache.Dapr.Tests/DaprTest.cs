@@ -1,4 +1,4 @@
-﻿using MessagePack;
+using MessagePack;
 using System.Runtime.CompilerServices;
 
 namespace Senparc.CO2NET.Cache.Dapr.Tests
@@ -50,12 +50,12 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
 
             cacheStrategy.Set(key, bag, TimeSpan.FromSeconds(100));
 
-            //1s后缓存不应该过期
+            //Cache should not expire after 1s
             Thread.Sleep(1000);
             var result = cacheStrategy.Get(key);
             Assert.IsNotNull(result);
 
-            //重新设置缓存生存时间为1s
+            //Reset cache lifetime to 1s
             cacheStrategy.Update(key, bag, TimeSpan.FromSeconds(1));
             result = cacheStrategy.Get(key);
             Assert.IsNotNull(result);
@@ -64,7 +64,7 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
             Assert.IsNotNull(strongEntity);
             Assert.AreEqual(bag.AddTime, strongEntity.AddTime);
             
-            //等待1s让缓存过期
+            //Wait 1s to let the cache expire
             Thread.Sleep(1000);
             result = cacheStrategy.Get(key);
             Assert.IsNull(result);
@@ -87,7 +87,7 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(bag.AddTime, result.AddTime);
 
-            //缓存1s后过期
+            //Cache expires after 1s
             Thread.Sleep(1000);
             entity = await cacheStrategy.GetAsync<ContainerBag>(key);
             Assert.IsNull(entity);
@@ -131,7 +131,7 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
 
         //            SetTest();
 
-        //            Console.WriteLine($"Thread内单条测试耗时：{SystemTime.DiffTotalMS(dtx)}ms");
+        //            Console.WriteLine($"Time taken for single test in thread: {SystemTime.DiffTotalMS(dtx)}ms");
 
         //            finishCount++;
         //        });
@@ -140,10 +140,10 @@ namespace Senparc.CO2NET.Cache.Dapr.Tests
 
         //    while (finishCount < threadCount)
         //    {
-        //        //等待
+        //        //Wait
         //    }
 
-        //    Console.WriteLine($"EfficiencyTest总测试时间：{SystemTime.DiffTotalMS(dt1)}ms");
+        //    Console.WriteLine($"Total test time for EfficiencyTest: {SystemTime.DiffTotalMS(dt1)}ms");
         //}
 
         private static ContainerBag MakeBag()
