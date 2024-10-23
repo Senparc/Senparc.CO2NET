@@ -21,11 +21,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：SenparcMessageQueueThreadUtility.cs
-    文件功能描述：SenparcMessageQueue消息队列线程处理
+    FileName：SenparcMessageQueueThreadUtility.cs
+    File Function Description：SenparcMessageQueue message queue thread processing
 
 
-    创建标识：Senparc - 20160210
+    Creation Identifier：Senparc - 20160210
 
 ----------------------------------------------------------------*/
 
@@ -40,7 +40,7 @@ using Senparc.CO2NET.MessageQueue;
 namespace Senparc.CO2NET.Threads
 {
     /// <summary>
-    /// SenparcMessageQueue线程自动处理
+    /// SenparcMessageQueue thread auto-processing
     /// </summary>
     public class SenparcMessageQueueThreadUtility
     {
@@ -53,7 +53,7 @@ namespace Senparc.CO2NET.Threads
         }
 
         /// <summary>
-        /// 析构函数，将未处理的队列处理掉
+        /// Destructor, process the unhandled queue
         /// </summary>
         ~SenparcMessageQueueThreadUtility()
         {
@@ -66,11 +66,11 @@ namespace Senparc.CO2NET.Threads
                 System.Diagnostics.Trace.WriteLine(string.Format("当前队列数量：{0}", mq.GetCount()));
 #endif
 
-                SenparcMessageQueue.OperateQueue();//处理队列
+                SenparcMessageQueue.OperateQueue();//Process the queue
             }
             catch (Exception ex)
             {
-                //此处可以添加日志
+                //Logs can be added here
 #if NET462
 
                 System.Diagnostics.Trace.WriteLine(string.Format("SenparcMessageQueueThreadUtility执行析构函数错误：{0}", ex.Message));
@@ -79,7 +79,7 @@ namespace Senparc.CO2NET.Threads
         }
 
         /// <summary>
-        /// 启动线程轮询
+        /// Start thread polling
         /// </summary>
         public void Run()
         {

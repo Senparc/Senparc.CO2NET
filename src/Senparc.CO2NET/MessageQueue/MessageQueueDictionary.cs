@@ -21,14 +21,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：MessageQueueDictionary.cs
-    文件功能描述：MessageQueueDictionary 记录队列的本地内存字典
+    FileName: MessageQueueDictionary.cs
+    File Function Description: MessageQueueDictionary records the local memory dictionary of the queue
 
 
-    创建标识：Senparc - 20181118
+    Creation Identifier: Senparc - 20181118
 
-    修改标识：Senparc - 20190812
-    修改描述：v4.5.10 改用基类 Dictionary 为 ConcurrentDictionary
+    Modification Identifier: Senparc - 20190812
+    Modification Description: v4.5.10 Changed base class from Dictionary to ConcurrentDictionary
 
 ----------------------------------------------------------------*/
 

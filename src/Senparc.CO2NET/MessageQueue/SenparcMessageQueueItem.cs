@@ -21,21 +21,21 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：SenparcMessageQueueItem.cs
-    文件功能描述：SenparcMessageQueue消息队列项
+    FileName：SenparcMessageQueueItem.cs
+    File Function Description：SenparcMessageQueue message queue item
     
     
-    创建标识：Senparc - 20151226
+    Creation Identifier：Senparc - 20151226
     
 
 ----  CO2NET   ----
 ----  split from Senparc.Weixin/MessageQueue/SenparcMessageQueueItem.cs  ----
 
-    修改标识：Senparc - 20180601
-    修改描述：v0.1.0 移植 SenparcMessageQueueItem
+    Modification Identifier：Senparc - 20180601
+    Modification Description：v0.1.0 migrated SenparcMessageQueueItem
 
-    修改标识：Senparc - 20181226
-    修改描述：v0.4.3 修改 DateTime 为 DateTimeOffset
+    Modification Identifier：Senparc - 20181226
+    Modification Description：v0.4.3 changed DateTime to DateTimeOffset
 ----------------------------------------------------------------*/
 
 using System;
@@ -46,29 +46,29 @@ using System.Text;
 namespace Senparc.CO2NET.MessageQueue
 {
     /// <summary>
-    /// SenparcMessageQueue消息队列项
+    /// SenparcMessageQueue message queue item
     /// </summary>
     public class SenparcMessageQueueItem
     {
         /// <summary>
-        /// 队列项唯一标识
+        /// Unique identifier for the queue item
         /// </summary>
         public string Key { get; set; }
         /// <summary>
-        /// 队列项目命中触发时执行的委托
+        /// Delegate executed when the queue item is triggered
         /// </summary>
         public Action Action { get; set; }
         /// <summary>
-        /// 此实例对象的创建时间
+        /// Creation time of this instance
         /// </summary>
         public DateTimeOffset AddTime { get; set; }
         /// <summary>
-        /// 项目说明（主要用于调试）
+        /// Item description (mainly for debugging)
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// 初始化SenparcMessageQueue消息队列项
+        /// Initialize SenparcMessageQueue message queue item
         /// </summary>
         /// <param name="key"></param>
         /// <param name="action"></param>

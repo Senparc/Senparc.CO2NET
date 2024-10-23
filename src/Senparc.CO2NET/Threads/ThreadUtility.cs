@@ -21,14 +21,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：ThreadUtility.cs
-    文件功能描述：线程工具类
+    FileName：ThreadUtility.cs
+    File Function Description：Thread utility class
 
 
-    创建标识：Senparc - 20151226
+    Creation Identifier：Senparc - 20151226
 
-    修改标识：Senparc - 20180222
-    修改描述：添加锁 AsynThreadCollectionLock
+    Modification Identifier：Senparc - 20180222
+    Modification Description：Added lock AsynThreadCollectionLock
 
 ----------------------------------------------------------------*/
 
@@ -43,19 +43,19 @@ using System.Threading;
 namespace Senparc.CO2NET.Threads
 {
     /// <summary>
-    /// 线程处理类
+    /// Thread processing class
     /// </summary>
     public static class ThreadUtility
     {
         /// <summary>
-        /// 异步线程容器
+        /// Asynchronous thread container
         /// </summary>
-        public static Dictionary<string, Thread> AsynThreadCollection = new Dictionary<string, Thread>();//后台运行线程
+        public static Dictionary<string, Thread> AsynThreadCollection = new Dictionary<string, Thread>();//Background running thread
 
         private static object AsynThreadCollectionLock = new object();
 
         /// <summary>
-        /// 注册线程
+        /// Register thread
         /// </summary>
         public static void Register()
         {
@@ -63,7 +63,7 @@ namespace Senparc.CO2NET.Threads
             {
                 if (AsynThreadCollection.Count == 0)
                 {
-                    //队列线程
+                    //Queue thread
                     {
                         SenparcMessageQueueThreadUtility senparcMessageQueue = new SenparcMessageQueueThreadUtility();
                         Thread senparcMessageQueueThread = new Thread(senparcMessageQueue.Run) { Name = "SenparcMessageQueue" };
@@ -74,7 +74,7 @@ namespace Senparc.CO2NET.Threads
                     {
                         z.IsBackground = true;
                         z.Start();
-                    });//全部运行
+                    });//Run all
                 }
             }
         }
