@@ -1,4 +1,4 @@
-#region Apache License Version 2.0
+﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
 Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
@@ -22,7 +22,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Copyright (C) 2024 Senparc
   
     FileName: Config.cs
-    FileFunctionDescription: Global configuration file
+    File Function Description: Global configuration file
     
     
     Creation Identifier: Senparc - 20180602

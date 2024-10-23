@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -16,22 +16,22 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
     public class InitTests
     {
         /// <summary>
-        /// Test if the Redis connection string can take effect immediately during the UseSenparcGlobal() phase
+        /// 测试 Redis 连接字符串是否可以在 UseSenparcGlobal() 阶段立即生效
         /// </summary>
         [TestMethod]
         public void AutoRegisterConfigurationTest()
         {
-            // Perform regular registration
+            // 执行常规注册
             var serviceCollection = new ServiceCollection();
             var configBuilder = new ConfigurationBuilder();
             var config = configBuilder.Build();
             serviceCollection.AddSenparcGlobalServices(config);
-            serviceCollection.AddMemoryCache();// Use memory cache
+            serviceCollection.AddMemoryCache();// 使用内存缓存
 
             var mockEnv = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
 
-            RedisManager.ConfigurationOption = null;// Clear before testing
+            RedisManager.ConfigurationOption = null;// 测试前清除
 
             var redisServer = "localhost:6379";
 
@@ -45,11 +45,11 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             var registerService = Senparc.CO2NET.AspNet.RegisterServices.
                                     RegisterService.Start(mockEnv.Object, senparcSetting)
                  .UseSenparcGlobal();
-            Assert.AreEqual(null, RedisManager.ConfigurationOption);// Not registered yet
+            Assert.AreEqual(null, RedisManager.ConfigurationOption);// 尚未注册
 
             registerService.RegisterCacheRedis(
                      redisServer,
-                     redisConfiguration => RedisObjectCacheStrategy.Instance// Will auto-register on first call
+                     redisConfiguration => RedisObjectCacheStrategy.Instance// 第一次调用时将自动注册
                         );
             Assert.AreEqual(redisServer, RedisManager.ConfigurationOption);
 

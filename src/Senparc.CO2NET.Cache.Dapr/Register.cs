@@ -1,4 +1,4 @@
-using Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy;
+﻿using Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Senparc.CO2NET.Cache.Dapr

@@ -1,4 +1,4 @@
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 using MessagePack.Resolvers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
