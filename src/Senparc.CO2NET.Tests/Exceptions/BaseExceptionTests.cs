@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+锘縰sing Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Exceptions;
 using Senparc.CO2NET.Tests.TestEntities;
 using System;
@@ -13,14 +13,14 @@ namespace Senparc.CO2NET.Tests.Exceptions
         {
             try
             {
-                throw new TestException("异常测试", new Exception("内部异常"));
+                throw new TestException("Exception Testng", new Exception("Inner Exception"));
             }
             catch (TestException ex)
             {
-                Assert.AreEqual("异常测试", ex.Message);
-                Assert.AreEqual("内部异常", ex.InnerException.Message);
+                Assert.AreEqual("Exception Testng", ex.Message);
+                Assert.AreEqual("Inner Exception", ex.InnerException.Message);
 
-                //TODO：测试日记录
+                //TODO: Fill in the record
             }
             catch (BaseException ex)
             {
