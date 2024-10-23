@@ -268,7 +268,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         {
             //fileName = fileName.UrlEncode();
             var fileContent = new StreamContent(stream);
-            //上传格式参考：
+            //Upload format reference:
             //https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738729
             //https://work.weixin.qq.com/api/doc#10112
             fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
