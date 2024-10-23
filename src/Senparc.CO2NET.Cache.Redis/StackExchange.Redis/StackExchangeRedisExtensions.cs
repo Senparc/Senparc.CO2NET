@@ -1,13 +1,13 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：StackExchangeRedisExtensions.cs
-    文件功能描述：StackExchange.Redis 扩展。
+    FileName：StackExchangeRedisExtensions.cs
+    File Function Description：StackExchange.Redis extension.
 
-    创建标识：Senparc - 20160309
+    Creation Identifier：Senparc - 20160309
 
-    修改标识：Senparc - 20170204
-    修改描述：v1.2.0 序列化方式改为 JSON
+    Modification Identifier：Senparc - 20170204
+    Modification Description：v1.2.0 Serialization method changed to JSON
 
 ----------------------------------------------------------------*/
 
@@ -27,7 +27,7 @@ using Senparc.CO2NET.Helpers;
 namespace Senparc.CO2NET.Cache.Redis
 {
     /// <summary>
-    ///  StackExchangeRedis 扩展
+    ///  StackExchangeRedis extension
     /// </summary>
     public static class StackExchangeRedisExtensions
     {
@@ -60,7 +60,7 @@ namespace Senparc.CO2NET.Cache.Redis
         //}
 
         /// <summary>
-        /// 序列化对象
+        /// Serialize object
         /// </summary>
         /// <param name="o"></param>
         /// <returns></returns>
@@ -74,7 +74,7 @@ namespace Senparc.CO2NET.Cache.Redis
             var dtx = SystemTime.Now;
 
 #if !NET462
-            ////二进制序列化方案
+            ////Binary serialization scheme
             //using (MemoryStream memoryStream = new MemoryStream())
             //{
 
@@ -87,7 +87,7 @@ namespace Senparc.CO2NET.Cache.Redis
             return binaryConverter.Serialize(o);
 #else
             #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
-            //二进制序列化方案
+            //Binary serialization scheme
             var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -98,18 +98,18 @@ namespace Senparc.CO2NET.Cache.Redis
             #endregion
 #endif
 
-            //Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
+            //Console.WriteLine($"StackExchangeRedisExtensions.Serialize time taken：{SystemTime.DiffTotalMS(dtx)}ms");
 
 
-            //使用JSON序列化，会在Get()方法反序列化到IContainerBag的过程中出错
-            //JSON序列化方案
+            //Using JSON serialization, there will be an error in deserializing to IContainerBag in the Get() method
+            //JSON serialization scheme
             //SerializerHelper serializerHelper = new SerializerHelper();
             //var jsonSetting = serializerHelper.GetJsonString(o);
             //return Encoding.UTF8.GetBytes(jsonSetting);
         }
 
         /// <summary>
-        /// 反序列化对象
+        /// Deserialize object
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="stream"></param>
@@ -122,7 +122,7 @@ namespace Senparc.CO2NET.Cache.Redis
             }
 
 #if !NET462
-            ////二进制序列化方案
+            ////Binary serialization scheme
             //using (MemoryStream memoryStream = new MemoryStream(stream))
             //{
             //    T result = ProtoBuf.Serializer.Deserialize<T>(memoryStream);
@@ -134,7 +134,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
 #else
             #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
-            //二进制序列化方案
+            //Binary serialization scheme
             var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
             using (MemoryStream memoryStream = new MemoryStream(stream))
             {
@@ -145,7 +145,7 @@ namespace Senparc.CO2NET.Cache.Redis
 #endif
 
 
-            //JSON序列化方案
+            //JSON serialization scheme
             //SerializerHelper serializerHelper = new SerializerHelper();
             //T result = serializerHelper.GetObject<T>(Encoding.UTF8.GetString(stream));
             //return result;
