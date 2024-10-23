@@ -21,11 +21,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：LocalObjectCacheHelper.cs
-    文件功能描述：全局静态数据源帮助类。
+    FileName：LocalObjectCacheHelper.cs
+    File Function Description：Global static data source helper class.
 
 
-    创建标识：Senparc - 20160308
+    Creation Identifier：Senparc - 20160308
 
  ----------------------------------------------------------------*/
 
@@ -41,13 +41,13 @@ using System.Collections.Generic;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// 全局静态数据源帮助类
+    /// Global static data source helper class
     /// </summary>
     public static class LocalObjectCacheHelper
     {
 #if NET462
         /// <summary>
-        /// 所有数据集合的列表
+        /// List of all data collections
         /// </summary>
         public static System.Web.Caching.Cache LocalObjectCache { get; set; }
 
@@ -60,7 +60,7 @@ namespace Senparc.CO2NET.Cache
         private static IMemoryCache _localObjectCache;
 
         /// <summary>
-        /// 所有数据集合的列表
+        /// List of all data collections
         /// </summary>
         public static IMemoryCache LocalObjectCache
         {
@@ -87,7 +87,7 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// .NET Core 的 MemoryCache 不提供遍历所有项目的方法，因此这里做一个储存Key的地方
+        /// .NET Core's MemoryCache does not provide a method to traverse all items, so this is a place to store Keys
         /// </summary>
         public static Dictionary<string, DateTimeOffset> Keys { get; set; } = new Dictionary<string, DateTimeOffset>();
 
@@ -97,7 +97,7 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 获取储存Keys信息的缓存键
+        /// Get the cache key for storing Keys information
         /// </summary>
         /// <param name="cacheStrategy"></param>
         /// <returns></returns>

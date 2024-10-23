@@ -21,20 +21,20 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：LocalContainerCacheStrategy.cs
-    文件功能描述：本地容器缓存。
+    FileName：LocalContainerCacheStrategy.cs
+    File Function Description：Local container cache.
 
 
-    创建标识：Senparc - 20160308
+    Creation Identifier：Senparc - 20160308
 
-    修改标识：Senparc - 20160812
-    修改描述：v4.7.4  解决Container无法注册的问题
+    Modification Identifier：Senparc - 20160812
+    Modification Description：v4.7.4  Fixed the issue where Container could not be registered
 
-    修改标识：Senparc - 20170205
-    修改描述：v0.2.0 重构分布式锁
+    Modification Identifier：Senparc - 20170205
+    Modification Description：v0.2.0 Refactored distributed lock
 
-    修改标识：Senparc - 20181226
-    修改描述：v0.4.3 修改 DateTime 为 DateTimeOffset
+    Modification Identifier：Senparc - 20181226
+    Modification Description：v0.4.3 Changed DateTime to DateTimeOffset
 
  ----------------------------------------------------------------*/
 
@@ -59,7 +59,7 @@ using Microsoft.Extensions.Caching.Memory;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// 本地容器缓存策略
+    /// Local container cache strategy
     /// </summary>
     public class LocalObjectCacheStrategy : BaseCacheStrategy, IBaseObjectCacheStrategy
     {
@@ -76,18 +76,18 @@ namespace Senparc.CO2NET.Cache
         #region 单例
 
         ///<summary>
-        /// LocalCacheStrategy的构造函数
+        /// Constructor of LocalCacheStrategy
         ///</summary>
         LocalObjectCacheStrategy()
         {
         }
 
-        //静态LocalCacheStrategy
+        //Static LocalCacheStrategy
         public static LocalObjectCacheStrategy Instance
         {
             get
             {
-                return Nested.instance;//返回Nested类中的静态成员instance
+                return Nested.instance;//Returns the static member instance in the Nested class
             }
         }
 
@@ -97,7 +97,7 @@ namespace Senparc.CO2NET.Cache
             static Nested()
             {
             }
-            //将instance设为一个初始化的LocalCacheStrategy新实例
+            //Sets instance to a new initialized instance of LocalCacheStrategy
             internal static readonly LocalObjectCacheStrategy instance = new LocalObjectCacheStrategy();
         }
 
@@ -143,7 +143,7 @@ namespace Senparc.CO2NET.Cache
                 _cache.Set(finalKey, value);
             }
 
-            //由于MemoryCache不支持遍历Keys，所以需要单独储存
+            //Since MemoryCache does not support traversing Keys, it needs to be stored separately
             if (newKey)
             {
                 var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
@@ -169,7 +169,7 @@ namespace Senparc.CO2NET.Cache
             _cache.Remove(cacheKey);
 
 #if !NET462
-            //移除key
+            //Remove key
             var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
             if (CheckExisted(keyStoreFinalKey, true))
             {
@@ -204,10 +204,10 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 返回指定缓存键的对象，并强制指定类型
+        /// Returns the object of the specified cache key and forces the specified type
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="isFullKey">Whether it is already a complete Key, if not, the GetFinalKey() method will be called once</param>
         /// <returns></returns>
         public T Get<T>(string key, bool isFullKey = false)
         {
@@ -242,7 +242,7 @@ namespace Senparc.CO2NET.Cache
                 data[cacheEnum.Key as string] = cacheEnum.Value;
             }
 #else
-            //获取所有Key
+            //Get all Keys
             var keyStoreFinalKey = LocalObjectCacheHelper.GetKeyStoreKey(this);
             if (CheckExisted(keyStoreFinalKey, true))
             {
@@ -310,10 +310,10 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 返回指定缓存键的对象，并强制指定类型
+        /// Returns the object of the specified cache key and forces the specified type
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="isFullKey">Whether it is already a complete Key, if not, the GetFinalKey() method will be called once</param>
         /// <returns></returns>
         public async Task<T> GetAsync<T>(string key, bool isFullKey = false)
         {
@@ -322,7 +322,7 @@ namespace Senparc.CO2NET.Cache
 #else
             return await Task.Factory.StartNew(() => Get<T>(key, isFullKey)).ConfigureAwait(false);
 
-            //TODO:使用_cache.GetOrCreateAsync
+            //TODO: Use _cache.GetOrCreateAsync
 #endif
 
         }

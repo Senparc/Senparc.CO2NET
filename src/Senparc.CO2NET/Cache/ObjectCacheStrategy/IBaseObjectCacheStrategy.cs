@@ -26,14 +26,14 @@ using System.Text;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// 所有以 string 类型为 key ，object 为 value 的缓存策略接口
+    /// Cache strategy interface where all keys are of type string and values are of type object
     /// </summary>
     public interface IBaseObjectCacheStrategy : IBaseCacheStrategy<string, object>, IBaseCacheStrategy
     {
         //IContainerCacheStrategy ContainerCacheStrategy { get; }
 
         /// <summary>
-        /// 注册的扩展缓存策略
+        /// Registered extension cache strategies
         /// </summary>
         //Dictionary<IExtensionCacheStrategy, IBaseObjectCacheStrategy> ExtensionCacheStratety { get; set; }
     }

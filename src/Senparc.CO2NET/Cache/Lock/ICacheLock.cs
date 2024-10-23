@@ -22,14 +22,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：ICacheLock.cs
-    文件功能描述：CacheLock 接口
+    FileName：ICacheLock.cs
+    File Function Description：CacheLock Interface
 
 
-    创建标识：Senparc - 20180106
+    Creation Identifier：Senparc - 20180106
 
-    修改标识：Senparc - 20230527
-    修改描述：v2.1.8 添加 GetLockCacheKey() 方法 
+    Modification Identifier：Senparc - 20230527
+    Modification Description：v2.1.8 Added GetLockCacheKey() method 
 
 ----------------------------------------------------------------*/
 
@@ -39,27 +39,27 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// 缓存锁接口
+    /// Cache lock interface
     /// </summary>
     public interface ICacheLock : IDisposable
     {
         /// <summary>
-        /// 是否成功获得锁
+        /// Whether the lock was successfully acquired
         /// </summary>
         bool LockSuccessful { get; set; }
 
         ///// <summary>
-        ///// 立即开始锁定
+        ///// Lock immediately
         ///// </summary>
         ///// <returns></returns>
         //ICacheLock LockNow();
 
         /// <summary>
-        /// 获取最长锁定时间（锁最长生命周期）
+        /// Get the maximum lock time (maximum lock lifecycle)
         /// </summary>
-        /// <param name="retryCount">重试次数，</param>
-        /// <param name="retryDelay">最小锁定时间周期</param>
-        /// <returns>单位：Milliseconds，毫秒</returns>
+        /// <param name="retryCount">Retry count,</param>
+        /// <param name="retryDelay">Minimum lock time period</param>
+        /// <returns>Unit: Milliseconds</returns>
         double GetTotalTtl(int retryCount, TimeSpan retryDelay);
 
         /// <summary>
@@ -73,12 +73,12 @@ namespace Senparc.CO2NET.Cache
         #region 同步方法
 
         /// <summary>
-        /// 开始锁
+        /// Start lock
         /// </summary>
         ICacheLock Lock();
 
         /// <summary>
-        /// 释放锁
+        /// Release lock
         /// </summary>
         void UnLock();
 
@@ -87,12 +87,12 @@ namespace Senparc.CO2NET.Cache
         #region 异步方法
 
         /// <summary>
-        /// 开始锁
+        /// Start lock
         /// </summary>
         Task<ICacheLock> LockAsync();
 
         /// <summary>
-        /// 释放锁
+        /// Release lock
         /// </summary>
         Task UnLockAsync();
 

@@ -1,17 +1,17 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：CacheStrategyDomainWarehouse.cs
-    文件功能描述： 领域缓存仓库
+    FileName：CacheStrategyDomainWarehouse.cs
+    File Function Description： Domain Cache Warehouse
 
 
-    创建标识：Senparc - 20180609
+    Creation Identifier：Senparc - 20180609
 
-    修改标识：Senparc - 20180707
-    修改描述：添加 AutoScanDomainCacheStrategy()、ClearRegisteredDomainExtensionCacheStrategies() 方法
+    Modification Identifier：Senparc - 20180707
+    Modification Description：Added AutoScanDomainCacheStrategy() and ClearRegisteredDomainExtensionCacheStrategies() methods
 
-    修改标识：Senparc - 20221219
-    修改描述：v2.1.4 _extensionCacheStrategyInstance 参数修改为 ConcurrentDictionary 类型
+    Modification Identifier：Senparc - 20221219
+    Modification Description：v2.1.4 _extensionCacheStrategyInstance parameter changed to ConcurrentDictionary type
 
 ----------------------------------------------------------------*/
 
@@ -26,25 +26,25 @@ using System.Linq;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// 领域内不同类型缓存 -> 底层（CO2NET 级别） 的映射关系
+    /// Mapping relationship between different types of caches in the domain -> underlying (CO2NET level)
     /// </summary>
     internal class CacheStrategyDomainMappingItem
     {
         /// <summary>
-        /// 扩展缓存策略（例如RedisContainerCacheStrategy）
+        /// Extension cache strategy (e.g., RedisContainerCacheStrategy)
         /// </summary>
         public IDomainExtensionCacheStrategy DomainExtensionCacheStrategy { get; set; }
 
         /// <summary>
-        /// 扩展缓存策略所使用的底层缓存策略（如RedisCacheStrategy）
+        /// Underlying cache strategy used by the extension cache strategy (e.g., RedisCacheStrategy)
         /// </summary>
         public Func<IBaseObjectCacheStrategy> BaseObjectCacheStrategy { get { return DomainExtensionCacheStrategy.BaseCacheStrategy; } }
 
 
         /// <summary>
-        /// 构造函数
+        /// Constructor
         /// </summary>
-        /// <param name="domainExtensionCacheStrategy">扩展缓存策略（例如RedisContainerCacheStrategy）</param>
+        /// <param name="domainExtensionCacheStrategy">Extension cache strategy (e.g., RedisContainerCacheStrategy)</param>
         public CacheStrategyDomainMappingItem(IDomainExtensionCacheStrategy domainExtensionCacheStrategy)
         {
             DomainExtensionCacheStrategy = domainExtensionCacheStrategy;
@@ -52,12 +52,12 @@ namespace Senparc.CO2NET.Cache
     }
 
     /// <summary>
-    /// 某一个领域内的缓存策略集合
+    /// Cache strategy collection within a domain
     /// </summary>
     internal class CacheStrategyDomainMappingCollection : Dictionary<IBaseObjectCacheStrategy, CacheStrategyDomainMappingItem>
     {
         /// <summary>
-        /// 添加或更新缓存策略映射
+        /// Add or update cache strategy mapping
         /// </summary>
         /// <param name="item"></param>
         public void AddOrUpdate(CacheStrategyDomainMappingItem item)
@@ -68,7 +68,7 @@ namespace Senparc.CO2NET.Cache
     }
 
     /// <summary>
-    /// 领域缓存仓库
+    /// Domain Cache Warehouse
     /// </summary>
     public class CacheStrategyDomainWarehouse
     {
@@ -77,7 +77,7 @@ namespace Senparc.CO2NET.Cache
 
 
         /// <summary>
-        /// 获取某个领域内的所有CacheStrategyDomainMappingCollection
+        /// Get all CacheStrategyDomainMappingCollection within a domain
         /// </summary>
         /// <param name="identityName"></param>
         /// <returns></returns>
@@ -98,7 +98,7 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 注册领域缓存
+        /// Register domain cache
         /// </summary>
         /// <param name="domainCacheStrategy"></param>
         public static void RegisterCacheStrategyDomain(IDomainExtensionCacheStrategy domainCacheStrategy)
@@ -111,16 +111,16 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 获取领域缓存（指定特定 的IBaseObjectCacheStrategy 缓存策略对象）
+        /// Get domain cache (specify a specific IBaseObjectCacheStrategy cache strategy object)
         /// </summary>
-        /// <param name="baseObjectCacheStrategy">IBaseObjectCacheStrategy 缓存策略对象</param>
-        /// <param name="cacheStrategyDomain">缓存领域</param>
+        /// <param name="baseObjectCacheStrategy">IBaseObjectCacheStrategy cache strategy object</param>
+        /// <param name="cacheStrategyDomain">Cache domain</param>
         /// <returns></returns>
         public static IDomainExtensionCacheStrategy GetDomainExtensionCacheStrategy(IBaseObjectCacheStrategy baseObjectCacheStrategy,
             ICacheStrategyDomain cacheStrategyDomain)
         {
             var identityName = cacheStrategyDomain.IdentityName;
-            var mappingCollection = GetMappingCollection(identityName);//当前扩展缓存可能已经注册的所有基础缓存
+            var mappingCollection = GetMappingCollection(identityName);//All base caches that the current extension cache may have registered
 
             if (mappingCollection.ContainsKey(baseObjectCacheStrategy))
             {
@@ -129,7 +129,7 @@ namespace Senparc.CO2NET.Cache
             }
             else
             {
-                //未注册，默认情况下使用本地缓存策略（应急）
+                //Not registered, use local cache strategy by default (emergency)
                 var ex = new Exceptions.UnregisteredDomainCacheStrategyException(cacheStrategyDomain.GetType(), baseObjectCacheStrategy.GetType());
                 SenparcTrace.BaseExceptionLog(ex);
                 throw ex;
@@ -137,7 +137,7 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 清空所有已经祖册的领域缓存对象
+        /// Clear all registered domain cache objects
         /// </summary>
         public static void ClearRegisteredDomainExtensionCacheStrategies()
         {
@@ -145,19 +145,19 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 自动注册领域缓存
+        /// Automatically register domain cache
         /// </summary>
-        /// <param name="autoScanExtensionCacheStrategies">是否自动扫描全局的扩展缓存（会增加系统启动时间）</param>
-        /// <param name="extensionCacheStrategiesFunc"><para>需要手动注册的扩展缓存策略</para>
-        /// <para>（LocalContainerCacheStrategy、RedisContainerCacheStrategy、MemcacheContainerCacheStrategy已经自动注册），</para>
-        /// <para>如果设置为 null（注意：不适委托返回 null，是整个委托参数为 null），则自动使用反射扫描所有可能存在的扩展缓存策略</para></param>
-        ///<returns>返回所有添加的类型</returns>
+        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time)</param>
+        /// <param name="extensionCacheStrategiesFunc"><para>Extension cache strategies that need to be manually registered</para>
+        /// <para>(LocalContainerCacheStrategy, RedisContainerCacheStrategy, MemcacheContainerCacheStrategy are already automatically registered),</para>
+        /// <para>If set to null (note: not delegate return null, but the entire delegate parameter is null), it will automatically use reflection to scan all possible extension cache strategies</para></param>
+        ///<returns>Returns all added types</returns>
         public static List<Type> AutoScanDomainCacheStrategy(bool autoScanExtensionCacheStrategies = false, Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
         {
-            //注册扩展缓存
+            //Register extension cache
             var dt1 = SystemTime.Now;
             var addedTypes = new List<Type>();
-            var cacheTypes = "";//所有注册的扩展缓存
+            var cacheTypes = "";//All registered extension caches
 
             if (extensionCacheStrategiesFunc != null)
             {
@@ -166,7 +166,7 @@ namespace Senparc.CO2NET.Cache
                 {
                     foreach (var cacheStrategy in containerCacheStrategies)
                     {
-                        var exCache = cacheStrategy;//确保能运行到就行，会自动注册
+                        var exCache = cacheStrategy;//Ensure it can run, will automatically register
 
                         var cacheType = exCache.GetType();
                         cacheTypes += "\r\n" + cacheType;
@@ -178,7 +178,7 @@ namespace Senparc.CO2NET.Cache
             var scanTypesCount = 0;
             if (autoScanExtensionCacheStrategies)
             {
-                //查找所有扩展缓存  TODO:扫描程序可以集中到一个 Helper 或者 Utility 中
+                //Find all extension caches  TODO: The scanning program can be centralized in a Helper or Utility
                 var types = AppDomain.CurrentDomain.GetAssemblies()
                             .SelectMany(a =>
                             {
@@ -191,7 +191,7 @@ namespace Senparc.CO2NET.Cache
                                 catch (Exception ex)
                                 {
                                     Trace.SenparcTrace.SendCustomLog("UseSenparcGlobal() 自动扫描程序集异常：" + a.FullName, ex.ToString());
-                                    return new List<Type>();//不能 return null
+                                    return new List<Type>();//Cannot return null
                                 }
                             });
 
@@ -207,7 +207,7 @@ namespace Senparc.CO2NET.Cache
                         {
                             var exCache = ReflectionHelper.GetStaticMember(type, "Instance");
 
-                            cacheTypes += "\r\n" + type;//由于数量不多，这里使用String，不使用StringBuilder
+                            cacheTypes += "\r\n" + type;//Since the number is small, use String instead of StringBuilder
                             addedTypes.Add(type);
                         }
                         catch (Exception ex)

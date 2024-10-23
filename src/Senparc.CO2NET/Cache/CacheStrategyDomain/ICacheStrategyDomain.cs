@@ -6,18 +6,18 @@ using System.Text;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// <para>扩展领域缓存策略</para>
-    /// <para>注意：实现此接口的类必须使用单例模式！</para>
+    /// <para>Extended domain cache strategy</para>
+    /// <para>Note: Classes implementing this interface must use the singleton pattern!</para>
     /// </summary>
     public interface ICacheStrategyDomain
     {
         /// <summary>
-        /// 唯一名称（建议使用GUID）
+        /// Unique name (recommended to use GUID)
         /// </summary>
         string IdentityName { get; }
 
         /// <summary>
-        /// 域的名称
+        /// Name of the domain
         /// </summary>
         string DomainName { get; }
     }

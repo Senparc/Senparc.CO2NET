@@ -21,19 +21,19 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：IBaseCacheStrategy.cs
-    文件功能描述：缓存策略接口。
+    FileName：IBaseCacheStrategy.cs
+    File Function Description：Cache strategy interface.
 
 
-    创建标识：Senparc - 20160308
+    Creation Identifier：Senparc - 20160308
 
-    修改标识：Senparc - 20160812
-    修改描述：v4.7.4 解决Container无法注册的问题
+    Modification Identifier：Senparc - 20160812
+    Modification Description：v4.7.4 Fixed the issue where Container could not be registered
 
     --CO2NET--
     
-    修改标识：Senparc - 20190411
-    修改描述：v0.6.0 提供缓存异步接口
+    Modification Identifier：Senparc - 20190411
+    Modification Description：v0.6.0 Provided asynchronous cache interface
 
  ----------------------------------------------------------------*/
 
@@ -45,47 +45,47 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// 最底层的缓存策略接口
+    /// The most basic cache strategy interface
     /// </summary>
     public interface IBaseCacheStrategy
     {
         ///// <summary>
-        ///// 整个Cache集合的Key
+        ///// Key for the entire Cache collection
         ///// </summary>
         //string CacheSetKey { get; set; }
 
         /// <summary>
-        /// 创建一个（分布）锁
+        /// Create a (distributed) lock
         /// </summary>
-        /// <param name="resourceName">资源名称</param>
-        /// <param name="key">Key标识</param>
-        /// <param name="retryCount">重试次数</param>
-        /// <param name="retryDelay">重试延时</param>
+        /// <param name="resourceName">Resource name</param>
+        /// <param name="key">Key identifier</param>
+        /// <param name="retryCount">Retry count</param>
+        /// <param name="retryDelay">Retry delay</param>
         /// <returns></returns>
         ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan());
 
         /// <summary>
-        /// 【异步方法】创建一个（分布）锁
+        /// [Asynchronous method] Create a (distributed) lock
         /// </summary>
-        /// <param name="resourceName">资源名称</param>
-        /// <param name="key">Key标识</param>
-        /// <param name="retryCount">重试次数</param>
-        /// <param name="retryDelay">重试延时</param>
+        /// <param name="resourceName">Resource name</param>
+        /// <param name="key">Key identifier</param>
+        /// <param name="retryCount">Retry count</param>
+        /// <param name="retryDelay">Retry delay</param>
         /// <returns></returns>
         Task<ICacheLock> BeginCacheLockAsync(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan());
     }
 
     /// <summary>
-    /// 公共缓存策略接口
+    /// Public cache strategy interface
     /// </summary>
     public interface IBaseCacheStrategy<TKey, TValue> /*: IBaseCacheLock*/
     //where TValue : class
     {
         /// <summary>
-        /// 获取缓存中最终的键，如Container建议格式： return String.Format("{0}:{1}", "SenparcWeixinContainer", key);
+        /// Get the final key in the cache, such as Container suggested format: return String.Format("{0}:{1}", "SenparcWeixinContainer", key);
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
         /// <returns></returns>
         string GetFinalKey(string key, bool isFullKey = false);
 
@@ -93,73 +93,73 @@ namespace Senparc.CO2NET.Cache
 
 
         /// <summary>
-        /// 添加指定ID的对象
+        /// Add an object with the specified ID
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="value">缓存值</param>
-        /// <param name="expiry">过期时间</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="value">Cache value</param>
+        /// <param name="expiry">Expiration time</param>
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法", true)]
         void InsertToCache(TKey key, TValue value, TimeSpan? expiry = null);
 
         /// <summary>
-        /// 添加指定ID的对象
+        /// Add an object with the specified ID
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="value">缓存值</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
-        /// <param name="expiry">过期时间</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="value">Cache value</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
+        /// <param name="expiry">Expiration time</param>
         void Set(TKey key, TValue value, TimeSpan? expiry = null, bool isFullKey = false);
 
         /// <summary>
-        /// 移除指定缓存键的对象
+        /// Remove the object with the specified cache key
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
         void RemoveFromCache(TKey key, bool isFullKey = false);
 
         /// <summary>
-        /// 返回指定缓存键的对象
+        /// Return the object with the specified cache key
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
         /// <returns></returns>
         TValue Get(TKey key, bool isFullKey = false);
 
         /// <summary>
-        /// 返回指定缓存键的对象，并强制指定类型
+        /// Return the object with the specified cache key and force the specified type
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
         /// <returns></returns>
         T Get<T>(TKey key, bool isFullKey = false);
 
         /// <summary>
-        /// 获取所有缓存信息集合
+        /// Get all cache information collections
         /// </summary>
         /// <returns></returns>
         IDictionary<TKey, TValue> GetAll();
 
         /// <summary>
-        /// 检查是否存在Key及对象
+        /// Check if the Key and object exist
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
         /// <returns></returns>
         bool CheckExisted(TKey key, bool isFullKey = false);
 
         /// <summary>
-        /// 获取缓存集合总数（注意：每个缓存框架的计数对象不一定一致！）
+        /// Get the total number of cache collections (Note: The counting objects of each cache framework may not be consistent!)
         /// </summary>
         /// <returns></returns>
         long GetCount();
 
         /// <summary>
-        /// 更新缓存
+        /// Update the cache
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="value">缓存值</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
-        /// <param name="expiry">过期时间</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="value">Cache value</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
+        /// <param name="expiry">Expiration time</param>
         void Update(TKey key, TValue value, TimeSpan? expiry = null, bool isFullKey = false);
 
         #endregion
@@ -167,64 +167,64 @@ namespace Senparc.CO2NET.Cache
         #region 异步方法
 
         /// <summary>
-        /// 【异步方法】添加指定ID的对象
+        /// [Asynchronous method] Add an object with the specified ID
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="value">缓存值</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
-        /// <param name="expiry">过期时间</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="value">Cache value</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
+        /// <param name="expiry">Expiration time</param>
         Task SetAsync(TKey key, TValue value, TimeSpan? expiry = null, bool isFullKey = false);
 
         /// <summary>
-        /// 【异步方法】移除指定缓存键的对象
+        /// [Asynchronous method] Remove the object with the specified cache key
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
         Task RemoveFromCacheAsync(TKey key, bool isFullKey = false);
 
         /// <summary>
-        /// 【异步方法】返回指定缓存键的对象
+        /// [Asynchronous method] Return the object with the specified cache key
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
         /// <returns></returns>
         Task<TValue> GetAsync(TKey key, bool isFullKey = false);
 
         /// <summary>
-        /// 【异步方法】返回指定缓存键的对象，并强制指定类型
+        /// [Asynchronous method] Return the object with the specified cache key and force the specified type
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
         /// <returns></returns>
         Task<T> GetAsync<T>(TKey key, bool isFullKey = false);
 
         /// <summary>
-        /// 【异步方法】获取所有缓存信息集合
+        /// [Asynchronous method] Get all cache information collections
         /// </summary>
         /// <returns></returns>
         Task<IDictionary<TKey, TValue>> GetAllAsync();
 
         /// <summary>
-        /// 【异步方法】检查是否存在Key及对象
+        /// [Asynchronous method] Check if the Key and object exist
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
         /// <returns></returns>
         Task<bool> CheckExistedAsync(TKey key, bool isFullKey = false);
 
         /// <summary>
-        /// 【异步方法】获取缓存集合总数（注意：每个缓存框架的计数对象不一定一致！）
+        /// [Asynchronous method] Get the total number of cache collections (Note: The counting objects of each cache framework may not be consistent!)
         /// </summary>
         /// <returns></returns>
         Task<long> GetCountAsync();
 
         /// <summary>
-        /// 【异步方法】更新缓存
+        /// [Asynchronous method] Update the cache
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="value">缓存值</param>
-        /// <param name="isFullKey">是否已经是完整的Key，如果不是，则会调用一次GetFinalKey()方法</param>
-        /// <param name="expiry">过期时间</param>
+        /// <param name="key">Cache key</param>
+        /// <param name="value">Cache value</param>
+        /// <param name="isFullKey">Whether it is already a full key, if not, the GetFinalKey() method will be called once</param>
+        /// <param name="expiry">Expiration time</param>
         Task UpdateAsync(TKey key, TValue value, TimeSpan? expiry = null, bool isFullKey = false);
         #endregion
     }

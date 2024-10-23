@@ -24,7 +24,7 @@ namespace Senparc.CO2NET.Cache
         public CacheLockWrapper(IBaseCacheStrategy containerCacheStragegy, string resourceName, string key, int retryCount, TimeSpan retryDelay)
         {
             _containerCacheStragegy = containerCacheStragegy;
-            _resourceName = resourceName + key;/*加上Key可以针对某个AppId加锁*/
+            _resourceName = resourceName + key;/*Adding a Key can lock for a specific AppId*/
 
             if (retryCount != 0 && retryDelay.Ticks != 0)
             {

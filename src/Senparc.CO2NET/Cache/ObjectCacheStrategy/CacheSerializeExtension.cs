@@ -7,7 +7,7 @@ using System.Text;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// 用于提供给缓存储存的封装对象，包含了对象类型（Type）信息
+    /// Used to provide encapsulated objects for cache storage, including object type (Type) information
     /// </summary>
     /// <typeparam name="T"></typeparam>
     sealed internal class CacheWrapper<T>
@@ -20,7 +20,7 @@ namespace Senparc.CO2NET.Cache
             this.Object = obj;
             if (obj == null)
             {
-                this.Type = typeof(object);//TODO：最好也应该要确定类型
+                this.Type = typeof(object);//TODO: It is better to also determine the type
             }
             else
             {
@@ -30,14 +30,14 @@ namespace Senparc.CO2NET.Cache
     }
 
     /// <summary>
-    /// 缓存序列化扩展方法，所有（分布式）缓存的序列化、反序列化过程必须使用这里的方法统一读写
+    /// Cache serialization extension methods, all (distributed) cache serialization and deserialization processes must use these methods for unified read and write
     /// </summary>
     public static class CacheSerializeExtension
     {
         #region CacheWrapper方案（效率比直接序列化低3-5倍，但也在可以接受范围内，和二进制序列化基本打平，好处是可以自动识别类型
 
         ///// <summary>
-        ///// 序列化到缓存可用的对象
+        ///// Serialize to an object usable by the cache
         ///// </summary>
         ///// <param name="obj"></param>
         ///// <returns></returns>
@@ -49,7 +49,7 @@ namespace Senparc.CO2NET.Cache
         //}
 
         ///// <summary>
-        ///// 从缓存对象反序列化到实例
+        ///// Deserialize from cache object to instance
         ///// </summary>
         ///// <param name="value"></param>
         ///// <returns></returns>
@@ -61,7 +61,7 @@ namespace Senparc.CO2NET.Cache
         //}
 
         ///// <summary>
-        ///// 从缓存对象反序列化到实例（效率更高，推荐）
+        ///// Deserialize from cache object to instance (more efficient, recommended)
         ///// </summary>
         ///// <typeparam name="T"></typeparam>
         ///// <param name="value"></param>
@@ -77,7 +77,7 @@ namespace Senparc.CO2NET.Cache
         #region 直接JSON序列化方案
 
         /// <summary>
-        /// 序列化到缓存可用的对象
+        /// Serialize to an object usable by the cache
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -88,7 +88,7 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 从缓存对象反序列化到实例
+        /// Deserialize from cache object to instance
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -99,7 +99,7 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 从缓存对象反序列化到实例（效率更高，推荐）
+        /// Deserialize from cache object to instance (more efficient, recommended)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
