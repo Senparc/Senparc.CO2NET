@@ -9,6 +9,14 @@
 [![NuGet](https://img.shields.io/nuget/dt/Senparc.CO2NET.svg)](https://www.nuget.org/packages/Senparc.CO2NET)
 [![license](https://img.shields.io/github/license/JeffreySu/WeiXinMPSDK.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
+
+Senparc.CO2NET 是一个支持 .NET Framework 和 .NET Core 的公共基础扩展库，包含常规开发所需要的基础帮助类。
+
+开发者可以直接使用 CO2NET 为项目提供公共基础方法，免去重复准备和维护公共代码的痛苦。
+
+Senparc.CO2NET 已经作为 [Senparc.Weixin SDK](https://github.com/JeffreySu/WeiXinMPSDK)、[NCF](https://github.com/NeuCharFramework/NCF) 等 Senparc 系列产品的的基础库被依赖。
+
+
 | 模块功能    |        Nuget 名称          |  Nuget                                                                                | 支持 .NET 版本 
 |------------|----------------------------|---------------------------------------------------------------------------------------|--------------------------------------
 | CO2NET 基础库 | Senparc.CO2NET   | [![Senparc.CO2NET][1.1]][1.2]    [![Senparc.CO2NET][nuget-img-base]][nuget-url-base]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.6.2][net462Y]    ![.NET Core 2.0][core20Y]
@@ -65,13 +73,6 @@
 [nuget-url-base-webapi]: https://www.nuget.org/packages/Senparc.CO2NET.WebApi
 [nuget-img-base-magic-object]: https://img.shields.io/nuget/dt/Senparc.CO2NET.MagicObject.svg
 [nuget-url-base-magic-object]: https://www.nuget.org/packages/Senparc.CO2NET.MagicObject
-
-
-Senparc.CO2NET 是一个支持 .NET Framework 和 .NET Core 的公共基础扩展库，包含常规开发所需要的基础帮助类。
-
-开发者可以直接使用 CO2NET 为项目提供公共基础方法，免去重复准备和维护公共代码的痛苦。
-
-Senparc.CO2NET 已经作为 [Senparc.Weixin SDK](https://github.com/JeffreySu/WeiXinMPSDK)、[NCF](https://github.com/NeuCharFramework/NCF) 等 Senparc 系列产品的的基础库被依赖。
 
 ## 如何使用 Nuget 安装？
 
