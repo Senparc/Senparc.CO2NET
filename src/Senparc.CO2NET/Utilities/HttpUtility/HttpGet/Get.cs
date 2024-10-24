@@ -98,7 +98,7 @@ namespace Senparc.CO2NET.HttpUtility
             return SystemTime.Now.ToString("yyyyMMdd-HHmmss") + Guid.NewGuid().ToString("n").Substring(0, 6);
         }
 
-        #region 同步方法
+        #region Synchronous Methods
 
         /// <summary>
         /// GET request URL and return type T
@@ -250,7 +250,7 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         /// <summary>
         /// [Async Method] Async GetJson

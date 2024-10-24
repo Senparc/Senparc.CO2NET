@@ -73,7 +73,7 @@ namespace Senparc.CO2NET.Cache.Redis
             public string Field { get; set; }
         }
 
-        #region 单例
+        #region Singleton
 
         /// <summary>
         /// Redis cache strategy
@@ -128,9 +128,9 @@ namespace Senparc.CO2NET.Cache.Redis
             return hashKeyAndField;
         }
 
-        #region 实现 IBaseObjectCacheStrategy 接口
+        #region Implement IBaseObjectCacheStrategy interface
 
-        #region 同步方法
+        #region Synchronous methods
 
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace Senparc.CO2NET.Cache.Redis
         #endregion
 
 
-        #region 异步方法
+        #region Asynchronous methods
 
         /// <summary>
         /// 

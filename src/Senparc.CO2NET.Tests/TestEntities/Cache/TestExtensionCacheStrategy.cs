@@ -10,7 +10,7 @@ namespace Senparc.CO2NET.Tests.TestEntities
     /// </summary>
     public class TestExtensionCacheStrategy : IDomainExtensionCacheStrategy
     {
-        #region 单例
+        #region Singleton
 
         ///<summary>
         /// Constructor of LocalCacheStrategy

@@ -86,7 +86,7 @@ namespace Senparc.CO2NET.Cache.Redis
             BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
             return binaryConverter.Serialize(o);
 #else
-            #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
+            #region .net 4.5 and .net core 2.0 both support BinaryFormatter, but .net core 2.0 does not support delegate serialization
             //Binary serialization scheme
             var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
             using (MemoryStream memoryStream = new MemoryStream())
@@ -133,7 +133,7 @@ namespace Senparc.CO2NET.Cache.Redis
             return binaryConverter.Deserialize<T>(stream);
 
 #else
-            #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
+            #region .net 4.5 and .net core 2.0 both support BinaryFormatter, but .net core 2.0 does not support delegate serialization
             //Binary serialization scheme
             var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
             using (MemoryStream memoryStream = new MemoryStream(stream))

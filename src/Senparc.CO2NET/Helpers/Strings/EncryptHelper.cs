@@ -73,7 +73,7 @@ namespace Senparc.CO2NET.Helpers
     /// </summary>
     public class EncryptHelper
     {
-        #region SHA相关
+        #region SHA related
 
         /// <summary>
         /// Encrypt string using SHA-1 algorithm (lowercase)
@@ -167,7 +167,7 @@ namespace Senparc.CO2NET.Helpers
             }
         }
 
-        #region 弃用算法
+        #region Deprecated algorithms
 
 
         //        /// <summary>
@@ -445,7 +445,7 @@ namespace Senparc.CO2NET.Helpers
 
                         decryptBytes = originalMemory.ToArray();
 
-                        #region 废弃的方法
+                        #region Deprecated methods
 
                         //cs.Read(decryptBytes, 0, decryptBytes.Length);
                         ////cs.Close();
@@ -605,7 +605,7 @@ namespace Senparc.CO2NET.Helpers
         #endregion
 #endif
 
-        #region 证书相关
+        #region Certificate related
 
         /// <summary>
         /// Get certificate content from certificate file content (single line string)

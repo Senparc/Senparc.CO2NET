@@ -69,7 +69,7 @@ namespace Senparc.CO2NET.Cache.Redis
     /// </summary>
     public class RedisObjectCacheStrategy : BaseRedisObjectCacheStrategy
     {
-        #region 单例
+        #region Singleton
 
         /// <summary>
         /// Redis cache strategy
@@ -100,9 +100,9 @@ namespace Senparc.CO2NET.Cache.Redis
         #endregion
 
 
-        #region 实现 IBaseObjectCacheStrategy 接口
+        #region Implement IBaseObjectCacheStrategy interface
 
-        #region 同步接口
+        #region Synchronous interface
 
         /// <summary>
         /// 
@@ -254,7 +254,7 @@ namespace Senparc.CO2NET.Cache.Redis
         #endregion
 
 
-        #region 异步方法
+        #region Asynchronous methods
 
         /// <summary>
         /// 

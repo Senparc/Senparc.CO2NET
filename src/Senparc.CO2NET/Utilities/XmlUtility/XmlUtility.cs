@@ -62,7 +62,7 @@ namespace Senparc.CO2NET.Utilities
     public static class XmlUtility
     {
 
-        #region 反序列化
+        #region Deserialization
 
         /// <summary>
         /// Deserialize
@@ -120,7 +120,7 @@ namespace Senparc.CO2NET.Utilities
 
         #endregion
 
-        #region 序列化
+        #region Serialization
 
         /// <summary>
         /// Serialize

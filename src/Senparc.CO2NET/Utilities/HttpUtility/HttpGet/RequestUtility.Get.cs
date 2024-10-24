@@ -71,7 +71,7 @@ namespace Senparc.CO2NET.HttpUtility
     /// </summary>
     public static partial class RequestUtility
     {
-        #region 公用静态方法
+        #region Public Static Methods
 
 #if NET462
         /// <summary>
@@ -126,7 +126,7 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-        #region 同步方法
+        #region Synchronous Methods
 
         /// <summary>
         /// Get string result using Get method (without Cookie)
@@ -281,7 +281,7 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         /// <summary>
         /// Get string result using Get method (without Cookie)

@@ -137,7 +137,7 @@ namespace Senparc.CO2NET.Helpers
             }
         }
 
-        #region 文件指纹
+        #region File Fingerprint
 
 
         /// <summary>

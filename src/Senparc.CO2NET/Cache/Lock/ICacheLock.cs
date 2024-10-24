@@ -70,7 +70,7 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
         string GetLockCacheKey(string resourceName, string key);
 
-        #region 同步方法
+        #region Synchronous Methods
 
         /// <summary>
         /// Start lock
@@ -84,7 +84,7 @@ namespace Senparc.CO2NET.Cache
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         /// <summary>
         /// Start lock

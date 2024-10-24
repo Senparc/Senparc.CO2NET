@@ -49,7 +49,7 @@ namespace Senparc.CO2NET.Utilities
     /// </summary>
     public static class StreamUtility
     {
-        #region 同步方法
+        #region Synchronous Methods
 
         /// <summary>
         /// Get Base64 string of Stream
@@ -106,7 +106,7 @@ namespace Senparc.CO2NET.Utilities
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         /// <summary>
         /// [Async method] Get Base64 string of Stream

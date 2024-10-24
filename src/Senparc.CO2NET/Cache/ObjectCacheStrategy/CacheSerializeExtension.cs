@@ -34,7 +34,7 @@ namespace Senparc.CO2NET.Cache
     /// </summary>
     public static class CacheSerializeExtension
     {
-        #region CacheWrapper方案（效率比直接序列化低3-5倍，但也在可以接受范围内，和二进制序列化基本打平，好处是可以自动识别类型
+        #region CacheWrapper Solution（efficiency is 3-5 times lower than direct serialization, but still acceptable, comparable to binary serialization, the advantage is automatic type recognition
 
         ///// <summary>
         ///// Serialize to an object usable by the cache
@@ -74,7 +74,7 @@ namespace Senparc.CO2NET.Cache
 
         #endregion
 
-        #region 直接JSON序列化方案
+        #region Direct JSON serialization scheme
 
         /// <summary>
         /// Serialize to an object usable by the cache

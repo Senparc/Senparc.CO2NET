@@ -97,7 +97,7 @@ namespace Senparc.CO2NET.HttpUtility
     /// </summary>
     public static partial class RequestUtility
     {
-        #region 代理
+        #region Proxy
 
 #if NET462
         private static System.Net.WebProxy _webproxy = null;
@@ -162,7 +162,7 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-        #region 私有方法
+        #region Private Methods
 
 
         /// <summary>
@@ -240,12 +240,12 @@ namespace Senparc.CO2NET.HttpUtility
             //fileName = fileName.UrlEncode();
             var fileContent = new StreamContent(stream);
 
-            //上传格式参考：
+            //Upload format reference:
             //https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738729
             //https://developer.work.weixin.qq.com/document/path/91054
             //https://work.weixin.qq.com/api/doc#10112
 
-            //这种方法会对中文名进行编码，腾讯服务器识别不了，如：=_utf-8_B_5Lit5paHLnhsc3g=_=
+            //This method will encode Chinese names, which cannot be recognized by Tencent servers, e.g.: =_utf-8_B_5Lit5paHLnhsc3g=_=
             //fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             //{
             //    Name = $"\"{formName}\"",
@@ -328,7 +328,7 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-        #region 同步方法
+        #region Synchronous Methods
 
         /// <summary>
         /// Stream to fill form information
@@ -345,7 +345,7 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         /// <summary>
         /// Stream to fill form information
@@ -362,7 +362,7 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-        #region 只需要使用同步的方法
+        #region Only need to use synchronous methods
 
         /// <summary>
         /// Method to assemble QueryString

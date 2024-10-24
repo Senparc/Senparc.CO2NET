@@ -84,7 +84,7 @@ namespace Redlock.CSharp
 
         protected Dictionary<String, CSRedisClient> redisMasterDictionary = new Dictionary<string, CSRedisClient>();
 
-        #region 同步方法
+        #region Synchronous Methods
 
         //TODO: Refactor passing a ConnectionMultiplexer
         protected bool LockInstance(string redisServer, string resource, byte[] val, TimeSpan ttl)
@@ -215,7 +215,7 @@ namespace Redlock.CSharp
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         //TODO: Refactor passing a ConnectionMultiplexer
         protected async Task<bool> LockInstanceAsync(string redisServer, string resource, byte[] val, TimeSpan ttl)
@@ -252,7 +252,7 @@ namespace Redlock.CSharp
         /// </summary>
         /// <param name="resource"></param>
         /// <param name="ttl"></param>
-        /// <returns>bool：successfull，Lock：lockObject</returns>
+        /// <returns>bool: successfull, Lock: lockObject</returns>
         public async Task<Tuple<bool, Lock>> LockAsync(string resource, TimeSpan ttl)
         {
             var val = CreateUniqueLockId();

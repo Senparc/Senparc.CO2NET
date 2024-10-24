@@ -18,7 +18,7 @@ namespace Senparc.Weixin.Cache.Redis
         private IRedisClient _client;
         private IRedisTypedClient<IContainerItemCollection> _cache;
 
-        #region 单例
+        #region Singleton
 
         //Static SearchCache
         public static RedisContainerCacheStrategy Instance
@@ -83,7 +83,7 @@ namespace Senparc.Weixin.Cache.Redis
             return _cache.GetHash<string>(CacheSetKey);
         }
 
-        #region 实现 IContainerCacheStragegy 接口
+        #region Implement IContainerCacheStragegy interface
 
         public string CacheSetKey { get; set; }
 

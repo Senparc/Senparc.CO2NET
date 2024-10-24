@@ -46,7 +46,7 @@ namespace Senparc.CO2NET.Cache.Redis
     /// </summary>
     public class RedisManager
     {
-        #region ConnectionMultiplexer 单例
+        #region ConnectionMultiplexer Singleton
 
         /// <summary>
         /// _redis(ConnectionMultiplexer) singleton

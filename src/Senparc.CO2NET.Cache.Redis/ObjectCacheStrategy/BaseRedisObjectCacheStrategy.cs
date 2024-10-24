@@ -89,7 +89,7 @@ namespace Senparc.CO2NET.Cache.Redis
             return server;
         }
 
-        #region 同步方法
+        #region Synchronous Methods
 
 
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法", true)]
@@ -114,7 +114,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         public abstract Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
 

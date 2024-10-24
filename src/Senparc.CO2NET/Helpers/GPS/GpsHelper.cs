@@ -40,7 +40,7 @@ namespace Senparc.CO2NET.Helpers
     /// </summary>
     public class GpsHelper
     {
-        #region 测距 - 方法1
+        #region Distance Measurement - Method 1
 
         //The following algorithm reference: https://blog.csdn.net/xiejm2333/article/details/73297004
 
@@ -86,7 +86,7 @@ namespace Senparc.CO2NET.Helpers
 
         #endregion
 
-        #region 测距 方法2
+        #region Distance Measurement - Method 2
 
         //Reference: https://blog.csdn.net/xiejm2333/article/details/73297004
 

@@ -153,7 +153,7 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
 
 
-        #region 同步方法
+        #region Synchronous Methods
 
         //protected ICacheLock LockNow()
         //{
@@ -174,7 +174,7 @@ namespace Senparc.CO2NET.Cache
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         //protected async Task<ICacheLock> LockNowAsync()
         //{

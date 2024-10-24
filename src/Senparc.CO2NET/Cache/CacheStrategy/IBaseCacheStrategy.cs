@@ -89,7 +89,7 @@ namespace Senparc.CO2NET.Cache
         /// <returns></returns>
         string GetFinalKey(string key, bool isFullKey = false);
 
-        #region 同步方法
+        #region Synchronous methods
 
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace Senparc.CO2NET.Cache
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous methods
 
         /// <summary>
         /// [Asynchronous method] Add an object with the specified ID
