@@ -9,6 +9,12 @@
 [![NuGet](https://img.shields.io/nuget/dt/Senparc.CO2NET.svg)](https://www.nuget.org/packages/Senparc.CO2NET)
 [![license](https://img.shields.io/github/license/JeffreySu/WeiXinMPSDK.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
+
+Senparc.CO2NET is a common foundational extension library supporting .NET Framework and .NET Core, including basic helper classes needed for regular development.  
+Developers can directly use CO2NET to provide common foundational methods for their projects, avoiding the pain of repeatedly preparing and maintaining common code.  
+Senparc.CO2NET is already relied upon as the foundational library for Senparc series products such as [Senparc.Weixin SDK](https://github.com/JeffreySu/WeiXinMPSDK) and [NCF](https://github.com/NeuCharFramework/NCF).  
+
+  
 | Module Function | Nuget Name                     | Nuget                                                                                   | Supported .NET Versions                          |  
 |-----------------|--------------------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------|  
 | CO2NET Base Library | Senparc.CO2NET                | [![Senparc.CO2NET][1.1]][1.2]  [![Senparc.CO2NET][nuget-img-base]][nuget-url-base]     | ![.NET 3.5][net35N]  ![.NET 4.0][net40N]  ![.NET 4.6.2][net462Y]  ![.NET Core 2.0][core20Y] |  
@@ -64,16 +70,12 @@
 [nuget-img-base-magic-object]: https://img.shields.io/nuget/dt/Senparc.CO2NET.MagicObject.svg
 [nuget-url-base-magic-object]: https://www.nuget.org/packages/Senparc.CO2NET.MagicObject
 
-Senparc.CO2NET is a common foundational extension library supporting .NET Framework and .NET Core, including basic helper classes needed for regular development.  
-Developers can directly use CO2NET to provide common foundational methods for their projects, avoiding the pain of repeatedly preparing and maintaining common code.  
-Senparc.CO2NET is already relied upon as the foundational library for Senparc series products such as [Senparc.Weixin SDK](https://github.com/JeffreySu/WeiXinMPSDK) and [NCF](https://github.com/NeuCharFramework/NCF).  
-  
 ## How to Install via Nuget?  
 * CO2NET Nuget Address: https://www.nuget.org/packages/Senparc.CO2NET  
-* Command:  
+* Command:
 ```shell  
 PM> Install-Package Senparc.CO2NET  
-
+```
 
 ## Stages  
 The currently released version is stable and continuously updated. You can follow the project's progress!  
