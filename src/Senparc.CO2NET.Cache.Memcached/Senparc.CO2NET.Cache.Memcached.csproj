@@ -1,157 +1,159 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-		<PropertyGroup>
-				<TargetFrameworks>net462;netstandard2.0;net8.0</TargetFrameworks>
-				<Version>4.3.0</Version>
-				<AssemblyName>Senparc.CO2NET.Cache.Memcached</AssemblyName>
-				<RootNamespace>Senparc.CO2NET.Cache.Memcached</RootNamespace>
-				<Description>微信公众账号 - Memcached 模块
+	<PropertyGroup>
+		<TargetFrameworks>net462;netstandard2.0;net8.0</TargetFrameworks>
+		<Version>4.3.0</Version>
+		<AssemblyName>Senparc.CO2NET.Cache.Memcached</AssemblyName>
+		<RootNamespace>Senparc.CO2NET.Cache.Memcached</RootNamespace>
+		<Description>
+			WeChat Public Account - Memcached Module
 
-Senparc.CO2NET SDK 开源项目：
-https://github.com/JeffreySu/WeiXinMPSDK</Description>
-				<Copyright>Senparc Copyright © 2004~2024</Copyright>
-				<PackageTags>微信,weixin,公众号,WeChat,Senparc,盛派,SDK,C#,JSSDK,微信支付,分布式,小程序,Cache,Memcached,CO2NET</PackageTags>
-				<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-				<Authors>Jeffrey Su</Authors>
-				<Owners>Senparc</Owners>
-				<PackageLicenseUrl>https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md</PackageLicenseUrl>
-				<ProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</ProjectUrl>
-				<Title>Senparc.CO2NET.Cache.Memcached.dll</Title>
-				<Summary>Memcached Cache for CO2NET C#</Summary>
-				<PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
-				<PackageIcon>icon.jpg</PackageIcon>
-				<PackageReleaseNotes>
-		v0.0.1
-		提供分布式缓存支持
-		.NET 4.0版本暂时未提供
+			Senparc.CO2NET SDK Open Source Project:
+			https://github.com/JeffreySu/WeiXinMPSDK
+		</Description>
+		<Copyright>Senparc Copyright © 2004~2024</Copyright>
+		<PackageTags>WeChat,weixin,public account,WeChat,Senparc,SDK,C#,JSSDK,WeChat Pay,distributed,mini program,Cache,Memcached,CO2NET</PackageTags>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<Authors>Jeffrey Su</Authors>
+		<Owners>Senparc</Owners>
+		<PackageLicenseUrl>https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md</PackageLicenseUrl>
+		<ProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</ProjectUrl>
+		<Title>Senparc.CO2NET.Cache.Memcached.dll</Title>
+		<Summary>Memcached Cache for CO2NET C#</Summary>
+		<PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
+		<PackageIcon>icon.jpg</PackageIcon>
+		<PackageReleaseNotes>
+			v0.0.1
+			Provide distributed cache support
+			.NET 4.0 version not provided temporarily
 
-		v0.0.2
-		重构缓存策略，提供分布锁
+			v0.0.2
+			Refactor cache strategy, provide distributed lock
 
-		v0.0.3 优化方法和接口
+			v0.0.3 Optimize methods and interfaces
 
-		v0.0.4 优化方法和接口
+			v0.0.4 Optimize methods and interfaces
 
-		v0.0.5  添加ServerList配制方法
+			v0.0.5 Add ServerList configuration method
 
-		v0.1.0
-		重构缓存，添加ObjectCacheStrategy
+			v0.1.0
+			Refactor cache, add ObjectCacheStrategy
 
-		v0.2.0 重构分布式锁
+			v0.2.0 Refactor distributed lock
 
-		v0.3.0 Memcached同步锁改为使用StoreMode.Add方法
+			v0.3.0 Change Memcached sync lock to use StoreMode.Add method
 
-		v1.0.0 支持 .NET Core
+			v1.0.0 Support .NET Core
 
-		v1.1.0 支持 .NET Core 2.0
+			v1.1.0 Support .NET Core 2.0
 
-		v1.2.0 注释掉无效代码
+			v1.2.0 Comment out invalid code
 
-		v1.3.0 .net core下，MemcachedObjectCacheStrategy.GetMemcachedClientConfiguration()方法添加注入参数
+			v1.3.0 In .net core, add injection parameter to MemcachedObjectCacheStrategy.GetMemcachedClientConfiguration() method
 
-		v1.4.0 停止对 .net core 1.1 生成的独立版本
-		v1.4.1 提供 RegisterServices 进行快捷注册
+			v1.4.0 Stop generating separate version for .net core 1.1
+			v1.4.1 Provide RegisterServices for quick registration
 
-		v1.5.0-rc1 支持 .NET Core 2.1.0-rc1-final
+			v1.5.0-rc1 Support .NET Core 2.1.0-rc1-final
 
-		v1.5.5 发布支持 .net core 2.1 的正式版
+			v1.5.5 Release official version supporting .net core 2.1
 
-		v2.0.0 引入 Senparc.CO2NET，支持 Senparc.CO2NET v5.0
+			v2.0.0 Introduce Senparc.CO2NET, support Senparc.CO2NET v5.0
 
-		======== CO2NET 移植 ========
+			======== CO2NET Migration ========
 
-		v2.0.0 重构 Redis 缓存策略
-		v2.0.1 支持 CO2NET v0.1.1
-		v2.0.2 支持 CO2NET v0.1.2
-		v2.0.3 支持 CO2NET v0.1.3
-		v2.0.5 支持 CO2NET v0.1.5
-		v2.0.9 支持 CO2NET v0.1.9
+			v2.0.0 Refactor Redis cache strategy
+			v2.0.1 Support CO2NET v0.1.1
+			v2.0.2 Support CO2NET v0.1.2
+			v2.0.3 Support CO2NET v0.1.3
+			v2.0.5 Support CO2NET v0.1.5
+			v2.0.9 Support CO2NET v0.1.9
 
-		v3.0.0
-		1、提供过期缓存策略
-		2、实现 MemcachedObjectCacheStrategy.GetAll() 和 Count() 方法
+			v3.0.0
+			1. Provide expired cache strategy
+			2. Implement MemcachedObjectCacheStrategy.GetAll() and Count() methods
 
-		v3.1.0
-		1、Register.RegisterCacheMemcached 标记为过期
-		2、新增 Register.SetConfigurationOption() 方法
-		3、新增 Register.UseMemcachedNow() 方法
-		4、Memcached 缓存服务连接信息实现从 Config.SenparcSetting 自动获取信息并注册
-		v3.1.2 整理 csproj 项目文件
-		v3.1.3 支持 CO2NET v0.2.8，添加 SenparcDI.GetIServiceProvider() 方法，以支持其他依赖注入框架
-		v3.2.0 使用 .NETStandard2.0 统一支持 .NET Core，放弃对 .NET Core 1.x 的单独适配
-		v3.3.0 提供缓存异步接口
-		v3.3.1 使用 .ConfigureAwait(false) 避免异步锁死的情况
-		v3.3.4 支持新版本 CO2NET
-		v3.3.5 支持新版本 CO2NET，提供带符号的 nuget 包（.snupkg)
-		v3.4.0 支持新版本 CO23NET，支持 .NET Core 3.0
-		v3.4.102 支持新版本 CO2NET
-		v3.4.103 支持新版本 CO2NET
-		v4.1.3 MemcachedObjectCacheStrategy.Get() 方法添加纯字符串的判断
-			[2024-09-11] v4.2.5 更新 Cache, remove InsertToCache(), add Count(prefix)
-			[2024-10-07] v4.3.0 停止对 .NET 6.0 的支持
-</PackageReleaseNotes>
-				<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
-				<Configurations>Debug;Release;Test</Configurations>
-				<!--<Product>Senparc.CO2NET.Cache.Memcached.dll</Product>-->
-		</PropertyGroup>
-		<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-				<OutputPath>..\BuildOutPut</OutputPath>
-				<DefineConstants>TRACE</DefineConstants>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-				<OutputPath>..\BuildOutPut</OutputPath>
-				<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-				<DocumentationFile>..\BuildOutPut\Senparc.CO2NET.Cache.Memcached.XML</DocumentationFile>
-				<Optimize>true</Optimize>
-				<DebugType>pdbonly</DebugType>
-				<ErrorReport>prompt</ErrorReport>
-				<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-		</PropertyGroup>
-		<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
+			v3.1.0
+			1. Mark Register.RegisterCacheMemcached as obsolete
+			2. Add Register.SetConfigurationOption() method
+			3. Add Register.UseMemcachedNow() method
+			4. Memcached cache service connection information is automatically obtained and registered from Config.SenparcSetting
+			v3.1.2 Organize csproj project file
+			v3.1.3 Support CO2NET v0.2.8, add SenparcDI.GetIServiceProvider() method to support other dependency injection frameworks
+			v3.2.0 Use .NETStandard2.0 to uniformly support .NET Core, abandon separate adaptation for .NET Core 1.x
+			v3.3.0 Provide cache asynchronous interface
+			v3.3.1 Use .ConfigureAwait(false) to avoid asynchronous deadlock
+			v3.3.4 Support new version of CO2NET
+			v3.3.5 Support new version of CO2NET, provide signed nuget package (.snupkg)
+			v3.4.0 Support new version of CO23NET, support .NET Core 3.0
+			v3.4.102 Support new version of CO2NET
+			v3.4.103 Support new version of CO2NET
+			v4.1.3 Add pure string judgment to MemcachedObjectCacheStrategy.Get() method
+			[2024-09-11] v4.2.5 Update Cache, remove InsertToCache(), add Count(prefix)
+			[2024-10-07] v4.3.0 Stop supporting .NET 6.0
+		</PackageReleaseNotes>
+		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
+		<Configurations>Debug;Release;Test</Configurations>
+		<!--<Product>Senparc.CO2NET.Cache.Memcached.dll</Product>-->
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<OutputPath>..\BuildOutPut</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+		<OutputPath>..\BuildOutPut</OutputPath>
+		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+		<DocumentationFile>..\BuildOutPut\Senparc.CO2NET.Cache.Memcached.XML</DocumentationFile>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<ErrorReport>prompt</ErrorReport>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+	<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
     <OutputPath>..\BuildOutPut\</OutputPath>
     <DocumentationFile>..\BuildOutPut\netstandard1.6\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
   </PropertyGroup>-->
-		<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
-				<OutputPath>..\BuildOutPut\</OutputPath>
-				<DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-				<OutputPath>..\BuildOutPut\</OutputPath>
-				<DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
-				<OutputPath>..\BuildOutPut\</OutputPath>
-				<DocumentationFile>..\BuildOutPut\net8.0\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
-		</PropertyGroup>
-		<ItemGroup>
-				<None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
-		</ItemGroup>
-		<ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-				<Reference Include="System.Core" />
-				<Reference Include="System.Data" />
-				<Reference Include="System.Data.DataSetExtensions" />
-				<Reference Include="System.Net.Http" />
-				<Reference Include="System.Runtime.Serialization" />
-				<Reference Include="System.Web" />
-				<Reference Include="System.Web.Extensions" />
-				<Reference Include="System.Xml" />
-				<Reference Include="System.Xml.Linq" />
-				<PackageReference Include="EnyimMemcached">
-						<Version>2.16.0</Version>
-				</PackageReference>
-				<PackageReference Include="Enyim.Caching.Web">
-						<Version>1.0.0.1</Version>
-				</PackageReference>
-		</ItemGroup>
-		<ItemGroup Condition=" '$(TargetFramework)' != 'net462' ">
-				<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-				<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-				<PackageReference Include="EnyimMemcachedCore" Version="2.5.3" />
-		</ItemGroup>
-		<ItemGroup>
-				<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-		</ItemGroup>
-		<ItemGroup>
-				<ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
-		</ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
+		<OutputPath>..\BuildOutPut\</OutputPath>
+		<DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+		<OutputPath>..\BuildOutPut\</OutputPath>
+		<DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
+		<OutputPath>..\BuildOutPut\</OutputPath>
+		<DocumentationFile>..\BuildOutPut\net8.0\Senparc.CO2NET.Cache.Memcached.xml</DocumentationFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
+	</ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+		<Reference Include="System.Core" />
+		<Reference Include="System.Data" />
+		<Reference Include="System.Data.DataSetExtensions" />
+		<Reference Include="System.Net.Http" />
+		<Reference Include="System.Runtime.Serialization" />
+		<Reference Include="System.Web" />
+		<Reference Include="System.Web.Extensions" />
+		<Reference Include="System.Xml" />
+		<Reference Include="System.Xml.Linq" />
+		<PackageReference Include="EnyimMemcached">
+			<Version>2.16.0</Version>
+		</PackageReference>
+		<PackageReference Include="Enyim.Caching.Web">
+			<Version>1.0.0.1</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' != 'net462' ">
+		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="EnyimMemcachedCore" Version="2.5.3" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+	</ItemGroup>
 </Project>

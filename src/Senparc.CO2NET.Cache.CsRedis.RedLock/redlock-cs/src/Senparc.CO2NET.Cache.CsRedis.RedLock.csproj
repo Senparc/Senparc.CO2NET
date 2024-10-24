@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
     <Version>1.2.4</Version>
@@ -6,11 +6,11 @@
     <RootNamespace>Senparc.CO2NET.Cache.CsRedis.RedLock</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <Description>
-      Senparc.CO2NET.Cache.CsRedis.RedLock 模块
+      Senparc.CO2NET.Cache.CsRedis.RedLock module
 
-      redlock-cs 开源项目：https://github.com/JeffreySu/redlock-cs
+      redlock-cs open source project: https://github.com/JeffreySu/redlock-cs
 
-      CO2NET 开源项目：
+      CO2NET open source project:
       https://github.com/Senparc/Senparc.CO2NET
     </Description>
     <Copyright>Senparc Copyright © 2004~2024</Copyright>
@@ -25,7 +25,7 @@
     <PackageIcon>icon.jpg</PackageIcon>
     <PackageReleaseNotes>
       v0.1.0
-      创世
+      Genesis
 </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>

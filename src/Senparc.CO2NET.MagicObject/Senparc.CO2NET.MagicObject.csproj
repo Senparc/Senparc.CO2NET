@@ -8,27 +8,27 @@
 				<RootNamespace>Senparc.CO2NET.MagicObject</RootNamespace>
 				<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
 				<Description>
-			Senparc.CO2NET.MagicObject 库
+			Senparc.CO2NET.MagicObject library
 			
-			这是一个开箱即用的轻量库，让你可以方便地对操作对象进行状态管理。例如，你可以还原对当前对象的属性操作，或者设置快照，以在修改对象值之后对其进行还原。
+			This is a lightweight library that is ready to use out of the box, allowing you to easily manage the state of operation objects. For example, you can restore property operations on the current object or set snapshots to restore it after modifying object values.
 
-			Senparc.CO2NET 开源项目：
+			Senparc.CO2NET open source project:
 			https://github.com/Senparc/Senparc.CO2NET
 		</Description>
 				<Copyright>Senparc Copyright © 2004~2024</Copyright>
-				<PackageTags>MagicObject,.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
+				<PackageTags>MagicObject,.NET Core,.NET Framework,public,base library,CO2NET</PackageTags>
 				<Authors>Senparc</Authors>
 				<Owners>Senparc</Owners>
 				<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 				<ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
 				<Title>Senparc.CO2NET.dll</Title>
-				<Summary>Senparc.CO2NET.MagicObject 库</Summary>
+				<Summary>Senparc.CO2NET.MagicObject library</Summary>
 				<PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
 				<PackageIcon>icon.jpg</PackageIcon>
 				<PackageReleaseNotes>
-			v0.0.1 创世
-			v0.1.0 将 MO.OriginalObject 和 MO.Object 属性设为 public
-			[2024-09-11] v0.1.3 更新 Cache, remove InsertToCache(), add Count(prefix)
+			v0.0.1 Genesis
+			v0.1.0 Set MO.OriginalObject and MO.Object properties to public
+			[2024-09-11] v0.1.3 Update Cache, remove InsertToCache(), add Count(prefix)
 </PackageReleaseNotes>
 				<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
 				<Configurations>Debug;Release;Test</Configurations>
