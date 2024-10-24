@@ -480,7 +480,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
         public override Task<long> GetCountAsync(string prefix)
         {
-            return Task.Factory.StartNew(() => GetCount(""));
+            return Task.Factory.StartNew(() => GetCount(prefix));
         }
 
         /// <summary>
