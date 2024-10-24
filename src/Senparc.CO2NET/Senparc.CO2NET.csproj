@@ -1,223 +1,220 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>3.0.0-beta1</Version>
-    <LangVersion>8.0</LangVersion>
-    <AssemblyName>Senparc.CO2NET</AssemblyName>
-    <RootNamespace>Senparc.CO2NET</RootNamespace>
-    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-    <Description>
-			Senparc.CO2NET 公共基础库
-
-			Senparc.CO2NET 开源项目：
+	<PropertyGroup>
+		<TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
+		<Version>3.0.0-beta1</Version>
+		<LangVersion>8.0</LangVersion>
+		<AssemblyName>Senparc.CO2NET</AssemblyName>
+		<RootNamespace>Senparc.CO2NET</RootNamespace>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<Description>
+			Senparc.CO2NET Public Base Library
+			Senparc.CO2NET Open Source Project:
 			https://github.com/Senparc/Senparc.CO2NET
 		</Description>
-    <Copyright>Senparc Copyright © 2004~2024</Copyright>
-    <PackageTags>.NET Core,.NET Framework,Public,Base Library,CO2NET,盛派</PackageTags>
-    <Authors>Senparc</Authors>
-    <Owners>Senparc</Owners>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
-    <Title>Senparc.CO2NET.dll</Title>
-    <Summary>Senparc.CO2NET 公共基础库</Summary>
-    <PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
-    <PackageIcon>icon.jpg</PackageIcon>
-    <PackageReleaseNotes>
-			v0.1.0 构建基础代码，从 Senparc.Weixin 分离公共代码
-			v0.1.1 优化代码，单元测试接近100%覆盖
-			v0.1.2 添加 IDomainExtensionCacheStrategy.RegisterCacheStrategyDomain() 方法
-			v0.1.3 添加 EntityUtility.FillSystemType()方法对 Int32[] 和 Int64[] 的处理
-			v0.1.4 添加 SenparcSetting 全局配置属性
-			v0.1.5 RegisterServiceExtension.AddSenparcGlobalServices() 方法可自动获取 SenparcSetting 全局设置
-			v0.1.6 解决 XXE 漏洞，继承自 XmlDocument 对象，自动将 XmlResolver 设为 null
-			v0.1.6.1 添加 Register.UseSenparcGlobal() 方
-			v0.1.7 扩展 ReflectionHelper.GetStaticMember() 方法
-			v0.1.8 .net core 下的 RegisterService.Start() 方法中，env 可以传入 null，以便在控制台等环境中完成注册
+		<Copyright>Senparc Copyright © 2004~2024</Copyright>
+		<PackageTags>.NET Core,.NET Framework,Public,Base Library,CO2NET,Senparc</PackageTags>
+		<Authors>Senparc</Authors>
+		<Owners>Senparc</Owners>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
+		<Title>Senparc.CO2NET.dll</Title>
+		<Summary>Senparc.CO2NET Public Base Library</Summary>
+		<PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
+		<PackageIcon>icon.jpg</PackageIcon>
+		<PackageReleaseNotes>
+			v0.1.0 Build basic code, separate public code from Senparc.Weixin
+			v0.1.1 Optimize code, unit tests nearly 100% coverage
+			v0.1.2 Add IDomainExtensionCacheStrategy.RegisterCacheStrategyDomain() method
+			v0.1.3 Add EntityUtility.FillSystemType() method to handle Int32[] and Int64[]
+			v0.1.4 Add SenparcSetting global configuration property
+			v0.1.5 RegisterServiceExtension.AddSenparcGlobalServices() method can automatically get SenparcSetting global settings
+			v0.1.6 Fix XXE vulnerability, inherit from XmlDocument object, automatically set XmlResolver to null
+			v0.1.6.1 Add Register.UseSenparcGlobal() method
+			v0.1.7 Extend ReflectionHelper.GetStaticMember() method
+			v0.1.8 In .net core, the env parameter in RegisterService.Start() method can be null to complete registration in console and other environments
 			v0.1.9
-			1、RegisterService 取消 public 的构造函数，统一使用 RegisterService.Start() 初始化
-			2、重构 Register.UseSenparcGlobal() 方法，承担扩展缓存扫描功能
-			3、添加 UnregisteredDomainCacheStrategyException 异常类型
-			4、 .net framework 和 .net core 版本统一强制在构造函数中要求提供 SenparcSetting 参数
-			v0.1.10 调整 SenparcSetting 参数，将分布式缓存连接信息归入到 SenparcSetting 中
-			v0.1.11 提供 SenparcSetting.BuildFromWebConfig() 方法
-
-			v0.2.0 缓存策略提供超时设置接口
-			v0.2.1 “当前扩展缓存策略没有进行注册”异常信息提供更加详细的缓存类型信息
-			v0.2.2 RequestExtension 添加对 NETSTANDARD2_0 的支持
-			v0.2.3 优化 RequestExtension.AbsoluteUri() 方法的输出结果
+			1. RegisterService cancels public constructor, unified use of RegisterService.Start() for initialization
+			2. Refactor Register.UseSenparcGlobal() method to undertake extended cache scanning function
+			3. Add UnregisteredDomainCacheStrategyException exception type
+			4. Unified requirement to provide SenparcSetting parameter in constructor for both .net framework and .net core versions
+			v0.1.10 Adjust SenparcSetting parameter, include distributed cache connection information into SenparcSetting
+			v0.1.11 Provide SenparcSetting.BuildFromWebConfig() method
+			v0.2.0 Cache strategy provides timeout setting interface
+			v0.2.1 "Current extended cache strategy is not registered" exception information provides more detailed cache type information
+			v0.2.2 RequestExtension adds support for NETSTANDARD2_0
+			v0.2.3 Optimize the output result of RequestExtension.AbsoluteUri() method
 			v0.2.4
-			1、添加 CacheException 缓存异常类型
-			2、添加对 IMemoryCache 的未设置提示
-			3、优化 UnregisteredDomainCacheStrategyException，使用 CacheException 作为基类
-			v0.2.5 优化 SenparcID，其中所有方法支持 .net standard 2.0
-			v0.2.6 增加 DateTimeHelper.GetUnixDateTime() 方法，标记过期 GetWeixinDateTime() 方法
-			v0.2.7 添加 ServerUtility
-			v0.2.8 添加 SenparcDI.GetIServiceProvider() 方法，以支持其他依赖注入框架
+			1. Add CacheException cache exception type
+			2. Add prompt for IMemoryCache not set
+			3. Optimize UnregisteredDomainCacheStrategyException, use CacheException as base class
+			v0.2.5 Optimize SenparcID, all methods support .net standard 2.0
+			v0.2.6 Add DateTimeHelper.GetUnixDateTime() method, mark GetWeixinDateTime() method as obsolete
+			v0.2.7 Add ServerUtility
+			v0.2.8 Add SenparcDI.GetIServiceProvider() method to support other dependency injection frameworks
 			v0.2.9
-			1、优化 Config.RootDictionaryPath 方法，可自动获取默认值
-			2、添加 SerializerHelper.GetObject(this string jsonString, Type type) 方法
-			v0.2.10 ObjectExtensions.ToJson() 方法提供 indented 方法，支持缩进格式
-			v0.2.11 修复 .NET Core 下模拟表单 Post 参数无效的问题
-			v0.2.14 ToJson() 方法优化
-			v0.2.15 Post 方法添加 headerAddition参数
-			v0.2.17 启用 SystemTime.Now，方便单元测试或紧急情况下改动系统当前时间
-			v0.2.18 支持 Senparc.CO2NET.APM
-			v0.3.0 升级 SenparcTrace，使用队列
-			v0.3.1 更新 RequestUtility.GetQueryString() 方法
-			v0.4.0 使用 .NETStandard2.0 统一支持 .NET Core，放弃对 .NET Core 1.x 的单独适配
-			v0.4.1 为 UrlEncode() 和 UrlDecode() 方法添加在 .net framework 环境下的编码类型选择
-			v0.4.2 优化 ServerUtility 类中方法在 docker 或 linux 环境下的路径识别
-			v0.4.3 使用 DateTimeOffset 取代 DateTime
-			v0.4.4 提供 SenparcTrace.RecordAPMLog 参数RequestUtility.Post.cs
-			v0.5.0 提供对 .NET Core Console 的全面支持
-			v0.5.1 ToJson() 方法添加 jsonSerializerSettings 参数
-			v0.5.1.1 添加 Sex.未设置 枚举值
-			v0.5.2 添加 SenparcDI.GetRequiredService() 方法，提供线程内独立 ServiceProvider 实例
-			v0.6.0 提供缓存异步接口
-			v0.6.1 完善 SystemTime，添加 NowTicks 属性
-			v0.7.0 优化 HttpClient，重构 RequestUtility（包括 Post 和 Get），引入 HttpClientFactory 机制
+			1. Optimize Config.RootDictionaryPath method, can automatically get default value
+			2. Add SerializerHelper.GetObject(this string jsonString, Type type) method
+			v0.2.10 ObjectExtensions.ToJson() method provides indented method, supports indented format
+			v0.2.11 Fix invalid simulated form Post parameters under .NET Core
+			v0.2.14 Optimize ToJson() method
+			v0.2.15 Add headerAddition parameter to Post method
+			v0.2.17 Enable SystemTime.Now, convenient for unit testing or emergency changes to the system current time
+			v0.2.18 Support Senparc.CO2NET.APM
+			v0.3.0 Upgrade SenparcTrace, use queue
+			v0.3.1 Update RequestUtility.GetQueryString() method
+			v0.4.0 Use .NETStandard2.0 to unify support for .NET Core, abandon separate adaptation for .NET Core 1.x
+			v0.4.1 Add encoding type selection for UrlEncode() and UrlDecode() methods under .net framework environment
+			v0.4.2 Optimize path recognition methods in ServerUtility class under docker or linux environment
+			v0.4.3 Use DateTimeOffset instead of DateTime
+			v0.4.4 Provide SenparcTrace.RecordAPMLog parameter RequestUtility.Post.cs
+			v0.5.0 Provide comprehensive support for .NET Core Console
+			v0.5.1 Add jsonSerializerSettings parameter to ToJson() method
+			v0.5.1.1 Add Sex.Unset enumeration value
+			v0.5.2 Add SenparcDI.GetRequiredService() method, provide independent ServiceProvider instance within thread
+			v0.6.0 Provide asynchronous cache interface
+			v0.6.1 Improve SystemTime, add NowTicks property
+			v0.7.0 Optimize HttpClient, refactor RequestUtility (including Post and Get), introduce HttpClientFactory mechanism
 			v0.7.1
-			1、添加 NowDiff 属性
-			2、添加 DayOfWeekString、DILifecycleType 配置和枚举
+			1. Add NowDiff property
+			2. Add DayOfWeekString, DILifecycleType configuration and enumeration
 			v0.7.1
-			1、添加 NowDiff 属性
-			2、添加 DayOfWeekString、DILifecycleType 配置和枚举
-			3、修复：.NET 4.5 下 Post 方法未指定 content-type
-			v0.7.2.1 解决 GetHttpClientHandler() 方法中 cookieContainer 为 null 可能发生的异常
+			1. Add NowDiff property
+			2. Add DayOfWeekString, DILifecycleType configuration and enumeration
+			3. Fix: Post method did not specify content-type under .NET 4.5
+			v0.7.2.1 Fix possible exception when cookieContainer is null in GetHttpClientHandler() method
 			v0.7.3
-			1、添加 HttpClientFactory 多证书方案
-			2、使用 .ConfigureAwait(false) 避免异步锁死的情况
+			1. Add HttpClientFactory multi-certificate solution
+			2. Use .ConfigureAwait(false) to avoid asynchronous deadlock
 			v0.8
-			1、停止提供对 .NET 3.5/4.0 的支持
-			2、使用异步方法提升并发效率
-			v0.8.3 添加 Stream 参数的 GetMD5() 方法
-			v0.8.4 HttpUtility.HttpPost_Common_NetCore 所调用的额 CreateFileContent 取消对 fileName 参数的 UrlEncode 编码
-			v0.8.5 解决 .NET Framework 4.5 下文件上传的 ContentType 设置问题
-			v0.8.6 添加 FileHelper.FileInUse() 方法，用于判断文件是否正在被占用
-			v0.8.7 RequestUtility.Post() 方法添加新功能：使用文件流模拟 Form 表单提交
-			v0.8.8 改进 SenparcTrace 日志记录效率，提供异步方法处理
-			v0.8.9 提供 AutoUnlockLogFile 参数，并针对日志文件可能被占用的情况尝试自动解锁。
-			v0.8.10 提供 Config.HostingEnvironment 属性
-			v0.9.0 添加 SystemTime.UtcDateTime 属性
-			v0.9.1 提供带符号的 nuget 包（.snuget)
-			v1.0.100 支持 .NET Core 3.0
-			v1.0.101 RequestUtility.GetRequestMemoryStream() 增加对 .NET Core 3.0 AllowSynchronousIO 的设置
+			1. Stop supporting .NET 3.5/4.0
+			2. Use asynchronous methods to improve concurrency efficiency
+			v0.8.3 Add GetMD5() method for Stream parameter
+			v0.8.4 Cancel UrlEncode encoding for fileName parameter in CreateFileContent called by HttpUtility.HttpPost_Common_NetCore
+			v0.8.5 Fix file upload ContentType setting issue under .NET Framework 4.5
+			v0.8.6 Add FileHelper.FileInUse() method to determine if the file is being used
+			v0.8.7 Add new feature to RequestUtility.Post() method: use file stream to simulate Form submission
+			v0.8.8 Improve SenparcTrace logging efficiency, provide asynchronous method handling
+			v0.8.9 Provide AutoUnlockLogFile parameter, and try to automatically unlock in case of possible log file occupation.
+			v0.8.10 Provide Config.HostingEnvironment property
+			v0.9.0 Add SystemTime.UtcDateTime property
+			v0.9.1 Provide signed nuget package (.snuget)
+			v1.0.100 Support .NET Core 3.0
+			v1.0.101 RequestUtility.GetRequestMemoryStream() adds setting for .NET Core 3.0 AllowSynchronousIO
 			v1.0.102
-			1、提供新的 app.UseSenparcGlobal() 注册方法
-			2、添加更多 SystemTime 辅助方法
-			v1.0.103 优化异步方法
-			v1.3.201 更新 Senparc.CO2NET.HttpUtility.Get.Download() 方法，修正 filename 判断正则表达式
-			v1.4.400 修复 Download 方法 bug
-
+			1. Provide new app.UseSenparcGlobal() registration method
+			2. Add more SystemTime helper methods
+			v1.0.103 Optimize asynchronous methods
+			v1.3.201 Update Senparc.CO2NET.HttpUtility.Get.Download() method, fix filename judgment regular expression
+			v1.4.400 Fix Download method bug
 			v1.5.2
-			1、增加和丰富 EncryptHelper 中加密方法（SHA1、AesGcmDecrypt、CRC32）
-			2、添加 FileHelper 中 GetFileHash 方法
-			3、LocalCacheLock释放锁之前增加是否锁成功的判断
-
-			v2.0.2 添加 XmlUtility.Deserialize() 重写方法
-			v2.0.3 修改HttpClient请求超时的实现方式
-			v2.0.4 XmlUtility 反序列化（Deserialize） 全面添加 rootNodeName 参数
-			v2.0.5 添加 WaitingFor() 方法
-			v2.0.5.4 添加 GetObject() 方法的 settings 参数
-			v2.1.1 添加 GetObject() 更多重写方法
+			1. Add and enrich encryption methods in EncryptHelper (SHA1, AesGcmDecrypt, CRC32)
+			2. Add GetFileHash method in FileHelper
+			3. Add judgment for successful lock before releasing LocalCacheLock
+			v2.0.2 Add overridden method for XmlUtility.Deserialize()
+			v2.0.3 Change the implementation of HttpClient request timeout
+			v2.0.4 Add rootNodeName parameter to XmlUtility Deserialize
+			v2.0.5 Add WaitingFor() method
+			v2.0.5.4 Add settings parameter to GetObject() method
+			v2.1.1 Add more overridden methods for GetObject()
 			v2.1.2
-			1、解决发送文件中中文名被微信服务器识别为乱码的问题
-			2、重构 RequestUtility，HttpPost_Common_NetCore() 改为异步方法：HttpPost_Common_NetCoreAsync()
-			3、修复 FileHelper.GetFileHash() 的 bug
+			1. Fix the issue of Chinese names in sent files being recognized as garbled by WeChat server
+			2. Refactor RequestUtility, change HttpPost_Common_NetCore() to asynchronous method: HttpPost_Common_NetCoreAsync()
+			3. Fix bug in FileHelper.GetFileHash()
 			v2.1.3
-			1、针对 .NET 7.0 处理对 Cookie 的特殊判断
-			2、优化模拟 Form 提交
-			v2.1.4 优化系统启动参数，允许使用相对路径注册 HTTP 证书
-			v2.1.5 新增 EncryptHelper.GetCertString() 以及 GetCertStringFromFile() 方法
-			v2.1.6 ReflectionHelper.GetStaticMember() 方法添加找不到目标对象的 null 判断，不再抛出异常
-			v2.1.7 HttpUtility.Post 系列方法提供 contentType 参数
-			v2.1.7.2 解决上一版本升级后导致的“The value cannot be null or empty. (Parameter 'mediaType')”异常
-			v2.1.7.3 继续解决上一版本升级后导致的“The value cannot be null or empty. (Parameter 'mediaType')”异常
-			v2.1.8 LocalObjectCacheStrategy.Get() 方法添加纯字符串的判断
-			v2.2.0 添加 RequestUtility.DeleteAsync() 方法
-			v2.3.0 适配 .NET 8.0
-			v2.3.1 添加 app.UseSenparcGlobal 扩展方法
-			v2.4.0 添加 SenparcDI.GetService&lt;T&gt;()、SenparcDI.GetRequiredService&lt;T&gt;()、SenparcDI.GetRequreidKeyedService()方法
-			v2.4.1 SenparcDI.GetServiceProvider() 方法添加 refresh 参数
-			v2.4.2 添加 ReflectionHelper.HasParameterlessConstructor() 方法
-			v2.4.3 更新 DateTimeHelper.GetDateTimeOffsetFromXml() 方法
-			[2024-08-23] v2.5.0 为 IBaseObjectCacheStrategy 创建依赖注入注册
-			[2024-08-23] v2.5.1 更新 DateTimeHelper.GetDateTimeOffsetFromXml() 方法 #297 感谢 @zhaoyangguang
-			[2024-09-11] v2.5.2 更新 Cache, remove InsertToCache(), add Count(prefix)
-</PackageReleaseNotes>
-    <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
-    <Configurations>Debug;Release;Test</Configurations>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>..\BuildOutPut</OutputPath>
-    <DefineConstants>TRACE;RELEASE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\BuildOutPut</OutputPath>
-    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
-    <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.xml</DocumentationFile>
-  </PropertyGroup>
-  <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
-    <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\netstandard1.6\Senparc.CO2NET.xml</DocumentationFile>
-  </PropertyGroup>-->
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
-    <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\netstandard2.1\Senparc.CO2NET.xml</DocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include=".\icon.jpg" Pack="true" Visible="false" PackagePath="" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Utilities\Cache\**" />
-    <EmbeddedResource Remove="Utilities\Cache\**" />
-    <None Remove="Utilities\Cache\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Cache\Lock\CacheLockWrapper.cs" />
-    <Compile Remove="Cache\Lock\CacheLockWrapperExtension.cs" />
-    <Compile Remove="Trace\SenparcTrace.v0.2.18.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Configuration" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net462'">
-    <!--<FrameworkReference Include="Microsoft.AspNetCore.App" />-->
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Net.Http.Headers" Version="8.0.0" Condition=" '$(TargetFramework)' == 'net8.0'" />
-    <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.0" Condition=" '$(TargetFramework)' != 'net8.0'" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utilities\HttpUtility\HttpPut\" />
-  </ItemGroup>
+			1. Handle special judgment for Cookie under .NET 7.0
+			2. Optimize simulated Form submission
+			v2.1.4 Optimize system startup parameters, allow registration of HTTP certificates using relative paths
+			v2.1.5 Add EncryptHelper.GetCertString() and GetCertStringFromFile() methods
+			v2.1.6 Add null judgment for target object not found in ReflectionHelper.GetStaticMember() method, no longer throw exception
+			v2.1.7 Provide contentType parameter for HttpUtility.Post series methods
+			v2.1.7.2 Fix "The value cannot be null or empty. (Parameter 'mediaType')" exception caused by the previous version upgrade
+			v2.1.7.3 Continue to fix "The value cannot be null or empty. (Parameter 'mediaType')" exception caused by the previous version upgrade
+			v2.1.8 Add pure string judgment to LocalObjectCacheStrategy.Get() method
+			v2.2.0 Add RequestUtility.DeleteAsync() method
+			v2.3.0 Adapt to .NET 8.0
+			v2.3.1 Add app.UseSenparcGlobal extension method
+			v2.4.0 Add SenparcDI.GetService&lt;T&gt;(), SenparcDI.GetRequiredService&lt;T&gt;(), SenparcDI.GetRequreidKeyedService() methods
+			v2.4.1 Add refresh parameter to SenparcDI.GetServiceProvider() method
+			v2.4.2 Add ReflectionHelper.HasParameterlessConstructor() method
+			v2.4.3 Update DateTimeHelper.GetDateTimeOffsetFromXml() method
+			[2024-08-23] v2.5.0 Create dependency injection registration for IBaseObjectCacheStrategy
+			[2024-08-23] v2.5.1 Update DateTimeHelper.GetDateTimeOffsetFromXml() method #297 Thanks @zhaoyangguang
+			[2024-09-11] v2.5.2 Update Cache, remove InsertToCache(), add Count(prefix)
+			[2024-10-24] v3.0.0 Upgrade to English version
+		</PackageReleaseNotes>
+		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
+		<Configurations>Debug;Release;Test</Configurations>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<OutputPath>..\BuildOutPut</OutputPath>
+		<DefineConstants>TRACE;RELEASE</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+		<OutputPath>..\BuildOutPut</OutputPath>
+		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+		<DocumentationFile>..\BuildOutPut\Senparc.CO2NET.xml</DocumentationFile>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<ErrorReport>prompt</ErrorReport>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
+		<OutputPath>..\BuildOutPut\</OutputPath>
+		<DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.xml</DocumentationFile>
+	</PropertyGroup>
+	<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">  
+        <OutputPath>..\BuildOutPut\</OutputPath>  
+        <DocumentationFile>..\BuildOutPut\netstandard1.6\Senparc.CO2NET.xml</DocumentationFile>  
+    </PropertyGroup>-->
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+		<OutputPath>..\BuildOutPut\</OutputPath>
+		<DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.xml</DocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
+		<OutputPath>..\BuildOutPut\</OutputPath>
+		<DocumentationFile>..\BuildOutPut\netstandard2.1\Senparc.CO2NET.xml</DocumentationFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include=".\icon.jpg" Pack="true" Visible="false" PackagePath="" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Utilities\Cache\**" />
+		<EmbeddedResource Remove="Utilities\Cache\**" />
+		<None Remove="Utilities\Cache\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Cache\Lock\CacheLockWrapper.cs" />
+		<Compile Remove="Cache\Lock\CacheLockWrapperExtension.cs" />
+		<Compile Remove="Trace\SenparcTrace.v0.2.18.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+		<Reference Include="System.Core" />
+		<Reference Include="System.Data" />
+		<Reference Include="System.Data.DataSetExtensions" />
+		<Reference Include="System.Net.Http" />
+		<Reference Include="System.Runtime.Serialization" />
+		<Reference Include="System.Web" />
+		<Reference Include="System.Web.Extensions" />
+		<Reference Include="System.Xml" />
+		<Reference Include="System.Xml.Linq" />
+		<Reference Include="System.Configuration" />
+	</ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' != 'net462'">
+		<!--<FrameworkReference Include="Microsoft.AspNetCore.App" />-->
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Net.Http.Headers" Version="8.0.0" Condition=" '$(TargetFramework)' == 'net8.0'" />
+		<PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.0" Condition=" '$(TargetFramework)' != 'net8.0'" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Utilities\HttpUtility\HttpPut\" />
+	</ItemGroup>
 </Project>
