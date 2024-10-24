@@ -28,7 +28,7 @@ Senparc.CO2NET is already relied upon as the foundational library for Senparc se
 ![.NET Core 2.0][core20Y] : Supports .NET Standard 2.0+ and .NET Core 2.1/3.1, .NET 5.0/6.0/7.0/8.0+  
 
 > [!NOTE]
-> CO2NET will gradually stop supporting .NET Framework 4.0 and earlier versions.  
+> CO2NET will gradually stop supporting .NET Framework 4.0 and earlier versions. Because the official update has stopped. 
 
 [1.1]: https://img.shields.io/nuget/v/Senparc.CO2NET.svg?style=flat
 [1.2]: https://www.nuget.org/packages/Senparc.CO2NET
