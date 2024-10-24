@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -87,7 +87,7 @@ namespace Senparc.CO2NET.Trace
         /// </summary>
         public static bool AutoUnlockLogFile { get; set; } = true;
 
-        #region 私有方法
+        #region Private Methods
 
         /// <summary>
         /// Senparc.Weixin global unified caching strategy
@@ -204,7 +204,7 @@ namespace Senparc.CO2NET.Trace
 
         #endregion
 
-        #region 日志记录
+        #region Logging
 
         /// <summary>
         /// System log

@@ -153,17 +153,17 @@ namespace Senparc.CO2NET
         //}
 
 
-        /* 过期方法
+        /* Obsolete method
 
         /// <summary>
-        /// 全局 IServiceCollection 对象
+        /// Global IServiceCollection object
         /// </summary>
-        [Obsolete("已过期，请使用系统的注入方式", true)]
+        [Obsolete("Obsolete, please use the system injection method", true)]
         public static IServiceProvider GlobalServiceProvider
         {
             get
             {
-                return _globalServiceProvider ?? throw new Exception("请在 Startup.cs 注册过程中，使用 services.AddSenparcGlobalServices() 方法提供全局统一的 ServiceProvider");
+                return _globalServiceProvider ?? throw new Exception("Please use the services.AddSenparcGlobalServices() method to provide a globally unified ServiceProvider during the registration process in Startup.cs");
             }
             set
             {
@@ -194,28 +194,28 @@ namespace Senparc.CO2NET
         //}
 
 
-        /* 过期方法
+        /* Obsolete method
         /// <summary>
-        /// 获取 ServiceProvider
+        /// Get ServiceProvider
         /// </summary>
-        /// <param name="useGlobalScope">是否使用全局唯一 ServiceScope 对象。
-        /// <para>默认为 true，即使用全局唯一 ServiceScope。</para>
-        /// <para>如果为 false，即使用线程内唯一 ServiceScope 对象</para>
+        /// <param name="useGlobalScope">Whether to use a globally unique ServiceScope object.
+        /// <para>Default is true, which means using a globally unique ServiceScope.</para>
+        /// <para>If false, use a thread-unique ServiceScope object</para>
         /// </param>
         /// <returns></returns>
-        [Obsolete("不再储存此对象，直接使用全局统一的GlobalIServiceProvider", true)]
+        [Obsolete("No longer store this object, directly use the globally unified GlobalIServiceProvider", true)]
         public static IServiceProvider GetIServiceProvider(bool useGlobalScope = true)
         {
             if (useGlobalScope)
             {
                 if (GlobalServiceProvider == null)
                 {
-                    //加锁确保唯一
+                    //Lock to ensure uniqueness
                     lock (_globalIServiceProviderLock)
                     {
                         if (GlobalServiceProvider == null)
                         {
-                            //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
+                            //Note: The BuildServiceProvider() method generates a different ServiceProvider object each time!
                             GlobalServiceProvider = GlobalServiceCollection.BuildServiceProvider();
                         }
                     }
@@ -226,12 +226,12 @@ namespace Senparc.CO2NET
             {
                 if (ThreadServiceScope == null)
                 {
-                    //加锁确保唯一
+                    //Lock to ensure uniqueness
                     lock (_threadIServiceProviderLock)
                     {
                         if (ThreadServiceScope == null)
                         {
-                            //注意：BuildServiceProvider() 方法每次会生成不同的 ServiceProvider 对象！
+                            //Note: The BuildServiceProvider() method generates a different ServiceProvider object each time!
                             //GlobalIServiceProvider = GetServiceCollection().BuildServiceProvider();
 
                             var globalServiceProvider = GetIServiceProvider(true);
@@ -246,37 +246,37 @@ namespace Senparc.CO2NET
 
 
         /// <summary>
-        /// 使用 .net core 默认的 DI 方法获得实例
-        /// <para>如果未注册，返回 null</para>
+        /// Use .net core default DI method to get instance
+        /// <para>If not registered, return null</para>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        /// <param name="useGlobalScope">是否使用全局唯一 ServiceScope 对象，默认为 false，即使用线程内唯一 ServiceScope 对象</param>
-        [Obsolete("不再储存此对象，直接使用全局统一的GlobalIServiceProvider", true)]
+        /// <param name="useGlobalScope">Whether to use a globally unique ServiceScope object, default is false, which means using a thread-unique ServiceScope object</param>
+        [Obsolete("No longer store this object, directly use the globally unified GlobalIServiceProvider", true)]
         public static T GetService<T>(bool useGlobalScope = true)
         {
             return GetIServiceProvider(useGlobalScope).GetService<T>();
         }
 
         /// <summary>
-        /// 使用 .net core 默认的 DI 方法获得实例（推荐）
-        /// <para>如果未注册，抛出异常 </para>
+        /// Use .net core default DI method to get instance (recommended)
+        /// <para>If not registered, throw an exception </para>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        [Obsolete("已过期", true)]
+        [Obsolete("Obsolete", true)]
         public static T GetRequiredService<T>()
         {
             return GlobalServiceProvider.GetRequiredService<T>();
         }
 
         /// <summary>
-        /// 使用 .net core 默认的 DI 方法获得实例（推荐）
-        /// <para>如果未注册，抛出异常 </para>
+        /// Use .net core default DI method to get instance (recommended)
+        /// <para>If not registered, throw an exception </para>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        [Obsolete("已过期", true)]
+        [Obsolete("Obsolete", true)]
         public static T GetService<T>()
         {
             return GlobalServiceProvider.GetService<T>();
@@ -284,9 +284,9 @@ namespace Senparc.CO2NET
 
 
         /// <summary>
-        /// 重置 GlobalIServiceProvider 对象，重新从 serviceCollection.BuildServiceProvider() 生成对象
+        /// Reset GlobalIServiceProvider object, regenerate the object from serviceCollection.BuildServiceProvider()
         /// </summary>
-        [Obsolete("已过期", true)]
+        [Obsolete("Obsolete", true)]
         public static IServiceProvider ResetGlobalIServiceProvider(this IServiceCollection serviceCollection)
         {
             GlobalServiceProvider = serviceCollection.BuildServiceProvider();
