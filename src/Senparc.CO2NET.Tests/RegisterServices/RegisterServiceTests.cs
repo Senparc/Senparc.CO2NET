@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.AspNet.RegisterServices;
 using Microsoft.Extensions.Options;
@@ -15,7 +15,7 @@ namespace Senparc.CO2NET.Tests.RegisterServices
         public void RegisterServiceTest()
         {
             var isDebug = true;
-            Senparc.CO2NET.Config.IsDebug = !isDebug;//故意换成相反值
+            Senparc.CO2NET.Config.IsDebug = !isDebug;// Convert the opposite value
 
             var mockEnv = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath );
@@ -25,7 +25,7 @@ namespace Senparc.CO2NET.Tests.RegisterServices
             Assert.IsTrue(Senparc.CO2NET.Config.RootDirectoryPath.Length > 0);
             Assert.AreEqual(isDebug, Senparc.CO2NET.Config.IsDebug);
 
-            //测试根目录正确性，测试查找文件
+            // Verify the directory, cannot be a file
             Assert.IsTrue(File.Exists(Path.Combine(Senparc.CO2NET.Config.RootDirectoryPath, "TestEntities", "Logo.jpg")));
         }
     }
