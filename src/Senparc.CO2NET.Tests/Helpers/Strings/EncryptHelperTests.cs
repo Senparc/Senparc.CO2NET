@@ -99,13 +99,13 @@ namespace Senparc.CO2NET.Helpers.Tests
             {
                 //Encryption-CEB
                 var encryptResult = EncryptHelper.AESEncrypt(encypStr, key);
-                Console.WriteLine("CEB encrypt��" + encryptResult);
+                Console.WriteLine("CEB encrypt: " + encryptResult);
                 //Assert.AreEqual("raQCWEp5ngocSs5R8srxkg==", encryptResult);
                 Assert.IsTrue(encryptResult.Length > 0);
 
                 //Encryption-CEB
                 var cebResult = EncryptHelper.AESDecrypt(encryptResult, key);
-                Console.WriteLine("CEB decrypt��" + cebResult);
+                Console.WriteLine("CEB decrypt: " + cebResult);
                 Assert.AreEqual(encypStr, cebResult);
             }
         }

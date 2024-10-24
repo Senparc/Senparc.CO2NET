@@ -126,7 +126,7 @@ namespace Senparc.CO2NET.Tests.Trace
                 //Wait for execution
             }
 
-            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, "�����쳣", keyword));
+            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, "Test Exception", keyword));
         }
 
         [TestMethod]

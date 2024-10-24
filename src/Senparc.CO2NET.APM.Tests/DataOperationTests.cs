@@ -95,13 +95,13 @@ namespace Senparc.CO2NET.APM.Tests
             Console.WriteLine("===============");
 
             //Check if the current task has received the previous task
-            var memoryData = dataOperation.GetDataItemListAsync("�ڴ�").Result;
+            var memoryData = dataOperation.GetDataItemListAsync("Memory").Result;
             Assert.AreEqual(1, memoryData.Count);//Delete 1 element from the list
 
             var cpuData = dataOperation.GetDataItemListAsync("CPU").Result;
             Assert.AreEqual(5, cpuData.Count);//Clear all elements in the list
 
-            var viewData = dataOperation.GetDataItemListAsync("������").Result;
+            var viewData = dataOperation.GetDataItemListAsync("Visitor Volumn").Result;
             Assert.AreEqual(7, viewData.Count);//Clear all elements in the list
 
             //Simulate current time
