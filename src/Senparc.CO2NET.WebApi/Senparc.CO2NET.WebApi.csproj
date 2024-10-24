@@ -1,28 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-		<PropertyGroup>
-				<TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
-				<Version>1.7.0</Version>
-				<LangVersion>latest</LangVersion>
-				<AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
-				<RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
-				<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-				<Description>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
+    <Version>2.0.0-beta1</Version>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
+    <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+    <Description>
 			Senparc.CO2NET.WebApi Application Performance Management
 		</Description>
-				<Copyright>Senparc Copyright © 2004~2023</Copyright>
-				<PackageTags>WebApi,.NET Core,.NET Framework,Public,Base Library,CO2NET,盛派</PackageTags>
-				<Authors>Senparc</Authors>
-				<Owners>Senparc</Owners>
-				<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-				<ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
-				<Title>Senparc.CO2NET.WebApi.dll</Title>
-				<Summary>Senparc.CO2NET.WebApi</Summary>
-				<PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
-				<PackageIcon>icon.jpg</PackageIcon>
-				<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
-				<Configurations>Debug;Release;Test</Configurations>
-				<PackageReleaseNotes>
+    <Copyright>Senparc Copyright © 2004~2023</Copyright>
+    <PackageTags>WebApi,.NET Core,.NET Framework,Public,Base Library,CO2NET,盛派</PackageTags>
+    <Authors>Senparc</Authors>
+    <Owners>Senparc</Owners>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
+    <Title>Senparc.CO2NET.WebApi.dll</Title>
+    <Summary>Senparc.CO2NET.WebApi</Summary>
+    <PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
+    <PackageIcon>icon.jpg</PackageIcon>
+    <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
+    <Configurations>Debug;Release;Test</Configurations>
+    <PackageReleaseNotes>
 			v0.1 Genesis
 			v0.2 Completed WebApiEngine first generation core version
 			v0.2.3 Completed WebApiEngine second generation core version, fully supports dynamic API integration and corresponding XML generation
@@ -44,36 +43,36 @@
 			[2024-09-11] v1.6.3 Updated Cache, removed InsertToCache(), added Count(prefix)
 			[2024-10-07] v1.7.0 Stopped support for .NET 6.0
 </PackageReleaseNotes>
-		</PropertyGroup>
-		<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-				<OutputPath>..\BuildOutPut</OutputPath>
-				<DefineConstants>TRACE;RELEASE</DefineConstants>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-				<OutputPath>..\BuildOutPut</OutputPath>
-				<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-				<DocumentationFile>..\BuildOutPut\Senparc.CO2NET.WebApi.xml</DocumentationFile>
-				<Optimize>true</Optimize>
-				<DebugType>pdbonly</DebugType>
-				<ErrorReport>prompt</ErrorReport>
-				<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-		</PropertyGroup>
-		<ItemGroup>
-				<None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
-		</ItemGroup>
-		<ItemGroup>
-				<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
-				<!--<PackageReference Include="System.Reflection.Emit" Version="4.7.0" />-->
-		</ItemGroup>
-		<ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.1'">
-				<PackageReference Include="Microsoft.AspNetCore.App" />
-				<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="8.0.0" />
-		</ItemGroup>
-		<ItemGroup>
-				<ProjectReference Include="..\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
-				<ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
-		</ItemGroup>
-		<ItemGroup>
-				<PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1" />
-		</ItemGroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\BuildOutPut</OutputPath>
+    <DefineConstants>TRACE;RELEASE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\BuildOutPut</OutputPath>
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.WebApi.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
+    <!--<PackageReference Include="System.Reflection.Emit" Version="4.7.0" />-->
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.1'">
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
+    <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+  </ItemGroup>
 </Project>
