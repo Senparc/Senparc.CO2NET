@@ -1,27 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
-    <Version>5.0.0-beta1</Version>
-    <AssemblyName>Senparc.CO2NET.Cache.Redis</AssemblyName>
-    <RootNamespace>Senparc.CO2NET.Cache.Redis</RootNamespace>
-    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-    <Description>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
+		<Version>5.0.1-beta1</Version>
+		<AssemblyName>Senparc.CO2NET.Cache.Redis</AssemblyName>
+		<RootNamespace>Senparc.CO2NET.Cache.Redis</RootNamespace>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<Description>
       WeChat Public Account - Redis Module
 
       Senparc.Weixin SDK Open Source Project:
       https://github.com/JeffreySu/WeiXinMPSDK
     </Description>
-    <Copyright>Senparc Copyright © 2004~2024</Copyright>
-    <PackageTags>Senparc.CO2NET,Cache,Redis,CO2NET,盛派</PackageTags>
-    <Authors>Jeffrey Su</Authors>
-    <Owners>Senparc</Owners>
-    <PackageLicenseUrl>https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md</PackageLicenseUrl>
-    <ProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</ProjectUrl>
-    <Title>Senparc.CO2NET.Cache.Redis.dll</Title>
-    <Summary>Redis Cache（StackExchange） for CO2NET C#</Summary>
-    <PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
-    <PackageIcon>icon.jpg</PackageIcon>
-    <PackageReleaseNotes>
+		<Copyright>Senparc Copyright © 2004~2024</Copyright>
+		<PackageTags>Senparc.CO2NET,Cache,Redis,CO2NET,盛派</PackageTags>
+		<Authors>Jeffrey Su</Authors>
+		<Owners>Senparc</Owners>
+		<PackageLicenseUrl>https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md</PackageLicenseUrl>
+		<ProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</ProjectUrl>
+		<Title>Senparc.CO2NET.Cache.Redis.dll</Title>
+		<Summary>Redis Cache（StackExchange） for CO2NET C#</Summary>
+		<PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
+		<PackageIcon>icon.jpg</PackageIcon>
+		<PackageReleaseNotes>
 		v0.1.0
 		Provide distributed cache support
 		Due to a bug in the StackExchange.Redis library, the .NET 4.0 version is temporarily not provided
@@ -104,61 +104,62 @@
 		v4.1.3 Add pure string check to RedisObjectCacheStrategy and RedisHashSetObjectCacheStrategy.Get() methods
 		v4.2.5 Fix bug where GetAllByPrefixAsync(key) method would automatically retrieve all keys
 
-				[2024-09-11] v4.2.6 Update Cache, remove InsertToCache(), add Count(prefix)
+		[2024-09-11] v4.2.6 Update Cache, remove InsertToCache(), add Count(prefix)
+			[2024-10-24] v5.0.1-beta1 fix: GetCountAsync(string prefix) #306 Thanks to @rendyu
 </PackageReleaseNotes>
-    <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
-    <Configurations>Debug;Release;Test</Configurations>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>..\BuildOutPut</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\BuildOutPut</OutputPath>
-    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.Cache.Redis.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
-    <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <OutputPath>..\BuildOutPut\</OutputPath>
-    <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="packages\**" />
-    <Compile Remove="ServiceStack.Redis\**" />
-    <EmbeddedResource Remove="packages\**" />
-    <EmbeddedResource Remove="ServiceStack.Redis\**" />
-    <None Remove="packages\**" />
-    <None Remove="ServiceStack.Redis\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <!--<PackageReference Include="Senparc.CO2NET.Cache.Redis.RedLock" Version="0.1.0" />-->
-    <PackageReference Include="BinaryFormatter" Version="2.1.4" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="StackExchange.Redis" Version="2.7.4" />
-  </ItemGroup>
-  <!--<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
+		<Configurations>Debug;Release;Test</Configurations>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<OutputPath>..\BuildOutPut</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+		<OutputPath>..\..\BuildOutPut</OutputPath>
+		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+		<DocumentationFile>..\BuildOutPut\Senparc.CO2NET.Cache.Redis.XML</DocumentationFile>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<ErrorReport>prompt</ErrorReport>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
+		<OutputPath>..\BuildOutPut\</OutputPath>
+		<DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+		<OutputPath>..\BuildOutPut\</OutputPath>
+		<DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.Cache.Redis.xml</DocumentationFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="packages\**" />
+		<Compile Remove="ServiceStack.Redis\**" />
+		<EmbeddedResource Remove="packages\**" />
+		<EmbeddedResource Remove="ServiceStack.Redis\**" />
+		<None Remove="packages\**" />
+		<None Remove="ServiceStack.Redis\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<!--<PackageReference Include="Senparc.CO2NET.Cache.Redis.RedLock" Version="0.1.0" />-->
+		<PackageReference Include="BinaryFormatter" Version="2.1.4" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="StackExchange.Redis" Version="2.7.4" />
+	</ItemGroup>
+	<!--<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <PackageReference Include="protobuf-net" Version="2.1.0" />
   </ItemGroup>-->
-  <ItemGroup>
-    <Compile Remove="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Senparc.CO2NET.Cache.Redis.RedLock\redlock-cs\src\Senparc.CO2NET.Cache.Redis.RedLock.csproj" />
-    <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Properties\AssemblyInfo.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Properties\" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Senparc.CO2NET.Cache.Redis.RedLock\redlock-cs\src\Senparc.CO2NET.Cache.Redis.RedLock.csproj" />
+		<ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+	</ItemGroup>
 </Project>
