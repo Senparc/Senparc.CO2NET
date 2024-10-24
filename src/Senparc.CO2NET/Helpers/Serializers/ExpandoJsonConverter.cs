@@ -21,11 +21,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：ExpandoJsonConverter.cs
-    文件功能描述：Expando-JSON字符串转换
+    FileName：ExpandoJsonConverter.cs
+    File Function Description：Expando-JSON string conversion
     
     
-    创建标识：Senparc - 20151002
+    Creation Identifier：Senparc - 20151002
     
 ----------------------------------------------------------------*/
 

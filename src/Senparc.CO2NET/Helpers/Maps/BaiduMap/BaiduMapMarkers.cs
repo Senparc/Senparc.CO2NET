@@ -21,20 +21,20 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：BaiduMapMarkers.cs
-    文件功能描述：百度地图
+    FileName：BaiduMapMarkers.cs
+    File Function Description：Baidu Map
     
     
-    创建标识：Senparc - 20150211
+    Creation Identifier：Senparc - 20150211
     
-    修改标识：Senparc - 20150303
-    修改描述：整理接口
+    Modification Identifier：Senparc - 20150303
+    Modification Description：Refactor interface
 ----------------------------------------------------------------*/
 
 namespace Senparc.CO2NET.Helpers.BaiduMap
 {
     /// <summary>
-    /// 标记大小
+    /// Marker size
     /// </summary>
     public enum BaiduMarkerSize
     {
@@ -43,16 +43,16 @@ namespace Senparc.CO2NET.Helpers.BaiduMap
     }
 
     /// <summary>
-    /// 百度地图标记
+    /// Baidu Map Marker
     /// </summary>
     public class BaiduMarkers
     {
         /// <summary>
-        /// （可选）有大中小三个值，分别为s、m、l。
+        /// (Optional) Three values: s, m, l.
         /// </summary>
         public BaiduMarkerSize Size { get; set; }
         /// <summary>
-        /// （可选）Color = [0x000000, 0xffffff]或使用css定义的颜色表。
+        /// (Optional) Color = [0x000000, 0xffffff] or use CSS defined color names.
         /// black 0x000000 
         /// silver 0xC0C0C0 
         /// gray 0x808080 
@@ -72,21 +72,21 @@ namespace Senparc.CO2NET.Helpers.BaiduMap
         /// </summary>
         public string Color { get; set; }
         /// <summary>
-        /// （可选）指定集合 {A-Z, 0-9} 中的一个大写字母数字字符。不指定时显示A。
+        /// (Optional) Specify a single uppercase alphanumeric character from the set {A-Z, 0-9}. Defaults to A if not specified.
         /// </summary>
         public string Label { get; set; }
 
         /// <summary>
-        /// 自定义icon的地址，图片格式目前仅支持png32的。设置自定义图标标注时，忽略Size、Color、Label三个属性，只设置该属性且该属性前增加-1，如markerStyles=-1, http://api.map.baidu.com/images/marker_red.png，图标大小需小于5k，超过该值会导致加载不上图标的情况发生。
+        /// Custom icon URL, currently only supports png32 format. When setting a custom icon, ignore Size, Color, and Label properties, and only set this property with a preceding -1, e.g., markerStyles=-1, http://api.map.baidu.com/images/marker_red.png. Icon size must be less than 5k, otherwise it may fail to load.
         /// </summary>
         public string url { get; set; }
 
         /// <summary>
-        /// 经度longitude（对应GoogleMap的X）
+        /// Longitude (corresponds to X in GoogleMap)
         /// </summary>
         public double Longitude { get; set; }
         /// <summary>
-        /// 纬度latitude（对应GoogleMap的Y）
+        /// Latitude (corresponds to Y in GoogleMap)
         /// </summary>
         public double Latitude { get; set; }
     }

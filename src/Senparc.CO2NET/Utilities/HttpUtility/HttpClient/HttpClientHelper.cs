@@ -22,17 +22,17 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：HttpClientHelper.cs
-    文件功能描述：HttpClient 相关帮助类
+    FileName：HttpClientHelper.cs
+    File Function Description：HttpClient related helper class
 
 
-    创建标识：Senparc - 20190429
+    Creation Identifier：Senparc - 20190429
 
-    修改标识：Senparc - 20190521
-    修改描述：v0.7.2.1 解决 GetHttpClientHandler() 方法中 cookieContainer 为 null 可能发生的异常
+    Modification Identifier：Senparc - 20190521
+    Modification Description：v0.7.2.1 Fixed potential exception when cookieContainer is null in GetHttpClientHandler() method
 
-    修改标识：Senparc - 20190911
-    修改描述：v0.8.10 优化 SetResponseCookieContainer() 方法，防止 null 异常（理论上不会出现）
+    Modification Identifier：Senparc - 20190911
+    Modification Description：v0.8.10 Optimized SetResponseCookieContainer() method to prevent null exception (theoretically should not occur)
 
 ----------------------------------------------------------------*/
 
@@ -48,23 +48,23 @@ using System.Net.Http;
 namespace Senparc.CO2NET.HttpUtility
 {
     /// <summary>
-    /// HttpClient 相关帮助类
+    /// HttpClient related helper class
     /// </summary>
     public static class HttpClientHelper
     {
         internal const string DEFAULT_CONTENT_TYPE = "text/xml";//"application/octet-stream"
 
         /// <summary>
-        /// 获取 Content
+        /// Get Content
         /// </summary>
-        /// <param name="formData">提交表单字段</param>
+        /// <param name="formData">Form submission fields</param>
         /// <returns></returns>
         internal static string GetContentType(Dictionary<string, string> formData)
         {
             string contentType = DEFAULT_CONTENT_TYPE;
             if (formData != null && formData.Count > 0)
             {
-                //contentType = "application/x-www-form-urlencoded";//如果需要提交表单，则使用特定的ContentType
+                //contentType = "application/x-www-form-urlencoded";//Use specific ContentType if form submission is needed
             }
             return contentType;
         }
@@ -73,7 +73,7 @@ namespace Senparc.CO2NET.HttpUtility
 #if !NET462
 
         /// <summary>
-        /// 获取 HttpClientHandler 对象
+        /// Get HttpClientHandler object
         /// </summary>
         /// <param name="cookieContainer"></param>
         /// <param name="webProxy"></param>
@@ -86,7 +86,7 @@ namespace Senparc.CO2NET.HttpUtility
                 UseProxy = webProxy != null,
                 Proxy = webProxy,
                 UseCookies = cookieContainer != null,
-                //CookieContainer = cookieContainer,//如果为null，赋值的时候会出现异常
+                //CookieContainer = cookieContainer,//If null, an exception will occur when assigning
                 AutomaticDecompression = decompressionMethods
             };
 
@@ -98,7 +98,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 从 Response 中设置 Cookie 到 CookieContainer
+        /// Set Cookie from Response to CookieContainer
         /// </summary>
         /// <param name="cookieContainer"></param>
         /// <param name="response"></param>
@@ -109,7 +109,7 @@ namespace Senparc.CO2NET.HttpUtility
                 return;
             }
 
-            //收集Cookie
+            //Collect Cookie
             try
             {
                 IEnumerable<string> setCookieHeaders = null;
@@ -130,7 +130,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
             catch (Exception ex)
             {
-                //理论上这里不应该抛出异常
+                //Theoretically, no exception should be thrown here
                 _ = new HttpException($"SetResponseCookieContainer 过程失败！{ex.Message}", ex);
             }
 

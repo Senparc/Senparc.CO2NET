@@ -21,18 +21,18 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：StreamUtility.cs
-    文件功能描述：流处理公共类
+    FileName：StreamUtility.cs
+    File Function Description：Stream processing utility class
     
     
-    创建标识：Senparc - 20150419
+    Creation Identifier：Senparc - 20150419
     
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/Utilities/StreamUtility/StreamUtility.cs  ----
 
-    修改标识：Senparc - 20180602
-    修改描述：v0.1.0 移植 StreamUtility
+    Modification Identifier：Senparc - 20180602
+    Modification Description：v0.1.0 Ported StreamUtility
 
 ----------------------------------------------------------------*/
 
@@ -45,14 +45,14 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Utilities
 {
     /// <summary>
-    /// 流工具类
+    /// Stream utility class
     /// </summary>
     public static class StreamUtility
     {
         #region 同步方法
 
         /// <summary>
-        /// 获取Stream的Base64字符串
+        /// Get Base64 string of Stream
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
@@ -69,10 +69,10 @@ namespace Senparc.CO2NET.Utilities
         }
 
         /// <summary>
-        /// 将base64String反序列化到流，或保存成文件
+        /// Deserialize base64String to stream, or save as file
         /// </summary>
         /// <param name="base64String"></param>
-        /// <param name="savePath">如果为null则不保存</param>
+        /// <param name="savePath">If null, do not save</param>
         /// <returns></returns>
         public static Stream GetStreamFromBase64String(string base64String, string savePath)
         {
@@ -91,7 +91,7 @@ namespace Senparc.CO2NET.Utilities
         }
 
         /// <summary>
-        /// 将memoryStream保存到文件
+        /// Save memoryStream to file
         /// </summary>
         /// <param name="memoryStream"></param>
         /// <param name="savePath"></param>
@@ -109,7 +109,7 @@ namespace Senparc.CO2NET.Utilities
         #region 异步方法
 
         /// <summary>
-        /// 【异步方法】获取Stream的Base64字符串
+        /// [Async method] Get Base64 string of Stream
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
@@ -126,10 +126,10 @@ namespace Senparc.CO2NET.Utilities
         }
 
         /// <summary>
-        /// 【异步方法】将base64String反序列化到流，或保存成文件
+        /// [Async method] Deserialize base64String to stream, or save as file
         /// </summary>
         /// <param name="base64String"></param>
-        /// <param name="savePath">如果为null则不保存</param>
+        /// <param name="savePath">If null, do not save</param>
         /// <returns></returns>
         public static async Task<Stream> GetStreamFromBase64StringAsync(string base64String, string savePath)
         {
@@ -148,7 +148,7 @@ namespace Senparc.CO2NET.Utilities
         }
 
         /// <summary>
-        /// 【异步方法】将memoryStream保存到文件
+        /// [Async method] Save memoryStream to file
         /// </summary>
         /// <param name="memoryStream"></param>
         /// <param name="savePath"></param>

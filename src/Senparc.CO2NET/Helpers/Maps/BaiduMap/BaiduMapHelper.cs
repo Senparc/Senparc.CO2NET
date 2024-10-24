@@ -21,18 +21,18 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：BaiduMapHelper.cs
-    文件功能描述：百度地图静态图片API
+    FileName：BaiduMapHelper.cs
+    File Function Description：Baidu Map Static Image API
     
     
-    创建标识：Senparc - 20150211
+    Creation Identifier：Senparc - 20150211
     
-    修改标识：Senparc - 20150303
-    修改描述：整理接口
+    Modification Identifier：Senparc - 20150303
+    Modification Description：Refactor interface
 ----------------------------------------------------------------*/
 
 /*
-     文档：http://api.map.baidu.com/lbsapi/cloud/staticimg.htm
+     Documentation：http://api.map.baidu.com/lbsapi/cloud/staticimg.htm
  */
 
 using Senparc.CO2NET.Helpers.BaiduMap;
@@ -43,23 +43,23 @@ using System.Text;
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// 百度地图静态图片API，文档：http://api.map.baidu.com/lbsapi/cloud/staticimg.htm
+    /// Baidu Map Static Image API, Documentation：http://api.map.baidu.com/lbsapi/cloud/staticimg.htm
     /// </summary>
     public static class BaiduMapHelper
     {
         /// <summary>
-        /// 获取百度地图静态图片
+        /// Get Baidu Map Static Image
         /// </summary>
-        /// <param name="lng">中心点经度</param>
-        /// <param name="lat">中心点维度</param>
-        /// <param name="scale">返回图片大小会根据此标志调整。取值范围为1或2：
-        ///1表示返回的图片大小为size= width * height;
-        ///2表示返回图片为(width*2)*(height *2)，且zoom加1
-        ///注：如果zoom为最大级别，则返回图片为（width*2）*（height*2），zoom不变。</param>
-        /// <param name="zoom">地图级别。高清图范围[3, 18]；低清图范围[3,19]</param>
-        /// <param name="markersList">标记列表，如果为null则不输出标记</param>
-        /// <param name="width">图片宽度。取值范围：(0, 1024]。</param>
-        /// <param name="height">图片高度。取值范围：(0, 1024]。</param>
+        /// <param name="lng">Center longitude</param>
+        /// <param name="lat">Center latitude</param>
+        /// <param name="scale">The size of the returned image will be adjusted according to this flag. The value range is 1 or 2:
+        ///1 means the returned image size is size= width * height;
+        ///2 means the returned image is (width*2)*(height *2), and zoom is increased by 1
+        ///Note: If zoom is at the maximum level, the returned image is (width*2)*(height*2), and zoom remains unchanged.</param>
+        /// <param name="zoom">Map level. HD map range [3, 18]; SD map range [3,19]</param>
+        /// <param name="markersList">Marker list, if null, no markers will be output</param>
+        /// <param name="width">Image width. Value range: (0, 1024].</param>
+        /// <param name="height">Image height. Value range: (0, 1024].</param>
         /// <returns></returns>
         public static string GetBaiduStaticMap(double lng, double lat, int scale, int zoom, IList<BaiduMarkers> markersList, int width = 400, int height = 300)
         {

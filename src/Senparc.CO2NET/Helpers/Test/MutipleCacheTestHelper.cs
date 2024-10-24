@@ -21,11 +21,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：MutipleCacheTestHelper.cs
-    文件功能描述：多种缓存测试帮助类
+    FileName：MutipleCacheTestHelper.cs
+    File Function Description：Multiple cache test helper class
     
     
-    创建标识：Senparc - 20170702
+    Creation Identifier：Senparc - 20170702
 
 ----------------------------------------------------------------*/
 
@@ -40,12 +40,12 @@ using Senparc.CO2NET.Cache;
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// 多种缓存测试帮助类
+    /// Multiple cache test helper class
     /// </summary>
     public class MutipleCacheTestHelper
     {
         /// <summary>
-        /// 测试多种缓存
+        /// Test multiple caches
         /// </summary>
         public static void RunMutipleCache(Action action)
         {
@@ -53,7 +53,7 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 遍历使用多种缓存测试同一个过程（委托），确保不同的缓存策略行为一致
+        /// Iterate using multiple caches to test the same process (delegate) to ensure consistent behavior across different caching strategies
         /// </summary>
         public static void RunMutipleCache(Action action, params CacheType[] cacheTypes)
         {
@@ -73,7 +73,7 @@ namespace Senparc.CO2NET.Helpers
 
 
                 var cacheInstance = ReflectionHelper.GetStaticMember(assabmleName, nameSpace,
-                    className, "Instance"/*获取单例的属性*/) as IBaseObjectCacheStrategy;
+                    className, "Instance"/*Get singleton property*/) as IBaseObjectCacheStrategy;
 
                 cacheStrategies.Add(cacheInstance);
 
@@ -93,17 +93,17 @@ namespace Senparc.CO2NET.Helpers
 
             foreach (var objectCacheStrategy in cacheStrategies)
             {
-                //原始缓存策越
+                //Original cache strategy
                 var originalCache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
 
                 Console.WriteLine("== 使用缓存策略：" + objectCacheStrategy.GetType().Name + " 开始 == ");
 
-                //使用当前缓存策略
+                //Use current cache strategy
                 CacheStrategyFactory.RegisterObjectCacheStrategy(() => objectCacheStrategy);
 
                 try
                 {
-                    action();//执行
+                    action();//Execute
                 }
                 catch (Exception e)
                 {
@@ -112,7 +112,7 @@ namespace Senparc.CO2NET.Helpers
 
                 Console.WriteLine("== 使用缓存策略：" + objectCacheStrategy.GetType().Name + " 结束 == \r\n");
 
-                //还原缓存策略
+                //Restore cache strategy
                 CacheStrategyFactory.RegisterObjectCacheStrategy(() => originalCache);
             }
         }

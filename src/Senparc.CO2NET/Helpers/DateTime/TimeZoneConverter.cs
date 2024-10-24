@@ -21,11 +21,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：TimeZoneConverter.cs
-    文件功能描述：时区转换工具类
+    FileName：TimeZoneConverter.cs
+    File Function Description：Time zone conversion utility class
     
     
-    创建标识：Senparc - 20240823
+    Creation Identifier：Senparc - 20240823
 
 ----------------------------------------------------------------*/
 
@@ -39,7 +39,7 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// 时区转换工具类
+    /// Time zone conversion utility class
     /// </summary>
     public static class TimeZoneConverter
     {
@@ -186,7 +186,7 @@ namespace Senparc.CO2NET.Helpers
     };
 
         /// <summary>
-        /// 把 Windows 时区转换为 IANA 时区
+        /// Convert Windows time zone to IANA time zone
         /// </summary>
         /// <param name="windowsZoneId"></param>
         /// <returns></returns>

@@ -21,40 +21,40 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：DateTimeHelper.cs
-    文件功能描述：时间处理
+    FileName：DateTimeHelper.cs
+    File Function Description：Time processing
     
     
-    创建标识：Senparc - 20150211
+    Creation Identifier：Senparc - 20150211
     
-    修改标识：Senparc - 20150303
-    修改描述：整理接口
+    Modification Identifier：Senparc - 20150303
+    Modification Description：Organize interface
 
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/Helpers/DateTimeHelper.cs  ----
 
-    修改标识：Senparc - 20180601
-    修改描述：v0.1.0 移植 DateTimeHelper
+    Modification Identifier：Senparc - 20180601
+    Modification Description：v0.1.0 Port DateTimeHelper
  
-    修改标识：Senparc - 20180802
-    修改描述：v0.2.6 增加 GetUnixDateTime() 方法，标记过期 GetWeixinDateTime() 方法
+    Modification Identifier：Senparc - 20180802
+    Modification Description：v0.2.6 Add GetUnixDateTime() method, mark GetWeixinDateTime() method as obsolete
     
-    修改标识：Senparc - 20181226
-    修改描述：1、v0.4.3 修改 DateTime 为 DateTimeOffset
-              2、添加 支持 DateTimeOffset 类型参数的 GetUnixDateTime() 重写方法
+    Modification Identifier：Senparc - 20181226
+    Modification Description：1. v0.4.3 Change DateTime to DateTimeOffset
+              2. Add GetUnixDateTime() overload method supporting DateTimeOffset type parameter
 
-    修改标识：Senparc - 20181227
-    修改描述：添加 GetDateTimeOffsetFromXml() 重写方法
+    Modification Identifier：Senparc - 20181227
+    Modification Description：Add GetDateTimeOffsetFromXml() overload method
 
-    修改标识：Senparc - 20230326
-    修改描述：v2.0.5 添加 WaitingFor() 方法
+    Modification Identifier：Senparc - 20230326
+    Modification Description：v2.0.5 Add WaitingFor() method
 
-    修改标识：Senparc - 20240728
-    修改描述：v2.4.3 优化 GetDateTimeOffsetFromXml() 方法，增加 timezoneId 参数
+    Modification Identifier：Senparc - 20240728
+    Modification Description：v2.4.3 Optimize GetDateTimeOffsetFromXml() method, add timezoneId parameter
 
-    修改标识：Senparc - 20240824
-    修改描述：v2.5.1 还原 GetDateTimeOffsetFromXml() 方法 #297 感谢 @zhaoyangguang
+    Modification Identifier：Senparc - 20240824
+    Modification Description：v2.5.1 Restore GetDateTimeOffsetFromXml() method #297 Thanks to @zhaoyangguang
 
 ----------------------------------------------------------------*/
 
@@ -66,19 +66,19 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// 微信日期处理帮助类
+    /// WeChat date processing helper class
     /// </summary>
     public class DateTimeHelper
     {
         /// <summary>
-        /// Unix起始时间
+        /// Unix start time
         /// </summary>
         public readonly static DateTimeOffset BaseTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
         /// <summary>
-        /// 转换微信DateTime时间到C#时间
+        /// Convert WeChat DateTime to C# DateTime
         /// </summary>
-        /// <param name="dateTimeFromXml">微信DateTime</param>
+        /// <param name="dateTimeFromXml">WeChat DateTime</param>
         /// <returns></returns>
         public static DateTime GetDateTimeFromXml(long dateTimeFromXml)
         {
@@ -86,9 +86,9 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 转换微信DateTime时间到C#时间
+        /// Convert WeChat DateTime to C# DateTime
         /// </summary>
-        /// <param name="dateTimeFromXml">微信DateTime</param>
+        /// <param name="dateTimeFromXml">WeChat DateTime</param>
         /// <returns></returns>
         public static DateTime GetDateTimeFromXml(string dateTimeFromXml)
         {
@@ -96,9 +96,9 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 转换微信DateTimeOffset时间到C#时间
+        /// Convert WeChat DateTimeOffset to C# DateTime
         /// </summary>
-        /// <param name="dateTimeFromXml">微信DateTime</param>
+        /// <param name="dateTimeFromXml">WeChat DateTime</param>
         /// <returns></returns>
         public static DateTimeOffset GetDateTimeOffsetFromXml(long dateTimeFromXml)
         {
@@ -109,9 +109,9 @@ namespace Senparc.CO2NET.Helpers
 
 
         /// <summary>
-        /// 转换微信DateTimeOffset时间到C#时间
+        /// Convert WeChat DateTimeOffset to C# DateTime
         /// </summary>
-        /// <param name="dateTimeFromXml">微信DateTime</param>
+        /// <param name="dateTimeFromXml">WeChat DateTime</param>
         /// <returns></returns>
         public static DateTimeOffset GetDateTimeOffsetFromXml(string dateTimeFromXml)
         {
@@ -119,9 +119,9 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 获取微信DateTime（UNIX时间戳）
+        /// Get WeChat DateTime (UNIX timestamp)
         /// </summary>
-        /// <param name="dateTime">时间</param>
+        /// <param name="dateTime">Time</param>
         /// <returns></returns>
         [Obsolete("请使用 GetUnixDateTime(dateTime) 方法")]
         public static long GetWeixinDateTime(DateTime dateTime)
@@ -130,7 +130,7 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 获取Unix时间戳
+        /// Get Unix timestamp
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
@@ -140,7 +140,7 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 获取Unix时间戳
+        /// Get Unix timestamp
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
@@ -150,11 +150,11 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 自动等待
+        /// Auto wait
         /// </summary>
-        /// <param name="waitingTime">总共等待时间</param>
-        /// <param name="waitingInterval">每次等待间隔</param>
-        /// <param name="work">每次等待之前执行的方法（可为空）</param>
+        /// <param name="waitingTime">Total waiting time</param>
+        /// <param name="waitingInterval">Interval between each wait</param>
+        /// <param name="work">Method to execute before each wait (can be null)</param>
         /// <returns></returns>
         public static async Task WaitingFor(TimeSpan waitingTime, TimeSpan waitingInterval, Action work = null)
         {

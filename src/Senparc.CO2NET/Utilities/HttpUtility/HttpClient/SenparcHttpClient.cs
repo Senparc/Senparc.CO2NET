@@ -21,20 +21,20 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：SenparcHttpClient.cs
-    文件功能描述：SenparcHttpClient，用于提供 HttpClientFactory 的自定义类
+    FileName：SenparcHttpClient.cs
+    File Function Description：SenparcHttpClient, used to provide custom class for HttpClientFactory
 
 
-    创建标识：Senparc - 20190429
+    Creation Identifier：Senparc - 20190429
 
-    修改标识：Senparc - 20190521
-    修改描述：v0.7.3 .NET Core 提供多证书注册功能
+    Modification Identifier：Senparc - 20190521
+    Modification Description：v0.7.3 .NET Core provides multi-certificate registration function
 
-    修改标识：Senparc - 20200220
-    修改描述：v1.1.100 重构 SenparcDI
+    Modification Identifier：Senparc - 20200220
+    Modification Description：v1.1.100 refactored SenparcDI
 
-    修改标识：Senparc - 20221115
-    修改描述：v2.1.3 针对 .NET 7.0 处理对 Cookie 的特殊判断
+    Modification Identifier：Senparc - 20221115
+    Modification Description：v2.1.3 special handling for Cookie in .NET 7.0
 
 ----------------------------------------------------------------*/
 
@@ -53,17 +53,17 @@ using System.Text;
 namespace Senparc.CO2NET.HttpUtility
 {
     /// <summary>
-    /// SenparcHttpClient，用于提供 HttpClientFactory 的自定义类
+    /// SenparcHttpClient, used to provide custom class for HttpClientFactory
     /// </summary>
     public class SenparcHttpClient
     {
         /// <summary>
-        /// HttpClient 对象
+        /// HttpClient object
         /// </summary>
         public HttpClient Client { get; private set; }
 
         /// <summary>
-        /// 从 HttpClientFactory 的唯一名称中获取 HttpClient 对象，并加载到 SenparcHttpClient 中
+        /// Get HttpClient object from the unique name of HttpClientFactory and load it into SenparcHttpClient
         /// </summary>
         /// <param name="httpClientName"></param>
         /// <returns></returns>
@@ -80,7 +80,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// SenparcHttpClient 构造函数
+        /// SenparcHttpClient constructor
         /// </summary>
         /// <param name="httpClient"></param>
         public SenparcHttpClient(HttpClient httpClient)
@@ -103,7 +103,7 @@ namespace Senparc.CO2NET.HttpUtility
 
             var cookieHeader = cookieContainer.GetCookieHeader(uri);
 
-            // .NET 7 此处如果传入空字符串，会抛异常：
+            // .NET 7 will throw an exception if an empty string is passed here:
             // System.FormatException: The format of value '' is invalid.
             if (!cookieHeader.IsNullOrEmpty())
             {

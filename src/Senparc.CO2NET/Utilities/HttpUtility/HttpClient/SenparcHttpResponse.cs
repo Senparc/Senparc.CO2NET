@@ -21,16 +21,16 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：SenparcHttpResponse.cs
-    文件功能描述：统一封装HttpResonse请求，提供Http请求过程中的调试、跟踪等扩展能力
+    FileName：SenparcHttpResponse.cs
+    File Function Description：Unified encapsulation of HttpResonse requests, providing debugging, tracking, and other extended capabilities during the Http request process
 
 
-    创建标识：Senparc - 20171104
+    Creation Identifier：Senparc - 20171104
 
-    修改描述：统一封装HttpResonse请求
+    Modification Description：Unified encapsulation of HttpResonse requests
 
-    修改标识：Senparc - 20190429
-    修改描述：v0.7.0 优化 HttpClient，重构 RequestUtility（包括 Post 和 Get），引入 HttpClientFactory 机制
+    Modification Identifier：Senparc - 20190429
+    Modification Description：v0.7.0 Optimized HttpClient, refactored RequestUtility (including Post and Get), introduced HttpClientFactory mechanism
 
 ----------------------------------------------------------------*/
 
@@ -50,7 +50,7 @@ using System.Net.Http.Headers;
 namespace Senparc.CO2NET.HttpUtility
 {
     /// <summary>
-    /// 统一封装HttpResonse请求，提供Http请求过程中的调试、跟踪等扩展能力
+    /// Unified encapsulation of HttpResonse requests, providing debugging, tracking, and other extended capabilities during the Http request process
     /// </summary>
     public class SenparcHttpResponse
     {
@@ -71,7 +71,7 @@ namespace Senparc.CO2NET.HttpUtility
 #endif
 
 //        /// <summary>
-//        /// 是Ajax请求
+//        /// Is an Ajax request
 //        /// </summary>
 //        public bool IsAjax
 //        {

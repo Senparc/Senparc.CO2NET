@@ -21,33 +21,33 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：JsonSetting.cs
-    文件功能描述：JSON字符串定义
+    FileName：JsonSetting.cs
+    File Function Description：JSON string definition
     
     
-    创建标识：Senparc - 20150930
+    Creation Identifier：Senparc - 20150930
     
-    修改标识：Senparc - 20160722
-    修改描述：增加特性，对json格式的输出内容的控制，对枚举类型字符串输出、默认值不输出、例外属性等，如会员卡卡里面的CodeType
-             IDictionary中foreach中的内容的修改
+    Modification Identifier：Senparc - 20160722
+    Modification Description：Added features to control the output content of json format, such as outputting enum type strings, not outputting default values, and exception properties, such as CodeType in membership cards
+             Modified content in foreach in IDictionary
 
-    修改标识：Senparc - 20160722
-    修改描述：v4.11.5 修复WeixinJsonConventer.Serialize中的错误。感谢 @jiehanlin
+    Modification Identifier：Senparc - 20160722
+    Modification Description：v4.11.5 Fixed error in WeixinJsonConventer.Serialize. Thanks to @jiehanlin
     
-    修改标识：Senparc - 20180526
-    修改描述：v4.22.0-rc1 将 JsonSetting 继承 JsonSerializerSettings，使用 Newtonsoft.Json 进行序列化
+    Modification Identifier：Senparc - 20180526
+    Modification Description：v4.22.0-rc1 JsonSetting inherits JsonSerializerSettings, using Newtonsoft.Json for serialization
     
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/Helpers/Conventers/WeixinJsonConventer.cs.cs  ----
 
-    修改标识：Senparc - 20180602
-    修改描述：v0.1.0 1、移植 JsonSetting
-                     2、重命名 WeixinJsonContractResolver 为 JsonContractResolver
-                     3、重命名 WeiXinJsonSetting 为 JsonSettingWrap
+    Modification Identifier：Senparc - 20180602
+    Modification Description：v0.1.0 1. Ported JsonSetting
+                     2. Renamed WeixinJsonContractResolver to JsonContractResolver
+                     3. Renamed WeiXinJsonSetting to JsonSettingWrap
 
-    修改标识：Senparc - 20180721
-    修改描述：v0.2.1 优化序列化特性识别
+    Modification Identifier：Senparc - 20180721
+    Modification Description：v0.2.1 Optimized serialization feature recognition
 
 ----------------------------------------------------------------*/
 
@@ -67,20 +67,20 @@ using Newtonsoft.Json.Serialization;
 namespace Senparc.CO2NET.Helpers.Serializers
 {
     /// <summary>
-    /// JSON输出设置
+    /// JSON output settings
     /// </summary>
     public class JsonSetting : JsonSerializerSettings
     {
         /// <summary>
-        /// 是否忽略当前类型以及具有IJsonIgnoreNull接口，且为Null值的属性。如果为true，符合此条件的属性将不会出现在Json字符串中
+        /// Whether to ignore properties of the current type and those with the IJsonIgnoreNull interface that are null. If true, such properties will not appear in the Json string
         /// </summary>
         public bool IgnoreNulls { get; set; }
         /// <summary>
-        /// 需要特殊忽略null值的属性名称
+        /// Properties that need special null value ignoring
         /// </summary>
         public List<string> PropertiesToIgnoreNull { get; set; }
         /// <summary>
-        /// 指定类型（Class，非Interface）下的为null属性不生成到Json中
+        /// Null properties under the specified type (Class, not Interface) will not be generated in Json
         /// </summary>
         public List<Type> TypesToIgnoreNull { get; set; }
 
@@ -99,7 +99,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
 
         }
         /// <summary>
-        /// 例外属性，即不排除的属性值
+        /// Exception properties, i.e., properties that are not excluded
         /// </summary>
         public class ExcludedAttribute : Attribute
         {
@@ -107,7 +107,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
         }
 
         /// <summary>
-        /// 枚举类型显示字符串
+        /// Enum type displays as string
         /// </summary>
         public class EnumStringAttribute : Attribute
         {
@@ -116,11 +116,11 @@ namespace Senparc.CO2NET.Helpers.Serializers
 
         #endregion
         /// <summary>
-        /// JSON 输出设置 构造函数
+        /// JSON output settings constructor
         /// </summary>
-        /// <param name="ignoreNulls">是否忽略当前类型以及具有IJsonIgnoreNull接口，且为Null值的属性。如果为true，符合此条件的属性将不会出现在Json字符串中</param>
-        /// <param name="propertiesToIgnoreNull">需要特殊忽略null值的属性名称</param>
-        /// <param name="typesToIgnoreNull">指定类型（Class，非Interface）下的为null属性不生成到Json中</param>
+        /// <param name="ignoreNulls">Whether to ignore properties of the current type and those with the IJsonIgnoreNull interface that are null. If true, such properties will not appear in the Json string</param>
+        /// <param name="propertiesToIgnoreNull">Properties that need special null value ignoring</param>
+        /// <param name="typesToIgnoreNull">Null properties under the specified type (Class, not Interface) will not be generated in Json</param>
         public JsonSetting(bool ignoreNulls = false, List<string> propertiesToIgnoreNull = null, List<Type> typesToIgnoreNull = null)
         {
             IgnoreNulls = ignoreNulls;
@@ -132,7 +132,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
     //#if NET462
 
     //    /// <summary>
-    //    /// 微信 JSON 转换器
+    //    /// WeChat JSON converter
     //    /// </summary>
     //    public class WeixinJsonConventer : JavaScriptConverter
     //    {
@@ -177,7 +177,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
     //            foreach (var propertyInfo in properties)
     //            {
     //                //continue;
-    //                //排除的属性
+    //                //Excluded properties
     //                bool excludedProp = propertyInfo.IsDefined(typeof(JsonSetting.ExcludedAttribute), true);
     //                if (excludedProp)
     //                {
@@ -194,7 +194,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
     //                        }
 
 
-    //                        //当值匹配时需要忽略的属性
+    //                        //Properties to ignore when value matches
 
     //#if NET35 || NET40
     //                        JsonSetting.IgnoreValueAttribute attri = propertyInfo.GetCustomAttributes(typeof(JsonSetting.IgnoreValueAttribute), false).FirstOrDefault() as JsonSetting.IgnoreValueAttribute;
@@ -206,7 +206,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
     //                        JsonSetting.EnumStringAttribute enumStringAttri = propertyInfo.GetCustomAttributes(typeof(JsonSetting.EnumStringAttribute), false).FirstOrDefault() as JsonSetting.EnumStringAttribute;
     //                        if (enumStringAttri != null)
     //                        {
-    //                            //枚举类型显示字符串
+    //                            //Enum type displays as string
     //                            result.Add(propertyInfo.Name, propertyInfo.GetValue(obj, null).ToString());
     //                        }
     //                        else
@@ -223,7 +223,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
     //                        JsonSetting.EnumStringAttribute enumStringAttri = propertyInfo.GetCustomAttribute<JsonSetting.EnumStringAttribute>();
     //                        if (enumStringAttri != null)
     //                        {
-    //                            //枚举类型显示字符串
+    //                            //Enum type displays as string
     //                            result.Add(propertyInfo.Name, propertyInfo.GetValue(obj).ToString());
     //                        }
     //                        else
@@ -254,7 +254,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
         {
             if (jsonSetting != null)
             {
-                //如果为null则不进行特殊处理
+                //If null, no special handling
                 ContractResolver = new JsonContractResolver(jsonSetting.IgnoreNulls, jsonSetting.PropertiesToIgnoreNull, jsonSetting.TypesToIgnoreNull);
             }
             //else
@@ -264,11 +264,11 @@ namespace Senparc.CO2NET.Helpers.Serializers
         }
 
         /// <summary>
-        /// JSON 输出设置 构造函数  优先级： ignoreNulls &lt; propertiesToIgnoreNull &lt; typesToIgnoreNull
+        /// JSON output settings constructor Priority: ignoreNulls < propertiesToIgnoreNull < typesToIgnoreNull
         /// </summary>
-        /// <param name="ignoreNulls">是否忽略具有IJsonIgnoreNull接口，且为Null值的属性。如果为true，符合此条件的属性将不会出现在Json字符串中</param>
-        /// <param name="propertiesToIgnoreNull">需要特殊忽略null值的属性名称</param>
-        /// <param name="typesToIgnoreNull">指定类型（Class，非Interface）下的为null属性不生成到Json中</param>
+        /// <param name="ignoreNulls">Whether to ignore properties with the IJsonIgnoreNull interface that are null. If true, such properties will not appear in the Json string</param>
+        /// <param name="propertiesToIgnoreNull">Properties that need special null value ignoring</param>
+        /// <param name="typesToIgnoreNull">Null properties under the specified type (Class, not Interface) will not be generated in Json</param>
         public JsonSettingWrap(bool ignoreNulls = false, List<string> propertiesToIgnoreNull = null, List<Type> typesToIgnoreNull = null)
         {
             ContractResolver = new JsonContractResolver(ignoreNulls, propertiesToIgnoreNull, typesToIgnoreNull);
@@ -278,23 +278,23 @@ namespace Senparc.CO2NET.Helpers.Serializers
     public class JsonContractResolver : DefaultContractResolver
     {
         /// <summary>
-        /// 是否忽略当前类型以及具有IJsonIgnoreNull接口，且为Null值的属性。如果为true，符合此条件的属性将不会出现在Json字符串中
+        /// Whether to ignore properties of the current type and those with the IJsonIgnoreNull interface that are null. If true, such properties will not appear in the Json string
         /// </summary>
         bool IgnoreNulls;
         /// <summary>
-        /// 需要特殊忽略null值的属性名称
+        /// Properties that need special null value ignoring
         /// </summary>
         public List<string> PropertiesToIgnoreNull { get; set; }
         /// <summary>
-        /// 指定类型（Class，非Interface）下的为null属性不生成到Json中
+        /// Null properties under the specified type (Class, not Interface) will not be generated in Json
         /// </summary>
         public List<Type> TypesToIgnoreNull { get; set; }
         /// <summary>
-        /// JSON 输出设置 构造函数  优先级： ignoreNulls &lt; propertiesToIgnoreNull &lt; typesToIgnoreNull
+        /// JSON output settings constructor Priority: ignoreNulls < propertiesToIgnoreNull < typesToIgnoreNull
         /// </summary>
-        /// <param name="ignoreNulls">是否忽略当前类型以及具有IJsonIgnoreNull接口，且为Null值的属性。如果为true，符合此条件的属性将不会出现在Json字符串中</param>
-        /// <param name="propertiesToIgnoreNull">需要特殊忽略null值的属性名称</param>
-        /// <param name="typesToIgnoreNull">指定类型（Class，非Interface）下的为null属性不生成到Json中</param>
+        /// <param name="ignoreNulls">Whether to ignore properties of the current type and those with the IJsonIgnoreNull interface that are null. If true, such properties will not appear in the Json string</param>
+        /// <param name="propertiesToIgnoreNull">Properties that need special null value ignoring</param>
+        /// <param name="typesToIgnoreNull">Null properties under the specified type (Class, not Interface) will not be generated in Json</param>
         public JsonContractResolver(bool ignoreNulls = false, List<string> propertiesToIgnoreNull = null, List<Type> typesToIgnoreNull = null)
         {
             IgnoreNulls = ignoreNulls;
@@ -304,7 +304,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
 
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            //TypesToIgnoreNull指定类型（Class，非Interface）下的为null属性不生成到Json中
+            //TypesToIgnoreNull null properties under the specified type (Class, not Interface) will not be generated in Json
             if (TypesToIgnoreNull.Contains(type))
             {
                 type.IsDefined(typeof(JsonSetting.IgnoreNullAttribute), false);
@@ -317,7 +317,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
             var property = base.CreateProperty(member, memberSerialization);
 
 #if NET462
-            //IgnoreNull标注的字段根据IgnoreNulls设定是否序列化
+            //IgnoreNull fields marked with IgnoreNulls are serialized based on the IgnoreNulls setting
             var ignoreNull = member.GetCustomAttribute<JsonSetting.IgnoreNullAttribute>();
             if (ignoreNull != null || IgnoreNulls)
             {
@@ -328,13 +328,13 @@ namespace Senparc.CO2NET.Helpers.Serializers
                 property.NullValueHandling = NullValueHandling.Include;
             }
 
-            //propertiesToIgnoreNull指定字段为Null时不序列化
+            //propertiesToIgnoreNull fields specified as null are not serialized
             if (PropertiesToIgnoreNull.Contains(member.Name))
             {
                 property.NullValueHandling = NullValueHandling.Ignore;
             }
 
-            ////符合IgnoreValue标注值的字段不序列化
+            ////Fields that match IgnoreValue marked values are not serialized
             //var ignoreValue = member.GetCustomAttribute<JsonSetting.IgnoreValueAttribute>();
             //if (ignoreValue != null)
             //{
@@ -348,7 +348,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
             //    };
             //}
 
-            //枚举序列化
+            //Enum serialization
             var enumString = member.GetCustomAttribute<JsonSetting.EnumStringAttribute>();
             if (enumString != null)
             {
@@ -358,7 +358,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
 #else
             var customAttributes = member.GetCustomAttributes(false);
             var ignoreNullAttribute = typeof(JsonSetting.IgnoreNullAttribute);
-            //IgnoreNull标注的字段根据IgnoreNulls设定是否序列化
+            //IgnoreNull fields marked with IgnoreNulls are serialized based on the IgnoreNulls setting
             if (IgnoreNulls || customAttributes.Count(o => o.GetType() == ignoreNullAttribute) == 1)
             {
                 property.NullValueHandling = NullValueHandling.Ignore;
@@ -368,19 +368,19 @@ namespace Senparc.CO2NET.Helpers.Serializers
                 property.NullValueHandling = NullValueHandling.Include;
             }
 
-            //TODO：一旦执行了 IgnoreNulls，有一些特殊的判断就可以不需要了
+            //TODO: Once IgnoreNulls is executed, some special judgments may no longer be needed
 
-            //PropertiesToIgnoreNull指定字段为Null时不序列化
+            //PropertiesToIgnoreNull fields specified as null are not serialized
             if (PropertiesToIgnoreNull.Contains(member.Name))
             {
                 property.NullValueHandling = NullValueHandling.Ignore;
             }
 
-            //TypesToIgnoreNull特定类型字段为Null时不序列化
+            //TypesToIgnoreNull specific type fields specified as null are not serialized
             if (TypesToIgnoreNull.Contains(property.PropertyType))
             {
-                //Console.WriteLine("忽略null值：" + property.PropertyType);
-                property.NullValueHandling = NullValueHandling.Ignore;//这样设置无效
+                //Console.WriteLine("Ignore null values: " + property.PropertyType);
+                property.NullValueHandling = NullValueHandling.Ignore;//This setting is invalid
 
                 var t = member.DeclaringType;
 
@@ -391,15 +391,15 @@ namespace Senparc.CO2NET.Helpers.Serializers
                         //var obj = Convert.ChangeType(instance, t);
                         var value = (member as PropertyInfo).GetValue(instance, null);
 
-                        //跟踪测试
+                        //Tracking test
                         //Console.WriteLine("Object Value:" + value);
                         //Console.WriteLine("Setting Value:" + (ignoreValue as JsonSetting.IgnoreValueAttribute).Value);
                         //Console.WriteLine("ShouldSerialize Result:" + (!value.Equals((ignoreValue as JsonSetting.IgnoreValueAttribute).Value)));
 
                         //return value != (ignoreValue as JsonSetting.IgnoreValueAttribute).Value;
 
-                        //Console.WriteLine("TypesToIgnoreNull Value：" + value);
-                        //Console.WriteLine("TypesToIgnoreNull Value is null：" + (value == null));
+                        //Console.WriteLine("TypesToIgnoreNull Value: " + value);
+                        //Console.WriteLine("TypesToIgnoreNull Value is null: " + (value == null));
 
                         return value != null;
                     }
@@ -413,7 +413,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
             }
 
 
-            //符合IgnoreValue标注值的字段不序列化
+            //Fields that match IgnoreValue marked values are not serialized
             var ignoreValueAttribute = typeof(JsonSetting.IgnoreValueAttribute);
             var ignoreValue = customAttributes.FirstOrDefault(o => o.GetType() == ignoreValueAttribute);
             if (ignoreValue != null)
@@ -426,7 +426,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
                     //var obj = Convert.ChangeType(instance, t);
                     var value = (member as PropertyInfo).GetValue(instance, null);
 
-                    //跟踪测试
+                    //Tracking test
                     //Console.WriteLine("Object Value:" + value);
                     //Console.WriteLine("Setting Value:" + (ignoreValue as JsonSetting.IgnoreValueAttribute).Value);
                     //Console.WriteLine("ShouldSerialize Result:" + (!value.Equals((ignoreValue as JsonSetting.IgnoreValueAttribute).Value)));
@@ -436,7 +436,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
                 };
             }
 
-            //枚举序列化
+            //Enum serialization
             var enumStringAttribute = typeof(JsonSetting.EnumStringAttribute);
             if (customAttributes.Count(o => o.GetType() == enumStringAttribute) == 1)
             {

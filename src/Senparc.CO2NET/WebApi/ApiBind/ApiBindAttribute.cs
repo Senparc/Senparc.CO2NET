@@ -1,14 +1,14 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：ApiBindAttribute.cs
-    文件功能描述：ApiBindAttribute 特性
+    FileName: ApiBindAttribute.cs
+    File Function Description: ApiBindAttribute Attribute
 
 
-    创建标识：Senparc - 20210627
+    Creation Identifier: Senparc - 20210627
 
-    修改标识：Senparc - 20230614
-    修改描述：v1.4.1 Ignore 添加 virtual 关键字
+    Modification Identifier: Senparc - 20230614
+    Modification Description: v1.4.1 Ignore added virtual keyword
 
 ----------------------------------------------------------------*/
 
@@ -19,40 +19,40 @@ using System.Reflection;
 namespace Senparc.CO2NET
 {
     /// <summary>
-    /// 自动绑定属性
+    /// Auto bind property
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     public class ApiBindAttribute : Attribute
     {
         /// <summary>
-        /// 目录（平台类型），用于输出 API 的 Url 时分组
+        /// Category (platform type), used for grouping when outputting API Url
         /// </summary>
         private string Category { get; set; }
         /// <summary>
-        /// 平台内唯一名称（请使用宇宙唯一名称，如： [namespace].[ClassName].[MethodName]）
+        /// Unique name within the platform (please use a globally unique name, e.g., [namespace].[ClassName].[MethodName])
         /// </summary>
         private string Name { get; set; }
         /// <summary>
-        /// 是否忽略当前标签
+        /// Whether to ignore the current tag
         /// </summary>
         public virtual bool Ignore { get; set; }
 
         /// <summary>
-        /// ApiController 的基类，默认为 ControllerBase
+        /// Base class of ApiController, default is ControllerBase
         /// </summary>
         public Type BaseApiControllerType { get; set; }
         /// <summary>
-        /// ApiController 的基类排序，最后会使用数字最大的一个（支持负数）
+        /// Base class order of ApiController, the one with the largest number will be used last (supports negative numbers)
         /// </summary>
         public short BaseApiControllerOrder { get; set; }
 
         /// <summary>
-        /// 请求方法
+        /// Request method
         /// </summary>
         public ApiRequestMethod ApiRequestMethod { get; set; }
 
         /// <summary>
-        /// ApiBindAttributes 构造函数
+        /// Constructor of ApiBindAttributes
         /// </summary>
         public ApiBindAttribute() { }
 
@@ -63,29 +63,29 @@ namespace Senparc.CO2NET
 
 
         /// <summary>
-        /// 自动绑定属性
+        /// Auto bind property
         /// </summary>
-        /// <param name="category">目录（平台类型），用于输出 API 的 Url 时分组</param>
+        /// <param name="category">Category (platform type), used for grouping when outputting API Url</param>
         public ApiBindAttribute(string category) : this(category, null, WebApi.ApiRequestMethod.GlobalDefault)
         {
         }
 
 
         /// <summary>
-        /// 自动绑定属性
+        /// Auto bind property
         /// </summary>
-        /// <param name="category">目录（平台类型），用于输出 API 的 Url 时分组</param>
-        /// <param name="name">平台内唯一名称（如使用 PlatformType.General，请使用宇宙唯一名称）</param>
+        /// <param name="category">Category (platform type), used for grouping when outputting API Url</param>
+        /// <param name="name">Unique name within the platform (if using PlatformType.General, please use a globally unique name)</param>
         public ApiBindAttribute(string category, string name) : this(category, name, WebApi.ApiRequestMethod.GlobalDefault)
         {
         }
 
         /// <summary>
-        /// 自动绑定属性
+        /// Auto bind property
         /// </summary>
-        /// <param name="category">目录（平台类型），用于输出 API 的 Url 时分组</param>
-        /// <param name="name">平台内唯一名称（如使用 PlatformType.General，请使用宇宙唯一名称）</param>
-        /// <param name="apiRequestMethod">当前 API 请求的类型，如果为 null，则使用本次引擎全局定义的 </param>
+        /// <param name="category">Category (platform type), used for grouping when outputting API Url</param>
+        /// <param name="name">Unique name within the platform (if using PlatformType.General, please use a globally unique name)</param>
+        /// <param name="apiRequestMethod">Current API request type, if null, the globally defined type of this engine will be used</param>
         public ApiBindAttribute(string category, string name, ApiRequestMethod apiRequestMethod) : this(category, name, WebApi.ApiRequestMethod.GlobalDefault, null, 0)
         {
         }
@@ -93,13 +93,13 @@ namespace Senparc.CO2NET
 
 
         /// <summary>
-        /// 自动绑定属性
+        /// Auto bind property
         /// </summary>
-        /// <param name="category">目录（平台类型），用于输出 API 的 Url 时分组</param>
-        /// <param name="name">平台内唯一名称（如使用 PlatformType.General，请使用宇宙唯一名称）</param>
-        /// <param name="apiRequestMethod">当前 API 请求的类型，如果为 null，则使用本次引擎全局定义的 </param>
-        /// <param name="baseApiControllerType">ApiController 的基类，默认为 ControllerBase</param>
-        /// <param name="baseApiControllerOrder">ApiController 的基类排序，最后会使用数字最大的一个（支持负数）</param>
+        /// <param name="category">Category (platform type), used for grouping when outputting API Url</param>
+        /// <param name="name">Unique name within the platform (if using PlatformType.General, please use a globally unique name)</param>
+        /// <param name="apiRequestMethod">Current API request type, if null, the globally defined type of this engine will be used</param>
+        /// <param name="baseApiControllerType">Base class of ApiController, default is ControllerBase</param>
+        /// <param name="baseApiControllerOrder">Base class order of ApiController, the one with the largest number will be used last (supports negative numbers)</param>
         public ApiBindAttribute(string category, string name, ApiRequestMethod apiRequestMethod, Type baseApiControllerType, short baseApiControllerOrder)
         {
             Category = category;
@@ -110,9 +110,9 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// 获取不为空的可显示、使用的Category名称
+        /// Get non-null, displayable, usable Category name
         /// </summary>
-        /// <param name="realAssemblyName">真实的当前程序集的名称（AssemblyName.Name）</param>
+        /// <param name="realAssemblyName">Real name of the current assembly (AssemblyName.Name)</param>
         /// <returns></returns>
         public string GetCategoryName(string realAssemblyName)
         {
@@ -120,9 +120,9 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// 获取不为空的可显示、使用的 Category 名称
+        /// Get non-null, displayable, usable Category name
         /// </summary>
-        /// <param name="methodInfo">当前方法名称</param>
+        /// <param name="methodInfo">Current method name</param>
         /// <returns></returns>
         public string GetCategoryName(MethodInfo methodInfo)
         {
@@ -130,9 +130,9 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// 获取不为空的可显示、使用的全局唯一 Name
+        /// Get non-null, displayable, usable globally unique Name
         /// </summary>
-        /// <param name="methodInfo">当前方法名称</param>
+        /// <param name="methodInfo">Current method name</param>
         /// <returns></returns>
         public string GetName(MethodInfo methodInfo)
         {

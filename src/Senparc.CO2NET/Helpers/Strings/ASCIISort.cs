@@ -21,21 +21,21 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：ASCIISort.cs
-    文件功能描述：ASCII排序
+    FileName：ASCIISort.cs
+    File Function Description：ASCII sorting
     
     
-    创建标识：Senparc - 20170623
+    Creation Identifier：Senparc - 20170623
 
-    修改标识：Senparc - 20170623
-    修改描述：添加ASCIISort.Create()静态方法
+    Modification Identifier：Senparc - 20170623
+    Modification Description：Added ASCIISort.Create() static method
     
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/Helpers/StringHelper/ASCIISort.cs  ----
 
-    修改标识：Senparc - 20180602
-    修改描述：v0.1.0 移植 StringHelper/ASCIISort
+    Modification Identifier：Senparc - 20180602
+    Modification Description：v0.1.0 migrated StringHelper/ASCIISort
 
 ----------------------------------------------------------------*/
 
@@ -48,12 +48,12 @@ using System.Text;
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// ASCII字典排序
+    /// ASCII dictionary sorting
     /// </summary>
     public class ASCIISort : IComparer
     {
         /// <summary>
-        /// 创建新的ASCIISort实例
+        /// Create a new ASCIISort instance
         /// </summary>
         /// <returns></returns>
         public static ASCIISort Create()

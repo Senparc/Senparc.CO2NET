@@ -27,9 +27,9 @@ using System.Dynamic;
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// IDictionary扩展方法
-    /// 代码引用自：https://bitbucket.org/patridge/expandoobject-json-serialization-tests/src/eab6ef0b18434278a5c2c1424145c47d1def2838/ExpandoJsonMvcStub/Helpers/IDictionaryExtensions.cs?at=default&amp;fileviewer=file-view-default
-    /// 更多解决方案：http://www.patridgedev.com/2011/08/24/getting-dynamic-expandoobject-to-serialize-to-json-as-expected/
+    /// IDictionary extension methods
+    /// Code referenced from: https://bitbucket.org/patridge/expandoobject-json-serialization-tests/src/eab6ef0b18434278a5c2c1424145c47d1def2838/ExpandoJsonMvcStub/Helpers/IDictionaryExtensions.cs?at=default&amp;fileviewer=file-view-default
+    /// More solutions: http://www.patridgedev.com/2011/08/24/getting-dynamic-expandoobject-to-serialize-to-json-as-expected/
     /// </summary>
     public static class IDictionaryExtensions
     {
@@ -53,7 +53,7 @@ namespace Senparc.CO2NET.Helpers
                 }
                 else if (kvp.Value is ICollection)
                 {
-                    // iterate through the collection and convert any strin-object dictionaries
+                    // iterate through the collection and convert any string-object dictionaries
                     // along the way into expando objects
                     var itemList = new List<object>();
                     foreach (var item in (ICollection)kvp.Value)

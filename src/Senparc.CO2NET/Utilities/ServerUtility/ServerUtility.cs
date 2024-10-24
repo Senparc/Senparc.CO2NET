@@ -21,14 +21,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：ServerUtility.cs
-    文件功能描述：服务器工具类
+    FileName：ServerUtility.cs
+    File Function Description：Server utility class
     
     
-    创建标识：Senparc - 20180819
+    Creation Identifier：Senparc - 20180819
 
-    修改标识：Senparc - 20181225
-    修改描述：v0.4.2 优化 ServerUtility 类中方法在 docker 或 linux 环境下的路径识别
+    Modification Identifier：Senparc - 20181225
+    Modification Description：v0.4.2 Optimize path recognition in docker or linux environment in ServerUtility class methods
 
 
 ----------------------------------------------------------------*/
@@ -44,14 +44,14 @@ using System.Web;
 namespace Senparc.CO2NET.Utilities
 {
     /// <summary>
-    /// 服务器工具类
+    /// Server utility class
     /// </summary>
     public class ServerUtility
     {
         private static string _appDomainAppPath;
 
         /// <summary>
-        /// dll 项目根目录
+        /// dll project root directory
         /// </summary>
         public static string AppDomainAppPath
         {
@@ -62,7 +62,7 @@ namespace Senparc.CO2NET.Utilities
 #if NET462
                     _appDomainAppPath = HttpRuntime.AppDomainAppPath;
 #else
-                    _appDomainAppPath = AppContext.BaseDirectory; //dll所在目录：;
+                    _appDomainAppPath = AppContext.BaseDirectory; //dll directory：;
 #endif
                 }
                 return _appDomainAppPath;
@@ -82,7 +82,7 @@ namespace Senparc.CO2NET.Utilities
         }
 
         /// <summary>
-        /// 获取相对于网站根目录的文件路径
+        /// Get the file path relative to the website root directory
         /// </summary>
         /// <param name="virtualPath"></param>
         /// <returns></returns>
@@ -114,9 +114,9 @@ namespace Senparc.CO2NET.Utilities
         }
 
         /// <summary>
-        /// 获取相对于dll目录的文件绝对路径
+        /// Get the absolute file path relative to the dll directory
         /// </summary>
-        /// <param name="virtualPath">虚拟路径，如~/App_Data/</param>
+        /// <param name="virtualPath">Virtual path, such as ~/App_Data/</param>
         /// <returns></returns>
         public static string DllMapPath(string virtualPath)
         {

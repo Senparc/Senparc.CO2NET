@@ -21,18 +21,18 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
  
-    文件名：EntityHelper.cs
-    文件功能描述：实体帮助类
+    FileName：EntityHelper.cs
+    File Function Description：Entity Helper Class
     
     
-    创建标识：Senparc - 20170809
+    Creation Identifier：Senparc - 20170809
 
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/Helpers/Entity/EntityHelper.cs  ----
 
-    修改标识：Senparc - 20180601
-    修改描述：v0.1.0 移植 EntityHelper
+    Modification Identifier：Senparc - 20180601
+    Modification Description：v0.1.0 migrated EntityHelper
 
 
 ----------------------------------------------------------------*/
@@ -47,7 +47,7 @@ using System.Xml.Linq;
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// 实体帮助类
+    /// Entity Helper Class
     /// </summary>
     public class EntityHelper
     {
