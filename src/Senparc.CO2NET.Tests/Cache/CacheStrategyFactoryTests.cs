@@ -37,7 +37,7 @@ namespace Senparc.CO2NET.Cache.Tests
     {
         public CacheStrategyFactoryTests()
         {
-            //注册
+            //Register
             var serviceCollection = new ServiceCollection();
             var configBuilder = new ConfigurationBuilder();
             var config = configBuilder.Build();
@@ -47,22 +47,22 @@ namespace Senparc.CO2NET.Cache.Tests
         [TestMethod()]
         public void RegisterObjectCacheStrategyTest()
         {
-            //Console.WriteLine("不注册");
+            //Console.WriteLine("Do not register");
 
 
             {
-                //不注册，使用默认
+                //Do not register, use default
 
-                //还原默认缓存状态
+                //Restore default cache state
                 CacheStrategyFactory.RegisterObjectCacheStrategy(null);
 
                 var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
-                //默认为本地缓存
+                //Default is local cache
                 Assert.IsInstanceOfType(cache, typeof(LocalObjectCacheStrategy));
             }
 
             {
-                //注册指定缓存
+                //Register specified cache
 
                 CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
 
@@ -79,7 +79,7 @@ namespace Senparc.CO2NET.Cache.Tests
             }
 
             //{
-            //    //不注册，使用默认
+            //    //Do not register, use default
             //    var c1 = TestContainer1.GetCollectionList();
             //    Console.WriteLine(c1.Count);//0
             //    var c1Strategy = CacheStrategyFactory.GetContainerCacheStrategyInstance();
@@ -102,9 +102,9 @@ namespace Senparc.CO2NET.Cache.Tests
             //    Assert.AreEqual(2, data.GetCount());
             //    Console.WriteLine(data.GetCount());//2
             //}
-            //Console.WriteLine("使用注册");
+            //Console.WriteLine("Use registration");
             //{
-            //    //进行注册
+            //    //Register
             //    CacheStrategyFactory.RegisterContainerCacheStrategy(() =>
             //    {
             //        return LocalContainerCacheStrategy.Instance as IContainerCacheStrategy;
@@ -113,7 +113,7 @@ namespace Senparc.CO2NET.Cache.Tests
             //    var key = typeof(TestContainer2).ToString();
 
             //    var c2 = TestContainer2.GetCollectionList();
-            //    Console.WriteLine(c2.Count);//1（位注册的时候已经注册过一个TestContainer1）
+            //    Console.WriteLine(c2.Count);//1 (one TestContainer1 was already registered during registration)
             //    var c2Strategy = CacheStrategyFactory.GetContainerCacheStrategyInstance();
             //    Assert.IsNotNull(c2Strategy);
 
