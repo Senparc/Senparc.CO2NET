@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.IO;
 using System.Threading;
 using Microsoft.AspNetCore.Hosting;
@@ -21,20 +21,20 @@ namespace Senparc.CO2NET.Tests.Trace
 
         public SenparcTraceTests()
         {
-            //注册
+            //Comment
             var mockEnv = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
             var register = Senparc.CO2NET.AspNet.RegisterServices.RegisterService.Start(mockEnv.Object, new SenparcSetting() { IsDebug = true });
 
             IServiceCollection services = new ServiceCollection();
-            services.AddMemoryCache();//使用内存缓存
+            services.AddMemoryCache();//Used for caching
 
-            SenparcDI.GlobalServiceCollection = services;//本地缓存需要用到
+            SenparcDI.GlobalServiceCollection = services;//Required for registration
 
             //var mockRegisterService = new Mock<RegisterService>();
             //mockRegisterService.Setup(z => z.ServiceCollection).Returns(() => services);
 
-            //删除日志文件
+            //Delete log file
             //File.Delete(_logFilePath);
         }
 
@@ -42,14 +42,14 @@ namespace Senparc.CO2NET.Tests.Trace
         [TestMethod]
         public void LogTest()
         {
-            //直接调用此方法不会记录到log文件中，而是输出到系统日志中
-            var keyword = Guid.NewGuid().ToString();//随机字符串
-            SenparcTrace.Log($"添加Log：{keyword}");
+            //Directly call this method to record in the log file, instead of the system log
+            var keyword = Guid.NewGuid().ToString();//Test string
+            SenparcTrace.Log($"Add Log: {keyword}");
 
             var dt1 = SystemTime.Now;
             while (SystemTime.DiffTotalMS(dt1) < 600)
             {
-                //等待队列执行
+                //Wait for execution
             }
 
             SenparcMessageQueue.OperateQueue();
@@ -57,23 +57,23 @@ namespace Senparc.CO2NET.Tests.Trace
             Console.WriteLine(SenparcMessageQueue.MessageQueueDictionary.Count);
 
             Console.WriteLine(ThreadUtility.AsynThreadCollection.Count);
-            //Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(_logFilePath,keyword));
+            //Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(_logFilePath, keyword));
         }
 
 
         [TestMethod]
         public void SendCustomLogTest()
         {
-            var keyword = Guid.NewGuid().ToString();//随机字符串
-            SenparcTrace.SendCustomLog("标题", $"添加Log：{keyword}");
+            var keyword = Guid.NewGuid().ToString();//Test string
+            SenparcTrace.SendCustomLog("Title", $"Add Log: {keyword}");
 
             var dt1 = SystemTime.Now;
             while (SystemTime.DiffTotalMS(dt1) < 800)
             {
-                //等待队列执行
+                //Wait for execution
             }
 
-            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, "标题", keyword));
+            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, "Title", keyword));
         }
 
 
@@ -81,13 +81,13 @@ namespace Senparc.CO2NET.Tests.Trace
         public void SendApiLogTest()
         {
             var url = "http://www.senparc.com";
-            var result = Guid.NewGuid().ToString();//随机字符串
+            var result = Guid.NewGuid().ToString();//Test string
             SenparcTrace.SendApiLog(url, result);
 
             var dt1 = SystemTime.Now;
             while (SystemTime.DiffTotalMS(dt1) < 800)
             {
-                //等待队列执行
+                //Wait for execution
             }
 
             Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, url, result));
@@ -98,13 +98,13 @@ namespace Senparc.CO2NET.Tests.Trace
         public void SendApiPostDataLogTest()
         {
             var url = "http://www.senparc.com";
-            var data = Guid.NewGuid().ToString();//随机字符串
+            var data = Guid.NewGuid().ToString();//Test string
             SenparcTrace.SendApiLog(url, data);
 
             var dt1 = SystemTime.Now;
             while (SystemTime.DiffTotalMS(dt1) < 800)
             {
-                //等待队列执行
+                //Wait for execution
             }
 
             Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, url, data));
@@ -115,18 +115,18 @@ namespace Senparc.CO2NET.Tests.Trace
         [TestMethod]
         public void BaseExceptionLogTest()
         {
-            var keyword = Guid.NewGuid().ToString();//随机字符串
-            var ex = new BaseException("测试异常：" + keyword);
-            //Log会记录两次，第一次是在BaseException初始化的时候会调用此方法
+            var keyword = Guid.NewGuid().ToString();//Test string
+            var ex = new BaseException("Test Excepption" + keyword);
+            //Log recording method, call this method when initializing a BaseException
             SenparcTrace.BaseExceptionLog(ex);
 
             var dt1 = SystemTime.Now;
             while (SystemTime.DiffTotalMS(dt1) < 800)
             {
-                //等待队列执行
+                //Wait for execution
             }
 
-            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, "测试异常", keyword));
+            Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, "锟斤拷锟斤拷锟届常", keyword));
         }
 
         [TestMethod]
@@ -135,13 +135,13 @@ namespace Senparc.CO2NET.Tests.Trace
             var onlogCount = 0;
             SenparcTrace.OnLogFunc = () => onlogCount++;
 
-            var keyword = Guid.NewGuid().ToString();//随机字符串
-            SenparcTrace.SendCustomLog("测试OnLogFuncTest", keyword);
+            var keyword = Guid.NewGuid().ToString();//Test string
+            SenparcTrace.SendCustomLog("Test OnLogFuncTest", keyword);
 
             var dt1 = SystemTime.Now;
             while (SystemTime.DiffTotalMS(dt1) < 800)
             {
-                //等待队列执行
+                //Wait for execution
             }
 
             Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, keyword));
@@ -155,15 +155,15 @@ namespace Senparc.CO2NET.Tests.Trace
             var onlogCount = 0;
             SenparcTrace.OnLogFunc = () => onlogCount++;
 
-            var keyword = Guid.NewGuid().ToString();//随机字符串
-            var ex = new BaseException("测试异常：" + keyword);
-            //Log会记录两次，第一次是在BaseException初始化的时候会调用此方法
+            var keyword = Guid.NewGuid().ToString();//Test string
+            var ex = new BaseException("Test Exception" + keyword);
+            //Log recording method, call this method when initializing a BaseException
             SenparcTrace.BaseExceptionLog(ex);
 
             var dt1 = SystemTime.Now;
             while (SystemTime.DiffTotalMS(dt1) < 1000)
             {
-                //等待队列执行
+                //Wait for execution
             }
 
             Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, keyword));
