@@ -35,7 +35,7 @@ namespace Senparc.CO2NET.Tests.ExtensionEntities
         public void NowTicksTest()
         {
             var now = SystemTime.Now;
-            Assert.IsTrue(TimeSpan.FromTicks(SystemTime.NowTicks - now.Ticks).TotalMilliseconds < 1);//由于分两次获取，小于一定的延迟
+            Assert.IsTrue(TimeSpan.FromTicks(SystemTime.NowTicks - now.Ticks).TotalMilliseconds < 1);//Due to being obtained twice, less than a certain delay
         }
     }
 }

@@ -83,11 +83,11 @@ namespace Senparc.CO2NET
     public enum Sex
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member   
-        未知 = 0,
-        未设置 = 0,
-        男 = 1,
-        女 = 2,
-        其他 = 3
+        Unknow = 0,
+        Unset = 0,
+        Male = 1,
+        Female = 2,
+        Other = 3
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 
