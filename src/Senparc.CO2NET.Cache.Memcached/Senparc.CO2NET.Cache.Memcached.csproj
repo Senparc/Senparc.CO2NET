@@ -12,7 +12,7 @@
 			https://github.com/JeffreySu/WeiXinMPSDK
 		</Description>
 		<Copyright>Senparc Copyright © 2004~2024</Copyright>
-		<PackageTags>WeChat,weixin,public account,WeChat,Senparc,SDK,C#,JSSDK,WeChat Pay,distributed,mini program,Cache,Memcached,CO2NET</PackageTags>
+		<PackageTags>Cache,Memcached,CO2NET,盛派</PackageTags>
 		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
 		<Authors>Jeffrey Su</Authors>
 		<Owners>Senparc</Owners>
