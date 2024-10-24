@@ -86,4 +86,7 @@
   <ItemGroup>
     <PackageReference Include="StackExchange.Redis" Version="2.7.4" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+  </ItemGroup>
 </Project>
