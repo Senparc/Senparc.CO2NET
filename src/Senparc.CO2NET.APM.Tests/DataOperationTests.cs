@@ -45,13 +45,13 @@ namespace Senparc.CO2NET.APM.Tests
             DataOperation dataOperation = new DataOperation(domainPrefix + "SetAndGetTest");
             BuildTestData(dataOperation);
 
-            var memoryData = dataOperation.GetDataItemListAsync("�ڴ�").Result;
+            var memoryData = dataOperation.GetDataItemListAsync("Memory").Result;
             Assert.AreEqual(2, memoryData.Count);
 
             var cpuData = dataOperation.GetDataItemListAsync("CPU").Result;
             Assert.AreEqual(5, cpuData.Count);
 
-            var viewData = dataOperation.GetDataItemListAsync("������").Result;
+            var viewData = dataOperation.GetDataItemListAsync("Visitor Volume").Result;
             Assert.AreEqual(7, viewData.Count);
         }
 
@@ -69,13 +69,13 @@ namespace Senparc.CO2NET.APM.Tests
             Console.WriteLine("===============");
 
             //Check if the current task has received the previous task
-            var memoryData = dataOperation.GetDataItemListAsync("�ڴ�").Result;
+            var memoryData = dataOperation.GetDataItemListAsync("内存").Result;
             Assert.AreEqual(0, memoryData.Count);
 
             var cpuData = dataOperation.GetDataItemListAsync("CPU").Result;
             Assert.AreEqual(0, cpuData.Count);
 
-            var viewData = dataOperation.GetDataItemListAsync("������").Result;
+            var viewData = dataOperation.GetDataItemListAsync("Visitor Volume").Result;
             Assert.AreEqual(1, viewData.Count);//The current task will not be interrupted
 
             //Simulate current time

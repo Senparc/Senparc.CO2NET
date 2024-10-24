@@ -7,39 +7,32 @@ using System.Collections.Generic;
 
 namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
 {
-
-
     [TestClass]
     public class CacheStrategyDomainWarehouseTests : BaseTest
     {
         [TestMethod]
         public void RegisterAndGetTest()
         {
-            // Restore default buffer state
+            // Restore default cache state  
             CacheStrategyFactory.RegisterObjectCacheStrategy(() => LocalObjectCacheStrategy.Instance);
 
-            // Note
+            // Register  
             CacheStrategyDomainWarehouse.RegisterCacheStrategyDomain(TestExtensionCacheStrategy.Instance);
 
-            // Get
-
-            // Get current buffer property (default is memory buffer)
+            // Get current cache strategy (default is memory cache)  
             var objectCache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var testCacheStrategy = CacheStrategyDomainWarehouse
                 .GetDomainExtensionCacheStrategy(objectCache, new TestCacheDomain());
-
             Assert.IsInstanceOfType(testCacheStrategy, typeof(TestExtensionCacheStrategy));
 
             var baseCache = testCacheStrategy.BaseCacheStrategy();
-
             Assert.IsInstanceOfType(baseCache, objectCache.GetType());
 
-
-            // Write
+            // Write  
             var testStr = Guid.NewGuid().ToString();
             baseCache.Set("TestCache", testStr);
 
-            // Get
+            // Read  
             var result = (testCacheStrategy as TestExtensionCacheStrategy).GetTestCache("TestCache");
             Assert.AreEqual(testStr + "|ABC", result);
             Console.WriteLine(result);
@@ -48,26 +41,24 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
         [TestMethod]
         public void ClearRegisteredDomainExtensionCacheStrategiesTest()
         {
-            // Save to buffer
+            // Add domain cache  
             CacheStrategyDomainWarehouse.RegisterCacheStrategyDomain(TestExtensionCacheStrategy.Instance);
             var objectCache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
-
             var testCacheStrategy = CacheStrategyDomainWarehouse
-             .GetDomainExtensionCacheStrategy(objectCache, new TestCacheDomain());
-
+                .GetDomainExtensionCacheStrategy(objectCache, new TestCacheDomain());
             Assert.IsInstanceOfType(testCacheStrategy, typeof(TestExtensionCacheStrategy));
 
-            // Load from buffer
+            // Clear domain cache  
             CacheStrategyDomainWarehouse.ClearRegisteredDomainExtensionCacheStrategies();
             try
             {
                 testCacheStrategy = CacheStrategyDomainWarehouse
-                                .GetDomainExtensionCacheStrategy(objectCache, new TestCacheDomain());
+                    .GetDomainExtensionCacheStrategy(objectCache, new TestCacheDomain());
             }
             catch (UnregisteredDomainCacheStrategyException ex)
             {
-                Console.WriteLine("�����쳣�׳�������ȷ��\r\n========\r\n");
-                Console.WriteLine(ex);// Not noted
+                Console.WriteLine("The following exception is expected\r\n========\r\n");
+                Console.WriteLine(ex); // Not registered  
             }
             catch (Exception ex)
             {
@@ -80,7 +71,7 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
         {
             Config.IsDebug = true;
             {
-                Console.WriteLine("Global Auto Scan");
+                Console.WriteLine("Global auto scan");
                 var addedTypes = CacheStrategyDomainWarehouse.AutoScanDomainCacheStrategy(true, null);
                 addedTypes.ForEach(z => Console.WriteLine(z));
                 Assert.IsTrue(addedTypes.Count > 0);
@@ -88,18 +79,20 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategyDomain
                 // Auto scan assemblies: 81, total registration time: 205.7718ms - 598.7549ms  
             }
             {
-                Console.WriteLine("No Auto Scan");
-                // var addedTypes = CacheStrategyDomainWarehouse.AutoScanDomainCacheStrategy(false, null);  
+                Console.WriteLine("No auto scan");
+                var addedTypes = CacheStrategyDomainWarehouse.AutoScanDomainCacheStrategy(false, null);
                 addedTypes.ForEach(z => Console.WriteLine(z));
                 Assert.IsTrue(addedTypes.Count == 0);
                 // Total registration time: 0.0021ms  
             }
             {
-                Console.WriteLine("Manual Specification");
+                Console.WriteLine("Manual specification");
                 Func<IList<IDomainExtensionCacheStrategy>> func = () =>
                 {
-                    var list = new List<IDomainExtensionCacheStrategy>();
-                    list.Add(TestExtensionCacheStrategy.Instance);
+                    var list = new List<IDomainExtensionCacheStrategy>
+                    {
+                        TestExtensionCacheStrategy.Instance
+                    };
                     return list;
                 };
                 var addedTypes = CacheStrategyDomainWarehouse.AutoScanDomainCacheStrategy(false, func);
