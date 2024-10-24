@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Tests.TestEntities;
@@ -15,7 +15,7 @@ namespace Senparc.CO2NET.Tests.Utilities
             var boolResult = EntityUtility.ConvertTo<bool>("True");
             Assert.AreEqual(true, boolResult);
 
-            boolResult = EntityUtility.ConvertTo<bool>("true");//小写支持
+            boolResult = EntityUtility.ConvertTo<bool>("true");// Write support
             Assert.AreEqual(true, boolResult);
 
 
@@ -25,7 +25,7 @@ namespace Senparc.CO2NET.Tests.Utilities
             try
             {
                 boolResult = EntityUtility.ConvertTo<bool>("0");
-                Assert.Fail();//不会执行到这里，会抛出异常
+                Assert.Fail();// During execution, an exception is thrown
             }
             catch (Exception ex)
             {
