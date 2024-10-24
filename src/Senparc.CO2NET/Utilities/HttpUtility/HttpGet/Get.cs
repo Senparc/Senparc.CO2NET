@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,45 +21,45 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：Get.cs
-    文件功能描述：Get
+    FileName：Get.cs
+    File Function Description：Get
 
 
-    创建标识：Senparc - 20150211
+    Creation Identifier：Senparc - 20150211
 
-    修改标识：Senparc - 20150303
-    修改描述：整理接口
+    Modification Identifier：Senparc - 20150303
+    Modification Description：Organize interface
 
-    修改标识：zeje - 20160422
-    修改描述：v4.5.19 为GetJson方法添加maxJsonLength参数
+    Modification Identifier：zeje - 20160422
+    Modification Description：v4.5.19 Add maxJsonLength parameter to GetJson method
 
-    修改标识：zeje - 20170305
-    修改描述：MP v14.3.132 添加Get.DownloadAsync(string url, string dir)方法
+    Modification Identifier：zeje - 20170305
+    Modification Description：MP v14.3.132 Add Get.DownloadAsync(string url, string dir) method
 
-    修改标识：Senparc - 20170409
-    修改描述：v4.11.9 修改Download方法
+    Modification Identifier：Senparc - 20170409
+    Modification Description：v4.11.9 Modify Download method
 
-    修改标识：Senparc - 20171101
-    修改描述：v4.18.1 修改Get.Download()方法
+    Modification Identifier：Senparc - 20171101
+    Modification Description：v4.18.1 Modify Get.Download() method
 
-    修改标识：Senparc - 20180114
-    修改描述：v4.18.13  修改 HttpUtility.Get.Download() 方法，
-                        根据 Content-Disposition 中的文件名储存文件
+    Modification Identifier：Senparc - 20180114
+    Modification Description：v4.18.13 Modify HttpUtility.Get.Download() method,
+                        Store file according to filename in Content-Disposition
 
-    修改标识：Senparc - 20180407
-    修改描述：v14.10.13 优化 Get.Download() 方法，完善对 FileName 的判断
+    Modification Identifier：Senparc - 20180407
+    Modification Description：v14.10.13 Optimize Get.Download() method, improve judgment of FileName
 
-    修改标识：Senparc - 20190429
-    修改描述：v0.7.0 优化 HttpClient，重构 RequestUtility（包括 Post 和 Get），引入 HttpClientFactory 机制
+    Modification Identifier：Senparc - 20190429
+    Modification Description：v0.7.0 Optimize HttpClient, refactor RequestUtility (including Post and Get), introduce HttpClientFactory mechanism
 
-    修改标识：Senparc - 20200925
-    修改描述：v1.3.201 更新 Senparc.CO2NET.HttpUtility.Get.Download() 方法，修正 filename 判断正则表达式
+    Modification Identifier：Senparc - 20200925
+    Modification Description：v1.3.201 Update Senparc.CO2NET.HttpUtility.Get.Download() method, fix filename judgment regex
 
-    修改标识：Senparc - 20210606
-    修改描述：v1.4.400 修复 Download 方法 bug
+    Modification Identifier：Senparc - 20210606
+    Modification Description：v1.4.400 Fix bug in Download method
 
-    修改标识：554393109 - 20220208
-    修改描述：v2.0.3 修改HttpClient请求超时的实现方式
+    Modification Identifier：554393109 - 20220208
+    Modification Description：v2.0.3 Modify HttpClient request timeout implementation
 
 ----------------------------------------------------------------*/
 
@@ -85,12 +85,12 @@ using System.Text.RegularExpressions;
 namespace Senparc.CO2NET.HttpUtility
 {
     /// <summary>
-    /// Get 请求处理
+    /// Get request processing
     /// </summary>
     public static class Get
     {
         /// <summary>
-        /// 获取随机文件名
+        /// Get random file name
         /// </summary>
         /// <returns></returns>
         private static string GetRandomFileName()
@@ -98,16 +98,16 @@ namespace Senparc.CO2NET.HttpUtility
             return SystemTime.Now.ToString("yyyyMMdd-HHmmss") + Guid.NewGuid().ToString("n").Substring(0, 6);
         }
 
-        #region 同步方法
+        #region Synchronous Methods
 
         /// <summary>
-        /// GET方式请求URL，并返回T类型
+        /// GET request URL and return type T
         /// </summary>
-        /// <typeparam name="T">接收JSON的数据类型</typeparam>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <typeparam name="T">Type of data received in JSON</typeparam>
+        /// <param name="serviceProvider">Server provider under .NetCore, if .NET Framework then keep null</param>
         /// <param name="url"></param>
         /// <param name="encoding"></param>
-        /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
+        /// <param name="afterReturnText">Return JSON text and trigger before serialization, parameters are: url, returnText</param>
         /// <returns></returns>
         public static T GetJson<T>(
             IServiceProvider serviceProvider,
@@ -125,9 +125,9 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 从Url下载
+        /// Download from URL
         /// </summary>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <param name="serviceProvider">Server provider under .NetCore, if .NET Framework then keep null</param>
         /// <param name="url"></param>
         /// <param name="stream"></param>
         public static void Download(
@@ -155,12 +155,12 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 从Url下载，并保存到指定目录
+        /// Download from URL and save to specified directory
         /// </summary>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
-        /// <param name="url">需要下载文件的Url</param>
-        /// <param name="filePathName">保存文件的路径，如果下载文件包含文件名，按照文件名储存，否则将分配Ticks随机文件名</param>
-        /// <param name="timeOut">超时时间</param>
+        /// <param name="serviceProvider">Server provider under .NetCore, if .NET Framework then keep null</param>
+        /// <param name="url">URL of the file to be downloaded</param>
+        /// <param name="filePathName">Path to save the file, if the downloaded file contains a filename, store it according to the filename, otherwise a random filename with Ticks will be assigned</param>
+        /// <param name="timeOut">Timeout</param>
         /// <returns></returns>
         public static string Download(IServiceProvider serviceProvider, string url, string filePathName, int timeOut = Config.TIME_OUT)
         {
@@ -178,7 +178,7 @@ namespace Senparc.CO2NET.HttpUtility
             using (Stream responseStream = response.GetResponseStream())
             {
                 string responseFileName = null;
-                //如：content-disposition: inline; filename="WeChatSampleBuilder-2.0.0.zip"; filename*=utf-8''WeChatSampleBuilder-2.0.0.zip
+                //e.g.: content-disposition: inline; filename="WeChatSampleBuilder-2.0.0.zip"; filename*=utf-8''WeChatSampleBuilder-2.0.0.zip
                 var contentDescriptionHeader = response.GetResponseHeader("Content-Disposition");
 
                 if (!string.IsNullOrEmpty(contentDescriptionHeader))
@@ -217,7 +217,7 @@ namespace Senparc.CO2NET.HttpUtility
                         if (responseMessage.StatusCode == HttpStatusCode.OK)
                         {
                             string responseFileName = null;
-                            //ContentDisposition可能会为Null
+                            //ContentDisposition may be null
                             if (responseMessage.Content.Headers.ContentDisposition != null &&
                                 responseMessage.Content.Headers.ContentDisposition.FileName != null &&
                                 responseMessage.Content.Headers.ContentDisposition.FileName != "\"\"")
@@ -250,15 +250,15 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         /// <summary>
-        /// 【异步方法】异步GetJson
+        /// [Async Method] Async GetJson
         /// </summary>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <param name="serviceProvider">Server provider under .NetCore, if .NET Framework then keep null</param>
         /// <param name="url"></param>
         /// <param name="encoding"></param>
-        /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
+        /// <param name="afterReturnText">Return JSON text and trigger before serialization, parameters are: url, returnText</param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="ErrorJsonResultException"></exception>
@@ -278,9 +278,9 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 【异步方法】异步从Url下载
+        /// [Async Method] Async download from URL
         /// </summary>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <param name="serviceProvider">Server provider under .NetCore, if .NET Framework then keep null</param>
         /// <param name="url"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
@@ -309,12 +309,12 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 【异步方法】从Url下载，并保存到指定目录
+        /// [Async Method] Download from URL and save to specified directory
         /// </summary>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
-        /// <param name="url">需要下载文件的Url</param>
-        /// <param name="filePathName">保存文件的路径，如果下载文件包含文件名，按照文件名储存，否则将分配Ticks随机文件名</param>
-        /// <param name="timeOut">超时时间</param>
+        /// <param name="serviceProvider">Server provider under .NetCore, if .NET Framework then keep null</param>
+        /// <param name="url">URL of the file to be downloaded</param>
+        /// <param name="filePathName">Path to save the file, if the downloaded file contains a filename, store it according to the filename, otherwise a random filename with Ticks will be assigned</param>
+        /// <param name="timeOut">Timeout</param>
         /// <returns></returns>
         public static async Task<string> DownloadAsync(
             IServiceProvider serviceProvider,
@@ -331,9 +331,9 @@ namespace Senparc.CO2NET.HttpUtility
 
             using (httpClient)
             {
-                //httpClient.Timeout = TimeSpan.FromMilliseconds(timeOut);  // 此处建议不要直接修改httpClient的Timeout属性，因为这是该Client的全局共享值，会影响同Client实例下的其他请求超时时间
-                // 微软技术文档原文链接【https://docs.microsoft.com/zh-cn/dotnet/api/system.net.http.httpclient.timeout?f1url=%3FappId%3DDev16IDEF1%26l%3DZH-CN%26k%3Dk(System.Net.Http.HttpClient.Timeout);k(DevLang-csharp)%26rd%3Dtrue&view=net-6.0】
-                // 文档提到“使用此实例的所有请求都将使用相同的超时值 HttpClient 。 你还可以使用任务上的为单个请求设置不同的超时 CancellationTokenSource 。”
+                //httpClient.Timeout = TimeSpan.FromMilliseconds(timeOut);  // It is recommended not to directly modify the Timeout property of httpClient here, as this is a globally shared value for the Client and will affect the timeout of other requests under the same Client instance
+                // Microsoft technical documentation original link【https://docs.microsoft.com/zh-cn/dotnet/api/system.net.http.httpclient.timeout?f1url=%3FappId%3DDev16IDEF1%26l%3DZH-CN%26k%3Dk(System.Net.Http.HttpClient.Timeout);k(DevLang-csharp)%26rd%3Dtrue&view=net-6.0】
+                // The document mentions "All requests using this instance will use the same timeout value HttpClient. You can also set a different timeout for a single request using CancellationTokenSource on the task."
                 using (var cts = new System.Threading.CancellationTokenSource(timeOut))
                 {
                     try
@@ -345,7 +345,7 @@ namespace Senparc.CO2NET.HttpUtility
                             if (responseMessage.StatusCode == HttpStatusCode.OK)
                             {
                                 string responseFileName = null;
-                                //ContentDisposition可能会为Null
+                                //ContentDisposition may be null
                                 if (responseMessage.Content.Headers.ContentDisposition != null &&
                                     responseMessage.Content.Headers.ContentDisposition.FileName != null &&
                                     responseMessage.Content.Headers.ContentDisposition.FileName != "\"\"")

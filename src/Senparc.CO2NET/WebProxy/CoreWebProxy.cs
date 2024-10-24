@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,18 +21,18 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
   
-    文件名：CoreWebProxy.cs
-    文件功能描述：.NET Core 使用的 WebProxy 类
+    FileName: CoreWebProxy.cs
+    File Function Description: WebProxy class used by .NET Core
     
     
-    创建标识：Senparc - 20170917
+    Creation Identifier: Senparc - 20170917
  
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/WebProxy/CoreWebProxy.cs  ----
 
-    修改标识：Senparc - 20180602
-    修改描述：v0.1.0 移植 CoreWebProxy
+    Modification Identifier: Senparc - 20180602
+    Modification Description: v0.1.0 migrated CoreWebProxy
    
 ----------------------------------------------------------------*/
 
@@ -47,8 +47,8 @@ using System.Text;
 namespace Senparc.CO2NET.WebProxy
 {
     /// <summary>
-    /// .NET Core 使用的 WebProxy 类
-    /// 参考：http://www.abelliu.com/dotnet/dotnet%20core/2017/03/14/dotnetcore-proxy/
+    /// WebProxy class used by .NET Core
+    /// Reference: http://www.abelliu.com/dotnet/dotnet%20core/2017/03/14/dotnetcore-proxy/
     /// </summary>
     public class CoreWebProxy : IWebProxy
     {

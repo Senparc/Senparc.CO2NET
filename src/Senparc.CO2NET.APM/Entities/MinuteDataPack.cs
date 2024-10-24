@@ -6,7 +6,7 @@ using System.Text;
 namespace Senparc.CO2NET.APM
 {
     /// <summary>
-    /// 包含了不同KindName的每分钟数据的集合包
+    /// Contains a collection of per-minute data for different KindName
     /// </summary>
     public class MinuteDataPack
     {

@@ -2,7 +2,7 @@
 #region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -40,12 +40,12 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         [TestMethod]
         public void PostGetJsonTest()
         {
-            //return;//已经通过，但需要连接远程测试，太耗时，常规测试时暂时忽略。
+            //return;//Already passed, but requires remote connection testing, too time-consuming, temporarily ignored during routine testing.
             var url = ApiMpHost + "/cgi-bin/media/upload?access_token=TOKEN&type=image";
 
-            //这里因为参数错误，系统会返回错误信息
+            //Here, due to parameter errors, the system will return error information
             WxJsonResult resultFail = Post.PostGetJson<WxJsonResult>(BaseTest.serviceProvider, url, cookieContainer: null, formData: null, encoding: null);
-            //Assert.Fail();//上一步就应该已经抛出异常
+            //Assert.Fail();//An exception should have been thrown in the previous step
             Console.WriteLine(resultFail);
             Assert.AreEqual(40001, resultFail.errcode);
         }
@@ -53,7 +53,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         [TestMethod()]
         public async Task PostGetJsonAsyncTest()
         {
-            //return;//已经通过，但需要连接远程测试，太耗时，常规测试时暂时忽略。
+            //return;//Already passed, but requires remote connection testing, too time-consuming, temporarily ignored during routine testing.
             var url = ApiMpHost + "/cgi-bin/media/upload?access_token=TOKEN&type=image";
 
             WxJsonResult resultFail =
@@ -66,11 +66,11 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         [TestMethod]
         public void PostGetJsonByFormDataTest()
         {
-            //return;//已经通过，但需要连接远程测试，太耗时，常规测试时暂时忽略。
+            //return;//Already passed, but requires remote connection testing, too time-consuming, temporarily ignored during routine testing.
             var url = "http://localhost:12222/P2P/GetPassport";
             try
             {
-                //这里因为参数错误，系统会返回错误信息
+                //Here, due to parameter errors, the system will return error information
                 var formData = new Dictionary<string, string>();
                 formData["appKey"] = "test";
                 formData["secret"] = "test2";
@@ -86,7 +86,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         [TestMethod]
         public async Task PostGetJsonStreamTest()
         {
-            //return;//已经通过，但需要连接远程测试，太耗时，常规测试时暂时忽略。
+            //return;//Already passed, but requires remote connection testing, too time-consuming, temporarily ignored during routine testing.
             var url = "http://localhost:58936/VirtualPath/weixin?timestamp=1559561525&nonce=05dde8fcd38e46fea0b7af7517831c5f&echostr=251ee1f4c800429282c824f46dd0f47b&signature=402a11f9b8537b08239607af0a789400796c5861";
             try
             {
@@ -97,8 +97,8 @@ namespace Senparc.CO2NET.HttpUtility.Tests
                 doc.Root.Add(new XElement("CreateTime", DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString()));
                 doc.Root.Add(new XElement("MsgType", "NeuChar"));
                 doc.Root.Add(new XElement("MsgId", DateTime.Now.Ticks.ToString()));
-                doc.Root.Add(new XElement("NeuCharMessageType", "GetConfig"));//设置类型
-                                                                              //发送请求
+                doc.Root.Add(new XElement("NeuCharMessageType", "GetConfig"));//Set type
+                                                                              //Send request
                 var ms = new MemoryStream();
                 var sr = new StreamWriter(ms);
                 sr.Write(doc.ToString());
@@ -111,9 +111,9 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             }
             catch (Exception ex)
             {
-                //实际返回的信息（错误信息）
+                //Actual returned information (error information)
                 Console.WriteLine(ex.Message);
-                Assert.Fail();//上一步就应该已经抛出异常
+                Assert.Fail();//An exception should have been thrown in the previous step
             }
         }
 
@@ -129,7 +129,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             var agentId = "1000009";
             var accessToken = "D0pI7JIOdFMfBPZ3QNIdazGupfEFlXNfC8aScj6BS3Vcdk3EjRwWdIJ_cxIQNbMoqdhWjHb6PplzK4tQ88MXz2qCugIhJ82IqBWTF-Q8ggK24QE8-iYB8c2yiSRZkTGirdbDLfZk4ERMs7GhhIkR4UiHplhNjtenXaztHAietRNUhQMhrVbw_vVMFgvYeDiAwzjP1Ntv0KddjWvDaXtscg";
 
-            //上传测试
+            //Upload test
             var type = "file";
             var url = $"https://qyapi.weixin.qq.com/cgi-bin/media/upload?access_token={accessToken}&type={type}";
             var fileDictionary = new Dictionary<string, string>();
@@ -143,7 +143,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
 
             Console.WriteLine("mediaId:" + mediaId);
 
-            //发送测试
+            //Send test
             var data = new
             {
                 touser = "001",
@@ -175,15 +175,15 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         }
 
         /// <summary>
-        /// v2.1.7.1 异常修复测试（v2.1.7.2 后，此测试应该通过）
+        /// v2.1.7.1 Exception fix test (This test should pass after v2.1.7.2)
         /// </summary>
         [TestMethod()]
         public void PostGetJsonTestForV2_1_7_1()
         {
-            /* 针对异常：
-            中间件类型：WxOpenMessageHandlerMiddleware`1
-MessageHandler 类型：CustomWxOpenMessageHandler
-异常信息：Senparc.NeuChar.Exceptions.MessageHandlerException: MessageHandler中Execute()过程发生错误：The value cannot be null or empty. (Parameter 'mediaType')
+            /* For exception:
+            Middleware type: WxOpenMessageHandlerMiddleware`1
+MessageHandler type: CustomWxOpenMessageHandler
+Exception information: Senparc.NeuChar.Exceptions.MessageHandlerException: Error occurred in Execute() process of MessageHandler: The value cannot be null or empty. (Parameter 'mediaType')
  ---> System.ArgumentException: The value cannot be null or empty. (Parameter 'mediaType')
    at System.Net.Http.Headers.MediaTypeHeaderValue.CheckMediaTypeFormat(String mediaType, String parameterName)
    at System.Net.Http.Headers.MediaTypeHeaderValue..ctor(String mediaType)

@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,18 +21,18 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
   
-    文件名：PropertyChangeResult.cs
-    文件功能描述：枚举配置文件
+    FileName: PropertyChangeResult.cs
+    File Function Description: Enum configuration file
     
     
-    创建标识：Senparc - 20240728
+    Creation Identifier: Senparc - 20240728
 
 ----------------------------------------------------------------*/
 
 namespace Senparc.CO2NET.MagicObject
 {
     /// <summary>
-    /// <see cref="MO{T}"/> 对象的属性获取结果
+    /// Property retrieval result of <see cref="MO{T}"/> object
     /// </summary>
     /// <typeparam name="TValue"></typeparam>
     public class PropertyChangeResult<TValue>

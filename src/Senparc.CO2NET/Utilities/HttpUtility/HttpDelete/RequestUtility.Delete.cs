@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,14 +21,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：RequestUtility.Delete.cs
-    文件功能描述：获取请求结果（Delete）
+    FileName：RequestUtility.Delete.cs
+    File Function Description：Get request result (Delete)
 
 
-    创建标识：Senparc - 20230625
+    Creation Identifier：Senparc - 20230625
 
-    修改标识：Senparc - 20230711
-    修改描述：v2.2.1 优化 Http 请求，及时关闭资源
+    Modification Identifier：Senparc - 20230711
+    Modification Description：v2.2.1 Optimize Http request, close resources in time
 
 ----------------------------------------------------------------*/
 
@@ -53,9 +53,9 @@ namespace Senparc.CO2NET.HttpUtility
     public partial class RequestUtility
     {
         /// <summary>
-        /// 使用 Delete 方法获取请求结果（没有加入Cookie）
+        /// Get request result using Delete method (without adding Cookie)
         /// </summary>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <param name="serviceProvider">Server provider under .NetCore, keep null if .NET Framework</param>
         /// <param name="url"></param>
         /// <returns></returns>
         public static async Task<string> HttpDeleteAsync(

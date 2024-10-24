@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.MessageQueue;
@@ -16,26 +16,25 @@ namespace Senparc.CO2NET.Tests.Threads
             var key = "SenparcMessageQueueThreadUtilityTest";
             smq.Add(key, () =>
             {
-                Console.WriteLine("执行SenparcMessageQueue");
+                Console.WriteLine("Execute SenparcMessageQueue");
             });
 
-            Console.WriteLine($"SenparcMessageQueue.Count：{smq.GetCount()}");
+            Console.WriteLine($"SenparcMessageQueue.Count: {smq.GetCount()}");
 
             var senparcMessageQueue = new SenparcMessageQueueThreadUtility();
 
             Task.Factory.StartNew(() =>
             {
                 senparcMessageQueue.Run();
-            });//异步执行
+            });// Asynchronous execution
 
             //
             while (smq.GetCount() > 0)
             {
-                //执行队列
+                // Execution details
             }
 
-            Console.WriteLine($"SenparcMessageQueue队列处理完毕，当前项目：{smq.GetCount()}");
-
+            Console.WriteLine($"SenparcMessageQueue processing completed, current count: {smq.GetCount()}");
         }
     }
 }

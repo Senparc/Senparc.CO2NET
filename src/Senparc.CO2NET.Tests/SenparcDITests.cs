@@ -34,30 +34,30 @@ namespace Senparc.CO2NET.Tests
 
             var key = Guid.NewGuid().ToString();
             var dt = SystemTime.Now;
-            memcache.Set(key, dt);//直接使用缓存
+            memcache.Set(key, dt);//Directly use cache
 
             var memcache2 = serviceProvider.GetService<IMemoryCache>();
             Console.WriteLine($"memcache 2 HashCode：{memcache2.GetHashCode()}");
 
-            Assert.AreEqual(memcache.GetHashCode(), memcache2.GetHashCode());//同一个全局对象
+            Assert.AreEqual(memcache.GetHashCode(), memcache2.GetHashCode());//Same global object
 
             var obj0 = memcache2.Get(key);
             Assert.IsNotNull(obj0);
             Assert.AreEqual(dt, obj0);
 
-            //使用本地缓存测试
+            //Test using local cache
             CacheStrategyFactory.RegisterObjectCacheStrategy(() => LocalObjectCacheStrategy.Instance);
             var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
 
-            var obj1 = cache.Get(key, true);//使用缓存策略获取，ServiceProvider不一致，所以不能的得到结果
+            var obj1 = cache.Get(key, true);//Using cache strategy to get, ServiceProvider is inconsistent, so the result cannot be obtained
             Assert.IsNull(obj1);
 
-            //再次储存
+            //Store again
             cache.Set(key, dt, null, true);
             obj1 = cache.Get(key, true);
             Assert.AreEqual(dt, obj1);
 
-            var obj2 = cache.Get<DateTimeOffset>(key, true);//获取明确类型对象
+            var obj2 = cache.Get<DateTimeOffset>(key, true);//Get specific type object
             Assert.IsNotNull(obj2);
             Assert.AreEqual(dt, obj2);
 
@@ -65,7 +65,7 @@ namespace Senparc.CO2NET.Tests
         }
 
         /// <summary>
-        /// 测试对象单例情况，以及 BuildServiceProvider() 方法效率
+        /// Test singleton instance and BuildServiceProvider() method efficiency
         /// </summary>
         [TestMethod]
         public void BuildProviderTest()
@@ -88,7 +88,7 @@ namespace Senparc.CO2NET.Tests
                 services.AddScoped<Senparc.CO2NET.Helpers.EncryptHelper>();
                 services.AddScoped<Senparc.CO2NET.MessageQueue.MessageQueueDictionary>();
                 services.AddScoped<Senparc.CO2NET.Utilities.ServerUtility>();
-                //每次进行一些变化
+                //Make some changes each time
                 if (i % 2 == 0)
                 {
                     services.AddScoped<Senparc.CO2NET.Utilities.BrowserUtility>();
@@ -108,7 +108,7 @@ namespace Senparc.CO2NET.Tests
                     {
                         Console.WriteLine($"{j}.\tBuildServiceProvider:{b1.GetHashCode()}");
                         Console.WriteLine($"{j}.\tscope.ServiceProvider:{scope.ServiceProvider.GetHashCode()}");
-                        //测试结果：两个 ServiceProvider 不是同一个对象
+                        //Test result: the two ServiceProviders are not the same object
 
 
                         var scopeS1 = scope.ServiceProvider.GetRequiredService<SenparcSetting>();
@@ -122,7 +122,7 @@ namespace Senparc.CO2NET.Tests
         }
 
         /// <summary>
-        /// 测试全局和线程范围的ServiceProvider
+        /// Test global and thread-scoped ServiceProvider
         /// </summary>
         [TestMethod]
         public void ThreadAndGlobalServiceTest()
@@ -133,7 +133,7 @@ namespace Senparc.CO2NET.Tests
             SenparcDI.GlobalServiceCollection.AddScoped<SenparcSetting>();
 
             BaseTest.serviceProvider = SenparcDI.GlobalServiceCollection.BuildServiceProvider();
-            //测试跨线程唯一
+            //Test unique across threads
             var s = BaseTest.serviceProvider.GetService<SenparcSetting>();
             Console.WriteLine($"s:{s.GetHashCode()}");
 
@@ -160,11 +160,11 @@ namespace Senparc.CO2NET.Tests
             while (finishedThread != threadsCount)
             {
             }
-            //所有HashCode相同
+            //All HashCodes are the same
 
-            //TODO:现在已经全部统一为全局
+            //TODO: Now all unified to global
 
-            //测试通线程唯一
+            //Test unique within thread
             Console.WriteLine("======= 开始线程内唯一测试 =======");
             finishedThread = 0;
             for (int i = 0; i < threadsCount; i++)
@@ -176,7 +176,7 @@ namespace Senparc.CO2NET.Tests
 
                     //var threadScope = Thread.GetData(Thread.GetNamedDataSlot(CO2NET.SenparcDI.SENPARC_DI_THREAD_SERVICE_Scope)) as IServiceScope;
                     //Console.WriteLine("ServiceScope:" + threadScope?.GetHashCode());
-                    //Console.WriteLine("ServiceProcider:" + threadScope?.ServiceProvider.GetHashCode());
+                    //Console.WriteLine("ServiceProvider:" + threadScope?.ServiceProvider.GetHashCode());
 
                     using (var threadScopeService = serviceProvider.CreateScope())
                     {
@@ -188,7 +188,7 @@ namespace Senparc.CO2NET.Tests
 
                         //threadScope = Thread.GetData(Thread.GetNamedDataSlot(CO2NET.SenparcDI.SENPARC_DI_THREAD_SERVICE_Scope)) as IServiceScope;
                         //Console.WriteLine("ServiceScope:" + threadScope.GetHashCode());
-                        //Console.WriteLine("ServiceProcider:" + threadScope.ServiceProvider.GetHashCode());
+                        //Console.WriteLine("ServiceProvider:" + threadScope.ServiceProvider.GetHashCode());
                         Console.WriteLine("-----------------");
                         finishedThread++;
                     }
@@ -199,7 +199,7 @@ namespace Senparc.CO2NET.Tests
             while (finishedThread != threadsCount)
             {
             }
-            //单线程内HashCode相同
+            //HashCode is the same within a single thread
 
         }
     }

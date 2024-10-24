@@ -1,14 +1,14 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2023 Senparc
 
-    文件名：WebApiEngine.cs
-    文件功能描述：WebApi 自动生成引擎
+    FileName: WebApiEngine.cs
+    File Function Description: WebApi auto-generation engine
 
 
-    创建标识：Senparc - 20210627
+    Creation Identifier: Senparc - 20210627
 
-    修改标识：Senparc - 20211122
-    修改描述：v1.1 提供参数属性同步复制到动态 Api 的能力
+    Modification Identifier: Senparc - 20211122
+    Modification Description: v1.1 provides the ability to synchronize parameter attributes to dynamic APIs
    
 ----------------------------------------------------------------*/
 
@@ -31,7 +31,7 @@ using System.Xml.Linq;
 namespace Senparc.CO2NET.WebApi
 {
     /// <summary>
-    /// WebApi 自动生成引擎
+    /// WebApi auto-generation engine
     /// </summary>
     public partial class WebApiEngine
     {
@@ -41,7 +41,7 @@ namespace Senparc.CO2NET.WebApi
         public static ConcurrentDictionary<string, string> ApiAssemblyVersions { get; private set; } = new ConcurrentDictionary<string, string>();
 
         /// <summary>
-        /// API 方法附加属性
+        /// API method additional attributes
         /// </summary>
         public static Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> AdditionalAttributeFunc { get; internal set; }
 
@@ -63,7 +63,7 @@ namespace Senparc.CO2NET.WebApi
         /// <summary>
         /// WebApiEngine
         /// </summary>
-        /// <param name="options"> WebApiEngine 配置</param>
+        /// <param name="options"> WebApiEngine configuration</param>
         public WebApiEngine(Action<WebApiEngineOptions> options = null)
         {
             WebApiEngineOptions opt = new();
@@ -84,7 +84,7 @@ namespace Senparc.CO2NET.WebApi
         }
 
         /// <summary>
-        /// 控制台打印日志
+        /// Console print log
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="hideLog"></param>
@@ -96,17 +96,17 @@ namespace Senparc.CO2NET.WebApi
             }
         }
 
-        #region 创建动态程序集相关
+        #region Create dynamic assembly related
 
 
         /// <summary>
-        /// 从 apiBindInfo.Value.GlobalName 中匹配需要替换的关键字福
+        /// Match keywords to be replaced from apiBindInfo.Value.GlobalName
         /// </summary>
         private static Regex regexForMethodName = new Regex(@"[\.\-/:]", RegexOptions.Compiled);
 
 
         /// <summary>
-        /// 创建动态 WebApi
+        /// Create dynamic WebApi
         /// </summary>
         public async Task<int> BuildWebApi(IGrouping<string, KeyValuePair<string, ApiBindInfo>> apiBindGroup)
         {
@@ -123,21 +123,21 @@ namespace Senparc.CO2NET.WebApi
 
             var assembleName = ApiAssemblyNames[category];
 
-            #region 动态创建程序集
+            #region Dynamically create assembly
 
             var dynamicAssembly = BuildDynamicAssembly(assembleName, apiBindGroup);
 
             #endregion
 
-            //TODO：开放所有类型
+            //TODO: Open all types
 
             var apiBindFilterList = apiBindGroup.Where(z => //!z.Value.GlobalName.EndsWith("Async")
                                                             //&& z.Value.MethodInfo.ReturnType != typeof(Task<>)
                                                             //&& 
                                      z.Value.MethodInfo.ReturnType != typeof(void)
-                                     && !z.Value.MethodInfo.IsGenericMethod //SemanticApi.SemanticSend 是泛型方法
+                                     && !z.Value.MethodInfo.IsGenericMethod //SemanticApi.SemanticSend is a generic method
 
-                                     //临时过滤 IEnumerable 对象   —— Jeffrey Su 2021.06.17
+                                     //Temporary filter IEnumerable objects   —— Jeffrey Su 2021.06.17
                                      && !z.Value.MethodInfo.GetParameters().Any(z =>
                                                         z.IsOut ||
                                                         z.ParameterType.Name.Contains("IEnumerable") ||
@@ -145,7 +145,7 @@ namespace Senparc.CO2NET.WebApi
                                 .OrderBy(z => z.Value.GlobalName)
                                 .ToArray();
 
-            //把 CommonApi 提前到头部
+            //Move CommonApi to the top
             //Func<KeyValuePair<string, ApiBindInfo>, bool> funcCommonApi = z => z.Value.ApiBindAttribute.Name.StartsWith("CommonApi.");
             //var commonApiList = filterList.Where(z => funcCommonApi(z)).ToList();
             //filterList.RemoveAll(z => funcCommonApi(z));
@@ -156,39 +156,39 @@ namespace Senparc.CO2NET.WebApi
 
             List<Task> taskList = new List<Task>();
 
-            //预分配每个线程需要领取的任务（索引范围）
-            var apiFilterMaxIndex = apiBindFilterList.Length - 1;//最大索引
-            var avgBlockCount = (int)((apiBindFilterList.Length - 1) / TaskCount);//每个线程（块）领取的平均数量
-            var lastEndIndex = -1;//上一个块的结束索引
+            //Pre-allocate the tasks (index range) for each thread
+            var apiFilterMaxIndex = apiBindFilterList.Length - 1;//Maximum index
+            var avgBlockCount = (int)((apiBindFilterList.Length - 1) / TaskCount);//Average number of tasks per thread (block)
+            var lastEndIndex = -1;//End index of the previous block
 
             for (int taskIndex = 0; taskIndex < TaskCount; taskIndex++)
             {
                 if (lastEndIndex >= apiFilterMaxIndex)
                 {
-                    break;//已经排满，终止
+                    break;//Fully allocated, terminate
                 }
 
-                var blockStart = Math.Min(lastEndIndex + 1, apiFilterMaxIndex);//当前块起始索引
-                var blockEnd = 0;//当前快结束索引
-                if (taskIndex == TaskCount - 1 || /*最后一个快，一直分配到最后（解决余数问题）*/
-                    avgBlockCount == 0                  /*如果API总数比线程数还要少，则只够一个模块*/)
+                var blockStart = Math.Min(lastEndIndex + 1, apiFilterMaxIndex);//Start index of the current block
+                var blockEnd = 0;//End index of the current block
+                if (taskIndex == TaskCount - 1 || /*Last block, allocate until the end (solve remainder issue)*/
+                    avgBlockCount == 0                  /*If the total number of APIs is less than the number of threads, only one module is enough*/)
                 {
                     blockEnd = apiFilterMaxIndex;//
                 }
                 else
                 {
-                    blockEnd = Math.Min(blockStart + avgBlockCount, apiFilterMaxIndex);//非最后一个快，取平均数量
+                    blockEnd = Math.Min(blockStart + avgBlockCount, apiFilterMaxIndex);//Not the last block, take the average number
                 }
-                lastEndIndex = blockEnd;//记录当前快位置
+                lastEndIndex = blockEnd;//Record the current block position
 
                 var apiTask = Task.Factory.StartNew(async () =>
                 {
                     Range blockRange = blockStart..(blockEnd + 1);
-                    var apiBindInfoBlock = apiBindFilterList[blockRange];//截取一段，分配给当前任务
+                    var apiBindInfoBlock = apiBindFilterList[blockRange];//Take a segment and assign it to the current task
 
                     apiIndex++;
 
-                    #region 创建 API 方法
+                    #region Create API methods
 
                     await BuildApiMethodForOneThread(apiBindGroup, apiBindInfoBlock, apiMethodName, dynamicAssembly.ControllerKeyName, dynamicAssembly.Tb,
                     dynamicAssembly.FbServiceProvider, apiIndex);
@@ -207,9 +207,9 @@ namespace Senparc.CO2NET.WebApi
 
             WriteLog($"\t create type:  {myType.Namespace} - {myType.FullName}");
 
-            //WeixinApiAssembly = myType.Assembly;//注意：此处会重复赋值相同的对象，不布偶股影响效率
+            //WeixinApiAssembly = myType.Assembly;//Note: This will repeatedly assign the same object, which does not affect efficiency
 
-            ApiAssemblyCollection[category] = dynamicAssembly.Mb.Assembly;//储存程序集
+            ApiAssemblyCollection[category] = dynamicAssembly.Mb.Assembly;//Store assembly
 
             var timeCost = SystemTime.NowDiff(dt1);
 
@@ -220,7 +220,7 @@ namespace Senparc.CO2NET.WebApi
         }
 
         /// <summary>
-        /// 生成单个线程（或 Task任务）的 API 方法（Method），最小粒度
+        /// Generate API methods (Method) for a single thread (or Task), smallest granularity
         /// </summary>
         private async Task BuildApiMethodForOneThread(IGrouping<string, KeyValuePair<string, ApiBindInfo>> apiBindGroup,
             KeyValuePair<string, ApiBindInfo>[] apiBindInfoBlock, ConcurrentDictionary<string, string> apiMethodName, string keyName,
@@ -234,25 +234,25 @@ namespace Senparc.CO2NET.WebApi
                 {
                     //if (apiIndex > 9999)//200-250
                     //{
-                    //    return;//用于小范围分析
+                    //    return;//For small range analysis
                     //}
 
                     var category = apiBindGroup.Key;
 
-                    //定义版本号
+                    //Define version number
                     if (!ApiAssemblyVersions.ContainsKey(category))
                     {
                         ApiAssemblyVersions[category] = apiBindInfo.Value.MethodInfo.DeclaringType.Assembly.GetName().Version.ToString(3);
                     }
 
-                    //当前方法名称
+                    //Current method name
                     var methodName = regexForMethodName.Replace(apiBindInfo.Value.GlobalName, "_");
                     var apiBindGlobalName = apiBindInfo.Value.GlobalName.Split('.')[0];
                     var apiBindName = apiBindInfo.Value.Name.Split('.')[0];
                     var indexOfApiGroupDot = apiBindInfo.Value.GlobalName.IndexOf(".");
                     var apiName = apiBindInfo.Value.GlobalName.Substring(indexOfApiGroupDot + 1, apiBindInfo.Value.GlobalName.Length - indexOfApiGroupDot - 1);
 
-                    //确保名称不会有重复
+                    //Ensure the name is not duplicated
                     while (apiMethodName.ContainsKey(methodName))
                     {
                         methodName += "0";
@@ -260,35 +260,35 @@ namespace Senparc.CO2NET.WebApi
                     }
                     apiMethodName[methodName] = apiName;
 
-                    //当前 API 的 MethodInfo
+                    //Current API's MethodInfo
                     MethodInfo apiMethodInfo = apiBindInfo.Value.MethodInfo;
-                    //当前 API 的所有参数信息
+                    //All parameter information of the current API
                     var parameters = apiMethodInfo.GetParameters();
 
                     var apiLog = $"> Search DynamicApi[{apiIndex}]: {keyName} > ";
-                    var prefixIndex = apiLog.Length;//用于对其缩进
+                    var prefixIndex = apiLog.Length;//For alignment indentation
                     apiLog += $"{apiBindInfo.Key}";
 
                     WriteLog(apiLog, true);
                     WriteLog($"-> {methodName} - Parameters: {parameters.Count()}".PadLeft(prefixIndex), true);
 
-                    //添加静态方法的标记
+                    //Add static method marker
                     string showStaticApiState = null;//$"{(apiMethodInfo.IsStatic ? "_StaticApi" : "_NonStaticApi")}";
 
                     MethodBuilder setPropMthdBldr =
                         tb.DefineMethod(methodName/* + showStaticApiState*/, MethodAttributes.Public | MethodAttributes.Virtual,
-                        apiMethodInfo.ReturnType, //返回类型
-                        parameters.Select(z => z.ParameterType).ToArray()//输入参数
+                        apiMethodInfo.ReturnType, //Return type
+                        parameters.Select(z => z.ParameterType).ToArray()//Input parameters
                         );
 
-                    //Controller已经使用过一次SwaggerOperationAttribute
+                    //Controller has already used SwaggerOperationAttribute once
                     var t2_3 = typeof(SwaggerOperationAttribute);
                     var tagName = new[] { $"{keyName}:{apiBindName}" };
                     var tagAttrBuilder = new CustomAttributeBuilder(t2_3.GetConstructor(new Type[] { typeof(string), typeof(string) }),
                         new object[] { (string)null, (string)null },
                         new[] { t2_3.GetProperty("Tags") }, new[] { tagName });
                     setPropMthdBldr.SetCustomAttribute(tagAttrBuilder);
-                    //其他Method排序方法参考：https://stackoverflow.com/questions/34175018/grouping-of-api-methods-in-documentation-is-there-some-custom-attribute
+                    //Other method sorting methods refer to: https://stackoverflow.com/questions/34175018/grouping-of-api-methods-in-documentation-is-there-some-custom-attribute
 
                     //TODO:
 
@@ -302,7 +302,7 @@ namespace Senparc.CO2NET.WebApi
                         new object[] { apiPath }/*, new[] { t2_2.GetProperty("Name") }, new[] { routeName }*/);
                     setPropMthdBldr.SetCustomAttribute(routeAttrBuilder);
 
-                    //TODO:从ApiBind中自定义
+                    //TODO: Customize from ApiBind
 
                     WriteLog($"Added DynamicApi Path: {apiPath}{System.Environment.NewLine}", true);
 
@@ -310,21 +310,21 @@ namespace Senparc.CO2NET.WebApi
                     var specialMethod = apiBindInfo.Value.ApiBindAttribute.ApiRequestMethod;
                     if (specialMethod == ApiRequestMethod.GlobalDefault)
                     {
-                        specialMethod = _defaultRequestMethod;//使用全局默认
+                        specialMethod = _defaultRequestMethod;//Use global default
                     }
                     Type tActionMethod = GetRequestMethodAttribute(specialMethod);
 
                     setPropMthdBldr.SetCustomAttribute(new CustomAttributeBuilder(tActionMethod.GetConstructor(new Type[0]), new object[0]));
 
-                    //添加默认已有特性
+                    //Add default existing attributes
                     if (_copyCustomAttributes)
                     {
-                        //类上的自定义特性     TODO：缓存以增加效率
+                        //Custom attributes on the class     TODO: Cache to increase efficiency
                         var classAttrs = CustomAttributeData.GetCustomAttributes(apiMethodInfo.DeclaringType).ToList();
-                        //反转数组
+                        //Reverse array
                         classAttrs.Reverse();
 
-                        //当前方法的自定义特性
+                        //Custom attributes of the current method
                         var customAttrs = CustomAttributeData.GetCustomAttributes(apiMethodInfo).ToList();
                         foreach (var classAttr in classAttrs)
                         {
@@ -334,7 +334,7 @@ namespace Senparc.CO2NET.WebApi
                             }
                         }
 
-                        //叠加类和特性的方法
+                        //Overlay class and method attributes
                         foreach (var item in customAttrs)
                         {
                             if (item.AttributeType == _typeOfApiBind)
@@ -347,7 +347,7 @@ namespace Senparc.CO2NET.WebApi
                         }
                     }
 
-                    //添加用户自定义特性
+                    //Add user-defined attributes
                     if (AdditionalAttributeFunc != null)
                     {
                         var additionalAttrs = AdditionalAttributeFunc(apiMethodInfo);
@@ -361,28 +361,28 @@ namespace Senparc.CO2NET.WebApi
                     }
 
 
-                    //用户限制  ——  Jeffrey Su 2021.06.18
+                    //User restriction  ——  Jeffrey Su 2021.06.18
                     //var t4 = typeof(UserAuthorizeAttribute);//[UserAuthorize("UserOnly")]
                     //setPropMthdBldr.SetCustomAttribute(new CustomAttributeBuilder(t4.GetConstructor(new Type[] { typeof(string) }), new[] { "UserOnly" }));
 
 
-                    //设置返回类型
+                    //Set return type
                     //setPropMthdBldr.SetReturnType(apiMethodInfo.ReturnType);
 
-                    //设置参数
-                    var boundSourceMetadata = false;//参数使用了[FromBody]等特性标记
-                    var boundClassType = false;//参数中已经绑定了 class 复杂类型
-                    //定义其他参数
+                    //Set parameters
+                    var boundSourceMetadata = false;//Parameters use attributes like [FromBody]
+                    var boundClassType = false;//Parameters already bind class complex types
+                    //Define other parameters
                     for (int i = 0; i < parameters.Length; i++)
                     {
                         var p = parameters[i];
-                        ParameterBuilder pb = setPropMthdBldr.DefineParameter(i + 1/*从1开始，0为返回值*/, p.Attributes, p.Name);
-                        //处理参数，反之出现复杂类型的参数，抛出异常：InvalidOperationException: Action 'WeChat_OfficialAccountController.CardApi_GetOrderList (WeixinApiAssembly)' has more than one parameter that was specified or inferred as bound from request body. Only one parameter per action may be bound from body. Inspect the following parameters, and use 'FromQueryAttribute' to specify bound from query, 'FromRouteAttribute' to specify bound from route, and 'FromBodyAttribute' for parameters to be bound from body:
+                        ParameterBuilder pb = setPropMthdBldr.DefineParameter(i + 1/*Start from 1, 0 is the return value*/, p.Attributes, p.Name);
+                        //Handle parameters, otherwise throw an exception for complex type parameters: InvalidOperationException: Action 'WeChat_OfficialAccountController.CardApi_GetOrderList (WeixinApiAssembly)' has more than one parameter that was specified or inferred as bound from request body. Only one parameter per action may be bound from body. Inspect the following parameters, and use 'FromQueryAttribute' to specify bound from query, 'FromRouteAttribute' to specify bound from route, and 'FromBodyAttribute' for parameters to be bound from body:
 
 
                         boundSourceMetadata = boundSourceMetadata || typeof(IBindingSourceMetadata).IsAssignableFrom(p.ParameterType);
 
-                        //复制添加单个参数上的所有特性
+                        //Copy and add all attributes on a single parameter
                         try
                         {
                             var paramAttrs = p.CustomAttributes;// CustomAttributeData.GetCustomAttributes(p.ParameterType).ToList();
@@ -394,7 +394,7 @@ namespace Senparc.CO2NET.WebApi
                         }
                         catch (Exception)
                         {
-                            //TODO：收集错误信息
+                            //TODO: Collect error information
                             //throw;
                         }
 
@@ -402,11 +402,11 @@ namespace Senparc.CO2NET.WebApi
                         {
                             if (p.ParameterType.IsClass && !boundClassType)
                             {
-                                boundClassType = true;//第一个绑定，可以不处理
+                                boundClassType = true;//First binding, can be ignored
                             }
                             else if (boundClassType && !boundSourceMetadata)
                             {
-                                //第二个开始使用标签     TODO：可以自定义更多的类型
+                                //Start using tags from the second one     TODO: More types can be customized
                                 var tFromQuery = typeof(FromQueryAttribute);
                                 pb.SetCustomAttribute(new CustomAttributeBuilder(tFromQuery.GetConstructor(new Type[0]), new object[0]));
                             }
@@ -430,7 +430,7 @@ namespace Senparc.CO2NET.WebApi
 
                         try
                         {
-                            //设置默认值
+                            //Set default value
                             if (p.HasDefaultValue)
                             {
                                 pb.SetConstant(p.DefaultValue);
@@ -442,17 +442,17 @@ namespace Senparc.CO2NET.WebApi
                         }
                     }
 
-                    //执行具体方法（body）
+                    //Execute specific method (body)
                     BuildMethodBody(apiMethodInfo, setPropMthdBldr, parameters, fbServiceProvider);
 
                     //var dt1 = SystemTime.Now;
-                    //修改XML文档
+                    //Modify XML document
                     await BuildXmlDoc(category, methodName, apiMethodInfo, tb);
-                    //WriteLog($"methodName 文档修改耗时：{SystemTime.DiffTotalMS(dt1)}ms");
+                    //WriteLog($"methodName document modification time: {SystemTime.DiffTotalMS(dt1)}ms");
                 }
                 catch (Exception ex)
                 {
-                    //遇到错误
+                    //Encounter an error
                     WriteLog($"==== Error ====\r\n \t{ex}");
                 }
                 #endregion
@@ -461,7 +461,7 @@ namespace Senparc.CO2NET.WebApi
         }
 
         /// <summary>
-        /// 创建 API 方法内部调用
+        /// Create internal call of API method
         /// </summary>
         /// <param name="apiMethodInfo"></param>
         /// <param name="setPropMthdBldr"></param>
@@ -469,7 +469,7 @@ namespace Senparc.CO2NET.WebApi
         /// <param name="fbServiceProvider"></param>
         private void BuildMethodBody(MethodInfo apiMethodInfo, MethodBuilder setPropMthdBldr, ParameterInfo[] parameters, FieldBuilder fbServiceProvider)
         {
-            //执行具体方法（body）
+            //Execute specific method (body)
             var il = setPropMthdBldr.GetILGenerator();
 
             //FieldBuilder fb = tb.DefineField("id", typeof(System.String), FieldAttributes.Private);
@@ -481,15 +481,15 @@ namespace Senparc.CO2NET.WebApi
                 //il.Emit(OpCodes.Ldstr, "The I.M implementation of C");
                 local = il.DeclareLocal(apiMethodInfo.ReturnType); // create a local variable
                                                                    //il.Emit(OpCodes.Ldarg_0);
-                                                                   //动态创建字段   
+                                                                   //Dynamically create fields   
             }
 
             if (apiMethodInfo.IsStatic)
             {
-                //静态方法
+                //Static method
 
 
-                //il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
+                //il.Emit(OpCodes.Ldarg_0); // this  //Static methods do not need to use this
                 //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
                 il.Emit(OpCodes.Nop); // the first one in arguments list
                 for (int i = 0; i < parameters.Length; i++)
@@ -503,7 +503,7 @@ namespace Senparc.CO2NET.WebApi
 
                 il.Emit(OpCodes.Call, apiMethodInfo);
 
-                ////if (apiMethodInfo.GetType() == apiMethodInfo.DeclaringType)//注意：此处使用不同的方法，会出现不同的异常
+                ////if (apiMethodInfo.GetType() == apiMethodInfo.DeclaringType)//Note: Using different methods here will result in different exceptions
                 //if (typeof(Senparc.Weixin.MP.CommonAPIs.CommonApi) == methodInfo.DeclaringType)
                 //    il.Emit(OpCodes.Call, methodInfo);
                 //else
@@ -520,12 +520,12 @@ namespace Senparc.CO2NET.WebApi
             }
             else
             {
-                //非静态方法
+                //Non-static method
                 var invokeClassType = apiMethodInfo.DeclaringType;
 
 
                 il.Emit(OpCodes.Nop); // the first one in arguments list
-                il.Emit(OpCodes.Ldarg_0); // this  //静态方法不需要使用this
+                il.Emit(OpCodes.Ldarg_0); // this  //Static methods do not need to use this
                                           //il.Emit(OpCodes.Ldarg_1); // the first one in arguments list
 
 
@@ -566,7 +566,7 @@ namespace Senparc.CO2NET.WebApi
         }
 
         /// <summary>
-        /// 创建动态程序集
+        /// Create dynamic assembly
         /// </summary>
         /// <param name="assembleName"></param>
         /// <param name="apiBindGroup"></param>
@@ -575,21 +575,21 @@ namespace Senparc.CO2NET.WebApi
         {
             var category = apiBindGroup.Key;
 
-            //动态创建程序集
+            //Dynamically create assembly
             AssemblyName dynamicApiAssembly = new AssemblyName(assembleName); //Assembly.GetExecutingAssembly().GetName();// new AssemblyName("DynamicAssembly");
                                                                               //AppDomain currentDomain = Thread.GetDomain();
             AssemblyBuilder dynamicAssemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(dynamicApiAssembly, AssemblyBuilderAccess.RunAndCollect);
 
-            //动态创建模块
+            //Dynamically create module
             ModuleBuilder mb = dynamicAssemblyBuilder.DefineDynamicModule(dynamicApiAssembly.Name);
 
-            //储存 API
+            //Store API
             //_apiCollection[category] = new Dictionary<string, ApiBindInfo>(apiBindGroup);
-            var controllerKeyName = category.Replace(":", "_");//不要随意改规则，全局需要保持一致
+            var controllerKeyName = category.Replace(":", "_");//Do not change the rules arbitrarily, global consistency is required
 
             WriteLog($"search key: {category} -> {controllerKeyName}", true);
 
-            //动态创建类 XXController
+            //Dynamically create class XXController
             var controllerClassName = $"{controllerKeyName}Controller";
             Type baseApiControllerType = apiBindGroup
                                             .Where(z => z.Value.BaseApiControllerType != null)
@@ -601,16 +601,16 @@ namespace Senparc.CO2NET.WebApi
 
             TypeBuilder tb = mb.DefineType(controllerClassName, TypeAttributes.Public, baseApiControllerType /*typeof(ControllerBase)*/ /*typeof(Controller)*/);
 
-            //私有变量
+            //Private variable
             var fbServiceProvider = tb.DefineField("_serviceProvider", typeof(IServiceProvider), FieldAttributes.Private | FieldAttributes.InitOnly);
 
-            //设置构造函数
+            //Set constructor
             var ctorBuilder = tb.DefineConstructor(MethodAttributes.Public, CallingConventions.HasThis, new[] { typeof(IServiceProvider) });
             var ctorIl = ctorBuilder.GetILGenerator();
             ctorIl.Emit(OpCodes.Ldarg, 0);
             //Define the reflection ConstructorInfor for System.Object
             ConstructorInfo conObj = typeof(object).GetConstructor(new Type[0]);
-            ctorIl.Emit(OpCodes.Call, conObj);//调用base的默认ctor
+            ctorIl.Emit(OpCodes.Call, conObj);//Call the default ctor of base
             ctorIl.Emit(OpCodes.Nop);
             ctorIl.Emit(OpCodes.Nop);
             ctorIl.Emit(OpCodes.Ldarg, 0);
@@ -619,9 +619,9 @@ namespace Senparc.CO2NET.WebApi
             ctorIl.Emit(OpCodes.Ret);
 
             //ConstructorBuilder constructor = tb.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
-            //多个Get参数放在同一个Controller中可能发生问题：NotSupportedException: HTTP method "GET" & path "api/WeChat_OfficialAccount/CommonApi_CreateMenu" overloaded by actions - WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly),WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly). Actions require unique method/path combination for OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+            //Multiple Get parameters in the same Controller may cause issues: NotSupportedException: HTTP method "GET" & path "api/WeChat_OfficialAccount/CommonApi_CreateMenu" overloaded by actions - WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly),WeChat_OfficialAccountController.CommonApi_CreateMenu (WeixinApiAssembly). Actions require unique method/path combination for OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
 
-            /*以下方法如果遇到参数含有 IEnumerable<T> 参数，会抛出异常：
+            /*The following method will throw an exception if it encounters parameters containing IEnumerable<T>:
              * InvalidOperationException: Action 'WeChat_MiniProgramController.TcbApi_UpdateIndex (NeuCharDocApi.WeChat_MiniProgram)' has more than one parameter that was specified or inferred as bound from request body. Only one parameter per action may be bound from body. Inspect the following parameters, and use 'FromQueryAttribute' to specify bound from query, 'FromRouteAttribute' to specify bound from route, and 'FromBodyAttribute' for parameters to be bound from body:
             IEnumerable<CreateIndex> create_indexes
             IEnumerable<DropIndex> drop_indexes
@@ -632,7 +632,7 @@ namespace Senparc.CO2NET.WebApi
                 tb.SetCustomAttribute(new CustomAttributeBuilder(t.GetConstructor(new Type[0]), new object[0]));
             }
 
-            //暂时取消登录验证  —— Jeffrey Su 2021.06.18
+            //Temporarily cancel login verification  —— Jeffrey Su 2021.06.18
             //var t_0 = typeof(AuthorizeAttribute);
             //tb.SetCustomAttribute(new CustomAttributeBuilder(t_0.GetConstructor(new Type[0]), new object[0]));
 
@@ -645,14 +645,14 @@ namespace Senparc.CO2NET.WebApi
             if (Register.ForbiddenExternalAccess)
             {
                 var forbiddenExternalAsyncAttr = typeof(ForbiddenExternalAccessAsyncFilter);
-                tb.SetCustomAttribute(new CustomAttributeBuilder(forbiddenExternalAsyncAttr.GetConstructor(new Type[0]), new object[0] { }));//只需要一个，和ForbiddenExternalAccessFilter两者可互换
+                tb.SetCustomAttribute(new CustomAttributeBuilder(forbiddenExternalAsyncAttr.GetConstructor(new Type[0]), new object[0] { }));//Only one is needed, interchangeable with ForbiddenExternalAccessFilter
                 //var forbiddenExternalAttr = typeof(ForbiddenExternalAccessFilter);
                 //tb.SetCustomAttribute(new CustomAttributeBuilder(forbiddenExternalAttr.GetConstructor(new Type[0]), new object[0] { }));
             }
 
-            //添加Controller级别的分类（暂时无效果）
+            //Add Controller-level classification (temporarily ineffective)
 
-            //TODO:外部注入
+            //TODO: External injection
 
             //var t2_0 = typeof(SwaggerOperationAttribute);
             //var t2_0_tagName = new[] { controllerKeyName };
@@ -661,11 +661,11 @@ namespace Senparc.CO2NET.WebApi
             //    new[] { t2_0.GetProperty("Tags") }, new[] { t2_0_tagName });
             //tb.SetCustomAttribute(t2_0_tagAttrBuilder);
 
-            ////添加返回类型标签 https://docs.microsoft.com/zh-cn/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.2&tabs=visual-studio
+            ////Add return type tag https://docs.microsoft.com/zh-cn/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.2&tabs=visual-studio
             //var t2_1 = typeof(ProducesAttribute);
             //tb.SetCustomAttribute(new CustomAttributeBuilder(t2_1.GetConstructor(new Type[] { typeof(string), typeof(string[]) }), new object[] { "application/json", (string[])null }));
 
-            ////添加针对Controller的GroupName
+            ////Add GroupName for Controller
             //var t2_2 = typeof(ApiExplorerSettingsAttribute);
             //var t2_2_groupName = category.ToString();
             //var t2_2_tagAttrBuilder = new CustomAttributeBuilder(t2_2.GetConstructor(new Type[0]), new object[0],
@@ -677,7 +677,7 @@ namespace Senparc.CO2NET.WebApi
 
 
         /// <summary>
-        /// 获取 WeixinApiAssembly 程序集对象
+        /// Get WeixinApiAssembly assembly object
         /// </summary>
         /// <returns></returns>
         public Assembly GetApiAssembly(string category)
@@ -686,7 +686,7 @@ namespace Senparc.CO2NET.WebApi
         }
 
         /// <summary>
-        /// 通过 ApiRequestMethod 枚举获取对应的 Http 请求特性
+        /// Get corresponding Http request attribute through ApiRequestMethod enum
         /// </summary>
         /// <param name="apiRequestMethod"></param>
         /// <returns></returns>
@@ -702,7 +702,7 @@ namespace Senparc.CO2NET.WebApi
                 ApiRequestMethod.Delete => typeof(HttpDeleteAttribute),
                 ApiRequestMethod.Options => typeof(HttpOptionsAttribute),
                 ApiRequestMethod.Patch => typeof(HttpPatchAttribute),
-                _ => typeof(HttpPostAttribute),//默认都使用 Post
+                _ => typeof(HttpPostAttribute),//Default to use Post
             };
         }
 

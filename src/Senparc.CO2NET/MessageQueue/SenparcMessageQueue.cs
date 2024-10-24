@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,28 +21,28 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：SenparcMessageQueue.cs
-    文件功能描述：SenparcMessageQueue消息队列
+    FileName：SenparcMessageQueue.cs
+    File Function Description：SenparcMessageQueue message queue
 
 
-    创建标识：Senparc - 20151226
+    Creation Identifier：Senparc - 20151226
 
-    修改标识：Senparc - 20160210
-    修改描述：v4.5.10 取消MessageQueueList，使用MessageQueueDictionary.Keys记录标示
-              （使用MessageQueueDictionary.Keys会可能会使储存项目的无序执行）
+    Modification Identifier：Senparc - 20160210
+    Modification Description：v4.5.10 Removed MessageQueueList, used MessageQueueDictionary.Keys to record identifiers
+              (Using MessageQueueDictionary.Keys may cause unordered execution of stored items)
 
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/MessageQueue/SenparcMessageQueue.cs  ----
 
-    修改标识：Senparc - 20180601
-    修改描述：v0.1.0 移植 SenparcMessageQueue
+    Modification Identifier：Senparc - 20180601
+    Modification Description：v0.1.0 Ported SenparcMessageQueue
 
-    修改标识：Senparc - 20190812
-    修改描述：v0.8.8 改用继承 ConcurrentDictionary 后的 MessageQueueDictionary，对方法进行调整
+    Modification Identifier：Senparc - 20190812
+    Modification Description：v0.8.8 Switched to using MessageQueueDictionary inherited from ConcurrentDictionary, adjusted methods
 
-    修改标识：Senparc - 20191009
-    修改描述：v1.0.102 修改 SenparcMessageQueue.GetCurrentKey() 方法
+    Modification Identifier：Senparc - 20191009
+    Modification Description：v1.0.102 Modified SenparcMessageQueue.GetCurrentKey() method
 
 ----------------------------------------------------------------*/
 
@@ -55,31 +55,31 @@ using System.Linq;
 namespace Senparc.CO2NET.MessageQueue
 {
     /// <summary>
-    /// 消息队列
+    /// Message queue
     /// </summary>
     public class SenparcMessageQueue
     {
         /// <summary>
-        /// 队列数据集合
+        /// Queue data collection
         /// </summary>
         public static MessageQueueDictionary MessageQueueDictionary = new MessageQueueDictionary();
 
         /// <summary>
-        /// 同步执行锁（注意：此处不使用并发锁，也不实用缓存策略中的本地锁，否则如果在外部锁中记录日志可能会引发死循环）
+        /// Synchronous execution lock (Note: Do not use concurrent locks here, nor use local locks in caching strategies, otherwise logging within external locks may cause a dead loop)
         /// </summary>
         private static object MessageQueueSyncLock = new object();
         /// <summary>
-        /// 立即同步所有缓存执行锁（给OperateQueue()使用）
+        /// Immediately synchronize all cache execution locks (used by OperateQueue())
         /// </summary>
         private static object FlushCacheLock = new object();
 
         /// <summary>
-        /// 生成Key
+        /// Generate Key
         /// </summary>
-        /// <param name="name">队列应用名称，如“ContainerBag”</param>
-        /// <param name="senderType">操作对象类型</param>
-        /// <param name="identityKey">对象唯一标识Key</param>
-        /// <param name="actionName">操作名称，如“UpdateContainerBag”</param>
+        /// <param name="name">Queue application name, such as "ContainerBag"</param>
+        /// <param name="senderType">Type of the operation object</param>
+        /// <param name="identityKey">Unique identifier Key of the object</param>
+        /// <param name="actionName">Operation name, such as "UpdateContainerBag"</param>
         /// <returns></returns>
         public static string GenerateKey(string name, Type senderType, string identityKey, string actionName)
         {
@@ -89,33 +89,33 @@ namespace Senparc.CO2NET.MessageQueue
         }
 
         /// <summary>
-        /// 操作队列
+        /// Operate queue
         /// </summary>
         public static void OperateQueue()
         {
             lock (FlushCacheLock)
             {
                 var mq = new SenparcMessageQueue();
-                var key = mq.GetCurrentKey(); //获取最新的Key
+                var key = mq.GetCurrentKey(); //Get the latest Key
                 while (!string.IsNullOrEmpty(key))
                 {
-                    var mqItem = mq.GetItem(key); //获取任务项
-                    mqItem.Action(); //执行
-                    mq.Remove(key, out SenparcMessageQueueItem value); //清除
-                    key = mq.GetCurrentKey(); //获取最新的Key
+                    var mqItem = mq.GetItem(key); //Get task item
+                    mqItem.Action(); //Execute
+                    mq.Remove(key, out SenparcMessageQueueItem value); //Clear
+                    key = mq.GetCurrentKey(); //Get the latest Key
                 }
             }
         }
 
         /// <summary>
-        /// 获取当前等待执行的Key
+        /// Get the current Key waiting to be executed
         /// </summary>
         /// <returns></returns>
         public string GetCurrentKey()
         {
             lock (MessageQueueSyncLock)
             {
-                //不直接使用 Key 是因为 Key 的顺序是不确定的
+                //Do not use Key directly because the order of Keys is uncertain
                 var value = MessageQueueDictionary.Values.OrderBy(z=>z.AddTime).FirstOrDefault();
                 if (value==null)
                 {
@@ -126,7 +126,7 @@ namespace Senparc.CO2NET.MessageQueue
         }
 
         /// <summary>
-        /// 获取SenparcMessageQueueItem
+        /// Get SenparcMessageQueueItem
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -143,7 +143,7 @@ namespace Senparc.CO2NET.MessageQueue
         }
 
         /// <summary>
-        /// 添加队列成员
+        /// Add queue member
         /// </summary>
         /// <param name="key"></param>
         /// <param name="action"></param>
@@ -158,7 +158,7 @@ namespace Senparc.CO2NET.MessageQueue
                 //else
                 //{
                 //    MessageQueueList.Remove(key);
-                //    MessageQueueList.Add(key);//移动到末尾
+                //    MessageQueueList.Add(key);//Move to the end
                 //}
 
                 var mqItem = new SenparcMessageQueueItem(key, action);
@@ -168,11 +168,11 @@ namespace Senparc.CO2NET.MessageQueue
         }
 
         /// <summary>
-        /// 移除队列成员
+        /// Remove queue member
         /// </summary>
-        /// <param name="key">缓存键</param>
-        /// <param name="value">移除信息的 value 对象</param>
-        /// <returns>如果移除成功或key不存在则返回 true,否则返回 false</returns>
+        /// <param name="key">Cache key</param>
+        /// <param name="value">Value object of the removed information</param>
+        /// <returns>Returns true if removal is successful or key does not exist, otherwise returns false</returns>
         public bool Remove(string key, out SenparcMessageQueueItem value)
         {
             lock (MessageQueueSyncLock)
@@ -191,7 +191,7 @@ namespace Senparc.CO2NET.MessageQueue
         }
 
         /// <summary>
-        /// 获得当前队列数量
+        /// Get the current queue count
         /// </summary>
         /// <returns></returns>
         public int GetCount()

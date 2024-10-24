@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,17 +21,17 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：BaseCacheStrategy.cs
-    文件功能描述：泛型缓存策略基类。
+    FileName：BaseCacheStrategy.cs
+    File Function Description：Generic cache strategy base class.
 
 
-    创建标识：Senparc - 20160813 v4.7.7 
+    Creation Identifier：Senparc - 20160813 v4.7.7 
 
 
     --CO2NET--
 
-    修改标识：Senparc - 20180606
-    修改描述：GetFinalKey() 方法添加虚方法关键字
+    Modification Identifier：Senparc - 20180606
+    Modification Description：Added virtual method keyword to GetFinalKey() method
 
  ----------------------------------------------------------------*/
 
@@ -42,20 +42,20 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// 泛型缓存策略基类
+    /// Generic cache strategy base class
     /// </summary>
     public abstract class BaseCacheStrategy : IBaseCacheStrategy
     {
         ///// <summary>
-        ///// 默认下级命名空间
+        ///// Default child namespace
         ///// </summary>
         //public virtual string ChildNamespace { get; set; }
 
         /// <summary>
-        /// 获取拼装后的FinalKey
+        /// Get the assembled FinalKey
         /// </summary>
-        /// <param name="key">键</param>
-        /// <param name="isFullKey">是否已经是经过拼接的FullKey</param>
+        /// <param name="key">Key</param>
+        /// <param name="isFullKey">Whether it is already the concatenated FullKey</param>
         /// <returns></returns>
         public virtual string GetFinalKey(string key, bool isFullKey = false)
         {
@@ -63,7 +63,7 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 获取一个同步锁
+        /// Get a synchronization lock
         /// </summary>
         /// <param name="resourceName"></param>
         /// <param name="key"></param>
@@ -74,12 +74,12 @@ namespace Senparc.CO2NET.Cache
 
 
         /// <summary>
-        /// 【异步方法】创建一个（分布）锁
+        /// [Async method] Create a (distributed) lock
         /// </summary>
-        /// <param name="resourceName">资源名称</param>
-        /// <param name="key">Key标识</param>
-        /// <param name="retryCount">重试次数</param>
-        /// <param name="retryDelay">重试延时</param>
+        /// <param name="resourceName">Resource name</param>
+        /// <param name="key">Key identifier</param>
+        /// <param name="retryCount">Retry count</param>
+        /// <param name="retryDelay">Retry delay</param>
         /// <returns></returns>
         public abstract Task<ICacheLock> BeginCacheLockAsync(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan());
     }

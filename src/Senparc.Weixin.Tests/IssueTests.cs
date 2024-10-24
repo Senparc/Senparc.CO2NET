@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+锘縰sing Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Tests;
@@ -19,7 +19,7 @@ namespace Senparc.Weixin.Tests
         }
 
         /// <summary>
-        /// 测试问题 https://github.com/JeffreySu/WeiXinMPSDK/issues/1305
+        /// Refer to https://github.com/JeffreySu/WeiXinMPSDK/issues/1305
         /// </summary>
         [TestMethod]
         public void ConvertTest()
@@ -33,10 +33,10 @@ namespace Senparc.Weixin.Tests
                 Card_GrouponData data1 = new Card_GrouponData()
                 {
                     base_info = _BaseInfo,
-                    deal_detail = "测试"
+                    deal_detail = "Test"
                 };
 
-                //这个位置报错
+                // This label is used
                 var result1 = CardApi.CreateCard(accessToken, data1);
 
                 var data = new Card_MemberCardData()
@@ -55,7 +55,7 @@ namespace Senparc.Weixin.Tests
             }
             catch (Exception ex)
             {
-                //这里如果刨除微信层面的异常，说明之前发送阶段已经测试通过
+                // This exception is thrown when the WeChat process has already completed the communication phase before the exception description
                 Assert.IsInstanceOfType(ex, typeof(WeixinException));
             }
 
@@ -64,16 +64,20 @@ namespace Senparc.Weixin.Tests
         protected Card_BaseInfoBase _BaseInfo = new Card_BaseInfoBase()
         {
             logo_url = "https://weixin.senparc.com/Content/Images/2015/logo-weixin.png",
-            brand_name = "海底捞",
+            brand_name = "Haidilao",
             code_type = Card_CodeType.CODE_TYPE_TEXT,
-            title = "132 元双人火锅套餐",
-            sub_title = "周末狂欢必备",
+            title = "132 Yuan Double Hot Pot Set",
+            sub_title = "Weekend Carnival Essential",
             color = "Color010",
-            notice = "使用时向服务员出示此券",
+            notice = "Show this coupon to the waiter when using",
             service_phone = "020-88888888",
-            description = @"不可与其他优惠同享\n 如需团购券发票，请在消费时向商户提出\n 店内均可
-使用，仅限堂食\n 餐前不可打包，餐后未吃完，可打包\n 本团购券不限人数，建议2 人使用，超过建议人
-数须另收酱料费5 元/位\n 本单谢绝自带酒水饮料",
+            description = @"Cannot be used with other discounts  
+If you need a group purchase invoice, please ask the merchant when consuming  
+Can be used in-store only, for dine-in only  
+Cannot be packaged before the meal, leftovers can be packaged after the meal  
+This group purchase coupon does not limit the number of people, it is recommended for 2 people, an additional sauce fee of 5 yuan/person will be charged for exceeding the recommended number  
+No outside drinks or alcohol allowed with this coupon"
+
             date_info = new Card_BaseInfo_DateInfo()
             {
                 type = Card_DateInfo_Type.DATE_TYPE_PERMANENT.ToString(),
@@ -90,10 +94,10 @@ namespace Senparc.Weixin.Tests
             can_give_friend = true,
             url_name_type = Card_UrlNameType.URL_NAME_TYPE_RESERVATION,
             custom_url = "http://www.weiweihi.com",
-            source = "大众点评",
-            custom_url_name = "立即使用",
-            custom_url_sub_title = "6个汉字tips",
-            promotion_url_name = "更多优惠",
+            source = "Dianping",
+            custom_url_name = "Use Now",
+            custom_url_sub_title = "6 Chinese Character Tips",
+            promotion_url_name = "More Offers",
             promotion_url = "http://www.qq.com",
         };
     }

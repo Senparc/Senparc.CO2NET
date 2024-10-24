@@ -20,14 +20,14 @@
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：Redlock.cs
-    文件功能描述：Redis 锁
+    FileName：Redlock.cs
+    File Function Description：Redis Lock
 
 
-    创建标识：Senparc - 20170402
+    Creation Identifier：Senparc - 20170402
     
-    修改标识：Senparc - 20190412
-    修改描述：v2.2.0 提供缓存异步接口
+    Modification Identifier：Senparc - 20190412
+    Modification Description：v2.2.0 Provide cache async interface
     
 ----------------------------------------------------------------*/
 

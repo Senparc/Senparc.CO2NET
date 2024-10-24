@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+锘縰sing Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Cache;
 using System;
 
@@ -10,7 +10,7 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategy
         [TestMethod]
         public void BaseCacheStrategyTest()
         {
-            //以本地缓存为例进行测试
+            // For caching purposes, do not modify
 
             CacheStrategyFactory.RegisterObjectCacheStrategy(() => LocalObjectCacheStrategy.Instance);
 
@@ -18,7 +18,7 @@ namespace Senparc.CO2NET.Tests.Cache.CacheStrategy
 
             var shortKey = "ShortKey";
             var finalKey = testCache.GetFinalKey(shortKey);
-            Console.WriteLine($"FinalKey：{finalKey}");
+            Console.WriteLine($"FinalKey: {finalKey}");
 
             Assert.IsTrue(finalKey.EndsWith(":" + shortKey));
             Assert.IsTrue(finalKey.StartsWith("Senparc:"));

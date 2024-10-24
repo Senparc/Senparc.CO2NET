@@ -1,11 +1,11 @@
 ﻿/*----------------------------------------------------------------
     Copyright(C) 2024 Senparc
 
-    文件名：WebApiException.cs
-    文件功能描述：WebApi 异常
+    FileName: WebApiException.cs
+    File Function Description: WebApi Exception
 
 
-    创建标识：Senparc - 20210714
+    Creation Identifier: Senparc - 20210714
 
 ----------------------------------------------------------------*/
 
@@ -14,12 +14,12 @@ using System;
 namespace Senparc.CO2NET.Exceptions
 {
     /// <summary>
-    /// 缓存异常
+    /// Cache Exception
     /// </summary>
     public class WebApiException : BaseException
     {
         /// <summary>
-        /// WebApi 异常
+        /// WebApi Exception
         /// </summary>
         /// <param name="message"></param>
         /// <param name="inner"></param>

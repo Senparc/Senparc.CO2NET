@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// CRC32 算法的实现
+    /// Implementation of the CRC32 algorithm
     /// </summary>
     internal class Crc32 : System.Security.Cryptography.HashAlgorithm
     {

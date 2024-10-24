@@ -5,7 +5,7 @@ using System.Text;
 namespace Senparc.CO2NET.WebApi
 {
     /// <summary>
-    /// API搜索列表
+    /// API search list
     /// </summary>
     [Serializable]
     public class FindWeixinApiResult
@@ -39,17 +39,17 @@ namespace Senparc.CO2NET.WebApi
 
         public string Category { get; set; }
         /// <summary>
-        /// 包含命名空间的方法名称（不包含参数）
+        /// Method name including namespace (excluding parameters)
         /// </summary>
         public string FullMethodName { get; set; }
         public string ParamsPart { get; }
 
         /// <summary>
-        /// 备注信息
+        /// Remarks
         /// </summary>
         public string Summary { get; set; }
         /// <summary>
-        /// 是否是异步方法
+        /// Whether it is an asynchronous method
         /// </summary>
         public bool? IsAsync { get; set; }
 

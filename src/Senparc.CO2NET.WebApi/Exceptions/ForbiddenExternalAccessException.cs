@@ -6,7 +6,7 @@ using System.Text;
 namespace Senparc.CO2NET.WebApi.Exceptions
 {
     /// <summary>
-    /// 禁止外部访问
+    /// Prohibit external access
     /// </summary>
     public class ForbiddenExternalAccessException : BaseException
     {

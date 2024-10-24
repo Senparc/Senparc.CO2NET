@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,13 +10,13 @@ namespace Senparc.CO2NET.Tests.Utilities
     [TestClass]
     public class StreamUtilityTests
     {
-        string str = "盛派在你身边";
+        string str = "Senparc is by your side"; 
         string baseString = "77u/55ub5rS+5Zyo5L2g6Lqr6L65";
 
         private MemoryStream GetStream(string content)
         {
-            var ms = new MemoryStream();//模拟一个已经存在的Stream
-            var sw = new StreamWriter(ms, encoding: Encoding.UTF8);//写入
+            var ms = new MemoryStream();// Simulate an existing Stream
+            var sw = new StreamWriter(ms, encoding: Encoding.UTF8);// Write
             sw.Write(content);
             sw.Flush();
             return ms;
@@ -30,37 +30,34 @@ namespace Senparc.CO2NET.Tests.Utilities
                 Assert.AreEqual(baseString, result);
             }
 
-            #region 测试异步方法
-
-            Console.WriteLine("=== 测试异步方法 ===");
+            #region Test Asynchronous Method  
+            Console.WriteLine("=== Test Asynchronous Method ===");
             Task.Run(async () =>
             {
                 var result = await StreamUtility.GetBase64StringAsync(GetStream(str));
                 Assert.AreEqual(baseString, result);
-
-                Console.WriteLine("=== 异步完成 ===");
+                Console.WriteLine("=== Asynchronous Completed ===");
             }).GetAwaiter().GetResult();
-
-            #endregion
+            #endregion  
         }
 
-        [TestMethod]
+            [TestMethod]
         public void GetStreamFromBase64String()
         {
             {
-                //不保存文件
+                // Create a new file
                 var ms = StreamUtility.GetStreamFromBase64String(baseString, null);
 
                 Assert.AreEqual(21, ms.Length);
 
-                //保存文件
+                // Open a file
                 var file = UnitTestHelper.RootPath + "GetStreamFromBase64String.txt";
                 var ms2 = StreamUtility.GetStreamFromBase64String(baseString, file);
                 Assert.AreEqual(21, ms.Length);
 
                 Assert.IsTrue(File.Exists(file));
 
-                //读取文件
+                // Read a file
                 using (var fs = new FileStream(file, FileMode.Open))
                 {
                     using (var sr = new StreamReader(fs, Encoding.UTF8))
@@ -70,26 +67,26 @@ namespace Senparc.CO2NET.Tests.Utilities
                     }
                 }
 
-                File.Delete(file);//删除文件
+                File.Delete(file);// Delete a file
             }
 
 
-            #region 测试异步方法
-            Console.WriteLine("=== 测试异步方法 ===");
+            #region Test Asynchronous Method  
+            Console.WriteLine("=== Asynchronous Completed ===");
             Task.Run(async () =>
             {
-                //不保存文件
+                // Create a new file
                 var ms = await StreamUtility.GetStreamFromBase64StringAsync(baseString, null);
                 Assert.AreEqual(21, ms.Length);
 
-                //保存文件
+                // Open a file
                 var file = UnitTestHelper.RootPath + "GetStreamFromBase64String_Async.txt";
                 var ms2 = await StreamUtility.GetStreamFromBase64StringAsync(baseString, file);
                 Assert.AreEqual(21, ms.Length);
 
                 Assert.IsTrue(File.Exists(file));
 
-                //读取文件
+                // Read a file
                 using (var fs = new FileStream(file, FileMode.Open))
                 {
                     using (var sr = new StreamReader(fs, Encoding.UTF8))
@@ -99,9 +96,9 @@ namespace Senparc.CO2NET.Tests.Utilities
                     }
                 }
 
-                File.Delete(file);//删除文件
+                File.Delete(file);// Delete a file
 
-                Console.WriteLine("=== 异步完成 ===");
+                Console.WriteLine("=== Asynchronous Completed ===");
             }).GetAwaiter().GetResult();
 
             #endregion
@@ -116,12 +113,12 @@ namespace Senparc.CO2NET.Tests.Utilities
                 StreamUtility.SaveFileFromStream(stream, file);
 
                 Assert.IsTrue(File.Exists(file));
-                Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(file, str));//检查内容已经被记录
+                Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(file, str));// The file has already been recorded
 
-                File.Delete(file);//删除文件
+                File.Delete(file);// Delete a file
             }
 
-            #region 测试异步方法
+            #region Test Asynchronous Method  
             Task.Run(async () =>
             {
                 var stream = GetStream(str);
@@ -129,10 +126,10 @@ namespace Senparc.CO2NET.Tests.Utilities
                 await StreamUtility.SaveFileFromStreamAsync(stream, file);
 
                 Assert.IsTrue(File.Exists(file));
-                Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(file, str));//检查内容已经被记录
+                Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(file, str));// The file has already been recorded
 
-                File.Delete(file);//删除文件
-                Console.WriteLine("=== 异步完成 ===");
+                File.Delete(file);// Delete a file
+                Console.WriteLine("=== Asynchronous Completed ===");
             }).GetAwaiter().GetResult();
             #endregion
         }

@@ -21,59 +21,59 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2020 Senparc
 
-    文件名：RequestUtility.cs
-    文件功能描述：获取请求结果
+    FileName: RequestUtility.cs
+    File Function Description: Get request result
 
 
-    创建标识：Senparc - 20150211
+    Creation Identifier: Senparc - 20150211
 
-    修改描述：整理接口
+    Modification Description: Organize interface
 
-    修改标识：Senparc - 20150407
-    修改描述：使用Post方法获取字符串结果 修改表单处理方法
+    Modification Identifier: Senparc - 20150407
+    Modification Description: Use Post method to get string result, modify form handling method
 
-    修改标识：Senparc - 20170122
-    修改描述：v4.9.14 为AsUrlData方法添加null判断
+    Modification Identifier: Senparc - 20170122
+    Modification Description: v4.9.14 Add null check for AsUrlData method
 
-    修改标识：Senparc - 20170122
-    修改描述：v4.12.2 修复HttpUtility.UrlEncode方法错误
+    Modification Identifier: Senparc - 20170122
+    Modification Description: v4.12.2 Fix HttpUtility.UrlEncode method error
 
-    修改标识：Senparc - 20170730
-    修改描述：v4.13.3 为RequestUtility.HttpGet()方法添加Accept、UserAgent、KeepAlive设置
+    Modification Identifier: Senparc - 20170730
+    Modification Description: v4.13.3 Add Accept, UserAgent, KeepAlive settings for RequestUtility.HttpGet() method
 
-    修改标识：Senparc - 20180516
-    修改描述：v4.21.0 支持 .NET Core 2.1.0-rc1-final 添加编译条件
+    Modification Identifier: Senparc - 20180516
+    Modification Description: v4.21.0 Support .NET Core 2.1.0-rc1-final, add compilation conditions
 
-    修改标识：Senparc - 20180518
-    修改描述：v4.21.0 支持 .NET Core 2.1.0-rc1-final 添加编译条件
+    Modification Identifier: Senparc - 20180518
+    Modification Description: v4.21.0 Support .NET Core 2.1.0-rc1-final, add compilation conditions
 
     -- CO2NET --
 
-    修改标识：Senparc - 20181009
-    修改描述：v0.2.15 Post 方法添加 headerAddition参数
+    Modification Identifier: Senparc - 20181009
+    Modification Description: v0.2.15 Add headerAddition parameter to Post method
 
-    修改标识：Senparc - 20181215
-    修改描述：v0.3.1 更新 RequestUtility.GetQueryString() 方法
+    Modification Identifier: Senparc - 20181215
+    Modification Description: v0.3.1 Update RequestUtility.GetQueryString() method
 
-    修改标识：Senparc - 20190429
-    修改描述：v0.7.0 优化 HttpClient，重构 RequestUtility（包括 Post 和 Get），引入 HttpClientFactory 机制
+    Modification Identifier: Senparc - 20190429
+    Modification Description: v0.7.0 Optimize HttpClient, refactor RequestUtility (including Post and Get), introduce HttpClientFactory mechanism
 
-    修改标识：Senparc - 20190521
-    修改描述：v0.7.3 .NET Core 提供多证书注册功能
+    Modification Identifier: Senparc - 20190521
+    Modification Description: v0.7.3 .NET Core provides multi-certificate registration function
 
-    修改标识：Senparc - 20190521
-    修改描述：v0.8.4 HttpUtility.HttpPost_Common_NetCore 所调用的额 CreateFileContent 取消对 fileName 参数的 UrlEncode 编码
+    Modification Identifier: Senparc - 20190521
+    Modification Description: v0.8.4 Remove UrlEncode encoding for fileName parameter in HttpUtility.HttpPost_Common_NetCore's CreateFileContent
 
-    修改标识：Senparc - 20190928
-    修改描述：v1.0.101 RequestUtility.GetRequestMemoryStream() 增加对 .NET Core 3.0 AllowSynchronousIO 的设置
+    Modification Identifier: Senparc - 20190928
+    Modification Description: v1.0.101 Add AllowSynchronousIO setting for .NET Core 3.0 in RequestUtility.GetRequestMemoryStream()
 
-    -- 从 CO2NET 移植到 CO2NET.AspNet --
+    -- Migrated from CO2NET to CO2NET.AspNet --
     
-    修改标识：Senparc - 20180721
-    修改描述：v0.1.0  从 CO2NET 移植到 CO2NET.AspNet
+    Modification Identifier: Senparc - 20180721
+    Modification Description: v0.1.0 Migrated from CO2NET to CO2NET.AspNet
     
-    修改标识：Senparc - 20210501
-    修改描述：v0.4.300.4 提供 GetRequestMemoryStreamAsync() 异步方法
+    Modification Identifier: Senparc - 20210501
+    Modification Description: v0.4.300.4 Provide GetRequestMemoryStreamAsync() asynchronous method
 
 
 ----------------------------------------------------------------*/
@@ -102,7 +102,7 @@ using Microsoft.AspNetCore.Http.Features;
 namespace Senparc.CO2NET.AspNet.HttpUtility
 {
     /// <summary>
-    /// HTTP 请求工具类
+    /// HTTP request utility class
     /// </summary>
     public static partial class RequestUtility
     {
@@ -111,7 +111,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
 #if NET462
         private static System.Net.WebProxy _webproxy = null;
         /// <summary>
-        /// 设置Web代理
+        /// Set Web proxy
         /// </summary>
         /// <param name="host"></param>
         /// <param name="port"></param>
@@ -128,7 +128,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         }
 
         /// <summary>
-        /// 清除Web代理状态
+        /// Clear Web proxy status
         /// </summary>
         public static void RemoveHttpProxy()
         {
@@ -137,12 +137,12 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
 #else
 
         /// <summary>
-        /// 作用于 SenparcHttpClient 的 WebProxy（需要在 AddSenparcGlobalServices 之前定义）
+        /// WebProxy for SenparcHttpClient (needs to be defined before AddSenparcGlobalServices)
         /// </summary>
         public static IWebProxy SenparcHttpClientWebProxy { get; set; } = null;
 
         /// <summary>
-        /// 设置Web代理
+        /// Set Web proxy
         /// </summary>
         /// <param name="host"></param>
         /// <param name="port"></param>
@@ -159,7 +159,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         }
 
         /// <summary>
-        /// 清除Web代理状态
+        /// Clear Web proxy status
         /// </summary>
         public static void RemoveHttpProxy()
         {
@@ -167,7 +167,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         }
 
         /// <summary>
-        /// 从 Request.Body 中读取流，并复制到一个独立的 MemoryStream 对象中
+        /// Read stream from Request.Body and copy to a separate MemoryStream object
         /// </summary>
         /// <param name="request"></param>
         /// <param name="allowSynchronousIO"></param>
@@ -195,7 +195,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
 
 
         /// <summary>
-        /// 验证服务器证书
+        /// Validate server certificate
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="certificate"></param>
@@ -209,12 +209,12 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
 
 #if NET462
         /// <summary>
-        /// 设置HTTP头
+        /// Set HTTP headers
         /// </summary>
         /// <param name="request"></param>
         /// <param name="refererUrl"></param>
-        /// <param name="useAjax">是否使用Ajax</param>
-        /// <param name="headerAddition">header附加信息</param>
+        /// <param name="useAjax">Whether to use Ajax</param>
+        /// <param name="headerAddition">Header additional information</param>
         /// <param name="timeOut"></param>
         private static void HttpClientHeader(HttpWebRequest request, string refererUrl, bool useAjax, Dictionary<string, string> headerAddition, int timeOut)
         {
@@ -245,7 +245,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
 #else // NETSTANDARD2_0
 
         /// <summary>
-        /// 验证服务器证书
+        /// Validate server certificate
         /// </summary>
         /// <param name="request"></param>
         /// <param name="certificate"></param>
@@ -268,7 +268,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         {
             //fileName = fileName.UrlEncode();
             var fileContent = new StreamContent(stream);
-            //上传格式参考：
+            //Upload format reference:
             //https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738729
             //https://work.weixin.qq.com/api/doc#10112
             fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
@@ -289,12 +289,12 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         //}
 
         /// <summary>
-        /// 设置HTTP头
+        /// Set HTTP headers
         /// </summary>
         /// <param name="client"></param>
         /// <param name="refererUrl"></param>
-        /// <param name="useAjax">是否使用Ajax</param>
-        /// <param name="headerAddition">header附加信息</param>
+        /// <param name="useAjax">Whether to use Ajax</param>
+        /// <param name="headerAddition">Header additional information</param>
         /// <param name="timeOut"></param>
         private static void HttpClientHeader(HttpClient client, string refererUrl, bool useAjax, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
@@ -343,7 +343,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         #region 同步方法
 
         /// <summary>
-        /// 填充表单信息的Stream
+        /// Fill form information Stream
         /// </summary>
         /// <param name="formData"></param>
         /// <param name="stream"></param>
@@ -352,7 +352,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
             string dataString = GetQueryString(formData);
             var formDataBytes = formData == null ? new byte[0] : Encoding.UTF8.GetBytes(dataString);
             stream.Write(formDataBytes, 0, formDataBytes.Length);
-            stream.Seek(0, SeekOrigin.Begin);//设置指针读取位置
+            stream.Seek(0, SeekOrigin.Begin);//Set pointer read position
         }
 
         #endregion
@@ -360,7 +360,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         #region 异步方法
 
         /// <summary>
-        /// 填充表单信息的Stream
+        /// Fill form information Stream
         /// </summary>
         /// <param name="formData"></param>
         /// <param name="stream"></param>
@@ -369,12 +369,12 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
             string dataString = GetQueryString(formData);
             var formDataBytes = formData == null ? new byte[0] : Encoding.UTF8.GetBytes(dataString);
             await stream.WriteAsync(formDataBytes, 0, formDataBytes.Length).ConfigureAwait(false);
-            stream.Seek(0, SeekOrigin.Begin);//设置指针读取位置
+            stream.Seek(0, SeekOrigin.Begin);//Set pointer read position
         }
 
 #if !NET462
         /// <summary>
-        /// 【异步方法】从 Request.Body 中读取流，并复制到一个独立的 MemoryStream 对象中
+        /// [Asynchronous method] Read stream from Request.Body and copy to a separate MemoryStream object
         /// </summary>
         /// <param name="request"></param>
         /// <param name="allowSynchronousIO"></param>
@@ -400,8 +400,8 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
         #region 只需要使用同步的方法
 
         /// <summary>
-        /// 组装QueryString的方法
-        /// 参数之间用&amp;连接，首位没有符号，如：a=1&amp;b=2&amp;c=3
+        /// Method to assemble QueryString
+        /// Parameters are connected with &amp;, no symbol at the beginning, e.g., a=1&amp;b=2&amp;c=3
         /// </summary>
         /// <param name="formData"></param>
         /// <returns></returns>

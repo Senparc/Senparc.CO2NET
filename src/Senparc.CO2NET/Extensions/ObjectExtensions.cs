@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,35 +21,35 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：ObjectExtensions.cs
-    文件功能描述：对象扩展类
+    FileName：ObjectExtensions.cs
+    File Function Description：Object extension class
     
     
-    创建标识：Senparc - 20180602
+    Creation Identifier：Senparc - 20180602
     
-    修改标识：Senparc - 20180901
-    修改描述：v0.2.10 ObjectExtensions.ToJson() 方法提供 indented 方法，支持缩进格式
+    Modification Identifier：Senparc - 20180901
+    Modification Description：v0.2.10 ObjectExtensions.ToJson() method provides indented method, supports indented format
 
-    修改标识：Senparc - 20160722
-    修改描述：v4.11.5 修复WeixinJsonConventer.Serialize中的错误。感谢 @jiehanlin
+    Modification Identifier：Senparc - 20160722
+    Modification Description：v4.11.5 Fixed error in WeixinJsonConventer.Serialize. Thanks to @jiehanlin
     
-    修改标识：Senparc - 20180526
-    修改描述：v4.22.0-rc1 将 JsonSetting 继承 JsonSerializerSettings，使用 Newtonsoft.Json 进行序列化
+    Modification Identifier：Senparc - 20180526
+    Modification Description：v4.22.0-rc1 JsonSetting inherits JsonSerializerSettings, uses Newtonsoft.Json for serialization
     
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/Helpers/Conventers/WeixinJsonConventer.cs.cs  ----
 
-    修改标识：Senparc - 20180602
-    修改描述：v0.1.0 1、移植 JsonSetting
-                     2、重命名 WeixinJsonContractResolver 为 JsonContractResolver
-                     3、重命名 WeiXinJsonSetting 为 JsonSettingWrap
+    Modification Identifier：Senparc - 20180602
+    Modification Description：v0.1.0 1. Ported JsonSetting
+                     2. Renamed WeixinJsonContractResolver to JsonContractResolver
+                     3. Renamed WeiXinJsonSetting to JsonSettingWrap
 
-    修改标识：Senparc - 20180721
-    修改描述：v0.2.1 优化序列化特性识别
+    Modification Identifier：Senparc - 20180721
+    Modification Description：v0.2.1 Optimized serialization feature recognition
 
-    修改标识：Senparc - 20190108
-    修改描述：v0.5.1 ToJson() 方法添加 jsonSerializerSettings 参数
+    Modification Identifier：Senparc - 20190108
+    Modification Description：v0.5.1 Added jsonSerializerSettings parameter to ToJson() method
 
 ----------------------------------------------------------------*/
 
@@ -58,16 +58,16 @@ using Newtonsoft.Json;
 namespace Senparc.CO2NET.Extensions
 {
     /// <summary>
-    /// 扩展方法
+    /// Extension method
     /// </summary>
     public static class ObjectExtensions
     {
         /// <summary>
-        /// 把数据转换为Json格式（使用Newtonsoft.Json.dll）
+        /// Convert data to Json format (using Newtonsoft.Json.dll)
         /// </summary>
-        /// <param name="data">数据</param>
-        /// <param name="indented">是否使用缩进格式</param>
-        /// <param name="jsonSerializerSettings">序列化设置（默认为null）</param>
+        /// <param name="data">Data</param>
+        /// <param name="indented">Whether to use indented format</param>
+        /// <param name="jsonSerializerSettings">Serialization settings (default is null)</param>
         /// <returns></returns>
         public static string ToJson(this object data, bool indented = false, JsonSerializerSettings jsonSerializerSettings = null)
         {
@@ -76,7 +76,7 @@ namespace Senparc.CO2NET.Extensions
         }
 
         /// <summary>
-        /// string.IsNullOrWhiteSpace()的扩展方法
+        /// Extension method for string.IsNullOrWhiteSpace()
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
@@ -86,7 +86,7 @@ namespace Senparc.CO2NET.Extensions
         }
 
         /// <summary>
-        /// string.IsNullOrEmpty()的扩展方法
+        /// Extension method for string.IsNullOrEmpty()
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
@@ -96,7 +96,7 @@ namespace Senparc.CO2NET.Extensions
         }
 
         /// <summary>
-        /// string.Format()的扩展方法
+        /// Extension method for string.Format()
         /// </summary>
         /// <param name="format"></param>
         /// <param name="args"></param>

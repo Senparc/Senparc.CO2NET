@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
-    <Version>3.2.4</Version>
+    <Version>4.0.0-beta1</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis.RedLock</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis.RedLock</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <Description>
-      Senparc.CO2NET.Cache.Redis.RedLock 模块
+			Senparc.CO2NET.Cache.Redis.RedLock module
 
-      redlock-cs 开源项目：https://github.com/JeffreySu/redlock-cs
+			redlock-cs open source project: https://github.com/JeffreySu/redlock-cs
 
-      Senparc.Weixin SDK 开源项目：
-      https://github.com/JeffreySu/WeiXinMPSDK
-    </Description>
+			Senparc.Weixin SDK open source project:
+			https://github.com/JeffreySu/WeiXinMPSDK
+		</Description>
     <Copyright>Senparc Copyright © 2004~2024</Copyright>
     <PackageTags>Cache,Redis,RedLock,Senparc,盛派,CO2NET</PackageTags>
     <Authors>Jeffrey Su</Authors>
@@ -20,41 +20,41 @@
     <PackageLicenseUrl>https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md</PackageLicenseUrl>
     <ProjectUrl>https://github.com/JeffreySu/redlock-cs</ProjectUrl>
     <Title>Senparc.CO2NET.Cache.Redis.RedLock.dll</Title>
-    <Summary>Redis Cache（StackExchange） RedLock for CO2NET C#</Summary>
+    <Summary>Redis Cache (StackExchange) RedLock for CO2NET C#</Summary>
     <PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
     <PackageIcon>icon.jpg</PackageIcon>
     <PackageReleaseNotes>
-      v0.0.1
-      重写构造函数，提供更加灵活的参数配置。
+			v0.0.1
+			Rewritten constructor to provide more flexible parameter configuration.
 
-      v0.0.2
-      调整引用框架
+			v0.0.2
+			Adjusted reference framework
 
-      v0.0.3
-      提供.net core 支持
+			v0.0.3
+			Provided .net core support
 
-      v0.0.4
-      提供.net framework 4.6.1 支持
+			v0.0.4
+			Provided .net framework 4.6.1 support
 
-      v0.1.0
-      提供.NET Core支持
+			v0.1.0
+			Provided .NET Core support
 
-      v1.0.1-beta1 支持.NET Core 2.0
+			v1.0.1-beta1 Supported .NET Core 2.0
 
-      v1.1.0 停止对 .net core 1.1 生成的独立版本
+			v1.1.0 Stopped generating separate version for .net core 1.1
 
-      v1.2.0-rc1 支持 .NET Core 2.1.0-rc1-final
+			v1.2.0-rc1 Supported .NET Core 2.1.0-rc1-final
 
-      v1.2.5 发布支持 .net core 2.1 的正式版
+			v1.2.5 Released official version supporting .net core 2.1
 
-      ======== CO2NET 移植 ========
+			======== CO2NET Migration ========
 
-      v1.0.0 从 Senparc.Weixin.Cache.REdis.Redlock 移植
-      v2.0.0 使用 .NETStandard2.0 统一支持 .NET Core，放弃对 .NET Core 1.x 的单独适配
-      v2.1.1 升级 StackExchange.Redis 到最新版本
-      v2.2.0 提供缓存异步接口
-      v2.2.1 使用 .ConfigureAwait(false) 避免异步锁死的情况
-      v2.2.4 提供带符号的 nuget 包（.snupkg)
+			v1.0.0 Migrated from Senparc.Weixin.Cache.REdis.Redlock
+			v2.0.0 Unified support for .NET Core using .NETStandard2.0, abandoned separate adaptation for .NET Core 1.x
+			v2.1.1 Upgraded StackExchange.Redis to the latest version
+			v2.2.0 Provided asynchronous cache interface
+			v2.2.1 Used .ConfigureAwait(false) to avoid asynchronous deadlock
+			v2.2.4 Provided signed nuget package (.snupkg)
 </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>

@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.Collections.Generic;
 using System.Dynamic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,8 +10,7 @@ namespace Senparc.CO2NET.Tests.Helpers
     [TestClass]
     public  class SerializerHelperJsonTests
     {
-        #region 复杂条件下的序列化测试：忽略null、特定值值、特定属性测试（微信接口中尤其重要）
-        [TestMethod]
+        #region Serialization Test Under Complex Conditions: Ignore null, specific values, specific properties (especially important in WeChat interfaces)          [TestMethod]
         public void GetJsonStringTest_Null()
         {
             var obj =
@@ -37,7 +36,7 @@ namespace Senparc.CO2NET.Tests.Helpers
             var dt1 = SystemTime.Now;
 
             {
-                //不进行任何设置，返回原始JSON
+                // Do not modify any properties, keep the original JSON
                 var json = SerializerHelper.GetJsonString(obj, jsonSetting: null);
                 Console.WriteLine(json);
                 var exceptedJson = "{\"X\":{\"A\":\"Jeffrey\",\"B\":31,\"C\":null,\"ElementClassA\":{\"A\":\"Jeffrey\",\"B\":null,\"RootClass\":null},\"ElementClassB\":null,\"ElementClass2\":null},\"Y\":{\"O\":\"0\",\"Z\":null}}";
@@ -46,7 +45,7 @@ namespace Senparc.CO2NET.Tests.Helpers
 
 
             {
-                //不忽略任何属性
+                // Do not modify any properties
                 var json = SerializerHelper.GetJsonString(obj, new JsonSetting(false));
                 Console.WriteLine(json);
                 var exceptedJson = "{\"X\":{\"A\":\"Jeffrey\",\"B\":31,\"ElementClassA\":{\"A\":\"Jeffrey\",\"B\":null,\"RootClass\":null},\"ElementClassB\":null,\"ElementClass2\":null},\"Y\":{\"O\":\"0\",\"Z\":null}}";
@@ -54,7 +53,7 @@ namespace Senparc.CO2NET.Tests.Helpers
             }
 
             {
-                //忽略所有为null的属性
+                // If the property is null, ignore it
                 var json = SerializerHelper.GetJsonString(obj, new JsonSetting(true));
                 Console.WriteLine(json);
                 var exceptedJson = "{\"X\":{\"A\":\"Jeffrey\",\"B\":31,\"ElementClassA\":{\"A\":\"Jeffrey\"}},\"Y\":{\"O\":\"0\"}}";
@@ -80,67 +79,67 @@ namespace Senparc.CO2NET.Tests.Helpers
             }
 
             {
-                //忽略特定为null的属性
+                // If the property is null, ignore it
                 var json = SerializerHelper.GetJsonString(obj,
-                                new JsonSetting(false, new List<string>(new[] { "Z" })));//Z属性会被忽略
+                                new JsonSetting(false, new List<string>(new[] { "Z" })));// Z property will be ignored
                 Console.WriteLine(json);
                 var exceptedJson = "{\"X\":{\"A\":\"Jeffrey\",\"B\":31,\"ElementClassA\":{\"A\":\"Jeffrey\",\"B\":null,\"RootClass\":null},\"ElementClassB\":null,\"ElementClass2\":null},\"Y\":{\"O\":\"0\"}}";
                 Assert.AreEqual(exceptedJson, json);
             }
 
             {
-                //忽略特定值测试（忽略特定值，以及忽略null）
+                // The property value is optional, it can be the property value itself or null
                 var obj4 = new RootClass()
                 {
-                    A = "IGNORE",//会被忽略
+                    A = "IGNORE",// Will be ignored
                     B = 31,
                     C = null,
                     ElementClassA = null,
                     ElementClassB = null,
                     ElementClass2 = null
                 };
-                var json = SerializerHelper.GetJsonString(obj4, new JsonSetting(true));//Z属性会被忽略
+                var json = SerializerHelper.GetJsonString(obj4, new JsonSetting(true));// Z property will be ignored
                 Console.WriteLine(json);
                 var exceptedJson = "{\"B\":31}";
                 Assert.AreEqual(exceptedJson, json);
             }
 
             {
-                //忽略特定值测试（只忽略特定值，不忽略null）
+                // The property value is optional, only the property value itself or null
                 var obj4 = new RootClass()
                 {
-                    A = "IGNORE",//会被忽略
+                    A = "IGNORE",// Will be ignored
                     B = 31,
                     C = null,
                     ElementClassA = null,
                     ElementClassB = null,
                     ElementClass2 = null
                 };
-                var json = SerializerHelper.GetJsonString(obj4, new JsonSetting(false));//Z属性会被忽略
+                var json = SerializerHelper.GetJsonString(obj4, new JsonSetting(false));// Z property will be ignored
                 Console.WriteLine(json);
                 var exceptedJson = "{\"B\":31,\"ElementClassA\":null,\"ElementClassB\":null,\"ElementClass2\":null}";
                 Assert.AreEqual(exceptedJson, json);
             }
 
             {
-                //忽略特定值测试（不匹配，因此不忽略）
+                // The property value is optional, match it, but it is not required
                 var obj4 = new RootClass()
                 {
-                    A = "DO NET IGNORE",//不会被忽略
+                    A = "DO NET IGNORE",// Will be ignored
                     B = 31,
                     C = null,
                     ElementClassA = null,
                     ElementClassB = null,
                     ElementClass2 = null
                 };
-                var json = SerializerHelper.GetJsonString(obj4, new JsonSetting(true));//Z属性会被忽略
+                var json = SerializerHelper.GetJsonString(obj4, new JsonSetting(true));// Z property will be ignored
                 Console.WriteLine(json);
                 var exceptedJson = "{\"A\":\"DO NET IGNORE\",\"B\":31}";
                 Assert.AreEqual(exceptedJson, json);
             }
 
             {
-                //忽略特定类型为null的属性
+                // If the property value is null, ignore it
                 var obj3 = new RootClass()
                 {
                     A = "Jeffrey",
@@ -148,7 +147,7 @@ namespace Senparc.CO2NET.Tests.Helpers
                     C = null,
                     ElementClassA = new ElementClass() { A = "Jeffrey", B = null },
                     ElementClassB = null,
-                    ElementClass2 = null//将会被忽略
+                    ElementClass2 = null// Will be ignored
                 };
 
                 var json3 = SerializerHelper.GetJsonString(obj3,
@@ -198,7 +197,7 @@ namespace Senparc.CO2NET.Tests.Helpers
         #endregion
 
 
-        #region 复杂（嵌套类型）反序列化测试
+        #region Complex (Nested Type) Deserialization Test  
 
         [TestMethod]
         public void GetObjectTest()
@@ -219,7 +218,7 @@ namespace Senparc.CO2NET.Tests.Helpers
         #endregion
 
 
-        #region 简单序列化/反序列化测试
+        #region Simple Serialization/Deserialization Test  
 
         [TestMethod]
         public void Simple_GetJsonStringTest()
@@ -266,7 +265,7 @@ namespace Senparc.CO2NET.Tests.Helpers
 
         #endregion
 
-        #region ExpandoObject类型转换测试
+        #region ExpandoObject Type Conversion Test  
 
         [TestMethod]
         public void GetJsonStringTest_Expando()

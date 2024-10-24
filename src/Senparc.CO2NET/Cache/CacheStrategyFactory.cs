@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -26,8 +26,8 @@ using System.Text;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// 缓存策略工厂。
-    /// <para>缓存策略的注册（立即启用）和当前缓存策略获取</para>
+    /// Cache strategy factory.
+    /// <para>Registration of cache strategy (immediate activation) and retrieval of current cache strategy</para>
     /// </summary>
     public static class CacheStrategyFactory
     {
@@ -41,21 +41,21 @@ namespace Senparc.CO2NET.Cache
         //}
 
         /// <summary>
-        /// 注册当前全局环境下的缓存策略，并立即启用。
+        /// Register the cache strategy for the current global environment and activate it immediately.
         /// </summary>
-        /// <param name="func">如果为 null，将使用默认的本地缓存策略（LocalObjectCacheStrategy.Instance）</param>
+        /// <param name="func">If null, the default local cache strategy (LocalObjectCacheStrategy.Instance) will be used</param>
         public static void RegisterObjectCacheStrategy(Func<IBaseObjectCacheStrategy> func)
         {
             ObjectCacheStrateFunc = func;
 
             if (func!=null)
             {
-                ObjectCacheStrategy = func();//提前运行一次，否则第一次运行开销比较大（400毫秒以上）
+                ObjectCacheStrategy = func();//Run once in advance, otherwise the first run will have a large overhead (more than 400 milliseconds)
             }
         }
 
         /// <summary>
-        /// 获取全局缓存策略
+        /// Get the global cache strategy
         /// </summary>
         /// <param name="serviceProvider"></param>
         /// <returns></returns>
@@ -65,33 +65,33 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 获取全局缓存策略
+        /// Get the global cache strategy
         /// </summary>
         /// <returns></returns>
         public static IBaseObjectCacheStrategy GetObjectCacheStrategyInstance()
         {
             if (ObjectCacheStrateFunc == null)
             {
-                //默认状态
+                //Default state
                 return LocalObjectCacheStrategy.Instance;
             }
             else
             {
-                //自定义类型
+                //Custom type
                 var instance = ObjectCacheStrateFunc();// ?? LocalObjectCacheStrategy.Instance;
 
                 //if (instance == null)
                 //{
-                //    return LocalObjectCacheStrategy.Instance;//确保有值，防止委托内结果仍然为null
+                //    return LocalObjectCacheStrategy.Instance;//Ensure there is a value to prevent the delegate result from still being null
                 //}
                 return instance;
             }
         }
 
         /// <summary>
-        /// 获取指定领域缓存的换存策略
+        /// Get the cache strategy for the specified domain cache
         /// </summary>
-        /// <param name="cacheStrategyDomain">领域缓存信息（需要为单例）CacheStrategyDomain</param>
+        /// <param name="cacheStrategyDomain">Domain cache information (must be singleton) CacheStrategyDomain</param>
         /// <returns></returns>
         public static IDomainExtensionCacheStrategy GetExtensionCacheStrategyInstance(ICacheStrategyDomain cacheStrategyDomain)
         {
@@ -109,12 +109,12 @@ namespace Senparc.CO2NET.Cache
         //{
         //    if (ContainerCacheStrateFunc == null)
         //    {
-        //        //默认状态
+        //        //Default state
         //        return LocalContainerCacheStrategy.Instance;
         //    }
         //    else
         //    {
-        //        //自定义类型
+        //        //Custom type
         //        var instance = ContainerCacheStrateFunc();
         //        return instance;
         //    }

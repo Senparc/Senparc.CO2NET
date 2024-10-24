@@ -11,14 +11,14 @@ namespace Senparc.Weixin.Cache.Redis
     public class RedisManager
     {
         /// <summary>
-        /// redis配置文件信息
+        /// Redis configuration file information
         /// </summary>
         private static RedisConfigInfo redisConfigInfo = RedisConfigInfo.GetConfig();
 
         private static PooledRedisClientManager prcm;
 
         /// <summary>
-        /// 静态构造方法，初始化链接池管理对象
+        /// Static constructor, initializes the connection pool management object
         /// </summary>
         static RedisManager()
         {
@@ -27,7 +27,7 @@ namespace Senparc.Weixin.Cache.Redis
 
 
         /// <summary>
-        /// 创建链接池管理对象
+        /// Creates the connection pool management object
         /// </summary>
         private static void CreateManager()
         {
@@ -49,7 +49,7 @@ namespace Senparc.Weixin.Cache.Redis
         }
 
         /// <summary>
-        /// 客户端缓存操作对象
+        /// Client cache operation object
         /// </summary>
         public static IRedisClient GetClient()
         {

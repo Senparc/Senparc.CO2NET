@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,33 +21,33 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
   
-    文件名：Config.cs
-    文件功能描述：全局配置文件
+    FileName: Config.cs
+    File Function Description: Global configuration file
     
     
-    创建标识：Senparc - 20180602
+    Creation Identifier: Senparc - 20180602
  
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/Config.cs  ----
 
-    修改标识：Senparc - 201806021
-    修改描述：v0.1.2 为 DefaultCacheNamespace 设置默认值
+    Modification Identifier: Senparc - 201806021
+    Modification Description: v0.1.2 Set default value for DefaultCacheNamespace
    
-    修改标识：Senparc - 20180704
-    修改描述：v0.1.4 添加 SenparcSetting 全局配置属性
+    Modification Identifier: Senparc - 20180704
+    Modification Description: v0.1.4 Add SenparcSetting global configuration property
  
-    修改标识：Senparc - 20180830
-    修改描述：v0.2.9 优化 Config.RootDirectoryPath 方法，可自动获取默认值
+    Modification Identifier: Senparc - 20180830
+    Modification Description: v0.2.9 Optimize Config.RootDirectoryPath method, can automatically get default value
 
-    修改标识：Senparc - 20180911
-    修改描述：v0.8.10 提供 Config.HostingEnvironment 属性 
+    Modification Identifier: Senparc - 20180911
+    Modification Description: v0.8.10 Provide Config.HostingEnvironment property 
 
-    修改标识：Senparc - 20211101
-    修改描述：v1.6 修改 RootDictionaryPath 名为 RootDirectoryPath
+    Modification Identifier: Senparc - 20211101
+    Modification Description: v1.6 Rename RootDictionaryPath to RootDirectoryPath
  
-    修改标识：Senparc - 20221219
-    修改描述：v2.1.4 RootDictionaryPath 设置为过期会抛错
+    Modification Identifier: Senparc - 20221219
+    Modification Description: v2.1.4 Set RootDictionaryPath to throw error when expired
   
 ----------------------------------------------------------------*/
 
@@ -59,19 +59,19 @@ using System.Text.RegularExpressions;
 namespace Senparc.CO2NET
 {
     /// <summary>
-    /// Senparc.CO2NET 全局设置
+    /// Senparc.CO2NET global settings
     /// </summary>
     public class Config
     {
 
         /// <summary>
-        /// <para>全局配置</para>
-        /// <para>在 startup.cs 中运行 RegisterServiceExtension.AddSenparcGlobalServices() 即可自动注入</para>
+        /// <para>Global configuration</para>
+        /// <para>Run RegisterServiceExtension.AddSenparcGlobalServices() in startup.cs to automatically inject</para>
         /// </summary>
-        public static SenparcSetting SenparcSetting { get; set; } = new SenparcSetting();//TODO:需要考虑分布式的情况，后期需要储存在缓存中
+        public static SenparcSetting SenparcSetting { get; set; } = new SenparcSetting();//TODO: Need to consider distributed scenarios, later need to store in cache
 
         /// <summary>
-        /// 指定是否是Debug状态，如果是，系统会自动输出日志
+        /// Specify whether it is in Debug mode, if true, the system will automatically output logs
         /// </summary>
         public static bool IsDebug
         {
@@ -95,19 +95,19 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// 请求超时设置（以毫秒为单位），默认为10秒。
-        /// 说明：此处常量专为提供给方法的参数的默认值，不是方法内所有请求的默认超时时间。
+        /// Request timeout setting (in milliseconds), default is 10 seconds.
+        /// Note: This constant is specifically provided as a default value for method parameters, not the default timeout for all requests within the method.
         /// </summary>
         public const int TIME_OUT = 10000;
 
         /// <summary>
-        /// JavaScriptSerializer 类接受的 JSON 字符串的最大长度
+        /// Maximum length of JSON string accepted by JavaScriptSerializer class
         /// </summary>
-        public static int MaxJsonLength = int.MaxValue;//TODO:需要考虑分布式的情况，后期需要储存在缓存中
+        public static int MaxJsonLength = int.MaxValue;//TODO: Need to consider distributed scenarios, later need to store in cache
 
 
         /// <summary>
-        /// 默认缓存键的第一级命名空间，默认值：DefaultCache
+        /// First-level namespace for default cache keys, default value: DefaultCache
         /// </summary>
         public static string DefaultCacheNamespace
         {
@@ -124,7 +124,7 @@ namespace Senparc.CO2NET
         private static string _rootDirectoryPath = null;
 
         /// <summary>
-        /// 网站根目录绝对路径
+        /// Absolute path of the website root directory
         /// </summary>
         public static string RootDirectoryPath
         {
@@ -156,7 +156,7 @@ namespace Senparc.CO2NET
         }
 
         /// <summary>
-        /// 网站根目录绝对路径
+        /// Absolute path of the website root directory
         /// </summary>
         [Obsolete("请使用 RootDirectoryPath 属性", true)]
         public static string RootDictionaryPath

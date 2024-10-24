@@ -20,14 +20,14 @@
 /*----------------------------------------------------------------
     Copyright (C) 2020 Senparc
 
-    文件名：Redlock.cs
-    文件功能描述：Redis 锁
+    FileName：Redlock.cs
+    File Function Description：Redis Lock
 
 
-    创建标识：Senparc - 20170402
+    Creation Identifier：Senparc - 20170402
     
-    修改标识：Senparc - 20190412
-    修改描述：v2.2.0 提供缓存异步接口
+    Modification Identifier：Senparc - 20190412
+    Modification Description：v2.2.0 Provide asynchronous cache interface
     
 ----------------------------------------------------------------*/
 
@@ -84,7 +84,7 @@ namespace Redlock.CSharp
 
         protected Dictionary<String, CSRedisClient> redisMasterDictionary = new Dictionary<string, CSRedisClient>();
 
-        #region 同步方法
+        #region Synchronous Methods
 
         //TODO: Refactor passing a ConnectionMultiplexer
         protected bool LockInstance(string redisServer, string resource, byte[] val, TimeSpan ttl)
@@ -215,7 +215,7 @@ namespace Redlock.CSharp
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         //TODO: Refactor passing a ConnectionMultiplexer
         protected async Task<bool> LockInstanceAsync(string redisServer, string resource, byte[] val, TimeSpan ttl)
@@ -252,7 +252,7 @@ namespace Redlock.CSharp
         /// </summary>
         /// <param name="resource"></param>
         /// <param name="ttl"></param>
-        /// <returns>bool：successfull，Lock：lockObject</returns>
+        /// <returns>bool: successfull, Lock: lockObject</returns>
         public async Task<Tuple<bool, Lock>> LockAsync(string resource, TimeSpan ttl)
         {
             var val = CreateUniqueLockId();
@@ -315,7 +315,7 @@ namespace Redlock.CSharp
         }
 
         /// <summary>
-        /// 这是改造新增的委托，返回task
+        /// This is a newly added delegate that returns a task
         /// </summary>
         /// <param name="func"></param>
         /// <returns></returns>

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.CO2NET.Helpers;
@@ -9,7 +9,7 @@ namespace Senparc.CO2NET.Tests.Helpers
     [TestClass]
     public class JsonSettingTests
     {
-        #region JsonSetting ²âÊÔ
+        #region JsonSetting Test
 
         [Serializable]
         public class WeixinData
@@ -31,7 +31,7 @@ namespace Senparc.CO2NET.Tests.Helpers
                 UserName = "JeffreySu",
                 Note = null,
                 Sign = null,
-                Sex = Sex.ÄÐ
+                Sex = Sex.Male
             };
 
             //string json = js.GetJsonString(weixinData);
@@ -55,7 +55,7 @@ namespace Senparc.CO2NET.Tests.Helpers
             Console.WriteLine(json);
             Assert.AreEqual("{\"page\":\"pages/websocket/websocket\",\"width\":100,\"line_color\":\"red\",\"is_hyaline\":true}", json);
 
-            //²âÊÔ¿Õ×Ö·û´®
+            //Test string
              data = new { scene = "", page = "pages/websocket/websocket", width = 100, line_color = "red", is_hyaline = true };
             json = SerializerHelper.GetJsonString(data, jsonSetting);
             Console.WriteLine(json);
