@@ -55,7 +55,7 @@ namespace Senparc.CO2NET.Cache.Redis
             //LockNow();//Immediately wait and acquire the lock
         }
 
-        #region 同步方法
+        #region Synchronous Methods
 
         /// <summary>
         /// Create an instance of RedisCacheLock and immediately attempt to acquire the lock
@@ -97,7 +97,7 @@ namespace Senparc.CO2NET.Cache.Redis
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         /// <summary>
         /// [Asynchronous method] Create an instance of RedisCacheLock and immediately attempt to acquire the lock

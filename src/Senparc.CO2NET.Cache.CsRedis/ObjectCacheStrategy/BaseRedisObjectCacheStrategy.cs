@@ -76,7 +76,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         }
 
 
-        #region 同步方法
+        #region Synchronous Methods
 
 
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法", true)]
@@ -101,7 +101,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         public abstract Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false);
 
@@ -123,7 +123,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         #endregion
 
 
-        #region 同步锁
+        #region Synchronous Lock
 
         public override ICacheLock BeginCacheLock(string resourceName, string key, int retryCount = 0, TimeSpan retryDelay = new TimeSpan())
         {

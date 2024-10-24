@@ -27,7 +27,7 @@ namespace Senparc.CO2NET.WebApi
 {
     public partial class WebApiEngine
     {
-        #region Doc 文档相关
+        #region Doc related
 
         /// <summary>
         /// Get global unified docName
@@ -179,7 +179,7 @@ namespace Senparc.CO2NET.WebApi
             ApiXmlInfo apiXmlInfo;
             if (!sourceApiXmlCollection.ContainsKey(sourceAssemblyName))
             {
-                #region 使用内嵌资源
+                #region Using embedded resources
                 //var sourceName = $"Senparc.Xncf.WeixinManager.App_Data.ApiDocXml.{xmlFileName}";//Embedded resource address
                 //var sourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(sourceName);
                 //var useXml = sourceStream?.Length > 0;
@@ -311,7 +311,7 @@ namespace Senparc.CO2NET.WebApi
 
             foreach (var item in dynamicApiXmlCollection)
             {
-                #region 保存新的 Xml 文件
+                #region Save new Xml file
 
 
                 var newDocFileName = Path.Combine(dynamicFilePath, $"{item.Key}.xml");

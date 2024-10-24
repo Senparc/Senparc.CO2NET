@@ -96,7 +96,7 @@ namespace Senparc.CO2NET.WebApi
             }
         }
 
-        #region 创建动态程序集相关
+        #region Create dynamic assembly related
 
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Senparc.CO2NET.WebApi
 
             var assembleName = ApiAssemblyNames[category];
 
-            #region 动态创建程序集
+            #region Dynamically create assembly
 
             var dynamicAssembly = BuildDynamicAssembly(assembleName, apiBindGroup);
 
@@ -188,7 +188,7 @@ namespace Senparc.CO2NET.WebApi
 
                     apiIndex++;
 
-                    #region 创建 API 方法
+                    #region Create API methods
 
                     await BuildApiMethodForOneThread(apiBindGroup, apiBindInfoBlock, apiMethodName, dynamicAssembly.ControllerKeyName, dynamicAssembly.Tb,
                     dynamicAssembly.FbServiceProvider, apiIndex);

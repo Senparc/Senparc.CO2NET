@@ -37,7 +37,7 @@ namespace Senparc.CO2NET
         public string SenparcUnionAgentKey { get; set; }
 
 
-        #region 分布式缓存
+        #region Distributed Cache
 
         /// <summary>
         /// Redis connection string
