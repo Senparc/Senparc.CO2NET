@@ -17,12 +17,15 @@ Senparc.CO2NET is already relied upon as the foundational library for Senparc se
   
 | Module Function | Nuget Name                     | Nuget                                                                                   | Supported .NET Versions                          |  
 |-----------------|--------------------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------|  
-| CO2NET Base Library | Senparc.CO2NET                | [![Senparc.CO2NET][1.1]][1.2]  [![Senparc.CO2NET][nuget-img-base]][nuget-url-base]     | ![.NET 3.5][net35N]  ![.NET 4.0][net40N]  ![.NET 4.6.2][net462Y]  ![.NET Core 2.0][core20Y] |  
-| MagicObject (New) | Senparc.CO2NET.MagicObject     | [![Senparc.CO2NET.MagicObject][6.1]][6.2]  [![Senparc.CO2NET.MagicObject][nuget-img-base-magic-object]][nuget-url-base-magic-object] | ![.NET 3.5][net35Y]  ![.NET 4.0][net40Y]  ![.NET 4.6.2][net462Y]  ![.NET Core 2.0][core20Y] |  
-| APM Module | Senparc.CO2NET.APM             | [![Senparc.CO2NET.APM][2.1]][2.2]  [![Senparc.CO2NET.APM][nuget-img-base-apm]][nuget-url-base-apm] | ![.NET 3.5][net35Y]  ![.NET 4.0][net40Y]  ![.NET 4.6.2][net462Y]  ![.NET Core 2.0][core20Y] |  
-| Redis Base Library | Senparc.CO2NET.Cache.Redis    | [![Senparc.CO2NET.Cache.Redis][3.1]][3.2]  [![Senparc.CO2NET.Cache.Redis][nuget-img-base-redis]][nuget-url-base-redis] | ![.NET 3.5][net35N]  ![.NET 4.0][net40N]  ![.NET 4.6.2][net462Y]  ![.NET Core 2.0][core20Y] |  
-| Memcached Base Library | Senparc.CO2NET.Cache.Memcached | [![Senparc.CO2NET.Cache.Memcached][4.1]][4.2]  [![Senparc.CO2NET.Cache.Memcached][nuget-img-base-memcached]][nuget-url-base-memcached] | ![.NET 3.5][net35N]  ![.NET 4.0][net40N]  ![.NET 4.6.2][net462Y]  ![.NET Core 2.0][core20Y] |  
-| WebApi (New) | Senparc.CO2NET.WebApi           | [![Senparc.CO2NET.WebApi][5.1]][5.2]  | Supports .NET Standard 2.0+ and .NET Core 2.1/3.1, .NET 5.0/6.0/7.0/8.0+  
+| CO2NET Base Library | Senparc.CO2NET   | [![Senparc.CO2NET][1.1]][1.2]    [![Senparc.CO2NET][nuget-img-base]][nuget-url-base]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.6.2][net462Y]    ![.NET Core 2.0][core20Y]
+| APM Module | Senparc.CO2NET.APM   | [![Senparc.CO2NET.APM][2.1]][2.2]    [![Senparc.CO2NET.APM][nuget-img-base-apm]][nuget-url-base-apm]  |  ![.NET 3.5][net35Y]    ![.NET 4.0][net40Y]   ![.NET 4.6.2][net462Y]    ![.NET Core 2.0][core20Y]
+| Redis Base Library | Senparc.CO2NET.Cache.Redis   | [![Senparc.CO2NET.Cache.Redis][3.1]][3.2]    [![Senparc.CO2NET.Cache.Redis][nuget-img-base-redis]][nuget-url-base-redis]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.6.2][net462Y]    ![.NET Core 2.0][core20Y]
+| Memcached Base Library | Senparc.CO2NET.Cache.Memcached   | [![Senparc.CO2NET.Cache.Memcached][4.1]][4.2]    [![Senparc.CO2NET.Cache.Memcached][nuget-img-base-memcached]][nuget-url-base-memcached]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.6.2][net462Y]    ![.NET Core 2.0][core20Y]
+| WebApi (New) | Senparc.CO2NET.WebApi   | [![Senparc.CO2NET.WebApi][5.1]][5.2]    [![Senparc.CO2NET.WebApi][nuget-img-base-memcached]][nuget-url-base-memcached]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.6.2][net462Y]    ![.NET Core 2.0][core20Y]
+| MagicObject (New) | Senparc.CO2NET.MagicObject   | [![Senparc.CO2NET.MagicObject][6.1]][6.2]    [![Senparc.CO2NET.MagicObject][nuget-img-base-magic-object]][nuget-url-base-magic-object]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.6.2][net462Y]    ![.NET Core 2.0][core20Y]
+
+
+![.NET Core 2.0][core20Y] : Supports .NET Standard 2.0+ and .NET Core 2.1/3.1, .NET 5.0/6.0/7.0/8.0+  
 
 > [!NOTE]
 > CO2NET will gradually stop supporting .NET Framework 4.0 and earlier versions.  
