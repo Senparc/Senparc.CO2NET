@@ -1,14 +1,14 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2023 Senparc
 
-    文件名：WebApiEngine.Doc.cs
-    文件功能描述：WebApi 自动生成引擎 - 文档相关
+    FileName：WebApiEngine.Doc.cs
+    File Function Description：WebApi Auto-Generation Engine - Document Related
 
 
-    创建标识：Senparc - 20210627
+    Creation Identifier：Senparc - 20210627
 
-    修改标识：Senparc - 20211122
-    修改描述：v1.1.2 优化文档提取正则表达式
+    Modification Identifier：Senparc - 20211122
+    Modification Description：v1.1.2 Optimized document extraction regex
    
 ----------------------------------------------------------------*/
 
@@ -27,10 +27,10 @@ namespace Senparc.CO2NET.WebApi
 {
     public partial class WebApiEngine
     {
-        #region Doc 文档相关
+        #region Doc related
 
         /// <summary>
-        /// 获取全局统一 docName
+        /// Get global unified docName
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
@@ -41,12 +41,12 @@ namespace Senparc.CO2NET.WebApi
         }
 
         /// <summary>
-        /// 检查并创建物理目录
+        /// Check and create physical directory
         /// </summary>
-        /// <param name="appDataPath">App_Data 文件夹路径</param>
+        /// <param name="appDataPath">App_Data folder path</param>
         internal void TryCreateDir(string appDataPath)
         {
-            //WriteLog($"检查目录：{appDataPath}");
+            //WriteLog($"Check directory: {appDataPath}");
             if (!Directory.Exists(appDataPath))
             {
                 Directory.CreateDirectory(appDataPath);
@@ -55,12 +55,12 @@ namespace Senparc.CO2NET.WebApi
         }
 
         /// <summary>
-        /// 从 xml 中获取方法名和参数的正则
+        /// Get regex for method names and parameters from xml
         /// </summary>
         private static Regex regexForDoc = new Regex(@"(M\:)(?<docName>[^(""]+)(?<paramsPart>\({1}.+\){1})", RegexOptions.Compiled);
 
         /// <summary>
-        /// 获取 DocName
+        /// Get DocName
         /// </summary>
         /// <param name="nameAttr"></param>
         /// <returns></returns>
@@ -75,7 +75,7 @@ namespace Senparc.CO2NET.WebApi
 
             return new DocMethodInfo(null, null);
 
-            //以下方法速度略慢：
+            //The following method is slightly slower:
             /*
             if (xmlAttr.StartsWith("M:"))
             {
@@ -88,7 +88,7 @@ namespace Senparc.CO2NET.WebApi
         }
 
         /// <summary>
-        /// 获取 XML 中所有 Member
+        /// Get all Members from XML
         /// </summary>
         /// <param name="root"></param>
         /// <returns></returns>
@@ -113,7 +113,7 @@ namespace Senparc.CO2NET.WebApi
 
 
         /// <summary>
-        /// 生成新的 XML 文档内容
+        /// Generate new XML document content
         /// </summary>
         /// <param name="methodName"></param>
         /// <param name="methodInfo"></param>
@@ -127,18 +127,18 @@ namespace Senparc.CO2NET.WebApi
                 return;
             }
 
-            //查找文档是否已经缓存
+            //Check if the document is already cached
             var sourceAssemblyName = methodInfo.DeclaringType.Assembly.GetName().Name;
             if (omitApiXmlList.ContainsKey(sourceAssemblyName))
             {
-                return;//如果确定当前 XML 需要被忽略（如不存在，则不进行处理）
+                return;//If it is determined that the current XML needs to be ignored (e.g., does not exist, then do not process)
             }
 
-            //获取或初始化 XML 信息
+            //Get or initialize XML information
             ApiXmlInfo apiXmlInfo = await TryGetApiXmlInfo(category, sourceAssemblyName).ConfigureAwait(false);
             if (apiXmlInfo == null)
             {
-                return;//没有文件存在，忽略
+                return;//No file exists, ignore
             }
 
             var dynamicAssemblyName = ApiAssemblyNames[category];
@@ -147,8 +147,8 @@ namespace Senparc.CO2NET.WebApi
 
             var xmlMembers = dynamicDocument.Root.Element("members");
 
-            //生成文档
-            var docMethodName = $"{methodInfo.DeclaringType.FullName}.{methodInfo.Name}";//以(结尾确定匹配到完整的方法名
+            //Generate document
+            var docMethodName = $"{methodInfo.DeclaringType.FullName}.{methodInfo.Name}";//Match the complete method name by ending with (
 
             //WriteLog($"\t search for docName:  {docMethodName}");//\t\tSDK Method：{apiMethodInfo.ToString()}
 
@@ -169,7 +169,7 @@ namespace Senparc.CO2NET.WebApi
         }
 
         /// <summary>
-        /// 获取或初始化 ApiXmlInfo
+        /// Get or initialize ApiXmlInfo
         /// </summary>
         /// <param name="category"></param>
         /// <param name="sourceAssemblyName"></param>
@@ -179,8 +179,8 @@ namespace Senparc.CO2NET.WebApi
             ApiXmlInfo apiXmlInfo;
             if (!sourceApiXmlCollection.ContainsKey(sourceAssemblyName))
             {
-                #region 使用内嵌资源
-                //var sourceName = $"Senparc.Xncf.WeixinManager.App_Data.ApiDocXml.{xmlFileName}";//嵌入资源地址
+                #region Using embedded resources
+                //var sourceName = $"Senparc.Xncf.WeixinManager.App_Data.ApiDocXml.{xmlFileName}";//Embedded resource address
                 //var sourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(sourceName);
                 //var useXml = sourceStream?.Length > 0;
                 #endregion
@@ -189,7 +189,7 @@ namespace Senparc.CO2NET.WebApi
                 {
                     if (!sourceApiXmlCollection.ContainsKey(sourceAssemblyName))
                     {
-                        var xmlFileName = $"{sourceAssemblyName}.xml";//XML 文件名
+                        var xmlFileName = $"{sourceAssemblyName}.xml";//XML file name
                         var xmlFilePath = Path.Combine(DocXmlPath, xmlFileName);
                         if (File.Exists(xmlFilePath))
                         {
@@ -217,13 +217,13 @@ namespace Senparc.CO2NET.WebApi
                                     dtlong += SystemTime.DiffTotalMS(dt00);
                                     if (docMethodInfo.MethodName != null && docMethodInfo.ParamsPart != null)
                                     {
-                                        //记录索引信息
+                                        //Record index information
                                         apiXmlInfo.DocMembersCollection[docMethodInfo.MethodName] = new DocMembersCollectionValue(/*x, */nameAttr, docMethodInfo.ParamsPart);
                                         //Console.WriteLine("record docMembersCollection:" + docMethodInfo.MethodName);
 
-                                        //记录接口信息，用于搜索
+                                        //Record interface information for search
                                         var isAsync = docMethodInfo.MethodName.EndsWith("Async", StringComparison.OrdinalIgnoreCase) ||
-                                                        docMethodInfo.MethodName.Contains("Async``", StringComparison.OrdinalIgnoreCase);//是否是异步方法
+                                                        docMethodInfo.MethodName.Contains("Async``", StringComparison.OrdinalIgnoreCase);//Is it an asynchronous method
                                         _findWeixinApiService.Value.RecordApiItem(category, docMethodInfo.MethodName, docMethodInfo.ParamsPart,
                                             x.Element("summary")?.Value, isAsync);
                                     }
@@ -233,7 +233,7 @@ namespace Senparc.CO2NET.WebApi
                         }
                         else
                         {
-                            //没有文件存在，忽略
+                            //No file exists, ignore
                             omitApiXmlList.TryAdd(sourceAssemblyName, null);
                             return null;
                         }
@@ -257,7 +257,7 @@ namespace Senparc.CO2NET.WebApi
 
 
         /// <summary>
-        /// 获取动态生成的 XML
+        /// Get dynamically generated XML
         /// </summary>
         /// <param name="dynamicAssemblyName"></param>
         /// <param name="dynamicDocument"></param>
@@ -293,7 +293,7 @@ namespace Senparc.CO2NET.WebApi
 
 
         /// <summary>
-        /// 保存动态接口的 XML 文件
+        /// Save dynamically generated XML file
         /// </summary>
         /// <returns></returns>
         internal void SaveDynamicApiXml()
@@ -311,7 +311,7 @@ namespace Senparc.CO2NET.WebApi
 
             foreach (var item in dynamicApiXmlCollection)
             {
-                #region 保存新的 Xml 文件
+                #region Save new Xml file
 
 
                 var newDocFileName = Path.Combine(dynamicFilePath, $"{item.Key}.xml");
@@ -321,7 +321,7 @@ namespace Senparc.CO2NET.WebApi
                 {
                     //using (XmlWriter xw = XmlWriter.Create(newDocFile, new XmlWriterSettings() { Async = true }))
                     //{
-                    //    await document.SaveAsync(xw, new CancellationToken()).ConfigureAwait(false);//保存
+                    //    await document.SaveAsync(xw, new CancellationToken()).ConfigureAwait(false);//Save
                     //}
                     item.Value.Save(newDocFileName);
 

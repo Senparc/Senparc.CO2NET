@@ -1,11 +1,11 @@
 ﻿/*----------------------------------------------------------------
     Copyright(C) 2024 Senparc
 
-    文件名：CacheException.cs
-    文件功能描述：缓存异常
+    FileName：CacheException.cs
+    File Function Description：Cache Exception
 
 
-    创建标识：Senparc - 20180728
+    Creation Identifier：Senparc - 20180728
 
 ----------------------------------------------------------------*/
 
@@ -14,12 +14,12 @@ using System;
 namespace Senparc.CO2NET.Exceptions
 {
     /// <summary>
-    /// 缓存异常
+    /// Cache Exception
     /// </summary>
     public class CacheException : BaseException
     {
         /// <summary>
-        /// 缓存异常构造函数
+        /// Cache Exception Constructor
         /// </summary>
         /// <param name="message"></param>
         /// <param name="inner"></param>

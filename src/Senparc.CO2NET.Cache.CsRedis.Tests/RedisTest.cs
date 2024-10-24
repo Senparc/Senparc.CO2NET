@@ -1,4 +1,4 @@
-using MessagePack;
+锘縰sing MessagePack;
 using MessagePack.Formatters;
 using MessagePack.Resolvers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -48,7 +48,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 
-            Console.WriteLine($"SetTest单条测试耗时：{SystemTime.DiffTotalMS(dt)}ms");
+            Console.WriteLine($"SetTest single test elapsed time: {SystemTime.DiffTotalMS(dt)}ms");
         }
 
         [TestMethod]
@@ -75,7 +75,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 
-            Console.WriteLine($"SetTest单条测试耗时：{SystemTime.DiffTotalMS(dt)}ms");
+            Console.WriteLine($"SetTest single test elapsed time: {SystemTime.DiffTotalMS(dt)}ms");
         }
 
         [TestMethod]
@@ -93,11 +93,11 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
                 AddTime = dt
             };
             cacheStrategy.Set(key, value, TimeSpan.FromSeconds(100));
-            Thread.Sleep(1000);//等待
+            Thread.Sleep(1000);//Waiting
             var entity = cacheStrategy.Get(key);
-            Assert.IsNotNull(entity);//未过期
+            Assert.IsNotNull(entity);//Not implemented
 
-            cacheStrategy.Update(key, value, TimeSpan.FromSeconds(1));//重新设置时间
+            cacheStrategy.Update(key, value, TimeSpan.FromSeconds(1));//Initialization time
             entity = cacheStrategy.Get(key);
             Assert.IsNotNull(entity);
 
@@ -105,7 +105,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             Assert.IsNotNull(strongEntity);
             Assert.AreEqual(dt, strongEntity.AddTime);
 
-            Thread.Sleep(1000);//让缓存过期
+            Thread.Sleep(1000);//User input
             entity = cacheStrategy.Get(key);
             Assert.IsNull(entity);
         }
@@ -132,12 +132,12 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             Assert.IsNotNull(strongEntity);
             Assert.AreEqual(dt, strongEntity.AddTime);
 
-            Thread.Sleep(1000);//让缓存过期
+            Thread.Sleep(1000);//User input
             entity = cacheStrategy.GetAsync(key).Result;
             Assert.IsNull(entity);
         }
 
-        #region 性能相关测试
+        #region Performance Related Tests
 
         [TestMethod]
         public void EfficiencyTest()
@@ -148,7 +148,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
                 SetTest();
             }
 
-            Console.WriteLine($"EfficiencyTest总测试时间（使用CacheWrapper)：{SystemTime.DiffTotalMS(dt1)}ms");
+            Console.WriteLine($"EfficiencyTest total test time (using CacheWrapper): {SystemTime.DiffTotalMS(dt1)}ms");
         }
 
         //[TestMethod]
@@ -186,7 +186,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
         //            Assert.AreEqual(dt.Ticks, containerBag.AddTime.Ticks);
 
 
-        //            Console.WriteLine($"Thread内单条测试耗时：{SystemTime.DiffTotalMS(dtx)}ms");
+        //            Console.WriteLine($"Thread execution time after cache: {SystemTime.DiffTotalMS(dtx)}ms");
 
         //            finishCount++;
         //        });
@@ -195,16 +195,16 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
 
         //    while (finishCount < threadCount)
         //    {
-        //        //等待
+        //        //Waiting
         //    }
 
-        //    Console.WriteLine($"EfficiencyTest总测试时间：{SystemTime.DiffTotalMS(dt1)}ms");
+        //    Console.WriteLine($"EfficiencyTest total time: {SystemTime.DiffTotalMS(dt1)}ms");
         //}
 
         [TestMethod]
         public void CacheSerializeExtensionTest()
         {
-            Console.WriteLine("开始异步测试");
+            Console.WriteLine("Starting asynchronous test"); 
             var threadCount = 100;
             var finishCount = 0;
             for (int i = 0; i < threadCount; i++)
@@ -221,12 +221,10 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
                         };
                         var dtx = SystemTime.Now;
                         var serializedObj = CacheSerializeExtension.SerializeToCache(newObj);
-                        Console.WriteLine($"CacheSerializeExtension.SerializeToCache耗时：{SystemTime.DiffTotalMS(dtx)}ms");
-
+                        Console.WriteLine($"CacheSerializeExtension.SerializeToCache elapsed time: {SystemTime.DiffTotalMS(dtx)}ms");
                         dtx = SystemTime.Now;
-                        var containerBag = CacheSerializeExtension.DeserializeFromCache<ContainerBag>((string)serializedObj);//11ms
-                        Console.WriteLine($"CacheSerializeExtension.DeserializeFromCache耗时：{SystemTime.DiffTotalMS(dtx)}ms");
-
+                        var containerBag = CacheSerializeExtension.DeserializeFromCache<ContainerBag>((string)serializedObj); // 11ms  
+                        Console.WriteLine($"CacheSerializeExtension.DeserializeFromCache elapsed time: {SystemTime.DiffTotalMS(dtx)}ms");
                         Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
                         Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
                     }
@@ -244,7 +242,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
 
             while (finishCount < threadCount)
             {
-                //等待
+                //Waiting
             }
 
 
@@ -256,19 +254,21 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
                     Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
                     AddTime = SystemTime.Now
                 };
+
                 var dtx = SystemTime.Now;
                 var serializedObj = CacheSerializeExtension.SerializeToCache(newObj);
-                Console.WriteLine($"StackExchangeRedisExtensions.Serialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
+                Console.WriteLine($"StackExchangeRedisExtensions.Serialize elapsed time: {SystemTime.DiffTotalMS(dtx)}ms");
 
                 dtx = SystemTime.Now;
-                var containerBag = CacheSerializeExtension.DeserializeFromCache<ContainerBag>((string)serializedObj);//11ms
-                Console.WriteLine($"StackExchangeRedisExtensions.Deserialize耗时：{SystemTime.DiffTotalMS(dtx)}ms");
+                var containerBag = CacheSerializeExtension.DeserializeFromCache<ContainerBag>((string)serializedObj); // 11ms  
+                Console.WriteLine($"StackExchangeRedisExtensions.Deserialize elapsed time: {SystemTime.DiffTotalMS(dtx)}ms");
 
                 Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
             };
 
-            Console.WriteLine("开始同步测试");
+            Console.WriteLine("Starting synchronous test");
+
             for (int i = 0; i < 10; i++)
             {
                 action();
@@ -292,9 +292,10 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             //                PrimitiveObjectResolver.Instance
             //);
 
-            Console.WriteLine("开始异步测试");
+            Console.WriteLine("Starting asynchronous test");
             var threadCount = 10;
             var finishCount = 0;
+
             for (int i = 0; i < threadCount; i++)
             {
                 var thread = new Thread(() =>
@@ -308,24 +309,25 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
 
                     var dtx = SystemTime.Now;
                     var serializedObj = MessagePackSerializer.Serialize(newObj/*, NativeDateTimeResolver.Instance*/);
-                    Console.WriteLine($"MessagePackSerializer.Serialize 耗时：{SystemTime.DiffTotalMS(dtx)}ms");
+                    Console.WriteLine($"MessagePackSerializer.Serialize elapsed time: {SystemTime.DiffTotalMS(dtx)}ms");
 
                     dtx = SystemTime.Now;
-                    var containerBag = MessagePackSerializer.Deserialize<ContainerBag>(serializedObj);//11ms
-                    Console.WriteLine($"MessagePackSerializer.Deserialize 耗时：{SystemTime.DiffTotalMS(dtx)}ms");
+                    var containerBag = MessagePackSerializer.Deserialize<ContainerBag>(serializedObj); // 11ms  
+                    Console.WriteLine($"MessagePackSerializer.Deserialize elapsed time: {SystemTime.DiffTotalMS(dtx)}ms");
 
                     Console.WriteLine(containerBag.AddTime.ToUniversalTime());
-
-                    //Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
+                    // Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);  
                     Assert.AreNotEqual(containerBag.GetHashCode(), newObj.GetHashCode());
+
                     finishCount++;
                 });
+
                 thread.Start();
             }
 
             while (finishCount < threadCount)
             {
-                //等待
+                //Waiting
             }
         }
 
@@ -346,7 +348,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             //                PrimitiveObjectResolver.Instance
             //);
 
-            Console.WriteLine("开始异步测试");
+            Console.WriteLine("Starting asynchronous test"); 
             var threadCount = 50;
             var finishCount = 0;
             for (int i = 0; i < threadCount; i++)
@@ -362,12 +364,10 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
 
                     var dtx = SystemTime.Now;
                     var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(newObj);
-                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.SerializeObject 耗时：{SystemTime.DiffTotalMS(dtx)}ms");
-
+                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.SerializeObject elapsed time: {SystemTime.DiffTotalMS(dtx)}ms");
                     dtx = SystemTime.Now;
-                    var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<ContainerBag>(serializedObj);//11ms
-                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.DeserializeObject 耗时：{SystemTime.DiffTotalMS(dtx)}ms");
-
+                    var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<ContainerBag>(serializedObj); // 11ms  
+                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.DeserializeObject elapsed time: {SystemTime.DiffTotalMS(dtx)}ms");
                     Console.WriteLine(containerBag.AddTime.ToUniversalTime());
 
                     //Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);
@@ -379,7 +379,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
 
             while (finishCount < threadCount)
             {
-                //等待
+                //Waiting
             }
         }
 

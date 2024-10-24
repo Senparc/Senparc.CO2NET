@@ -1,4 +1,4 @@
-using MessagePack;
+Ôªøusing MessagePack;
 using MessagePack.Formatters;
 using MessagePack.Resolvers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,7 +35,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             Assert.IsNotNull(containerBag);
             Assert.AreEqual(dt, containerBag.AddTime);
 
-            Console.WriteLine($"HashSet-SetTestµ•Ãı≤‚ ‘∫ƒ ±£∫{SystemTime.DiffTotalMS(dt)}ms");
+            Console.WriteLine($"HashSet-SetTest single test takes time: {SystemTime.DiffTotalMS(dt)}ms");
         }
     }
 }

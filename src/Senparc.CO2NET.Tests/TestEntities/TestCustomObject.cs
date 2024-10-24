@@ -5,7 +5,7 @@ using System.Text;
 namespace Senparc.CO2NET.Tests.TestEntities
 {
     /// <summary>
-    /// 测试用的自定义对象
+    /// Custom object for testing
     /// </summary>
     [Serializable]
     public class TestCustomObject

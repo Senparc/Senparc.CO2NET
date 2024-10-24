@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.IO;
 using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,7 +13,7 @@ namespace Senparc.CO2NET.Tests.Utilities
         string xml = @"<TestCustomObject>
 <Id>666</Id>
 <Name>Jeffrey</Name>
-</TestCustomObject>";//注意：根节点名称需要和实体类名相同，否则可能需要设置xmlns等
+</TestCustomObject>";// Note: When serializing, ensure that the same namespace is used, and that xmlns is specified
 
         [TestMethod]
         public void DeserializeTest()
@@ -27,7 +27,7 @@ namespace Senparc.CO2NET.Tests.Utilities
         [TestMethod]
         public void DeserializeStreamTest()
         {
-            using (var ms = new MemoryStream())//模拟已有stream
+            using (var ms = new MemoryStream())// Model for stream
             {
                 using (var sw = new StreamWriter(ms))
                 {
@@ -68,7 +68,7 @@ namespace Senparc.CO2NET.Tests.Utilities
         [TestMethod]
         public void ConvertTest()
         {
-            using (var ms = new MemoryStream())//模拟已有stream
+            using (var ms = new MemoryStream())// Model for stream
             {
                 using (var sw = new StreamWriter(ms))
                 {

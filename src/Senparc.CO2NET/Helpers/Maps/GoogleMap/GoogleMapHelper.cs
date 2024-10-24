@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,18 +21,18 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：GoogleMapHelper.cs
-    文件功能描述：获取谷歌今天静态地图Url
+    FileName：GoogleMapHelper.cs
+    File Function Description：Get Google Static Map Url
     
     
-    创建标识：Senparc - 20150211
+    Creation Identifier：Senparc - 20150211
     
-    修改标识：Senparc - 20150303
-    修改描述：整理接口
+    Modification Identifier：Senparc - 20150303
+    Modification Description：Refactor interface
 ----------------------------------------------------------------*/
 
 /*
-     API介绍：https://developers.google.com/maps/documentation/staticmaps/?hl=zh-CN
+     API Introduction：https://developers.google.com/maps/documentation/staticmaps/?hl=zh-CN
  */
 
 using Senparc.CO2NET.Helpers.GoogleMap;
@@ -42,12 +42,12 @@ using System.Text;
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// 谷歌地图帮助类
+    /// Google Map Helper Class
     /// </summary>
     public static class GoogleMapHelper
     {
         /// <summary>
-        /// 获取谷歌静态地图Url。API介绍：https://developers.google.com/maps/documentation/staticmaps/?hl=zh-CN
+        /// Get Google Static Map Url. API Introduction：https://developers.google.com/maps/documentation/staticmaps/?hl=zh-CN
         /// </summary>
         /// <returns></returns>
         public static string GetGoogleStaticMap(int scale,  IList<GoogleMapMarkers> markersList, string size = "640x640")

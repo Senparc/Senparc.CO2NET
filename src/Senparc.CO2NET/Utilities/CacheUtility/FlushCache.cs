@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,11 +21,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright(C) 2024 Senparc
 
-    文件名：FlushCache.cs
-    文件功能描述：缓存立即生效方法
+    FileName：FlushCache.cs
+    File Function Description：Method for immediate cache effect
 
 
-    创建标识：Senparc - 20160318
+    Creation Identifier：Senparc - 20160318
 
 ----------------------------------------------------------------*/
 
@@ -38,26 +38,26 @@ using Senparc.CO2NET.MessageQueue;
 namespace Senparc.CO2NET.CacheUtility
 {
     /// <summary>
-    /// 缓存立即生效方法
+    /// Method for immediate cache effect
     /// </summary>
     public class FlushCache : IDisposable
     {
         /// <summary>
-        /// 是否立即个更新到缓存
+        /// Whether to update the cache immediately
         /// </summary>
         public bool DoFlush { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        /// <param name="doFlush">是否立即更新到缓存</param>
+        /// <param name="doFlush">Whether to update the cache immediately</param>
         public FlushCache(bool doFlush = true)
         {
             DoFlush = doFlush;
         }
 
         /// <summary>
-        /// 释放，开始立即更新所有缓存
+        /// Release, start updating all caches immediately
         /// </summary>
         public void Dispose()
         {
@@ -68,9 +68,9 @@ namespace Senparc.CO2NET.CacheUtility
         }
 
         /// <summary>
-        /// 创建一个FlushCache实例
+        /// Create a FlushCache instance
         /// </summary>
-        /// <param name="doFlush">是否立即更新到缓存</param>
+        /// <param name="doFlush">Whether to update the cache immediately</param>
         /// <returns></returns>
         public static FlushCache CreateInstance(bool doFlush = true)
         {

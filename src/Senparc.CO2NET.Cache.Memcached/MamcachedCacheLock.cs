@@ -1,17 +1,16 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：RedisCacheLock.cs
-    文件功能描述：本地锁
+    FileName: RedisCacheLock.cs
+    File Function Description: Local lock
 
+    Creation Identifier: Senparc - 20160810
 
-    创建标识：Senparc - 20160810
+    Modification Identifier: Senparc - 20170205
+    Modification Description: v0.2.0 Refactor distributed lock
 
-    修改标识：Senparc - 20170205
-    修改描述：v0.2.0 重构分布式锁
-
-    修改标识：spadark - 20170419
-    修改描述：v0.3.0 Memcached同步锁改为使用StoreMode.Add方法
+    Modification Identifier: spadark - 20170419
+    Modification Description: v0.3.0 Change Memcached sync lock to use StoreMode.Add method
 
 ----------------------------------------------------------------*/
 
@@ -32,7 +31,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             : base(strategy, resourceName, key, retryCount, retryDelay)
         {
             _mamcachedStrategy = strategy;
-            //LockNow();//立即等待并抢夺锁
+            //LockNow();//Immediately wait and acquire the lock
         }
 
         private static Random _rnd = new Random();
@@ -45,7 +44,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         #region 同步方法
 
         /// <summary>
-        /// 创建 MemcachedCacheLock 实例，并立即尝试获得锁
+        /// Create an instance of MemcachedCacheLock and immediately attempt to acquire the lock
         /// </summary>
         /// <param name="strategy">MemcachedObjectCacheStrategy</param>
         /// <param name="resourceName"></param>
@@ -68,7 +67,7 @@ namespace Senparc.CO2NET.Cache.Memcached
                 if (action())
                 {
                     base.LockSuccessful = true;
-                    return this;//取得锁
+                    return this;//Acquire the lock
                 }
                 Thread.Sleep(_rnd.Next(maxRetryDelay));
             }
@@ -86,22 +85,22 @@ namespace Senparc.CO2NET.Cache.Memcached
                     if (_mamcachedStrategy.Cache.Store(StoreMode.Add, key, new object(), TimeSpan.FromMilliseconds(ttl)))
                     {
                         base.LockSuccessful = true;
-                        return true;//取得锁 
+                        return true;//Acquire the lock
                     }
                     else
                     {
                         base.LockSuccessful = false;
-                        return false;//已被别人锁住，没有取得锁
+                        return false;//Locked by someone else, failed to acquire the lock
                     }
 
                     //if (_mamcachedStrategy._cache.Get(key) != null)
                     //{
-                    //    return false;//已被别人锁住，没有取得锁
+                    //    return false;//Locked by someone else, failed to acquire the lock
                     //}
                     //else
                     //{
-                    //    _mamcachedStrategy._cache.Store(StoreMode.set, key, new object(), new TimeSpan(0, 0, 10));//创建锁
-                    //    return true;//取得锁
+                    //    _mamcachedStrategy._cache.Store(StoreMode.set, key, new object(), new TimeSpan(0, 0, 10));//Create the lock
+                    //    return true;//Acquire the lock
                     //}
                 }
                 catch (Exception ex)
@@ -125,7 +124,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         #region 异步方法
 
         /// <summary>
-        /// 【异步方法】创建 MemcachedCacheLock 实例，并立即尝试获得锁
+        /// [Async method] Create an instance of MemcachedCacheLock and immediately attempt to acquire the lock
         /// </summary>
         /// <param name="strategy">MemcachedObjectCacheStrategy</param>
         /// <param name="resourceName"></param>
@@ -147,7 +146,7 @@ namespace Senparc.CO2NET.Cache.Memcached
                 if (await action().ConfigureAwait(false))
                 {
                     base.LockSuccessful = true;
-                    return this;//取得锁
+                    return this;//Acquire the lock
                 }
                 Thread.Sleep(_rnd.Next(maxRetryDelay));
             }
@@ -170,22 +169,22 @@ namespace Senparc.CO2NET.Cache.Memcached
 #endif
                      {
                          base.LockSuccessful = true;
-                         return true;//取得锁 
+                         return true;//Acquire the lock
                      }
                      else
                      {
                          base.LockSuccessful = false;
-                         return false;//已被别人锁住，没有取得锁
+                         return false;//Locked by someone else, failed to acquire the lock
                      }
 
                      //if (_mamcachedStrategy._cache.Get(key) != null)
                      //{
-                     //    return false;//已被别人锁住，没有取得锁
+                     //    return false;//Locked by someone else, failed to acquire the lock
                      //}
                      //else
                      //{
-                     //    _mamcachedStrategy._cache.Store(StoreMode.set, key, new object(), new TimeSpan(0, 0, 10));//创建锁
-                     //    return true;//取得锁
+                     //    _mamcachedStrategy._cache.Store(StoreMode.set, key, new object(), new TimeSpan(0, 0, 10));//Create the lock
+                     //    return true;//Acquire the lock
                      //}
                  }
                  catch (Exception ex)

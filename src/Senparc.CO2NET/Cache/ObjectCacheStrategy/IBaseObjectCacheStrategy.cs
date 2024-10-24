@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -26,14 +26,14 @@ using System.Text;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// 所有以 string 类型为 key ，object 为 value 的缓存策略接口
+    /// Cache strategy interface where all keys are of type string and values are of type object
     /// </summary>
     public interface IBaseObjectCacheStrategy : IBaseCacheStrategy<string, object>, IBaseCacheStrategy
     {
         //IContainerCacheStrategy ContainerCacheStrategy { get; }
 
         /// <summary>
-        /// 注册的扩展缓存策略
+        /// Registered extension cache strategies
         /// </summary>
         //Dictionary<IExtensionCacheStrategy, IBaseObjectCacheStrategy> ExtensionCacheStratety { get; set; }
     }

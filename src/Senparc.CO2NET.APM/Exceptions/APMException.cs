@@ -8,7 +8,7 @@ using System.Text;
 namespace Senparc.CO2NET.APM.Exceptions
 {
     /// <summary>
-    /// APM 异常
+    /// APM Exception
     /// </summary>
     public class APMException : BaseException
     {

@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,15 +21,15 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：EntityUtility.cs
-    文件功能描述：实体工具类
+    FileName：EntityUtility.cs
+    File Function Description：Entity utility class
 
 
-    创建标识：Senparc - 20160808（v4.6.0）
+    Creation Identifier：Senparc - 20160808（v4.6.0）
 
     
-    修改标识：Senparc - 20180623
-    修改描述：v0.1.3 添加 EntityUtility.FillSystemType<>()方法对 Int32[] 和 Int64[] 的处理
+    Modification Identifier：Senparc - 20180623
+    Modification Description：v0.1.3 Added EntityUtility.FillSystemType<>() method to handle Int32[] and Int64[]
 
 ----------------------------------------------------------------*/
 
@@ -44,12 +44,12 @@ using Senparc.CO2NET.Helpers;
 namespace Senparc.CO2NET.Utilities
 {
     /// <summary>
-    /// 实体工具类
+    /// Entity utility class
     /// </summary>
     public static class EntityUtility
     {
         /// <summary>
-        /// 将对象转换到指定类型
+        /// Convert object to specified type
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="convertibleValue"></param>
@@ -81,7 +81,7 @@ namespace Senparc.CO2NET.Utilities
 
 
         /// <summary>
-        /// 向属性填充值
+        /// Fill value to property
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="entity"></param>
@@ -93,7 +93,7 @@ namespace Senparc.CO2NET.Utilities
         }
 
         /// <summary>
-        /// 向属性填充值（强制使用指定的类型）
+        /// Fill value to property (force using specified type)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="entity"></param>
@@ -142,7 +142,7 @@ namespace Senparc.CO2NET.Utilities
 
             switch (specialType.Name)
             {
-                case "Nullable`1": //可为空对象
+                case "Nullable`1": //Nullable object
                     {
                         if (!string.IsNullOrEmpty(value as string))
                         {
@@ -151,7 +151,7 @@ namespace Senparc.CO2NET.Utilities
                         }
                         else
                         {
-                            prop.SetValue(entity, null, null);//默认通常为null
+                            prop.SetValue(entity, null, null);//Default is usually null
                         }
                         break;
                     }
@@ -169,7 +169,7 @@ namespace Senparc.CO2NET.Utilities
         }
 
         ///// <summary>
-        ///// 将ApiData专为Dictionary类型
+        ///// Convert ApiData to Dictionary type
         ///// </summary>
         ///// <param name="apiData"></param>
         //public static Dictionary<string, string> ConvertDataEntityToDictionary<T>(T apiData)

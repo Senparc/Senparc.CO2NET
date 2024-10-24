@@ -26,7 +26,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
         {
             get
             {
-                return Nested.instance;//返回Nested类中的静态成员instance
+                return Nested.instance;//Return the static member instance in the Nested class
             }
         }
 
@@ -35,7 +35,7 @@ namespace Senparc.CO2NET.Cache.Dapr.ObjectCacheStrategy
             static Nested()
             {
             }
-            //将instance设为一个初始化的LocalCacheStrategy新实例
+            //Set instance to a new initialized instance of LocalCacheStrategy
             internal static readonly DaprStateObjectCacheStrategy instance = new DaprStateObjectCacheStrategy();
         }
 

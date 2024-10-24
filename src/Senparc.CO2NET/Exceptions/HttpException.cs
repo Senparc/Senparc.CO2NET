@@ -1,11 +1,11 @@
 ﻿/*----------------------------------------------------------------
     Copyright(C) 2024 Senparc
 
-    文件名：HttpException.cs
-    文件功能描述：HttpClient 等网络请求异常
+    FileName: HttpException.cs
+    File Function Description: HttpClient and other network request exceptions
 
 
-    创建标识：Senparc - 20190907
+    Creation Identifier: Senparc - 20190907
 
 ----------------------------------------------------------------*/
 
@@ -14,12 +14,12 @@ using System;
 namespace Senparc.CO2NET.Exceptions
 {
     /// <summary>
-    /// HttpClient 等网络请求异常
+    /// HttpClient and other network request exceptions
     /// </summary>
     public class HttpException : BaseException
     {
         /// <summary>
-        /// HttpClient 等网络请求异常 构造函数
+        /// HttpClient and other network request exceptions constructor
         /// </summary>
         /// <param name="message"></param>
         /// <param name="inner"></param>

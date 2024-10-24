@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,36 +21,36 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
  
-    创建标识：Senparc - 20160808
-    创建描述：安全帮助类，提供SHA-1、AES算法等
+    Creation Identifier: Senparc - 20160808
+    File Function Description: Security helper class, provides SHA-1, AES algorithms, etc.
 
-    修改标识：Senparc - 20170130
-    修改描述：v4.9.15 添加AES加密、解密算法
+    Modification Identifier: Senparc - 20170130
+    Modification Description: v4.9.15 Added AES encryption and decryption algorithms
     
-    修改标识：Senparc - 20170313
-    修改描述：v4.11.4 修改EncryptHelper.GetSha1(string encypStr)方法算法
+    Modification Identifier: Senparc - 20170313
+    Modification Description: v4.11.4 Modified EncryptHelper.GetSha1(string encypStr) method algorithm
       
-    修改标识：Senparc - 20170313
-    修改描述：v4.14.3 重构MD5生成方法，并提供小写MD5方法
+    Modification Identifier: Senparc - 20170313
+    Modification Description: v4.14.3 Refactored MD5 generation method and provided lowercase MD5 method
     
-    修改标识：Senparc - 20180101
-    修改描述：v4.18.10 添加 EncryptHelper.GetHmacSha256() 方法，为“小游戏”签名提供支持
+    Modification Identifier: Senparc - 20180101
+    Modification Description: v4.18.10 Added EncryptHelper.GetHmacSha256() method to support "mini-games" signature
 
 
     
     ----  CO2NET   ----
 
-    修改标识：Senparc - 20180601
-    修改描述：v5.0.0 引入 Senparc.CO2NET
+    Modification Identifier: Senparc - 20180601
+    Modification Description: v5.0.0 Introduced Senparc.CO2NET
 
-    修改标识：Senparc - 20210831
-    修改描述：v1.5.1 增加和丰富 EncryptHelper 中加密方法（SHA1、AesGcmDecrypt、CRC32）
+    Modification Identifier: Senparc - 20210831
+    Modification Description: v1.5.1 Added and enriched encryption methods in EncryptHelper (SHA1, AesGcmDecrypt, CRC32)
 
-    修改标识：Senparc - 20221220
-    修改描述：v2.1.5 新增 EncryptHelper.GetCertString() 以及 GetCertStringFromFile() 方法
+    Modification Identifier: Senparc - 20221220
+    Modification Description: v2.1.5 Added EncryptHelper.GetCertString() and GetCertStringFromFile() methods
 
-    修改标识：Senparc - 20240511
-    修改描述：v2.4.1 SenparcDI.GetServiceProvider() 方法添加 refresh 参数
+    Modification Identifier: Senparc - 20240511
+    Modification Description: v2.4.1 Added refresh parameter to SenparcDI.GetServiceProvider() method
 
 ----------------------------------------------------------------*/
 
@@ -69,16 +69,16 @@ using System.Text.RegularExpressions;
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// 安全帮助类，提供SHA-1算法等
+    /// Security helper class, provides SHA-1 algorithm, etc.
     /// </summary>
     public class EncryptHelper
     {
-        #region SHA相关
+        #region SHA related
 
         /// <summary>
-        /// 采用SHA-1算法加密字符串（小写）
+        /// Encrypt string using SHA-1 algorithm (lowercase)
         /// </summary>
-        /// <param name="encypStr">需要加密的字符串</param>
+        /// <param name="encypStr">String to be encrypted</param>
         /// <returns></returns>
         public static string GetSha1(string encypStr)
         {
@@ -103,11 +103,11 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 采用SHA-1算法加密字符串（默认大写）
+        /// Encrypt string using SHA-1 algorithm (default uppercase)
         /// </summary>
-        /// <param name="encypStr">需要加密的字符串</param>
-        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
-        /// <param name="encoding">编码</param>
+        /// <param name="encypStr">String to be encrypted</param>
+        /// <param name="toUpper">Whether to return uppercase result, true: uppercase, false: lowercase</param>
+        /// <param name="encoding">Encoding</param>
         /// <returns></returns>
         public static string GetSha1(string encypStr, bool toUpper = true, Encoding encoding = null)
         {
@@ -139,10 +139,10 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 采用SHA-1算法加密流（默认大写）
+        /// Encrypt stream using SHA-1 algorithm (default uppercase)
         /// </summary>
-        /// <param name="stream">流</param>
-        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <param name="stream">Stream</param>
+        /// <param name="toUpper">Whether to return uppercase result, true: uppercase, false: lowercase</param>
         /// <returns></returns>
         public static string GetSha1(Stream stream, bool toUpper = true)
         {
@@ -167,29 +167,29 @@ namespace Senparc.CO2NET.Helpers
             }
         }
 
-        #region 弃用算法
+        #region Deprecated algorithms
 
 
         //        /// <summary>
-        //        /// 签名算法
+        //        /// Signature algorithm
         //        /// </summary>
         //        /// <param name="str"></param>
         //        /// <returns></returns>
         //        public static string GetSha1(string str)
         //        {
-        //            //建立SHA1对象
+        //            //Create SHA1 object
         //#if NET462
         //            SHA1 sha = new SHA1CryptoServiceProvider();
         //#else
         //            SHA1 sha = SHA1.Create();
         //#endif
 
-        //            //将mystr转换成byte[] 
+        //            //Convert mystr to byte[] 
         //            ASCIIEncoding enc = new ASCIIEncoding();
         //            byte[] dataToHash = enc.GetBytes(str);
-        //            //Hash运算
+        //            //Hash operation
         //            byte[] dataHashed = sha.ComputeHash(dataToHash);
-        //            //将运算结果转换成string
+        //            //Convert result to string
         //            string hash = BitConverter.ToString(dataHashed).Replace("-", "");
         //            return hash;
         //        }
@@ -198,10 +198,10 @@ namespace Senparc.CO2NET.Helpers
 
 
         /// <summary>
-        /// HMAC SHA256 加密
+        /// HMAC SHA256 encryption
         /// </summary>
-        /// <param name="message">加密消息原文。当为小程序SessionKey签名提供服务时，其中message为本次POST请求的数据包（通常为JSON）。特别地，对于GET请求，message等于长度为0的字符串。</param>
-        /// <param name="secret">秘钥（如小程序的SessionKey）</param>
+        /// <param name="message">Original message to be encrypted. When providing service for mini-program SessionKey signature, message is the data packet of this POST request (usually JSON). Specifically, for GET requests, message is an empty string.</param>
+        /// <param name="secret">Secret key (e.g., SessionKey of mini-program)</param>
         /// <returns></returns>
         public static string GetHmacSha256(string message, string secret)
         {
@@ -226,10 +226,10 @@ namespace Senparc.CO2NET.Helpers
         #region MD5
 
         /// <summary>
-        /// 获取大写的MD5签名结果
+        /// Get uppercase MD5 signature result
         /// </summary>
-        /// <param name="encypStr">需要加密的字符串</param>
-        /// <param name="encoding">编码</param>
+        /// <param name="encypStr">String to be encrypted</param>
+        /// <param name="encoding">Encoding</param>
         /// <returns></returns>
         public static string GetMD5(string encypStr, Encoding encoding)
         {
@@ -241,11 +241,11 @@ namespace Senparc.CO2NET.Helpers
             MD5 m5 = MD5.Create();
 #endif
 
-            //创建md5对象
+            //Create md5 object
             byte[] inputBye;
             byte[] outputBye;
 
-            //使用指定编码方式把字符串转化为字节数组．
+            //Convert string to byte array using specified encoding.
             try
             {
                 inputBye = encoding.GetBytes(encypStr);
@@ -262,22 +262,22 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 获取大写的MD5签名结果
+        /// Get uppercase MD5 signature result
         /// </summary>
-        /// <param name="encypStr">需要加密的字符串</param>
-        /// <param name="charset">编码</param>
+        /// <param name="encypStr">String to be encrypted</param>
+        /// <param name="charset">Encoding</param>
         /// <returns></returns>
         public static string GetMD5(string encypStr, string charset = "utf-8")
         {
             charset = charset ?? "utf-8";
             try
             {
-                //使用指定编码
+                //Use specified encoding
                 return GetMD5(encypStr, Encoding.GetEncoding(charset));
             }
             catch
             {
-                //使用UTF-8编码
+                //Use UTF-8 encoding
                 return GetMD5("utf-8", Encoding.GetEncoding(charset));
 
                 //#if NET462
@@ -289,10 +289,10 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 获取MD5签名结果
+        /// Get MD5 signature result
         /// </summary>
         /// <param name="stream">Stream</param>
-        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <param name="toUpper">Whether to return uppercase result, true: uppercase, false: lowercase</param>
         /// <returns></returns>
         public static string GetMD5(Stream stream, bool toUpper = true)
         {
@@ -312,10 +312,10 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 获取小写的MD5签名结果
+        /// Get lowercase MD5 signature result
         /// </summary>
-        /// <param name="encypStr">需要加密的字符串</param>
-        /// <param name="encoding">编码</param>
+        /// <param name="encypStr">String to be encrypted</param>
+        /// <param name="encoding">Encoding</param>
         /// <returns></returns>
         public static string GetLowerMD5(string encypStr, Encoding encoding)
         {
@@ -329,8 +329,8 @@ namespace Senparc.CO2NET.Helpers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="encypStr">需要加密的字符串</param>
-        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <param name="encypStr">String to be encrypted</param>
+        /// <param name="toUpper">Whether to return uppercase result, true: uppercase, false: lowercase</param>
         /// <param name="encoding"></param>
         /// <returns></returns>
         public static string GetCrc32(string encypStr, bool toUpper = true, Encoding encoding = null)
@@ -339,7 +339,7 @@ namespace Senparc.CO2NET.Helpers
             Crc32 calculator = new Crc32();
             byte[] buffer = calculator.ComputeHash(encoding.GetBytes(encypStr));
             calculator.Clear();
-            //将字节数组转换成十六进制的字符串形式
+            //Convert byte array to hexadecimal string
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < buffer.Length; i++)
             {
@@ -350,17 +350,17 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 获取 CRC32 加密字符串
+        /// Get CRC32 encrypted string
         /// </summary>
-        /// <param name="encypStr">需要加密的字符串</param>
-        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <param name="encypStr">String to be encrypted</param>
+        /// <param name="toUpper">Whether to return uppercase result, true: uppercase, false: lowercase</param>
         /// <returns></returns>
         public static string GetCrc32(Stream stream, bool toUpper = true)
         {
             Crc32 calculator = new Crc32();
             byte[] buffer = calculator.ComputeHash(stream);
             calculator.Clear();
-            //将字节数组转换成十六进制的字符串形式
+            //Convert byte array to hexadecimal string
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < buffer.Length; i++)
             {
@@ -375,23 +375,23 @@ namespace Senparc.CO2NET.Helpers
         #region AES - CBC
 
         /// <summary>
-        /// AES加密（默认为CBC模式）
+        /// AES encryption (default CBC mode)
         /// </summary>
-        /// <param name="inputdata">输入的数据</param>
-        /// <param name="iv">向量</param>
-        /// <param name="strKey">加密密钥</param>
+        /// <param name="inputdata">Input data</param>
+        /// <param name="iv">Vector</param>
+        /// <param name="strKey">Encryption key</param>
         /// <returns></returns>
         public static byte[] AESEncrypt(byte[] inputdata, byte[] iv, string strKey)
         {
-            //分组加密算法   
+            //Block encryption algorithm   
 #if NET462
             SymmetricAlgorithm des = Rijndael.Create();
 #else
             SymmetricAlgorithm des = Aes.Create();
 #endif
 
-            byte[] inputByteArray = inputdata;//得到需要加密的字节数组       
-                                              //设置密钥及密钥向量
+            byte[] inputByteArray = inputdata;//Get byte array to be encrypted       
+                                              //Set key and key vector
             des.Key = Encoding.UTF8.GetBytes(strKey.PadRight(32));
             des.IV = iv;
 
@@ -403,7 +403,7 @@ namespace Senparc.CO2NET.Helpers
                 {
                     cs.Write(inputByteArray, 0, inputByteArray.Length);
                     cs.FlushFinalBlock();
-                    byte[] cipherBytes = ms.ToArray();//得到加密后的字节数组   
+                    byte[] cipherBytes = ms.ToArray();//Get encrypted byte array   
                     //cs.Close();
                     //ms.Close();
                     return cipherBytes;
@@ -413,11 +413,11 @@ namespace Senparc.CO2NET.Helpers
 
 
         /// <summary>
-        /// AES解密（默认为CBC模式）
+        /// AES decryption (default CBC mode)
         /// </summary>
-        /// <param name="inputdata">输入的数据</param>
-        /// <param name="iv">向量</param>
-        /// <param name="strKey">key</param>
+        /// <param name="inputdata">Input data</param>
+        /// <param name="iv">Vector</param>
+        /// <param name="strKey">Key</param>
         /// <returns></returns>
         public static byte[] AESDecrypt(byte[] inputdata, byte[] iv, string strKey)
         {
@@ -445,7 +445,7 @@ namespace Senparc.CO2NET.Helpers
 
                         decryptBytes = originalMemory.ToArray();
 
-                        #region 废弃的方法
+                        #region Deprecated methods
 
                         //cs.Read(decryptBytes, 0, decryptBytes.Length);
                         ////cs.Close();
@@ -462,10 +462,10 @@ namespace Senparc.CO2NET.Helpers
         #region AES - CEB
 
         /// <summary>
-        ///  AES 加密（无向量，CEB模式，秘钥长度=128）
+        /// AES encryption (no vector, CEB mode, key length=128)
         /// </summary>
-        /// <param name="str">明文（待加密）</param>
-        /// <param name="key">密文</param>
+        /// <param name="str">Plaintext (to be encrypted)</param>
+        /// <param name="key">Ciphertext</param>
         /// <returns></returns>
         public static string AESEncrypt(string str, string key)
         {
@@ -503,7 +503,7 @@ namespace Senparc.CO2NET.Helpers
             //                {
             //                    cs.Write(inputByteArray, 0, inputByteArray.Length);
             //                    cs.FlushFinalBlock();
-            //                    byte[] cipherBytes = ms.ToArray();//得到加密后的字节数组   
+            //                    byte[] cipherBytes = ms.ToArray();//Get encrypted byte array   
             //                    //cs.Close();
             //                    //ms.Close();
             //                    return Convert.ToBase64String(cipherBytes);
@@ -513,11 +513,11 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>  
-        /// AES 解密（无向量，CEB模式，秘钥长度=128）
+        /// AES decryption (no vector, CEB mode, key length=128)
         /// </summary>  
-        /// <param name="data">被加密的明文（注意：为Base64编码）</param>  
-        /// <param name="key">密钥</param>  
-        /// <returns>明文</returns>  
+        /// <param name="data">Encrypted plaintext (note: Base64 encoded)</param>  
+        /// <param name="key">Key</param>  
+        /// <returns>Plaintext</returns>  
         public static string AESDecrypt(string data, string key)
         {
             byte[] encryptedBytes = Convert.FromBase64String(data);
@@ -575,20 +575,20 @@ namespace Senparc.CO2NET.Helpers
 
 #if NETSTANDARD2_1_OR_GREATER
         #region AES - GCM
-        //TODO:单元测试
+        //TODO: Unit test
 
         /// <summary>
-        /// 解密微信支付接口 ciphertext 内容
+        /// Decrypt ciphertext content from WeChat payment interface
         /// </summary>
         /// <returns></returns>
         public static string AesGcmDecrypt(string aes_key, string nonce, string associated_data, string content)
         {
-            //将解密所需数据转换为Bytes
+            //Convert data needed for decryption to Bytes
             var keyBytes = Encoding.UTF8.GetBytes(aes_key);
             var nonceBytes = Encoding.UTF8.GetBytes(nonce);
             var associatedBytes = associated_data == null ? null : Encoding.UTF8.GetBytes(associated_data);
 
-            //AEAD_AES_256_GCM 解密
+            //AEAD_AES_256_GCM decryption
             var encryptedBytes = Convert.FromBase64String(content);
             //tag size is 16
             var cipherBytes = encryptedBytes[..^16];
@@ -605,10 +605,10 @@ namespace Senparc.CO2NET.Helpers
         #endregion
 #endif
 
-        #region 证书相关
+        #region Certificate related
 
         /// <summary>
-        /// 从证书文件内容中获取证书内容（单行字符串）
+        /// Get certificate content from certificate file content (single line string)
         /// </summary>
         /// <param name="fileContent"></param>
         public static string GetCertString(string fileContent)
@@ -619,9 +619,9 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 从证书文件中获取证书内容（单行字符串）
+        /// Get certificate content from certificate file (single line string)
         /// </summary>
-        /// <param name="filePath">文件绝对路径</param>
+        /// <param name="filePath">File absolute path</param>
         public static string GetCertStringFromFile(string filePath)
         {
             var fileContent = File.ReadAllText(filePath);

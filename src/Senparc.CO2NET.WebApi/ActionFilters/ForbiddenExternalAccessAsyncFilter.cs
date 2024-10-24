@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 namespace Senparc.CO2NET.WebApi.ActionFilters
 {
     /// <summary>
-    /// 外部访问屏蔽特性
+    /// External Access Blocking Attribute
     /// </summary>
     public class ForbiddenExternalAccessAsyncFilter : IAsyncActionFilter
     {
@@ -35,7 +35,7 @@ namespace Senparc.CO2NET.WebApi.ActionFilters
         }
     }
 
-    // 二选一
+    // Choose one
 
     //public class ForbiddenExternalAccessFilter : IActionFilter
     //{

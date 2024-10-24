@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+锘縰sing Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -39,11 +39,11 @@ namespace Senparc.CO2NET.WebApi.Tests
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             RegisterServiceCollection(initDynamicApi);
             RegisterServiceStart();
-            Console.WriteLine("完成 TaseTest 初始化");
+            Console.WriteLine("Finish TaseTest Init");
         }
 
         /// <summary>
-        /// 注册 IServiceCollection 和 MemoryCache
+        /// Register IServiceCollection with MemoryCache
         /// </summary>
         public void RegisterServiceCollection(bool initDynamicApi = false)
         {
@@ -59,7 +59,7 @@ namespace Senparc.CO2NET.WebApi.Tests
             _senparcSetting = new SenparcSetting() { IsDebug = true };
             config.GetSection("SenparcSetting").Bind(_senparcSetting);
 
-            ServiceCollection.AddMemoryCache();//使用内存缓存
+            ServiceCollection.AddMemoryCache();//Use memory cache
 
 
             MvcCoreBuilder = ServiceCollection.AddMvcCore();
@@ -76,13 +76,13 @@ namespace Senparc.CO2NET.WebApi.Tests
         }
 
         /// <summary>
-        /// 注册 RegisterService.Start()
+        /// Register RegisterService.Start()
         /// </summary>
         public void RegisterServiceStart(bool autoScanExtensionCacheStrategies = false)
         {
             IApplicationBuilder app = new ApplicationBuilder(ServiceProvider);
 
-            // 启动 CO2NET 全局注册，必须！
+            // Complete CO2NET global registration, done!
             app.UseSenparcGlobal(_env.Object, _senparcSetting, register =>
             {
             });

@@ -1,11 +1,11 @@
 ﻿/*----------------------------------------------------------------
     Copyright(C) 2024 Senparc
 
-    文件名：BaseException.cs
-    文件功能描述：异常基类
+    FileName：BaseException.cs
+    File Function Description：Base class for exceptions
 
 
-    创建标识：Senparc - 20180602
+    Creation Identifier：Senparc - 20180602
 
 ----------------------------------------------------------------*/
 
@@ -16,7 +16,7 @@ using System;
 namespace Senparc.CO2NET.Exceptions
 {
     /// <summary>
-    /// 异常基类
+    /// Base class for exceptions
     /// </summary>
 #if NET462
     public class BaseException : ApplicationException
@@ -25,7 +25,7 @@ namespace Senparc.CO2NET.Exceptions
 #endif
     {
         /// <summary>
-        /// BaseException 构造函数
+        /// BaseException constructor
         /// </summary>
         /// <param name="message"></param>
         /// <param name="logged"></param>
@@ -37,9 +37,9 @@ namespace Senparc.CO2NET.Exceptions
         /// <summary>
         /// BaseException
         /// </summary>
-        /// <param name="message">异常消息</param>
-        /// <param name="inner">内部异常信息</param>
-        /// <param name="logged">是否已经使用WeixinTrace记录日志，如果没有，BaseException会进行概要记录</param>
+        /// <param name="message">Exception message</param>
+        /// <param name="inner">Inner exception information</param>
+        /// <param name="logged">Whether the log has been recorded using WeixinTrace. If not, BaseException will record a summary</param>
         public BaseException(string message, Exception inner, bool logged = false)
             : base(message, inner)
         {

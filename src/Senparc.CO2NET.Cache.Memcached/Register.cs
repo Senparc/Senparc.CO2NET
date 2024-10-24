@@ -1,19 +1,19 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：Register.cs
-    文件功能描述：Senparc.CO2NET.Memcached.Redis 快捷注册流程
+    FileName: Register.cs
+    File Function Description: Senparc.CO2NET.Memcached.Redis quick registration process
 
 
-    创建标识：Senparc - 20180222
+    Creation Identifier: Senparc - 20180222
 
-    修改标识：Senparc - 20180606
-    修改描述：缓存工厂重命名为 ContainerCacheStrategyFactory
+    Modification Identifier: Senparc - 20180606
+    Modification Description: Cache factory renamed to ContainerCacheStrategyFactory
 
-    修改标识：Senparc - 201800802
-    修改描述：v3.1.0 1、Register.RegisterCacheMemcached 标记为过期
-                     2、新增 Register.SetConfigurationOption() 方法
-                     3、新增 Register.UseMemcachedNow() 方法
+    Modification Identifier: Senparc - 201800802
+    Modification Description: v3.1.0 1. Marked Register.RegisterCacheMemcached as obsolete
+                              2. Added Register.SetConfigurationOption() method
+                              3. Added Register.UseMemcachedNow() method
 
 ----------------------------------------------------------------*/
 
@@ -27,11 +27,11 @@ namespace Senparc.CO2NET.Cache.Memcached
     {
 
         /// <summary>
-        /// 注册 Memcached 缓存信息
+        /// Register Memcached cache information
         /// </summary>
         /// <param name="registerService">RegisterService</param>
-        /// <param name="memcachedConfig">memcached连接字符串列表</param>
-        /// <param name="memcachedObjectCacheStrategyInstance">缓存策略的委托，第一个参数为 memcachedConfig</param>
+        /// <param name="memcachedConfig">List of memcached connection strings</param>
+        /// <param name="memcachedObjectCacheStrategyInstance">Delegate for cache strategy, the first parameter is memcachedConfig</param>
         /// <returns></returns>
         [Obsolete("注册过程已经自动化，请改用 Register.SetConfigurationOption() 方法修改连接字符串")]
         public static IRegisterService RegisterCacheMemcached(this IRegisterService registerService,
@@ -40,7 +40,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         {
             MemcachedObjectCacheStrategy.RegisterServerList(memcachedConfig);
 
-            //此处先执行一次委托，直接在下方注册结果，提高每次调用的执行效率
+            // Execute the delegate once here, directly register the result below to improve execution efficiency for each call
             IBaseObjectCacheStrategy objectCacheStrategy = memcachedObjectCacheStrategyInstance(memcachedConfig);
             if (objectCacheStrategy != null)
             {
@@ -51,7 +51,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         }
 
         /// <summary>
-        /// 设置连接信息（不立即启用）
+        /// Set connection information (not enabled immediately)
         /// </summary>
         /// <param name="redisConfigurationString"></param>
         public static void SetConfigurationOption(string redisConfigurationString)
@@ -60,7 +60,7 @@ namespace Senparc.CO2NET.Cache.Memcached
         }
 
         /// <summary>
-        /// 立即使用 Memcached 缓存
+        /// Use Memcached cache immediately
         /// </summary>
         public static void UseMemcachedNow()
         {

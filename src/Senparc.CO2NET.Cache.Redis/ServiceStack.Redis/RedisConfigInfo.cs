@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace Senparc.Weixin.Cache.Redis
 {
     /// <summary>
-    /// Redis配置信息
+    /// Redis configuration information
     /// </summary>
     public sealed class RedisConfigInfo : ConfigurationSection
     {
         /// <summary>
-        /// 获取配置信息，默认配置节点名称为RedisConfig
+        /// Get configuration information, the default configuration node name is RedisConfig
         /// </summary>
         /// <returns></returns>
         public static RedisConfigInfo GetConfig()
@@ -23,9 +23,9 @@ namespace Senparc.Weixin.Cache.Redis
         }
 
         /// <summary>
-        /// 获取配置信息
+        /// Get configuration information
         /// </summary>
-        /// <param name="sectionName">配置节点的sectionName</param>
+        /// <param name="sectionName">Configuration node sectionName</param>
         /// <returns></returns>
         public static RedisConfigInfo GetConfig(string sectionName)
         {
@@ -35,7 +35,7 @@ namespace Senparc.Weixin.Cache.Redis
             return section;
         }
         /// <summary>
-        /// 可写的Redis链接地址
+        /// Writable Redis connection address
         /// </summary>
         [ConfigurationProperty("WriteServerList", IsRequired = false)]
         public string WriteServerList
@@ -52,7 +52,7 @@ namespace Senparc.Weixin.Cache.Redis
 
 
         /// <summary>
-        /// 可读的Redis链接地址
+        /// Readable Redis connection address
         /// </summary>
         [ConfigurationProperty("ReadServerList", IsRequired = false)]
         public string ReadServerList
@@ -69,7 +69,7 @@ namespace Senparc.Weixin.Cache.Redis
 
 
         /// <summary>
-        /// 最大写链接数
+        /// Maximum number of write connections
         /// </summary>
         [ConfigurationProperty("MaxWritePoolSize", IsRequired = false, DefaultValue = 5)]
         public int MaxWritePoolSize
@@ -87,7 +87,7 @@ namespace Senparc.Weixin.Cache.Redis
 
 
         /// <summary>
-        /// 最大读链接数
+        /// Maximum number of read connections
         /// </summary>
         [ConfigurationProperty("MaxReadPoolSize", IsRequired = false, DefaultValue = 5)]
         public int MaxReadPoolSize
@@ -105,7 +105,7 @@ namespace Senparc.Weixin.Cache.Redis
 
 
         /// <summary>
-        /// 自动重启
+        /// Auto restart
         /// </summary>
         [ConfigurationProperty("AutoStart", IsRequired = false, DefaultValue = true)]
         public bool AutoStart
@@ -123,7 +123,7 @@ namespace Senparc.Weixin.Cache.Redis
 
 
         /// <summary>
-        /// 本地缓存到期时间，单位:秒
+        /// Local cache expiration time, unit: seconds
         /// </summary>
         [ConfigurationProperty("LocalCacheTime", IsRequired = false, DefaultValue = 36000)]
         public int LocalCacheTime
@@ -140,7 +140,7 @@ namespace Senparc.Weixin.Cache.Redis
 
 
         /// <summary>
-        /// 是否记录日志,该设置仅用于排查redis运行时出现的问题,如redis工作正常,请关闭该项
+        /// Whether to log, this setting is only used to troubleshoot issues during Redis runtime, if Redis is working normally, please disable this option
         /// </summary>
         [ConfigurationProperty("RecordeLog", IsRequired = false, DefaultValue = false)]
         public bool RecordeLog

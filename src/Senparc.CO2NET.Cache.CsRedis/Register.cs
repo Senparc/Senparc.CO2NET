@@ -1,20 +1,20 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2020 Senparc
 
-    文件名：Register.cs
-    文件功能描述：Senparc.CO2NET.Cache.Redis 快捷注册流程
+    File Name: Register.cs
+    File Function Description: Senparc.CO2NET.Cache.Redis Quick Registration Process
 
 
-    创建标识：Senparc - 20180222
+    Creation Identifier: Senparc - 20180222
 
-    修改标识：Senparc - 20180606
-    修改描述：缓存工厂重命名为 ContainerCacheStrategyFactory
+    Modification Identifier: Senparc - 20180606
+    Modification Description: Cache factory renamed to ContainerCacheStrategyFactory
 
-    修改标识：Senparc - 20180802
-    修改描述：v3.1.0 1、Register.RegisterCacheRedis 标记为过期
-                     2、新增 Register.SetConfigurationOption() 方法
-                     3、新增 Register.UseKeyValueRedisNow() 方法
-                     4、新增 Register.UseHashRedisNow() 方法
+    Modification Identifier: Senparc - 20180802
+    Modification Description: v3.1.0 1. Marked Register.RegisterCacheRedis as obsolete
+                     2. Added Register.SetConfigurationOption() method
+                     3. Added Register.UseKeyValueRedisNow() method
+                     4. Added Register.UseHashRedisNow() method
 
 ----------------------------------------------------------------*/
 
@@ -25,25 +25,25 @@ using System;
 namespace Senparc.CO2NET.Cache.CsRedis
 {
     /// <summary>
-    /// Redis 注册
+    /// Redis Registration
     /// </summary>
     public static class Register
     {
         /// <summary>
-        /// 注册 Redis 缓存信息
+        /// Register Redis cache information
         /// </summary>
         /// <param name="registerService">RegisterService</param>
-        /// <param name="redisConfigurationString">Redis的连接字符串</param>
-        /// <param name="redisObjectCacheStrategyInstance">缓存策略的委托，第一个参数为 redisConfigurationString</param>
+        /// <param name="redisConfigurationString">Redis connection string</param>
+        /// <param name="redisObjectCacheStrategyInstance">Cache strategy delegate, the first parameter is redisConfigurationString</param>
         /// <returns></returns>
-        [Obsolete("注册过程已经自动化，请改用 Register.SetConfigurationOption() 方法修改连接字符串")]
+        [Obsolete("The registration process has been automated. Please use the Register.SetConfigurationOption() method to modify the connection string.")]
         public static IRegisterService RegisterCacheRedis(this IRegisterService registerService,
             string redisConfigurationString,
             Func<string, IBaseObjectCacheStrategy> redisObjectCacheStrategyInstance)
         {
             RedisManager.ConfigurationOption = redisConfigurationString;
 
-            //此处先执行一次委托，直接在下方注册结果，提高每次调用的执行效率
+            //Execute the delegate once here, register the result below to improve execution efficiency for each call
             IBaseObjectCacheStrategy objectCacheStrategy = redisObjectCacheStrategyInstance(redisConfigurationString);
             if (objectCacheStrategy != null)
             {
@@ -54,7 +54,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         }
 
         /// <summary>
-        /// 设置连接字符串（不立即启用）
+        /// Set connection string (not enabled immediately)
         /// </summary>
         /// <param name="redisConfigurationString"></param>
         public static void SetConfigurationOption(string redisConfigurationString)
@@ -63,19 +63,20 @@ namespace Senparc.CO2NET.Cache.CsRedis
         }
 
         /// <summary>
-        /// 立即使用键值对方式储存的 Redis（推荐）
+        /// Immediately use key-value pair storage Redis (recommended)
         /// </summary>
         public static void UseKeyValueRedisNow()
         {
-            CacheStrategyFactory.RegisterObjectCacheStrategy(() => CsRedis.RedisObjectCacheStrategy.Instance);//键值Redis
+            CacheStrategyFactory.RegisterObjectCacheStrategy(() => CsRedis.RedisObjectCacheStrategy.Instance);//Key-Value Redis
         }
 
         /// <summary>
-        /// 立即使用 HashSet 方式储存的 Redis 缓存策略
+        /// Immediately use HashSet storage Redis cache strategy
         /// </summary>
         public static void UseHashRedisNow()
         {
-            CacheStrategyFactory.RegisterObjectCacheStrategy(() => CsRedis.RedisHashSetObjectCacheStrategy.Instance);//Hash格式储存的Redis
+            CacheStrategyFactory.RegisterObjectCacheStrategy(() => CsRedis.RedisHashSetObjectCacheStrategy.Instance);//Hash format storage Redis
+
         }
     }
 }

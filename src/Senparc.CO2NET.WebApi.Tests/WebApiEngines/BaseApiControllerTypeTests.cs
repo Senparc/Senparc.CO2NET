@@ -16,7 +16,7 @@ namespace Senparc.CO2NET.WebApi.Tests.WebApiEngines
         [TestMethod]
         public void BaseTypeTest()
         {
-            base.Init();//初始化
+            base.Init();// Initialize
 
             var appDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "App_Data");// ServerUtility.ContentRootMapPath("~/App_Data");
             base.ServiceCollection.AddAndInitDynamicApi(MvcCoreBuilder, options =>
@@ -30,7 +30,7 @@ namespace Senparc.CO2NET.WebApi.Tests.WebApiEngines
                 var classType = assembly.GetType("BaseApiControllerTypeTestController");
                 Assert.IsNotNull(classType);
 
-                //选用Order最大的基类
+                // Select the base class with the largest Order
                 Assert.IsTrue(classType.IsSubclassOf(typeof(MyBaseController2)));
             }
 
@@ -39,7 +39,7 @@ namespace Senparc.CO2NET.WebApi.Tests.WebApiEngines
                 var classType = assembly.GetType("BaseApiControllerTypeTest_NoBaseController");
                 Assert.IsNotNull(classType);
 
-                //默认使用 ControllerBase
+                // Default to using ControllerBase
                 Assert.IsTrue(classType.IsSubclassOf(typeof(ControllerBase)));
             }
         }
@@ -71,7 +71,7 @@ namespace Senparc.CO2NET.WebApi.Tests.WebApiEngines
         }
     }
 
-    [ApiBind("BaseApiControllerTypeTest", BaseApiControllerType = typeof(MyBaseController2), BaseApiControllerOrder = 10/*数字最大，MyBaseController2 会被选用*/)]
+    [ApiBind("BaseApiControllerTypeTest", BaseApiControllerType = typeof(MyBaseController2), BaseApiControllerOrder = 10/* The largest number, MyBaseController2 will be selected */)]
     public class TestApiClass2
     {
         public string Method1()
@@ -101,7 +101,7 @@ namespace Senparc.CO2NET.WebApi.Tests.WebApiEngines
 
 
     /// <summary>
-    /// 不定义任何基类
+    /// Do not define any base class
     /// </summary>
     [ApiBind("BaseApiControllerTypeTest_NoBase")]
     public class TestApiClass4

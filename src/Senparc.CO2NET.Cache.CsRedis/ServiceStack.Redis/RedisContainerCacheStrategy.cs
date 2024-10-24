@@ -11,7 +11,7 @@ using ServiceStack.Redis.Generic;
 namespace Senparc.Weixin.Cache.Redis
 {
     /// <summary>
-    /// Redis容器缓存策略
+    /// Redis container cache strategy
     /// </summary>
     public sealed class RedisContainerCacheStrategy : IContainerCacheStragegy
     {
@@ -20,12 +20,12 @@ namespace Senparc.Weixin.Cache.Redis
 
         #region 单例
 
-        //静态SearchCache
+        //Static SearchCache
         public static RedisContainerCacheStrategy Instance
         {
             get
             {
-                return Nested.instance;//返回Nested类中的静态成员instance
+                return Nested.instance;//Return the static member instance in the Nested class
             }
         }
 
@@ -34,7 +34,7 @@ namespace Senparc.Weixin.Cache.Redis
             static Nested()
             {
             }
-            //将instance设为一个初始化的BaseCacheStrategy新实例
+            //Set instance to a new initialized BaseCacheStrategy instance
             internal static readonly RedisContainerCacheStrategy instance = new RedisContainerCacheStrategy();
         }
 
@@ -65,7 +65,7 @@ namespace Senparc.Weixin.Cache.Redis
 
         ~RedisContainerCacheStrategy()
         {
-            _client.Dispose();//释放
+            _client.Dispose();//Release
             //GC.SuppressFinalize(_client);
         }
 
@@ -75,7 +75,7 @@ namespace Senparc.Weixin.Cache.Redis
         }
 
         /// <summary>
-        /// 获取hash
+        /// Get hash
         /// </summary>
         /// <returns></returns>
         private IRedisHash<string, IContainerItemCollection> GetHash()
@@ -128,17 +128,17 @@ namespace Senparc.Weixin.Cache.Redis
 
             if (value is IDictionary)
             {
-                //Dictionary类型
+                //Dictionary type
             }
 
-            //TODO：加了绝对过期时间就会立即失效（再次获取后为null），memcache低版本的bug
+            //TODO: Adding an absolute expiration time will cause immediate invalidation (null upon next retrieval), a bug in lower versions of memcache
             var hash = GetHash();
             _cache.SetEntryInHash(hash, cacheKey, value);
             //_cache.SetEntry(cacheKey, obj);
 
 #if DEBUG
-            var value1 = _cache.GetFromHash(cacheKey);//正常情况下可以得到 //_cache.GetValue(cacheKey);
-            var value2 = _cache.GetValueFromHash(hash, cacheKey);//正常情况下可以得到
+            var value1 = _cache.GetFromHash(cacheKey);//Normally can get //_cache.GetValue(cacheKey);
+            var value2 = _cache.GetValueFromHash(hash, cacheKey);//Normally can get
             var value3 = _cache.GetValue(cacheKey);//null
 #endif
         }

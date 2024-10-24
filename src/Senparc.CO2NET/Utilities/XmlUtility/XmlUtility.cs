@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,30 +21,30 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：BrowserUtility.cs
-    文件功能描述：浏览器公共类
+    FileName：BrowserUtility.cs
+    File Function Description：Browser utility class
 
 
-    创建标识：Senparc - 20150419
+    Creation Identifier：Senparc - 20150419
 
-    修改标识：Senparc - 20161219
-    修改描述：v4.9.6 修改错别字：Browser->Browser
+    Modification Identifier：Senparc - 20161219
+    Modification Description：v4.9.6 Corrected typo: Browser->Browser
 
-    修改标识：Senparc - 20161219
-    修改描述：v4.11.2 修改SideInWeixinBrowser判断逻辑
+    Modification Identifier：Senparc - 20161219
+    Modification Description：v4.11.2 Modified SideInWeixinBrowser logic
 
-    修改标识：Senparc - 20180513
-    修改描述：v4.11.2 1、增加对小程序请求的判断方法 SideInWeixinMiniProgram()
-                      2、添加 GetUserAgent() 方法
+    Modification Identifier：Senparc - 20180513
+    Modification Description：v4.11.2 1. Added method to determine mini program requests SideInWeixinMiniProgram()
+                      2. Added GetUserAgent() method
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/Utilities/XmlUtility.cs  ----
 
-    修改标识：Senparc - 20180601
-    修改描述：v0.1.0 移植 XmlUtility
+    Modification Identifier：Senparc - 20180601
+    Modification Description：v0.1.0 Migrated XmlUtility
 
-    修改标识：Senparc - 20220208
-    修改描述：v2.0.2 添加 XmlUtility.Deserialize() 重写方法
+    Modification Identifier：Senparc - 20220208
+    Modification Description：v2.0.2 Added XmlUtility.Deserialize() override method
 
 ----------------------------------------------------------------*/
 
@@ -57,17 +57,17 @@ using System.Xml.Serialization;
 namespace Senparc.CO2NET.Utilities
 {
     /// <summary>
-    /// XML 工具类
+    /// XML utility class
     /// </summary>
     public static class XmlUtility
     {
 
-        #region 反序列化
+        #region Deserialization
 
         /// <summary>
-        /// 反序列化
+        /// Deserialize
         /// </summary>
-        /// <param name="xml">XML字符串</param>
+        /// <param name="xml">XML string</param>
         /// <param name="rootNodeName"></param>
         /// <returns></returns>
         public static object Deserialize(Type type, string xml, string rootNodeName = null)
@@ -96,9 +96,9 @@ namespace Senparc.CO2NET.Utilities
         }
 
         /// <summary>
-        /// 反序列化
+        /// Deserialize
         /// </summary>
-        /// <param name="xml">XML字符串</param>
+        /// <param name="xml">XML string</param>
         /// <param name="rootNodeName"></param>
         /// <returns></returns>
         public static object Deserialize<T>(string xml, string rootNodeName = null)
@@ -107,7 +107,7 @@ namespace Senparc.CO2NET.Utilities
         }
 
         /// <summary>
-        /// 反序列化
+        /// Deserialize
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="rootNodeName"></param>
@@ -120,13 +120,13 @@ namespace Senparc.CO2NET.Utilities
 
         #endregion
 
-        #region 序列化
+        #region Serialization
 
         /// <summary>
-        /// 序列化
-        /// 说明：此方法序列化复杂类，如果没有声明XmlInclude等特性，可能会引发“使用 XmlInclude 或 SoapInclude 特性静态指定非已知的类型。”的错误。
+        /// Serialize
+        /// Note: This method serializes complex classes. If XmlInclude and other attributes are not declared, it may cause the error "Use the XmlInclude or SoapInclude attribute to specify types that are not known statically."
         /// </summary>
-        /// <param name="obj">对象</param>
+        /// <param name="obj">Object</param>
         /// <returns></returns>
         public static string Serializer<T>(T obj)
         {
@@ -134,7 +134,7 @@ namespace Senparc.CO2NET.Utilities
             XmlSerializer xml = new XmlSerializer(typeof(T));
             try
             {
-                //序列化对象
+                //Serialize object
                 xml.Serialize(Stream, obj);
             }
             catch (InvalidOperationException)
@@ -154,7 +154,7 @@ namespace Senparc.CO2NET.Utilities
         #endregion
 
         /// <summary>
-        /// 序列化将流转成XML字符串
+        /// Serialize stream to XML string
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
@@ -162,7 +162,7 @@ namespace Senparc.CO2NET.Utilities
         {
             if (stream.CanSeek)
             {
-                stream.Seek(0, SeekOrigin.Begin);//强制调整指针位置
+                stream.Seek(0, SeekOrigin.Begin);//Force adjust pointer position
             }
             using (XmlReader xr = XmlReader.Create(stream))
             {

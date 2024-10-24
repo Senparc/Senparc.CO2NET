@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,20 +21,20 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：LocalCacheLock.cs
-    文件功能描述：本地锁
+    FileName：LocalCacheLock.cs
+    File Function Description：Local Lock
 
 
-    创建标识：Senparc - 20160810
+    Creation Identifier：Senparc - 20160810
 
-    修改标识：Senparc - 20170205
-    修改描述：v4.11.0 重构分布式锁
+    Modification Identifier：Senparc - 20170205
+    Modification Description：v4.11.0 Refactor distributed lock
 
-    修改标识：Senparc - 20190412
-    修改描述：v0.6.0 提供缓存异步接口
+    Modification Identifier：Senparc - 20190412
+    Modification Description：v0.6.0 Provide asynchronous cache interface
 
-    修改标识：Senparc - 20230527
-    修改描述：v2.1.8 添加 GetLockCacheKey() 方法 
+    Modification Identifier：Senparc - 20230527
+    Modification Description：v2.1.8 Add GetLockCacheKey() method 
 
 ----------------------------------------------------------------*/
 
@@ -44,7 +44,7 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// 缓存同步锁基类
+    /// Base class for cache synchronization lock
     /// </summary>
     public abstract class BaseCacheLock : ICacheLock
     {
@@ -53,16 +53,16 @@ namespace Senparc.CO2NET.Cache
         protected int _retryCount;
         protected TimeSpan _retryDelay;
 
-        protected bool _isSyncLock;//是否使用异步步的方法调用锁
+        protected bool _isSyncLock;//Whether to use asynchronous method to call the lock
 
         public bool LockSuccessful { get; set; }
 
         /// <summary>
-        /// 默认重试次数
+        /// Default retry count
         /// </summary>
         public readonly int DefaultRetryCount = 20;
         /// <summary>
-        /// 默认每次重试间隔时间
+        /// Default retry interval time
         /// </summary>
         public readonly TimeSpan DefaultRetryDelay = TimeSpan.FromMilliseconds(10);
 
@@ -72,18 +72,18 @@ namespace Senparc.CO2NET.Cache
         /// <param name="strategy"></param>
         /// <param name="resourceName"></param>
         /// <param name="key"></param>
-        /// <param name="retryCount">如果传入null，默认为50</param>
-        /// <param name="retryDelay">如果传入null，默认为10毫秒</param>
+        /// <param name="retryCount">If null, default is 50</param>
+        /// <param name="retryDelay">If null, default is 10 milliseconds</param>
         protected BaseCacheLock(IBaseCacheStrategy strategy, string resourceName, string key, int? retryCount, TimeSpan? retryDelay)
         {
             _cacheStrategy = strategy;
-            _resourceName = GetLockCacheKey(resourceName,key);/*加上Key可以针对某个AppId加锁*/
+            _resourceName = GetLockCacheKey(resourceName,key);/*Adding Key can lock for a specific AppId*/
             _retryCount = retryCount == null || retryCount == 0 ? DefaultRetryCount : retryCount.Value;
             _retryDelay = retryDelay == null || retryDelay.Value.TotalMilliseconds == 0 ? DefaultRetryDelay : retryDelay.Value;
         }
 
         /// <summary>
-        /// 获取换缓存中组合后的 Key
+        /// Get the combined Key in the cache
         /// </summary>
         /// <param name="resourceName"></param>
         /// <param name="key"></param>
@@ -94,11 +94,11 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 获取最长锁定时间（锁最长生命周期），单位：毫秒
+        /// Get the maximum lock time (maximum lock lifecycle), unit: milliseconds
         /// </summary>
-        /// <param name="retryCount">重试次数，</param>
-        /// <param name="retryDelay">最小锁定时间周期</param>
-        /// <returns>单位：Milliseconds，毫秒</returns>
+        /// <param name="retryCount">Retry count,</param>
+        /// <param name="retryDelay">Minimum lock time period</param>
+        /// <returns>Unit: Milliseconds</returns>
         public double GetTotalTtl(int retryCount, TimeSpan retryDelay)
         {
             var ttl = retryDelay.TotalMilliseconds * retryCount;
@@ -107,26 +107,26 @@ namespace Senparc.CO2NET.Cache
 
         public void Dispose()
         {
-            //必须为true
+            //Must be true
             Dispose(true);
-            //通知垃圾回收机制不再调用终结器（析构器）
+            //Notify the garbage collector not to call the finalizer (destructor)
             GC.SuppressFinalize(this);
         }
 
         ///<summary>
-        /// 必须，以备程序员忘记了显式调用Dispose方法
+        /// Must, in case the programmer forgets to explicitly call the Dispose method
         ///</summary>
         ~BaseCacheLock()
         {
-            //必须为false
+            //Must be false
             Dispose(false);
         }
 
         protected bool disposed = false;
 
         ///<summary>
-        /// 非密封类修饰用protected virtual
-        /// 密封类修饰用private
+        /// Use protected virtual for non-sealed classes
+        /// Use private for sealed classes
         ///</summary>
         ///<param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
@@ -140,20 +140,20 @@ namespace Senparc.CO2NET.Cache
 
             if (disposing)
             {
-                //清理托管资源
+                //Clean up managed resources
             }
 
-            //让类型知道自己已经被释放
+            //Let the type know it has been released
             disposed = true;
         }
 
         /// <summary>
-        /// 立即开始锁定，需要在子类的构造函数中执行
+        /// Start locking immediately, needs to be executed in the constructor of the subclass
         /// </summary>
         /// <returns></returns>
 
 
-        #region 同步方法
+        #region Synchronous Methods
 
         //protected ICacheLock LockNow()
         //{
@@ -174,7 +174,7 @@ namespace Senparc.CO2NET.Cache
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         //protected async Task<ICacheLock> LockNowAsync()
         //{

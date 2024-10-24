@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,14 +21,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：RedisManager.cs
-    文件功能描述：Redis连接及数据库管理接口。
+    FileName：RedisManager.cs
+    File Function Description：Redis connection and database management interface.
 
-    创建标识：Senparc - 20160309
+    Creation Identifier：Senparc - 20160309
 
-    修改标识：Senparc - 20150319
-    修改描述：文件Manager.cs改名为RedisManager.cs（类名没有改动）；
-              使用新的单例做法。
+    Modification Identifier：Senparc - 20150319
+    Modification Description：Renamed file Manager.cs to RedisManager.cs (class name unchanged);
+              Used new singleton approach.
 
 ----------------------------------------------------------------*/
 
@@ -42,20 +42,20 @@ using StackExchange.Redis;
 namespace Senparc.CO2NET.Cache.Redis
 {
     /// <summary>
-    /// Redis 链接管理
+    /// Redis connection management
     /// </summary>
     public class RedisManager
     {
-        #region ConnectionMultiplexer 单例
+        #region ConnectionMultiplexer Singleton
 
         /// <summary>
-        /// _redis(ConnectionMultiplexer)单例
+        /// _redis(ConnectionMultiplexer) singleton
         /// </summary>
         internal static ConnectionMultiplexer _redis
         {
             get
             {
-                return NestedRedis.instance;//返回Nested类中的静态成员instance
+                return NestedRedis.instance;//Returns the static member instance in the Nested class
             }
         }
 
@@ -64,14 +64,14 @@ namespace Senparc.CO2NET.Cache.Redis
             static NestedRedis()
             {
             }
-            //将instance设为一个初始化的ConnectionMultiplexer新实例
+            //Sets instance to a new initialized ConnectionMultiplexer instance
             internal static readonly ConnectionMultiplexer instance = GetManager();
         }
 
         #endregion
 
         /// <summary>
-        /// 链接设置字符串
+        /// Connection string settings
         /// </summary>
         public static string ConfigurationOption { get; set; }
 
@@ -85,7 +85,7 @@ namespace Senparc.CO2NET.Cache.Redis
         }
 
         /// <summary>
-        /// 默认连接字符串
+        /// Default connection string
         /// </summary>
         /// <returns></returns>
         private static string GetDefaultConnectionString()
@@ -108,28 +108,28 @@ namespace Senparc.CO2NET.Cache.Redis
             }
 
             //            var redisConfigInfo = RedisConfigInfo.GetConfig();
-            //            #region options 设置说明
+            //            #region options settings description
 
             //            /*
-            //abortConnect ： 当为true时，当没有可用的服务器时则不会创建一个连接
-            //allowAdmin ： 当为true时 ，可以使用一些被认为危险的命令
-            //channelPrefix：所有pub/sub渠道的前缀
-            //connectRetry ：重试连接的次数
-            //connectTimeout：超时时间
+            //abortConnect ： When true, no connection will be created if no servers are available
+            //allowAdmin ： When true, allows the use of certain dangerous commands
+            //channelPrefix：Prefix for all pub/sub channels
+            //connectRetry ：Number of times to retry connecting
+            //connectTimeout：Timeout duration
             //configChannel： Broadcast channel name for communicating configuration changes
-            //defaultDatabase ： 默认0到-1
-            //keepAlive ： 保存x秒的活动连接
+            //defaultDatabase ： Default 0 to -1
+            //keepAlive ： Keep active connection for x seconds
             //name:ClientName
             //password:password
-            //proxy:代理 比如 twemproxy
-            //resolveDns : 指定dns解析
+            //proxy:Proxy such as twemproxy
+            //resolveDns : Specify DNS resolution
             //serviceName ： Not currently implemented (intended for use with sentinel)
-            //ssl={bool} ： 使用sll加密
-            //sslHost={string}	： 强制服务器使用特定的ssl标识
-            //syncTimeout={int} ： 异步超时时间
+            //ssl={bool} ： Use SSL encryption
+            //sslHost={string}	： Force server to use specific SSL identity
+            //syncTimeout={int} ： Asynchronous timeout
             //tiebreaker={string}：Key to use for selecting a server in an ambiguous master scenario
             //version={string} ： Redis version level (useful when the server does not make this available)
-            //writeBuffer={int} ： 输出缓存区的大小
+            //writeBuffer={int} ： Output buffer size
             //    */
 
             //            #endregion

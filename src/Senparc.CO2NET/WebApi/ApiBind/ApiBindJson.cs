@@ -1,16 +1,16 @@
 ﻿namespace Senparc.CO2NET.ApiBind
 {
     /// <summary>
-    /// ApiBind Json 设置格式
+    /// ApiBind Json format settings
     /// </summary>
     public class ApiBindJson
     {
         /// <summary>
-        /// 全局唯一名称
+        /// Globally unique name
         /// </summary>
         public string name { get; set; }
         /// <summary>
-        /// 参数
+        /// Parameters
         /// </summary>
         public object[] parameters { get; set; }
     }

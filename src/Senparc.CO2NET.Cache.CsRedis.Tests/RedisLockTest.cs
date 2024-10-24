@@ -21,33 +21,33 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
 
             var lockResourceName = "LockTest";
 
-            var threadCount = 60;//定义线程数量
+            var threadCount = 60;// Define the number of threads
             var runningCount = 0;
-            var finishThreadCount = 0;//已完成线程数量
-            var retryCount = 10;//重试次数（Redis 默认10）
-            var retryDelay = TimeSpan.FromMilliseconds(100);//单次重试等待时间（Redis 默认10毫秒）
-            Dictionary<int, Thread> threadCollection = new Dictionary<int, Thread>();//线程集合
+            var finishThreadCount = 0;// Number of completed threads
+            var retryCount = 10;// Retry count (Redis default is 10)
+            var retryDelay = TimeSpan.FromMilliseconds(100);// Single retry wait time (Redis default is 10 milliseconds)
+            Dictionary<int, Thread> threadCollection = new Dictionary<int, Thread>();// Thread collection
 
             var dtStart = SystemTime.Now;
             var startRun = false;
-            //配置所有线程（为了尽量同时开始，忽略设置时间，所以先设置，再依次快速开启）
+            // Configure all threads (to start as simultaneously as possible, ignore setup time, so set first, then start quickly in sequence)
             for (int i = 0; i < threadCount; i++)
             {
-                var lockGroupKey = i % 4;//分为4组
+                var lockGroupKey = i % 4;// Divided into 4 groups
                 var threadIndex = i;
                 threadCollection[i] = new Thread(async () =>
                 {
                     runningCount++;
-                    //while (runningCount < threadCount)
+                    // while (runningCount < threadCount)
                     {
-                        //等待统一开始
+                        // Wait for unified start
                     }
                     var dt1 = SystemTime.Now;
                     using (var syncLock = cache.BeginCacheLock(lockResourceName, lockGroupKey.ToString(), retryCount, retryDelay))
                     {
                         var runTime = SystemTime.Now;
                         var waitTime = (runTime - dt1).TotalMilliseconds;
-                        Thread.Sleep(100);//模拟线程处理时间
+                        Thread.Sleep(100);// Simulate thread processing time
                         finishThreadCount++;
                         Console.WriteLine($"{runTime.ToString("ss.ffffff")} - {SystemTime.Now.ToString("ss.ffffff")}\t\t 等待：{waitTime}ms \t\t获取syncLock完成（Group：{lockGroupKey}）：{threadIndex} - {syncLock.LockSuccessful}");
                     }
@@ -55,19 +55,19 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
                 threadCollection[i].Name = $"Lock-{i}";
             }
 
-            //开始所有线程
+            // Start all threads
 
-            //此方法会导致死循环
-            //threadCollection.Values.ToList().AsParallel().ForAll(thread => thread.Start());
+            // This method will cause an infinite loop
+            // threadCollection.Values.ToList().AsParallel().ForAll(thread => thread.Start());
 
             foreach (var thread in threadCollection.Values)
             {
-                thread.Start();//注意：线程实际启动完成时间不一定是按序的
+                thread.Start();// Note: The actual start completion time of threads may not be in order
             }
 
             while (finishThreadCount < threadCount)
             {
-                //等待完成
+                // Wait for completion
             }
 
             Console.WriteLine($"过程结束，总用时：{SystemTime.DiffTotalMS(dtStart)} ms");
@@ -76,12 +76,12 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
         [TestMethod]
         public void CacheLockTest()
         {
-            var cache = RedisObjectCacheStrategy.Instance;//使用 Redis 缓存测试
+            var cache = RedisObjectCacheStrategy.Instance;// Use Redis cache for testing
             var resourceName = "SenparcTest";
             var key = "CacheLockTest";
             using (var cacheLock = cache.BeginCacheLock(resourceName, key, 100, TimeSpan.FromMilliseconds(100)))
             {
-                //查找内存中的对象
+                // Find objects in memory
                 var cacheKey = cacheLock.GetLockCacheKey(resourceName, key);
                 Console.WriteLine($"CacheKey: {cacheKey}");
                 var lockObject = cache.Get(cacheKey, true);

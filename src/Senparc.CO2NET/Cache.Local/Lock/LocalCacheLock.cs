@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,22 +21,22 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：LocalCacheLock.cs
-    文件功能描述：本地锁
+    FileName：LocalCacheLock.cs
+    File Function Description：Local lock
 
 
-    创建标识：Senparc - 20160810
+    Creation Identifier：Senparc - 20160810
 
-    修改标识：Senparc - 20170205
-    修改描述：1、修改默认retryDelay时间为10毫秒，retryCount为99999，总时间为16.6分钟
-              2、更新构造函数
-              3、重构方法
+    Modification Identifier：Senparc - 20170205
+    Modification Description：1. Changed default retryDelay to 10 milliseconds, retryCount to 99999, total time to 16.6 minutes
+                              2. Updated constructor
+                              3. Refactored methods
 
-    修改标识：Senparc - 20210911
-    修改描述：v1.5.2 LocalCacheLock释放锁之前增加是否锁成功的判断
+    Modification Identifier：Senparc - 20210911
+    Modification Description：v1.5.2 Added a check for successful lock before releasing LocalCacheLock
 
-    修改标识：Senparc - 20230528
-    修改描述：v2.1.8 LockPool 改为 ConcurrentDictionary
+    Modification Identifier：Senparc - 20230528
+    Modification Description：v2.1.8 Changed LockPool to ConcurrentDictionary
 
 ----------------------------------------------------------------*/
 
@@ -50,32 +50,32 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Cache
 {
     /// <summary>
-    /// 本地锁
+    /// Local lock
     /// </summary>
     public class LocalCacheLock : BaseCacheLock
     {
         private LocalObjectCacheStrategy _localStrategy;
 
 
-        //这里必须为非公开的构造函数，使用 Create() 方法创建
+        //This must be a non-public constructor, use the Create() method to create
         protected LocalCacheLock(LocalObjectCacheStrategy strategy, string resourceName, string key,
             int? retryCount = null, TimeSpan? retryDelay = null)
             : base(strategy, resourceName, key, retryCount ?? 0, retryDelay ?? TimeSpan.FromMilliseconds(10))
         {
             _localStrategy = strategy;
-            //LockNow();//立即等待并抢夺锁
+            //LockNow();//Wait immediately and seize the lock
         }
 
         /// <summary>
-        /// 锁存放容器   TODO：考虑分布式情况 —— 直接使用 Redis
+        /// Lock storage container   TODO: Consider distributed scenario — use Redis directly
         /// </summary>
         private static ConcurrentDictionary<string, object> LockPool = new ConcurrentDictionary<string, object>();
         /// <summary>
-        /// 随机数
+        /// Random number
         /// </summary>
         private static Random _rnd = new Random();
         /// <summary>
-        /// 读取LockPool时的锁
+        /// Lock for reading LockPool
         /// </summary>
         private static object lookPoolLock = new object();
 
@@ -84,7 +84,7 @@ namespace Senparc.CO2NET.Cache
 
 
         /// <summary>
-        /// 创建 LocalCacheLock 实例，并立即尝试获得锁
+        /// Create a LocalCacheLock instance and immediately try to acquire the lock
         /// </summary>
         /// <param name="strategy">LocalObjectCacheStrategy</param>
         /// <param name="resourceName"></param>
@@ -98,7 +98,7 @@ namespace Senparc.CO2NET.Cache
         }
 
         /// <summary>
-        /// 立即等待并抢夺锁
+        /// Wait immediately and seize the lock
         /// </summary>
         /// <returns></returns>
         public override ICacheLock Lock()
@@ -116,12 +116,12 @@ namespace Senparc.CO2NET.Cache
                     {
                         if (LockPool.ContainsKey(_resourceName))
                         {
-                            getLock = false;//已被别人锁住，没有取得锁
+                            getLock = false;//Locked by someone else, failed to acquire the lock
                         }
                         else
                         {
-                            LockPool.TryAdd(_resourceName, new object());//创建锁
-                            getLock = true;//取得锁
+                            LockPool.TryAdd(_resourceName, new object());//Create lock
+                            getLock = true;//Acquire lock
                         }
                     }
                 }
@@ -136,7 +136,7 @@ namespace Senparc.CO2NET.Cache
                 if (getLock)
                 {
                     LockSuccessful = true;
-                    return this;//取得锁
+                    return this;//Acquire lock
                 }
                 Thread.Sleep(_rnd.Next(maxRetryDelay));
             }
@@ -160,7 +160,7 @@ namespace Senparc.CO2NET.Cache
         #region 异步方法
 
         /// <summary>
-        /// 【异步方法】创建 LocalCacheLock 实例，并立即尝试获得锁
+        /// [Async method] Create a LocalCacheLock instance and immediately try to acquire the lock
         /// </summary>
         /// <param name="strategy">LocalObjectCacheStrategy</param>
         /// <param name="resourceName"></param>
@@ -175,10 +175,10 @@ namespace Senparc.CO2NET.Cache
 
         public override async Task<ICacheLock> LockAsync()
         {
-            //TODO：异常处理
+            //TODO: Exception handling
 
             //return await Task.Factory.StartNew(() => Lock()).ConfigureAwait(false);
-            return Lock();//此处使用同步方法，完成锁定
+            return Lock();//Use synchronous method here to complete the lock
         }
 
         public override async Task UnLockAsync()

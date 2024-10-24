@@ -21,17 +21,17 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2020 Senparc
 
-    文件名：RedisCacheLock.cs
-    文件功能描述：本地锁
+    FileName: RedisCacheLock.cs
+    File Function Description: Local lock
 
 
-    创建标识：Senparc - 20160810
+    Creation Identifier: Senparc - 20160810
 
-    修改标识：Senparc - 20170205
-    修改描述：v1.2.0 重构分布式锁
+    Modification Identifier: Senparc - 20170205
+    Modification Description: v1.2.0 Refactor distributed lock
 
-    修改标识：Senparc - 20191413
-    修改描述：v3.5.0 提供缓存异步接口
+    Modification Identifier: Senparc - 20191413
+    Modification Description: v3.5.0 Provide asynchronous cache interface
 
 ----------------------------------------------------------------*/
 
@@ -52,13 +52,13 @@ namespace Senparc.CO2NET.Cache.CsRedis
             : base(strategy, resourceName, key, retryCount, retryDelay)
         {
             _redisStrategy = strategy;
-            //LockNow();//立即等待并抢夺锁
+            //LockNow();//Immediately wait and seize the lock
         }
 
-        #region 同步方法
+        #region Synchronous Methods
 
         /// <summary>
-        /// 创建 RedisCacheLock 实例，并立即尝试获得锁
+        /// Create a RedisCacheLock instance and immediately attempt to acquire the lock
         /// </summary>
         /// <param name="strategy">BaseRedisObjectCacheStrategy</param>
         /// <param name="resourceName"></param>
@@ -97,10 +97,10 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         /// <summary>
-        /// 【异步方法】创建 RedisCacheLock 实例，并立即尝试获得锁
+        /// [Asynchronous method] Create a RedisCacheLock instance and immediately attempt to acquire the lock
         /// </summary>
         /// <param name="strategy">BaseRedisObjectCacheStrategy</param>
         /// <param name="resourceName"></param>

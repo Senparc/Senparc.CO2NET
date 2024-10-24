@@ -15,16 +15,16 @@ namespace Senparc.CO2NET.WebApi
         }
 
         ///// <summary>
-        ///// Xml 节点
+        ///// Xml node
         ///// </summary>
         public XElement Element => NameAttr.Parent;
         /// <summary>
-        /// name 属性，如： name="M:Senparc.Weixin.MP.AdvancedAPIs.AnalysisApi.GetArticleSummary(System.String,System.String,System.String,System.Int32)"
+        /// name attribute, e.g.: name="M:Senparc.Weixin.MP.AdvancedAPIs.AnalysisApi.GetArticleSummary(System.String,System.String,System.String,System.Int32)"
         /// </summary>
         public XAttribute NameAttr { get; }
 
         /// <summary>
-        /// 参数部分，如：(System.String,System.String,System.String,System.Int32)
+        /// parameter part, e.g.: (System.String,System.String,System.String,System.Int32)
         /// </summary>
         public string ParamsPart { get; }
     }

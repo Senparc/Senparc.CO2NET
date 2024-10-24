@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,26 +21,26 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：RequestUtility.Get.cs
-    文件功能描述：获取请求结果（Get）
+    FileName：RequestUtility.Get.cs
+    File Function Description：Get request result
 
 
-    创建标识：Senparc - 20171006
+    Creation Identifier：Senparc - 20171006
 
-    修改描述：移植Get方法过来
+    Modification Description：Ported Get method
 
-    修改标识：Senparc - 20190429
-    修改描述：v0.7.0 优化 HttpClient，重构 RequestUtility（包括 Post 和 Get），引入 HttpClientFactory 机制
+    Modification Identifier：Senparc - 20190429
+    Modification Description：v0.7.0 Optimized HttpClient, refactored RequestUtility (including Post and Get), introduced HttpClientFactory mechanism
 
-    修改标识：Senparc - 20200530
-    修改描述：v1.3.108 为 RequestUtility.Get 方法添加 headerAddition 参数
-              v1.3.109 添加 HttpResponseGetAsync
+    Modification Identifier：Senparc - 20200530
+    Modification Description：v1.3.108 Added headerAddition parameter to RequestUtility.Get method
+              v1.3.109 Added HttpResponseGetAsync
 
-    修改标识：554393109 - 20220208
-    修改描述：v2.0.3 修改HttpClient请求超时的实现方式
+    Modification Identifier：554393109 - 20220208
+    Modification Description：v2.0.3 Modified HttpClient request timeout implementation
 
-    修改标识：Senparc - 20230711
-    修改描述：v2.2.1 优化 Http 请求，及时关闭资源
+    Modification Identifier：Senparc - 20230711
+    Modification Description：v2.2.1 Optimized Http request, timely release of resources
 
 ----------------------------------------------------------------*/
 
@@ -67,15 +67,15 @@ using Senparc.CO2NET.WebProxy;
 namespace Senparc.CO2NET.HttpUtility
 {
     /// <summary>
-    /// HTTP 请求工具类
+    /// HTTP request utility class
     /// </summary>
     public static partial class RequestUtility
     {
-        #region 公用静态方法
+        #region Public Static Methods
 
 #if NET462
         /// <summary>
-        /// .NET 4.5 版本的HttpWebRequest参数设置
+        /// HttpWebRequest parameter settings for .NET 4.5 version
         /// </summary>
         /// <returns></returns>
         private static HttpWebRequest HttpGet_Common_Net45(string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
@@ -95,7 +95,7 @@ namespace Senparc.CO2NET.HttpUtility
                 request.CookieContainer = cookieContainer;
             }
 
-            HttpClientHeader(request, refererUrl, useAjax, null, timeOut);//设置头信息
+            HttpClientHeader(request, refererUrl, useAjax, null, timeOut);//Set header information
 
             return request;
         }
@@ -103,7 +103,7 @@ namespace Senparc.CO2NET.HttpUtility
 
 #if !NET462
         /// <summary>
-        /// .NET Core 版本的HttpWebRequest参数设置
+        /// HttpWebRequest parameter settings for .NET Core version
         /// </summary>
         /// <returns></returns>
         private static HttpClient HttpGet_Common_NetCore(IServiceProvider serviceProvider, string url, CookieContainer cookieContainer = null,
@@ -126,12 +126,12 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-        #region 同步方法
+        #region Synchronous Methods
 
         /// <summary>
-        /// 使用Get方法获取字符串结果（没有加入Cookie）
+        /// Get string result using Get method (without Cookie)
         /// </summary>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <param name="serviceProvider">Server provider under .NetCore, keep null if .NET Framework</param>
         /// <param name="url"></param>
         /// <param name="encoding"></param>
         /// <returns></returns>
@@ -155,15 +155,15 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 使用Get方法获取字符串结果（加入Cookie）
+        /// Get string result using Get method (with Cookie)
         /// </summary>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <param name="serviceProvider">Server provider under .NetCore, keep null if .NET Framework</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="encoding"></param>
-        /// <param name="cer">证书，如果不需要则保留null</param>
-        /// <param name="refererUrl">referer参数</param>
-        /// <param name="useAjax">是否使用Ajax</param>
+        /// <param name="cer">Certificate, keep null if not needed</param>
+        /// <param name="refererUrl">Referer parameter</param>
+        /// <param name="useAjax">Whether to use Ajax</param>
         /// <param name="headerAddition"></param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
@@ -200,10 +200,10 @@ namespace Senparc.CO2NET.HttpUtility
                 {
                     try
                     {
-                        var response = httpClient.GetAsync(url, cancellationToken: cts.Token).GetAwaiter().GetResult();//获取响应信息
+                        var response = httpClient.GetAsync(url, cancellationToken: cts.Token).GetAwaiter().GetResult();//Get response information
                         using (response)
                         {
-                            HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
+                            HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//Set Cookie
 
                             return response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                         }
@@ -217,7 +217,7 @@ namespace Senparc.CO2NET.HttpUtility
 #if NET462
 
         /// <summary>
-        /// 获取HttpWebResponse或HttpResponseMessage对象，本方法通常用于测试）
+        /// Get HttpWebResponse or HttpResponseMessage object, this method is usually used for testing
         /// </summary>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
@@ -243,15 +243,15 @@ namespace Senparc.CO2NET.HttpUtility
         }
 #else
         /// <summary>
-        /// 获取HttpWebResponse或HttpResponseMessage对象，本方法通常用于测试）
+        /// Get HttpWebResponse or HttpResponseMessage object, this method is usually used for testing
         /// </summary>
-        /// <param name="serviceProvider">NetCore的服务器提供程序</param>
+        /// <param name="serviceProvider">Server provider for NetCore</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="encoding"></param>
         /// <param name="cer"></param>
         /// <param name="refererUrl"></param>
-        /// <param name="useAjax">是否使用Ajax请求</param>
+        /// <param name="useAjax">Whether to use Ajax request</param>
         /// <param name="headerAddition"></param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
@@ -268,7 +268,7 @@ namespace Senparc.CO2NET.HttpUtility
                     var task = httpClient.GetAsync(url, cancellationToken: cts.Token);
                     HttpResponseMessage response = task.Result;
 
-                    HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
+                    HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//Set Cookie
 
                     return response;
                 }
@@ -281,12 +281,12 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         /// <summary>
-        /// 使用Get方法获取字符串结果（没有加入Cookie）
+        /// Get string result using Get method (without Cookie)
         /// </summary>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <param name="serviceProvider">Server provider under .NetCore, keep null if .NET Framework</param>
         /// <param name="url"></param>
         /// <returns></returns>
         public static async Task<string> HttpGetAsync(
@@ -315,15 +315,15 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 使用Get方法获取字符串结果（加入Cookie）
+        /// Get string result using Get method (with Cookie)
         /// </summary>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <param name="serviceProvider">Server provider under .NetCore, keep null if .NET Framework</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="encoding"></param>
-        /// <param name="cer">证书，如果不需要则保留null</param>
+        /// <param name="cer">Certificate, keep null if not needed</param>
         /// <param name="timeOut"></param>
-        /// <param name="refererUrl">referer参数</param>
+        /// <param name="refererUrl">Referer parameter</param>
         /// <param name="useAjax"></param>
         /// <param name="headerAddition"></param>
         /// <returns></returns>
@@ -359,11 +359,11 @@ namespace Senparc.CO2NET.HttpUtility
                 {
                     try
                     {
-                        var response = await httpClient.GetAsync(url, cancellationToken: cts.Token).ConfigureAwait(false);//获取响应信息
+                        var response = await httpClient.GetAsync(url, cancellationToken: cts.Token).ConfigureAwait(false);//Get response information
 
                         using (response)
                         {
-                            HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
+                            HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//Set Cookie
 
                             var retString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -380,7 +380,7 @@ namespace Senparc.CO2NET.HttpUtility
 #if NET462
 
         /// <summary>
-        /// 获取HttpWebResponse或HttpResponseMessage对象，本方法通常用于测试）
+        /// Get HttpWebResponse or HttpResponseMessage object, this method is usually used for testing
         /// </summary>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
@@ -406,15 +406,15 @@ namespace Senparc.CO2NET.HttpUtility
         }
 #else
         /// <summary>
-        /// 获取HttpWebResponse或HttpResponseMessage对象，本方法通常用于测试）
+        /// Get HttpWebResponse or HttpResponseMessage object, this method is usually used for testing
         /// </summary>
-        /// <param name="serviceProvider">NetCore的服务器提供程序</param>
+        /// <param name="serviceProvider">Server provider for NetCore</param>
         /// <param name="url"></param>
         /// <param name="cookieContainer"></param>
         /// <param name="encoding"></param>
         /// <param name="cer"></param>
         /// <param name="refererUrl"></param>
-        /// <param name="useAjax">是否使用Ajax请求</param>
+        /// <param name="useAjax">Whether to use Ajax request</param>
         /// <param name="headerAddition"></param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
@@ -431,7 +431,7 @@ namespace Senparc.CO2NET.HttpUtility
                     var task = httpClient.GetAsync(url, cancellationToken: cts.Token);
                     HttpResponseMessage response = await task;
 
-                    HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//设置 Cookie
+                    HttpClientHelper.SetResponseCookieContainer(cookieContainer, response);//Set Cookie
 
                     return response;
                 }

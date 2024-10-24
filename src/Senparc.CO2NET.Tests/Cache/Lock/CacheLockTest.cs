@@ -13,7 +13,7 @@ namespace Senparc.CO2NET.Cache.Lock
     public class CacheLockTest
     {
         /// <summary>
-        /// 测试 Parallel 和 Thread 的并行数量
+        /// Test the parallel quantity of Parallel and Thread
         /// </summary>
         //[TestMethod]
         public void TestParallelThreadsRunAtSameTime()
@@ -28,9 +28,9 @@ namespace Senparc.CO2NET.Cache.Lock
 
             var dt2 = SystemTime.Now;
             Console.WriteLine("Working Threads Count:{0}", 100 * 20 / (dt2 - dt1).TotalMilliseconds);
-            //测试结果：同时运行的线程数约为4（平均3.6）,实际目测为5
+            //Test result: The number of threads running simultaneously is about 4 (average 3.6), visually observed as 5
 
-            Console.WriteLine("测试Threads");
+            Console.WriteLine("Test Threads");
 
             List<Thread> list = new List<Thread>();
             int[] runThreads = { 0 };
@@ -56,27 +56,26 @@ namespace Senparc.CO2NET.Cache.Lock
             }
             var dt4 = SystemTime.Now;
             Console.WriteLine("Working Threads Count:{0}", 1000 * 20 / (dt4 - dt3).TotalMilliseconds);
-            //测试结果：无限制
+            //Test result: No limit
         }
 
         [TestMethod]
         public void LockTest()
         {
-            /* 测试逻辑：
-             * 20个异步线程同时进行，
-             * 线程内有两组不同的ResourceName： "Test-0"，"Test-1"，模拟AccessTokenContainer和JsTicketContainer），
-             * 每组ResourceName下面有两组分别为0和1的appId。
-             * 同时运行这些线程，观察锁是否生效。
-             * 失败的现象：1、同一个ResourceName、同一个appId下有两个线程同时获得锁
-             *             2、不同的ResourceName、appId之间任意组合相互干扰；
-             *             3、出现死锁；
-             *             4、某线程始终无法获得锁（超时或一直运行）
-             *             
-             * 注意：超时导致的失败可能是由于设置的最大等待时间相对于测试的Thread.Sleep(sleepMillionSeconds)太短。
+            /* Test logic:
+             * 20 asynchronous threads run simultaneously,
+             * Each thread has two different ResourceNames: "Test-0", "Test-1", simulating AccessTokenContainer and JsTicketContainer),
+             * Each ResourceName has two appIds, 0 and 1.
+             * Run these threads simultaneously to observe if the lock works.
+             * Failure phenomena: 1. Two threads obtain the lock simultaneously under the same ResourceName and appId
+             *                    2. Interference between different combinations of ResourceName and appId;
+             *                    3. Deadlock;
+             *                    4. A thread can never obtain the lock (timeout or always running)
+             *                    
+             * Note: Failures due to timeout may be caused by the maximum wait time being too short relative to the Thread.Sleep(sleepMillionSeconds) set for the test.
              */
 
-            Console.WriteLine("同步方法测试");
-
+            Console.WriteLine("Synchronous Method Test");
             bool useRedis = true;
 
             if (useRedis)
@@ -86,19 +85,18 @@ namespace Senparc.CO2NET.Cache.Lock
                 CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//Redis
             }
 
-            Console.WriteLine($"使用缓存策略：{CacheStrategyFactory.GetObjectCacheStrategyInstance()}");
-
+            Console.WriteLine($"Using Cache Strategy: {CacheStrategyFactory.GetObjectCacheStrategyInstance()}");
             Random rnd = new Random();
             var threadsCount = 20M;
-            int sleepMillionSeconds = 200;//数字越大，每个线程占用时间越长，直至超时
+            int sleepMillionSeconds = 200;//The larger the number, the longer each thread occupies time, until timeout
 
-            //初步估计需要重试时间
-            var differentLocksCount = (2 /*appId*/* 2 /*resource*/) /* = diffrent locks count */;
+            //Preliminary estimate of retry time required
+            var differentLocksCount = (2 /*appId*/* 2 /*resource*/) /* = different locks count */;
             var runCycle = threadsCount / differentLocksCount /* = Run Cycle*/;
             var hopedTotalTime = runCycle * (sleepMillionSeconds + 100) /* = Hoped Total Time */;
             var retryDelay = 20; /* = retryDelayCycle MillionSeconds */
             var randomRetryDelay = (retryDelay / 2) /*random retry delay*/;
-            var retryTimes = 50;// hopedTotalTime / randomRetryDelay; /* = maxium retry times */;//此数字可以调整（根据测试结果逐步缩小，可以看到会有失败的锁产生）
+            var retryTimes = 50;// hopedTotalTime / randomRetryDelay; /* = maximum retry times */;//This number can be adjusted (gradually reduced based on test results, failures can be observed)
 
             Console.WriteLine("sleepMillionSeconds:{0}ms", sleepMillionSeconds);
             Console.WriteLine("differentLocksCount:{0}", differentLocksCount);
@@ -106,7 +104,7 @@ namespace Senparc.CO2NET.Cache.Lock
             Console.WriteLine("hopedTotalTime:{0}ms", hopedTotalTime);
             Console.WriteLine("randomRetryDelay:{0}ms", randomRetryDelay);
             Console.WriteLine("retryTimes:{0}", retryTimes);
-            Console.WriteLine("randomLockTime（可能的Lock超时时间）:{0}ms", randomRetryDelay * retryTimes);
+            Console.WriteLine("randomLockTime (possible Lock timeout): {0}ms", randomRetryDelay * retryTimes); 
             Console.WriteLine("=====================");
 
             List<Thread> list = new List<Thread>();
@@ -119,8 +117,8 @@ namespace Senparc.CO2NET.Cache.Lock
                 var thread = new Thread(() =>
                 {
                     var appId = (i1 % 2).ToString();
-                    var resourceName = "Test-" + rnd.Next(0, 2);//调整这里的随机数，可以改变锁的个数
-                    var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();//每次重新获取实例（因为单例模式，所以其实是同一个）
+                    var resourceName = "Test-" + rnd.Next(0, 2);//Adjust the random number here to change the number of locks
+                    var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();//Reacquire the instance each time (since it's a singleton, it's actually the same one)
 
                     Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 进入，准备尝试锁。Cache实例：{cache.GetHashCode()}");
 
@@ -128,15 +126,15 @@ namespace Senparc.CO2NET.Cache.Lock
                     using (var cacheLock = cache.BeginCacheLock(resourceName, appId, (int)retryTimes, TimeSpan.FromMilliseconds(retryDelay)))
                     {
                         var result = cacheLock.LockSuccessful
-                            ? "成功"
-                            : "【失败！】";
+                            ? "Success"
+                            : "Failed";
                         result += " | TTL：" + cacheLock.GetTotalTtl(retryTimes, TimeSpan.FromMilliseconds(retryDelay)) + "ms";
 
-                        Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 进入锁，等待时间：{SystemTime.DiffTotalMS(dt1)} / {SystemTime.DiffTotalMS(dt0)}ms，获得锁结果：{result}");
+                        Console.WriteLine($"Thread {i1} / {resourceName} : {appId} 进入锁，等待时间：{SystemTime.DiffTotalMS(dt1)} / {SystemTime.DiffTotalMS(dt0)}ms，获得锁结果：{result}");
 
                         Thread.Sleep(sleepMillionSeconds);
                     }
-                    Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 释放锁（{SystemTime.DiffTotalMS(dt1)}ms）");
+                    Console.WriteLine($"Thread {i1} / {resourceName} : {appId} 释放锁（{SystemTime.DiffTotalMS(dt1)}ms）");
                     runThreads[0]--;
                 });
                 list.Add(thread);
@@ -164,46 +162,45 @@ namespace Senparc.CO2NET.Cache.Lock
             //    }
             //}
 
-            //等待
+            //Wait
             //Parallel.For(0, (int)threadsCount, i =>
             //{
             //    var appId = (i % 2).ToString();
             //    var resourceName = "Test-" + rnd.Next(0, 2);
-            //    Console.WriteLine("线程 {0} / {1} : {2} 进入，准备尝试锁", Thread.CurrentThread.GetHashCode(), resourceName, appId);
+            //    Console.WriteLine("Thread {0} / {1} : {2} entering, preparing to try lock", Thread.CurrentThread.GetHashCode(), resourceName, appId);
 
             //    DateTime dt1 = SystemTime.Now;
             //    using (var cacheLock = Cache.BeginCacheLock(resourceName, appId, (int)retryTimes, new TimeSpan(0, 0, 0, 0, 20)))
             //    {
             //        var result = cacheLock.LockSuccessful
-            //            ? "成功"
-            //            : "【失败！】";
+            //            ? "Success"
+            //            : "【Failure!】";
 
-            //        Console.WriteLine("线程 {0} / {1} : {2} 进入锁，等待时间：{3}ms，获得锁结果：{4}", Thread.CurrentThread.GetHashCode(), resourceName, appId, SystemTime.DiffTotalMS(dt1), result);
+            //        Console.WriteLine("Thread {0} / {1} : {2} entered lock, wait time: {3}ms, lock result: {4}", Thread.CurrentThread.GetHashCode(), resourceName, appId, SystemTime.DiffTotalMS(dt1), result);
 
             //        Thread.Sleep(sleepMillionSeconds);
             //    }
-            //    Console.WriteLine("线程 {0} / {1} : {2} 释放锁（{3}ms）", Thread.CurrentThread.GetHashCode(), resourceName, appId, SystemTime.DiffTotalMS(dt1));
+            //    Console.WriteLine("Thread {0} / {1} : {2} released lock ({3}ms)", Thread.CurrentThread.GetHashCode(), resourceName, appId, SystemTime.DiffTotalMS(dt1));
             //});
         }
 
         [TestMethod]
         public void LockAsyncTest()
         {
-            /* 测试逻辑：
-             * 20个异步线程同时进行，
-             * 线程内有两组不同的ResourceName： "Test-0"，"Test-1"，模拟AccessTokenContainer和JsTicketContainer），
-             * 每组ResourceName下面有两组分别为0和1的appId。
-             * 同时运行这些线程，观察锁是否生效。
-             * 失败的现象：1、同一个ResourceName、同一个appId下有两个线程同时获得锁
-             *             2、不同的ResourceName、appId之间任意组合相互干扰；
-             *             3、出现死锁；
-             *             4、某线程始终无法获得锁（超时或一直运行）
-             *             
-             * 注意：超时导致的失败可能是由于设置的最大等待时间相对于测试的Thread.Sleep(sleepMillionSeconds)太短。
+            /* Test logic:
+             * 20 asynchronous threads run simultaneously,
+             * Each thread has two different ResourceNames: "Test-0", "Test-1", simulating AccessTokenContainer and JsTicketContainer),
+             * Each ResourceName has two appIds, 0 and 1.
+             * Run these threads simultaneously to observe if the lock works.
+             * Failure phenomena: 1. Two threads obtain the lock simultaneously under the same ResourceName and appId
+             *                    2. Interference between different combinations of ResourceName and appId;
+             *                    3. Deadlock;
+             *                    4. A thread can never obtain the lock (timeout or always running)
+             *                    
+             * Note: Failures due to timeout may be caused by the maximum wait time being too short relative to the Thread.Sleep(sleepMillionSeconds) set for the test.
              */
 
-            Console.WriteLine("异步方法测试");
-
+            Console.WriteLine("Asynchronous Method Test");
             bool useRedis = true;
 
             if (useRedis)
@@ -213,19 +210,18 @@ namespace Senparc.CO2NET.Cache.Lock
                 CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//Redis
             }
 
-            Console.WriteLine($"使用缓存策略：{CacheStrategyFactory.GetObjectCacheStrategyInstance()}");
-
+            Console.WriteLine("Asynchronous Method Test");
             Random rnd = new Random();
             var threadsCount = 20M;
-            int sleepMillionSeconds = 200;//数字越大，每个线程占用时间越长，直至超时
+            int sleepMillionSeconds = 200;//The larger the number, the longer each thread occupies time, until timeout
 
-            //初步估计需要重试时间
-            var differentLocksCount = (2 /*appId*/* 2 /*resource*/) /* = diffrent locks count */;
+            //Preliminary estimate of retry time required
+            var differentLocksCount = (2 /*appId*/* 2 /*resource*/) /* = different locks count */;
             var runCycle = threadsCount / differentLocksCount /* = Run Cycle*/;
             var hopedTotalTime = runCycle * (sleepMillionSeconds + 100) /* = Hoped Total Time */;
             var retryDelay = 20; /* = retryDelayCycle MillionSeconds */
             var randomRetryDelay = (retryDelay / 2) /*random retry delay*/;
-            var retryTimes = 50;// hopedTotalTime / randomRetryDelay; /* = maxium retry times */;//此数字可以调整（根据测试结果逐步缩小，可以看到会有失败的锁产生）
+            var retryTimes = 50;// hopedTotalTime / randomRetryDelay; /* = maximum retry times */;//This number can be adjusted (gradually reduced based on test results, failures can be observed)
 
             Console.WriteLine("sleepMillionSeconds:{0}ms", sleepMillionSeconds);
             Console.WriteLine("differentLocksCount:{0}", differentLocksCount);
@@ -246,24 +242,24 @@ namespace Senparc.CO2NET.Cache.Lock
                 var thread = new Thread(async () =>
                 {
                     var appId = (i1 % 2).ToString();
-                    var resourceName = "Test-" + rnd.Next(0, 2);//调整这里的随机数，可以改变锁的个数
-                    var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();//每次重新获取实例（因为单例模式，所以其实是同一个）
+                    var resourceName = "Test-" + rnd.Next(0, 2);//Adjust the random number here to change the number of locks
+                    var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();//Reacquire the instance each time (since it's a singleton, it's actually the same one)
 
-                    Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 进入，准备尝试锁。Cache实例：{cache.GetHashCode()}");
+                    Console.WriteLine($"Thread {i1} / {resourceName} : {appId} 进入，准备尝试锁。Cache实例：{cache.GetHashCode()}");
 
                     var dt1 = SystemTime.Now;
                     using (var cacheLock = await cache.BeginCacheLockAsync(resourceName, appId, (int)retryTimes, TimeSpan.FromMilliseconds(retryDelay)))
                     {
                         var result = cacheLock.LockSuccessful
-                            ? "成功"
-                            : "【失败！】";
+                            ? "Success"
+                            : "Failed";
                         result += " | TTL：" + cacheLock.GetTotalTtl(retryTimes, TimeSpan.FromMilliseconds(retryDelay)) + "ms";
 
-                        Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 进入锁，等待时间：{SystemTime.DiffTotalMS(dt1)} / {SystemTime.DiffTotalMS(dt1)}ms，获得锁结果：{result}");
+                        Console.WriteLine($"Thread {i1} / {resourceName} : {appId} 进入锁，等待时间：{SystemTime.DiffTotalMS(dt1)} / {SystemTime.DiffTotalMS(dt1)}ms，获得锁结果：{result}");
 
                         Thread.Sleep(sleepMillionSeconds);
                     }
-                    Console.WriteLine($"线程 {i1} / {resourceName} : {appId} 释放锁（{SystemTime.DiffTotalMS(dt1)}ms）");
+                    Console.WriteLine($"Thread {i1} / {resourceName} : {appId} 释放锁（{SystemTime.DiffTotalMS(dt1)}ms）");
                     runThreads[0]--;
                 });
                 list.Add(thread);

@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,27 +21,27 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：ReflectionHelper.cs
-    文件功能描述：反射帮助类
-    参考文章：http://www.cnblogs.com/zfanlong1314/p/4197383.html
+    FileName: ReflectionHelper.cs
+    File Function Description: Reflection helper class
+    Reference article: http://www.cnblogs.com/zfanlong1314/p/4197383.html
     
-    创建标识：Senparc - 20170702
+    Creation Identifier: Senparc - 20170702
 
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/Utilities/ReflectionHelper.cs  ----
 
-    修改标识：Senparc - 20180602
-    修改描述：v0.1.0 移植 ReflectionHelper
+    Modification Identifier: Senparc - 20180602
+    Modification Description: v0.1.0 Port ReflectionHelper
 
-    修改标识：Senparc - 20180602
-    修改描述：v0.1.6.2 扩展 ReflectionHelper.GetStaticMember() 方法
+    Modification Identifier: Senparc - 20180602
+    Modification Description: v0.1.6.2 Extend ReflectionHelper.GetStaticMember() method
 
-    修改标识：Senparc - 20200228
-    修改描述：v1.3.102 提供 ReflectionHelper 异常是否记录日志的选项
+    Modification Identifier: Senparc - 20200228
+    Modification Description: v1.3.102 Provide option to log exceptions in ReflectionHelper
 
-    修改标识：Senparc - 20230110
-    修改描述：v2.1.6 ReflectionHelper.GetStaticMember() 方法添加找不到目标对象的 null 判断，不再抛出异常
+    Modification Identifier: Senparc - 20230110
+    Modification Description: v2.1.6 Add null check for target object not found in ReflectionHelper.GetStaticMember() method, no longer throw exception
 
 ----------------------------------------------------------------*/
 
@@ -55,80 +55,80 @@ using System.Text;
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// 反射帮助类
+    /// Reflection helper class
     /// </summary>
     public static class ReflectionHelper
     {
         /// <summary>
-        /// 创建对象实例
+        /// Create object instance
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="fullName">命名空间.类型名</param>
-        /// <param name="assemblyName">程序集</param>
+        /// <param name="fullName">Namespace.TypeName</param>
+        /// <param name="assemblyName">Assembly</param>
         /// <returns></returns>
         public static T CreateInstance<T>(string fullName, string assemblyName)
         {
-            string path = fullName + "," + assemblyName;//命名空间.类型名,程序集
-            Type o = Type.GetType(path);//加载类型
-            object obj = Activator.CreateInstance(o, true);//根据类型创建实例
-            return (T)obj;//类型转换并返回
+            string path = fullName + "," + assemblyName;//Namespace.TypeName, Assembly
+            Type o = Type.GetType(path);//Load type
+            object obj = Activator.CreateInstance(o, true);//Create instance based on type
+            return (T)obj;//Type conversion and return
         }
 
         /// <summary>
-        /// 创建对象实例
+        /// Create object instance
         /// </summary>
-        /// <typeparam name="T">要创建对象的类型</typeparam>
-        /// <param name="assemblyName">类型所在程序集名称</param>
-        /// <param name="nameSpace">类型所在命名空间</param>
-        /// <param name="className">类型名</param>
-        /// <param name="recordLog">是否记录日志</param>
+        /// <typeparam name="T">Type of object to create</typeparam>
+        /// <param name="assemblyName">Assembly name where the type is located</param>
+        /// <param name="nameSpace">Namespace where the type is located</param>
+        /// <param name="className">Type name</param>
+        /// <param name="recordLog">Whether to log</param>
         /// <returns></returns>
         public static T CreateInstance<T>(string assemblyName, string nameSpace, string className, bool recordLog = false)
         {
             try
             {
-                string fullName = nameSpace + "." + className;//命名空间.类型名
-                                                              //此为第一种写法
+                string fullName = nameSpace + "." + className;//Namespace.TypeName
+                                                              //This is the first way
 #if !NET462
-                //object ect = Assembly.Load(new AssemblyName(assemblyName)).CreateInstance(fullName);//加载程序集，创建程序集里面的 命名空间.类型名 实例s
+                //object ect = Assembly.Load(new AssemblyName(assemblyName)).CreateInstance(fullName);//Load assembly, create instance of Namespace.TypeName in the assembly
 
-                //.net core 2.1这种方法也已经支持
-                object ect = Assembly.Load(assemblyName).CreateInstance(fullName);//加载程序集，创建程序集里面的 命名空间.类型名 实例s
+                //.net core 2.1 also supports this method
+                object ect = Assembly.Load(assemblyName).CreateInstance(fullName);//Load assembly, create instance of Namespace.TypeName in the assembly
 #else
-                object ect = Assembly.Load(assemblyName).CreateInstance(fullName);//加载程序集，创建程序集里面的 命名空间.类型名 实例
+                object ect = Assembly.Load(assemblyName).CreateInstance(fullName);//Load assembly, create instance of Namespace.TypeName in the assembly
 #endif
-                return (T)ect;//类型转换并返回
-                //下面是第二种写法
-                //string path = fullName + "," + assemblyName;//命名空间.类型名,程序集
-                //Type o = Type.GetType(path);//加载类型
-                //object obj = Activator.CreateInstance(o, true);//根据类型创建实例
-                //return (T)obj;//类型转换并返回
+                return (T)ect;//Type conversion and return
+                //Below is the second way
+                //string path = fullName + "," + assemblyName;//Namespace.TypeName, Assembly
+                //Type o = Type.GetType(path);//Load type
+                //object obj = Activator.CreateInstance(o, true);//Create instance based on type
+                //return (T)obj;//Type conversion and return
             }
             catch (Exception ex)
             {
                 if (recordLog)
                 {
                     SenparcTrace.BaseExceptionLog(ex);
-                }                //发生异常，返回类型的默认值
+                }                //In case of exception, return default value of the type
                 return default(T);
             }
         }
 
         /// <summary>
-        /// 获取静态类属性
+        /// Get static class property
         /// </summary>
-        /// <param name="assemblyName">类型所在程序集名称</param>
-        /// <param name="nameSpace">类型所在命名空间</param>
-        /// <param name="className">类型名</param>
-        /// <param name="memberName">属性名称（忽略大小写）</param>
-        /// <param name="recordLog">是否记录日志</param>
+        /// <param name="assemblyName">Assembly name where the type is located</param>
+        /// <param name="nameSpace">Namespace where the type is located</param>
+        /// <param name="className">Type name</param>
+        /// <param name="memberName">Property name (case insensitive)</param>
+        /// <param name="recordLog">Whether to log</param>
         /// <returns></returns>
         public static object GetStaticMember(string assemblyName, string nameSpace, string className, string memberName, bool recordLog = false)
         {
             try
             {
-                string fullName = nameSpace + "." + className;//命名空间.类型名
-                string path = fullName + "," + assemblyName;//命名空间.类型名,程序集
+                string fullName = nameSpace + "." + className;//Namespace.TypeName
+                string path = fullName + "," + assemblyName;//Namespace.TypeName, Assembly
                 var type = Type.GetType(path);
 
                 if (type == null)
@@ -157,11 +157,11 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 获取静态类属性
+        /// Get static class property
         /// </summary>
-        /// <param name="type">类型</param>
-        /// <param name="memberName">属性名称（忽略大小写）</param>
-        /// <param name="recordLog">是否记录日志</param>
+        /// <param name="type">Type</param>
+        /// <param name="memberName">Property name (case insensitive)</param>
+        /// <param name="recordLog">Whether to log</param>
         /// <returns></returns>
         public static object GetStaticMember(Type type, string memberName, bool recordLog = false)
         {
@@ -188,16 +188,16 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 查看类型是否具有不带参数的构造函数
+        /// Check if the type has a parameterless constructor
         /// </summary>
-        /// <param name="type">查看类型</param>
+        /// <param name="type">Type to check</param>
         /// <returns></returns>
         public static bool HasParameterlessConstructor(Type type)
         {
-            // 获取所有公共和非公共的构造函数  
+            // Get all public and non-public constructors  
             ConstructorInfo[] constructors = type.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-            // 检查是否存在不带参数的构造函数  
+            // Check if there is a parameterless constructor  
             foreach (ConstructorInfo constructor in constructors)
             {
                 if (constructor.GetParameters().Length == 0)

@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,38 +21,38 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：FileHelper.cs
-    文件功能描述：处理文件
+    FileName：FileHelper.cs
+    File Function Description：Handle files
     
-    创建标识：Senparc - 20150211
+    Creation Identifier：Senparc - 20150211
     
-    修改标识：Senparc - 20150303
-    修改描述：整理接口
+    Modification Identifier：Senparc - 20150303
+    Modification Description：Organize interface
     
-    修改标识：Senparc - 20161108
-    修改描述：将Senparc.Weixin.MP中的FileHelper转移到Senparc.Weixin中，并添加DownLoadFileFromUrl方法
+    Modification Identifier：Senparc - 20161108
+    Modification Description：Moved FileHelper from Senparc.Weixin.MP to Senparc.Weixin and added DownLoadFileFromUrl method
 
-    修改标识：Senparc - 20170204
-    修改描述：v4.10.4 优化GetFileStream方法
+    Modification Identifier：Senparc - 20170204
+    Modification Description：v4.10.4 Optimized GetFileStream method
 
 
     ----  CO2NET   ----
     ----  split from Senparc.Weixin/Helpers/FileHelper.cs  ----
 
-    修改标识：Senparc - 20180601
-    修改描述：v0.1.0 移植 FileHelper
+    Modification Identifier：Senparc - 20180601
+    Modification Description：v0.1.0 Ported FileHelper
 
-    修改标识：Senparc - 20190811
-    修改描述：v0.8.6 添加 FileHelper.FileInUse() 方法，用于判断文件是否正在被占用
+    Modification Identifier：Senparc - 20190811
+    Modification Description：v0.8.6 Added FileHelper.FileInUse() method to determine if a file is in use
 
-    修改标识：Senparc - 20200530
-    修改描述：v1.3.110 添加 FileHelper.TryCreateDirectory() 方法
+    Modification Identifier：Senparc - 20200530
+    Modification Description：v1.3.110 Added FileHelper.TryCreateDirectory() method
 
-    修改标识：Senparc - 20210831
-    修改描述：v1.5.1 添加 FileHelper 中 GetFileHash 方法
+    Modification Identifier：Senparc - 20210831
+    Modification Description：v1.5.1 Added GetFileHash method in FileHelper
 
-    修改标识：qideqian - 20220721
-    修改描述：v2.1.2 修复 FileHelper.GetFileHash() 的 bug
+    Modification Identifier：qideqian - 20220721
+    Modification Description：v2.1.2 Fixed bug in FileHelper.GetFileHash()
 
 ----------------------------------------------------------------*/
 
@@ -64,12 +64,12 @@ using System.Text;
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// 文件帮助类
+    /// File helper class
     /// </summary>
     public class FileHelper
     {
         /// <summary>
-        /// 根据完整文件路径获取FileStream
+        /// Get FileStream based on full file path
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
@@ -84,7 +84,7 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 从Url下载文件
+        /// Download file from URL
         /// </summary>
         /// <param name="serviceProvider"></param>
         /// <param name="url"></param>
@@ -101,9 +101,9 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 判断文件是否正在被使用
+        /// Determine if the file is in use
         /// </summary>
-        /// <param name="filePath">文件路径</param>
+        /// <param name="filePath">File path</param>
         /// <returns></returns>
         public static bool FileInUse(string filePath)
         {
@@ -126,9 +126,9 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 如果目录不存在，则创建目录
+        /// Create directory if it does not exist
         /// </summary>
-        /// <param name="dir">目录绝对路径</param>
+        /// <param name="dir">Absolute directory path</param>
         public static void TryCreateDirectory(string dir)
         {
             if (!Directory.Exists(dir))
@@ -137,15 +137,15 @@ namespace Senparc.CO2NET.Helpers
             }
         }
 
-        #region 文件指纹
+        #region File Fingerprint
 
 
         /// <summary>
-        /// 获取文件的 HASH 值
+        /// Get the HASH value of the file
         /// </summary>
         /// <param name="filePath"></param>
-        /// <param name="type">SHA1 或 MD5，必须为大写</param>
-        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <param name="type">SHA1 or MD5, must be uppercase</param>
+        /// <param name="toUpper">Return uppercase result, true: uppercase, false: lowercase</param>
         public static string GetFileHash(string filePath, string type = "SHA1", bool toUpper = true)
         {
             var stream = GetFileStream(filePath);
@@ -164,11 +164,11 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 获取文件的 HASH 值
+        /// Get the HASH value of the file
         /// </summary>
         /// <param name="stream"></param>
-        /// <param name="type">SHA1 或 MD5 或 CRC32，必须为大写</param>
-        /// <param name="toUpper">是否返回大写结果，true：大写，false：小写</param>
+        /// <param name="type">SHA1 or MD5 or CRC32, must be uppercase</param>
+        /// <param name="toUpper">Return uppercase result, true: uppercase, false: lowercase</param>
         public static string GetFileHash(Stream stream, string type = "SHA1", bool toUpper = true)
         {
             switch (type)

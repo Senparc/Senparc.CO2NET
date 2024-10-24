@@ -55,12 +55,12 @@ namespace Senparc.CO2NET.Tests.Cache
 
                 if (cache is CO2NET.Cache.CsRedis.RedisObjectCacheStrategy || cache is CO2NET.Cache.CsRedis.RedisHashSetObjectCacheStrategy)
                 {
-                    //CsRedis 只支持整秒过期
-                    Thread.Sleep(1000);//让缓存过期
+                    //CsRedis only supports expiration in whole seconds
+                    Thread.Sleep(1000);//Make the cache expire
                 }
                 else
                 {
-                    Thread.Sleep(500);//让缓存过期
+                    Thread.Sleep(500);//Make the cache expire
                 }
 
                 entity = cacheStrategy.Get(key);
@@ -68,7 +68,7 @@ namespace Senparc.CO2NET.Tests.Cache
                 if (cache.GetType() == typeof(RedisHashSetObjectCacheStrategy) ||
                     cache.GetType() == typeof(Senparc.CO2NET.Cache.CsRedis.RedisHashSetObjectCacheStrategy))
                 {
-                    Assert.IsNotNull(entity);//RedisHashSet 不支持过期
+                    Assert.IsNotNull(entity);//RedisHashSet does not support expiration
                 }
                 else
                 {

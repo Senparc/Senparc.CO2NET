@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -36,15 +36,15 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             var url = "http://sdk.weixin.senparc.com/images/v2/ewm_01.png";
             using (FileStream fs = new FileStream(string.Format("qr-{0}.jpg", DateTime.Now.Ticks), FileMode.OpenOrCreate))
             {
-                Get.Download(BaseTest.serviceProvider, url, fs);//下载
-                fs.Flush();//直接保存，无需处理指针
+                Get.Download(BaseTest.serviceProvider, url, fs);//Download
+                fs.Flush();//Directly save, no need to handle the pointer
             }
 
             using (MemoryStream ms = new MemoryStream())
             {
-                Get.Download(BaseTest.serviceProvider, url, ms);//下载
-                ms.Seek(0, SeekOrigin.Begin);//将指针放到流的开始位置
-                string base64Img = Convert.ToBase64String(ms.ToArray());//输出图片base64编码
+                Get.Download(BaseTest.serviceProvider, url, ms);//Download
+                ms.Seek(0, SeekOrigin.Begin);//Move the pointer to the beginning of the stream
+                string base64Img = Convert.ToBase64String(ms.ToArray());//Output image base64 encoding
                 Console.WriteLine(base64Img);
             }
         }
@@ -52,14 +52,14 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         //[TestMethod]
         //public void GetJsonTest()
         //{
-        //    return; //已经通过，但需要连接远程测试，太耗时，常规测试时暂时忽略。
+        //    return; //Already passed, but requires remote connection for testing, too time-consuming, temporarily ignored during routine testing.
 
         //    {
-        //        var url = "http://apistore.baidu.com/microservice/cityinfo?cityname=苏州";
+        //        var url = "http://apistore.baidu.com/microservice/cityinfo?cityname=Suzhou";
         //        var result = Get.GetJson<dynamic>(url);
         //        Assert.IsNotNull(result);
         //        Assert.AreEqual(0, result["errNum"]);
-        //        Assert.AreEqual("苏州", result["retData"]["cityName"]);
+        //        Assert.AreEqual("Suzhou", result["retData"]["cityName"]);
 
         //        Console.WriteLine(result.GetType());
         //    }
@@ -69,14 +69,14 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         //     Config.ApiMpHost + "/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
         //        try
         //        {
-        //            //这里因为参数错误，系统会返回错误信息
+        //            //Here, due to parameter errors, the system will return error information
         //            WxJsonResult resultFail = Get.GetJson<WxJsonResult>(url);
-        //            Assert.Fail(); //上一步就应该已经抛出异常
+        //            Assert.Fail(); //An exception should have been thrown in the previous step
         //        }
         //        catch (ErrorJsonResultException ex)
         //        {
-        //            //实际返回的信息（错误信息）
-        //            Assert.AreEqual(ex.JsonResult.errcode, ReturnCode.不合法的APPID);
+        //            //Actual returned information (error information)
+        //            Assert.AreEqual(ex.JsonResult.errcode, ReturnCode.InvalidAPPID);
         //        }
 
         //    }
@@ -86,7 +86,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         //[TestMethod]
         //public void GetJsonAsyncTest()
         //{
-        //    //return;//已经通过，但需要连接远程测试，太耗时，常规测试时暂时忽略。
+        //    //return;//Already passed, but requires remote connection for testing, too time-consuming, temporarily ignored during routine testing.
         //    var url =
         //        Config.ApiMpHost + "/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 
@@ -101,20 +101,20 @@ namespace Senparc.CO2NET.HttpUtility.Tests
 
         //private async Task Run(string url)
         //{
-        //    Console.WriteLine("Start Task.CurrentId：{0}，Time：{1}", Task.CurrentId, DateTime.Now.Ticks);
+        //    Console.WriteLine("Start Task.CurrentId: {0}, Time: {1}", Task.CurrentId, DateTime.Now.Ticks);
 
         //    try
         //    {
-        //        //这里因为参数错误，系统会返回错误信息
+        //        //Here, due to parameter errors, the system will return error information
         //        WxJsonResult resultFail = await Get.GetJsonAsync<WxJsonResult>(url);
-        //        Assert.Fail(); //上一步就应该已经抛出异常
+        //        Assert.Fail(); //An exception should have been thrown in the previous step
         //    }
         //    catch (ErrorJsonResultException ex)
         //    {
-        //        //实际返回的信息（错误信息）
-        //        Assert.AreEqual(ex.JsonResult.errcode, ReturnCode.不合法的APPID);
+        //        //Actual returned information (error information)
+        //        Assert.AreEqual(ex.JsonResult.errcode, ReturnCode.InvalidAPPID);
 
-        //        Console.WriteLine("End Task.CurrentId：{0}，Time：{1}", Task.CurrentId, DateTime.Now.Ticks);
+        //        Console.WriteLine("End Task.CurrentId: {0}, Time: {1}", Task.CurrentId, DateTime.Now.Ticks);
         //    }
         //}
     }

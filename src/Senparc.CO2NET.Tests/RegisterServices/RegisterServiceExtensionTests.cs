@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,12 +28,12 @@ namespace Senparc.CO2NET.Tests.RegisterServices
             var b1 = serviceCollection.BuildServiceProvider();
             var b2 = serviceCollection.BuildServiceProvider();
 
-            //两个不同
+            // Synchronize
             Console.WriteLine(b1.GetHashCode());
             Console.WriteLine(b2.GetHashCode());
 
 
-            //TODO：测试获取（单元测试中不成功）
+            //TODO: Implement the logic to obtain configuration elements
             //var senparcSetting = serviceCollection
             //                        .BuildServiceProvider().GetService<IOptions<SenparcSetting>>();
             //Console.WriteLine(senparcSetting.ToJson());

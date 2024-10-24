@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -32,15 +32,15 @@ namespace Senparc.CO2NET.HttpUtility.Tests
     [TestClass()]
     public class RequestUtilityTests : BaseTest
     {
-        private string _domain = "https://sdk.weixin.senparc.com";//本地运行 Senaprc.Weixin SDK Sample(All) https://localhost:5021
+        private string _domain = "https://sdk.weixin.senparc.com";//Local run Senaprc.Weixin SDK Sample(All) https://localhost:5021
 
         [TestMethod()]
         public void SetHttpProxyTest()
         {
-            //设置
+            //Set
             RequestUtility.SetHttpProxy("http://192.168.1.130", "8088", "username", "pwd");
 
-            //清除
+            //Clear
             RequestUtility.RemoveHttpProxy();
         }
 
@@ -55,7 +55,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             stream.Seek(0, SeekOrigin.Begin);
 
             var cookieContainer = new CookieContainer();
-            var url = $"{_domain}/ForTest/PostTest";//使用.NET 4.5的Sample
+            var url = $"{_domain}/ForTest/PostTest";//Sample using .NET 4.5
             var result = RequestUtility.HttpPost(BaseTest.serviceProvider, url,
                 cookieContainer, stream, useAjax: true);
 
@@ -65,8 +65,8 @@ namespace Senparc.CO2NET.HttpUtility.Tests
         }
 
         /// <summary>
-        /// 测试微信特殊接口，正常请求后返回空值的情况
-        /// 测试结果：实际收到了503的响应，但是PostMan是可用的。
+        /// Test WeChat special interface, returns null after normal request
+        /// Test result: Actually received a 503 response, but PostMan is usable.
         /// </summary>
         [TestMethod]
         public void PostJsonDataTest()
@@ -99,7 +99,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             stream.Seek(0, SeekOrigin.Begin);
 
             var cookieContainer = new CookieContainer();
-            var url = $"{_domain}/ForTest/PostTest";//使用.NET 4.5的Sample
+            var url = $"{_domain}/ForTest/PostTest";//Sample using .NET 4.5
             var result = RequestUtility.HttpResponsePost(BaseTest.serviceProvider, url,
                 cookieContainer, stream, useAjax: true);
 
@@ -127,7 +127,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
                 stream.Write(bytes, 0, bytes.Length);
                 stream.Seek(0, SeekOrigin.Begin);
 
-                var url = $"{_domain}/ForTest/PostTest";//使用 Senparc.Weixin SDK 的 Sample
+                var url = $"{_domain}/ForTest/PostTest";//Sample using Senparc.Weixin SDK
                 var result = RequestUtility.HttpResponsePost(BaseTest.serviceProvider, url, cookieContainer, stream, useAjax: true);
 
                 Assert.IsNotNull(result);
@@ -150,7 +150,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             {
                 var data = "CookieTest";
 
-                var url = $"{_domain}/ForTest/GetTest?data={data}";//使用 Senparc.Weixin SDK 的 Sample
+                var url = $"{_domain}/ForTest/GetTest?data={data}";//Sample using Senparc.Weixin SDK
                 var result = RequestUtility.HttpGet(BaseTest.serviceProvider, url, cookieContainer);
 
                 Console.WriteLine("result length: \t{0}", result.Length);

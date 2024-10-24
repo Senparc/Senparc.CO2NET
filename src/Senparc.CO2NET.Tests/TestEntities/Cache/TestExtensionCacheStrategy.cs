@@ -6,27 +6,27 @@ using System.Text;
 namespace Senparc.CO2NET.Tests.TestEntities
 {
     /// <summary>
-    /// 测试用的扩展缓存策略（默认使用本地缓存，可以修改）
+    /// Extended cache strategy for testing (default is local cache, can be modified)
     /// </summary>
     public class TestExtensionCacheStrategy : IDomainExtensionCacheStrategy
     {
-        #region 单例
+        #region Singleton
 
         ///<summary>
-        /// LocalCacheStrategy的构造函数
+        /// Constructor of LocalCacheStrategy
         ///</summary>
         TestExtensionCacheStrategy()
         {
-            //向底层缓存注册当前缓存策略
+            // Register the current cache strategy to the underlying cache
             CacheStrategyDomainWarehouse.RegisterCacheStrategyDomain(this);
         }
 
-        //静态LocalCacheStrategy
+        // Static LocalCacheStrategy
         public static TestExtensionCacheStrategy Instance
         {
             get
             {
-                return Nested.instance;//返回Nested类中的静态成员instance
+                return Nested.instance;// Return the static member instance in the Nested class
             }
         }
 
@@ -36,7 +36,7 @@ namespace Senparc.CO2NET.Tests.TestEntities
             static Nested()
             {
             }
-            //将instance设为一个初始化的LocalCacheStrategy新实例
+            // Set instance to a new initialized instance of LocalCacheStrategy
             internal static readonly TestExtensionCacheStrategy instance = new TestExtensionCacheStrategy();
         }
 
@@ -44,15 +44,15 @@ namespace Senparc.CO2NET.Tests.TestEntities
         #endregion
 
 
-        //设置此属性用于指定当前扩展缓存所属领域
+        // Set this property to specify the domain of the current extended cache
         public ICacheStrategyDomain CacheStrategyDomain => new TestCacheDomain();
 
-        //所使用的基础缓存策略（也可以在委托内动态调整，但是不建议。）
+        // The base cache strategy used (can also be dynamically adjusted within the delegate, but not recommended.)
         public Func<IBaseObjectCacheStrategy> BaseCacheStrategy =>
-            () => LocalObjectCacheStrategy.Instance;//默认使用本地缓存
+            () => LocalObjectCacheStrategy.Instance;// Default to local cache
 
         /// <summary>
-        /// 扩展一个方法
+        /// Extend a method
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -63,7 +63,7 @@ namespace Senparc.CO2NET.Tests.TestEntities
 
         public void RegisterCacheStrategyDomain(IDomainExtensionCacheStrategy extensionCacheStrategy)
         {
-            CacheStrategyDomainWarehouse.RegisterCacheStrategyDomain(extensionCacheStrategy);//对于可以重用的方法，可以考虑做一个基类
+            CacheStrategyDomainWarehouse.RegisterCacheStrategyDomain(extensionCacheStrategy);// For reusable methods, consider creating a base class
         }
     }
 }

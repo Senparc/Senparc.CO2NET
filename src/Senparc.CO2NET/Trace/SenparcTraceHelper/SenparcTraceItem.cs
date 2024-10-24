@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,14 +21,14 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：SenparcTraceItem.cs
-    文件功能描述：每一次跟踪日志的对象信息
+    FileName：SenparcTraceItem.cs
+    File Function Description：Object information for each trace log
 
 
-    创建标识：Senparc - 20180602
+    Creation Identifier：Senparc - 20180602
 
-    修改标识：Senparc - 20181226
-    修改描述：v0.4.3 修改 DateTime 为 DateTimeOffset
+    Modification Identifier：Senparc - 20181226
+    Modification Description：v0.4.3 Changed DateTime to DateTimeOffset
 
  ----------------------------------------------------------------*/
 
@@ -42,7 +42,7 @@ using System.Threading;
 namespace Senparc.CO2NET.Trace
 {
     /// <summary>
-    /// 每一次跟踪日志的对象信息
+    /// Object information for each trace log
     /// </summary>
     public class SenparcTraceItem : IDisposable
     {
@@ -77,7 +77,7 @@ namespace Senparc.CO2NET.Trace
         }
 
         /// <summary>
-        /// 获取完整单条日志的字符串信息
+        /// Get the complete string information of a single log
         /// </summary>
         public string GetFullLog()
         {

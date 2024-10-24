@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,28 +21,28 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：RegisterService.cs
-    文件功能描述：快捷注册类，RegisterService 扩展类
+    FileName：RegisterService.cs
+    File Function Description：Quick registration class, RegisterService extension class
 
 
-    创建标识：Senparc - 20180222
+    Creation Identifier：Senparc - 20180222
 
-    修改标识：Senparc - 20180531
-    修改描述：v4.22.2 修改 AddSenparcWeixinGlobalServices() 方法命名
+    Modification Identifier：Senparc - 20180531
+    Modification Description：v4.22.2 Modified AddSenparcWeixinGlobalServices() method name
     
     ----  CO2NET   ----
 
-    修改标识：Senparc - 20180704
-    修改描述：v0.1.5 RegisterServiceExtension.AddSenparcGlobalServices() 方法可自动获取 SenparcSetting 全局设置
+    Modification Identifier：Senparc - 20180704
+    Modification Description：v0.1.5 RegisterServiceExtension.AddSenparcGlobalServices() method can automatically obtain SenparcSetting global settings
 
-    修改标识：Senparc - 20190429
-    修改描述：v0.7.0 优化 HttpClient，重构 RequestUtility（包括 Post 和 Get），引入 HttpClientFactory 机制
+    Modification Identifier：Senparc - 20190429
+    Modification Description：v0.7.0 Optimized HttpClient, refactored RequestUtility (including Post and Get), introduced HttpClientFactory mechanism
 
-    修改标识：Senparc - 20190521
-    修改描述：v0.7.3 .NET Core 提供多证书注册功能
+    Modification Identifier：Senparc - 20190521
+    Modification Description：v0.7.3 .NET Core provides multi-certificate registration function
 
-    修改标识：Senparc - 20200220
-    修改描述：v1.1.100 重构 SenparcDI
+    Modification Identifier：Senparc - 20200220
+    Modification Description：v1.1.100 Refactored SenparcDI
 
 ----------------------------------------------------------------*/
 
@@ -67,19 +67,19 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Senparc.CO2NET.RegisterServices
 {
     /// <summary>
-    /// 快捷注册类，RegisterService 扩展类
+    /// Quick registration class, RegisterService extension class
     /// </summary>
     public static class RegisterServiceExtension
     {
 #if !NET462 
 
         /// <summary>
-        /// 是否已经进行过全局注册
+        /// Whether global registration has been performed
         /// </summary>
         public static bool SenparcGlobalServicesRegistered { get; set; }
 
         /// <summary>0781-B2EB0781-B2EB0781-B2EB0781-B2EB0781-B2EB0781-B2EB
-        /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程（必须）
+        /// Register IServiceCollection and return RegisterService to start the registration process (required)
         /// </summary>
         /// <param name="serviceCollection">IServiceCollection</param>
         /// <param name="configuration">IConfiguration</param>
@@ -92,8 +92,8 @@ namespace Senparc.CO2NET.RegisterServices
 
             serviceCollection.AddTransient<IBaseObjectCacheStrategy>(s => CacheStrategyFactory.GetObjectCacheStrategyInstance());
 
-            // .net core 3.0 HttpClient 文档参考：https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/http-requests?view=aspnetcore-3.0
-            //配置 HttpClient，可使用 Head 自定义 Cookie
+            // .net core 3.0 HttpClient documentation reference: https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/http-requests?view=aspnetcore-3.0
+            //Configure HttpClient, can use Head to customize Cookie
             serviceCollection.AddHttpClient<SenparcHttpClient>()
             //.ConfigureHttpMessageHandlerBuilder((c) =>
             .ConfigurePrimaryHttpMessageHandler((c) =>
@@ -103,8 +103,8 @@ namespace Senparc.CO2NET.RegisterServices
             });
 
             /*
-             * appsettings.json 中添加节点：
- //CO2NET 设置
+             * Add node in appsettings.json:
+ //CO2NET settings
   "SenparcSetting": {
     "IsDebug": true,
     "DefaultCacheNamespace": "DefaultCache"
@@ -121,18 +121,18 @@ namespace Senparc.CO2NET.RegisterServices
         }
 
         /// <summary>
-        /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程（必须）
+        /// Register IServiceCollection and return RegisterService to start the registration process (required)
         /// </summary>
         /// <param name="serviceCollection">IServiceCollection</param>
-        /// <param name="certName">证书名称，必须全局唯一，并且确保在全局 HttpClientFactory 内唯一</param>
-        /// <param name="certSecret">证书密码</param>
-        /// <param name="certPath">证书路径（物理路径）</param>
-        /// <param name="checkValidationResult">设置</param>
+        /// <param name="certName">Certificate name, must be globally unique and ensure uniqueness within the global HttpClientFactory</param>
+        /// <param name="certSecret">Certificate password</param>
+        /// <param name="certPath">Certificate path (physical path)</param>
+        /// <param name="checkValidationResult">Settings</param>
         /// <returns></returns>
         public static IServiceCollection AddSenparcHttpClientWithCertificate(this IServiceCollection serviceCollection,
             string certName, string certSecret, string certPath, bool checkValidationResult = false)
         {
-            //添加注册
+            //Add registration
             if (!string.IsNullOrEmpty(certPath))
             {
                 if (File.Exists(certPath))
@@ -159,12 +159,12 @@ namespace Senparc.CO2NET.RegisterServices
         }
 
         /// <summary>
-        /// 注册 IServiceCollection，并返回 RegisterService，开始注册流程（必须）
+        /// Register IServiceCollection and return RegisterService to start the registration process (required)
         /// </summary>
         /// <param name="serviceCollection">IServiceCollection</param>
-        /// <param name="certName">证书名称，必须全局唯一，并且确保在全局 HttpClientFactory 内唯一</param>
-        /// <param name="cert">证书对象，也可以是 X509Certificate2</param>
-        /// <param name="checkValidationResult">设置</param>
+        /// <param name="certName">Certificate name, must be globally unique and ensure uniqueness within the global HttpClientFactory</param>
+        /// <param name="cert">Certificate object, can also be X509Certificate2</param>
+        /// <param name="checkValidationResult">Settings</param>
         /// <returns></returns>
         public static IServiceCollection AddSenparcHttpClientWithCertificate(this IServiceCollection serviceCollection,
             string certName, X509Certificate cert, bool checkValidationResult = false)
@@ -184,12 +184,12 @@ namespace Senparc.CO2NET.RegisterServices
                              return httpClientHandler;
                          });
 
-            //serviceCollection.ResetGlobalIServiceProvider();//重置 GlobalIServiceProvider
+            //serviceCollection.ResetGlobalIServiceProvider();//Reset GlobalIServiceProvider
             return serviceCollection;
         }
 
         /// <summary>
-        /// 添加作用于 SenparcHttpClient 的 WebProxy（需要在 AddSenparcGlobalServices 之前定义）
+        /// Add WebProxy for SenparcHttpClient (needs to be defined before AddSenparcGlobalServices)
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <param name="host"></param>

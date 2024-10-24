@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2023 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -21,26 +21,26 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
     
-    文件名：SerializerHelper.cs
-    文件功能描述：unicode解码
+    FileName：SerializerHelper.cs
+    File Function Description：unicode decoding
     
     
-    创建标识：Senparc - 20150211
+    Creation Identifier：Senparc - 20150211
     
-    修改标识：Senparc - 20150303
-    修改描述：整理接口
+    Modification Identifier：Senparc - 20150303
+    Modification Description：Organize interface
 
-    修改标识：Senparc - 20180526
-    修改描述：v4.22.0-rc1 使用 Newtonsoft.Json 进行序列化
+    Modification Identifier：Senparc - 20180526
+    Modification Description：v4.22.0-rc1 Use Newtonsoft.Json for serialization
 
-    修改标识：Senparc - 20180526
-    修改描述：v0.2.9 添加 SerializerHelper.GetObject(this string jsonString, Type type) 方法
+    Modification Identifier：Senparc - 20180526
+    Modification Description：v0.2.9 Add SerializerHelper.GetObject(this string jsonString, Type type) method
 
-    修改标识：Senparc - 20220331
-    修改描述：v2.0.5.4 添加 GetObject() 方法的 settings 参数
+    Modification Identifier：Senparc - 20220331
+    Modification Description：v2.0.5.4 Add settings parameter to GetObject() method
 
-    修改标识：Senparc - 20220530
-    修改描述：v2.1.1 添加 GetObject() 更多重写方法
+    Modification Identifier：Senparc - 20220530
+    Modification Description：v2.1.1 Add more overloads for GetObject() method
 
 ----------------------------------------------------------------*/
 
@@ -62,37 +62,37 @@ namespace Senparc.CO2NET.Helpers
 {
 
     /// <summary>
-    /// 序列化帮助类
+    /// Serialization helper class
     /// </summary>
     public static class SerializerHelper
     {
         #region JSON
 
         /// <summary>
-        /// 将对象转为JSON字符串（进行Json输出配置）
+        /// Convert object to JSON string (with Json output configuration)
         /// </summary>
-        /// <param name="data">需要生成JSON字符串的数据</param>
-        /// <param name="jsonSetting">JSON输出设置</param>
+        /// <param name="data">Data to generate JSON string</param>
+        /// <param name="jsonSetting">JSON output settings</param>
         /// <returns></returns>
         public static string GetJsonString(object data, JsonSetting jsonSetting = null)
         {
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(data, new JsonSettingWrap(jsonSetting));
 
-            //TODO：视情况启用
+            //TODO: Enable as needed
 
-            ////解码Unicode，也可以通过设置App.Config（Web.Config）设置来做，这里只是暂时弥补一下，用到的地方不多
+            ////Decode Unicode, can also be done through App.Config (Web.Config) settings, this is just a temporary fix, not used often
             //string jsonString;
             //MatchEvaluator evaluator = new MatchEvaluator(DecodeUnicode);
-            //var json = Regex.Replace(jsonString, @"\\u[0123456789abcdef]{4}", evaluator);//或：[\\u007f-\\uffff]，\对应为\u000a，但一般情况下会保持\
+            //var json = Regex.Replace(jsonString, @"\\u[0123456789abcdef]{4}", evaluator);//or: [\\u007f-\\uffff], \ corresponds to \u000a, but generally \ is kept
             //return json;
         }
 
         /// <summary>
-        /// 反序列化到对象
+        /// Deserialize to object
         /// </summary>
-        /// <typeparam name="T">反序列化对象类型</typeparam>
-        /// <param name="jsonString">JSON字符串</param>
+        /// <typeparam name="T">Type of deserialized object</typeparam>
+        /// <param name="jsonString">JSON string</param>
         /// <returns></returns>
         public static T GetObject<T>(this string jsonString)
         {
@@ -106,10 +106,10 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 反序列化到对象
+        /// Deserialize to object
         /// </summary>
-        /// <typeparam name="T">反序列化对象类型</typeparam>
-        /// <param name="jsonString">JSON字符串</param>
+        /// <typeparam name="T">Type of deserialized object</typeparam>
+        /// <param name="jsonString">JSON string</param>
         /// <param name="settings">JsonSerializerSettings</param>
         /// <returns></returns>
         public static T GetObject<T>(this string jsonString, Newtonsoft.Json.JsonSerializerSettings settings = null)
@@ -125,9 +125,9 @@ namespace Senparc.CO2NET.Helpers
 
 
         /// <summary>
-        /// 反序列化到对象
+        /// Deserialize to object
         /// </summary>
-        /// <param name="jsonString">JSON字符串</param>
+        /// <param name="jsonString">JSON string</param>
         /// <returns></returns>
         public static object GetObject(this string jsonString)
         {
@@ -136,9 +136,9 @@ namespace Senparc.CO2NET.Helpers
 
 
         /// <summary>
-        /// 反序列化到对象
+        /// Deserialize to object
         /// </summary>
-        /// <param name="jsonString">JSON字符串</param>
+        /// <param name="jsonString">JSON string</param>
         /// <param name="settings">JsonSerializerSettings</param>
         /// <returns></returns>
         public static object GetObject(this string jsonString, Newtonsoft.Json.JsonSerializerSettings settings)
@@ -147,10 +147,10 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// 反序列化到对象
+        /// Deserialize to object
         /// </summary>
-        /// <param name="jsonString">JSON字符串</param>
-        /// <param name="type">反序列化类型</param>
+        /// <param name="jsonString">JSON string</param>
+        /// <param name="type">Deserialization type</param>
         /// <param name="settings">JsonSerializerSettings</param>
         /// <returns></returns>
         public static object GetObject(this string jsonString, Type type, Newtonsoft.Json.JsonSerializerSettings settings = null)
@@ -158,55 +158,55 @@ namespace Senparc.CO2NET.Helpers
             return Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString, type, settings);
         }
 
-        //        #region 序列化对象 - byte[]
+        //        #region Serialize object - byte[]
 
-        //        #region 二进制实体对象
+        //        #region Binary entity object
         //        /// <summary>
-        //        /// 序列化对象（二进制实体对象）
+        //        /// Serialize object (binary entity object)
         //        /// </summary>
         //        /// <param name="o"></param>
         //        /// <returns></returns>
         //        public static byte[] BinarySerialize(this object o)
         //        {
         //            if (o == null)
-        //            {
+        //////            {
         //                return null;
-        //            }
+        //////            }
 
         //#if !NET462
-        //            ////二进制序列化方案
-        //            //using (MemoryStream memoryStream = new MemoryStream())
-        //            //{
+        ////            ////Binary serialization scheme
+        ////            //using (MemoryStream memoryStream = new MemoryStream())
+        //////            //{
 
-        //            //    ProtoBuf.Serializer.Serialize(memoryStream, o);
-        //            //    byte[] objectDataAsStream = memoryStream.ToArray();
-        //            //    return objectDataAsStream;
-        //            //}
+        ////            //    ProtoBuf.Serializer.Serialize(memoryStream, o);
+        ////            //    byte[] objectDataAsStream = memoryStream.ToArray();
+        ////            //    return objectDataAsStream;
+        //////            //}
 
         //            BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
         //            return binaryConverter.Serialize(o);
         //#else
-        //            #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
-        //            //二进制序列化方案
-        //            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-        //            using (MemoryStream memoryStream = new MemoryStream())
-        //            {
-        //                binaryFormatter.Serialize(memoryStream, o);
-        //                byte[] objectDataAsStream = memoryStream.ToArray();
-        //                return objectDataAsStream;
-        //            }
+        //            #region .net 4.5 and .net core 2.0 both support BinaryFormatter, but .net core 2.0 does not support delegate serialization
+        ////            //Binary serialization scheme
+        //////            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+        ////            using (MemoryStream memoryStream = new MemoryStream())
+        //////            {
+        ////                binaryFormatter.Serialize(memoryStream, o);
+        ////                byte[] objectDataAsStream = memoryStream.ToArray();
+        ////                return objectDataAsStream;
+        //////            }
         //            #endregion
         //#endif
 
-        //            //使用JSON序列化，会在Get()方法反序列化到IContainerBag的过程中出错
-        //            //JSON序列化方案
-        //            //SerializerHelper serializerHelper = new SerializerHelper();
-        //            //var jsonSetting = serializerHelper.GetJsonString(o);
-        //            //return Encoding.UTF8.GetBytes(jsonSetting);
+        ////            //Using JSON serialization will cause errors during deserialization to IContainerBag in Get() method
+        ////            //JSON serialization scheme
+        ////            //SerializerHelper serializerHelper = new SerializerHelper();
+        ////            //var jsonSetting = serializerHelper.GetJsonString(o);
+        ////            //return Encoding.UTF8.GetBytes(jsonSetting);
         //        }
 
         //        /// <summary>
-        //        /// 反序列化对象（二进制实体对象）
+        //        /// Deserialize object (binary entity object)
         //        /// </summary>
         //        /// <typeparam name="T"></typeparam>
         //        /// <param name="stream"></param>
@@ -214,30 +214,30 @@ namespace Senparc.CO2NET.Helpers
         //        public static T BinaryDeserialize<T>(this byte[] stream)
         //        {
         //            if (stream == null)
-        //            {
+        //////            {
         //                return default(T);
-        //            }
+        //////            }
 
         //#if !NET462
-        //            ////二进制序列化方案
-        //            //using (MemoryStream memoryStream = new MemoryStream(stream))
-        //            //{
-        //            //    T result = ProtoBuf.Serializer.Deserialize<T>(memoryStream);
-        //            //    return result;
-        //            //}
+        ////            ////Binary serialization scheme
+        ////            //using (MemoryStream memoryStream = new MemoryStream(stream))
+        //////            //{
+        ////            //    T result = ProtoBuf.Serializer.Deserialize<T>(memoryStream);
+        ////            //    return result;
+        //////            //}
 
         //            BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
         //            return binaryConverter.Deserialize<T>(stream);
 
         //#else
-        //            #region .net 4.5 和 .net core 2.0 都提供对 BinaryFormatter 的支持，但是 .net core 2.0 不支持委托的序列化
-        //            //二进制序列化方案
-        //            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-        //            using (MemoryStream memoryStream = new MemoryStream(stream))
-        //            {
-        //                T result = (T)binaryFormatter.Deserialize(memoryStream);
-        //                return result;
-        //            }
+        //            #region .net 4.5 and .net core 2.0 both support BinaryFormatter, but .net core 2.0 does not support delegate serialization
+        ////            //Binary serialization scheme
+        //////            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+        ////            using (MemoryStream memoryStream = new MemoryStream(stream))
+        //////            {
+        ////                T result = (T)binaryFormatter.Deserialize(memoryStream);
+        ////                return result;
+        //////            }
         //            #endregion
         //#endif
         //        }
@@ -250,7 +250,7 @@ namespace Senparc.CO2NET.Helpers
         #region Unicode
 
         /// <summary>
-        /// 将字符串转为Unicode
+        /// Convert string to Unicode
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
@@ -268,9 +268,9 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
-        /// unicode解码
+        /// Unicode decoding
         /// </summary>
-        /// <param name="unicodeStr">unicode编码字符串</param>
+        /// <param name="unicodeStr">Unicode encoded string</param>
         /// <returns></returns>
         public static string DecodeUnicode(string unicodeStr)
         {
@@ -282,7 +282,7 @@ namespace Senparc.CO2NET.Helpers
                 {
                     for (int i = 1; i < strlist.Length; i++)
                     {
-                        //将unicode字符转为10进制整数，然后转为char中文字符
+                        //Convert Unicode characters to decimal integers, then to char Chinese characters
                         sb.Append((char)int.Parse(strlist[i], System.Globalization.NumberStyles.HexNumber));
                     }
                 }
@@ -295,15 +295,15 @@ namespace Senparc.CO2NET.Helpers
         }
 
 
-        //TODO：需要优化Match匹配条件后，可以启用
+        //TODO: Need to optimize Match conditions before enabling
         ///// <summary>
-        ///// unicode解码
+        ///// Unicode decoding
         ///// </summary>
         ///// <param name="match"></param>
         ///// <returns></returns>
         //public static string DecodeUnicode(Match match)
         //{
-        //    //Unicode码对照表：http://www.cnblogs.com/whiteyun/archive/2010/07/06/1772218.html
+        //    //Unicode code table: http://www.cnblogs.com/whiteyun/archive/2010/07/06/1772218.html
 
         //    if (!match.Success)
         //    {
