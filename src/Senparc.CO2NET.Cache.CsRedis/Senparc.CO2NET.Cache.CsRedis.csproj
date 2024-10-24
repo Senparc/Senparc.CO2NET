@@ -7,9 +7,9 @@
 				<RootNamespace>Senparc.CO2NET.Cache.CsRedis</RootNamespace>
 				<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
 				<Description>
-      CONET 缓存策略 - Redis 模块
+      CONET cache strategy - Redis module
 
-      CO2NET 开源项目：
+      CO2NET open source project:
       https://github.com/Senparc/Senparc.CO2NET
     </Description>
 				<Copyright>Senparc Copyright © 2004~2024</Copyright>
@@ -23,11 +23,11 @@
 				<PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
 				<PackageIcon>icon.jpg</PackageIcon>
 				<PackageReleaseNotes>
-		v0.1.0 创世
-		v0.5.2 BaseRedisObjectCacheStrategy 析构函数进行 null 值判断，并添加 "#{Cache_Redis_Configuration}#" 过滤判断
-		v1.1.4 RedisObjectCacheStrategy 和 RedisHashSetObjectCacheStrategy.Get() 方法添加纯字符串的判断
-		v1.2.5 修复 GetAllByPrefixAsync(key) 方法会自动获取所有 Key 的 bug
-				[2024-09-11] v1.2.6 更新 Cache, remove InsertToCache(), add Count(prefix)
+		v0.1.0 Genesis
+		v0.5.2 BaseRedisObjectCacheStrategy destructor performs null value check and adds "#{Cache_Redis_Configuration}#" filter check
+		v1.1.4 RedisObjectCacheStrategy and RedisHashSetObjectCacheStrategy.Get() methods add pure string check
+		v1.2.5 Fix bug where GetAllByPrefixAsync(key) method automatically retrieves all keys
+				[2024-09-11] v1.2.6 Update Cache, remove InsertToCache(), add Count(prefix)
 </PackageReleaseNotes>
 				<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
 				<Configurations>Debug;Release;Test</Configurations>

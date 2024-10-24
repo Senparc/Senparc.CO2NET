@@ -8,10 +8,10 @@
 				<RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
 				<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
 				<Description>
-			Senparc.CO2NET.WebApi 应用性能管理
+			Senparc.CO2NET.WebApi Application Performance Management
 		</Description>
 				<Copyright>Senparc Copyright © 2004~2023</Copyright>
-				<PackageTags>WebApi,.NET Core,.NET Framework,公共,基础库,CO2NET</PackageTags>
+				<PackageTags>WebApi,.NET Core,.NET Framework,Public,Base Library,CO2NET</PackageTags>
 				<Authors>Senparc</Authors>
 				<Owners>Senparc</Owners>
 				<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -23,26 +23,26 @@
 				<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
 				<Configurations>Debug;Release;Test</Configurations>
 				<PackageReleaseNotes>
-			v0.1 创世
-			v0.2 完成 WebApiEngine 第一代核心版本
-			v0.2.3 完成 WebApiEngine 第二代核心版本，全面支持动态 API 集成和集成和对应 XML 生成
-			v0.2.4 添加可额外注入的类或方法
-			v0.2.5 优化异步线程执行
-			v0.2.5.7 添加 ForbiddenExternalAccess 参数，设置是否允许外部访问
-			v0.2.6 添加 WebApiEngineOptions
-			v0.2.8 提供 .NET Standard 2.1 版本
-			v1.1 提供参数属性同步复制到动态 Api 的能力
-			v1.1.2 优化文档提取正则表达式
-			v1.1.3 添加 AddApiControllerAttribute 选项，默认为 true
-			v1.3 提供 .NET 7.0 支持
-			v1.4.1 使用 [ApiBind(Ignore = false)]，添加完善对整个类的 API 生成忽略忽略
-			v1.5.2.1整理日志格式
+			v0.1 Genesis
+			v0.2 Completed WebApiEngine first generation core version
+			v0.2.3 Completed WebApiEngine second generation core version, fully supports dynamic API integration and corresponding XML generation
+			v0.2.4 Added additional injectable classes or methods
+			v0.2.5 Optimized asynchronous thread execution
+			v0.2.5.7 Added ForbiddenExternalAccess parameter to set whether external access is allowed
+			v0.2.6 Added WebApiEngineOptions
+			v0.2.8 Provided .NET Standard 2.1 version
+			v1.1 Provided the ability to synchronize parameter attributes to dynamic APIs
+			v1.1.2 Optimized document extraction regular expressions
+			v1.1.3 Added AddApiControllerAttribute option, default is true
+			v1.3 Provided .NET 7.0 support
+			v1.4.1 Used [ApiBind(Ignore = false)], added complete API generation ignore for the entire class
+			v1.5.2.1 Organized log format
 			v1.6.0
-			1、删除 .NET 7.0 TargetFramework；增加 .NET 8.0 TargetFramework
-			2、移除 Microsoft.AspNetCore.Mvc.Core 的引用
-			2、引用最新的 Senparc.CO2NET.AspNet，.NET 6.0 和 .NET 8.0 程序集不再依赖 Microsoft.AspNetCore.Hosting.Abstractions 和 Microsoft.AspNetCore.Http.Abstractions
-			[2024-09-11] v1.6.3 更新 Cache, remove InsertToCache(), add Count(prefix)
-			[2024-10-07] v1.7.0 停止对 .NET 6.0 的支持
+			1. Removed .NET 7.0 TargetFramework; added .NET 8.0 TargetFramework
+			2. Removed reference to Microsoft.AspNetCore.Mvc.Core
+			2. Referenced the latest Senparc.CO2NET.AspNet, .NET 6.0 and .NET 8.0 assemblies no longer depend on Microsoft.AspNetCore.Hosting.Abstractions and Microsoft.AspNetCore.Http.Abstractions
+			[2024-09-11] v1.6.3 Updated Cache, removed InsertToCache(), added Count(prefix)
+			[2024-10-07] v1.7.0 Stopped support for .NET 6.0
 </PackageReleaseNotes>
 		</PropertyGroup>
 		<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
