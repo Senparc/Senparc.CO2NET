@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2023 Senparc
+
+    FileName: WebApiEngineOptions.cs
+    File Function Description: WebApiEngine configuration parameters
+
+
+    Creation Identifier: Senparc - 20210923
+
+    Modification Identifier: Senparc - 20241108
+    Modification Description: v2.0.0-beta2 1. Add UseLowerCaseApiName to WebApiEngineOptions
+                              2. Add unique WebApi name to duplicate method name
+   
+----------------------------------------------------------------*/
+
+
+using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Reflection;
@@ -20,7 +36,11 @@ namespace Senparc.CO2NET.WebApi
         /// <param name="additionalAttributeFunc">Additional attributes to bind</param>
         /// <param name="forbiddenExternalAccess">Whether to allow external access, default is false, only local access to auto-generated WebApi is allowed</param>
         /// <param name="addApiControllerAttribute">Whether to automatically add [ApiController] tag to auto-generated interface classes (Controller)</param>
-        public WebApiEngineOptions(string docXmlPath = null, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post, Type baseApiControllerType = null, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false, Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null, bool forbiddenExternalAccess = true, bool addApiControllerAttribute = true)
+        /// <param name="useLowerCaseApiName">Create lower-case api names</param>
+        public WebApiEngineOptions(string docXmlPath = null, ApiRequestMethod defaultRequestMethod = ApiRequestMethod.Post,
+            Type baseApiControllerType = null, bool copyCustomAttributes = true, int taskCount = 4, bool showDetailApiLog = false,
+            Func<MethodInfo, IEnumerable<CustomAttributeBuilder>> additionalAttributeFunc = null, bool forbiddenExternalAccess = true,
+            bool addApiControllerAttribute = true, bool useLowerCaseApiName = false)
         {
             DocXmlPath = docXmlPath;
             DefaultRequestMethod = defaultRequestMethod;
@@ -31,6 +51,7 @@ namespace Senparc.CO2NET.WebApi
             AdditionalAttributeFunc = additionalAttributeFunc;
             ForbiddenExternalAccess = forbiddenExternalAccess;
             AddApiControllerAttribute = addApiControllerAttribute;
+            UseLowerCaseApiName = useLowerCaseApiName;
         }
 
         /// <summary>
@@ -65,6 +86,7 @@ namespace Senparc.CO2NET.WebApi
         /// Whether to allow external access, default is false, only local access to auto-generated WebApi is allowed
         /// </summary>
         public bool ForbiddenExternalAccess { get; set; }
-        public bool AddApiControllerAttribute { get; }
+        public bool AddApiControllerAttribute { get; set; }
+        public bool UseLowerCaseApiName { get; set; }
     }
 }

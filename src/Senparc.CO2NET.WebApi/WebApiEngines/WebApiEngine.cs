@@ -9,6 +9,10 @@
 
     Modification Identifier: Senparc - 20211122
     Modification Description: v1.1 provides the ability to synchronize parameter attributes to dynamic APIs
+
+    Modification Identifier: Senparc - 20241108
+    Modification Description: v2.0.0-beta2 1. Add UseLowerCaseApiName to WebApiEngineOptions
+                              2. Add unique WebApi name to duplicate method name
    
 ----------------------------------------------------------------*/
 
@@ -57,6 +61,7 @@ namespace Senparc.CO2NET.WebApi
         private Type _typeOfApiBind = typeof(ApiBindAttribute);
         private Type _baseApiControllerType;
         private bool _addApiControllerAttribute = true;
+        private bool _useLowerCaseApiName = false;
 
         public bool BuildXml => DocXmlPath != null;
 
@@ -79,6 +84,7 @@ namespace Senparc.CO2NET.WebApi
             TaskCount = opt.TaskCount;
             _showDetailApiLog = opt.ShowDetailApiLog;
             _addApiControllerAttribute = opt.AddApiControllerAttribute;
+            _useLowerCaseApiName = opt.UseLowerCaseApiName;
             Register.ForbiddenExternalAccess = opt.ForbiddenExternalAccess;
             WebApiEngine.AdditionalAttributeFunc = opt.AdditionalAttributeFunc;
         }
@@ -252,14 +258,6 @@ namespace Senparc.CO2NET.WebApi
                     var indexOfApiGroupDot = apiBindInfo.Value.GlobalName.IndexOf(".");
                     var apiName = apiBindInfo.Value.GlobalName.Substring(indexOfApiGroupDot + 1, apiBindInfo.Value.GlobalName.Length - indexOfApiGroupDot - 1);
 
-                    //Ensure the name is not duplicated
-                    while (apiMethodName.ContainsKey(methodName))
-                    {
-                        methodName += "0";
-                        apiName += "0";
-                    }
-                    apiMethodName[methodName] = apiName;
-
                     //Current API's MethodInfo
                     MethodInfo apiMethodInfo = apiBindInfo.Value.MethodInfo;
                     //All parameter information of the current API
@@ -271,6 +269,18 @@ namespace Senparc.CO2NET.WebApi
 
                     WriteLog(apiLog, true);
                     WriteLog($"-> {methodName} - Parameters: {parameters.Count()}".PadLeft(prefixIndex), true);
+
+                    Func<string> getMethodUniqueNo = () => parameters.Sum(z => z.Name.Length + z.ParameterType.Name.Length).ToString();
+
+                    //Ensure the name is not duplicated
+                    while (apiMethodName.ContainsKey(methodName))
+                    {
+                        //开发过程中可能会因为接口增加，导致重复名称的后缀改变，因此使用相对差异更大的方式增加后缀（将所有参数名、类型的字符串长度相加）
+                        //TODO：这种做法仍然无法解决第一个名称的命名问题（需要转回去修改）
+                        methodName += "_"+ getMethodUniqueNo;
+                        apiName += "_" + getMethodUniqueNo;
+                    }
+                    apiMethodName[methodName] = apiName;
 
                     //Add static method marker
                     string showStaticApiState = null;//$"{(apiMethodInfo.IsStatic ? "_StaticApi" : "_NonStaticApi")}";
@@ -298,6 +308,13 @@ namespace Senparc.CO2NET.WebApi
                     var apiBindGroupNamePath = apiBindName.Replace(":", "_");
                     var apiNamePath = apiName.Replace(":", "_");
                     var apiPath = $"/api/{keyName}/{apiBindGroupNamePath}/{apiNamePath}{showStaticApiState}";
+
+                    //强制所有名称小写
+                    if (_useLowerCaseApiName)
+                    {
+                        apiPath = apiPath.ToLower();
+                    }
+
                     var routeAttrBuilder = new CustomAttributeBuilder(t2_4.GetConstructor(new Type[] { typeof(string) }),
                         new object[] { apiPath }/*, new[] { t2_2.GetProperty("Name") }, new[] { routeName }*/);
                     setPropMthdBldr.SetCustomAttribute(routeAttrBuilder);
