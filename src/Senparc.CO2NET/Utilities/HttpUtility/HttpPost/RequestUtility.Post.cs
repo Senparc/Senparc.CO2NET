@@ -21,50 +21,49 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2024 Senparc
 
-    文件名：RequestUtility.Post.cs
-    文件功能描述：获取请求结果（Post）
+    Filename: RequestUtility.Post.cs
 
+    Description: Retrieve request result (Post)
 
-    创建标识：Senparc - 20171006
+    Creation Identifier: Senparc - 20171006
 
-    修改描述：移植Post方法过来
+    Modification Description: Ported the Post method
+    Modification Identifier: Senparc - 20180516
+    Modification Description: v4.21.1-rc1 Resolved the issue of RequestUtility.HttpResponsePost() and HttpPostAsync() methods not closing postStream in .NET Core promptly
 
-    修改标识：Senparc - 20180516
-    修改描述：v4.21.1-rc1  解决 RequestUtility.HttpResponsePost() 和 HttpPostAsync() 方法
-                           在 .net core 下没有及时关闭 postStream 的问题
-
-    修改标识：Senparc - 20180602
-    修改描述：v4.22.2 完善 RequestUtility.HttpPost_Common_NetCore() 字符串信息提交过程
-
+    Modification Identifier: Senparc - 20180602
+    Modification Description: v4.22.2 Improved the string information submission process in RequestUtility.HttpPost_Common_NetCore()
     -- CO2NET --
 
-    修改标识：Senparc - 20181009
-    修改描述：v0.2.15 Post 方法添加 headerAddition参数
+    Modification Identifier: Senparc - 20181009
+    Modification Description: v0.2.15 Added headerAddition parameter to the Post method
 
-    修改标识：Senparc - 20190429
-    修改描述：v0.7.0 优化 HttpClient，重构 RequestUtility（包括 Post 和 Get），引入 HttpClientFactory 机制
+    Modification Identifier: Senparc - 20190429
+    Modification Description: v0.7.0 Optimized HttpClient, refactored RequestUtility (including Post and Get), introduced HttpClientFactory mechanism
 
-    修改标识：Senparc - 20190521
-    修改描述：v0.7.3 .NET Core 提供多证书注册功能
+    Modification Identifier: Senparc - 20190521
+    Modification Description: v0.7.3 .NET Core provides multi-certificate registration feature
 
-    修改标识：Senparc - 20190811
-    修改描述：v0.8.7 RequestUtility.Post() 方法添加新功能：使用文件流模拟 Form 表单提交
+    Modification Identifier: Senparc - 20190811
+    Modification Description: v0.8.7 Added new feature to RequestUtility.Post() method: simulating Form submission using file stream
 
-    修改标识：554393109 - 20220208
-    修改描述：v2.0.3 修改HttpClient请求超时的实现方式
+    Modification Identifier: 554393109 - 20220208
+    Modification Description: v2.0.3 Modified the implementation method of HttpClient request timeout
 
-    修改标识：Senparc - 20220721
-    修改描述：v2.1.2 重构 RequestUtility，HttpPost_Common_NetCore() 改为异步方法：HttpPost_Common_NetCoreAsync()
+    Modification Identifier: Senparc - 20220721
+    Modification Description: v2.1.2 Refactored RequestUtility, changed HttpPost_Common_NetCore() to an asynchronous method: HttpPost_Common_NetCoreAsync()
 
-    修改标识：Senparc - 20221115
-    修改描述：v2.1.3 优化模拟 Form 提交
+    Modification Identifier: Senparc - 20221115
+    Modification Description: v2.1.3 Optimized simulated Form submission
 
-    修改标识：Senparc - 20230128
-    修改描述：v2.1.7.3 继续解决上一版本升级后导致的“The value cannot be null or empty. (Parameter 'mediaType')”异常
+    Modification Identifier: Senparc - 20230128
+    Modification Description: v2.1.7.3 Continued to resolve the exception “The value cannot be null or empty. (Parameter 'mediaType')” caused by the previous version upgrade
 
-    修改标识：Senparc - 20230711
-    修改描述：v2.2.1 优化 Http 请求，及时关闭资源
+    Modification Identifier: Senparc - 20230711
+    Modification Description: v2.2.1 Optimized Http request, promptly closed resources
 
+    Modification Identifier: Senparc - 20241119
+    Modification Description: v3.0.0-beta3 Added ApiClient parameter    
 ----------------------------------------------------------------*/
 
 using System;
@@ -284,7 +283,9 @@ namespace Senparc.CO2NET.HttpUtility
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null,
             Stream postStream = null, Dictionary<string, string> fileDictionary = null, string refererUrl = null,
-            Encoding encoding = null, string certName = null, bool useAjax = false, Dictionary<string, string> headerAddition = null,
+            Encoding encoding = null,
+            ApiClient apiClient = null,
+            string certName = null, bool useAjax = false, Dictionary<string, string> headerAddition = null,
             int timeOut = Config.TIME_OUT, bool checkValidationResult = false,
             bool hasFormData = false,
             string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
@@ -303,7 +304,9 @@ namespace Senparc.CO2NET.HttpUtility
 
             //TODO:此处 handler并没有被使用到，因此 cer 实际无法传递（这个也是 .net core 目前针对多 cer 场景的一个问题）
 
-            var senparcHttpClient = SenparcHttpClient.GetInstanceByName(serviceProvider, certName);
+            var senparcHttpClient = apiClient == null
+                ? SenparcHttpClient.GetInstanceByName(serviceProvider, certName)
+                : apiClient.SenparcHttpClient;
 
             contentType ??= HttpClientHelper.DEFAULT_CONTENT_TYPE;
 
@@ -452,6 +455,7 @@ namespace Senparc.CO2NET.HttpUtility
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null,
             Encoding encoding = null,
 #if !NET462
+            ApiClient apiClient = null,
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -473,6 +477,7 @@ namespace Senparc.CO2NET.HttpUtility
                 serviceProvider,
                 url, cookieContainer, ms, null, null, encoding,
 #if !NET462
+                apiClient,
                 certName,
 #else
                 cer,
@@ -504,6 +509,7 @@ namespace Senparc.CO2NET.HttpUtility
             Dictionary<string, string> fileDictionary = null, string refererUrl = null,
             Encoding encoding = null,
 #if !NET462
+            ApiClient apiClient = null,
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -520,6 +526,7 @@ namespace Senparc.CO2NET.HttpUtility
                 serviceProvider,
                 url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
 #if !NET462
+                apiClient,
                 certName,
 #else
                 cer,
@@ -626,6 +633,7 @@ namespace Senparc.CO2NET.HttpUtility
             Dictionary<string, string> fileDictionary = null, string refererUrl = null,
             Encoding encoding = null,
 #if !NET462
+            ApiClient apiClient = null,
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -676,7 +684,7 @@ namespace Senparc.CO2NET.HttpUtility
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             return new SenparcHttpResponse(response);
 #else
-            var httpPost = HttpPost_Common_NetCoreAsync(serviceProvider, url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, hasFormData, contentType).ConfigureAwait(false).GetAwaiter().GetResult();
+            var httpPost = HttpPost_Common_NetCoreAsync(serviceProvider, url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, apiClient, certName, useAjax, headerAddition, timeOut, checkValidationResult, hasFormData, contentType).ConfigureAwait(false).GetAwaiter().GetResult();
 
             var client = httpPost.HttpClient;
             var hc = httpPost.HttpContent;
@@ -736,6 +744,7 @@ namespace Senparc.CO2NET.HttpUtility
             string url, CookieContainer cookieContainer = null,
             Dictionary<string, string> formData = null, Encoding encoding = null,
 #if !NET462
+            ApiClient apiClient = null,
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -758,6 +767,7 @@ namespace Senparc.CO2NET.HttpUtility
                 serviceProvider,
                 url, cookieContainer, ms, null, null, encoding,
 #if !NET462
+                apiClient,
                 certName,
 #else
                 cer,
@@ -789,6 +799,7 @@ namespace Senparc.CO2NET.HttpUtility
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
 #if !NET462
+            ApiClient apiClient = null,
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -816,6 +827,7 @@ namespace Senparc.CO2NET.HttpUtility
                 serviceProvider,
                 url, cookieContainer, postStream, fileDictionary, refererUrl, encoding,
 #if !NET462
+                apiClient,
                 certName,
 #else
                 cer,
@@ -940,6 +952,7 @@ namespace Senparc.CO2NET.HttpUtility
             string url, CookieContainer cookieContainer = null, Stream postStream = null,
             Dictionary<string, string> fileDictionary = null, string refererUrl = null, Encoding encoding = null,
 #if !NET462
+            ApiClient apiClient = null,
             string certName = null,
 #else
             X509Certificate2 cer = null,
@@ -991,7 +1004,7 @@ namespace Senparc.CO2NET.HttpUtility
             HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync().ConfigureAwait(false));
             return new SenparcHttpResponse(response);
 #else
-            var httpPost = await HttpPost_Common_NetCoreAsync(serviceProvider, url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, certName, useAjax, headerAddition, timeOut, checkValidationResult, hasFormData, contentType);
+            var httpPost = await HttpPost_Common_NetCoreAsync(serviceProvider, url, cookieContainer, postStream, fileDictionary, refererUrl, encoding, apiClient, certName, useAjax, headerAddition, timeOut, checkValidationResult, hasFormData, contentType);
 
             var client = httpPost.HttpClient;
             var hc = httpPost.HttpContent;
