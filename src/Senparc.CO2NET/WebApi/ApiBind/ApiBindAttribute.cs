@@ -10,11 +10,15 @@
     Modification Identifier: Senparc - 20230614
     Modification Description: v1.4.1 Ignore added virtual keyword
 
+    Modification Identifier：Senparc - 20241119
+    Modification Description：v3.0.0-beta3 add GetGlobalName() method and rename GetName() to GetApiBindAttrName()
+
 ----------------------------------------------------------------*/
 
 using Senparc.CO2NET.WebApi;
 using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Senparc.CO2NET
 {
@@ -86,7 +90,8 @@ namespace Senparc.CO2NET
         /// <param name="category">Category (platform type), used for grouping when outputting API Url</param>
         /// <param name="name">Unique name within the platform (if using PlatformType.General, please use a globally unique name)</param>
         /// <param name="apiRequestMethod">Current API request type, if null, the globally defined type of this engine will be used</param>
-        public ApiBindAttribute(string category, string name, ApiRequestMethod apiRequestMethod) : this(category, name, WebApi.ApiRequestMethod.GlobalDefault, null, 0)
+        public ApiBindAttribute(string category, string name, ApiRequestMethod apiRequestMethod)
+            : this(category, name, WebApi.ApiRequestMethod.GlobalDefault, null, 0)
         {
         }
 
@@ -96,7 +101,7 @@ namespace Senparc.CO2NET
         /// Auto bind property
         /// </summary>
         /// <param name="category">Category (platform type), used for grouping when outputting API Url</param>
-        /// <param name="name">Unique name within the platform (if using PlatformType.General, please use a globally unique name)</param>
+        /// <param name="name">Unique name within the platform (if using PlatformType.General, please use a globally unique name). If input empty string, default value is "ClassTypeName.MethodName"</param>
         /// <param name="apiRequestMethod">Current API request type, if null, the globally defined type of this engine will be used</param>
         /// <param name="baseApiControllerType">Base class of ApiController, default is ControllerBase</param>
         /// <param name="baseApiControllerOrder">Base class order of ApiController, the one with the largest number will be used last (supports negative numbers)</param>
@@ -134,10 +139,39 @@ namespace Senparc.CO2NET
         /// </summary>
         /// <param name="methodInfo">Current method name</param>
         /// <returns></returns>
-        public string GetName(MethodInfo methodInfo)
+        public string GetApiBindAttrName(MethodInfo methodInfo)
         {
             return Name ?? $"{methodInfo.DeclaringType.Name}.{methodInfo.Name}";
         }
 
+        /// <summary>
+        /// Get globally unique name
+        /// </summary>
+        /// <returns></returns>
+        public string GetGlobalName(MethodInfo methodInfo)
+        {
+            var categoryName = GetCategoryName(methodInfo);
+            var apiBindAttrName = this.GetApiBindAttrName(methodInfo);
+            return ApiBindAttribute.GetGlobalName(categoryName, apiBindAttrName);
+        }
+
+
+        /// <summary>
+        /// Get globally unique name
+        /// </summary>
+        /// <param name="category">Category (platform type), used for grouping when outputting API Url</param>
+        /// <param name="apiBindAttrName">Common name across assemblies (e.g., CustomApi.SendText)</param>
+        /// <returns></returns>
+        public static string GetGlobalName(string category, string apiBindAttrName)
+        {
+            Console.WriteLine($"category / apiBindAttrName:{category} /{apiBindAttrName}");
+            return $"{category}:{apiBindAttrName}";//TODO: Generate globally unique name
+        }
+
+
+        //public string GetApiPath()
+        //{ 
+
+        //}
     }
 }
