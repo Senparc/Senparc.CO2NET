@@ -24,7 +24,7 @@ namespace Senparc.CO2NET.Tests
         {
             var method = typeof(TestClass).GetMethod("Func");
             var attr = new ApiBindAttribute();
-            var result = attr.GetName(method);
+            var result = attr.GetApiBindAttrName(method);
             Assert.AreEqual("TestClass.Func", result);
         }
     }

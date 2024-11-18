@@ -32,8 +32,12 @@ Detail: https://github.com/JeffreySu/WeiXinMPSDK/blob/master/license.md
 
     ---------- 2021.6.27 Migrated from Senparc.NeuChar
 
+    Modification Identifier：Senparc - 20241119
+    Modification Description：v3.0.0-beta3 reconstruction
+
 ----------------------------------------------------------------*/
 
+using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.WebApi;
 using System;
 using System.Collections.Generic;
@@ -71,17 +75,6 @@ namespace Senparc.CO2NET.ApiBind
         #endregion
 
         /// <summary>
-        /// Get globally unique name
-        /// </summary>
-        /// <param name="category">Category (platform type), used for grouping when outputting API Url</param>
-        /// <param name="apiBindAttrName">Common name across assemblies (e.g., CustomApi.SendText)</param>
-        /// <returns></returns>
-        private string GetGlobalName(string category, string apiBindAttrName)
-        {
-            return $"{category}:{apiBindAttrName}";//TODO: Generate globally unique name
-        }
-
-        /// <summary>
         /// ApiBindCollection constructor
         /// </summary>
         public ApiBindInfoCollection() : base(StringComparer.OrdinalIgnoreCase)
@@ -97,8 +90,8 @@ namespace Senparc.CO2NET.ApiBind
         public void Add(ApiBindOn apiBindOn, string cagtegory, MethodInfo method, ApiBindAttribute apiBindAttr)
         {
             var category = apiBindAttr.GetCategoryName(method);
-            var name = apiBindAttr.GetName(method);
-            var globalName = GetGlobalName(category, name);
+            var apiBindAttrName = apiBindAttr.GetApiBindAttrName(method);
+            var globalName = apiBindAttr.GetGlobalName(method);
 
             var finalGlobalName = globalName;
             var suffix = 0;
@@ -109,7 +102,10 @@ namespace Senparc.CO2NET.ApiBind
                 finalGlobalName = globalName + suffix.ToString("00");
             }
 
-            base.Add(finalGlobalName, new ApiBindInfo(apiBindOn, cagtegory, finalGlobalName, name, apiBindAttr.BaseApiControllerType, apiBindAttr.BaseApiControllerOrder, apiBindAttr, method));
+            //TODO: move all functions to ctor. by input method
+
+            var apiBindInfo = new ApiBindInfo(apiBindOn, cagtegory, finalGlobalName, apiBindAttrName, apiBindAttr.BaseApiControllerType, apiBindAttr.BaseApiControllerOrder, apiBindAttr, method);
+            base.Add(finalGlobalName, apiBindInfo);
         }
 
         /// <summary>
@@ -119,7 +115,7 @@ namespace Senparc.CO2NET.ApiBind
         /// <param name="apiBindAttrName">Common name across assemblies (e.g., CustomApi.SendText)</param>
         public ApiBindInfo Get(string category, string apiBindAttrName)
         {
-            var name = GetGlobalName(category, apiBindAttrName);
+            var name = ApiBindAttribute.GetGlobalName(category, apiBindAttrName);
             if (ApiBindInfoCollection.Instance.ContainsKey(name))
             {
                 return ApiBindInfoCollection.Instance[name];

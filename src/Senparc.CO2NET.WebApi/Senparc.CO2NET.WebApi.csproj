@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
-    <Version>2.0.0-beta2</Version>
+    <Version>2.0.0-beta3</Version>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
     <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
@@ -9,7 +9,7 @@
     <Description>
 			Senparc.CO2NET.WebApi Application Performance Management
 		</Description>
-    <Copyright>Senparc Copyright © 2004~2023</Copyright>
+    <Copyright>Senparc Copyright © 2004~2024</Copyright>
     <PackageTags>WebApi,.NET Core,.NET Framework,Public,Base Library,CO2NET,盛派</PackageTags>
     <Authors>Senparc</Authors>
     <Owners>Senparc</Owners>

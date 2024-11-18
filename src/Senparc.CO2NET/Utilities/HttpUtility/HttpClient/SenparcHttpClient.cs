@@ -35,6 +35,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
     Modification Identifier：Senparc - 20221115
     Modification Description：v2.1.3 special handling for Cookie in .NET 7.0
+    
+    Modification Identifier：Senparc - 20241119
+    Modification Description：v3.0.0-beta3 Add ApiClientName property
 
 ----------------------------------------------------------------*/
 
@@ -63,8 +66,14 @@ namespace Senparc.CO2NET.HttpUtility
         public HttpClient Client { get; private set; }
 
         /// <summary>
+        /// ApiClient Name
+        /// </summary>
+        public string ApiClientName { get; set; }
+
+        /// <summary>
         /// Get HttpClient object from the unique name of HttpClientFactory and load it into SenparcHttpClient
         /// </summary>
+        /// <param name="serviceProvider"></param>
         /// <param name="httpClientName"></param>
         /// <returns></returns>
         public static SenparcHttpClient GetInstanceByName(IServiceProvider serviceProvider, string httpClientName)
@@ -73,6 +82,24 @@ namespace Senparc.CO2NET.HttpUtility
             {
                 var clientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
                 var httpClient = clientFactory.CreateClient(httpClientName);
+                return new SenparcHttpClient(httpClient);
+            }
+
+            return serviceProvider.GetRequiredService<SenparcHttpClient>();
+        }
+
+        /// <summary>
+        /// Get HttpClient object from the unique name of HttpClientFactory and load it into SenparcHttpClient
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <param name="httpClientType"></param>
+        /// <returns></returns>
+        public static SenparcHttpClient GetInstanceByType(IServiceProvider serviceProvider, Type httpClientType = null)
+        {
+            if (httpClientType != null || typeof(HttpClient).IsAssignableFrom(httpClientType))
+            {
+                var clientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+                var httpClient = serviceProvider.GetService(httpClientType) as HttpClient;
                 return new SenparcHttpClient(httpClient);
             }
 
@@ -89,10 +116,6 @@ namespace Senparc.CO2NET.HttpUtility
             //httpClient.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
             Client = httpClient;
         }
-
-        //public void SetHandler(HttpClientHandler handler)
-        //{
-        //}
 
         public void SetCookie(Uri uri, CookieContainer cookieContainer)
         {
