@@ -30,6 +30,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier：Senparc - 20230711
     Modification Description：v2.2.1 Optimize Http request, close resources in time
 
+    Modification Identifier：Senparc - 20241119
+    Modification Description：v3.0.0-beta3 Add ApiClient parameter
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -60,7 +63,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static async Task<string> HttpDeleteAsync(
             IServiceProvider serviceProvider,
-            string url, Encoding encoding = null)
+            string url, Encoding encoding = null
+#if !NET462
+            , ApiClient apiClient = null
+#endif
+            )
         {
 #if NET462
             using (var wc = new WebClient())
@@ -78,8 +85,9 @@ namespace Senparc.CO2NET.HttpUtility
                 Proxy = SenparcHttpClientWebProxy,
             };
 
-            HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
-
+            var httpClient = apiClient == null
+                ? serviceProvider.GetRequiredService<SenparcHttpClient>().Client
+                : apiClient.SenparcHttpClient.Client;
             using (httpClient)
             {
                 var response = await httpClient.DeleteAsync(url).ConfigureAwait(false);

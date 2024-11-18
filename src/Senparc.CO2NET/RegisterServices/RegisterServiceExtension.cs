@@ -44,6 +44,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier：Senparc - 20200220
     Modification Description：v1.1.100 Refactored SenparcDI
 
+    Modification Identifier：Senparc - 20241119
+    Modification Description：v1.1.100 Refactored SenparcDI
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -58,10 +61,12 @@ using System.IO;
 using Senparc.CO2NET.Cache;
 
 
+
 #if !NET462
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 #endif
 
 namespace Senparc.CO2NET.RegisterServices
@@ -92,7 +97,9 @@ namespace Senparc.CO2NET.RegisterServices
 
             serviceCollection.AddTransient<IBaseObjectCacheStrategy>(s => CacheStrategyFactory.GetObjectCacheStrategyInstance());
 
-            // .net core 3.0 HttpClient documentation reference: https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/http-requests?view=aspnetcore-3.0
+            serviceCollection.AddScoped<ApiClientHelper>();
+
+            // .net core 8.0 HttpClient documentation reference: https://learn.microsoft.com/zh-cn/aspnet/core/fundamentals/http-requests?view=aspnetcore-8.0
             //Configure HttpClient, can use Head to customize Cookie
             serviceCollection.AddHttpClient<SenparcHttpClient>()
             //.ConfigureHttpMessageHandlerBuilder((c) =>

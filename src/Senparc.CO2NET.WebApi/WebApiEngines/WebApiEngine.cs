@@ -14,6 +14,8 @@
     Modification Description: v2.0.0-beta2 1. Add UseLowerCaseApiName to WebApiEngineOptions
                               2. Add unique WebApi name to duplicate method name
    
+    Modification Identifier：Senparc - 20241119
+    Modification Description：v3.0.0-beta3 reconstruction
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
@@ -104,11 +106,6 @@ namespace Senparc.CO2NET.WebApi
 
         #region Create dynamic assembly related
 
-
-        /// <summary>
-        /// Match keywords to be replaced from apiBindInfo.Value.GlobalName
-        /// </summary>
-        private static Regex regexForMethodName = new Regex(@"[\.\-/:]", RegexOptions.Compiled);
 
 
         /// <summary>
@@ -229,10 +226,10 @@ namespace Senparc.CO2NET.WebApi
         /// Generate API methods (Method) for a single thread (or Task), smallest granularity
         /// </summary>
         private async Task BuildApiMethodForOneThread(IGrouping<string, KeyValuePair<string, ApiBindInfo>> apiBindGroup,
-            KeyValuePair<string, ApiBindInfo>[] apiBindInfoBlock, ConcurrentDictionary<string, string> apiMethodName, string keyName,
+            KeyValuePair<string, ApiBindInfo>[] apiBindInfoBlock, ConcurrentDictionary<string, string> apiMethodName, string controllerKeyName,
             TypeBuilder tb, FieldBuilder fbServiceProvider, int apiIndex)
         {
-            foreach (var apiBindInfo in apiBindInfoBlock)
+            foreach (var apiBindInfoKv in apiBindInfoBlock)
             {
                 #region ApiBuild
 
@@ -244,28 +241,30 @@ namespace Senparc.CO2NET.WebApi
                     //}
 
                     var category = apiBindGroup.Key;
+                    var apiBindInfo = apiBindInfoKv.Value;
 
                     //Define version number
                     if (!ApiAssemblyVersions.ContainsKey(category))
                     {
-                        ApiAssemblyVersions[category] = apiBindInfo.Value.MethodInfo.DeclaringType.Assembly.GetName().Version.ToString(3);
+                        ApiAssemblyVersions[category] = apiBindInfo.MethodInfo.DeclaringType.Assembly.GetName().Version.ToString(3);
                     }
 
                     //Current method name
-                    var methodName = regexForMethodName.Replace(apiBindInfo.Value.GlobalName, "_");
-                    var apiBindGlobalName = apiBindInfo.Value.GlobalName.Split('.')[0];
-                    var apiBindName = apiBindInfo.Value.Name.Split('.')[0];
-                    var indexOfApiGroupDot = apiBindInfo.Value.GlobalName.IndexOf(".");
-                    var apiName = apiBindInfo.Value.GlobalName.Substring(indexOfApiGroupDot + 1, apiBindInfo.Value.GlobalName.Length - indexOfApiGroupDot - 1);
+                    var globalName = apiBindInfo.GlobalName;
+
+                    var methodName = apiBindInfo.MethodName;
+                    //var apiBindGlobalName = globalName.Split('.')[0];
+                    var apiBindName = apiBindInfo.ApiBindName;
+                    var apiName = apiBindInfo.ApiName;
 
                     //Current API's MethodInfo
-                    MethodInfo apiMethodInfo = apiBindInfo.Value.MethodInfo;
+                    MethodInfo apiMethodInfo = apiBindInfo.MethodInfo;
                     //All parameter information of the current API
                     var parameters = apiMethodInfo.GetParameters();
 
-                    var apiLog = $"> Search DynamicApi[{apiIndex}]: {keyName} > ";
+                    var apiLog = $"> Search DynamicApi[{apiIndex}]: {controllerKeyName} > ";
                     var prefixIndex = apiLog.Length;//For alignment indentation
-                    apiLog += $"{apiBindInfo.Key}";
+                    apiLog += $"{category}";
 
                     WriteLog(apiLog, true);
                     WriteLog($"-> {methodName} - Parameters: {parameters.Count()}".PadLeft(prefixIndex), true);
@@ -277,7 +276,7 @@ namespace Senparc.CO2NET.WebApi
                     {
                         //开发过程中可能会因为接口增加，导致重复名称的后缀改变，因此使用相对差异更大的方式增加后缀（将所有参数名、类型的字符串长度相加）
                         //TODO：这种做法仍然无法解决第一个名称的命名问题（需要转回去修改）
-                        methodName += "_"+ getMethodUniqueNo;
+                        methodName += "_" + getMethodUniqueNo;
                         apiName += "_" + getMethodUniqueNo;
                     }
                     apiMethodName[methodName] = apiName;
@@ -293,7 +292,7 @@ namespace Senparc.CO2NET.WebApi
 
                     //Controller has already used SwaggerOperationAttribute once
                     var t2_3 = typeof(SwaggerOperationAttribute);
-                    var tagName = new[] { $"{keyName}:{apiBindName}" };
+                    var tagName = new[] { $"{controllerKeyName}:{apiBindName}" };
                     var tagAttrBuilder = new CustomAttributeBuilder(t2_3.GetConstructor(new Type[] { typeof(string), typeof(string) }),
                         new object[] { (string)null, (string)null },
                         new[] { t2_3.GetProperty("Tags") }, new[] { tagName });
@@ -305,9 +304,7 @@ namespace Senparc.CO2NET.WebApi
                     //[Route("/api/...", Name="xxx")]
                     var t2_4 = typeof(RouteAttribute);
                     //var routeName = apiBindInfo.Value.ApiBindAttribute.Name.Split('.')[0];
-                    var apiBindGroupNamePath = apiBindName.Replace(":", "_");
-                    var apiNamePath = apiName.Replace(":", "_");
-                    var apiPath = $"/api/{keyName}/{apiBindGroupNamePath}/{apiNamePath}{showStaticApiState}";
+                    string apiPath = GetApiPath(apiBindInfo, showStaticApiState);
 
                     //强制所有名称小写
                     if (_useLowerCaseApiName)
@@ -324,7 +321,7 @@ namespace Senparc.CO2NET.WebApi
                     WriteLog($"Added DynamicApi Path: {apiPath}{System.Environment.NewLine}", true);
 
                     //[HttpPost]
-                    var specialMethod = apiBindInfo.Value.ApiBindAttribute.ApiRequestMethod;
+                    var specialMethod = apiBindInfo.ApiBindAttribute.ApiRequestMethod;
                     if (specialMethod == ApiRequestMethod.GlobalDefault)
                     {
                         specialMethod = _defaultRequestMethod;//Use global default
@@ -477,6 +474,19 @@ namespace Senparc.CO2NET.WebApi
             }
         }
 
+        public static string GetApiPath(ApiBindInfo apiBindInfo, string showStaticApiState)
+        {
+            return GetApiPath(apiBindInfo.ControllerKeyName, apiBindInfo.ApiBindName, apiBindInfo.ApiName, showStaticApiState);
+        }
+
+        public static string GetApiPath(string keyName, string apiBindName, string apiName, string showStaticApiState)
+        {
+            var apiBindGroupNamePath = apiBindName.Replace(":", "_");
+            var apiNamePath = apiName.Replace(":", "_");
+            var apiPath = $"/api/{keyName}/{apiBindGroupNamePath}/{apiNamePath}{showStaticApiState}";
+            return apiPath;
+        }
+
         /// <summary>
         /// Create internal call of API method
         /// </summary>
@@ -602,7 +612,7 @@ namespace Senparc.CO2NET.WebApi
 
             //Store API
             //_apiCollection[category] = new Dictionary<string, ApiBindInfo>(apiBindGroup);
-            var controllerKeyName = category.Replace(":", "_");//Do not change the rules arbitrarily, global consistency is required
+            var controllerKeyName = ApiBindInfo.GetControllerKeyName(category);//Do not change the rules arbitrarily, global consistency is required
 
             WriteLog($"search key: {category} -> {controllerKeyName}", true);
 

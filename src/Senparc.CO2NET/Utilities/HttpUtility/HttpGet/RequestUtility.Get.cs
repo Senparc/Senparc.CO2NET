@@ -42,6 +42,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier：Senparc - 20230711
     Modification Description：v2.2.1 Optimized Http request, timely release of resources
 
+    Modification Identifier：Senparc - 20241119
+    Modification Description：v3.0.0-beta3 Add ApiClient parameter
 ----------------------------------------------------------------*/
 
 using System;
@@ -106,8 +108,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// HttpWebRequest parameter settings for .NET Core version
         /// </summary>
         /// <returns></returns>
-        private static HttpClient HttpGet_Common_NetCore(IServiceProvider serviceProvider, string url, CookieContainer cookieContainer = null,
-            Encoding encoding = null, X509Certificate2 cer = null,
+        private static HttpClient HttpGet_Common_NetCore(IServiceProvider serviceProvider, string url,
+            CookieContainer cookieContainer = null,
+            Encoding encoding = null,
+            ApiClient apiClient = null,
+            X509Certificate2 cer = null,
             string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
             var handler = HttpClientHelper.GetHttpClientHandler(cookieContainer, RequestUtility.SenparcHttpClientWebProxy, DecompressionMethods.GZip);
@@ -117,7 +122,10 @@ namespace Senparc.CO2NET.HttpUtility
                 handler.ClientCertificates.Add(cer);
             }
 
-            HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
+            var httpClient = apiClient == null
+                ? serviceProvider.GetRequiredService<SenparcHttpClient>().Client
+                : apiClient.SenparcHttpClient.Client;
+
             HttpClientHeader(httpClient, refererUrl, useAjax, headerAddition, timeOut);
 
             return httpClient;
@@ -169,7 +177,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static string HttpGet(
             IServiceProvider serviceProvider,
-            string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
+            string url, CookieContainer cookieContainer = null, Encoding encoding = null,
+#if !NET462
+            ApiClient apiClient = null,
+#endif
+            X509Certificate2 cer = null,
             string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
 #if NET462
@@ -192,7 +204,7 @@ namespace Senparc.CO2NET.HttpUtility
             }
 #else
 
-            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
+            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, apiClient, cer, refererUrl, useAjax, headerAddition, timeOut);
 
             using (httpClient)
             {
@@ -257,10 +269,14 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static HttpResponseMessage HttpResponseGet(
             IServiceProvider serviceProvider,
-            string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
+            string url, CookieContainer cookieContainer = null, Encoding encoding = null,
+#if !NET462
+            ApiClient apiClient = null,
+#endif
+            X509Certificate2 cer = null,
             string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
-            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
+            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, apiClient, cer, refererUrl, useAjax, headerAddition, timeOut);
             using (var cts = new System.Threading.CancellationTokenSource(timeOut))
             {
                 try
@@ -291,7 +307,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static async Task<string> HttpGetAsync(
             IServiceProvider serviceProvider,
-            string url, Encoding encoding = null)
+            string url, Encoding encoding = null
+#if !NET462
+            , ApiClient apiClient = null
+#endif
+            )
         {
 #if NET462
             WebClient wc = new WebClient();
@@ -305,7 +325,10 @@ namespace Senparc.CO2NET.HttpUtility
                 Proxy = SenparcHttpClientWebProxy,
             };
 
-            HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
+            var httpClient = apiClient == null
+               ? serviceProvider.GetRequiredService<SenparcHttpClient>().Client
+               : apiClient.SenparcHttpClient.Client;
+
             using (httpClient)
             {
                 return await httpClient.GetStringAsync(url).ConfigureAwait(false);
@@ -329,7 +352,12 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static async Task<string> HttpGetAsync(
             IServiceProvider serviceProvider,
-            string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
+            string url, CookieContainer cookieContainer = null,
+#if !NET462
+            ApiClient apiClient = null,
+#endif
+            Encoding encoding = null,
+            X509Certificate2 cer = null,
             string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
 #if NET462
@@ -351,7 +379,7 @@ namespace Senparc.CO2NET.HttpUtility
                 }
             }
 #else
-            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
+            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, apiClient, cer, refererUrl, useAjax, headerAddition, timeOut);
 
             using (httpClient)
             {
@@ -420,10 +448,11 @@ namespace Senparc.CO2NET.HttpUtility
         /// <returns></returns>
         public static async Task<HttpResponseMessage> HttpResponseGetAsync(
             IServiceProvider serviceProvider,
-            string url, CookieContainer cookieContainer = null, Encoding encoding = null, X509Certificate2 cer = null,
+            string url, CookieContainer cookieContainer = null, Encoding encoding = null,
+            ApiClient apiClient = null, X509Certificate2 cer = null,
             string refererUrl = null, bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT)
         {
-            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, cer, refererUrl, useAjax, headerAddition, timeOut);
+            var httpClient = HttpGet_Common_NetCore(serviceProvider, url, cookieContainer, encoding, apiClient, cer, refererUrl, useAjax, headerAddition, timeOut);
             using (var cts = new System.Threading.CancellationTokenSource(timeOut))
             {
                 try
