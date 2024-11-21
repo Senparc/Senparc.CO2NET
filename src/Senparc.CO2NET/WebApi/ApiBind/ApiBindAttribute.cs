@@ -164,7 +164,7 @@ namespace Senparc.CO2NET
         /// <returns></returns>
         public static string GetGlobalName(string category, string apiBindAttrName)
         {
-            Console.WriteLine($"category / apiBindAttrName:{category} /{apiBindAttrName}");
+            //Console.WriteLine($"category / apiBindAttrName:{category} /{apiBindAttrName}");
             return $"{category}:{apiBindAttrName}";//TODO: Generate globally unique name
         }
 
