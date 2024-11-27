@@ -1,81 +1,82 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
-    <Version>2.0.0-beta3</Version>
-    <LangVersion>latest</LangVersion>
-    <AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
-    <RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
-    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-    <Description>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
+		<Version>2.0.1-beta3</Version>
+		<LangVersion>latest</LangVersion>
+		<AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
+		<RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<Description>
 			Senparc.CO2NET.WebApi Application Performance Management
 		</Description>
-    <Copyright>Senparc Copyright © 2004~2024</Copyright>
-    <PackageTags>WebApi,.NET Core,.NET Framework,Public,Base Library,CO2NET,盛派</PackageTags>
-    <Authors>Senparc</Authors>
-    <Owners>Senparc</Owners>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
-    <Title>Senparc.CO2NET.WebApi.dll</Title>
-    <Summary>Senparc.CO2NET.WebApi</Summary>
-    <PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
-    <PackageIcon>icon.jpg</PackageIcon>
-    <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
-    <Configurations>Debug;Release;Test</Configurations>
-    <PackageReleaseNotes>
-		v0.1 Genesis
-		v0.2 Completed WebApiEngine first generation core version
-		v0.2.3 Completed WebApiEngine second generation core version, fully supports dynamic API integration and corresponding XML generation
-		v0.2.4 Added additional injectable classes or methods
-		v0.2.5 Optimized asynchronous thread execution
-		v0.2.5.7 Added ForbiddenExternalAccess parameter to set whether external access is allowed
-		v0.2.6 Added WebApiEngineOptions
-		v0.2.8 Provided .NET Standard 2.1 version
-		v1.1 Provided the ability to synchronize parameter attributes to dynamic APIs
-		v1.1.2 Optimized document extraction regular expressions
-		v1.1.3 Added AddApiControllerAttribute option, default is true
-		v1.3 Provided .NET 7.0 support
-		v1.4.1 Used [ApiBind(Ignore = false)], added complete API generation ignore for the entire class
-		v1.5.2.1 Organized log format
-		v1.6.0
-		1. Removed .NET 7.0 TargetFramework; added .NET 8.0 TargetFramework
-		2. Removed reference to Microsoft.AspNetCore.Mvc.Core
-		2. Referenced the latest Senparc.CO2NET.AspNet, .NET 6.0 and .NET 8.0 assemblies no longer depend on Microsoft.AspNetCore.Hosting.Abstractions and Microsoft.AspNetCore.Http.Abstractions
-		[2024-09-11] v1.6.3 Updated Cache, removed InsertToCache(), added Count(prefix)
-		[2024-10-07] v1.7.0 Stopped support for .NET 6.0
-		[2024-10-07] v2.0.0-beta2
-		    1. Add UseLowerCaseApiName to WebApiEngineOptions
-		    2. Add unique WebApi name to duplicate method name
-	</PackageReleaseNotes>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>..\BuildOutPut</OutputPath>
-    <DefineConstants>TRACE;RELEASE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\BuildOutPut</OutputPath>
-    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.WebApi.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
-    <!--<PackageReference Include="System.Reflection.Emit" Version="4.7.0" />-->
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.1'">
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="8.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
-    <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1" />
-  </ItemGroup>
+		<Copyright>Senparc Copyright © 2004~2024</Copyright>
+		<PackageTags>WebApi,.NET Core,.NET Framework,Public,Base Library,CO2NET,盛派</PackageTags>
+		<Authors>Senparc</Authors>
+		<Owners>Senparc</Owners>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
+		<Title>Senparc.CO2NET.WebApi.dll</Title>
+		<Summary>Senparc.CO2NET.WebApi</Summary>
+		<PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
+		<PackageIcon>icon.jpg</PackageIcon>
+		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
+		<Configurations>Debug;Release;Test</Configurations>
+		<PackageReleaseNotes>
+			v0.1 Genesis
+			v0.2 Completed WebApiEngine first generation core version
+			v0.2.3 Completed WebApiEngine second generation core version, fully supports dynamic API integration and corresponding XML generation
+			v0.2.4 Added additional injectable classes or methods
+			v0.2.5 Optimized asynchronous thread execution
+			v0.2.5.7 Added ForbiddenExternalAccess parameter to set whether external access is allowed
+			v0.2.6 Added WebApiEngineOptions
+			v0.2.8 Provided .NET Standard 2.1 version
+			v1.1 Provided the ability to synchronize parameter attributes to dynamic APIs
+			v1.1.2 Optimized document extraction regular expressions
+			v1.1.3 Added AddApiControllerAttribute option, default is true
+			v1.3 Provided .NET 7.0 support
+			v1.4.1 Used [ApiBind(Ignore = false)], added complete API generation ignore for the entire class
+			v1.5.2.1 Organized log format
+			v1.6.0
+			1. Removed .NET 7.0 TargetFramework; added .NET 8.0 TargetFramework
+			2. Removed reference to Microsoft.AspNetCore.Mvc.Core
+			2. Referenced the latest Senparc.CO2NET.AspNet, .NET 6.0 and .NET 8.0 assemblies no longer depend on Microsoft.AspNetCore.Hosting.Abstractions and Microsoft.AspNetCore.Http.Abstractions
+			[2024-09-11] v1.6.3 Updated Cache, removed InsertToCache(), added Count(prefix)
+			[2024-10-07] v1.7.0 Stopped support for .NET 6.0
+			[2024-10-07] v2.0.0-beta2
+			1. Add UseLowerCaseApiName to WebApiEngineOptions
+			2. Add unique WebApi name to duplicate method name
+			[2024-11-27] v2.0.1-beta3 add lock to AddAndInitDynamicApi() method
+		</PackageReleaseNotes>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<OutputPath>..\BuildOutPut</OutputPath>
+		<DefineConstants>TRACE;RELEASE</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+		<OutputPath>..\BuildOutPut</OutputPath>
+		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+		<DocumentationFile>..\BuildOutPut\Senparc.CO2NET.WebApi.xml</DocumentationFile>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<ErrorReport>prompt</ErrorReport>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
+		<!--<PackageReference Include="System.Reflection.Emit" Version="4.7.0" />-->
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.1'">
+		<PackageReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="8.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
+		<ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+	</ItemGroup>
 </Project>
