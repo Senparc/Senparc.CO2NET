@@ -12,7 +12,12 @@
     Modification Identifier: Senparc - 20180707
     Modification Description: v0.1.11 Provided BuildFromWebConfig() method
 
+    Modification Identifier: Senparc - 20241128
+    Modification Description: v3.0.1-beta3 Add UseLowerCaseApiName property for SenparcSetting
+
 ----------------------------------------------------------------*/
+
+using Senparc.CO2NET.Extensions;
 
 namespace Senparc.CO2NET
 {
@@ -52,6 +57,11 @@ namespace Senparc.CO2NET
 
         #endregion
 
+        /// <summary>
+        /// Use lowercase API names for WebApiEngine
+        /// </summary>
+        public bool? UseLowerCaseApiName { get; set; }
+
 
         /// <summary>
         /// SenparcSetting constructor
@@ -83,6 +93,10 @@ namespace Senparc.CO2NET
             senparcSetting.SenparcUnionAgentKey = System.Configuration.ConfigurationManager.AppSettings["SenparcUnionAgentKey"];
             senparcSetting.Cache_Redis_Configuration = System.Configuration.ConfigurationManager.AppSettings["Cache_Redis_Configuration"];
             senparcSetting.Cache_Memcached_Configuration = System.Configuration.ConfigurationManager.AppSettings["Cache_Memcached_Configuration"];
+            if (!System.Configuration.ConfigurationManager.AppSettings["UseLowerCaseApiName"].IsNullOrEmpty())
+            {
+                senparcSetting.UseLowerCaseApiName = bool.Parse(System.Configuration.ConfigurationManager.AppSettings["UseLowerCaseApiName"]);
+            }
             return senparcSetting;
         }
 #endif

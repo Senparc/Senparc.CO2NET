@@ -10,7 +10,10 @@
     Modification Identifier: Senparc - 20241108
     Modification Description: v2.0.0-beta2 1. Add UseLowerCaseApiName to WebApiEngineOptions
                               2. Add unique WebApi name to duplicate method name
-   
+
+    Modification Identifier：Senparc - 20241128
+    Modification Description：v2.0.2-beta3 Add UseLowerCaseApiName property for SenparcSetting
+
 ----------------------------------------------------------------*/
 
 
@@ -87,6 +90,6 @@ namespace Senparc.CO2NET.WebApi
         /// </summary>
         public bool ForbiddenExternalAccess { get; set; }
         public bool AddApiControllerAttribute { get; set; }
-        public bool UseLowerCaseApiName { get; set; }
+        public bool? UseLowerCaseApiName { get; set; }
     }
 }
