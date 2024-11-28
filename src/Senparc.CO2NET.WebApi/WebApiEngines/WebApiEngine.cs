@@ -311,7 +311,7 @@ namespace Senparc.CO2NET.WebApi
                     string apiPath = GetApiPath(apiBindInfo, showStaticApiState);
 
                     //强制所有名称小写
-                    if (_useLowerCaseApiName.HasValue && _useLowerCaseApiName.Value == true)
+                    if (_useLowerCaseApiName)
                     {
                         apiPath = apiPath.ToLower();
                     }
