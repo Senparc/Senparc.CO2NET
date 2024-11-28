@@ -16,6 +16,10 @@
    
     Modification Identifier：Senparc - 20241119
     Modification Description：v3.0.0-beta3 reconstruction
+
+    Modification Identifier：Senparc - 20241128
+    Modification Description：v2.0.2-beta3 Add UseLowerCaseApiName property for SenparcSetting
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
@@ -86,7 +90,7 @@ namespace Senparc.CO2NET.WebApi
             TaskCount = opt.TaskCount;
             _showDetailApiLog = opt.ShowDetailApiLog;
             _addApiControllerAttribute = opt.AddApiControllerAttribute;
-            _useLowerCaseApiName = opt.UseLowerCaseApiName;
+            _useLowerCaseApiName = opt.UseLowerCaseApiName ?? Config.SenparcSetting.UseLowerCaseApiName ?? false;
             Register.ForbiddenExternalAccess = opt.ForbiddenExternalAccess;
             WebApiEngine.AdditionalAttributeFunc = opt.AdditionalAttributeFunc;
         }
@@ -307,7 +311,7 @@ namespace Senparc.CO2NET.WebApi
                     string apiPath = GetApiPath(apiBindInfo, showStaticApiState);
 
                     //强制所有名称小写
-                    if (_useLowerCaseApiName)
+                    if (_useLowerCaseApiName.HasValue && _useLowerCaseApiName.Value == true)
                     {
                         apiPath = apiPath.ToLower();
                     }
