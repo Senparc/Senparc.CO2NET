@@ -37,11 +37,10 @@ namespace Senparc.CO2NET.AspNet.RegisterServices
         /// Start Senparc.CO2NET SDK initialization parameter process (.NET Core), supports ASP.NET Core
         /// </summary>
         /// <param name="env">IHostingEnvironment, console programs can input null,</param>
-        /// <param name="senparcSetting"></param>
         /// <returns></returns>
         public static Senparc.CO2NET.RegisterServices.RegisterService Start(
-            Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/ env,
-            SenparcSetting senparcSetting)
+            Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/ env
+            , SenparcSetting senparcSetting = null)
         {
             //Provide website root directory
             if (env != null && env.ContentRootPath != null)
