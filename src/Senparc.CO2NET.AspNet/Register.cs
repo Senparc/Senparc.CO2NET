@@ -54,11 +54,11 @@ namespace Senparc.CO2NET.AspNet
             bool autoScanExtensionCacheStrategies = false,
             Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
         {
-            senparcSetting = senparcSetting ?? registerService.ApplicationServices.GetService<IOptions<SenparcSetting>>().Value;
+            senparcSetting = senparcSetting ?? Senparc.CO2NET.Config.SenparcSetting; /*registerService.ApplicationServices.GetService<IOptions<SenparcSetting>>().Value;*/
 
             //Initialize the global RegisterService object and store SenparcSetting information
             var register = Senparc.CO2NET.AspNet.RegisterServices.
-                            RegisterService.Start(env, senparcSetting);
+                            RegisterService.Start(env/*, senparcSetting*/);
 
             return Senparc.CO2NET.Register.UseSenparcGlobal(senparcSetting, registerConfigure, autoScanExtensionCacheStrategies, extensionCacheStrategiesFunc);
         }

@@ -11,7 +11,7 @@ namespace Senparc.CO2NET.Tests.Utilities
     public class StreamUtilityTests
     {
         string str = "Senparc is by your side"; 
-        string baseString = "77u/55ub5rS+5Zyo5L2g6Lqr6L65";
+        string baseString = "77u/U2VucGFyYyBpcyBieSB5b3VyIHNpZGU=";
 
         private MemoryStream GetStream(string content)
         {
@@ -48,12 +48,12 @@ namespace Senparc.CO2NET.Tests.Utilities
                 // Create a new file
                 var ms = StreamUtility.GetStreamFromBase64String(baseString, null);
 
-                Assert.AreEqual(21, ms.Length);
+                Assert.AreEqual(26, ms.Length);
 
                 // Open a file
                 var file = UnitTestHelper.RootPath + "GetStreamFromBase64String.txt";
                 var ms2 = StreamUtility.GetStreamFromBase64String(baseString, file);
-                Assert.AreEqual(21, ms.Length);
+                Assert.AreEqual(26, ms.Length);
 
                 Assert.IsTrue(File.Exists(file));
 
@@ -77,12 +77,12 @@ namespace Senparc.CO2NET.Tests.Utilities
             {
                 // Create a new file
                 var ms = await StreamUtility.GetStreamFromBase64StringAsync(baseString, null);
-                Assert.AreEqual(21, ms.Length);
+                Assert.AreEqual(26, ms.Length);
 
                 // Open a file
                 var file = UnitTestHelper.RootPath + "GetStreamFromBase64String_Async.txt";
                 var ms2 = await StreamUtility.GetStreamFromBase64StringAsync(baseString, file);
-                Assert.AreEqual(21, ms.Length);
+                Assert.AreEqual(26, ms.Length);
 
                 Assert.IsTrue(File.Exists(file));
 

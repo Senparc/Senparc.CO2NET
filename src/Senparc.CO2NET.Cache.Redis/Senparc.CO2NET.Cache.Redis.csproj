@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
-		<Version>5.1.1-beta1</Version>
+		<Version>5.2.0-beta1</Version>
 		<AssemblyName>Senparc.CO2NET.Cache.Redis</AssemblyName>
 		<RootNamespace>Senparc.CO2NET.Cache.Redis</RootNamespace>
 		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
 		<Description>
-      WeChat Public Account - Redis Module
+			WeChat Public Account - Redis Module
 
-      Senparc.Weixin SDK Open Source Project:
-      https://github.com/JeffreySu/WeiXinMPSDK
-    </Description>
+			Senparc.Weixin SDK Open Source Project:
+			https://github.com/JeffreySu/WeiXinMPSDK
+		</Description>
 		<Copyright>Senparc Copyright © 2004~2024</Copyright>
 		<PackageTags>Senparc.CO2NET,Cache,Redis,CO2NET,盛派</PackageTags>
 		<Authors>Jeffrey Su</Authors>
@@ -22,92 +22,93 @@
 		<PackageProjectUrl>https://github.com/JeffreySu/WeiXinMPSDK</PackageProjectUrl>
 		<PackageIcon>icon.jpg</PackageIcon>
 		<PackageReleaseNotes>
-		v0.1.0
-		Provide distributed cache support
-		Due to a bug in the StackExchange.Redis library, the .NET 4.0 version is temporarily not provided
+			v0.1.0
+			Provide distributed cache support
+			Due to a bug in the StackExchange.Redis library, the .NET 4.0 version is temporarily not provided
 
-		v0.1.1
-		Optimize cache strategy, improve delete method.
+			v0.1.1
+			Optimize cache strategy, improve delete method.
 
-		v0.2.0
-		Refactor cache strategy, provide distributed lock
+			v0.2.0
+			Refactor cache strategy, provide distributed lock
 
-		v0.2.1
-		Optimize methods and interfaces
+			v0.2.1
+			Optimize methods and interfaces
 
-		v0.0.2
-		Refactor cache key namespace rules, add Config.DefaultCacheNamespace
+			v0.0.2
+			Refactor cache key namespace rules, add Config.DefaultCacheNamespace
 
-		v0.2.3
-		Release stable version
+			v0.2.3
+			Release stable version
 
-		v1.0.0
-		Modify cache strategy, change storage type from String to Hash
+			v1.0.0
+			Modify cache strategy, change storage type from String to Hash
 
-		v1.1.0
-		Refactor cache, add ObjectCacheStrategy
+			v1.1.0
+			Refactor cache, add ObjectCacheStrategy
 
-		v1.2.0 Refactor distributed lock
-		v1.2.1 Provide .net core version
-		v1.2.2 Provide both .net core and .net 4.6.1 versions
+			v1.2.0 Refactor distributed lock
+			v1.2.1 Provide .net core version
+			v1.2.2 Provide both .net core and .net 4.6.1 versions
 
-		v1.3.0 Support .NET Core
+			v1.3.0 Support .NET Core
 
-		v1.4.0-beta1 Support .NET Core 2.0
+			v1.4.0-beta1 Support .NET Core 2.0
 
-		v1.5.0 Stop generating separate versions for .net core 1.1
-		v1.5.1 Provide RegisterServices for quick registration
+			v1.5.0 Stop generating separate versions for .net core 1.1
+			v1.5.1 Provide RegisterServices for quick registration
 
-		v1.6.0 Provide full binary serialization support under .NET Core (support delegate parameters)
-		v1.6.1 Optimize binary serialization support
+			v1.6.0 Provide full binary serialization support under .NET Core (support delegate parameters)
+			v1.6.1 Optimize binary serialization support
 
-		v1.7.0-rc1 Support .NET Core 2.1.0-rc1-final
-		v1.7.2-rc1 Improve conditional compilation for .net core 2.1
+			v1.7.0-rc1 Support .NET Core 2.1.0-rc1-final
+			v1.7.2-rc1 Improve conditional compilation for .net core 2.1
 
-		v1.7.5 Release official version supporting .net core 2.1
+			v1.7.5 Release official version supporting .net core 2.1
 
-		v2.0.0 Introduce Senparc.CO2NET, support Senparc.Weixin v5.0
+			v2.0.0 Introduce Senparc.CO2NET, support Senparc.Weixin v5.0
 
-		======== CO2NET Migration ========
+			======== CO2NET Migration ========
 
-		v2.0.0 Refactor Redis cache strategy
-		v2.0.1 Support CO2NET v0.1.1
-		v2.0.2 Support CO2NET v0.1.2
-		v2.0.3 Support CO2NET v0.1.3
-		v2.0.5 Support CO2NET v0.1.5
-		v2.0.9 Support CO2NET v0.1.9
+			v2.0.0 Refactor Redis cache strategy
+			v2.0.1 Support CO2NET v0.1.1
+			v2.0.2 Support CO2NET v0.1.2
+			v2.0.3 Support CO2NET v0.1.3
+			v2.0.5 Support CO2NET v0.1.5
+			v2.0.9 Support CO2NET v0.1.9
 
-		v3.0.0
-		1. Separate HashSet and Key-Value two different formats of cache: RedisHashSetObjectCacheStrategy and RedisObjectCacheStrategy
-		2. Provide new cache expiration strategy
+			v3.0.0
+			1. Separate HashSet and Key-Value two different formats of cache: RedisHashSetObjectCacheStrategy and RedisObjectCacheStrategy
+			2. Provide new cache expiration strategy
 
-		v3.1.0
-		1. Mark Register.RegisterCacheRedis as obsolete
-		2. Add Register.SetConfigurationOption() method
-		3. Add Register.UseKeyValueRedisNow() method
-		4. Add Register.UseHashRedisNow() method
-		5. Implement automatic acquisition and registration of Redis cache service connection information from Config.SenparcSetting
-		v3.2.0 Upgrade StackExchange.Redis to 2.0.513
-		v3.3.0 Use .NETStandard2.0 to support .NET Core uniformly, abandon separate adaptation for .NET Core 1.x
-		v3.4.0 Support .net 4.6.1 version
-		v3.4.3 Upgrade StackExchange.Redis to the latest version
-		v3.5.0 Provide asynchronous cache interface
-		v3.5.1 Use .ConfigureAwait(false) to avoid asynchronous deadlock
-		v3.5.4
-		1. fix bug: Add database index value to GetServer().Keys() method
-		2. Constrain the upper limit of GetServer().Keys() method: 99999
-		v3.5.5 Support new version of CO2NET, provide signed nuget package (.snupkg)
-		v3.6.0 Support new version of CO2NET, support .NET Core 3.0
-		v3.6.102 Support new version of CO2NET
-		v3.6.103 Support new version of CO2NET, optimize asynchronous methods
-		v3.11.2 BaseRedisObjectCacheStrategy destructor performs null value check, and adds "#{Cache_Redis_Configuration}#" filter check
-		v4.1.3 Add pure string check to RedisObjectCacheStrategy and RedisHashSetObjectCacheStrategy.Get() methods
-		v4.2.5 Fix bug where GetAllByPrefixAsync(key) method would automatically retrieve all keys
+			v3.1.0
+			1. Mark Register.RegisterCacheRedis as obsolete
+			2. Add Register.SetConfigurationOption() method
+			3. Add Register.UseKeyValueRedisNow() method
+			4. Add Register.UseHashRedisNow() method
+			5. Implement automatic acquisition and registration of Redis cache service connection information from Config.SenparcSetting
+			v3.2.0 Upgrade StackExchange.Redis to 2.0.513
+			v3.3.0 Use .NETStandard2.0 to support .NET Core uniformly, abandon separate adaptation for .NET Core 1.x
+			v3.4.0 Support .net 4.6.1 version
+			v3.4.3 Upgrade StackExchange.Redis to the latest version
+			v3.5.0 Provide asynchronous cache interface
+			v3.5.1 Use .ConfigureAwait(false) to avoid asynchronous deadlock
+			v3.5.4
+			1. fix bug: Add database index value to GetServer().Keys() method
+			2. Constrain the upper limit of GetServer().Keys() method: 99999
+			v3.5.5 Support new version of CO2NET, provide signed nuget package (.snupkg)
+			v3.6.0 Support new version of CO2NET, support .NET Core 3.0
+			v3.6.102 Support new version of CO2NET
+			v3.6.103 Support new version of CO2NET, optimize asynchronous methods
+			v3.11.2 BaseRedisObjectCacheStrategy destructor performs null value check, and adds "#{Cache_Redis_Configuration}#" filter check
+			v4.1.3 Add pure string check to RedisObjectCacheStrategy and RedisHashSetObjectCacheStrategy.Get() methods
+			v4.2.5 Fix bug where GetAllByPrefixAsync(key) method would automatically retrieve all keys
 
-		[2024-09-11] v4.2.6 Update Cache, remove InsertToCache(), add Count(prefix)
+			[2024-09-11] v4.2.6 Update Cache, remove InsertToCache(), add Count(prefix)
 			[2024-10-24] v5.0.1-beta1 fix: GetCountAsync(string prefix) #306 Thanks to @rendyu
 			[2024-11-28] v5.1.1-beta1 Add UseLowerCaseApiName property for SenparcSetting
-</PackageReleaseNotes>
+			[2024-12-04] v5.2.0-beta1 update Start() method, set SenparcSetting in Config when AddSenparcGlobalService() run
+		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
 		<Configurations>Debug;Release;Test</Configurations>
 	</PropertyGroup>

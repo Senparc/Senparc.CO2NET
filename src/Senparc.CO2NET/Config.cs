@@ -68,7 +68,7 @@ namespace Senparc.CO2NET
         /// <para>Global configuration</para>
         /// <para>Run RegisterServiceExtension.AddSenparcGlobalServices() in startup.cs to automatically inject</para>
         /// </summary>
-        public static SenparcSetting SenparcSetting { get; set; } = new SenparcSetting();//TODO: Need to consider distributed scenarios, later need to store in cache
+        public static SenparcSetting SenparcSetting { get; internal set; } = new SenparcSetting();//TODO: Need to consider distributed scenarios, later need to store in cache
 
         /// <summary>
         /// Specify whether it is in Debug mode, if true, the system will automatically output logs

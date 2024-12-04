@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net462;netstandard2.0;net8.0</TargetFrameworks>
-		<Version>5.0.1-beta1</Version>
+		<Version>5.1.0-beta1</Version>
 		<AssemblyName>Senparc.CO2NET.Cache.Memcached</AssemblyName>
 		<RootNamespace>Senparc.CO2NET.Cache.Memcached</RootNamespace>
 		<Description>
@@ -91,7 +91,8 @@
 			[2024-09-11] v4.2.5 Update Cache, remove InsertToCache(), add Count(prefix)
 			[2024-10-07] v4.3.0 Stop supporting .NET 6.0
 			[2024-11-28] v5.0.1-beta1 Add UseLowerCaseApiName property for SenparcSetting
-</PackageReleaseNotes>
+			[2024-12-04] v5.1.0-beta1 update Start() method, set SenparcSetting in Config when AddSenparcGlobalService() run
+		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
 		<Configurations>Debug;Release;Test</Configurations>
 		<!--<Product>Senparc.CO2NET.Cache.Memcached.dll</Product>-->

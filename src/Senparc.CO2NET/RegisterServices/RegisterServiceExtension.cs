@@ -95,6 +95,13 @@ namespace Senparc.CO2NET.RegisterServices
             SenparcDI.GlobalServiceCollection = serviceCollection;
             serviceCollection.Configure<SenparcSetting>(configuration.GetSection("SenparcSetting"));
 
+            //Senparc.CO2NET SDK configuration
+            var senparcSetting = configuration.GetSection("SenparcSetting").Get<SenparcSetting>();
+            if (senparcSetting != null)
+            {
+                Senparc.CO2NET.Config.SenparcSetting = senparcSetting;
+            }
+
             serviceCollection.AddTransient<IBaseObjectCacheStrategy>(s => CacheStrategyFactory.GetObjectCacheStrategyInstance());
 
             serviceCollection.AddScoped<ApiClientHelper>();
