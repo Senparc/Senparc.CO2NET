@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-		<Version>3.0.1-beta3</Version>
+		<Version>3.1.0-beta3</Version>
 		<LangVersion>10.0</LangVersion>
 		<AssemblyName>Senparc.CO2NET</AssemblyName>
 		<RootNamespace>Senparc.CO2NET</RootNamespace>
@@ -143,6 +143,7 @@
 			[2024-10-24] v3.0.0-beta1 Upgrade to English version
 			[2024-10-24] v3.0.0-beta3 Add ApiClient and ApiClientHelper
 			[2024-11-28] v3.0.1-beta3 Add UseLowerCaseApiName property for SenparcSetting
+			[2024-12-04] v3.1.0-beta3 update Start() method, set SenparcSetting in Config when AddSenparcGlobalService() run
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
 		<Configurations>Debug;Release;Test</Configurations>

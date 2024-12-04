@@ -35,7 +35,8 @@ namespace Senparc.CO2NET.Tests
             var config = configBuilder.Build();
             serviceCollection.AddSenparcGlobalServices(config);
 
-            _senparcSetting = new SenparcSetting() { IsDebug = true };
+            _senparcSetting = Senparc.CO2NET.Config.SenparcSetting; /*new SenparcSetting() { IsDebug = true };*/
+            _senparcSetting.IsDebug = true;
             config.GetSection("SenparcSetting").Bind(_senparcSetting);
 
             serviceCollection.AddMemoryCache();//Use memory cache
@@ -52,7 +53,7 @@ namespace Senparc.CO2NET.Tests
             var mockEnv = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/>();
             mockEnv.Setup(z => z.ContentRootPath).Returns(() => UnitTestHelper.RootPath);
 
-            registerService = Senparc.CO2NET.AspNet.RegisterServices.RegisterService.Start(mockEnv.Object, _senparcSetting)
+            registerService = Senparc.CO2NET.AspNet.RegisterServices.RegisterService.Start(mockEnv.Object/*, _senparcSetting*/)
                 .UseSenparcGlobal(autoScanExtensionCacheStrategies);
 
             registerService.ChangeDefaultCacheNamespace("Senparc.CO2NET Tests");

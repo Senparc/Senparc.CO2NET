@@ -69,12 +69,15 @@ namespace Senparc.CO2NET.RegisterServices
     {
         public static RegisterService Object { get; internal set; }
 
-        private RegisterService() : this(null) { }
+        //private RegisterService() : this(null) { }
 
-        private RegisterService(SenparcSetting senparcSetting)
+        private RegisterService(SenparcSetting senparcSetting = null)
         {
             //Senparc.CO2NET SDK configuration
-            Senparc.CO2NET.Config.SenparcSetting = senparcSetting ?? new SenparcSetting();
+            if (senparcSetting!=null)
+            {
+                Senparc.CO2NET.Config.SenparcSetting = senparcSetting;
+            }
         }
 
 #if !NET462
@@ -89,7 +92,7 @@ namespace Senparc.CO2NET.RegisterServices
         /// </summary>
         /// <param name="senparcSetting"></param>
         /// <returns></returns>
-        public static RegisterService Start(SenparcSetting senparcSetting)
+        public static RegisterService Start(SenparcSetting senparcSetting=null)
         {
             var register = new RegisterService(senparcSetting);
 
@@ -104,9 +107,9 @@ namespace Senparc.CO2NET.RegisterServices
         /// Start Senparc.CO2NET SDK initialization parameter process
         /// </summary>
         /// <returns></returns>
-        public static RegisterService Start(SenparcSetting senparcSetting)
+        public static RegisterService Start(/*SenparcSetting senparcSetting*/)
         {
-            var register = new RegisterService(senparcSetting);
+            var register = new RegisterService(/*senparcSetting*/);
 
             //Provide website root directory
             Senparc.CO2NET.Config.RootDirectoryPath = AppDomain.CurrentDomain.BaseDirectory;

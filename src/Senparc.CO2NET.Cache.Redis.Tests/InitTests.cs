@@ -35,15 +35,18 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
             var redisServer = "localhost:6379";
 
-            var senparcSetting = new SenparcSetting()
-            {
-                IsDebug = true,
-                Cache_Redis_Configuration = redisServer
-            };
+            Senparc.CO2NET.Config.SenparcSetting.IsDebug = true;
+            Senparc.CO2NET.Config.SenparcSetting.Cache_Redis_Configuration = redisServer;
 
+
+            //var senparcSetting = new SenparcSetting()
+            //{
+            //    IsDebug = true,
+            //    Cache_Redis_Configuration = redisServer
+            //};
 
             var registerService = Senparc.CO2NET.AspNet.RegisterServices.
-                                    RegisterService.Start(mockEnv.Object, senparcSetting)
+                                    RegisterService.Start(mockEnv.Object/*, senparcSetting*/)
                  .UseSenparcGlobal();
             Assert.AreEqual(null, RedisManager.ConfigurationOption);// Not registered yet
 

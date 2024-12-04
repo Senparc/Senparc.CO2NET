@@ -135,7 +135,7 @@ namespace Senparc.CO2NET.HttpUtility.Tests
             var fileDictionary = new Dictionary<string, string>();
             fileDictionary["media"] = "E:\\Senparc项目\\WeiXinMPSDK\\src\\Senparc.Weixin.Work\\Senparc.Weixin.Work.Test\\AdvancedAPIs\\Media\\中文名.txt";
 
-            var uploadResult = CO2NET.HttpUtility.Post.PostFileGetJsonAsync<dynamic>(BaseTest.serviceProvider, url, null, fileDictionary, null, null, null, false).GetAwaiter().GetResult();
+            var uploadResult = CO2NET.HttpUtility.Post.PostFileGetJsonAsync<dynamic>(BaseTest.serviceProvider, url, null, fileDictionary, null, null, null, null, false).GetAwaiter().GetResult();
 
             Console.WriteLine(uploadResult);
 
