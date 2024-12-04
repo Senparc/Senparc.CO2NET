@@ -12,7 +12,8 @@
     Modification Identifier: Senparc - 20240728
     Modification Description: v1.4.0 .NET 6.0 and .NET 8.0 assemblies no longer depend on Microsoft.AspNetCore.Hosting.Abstractions and Microsoft.AspNetCore.Http.Abstractions
 
-----------------------------------------------------------------*/
+----------------------------------------------------------------*/
+
 
 #if !NET462
 using Microsoft.AspNetCore.Builder;
