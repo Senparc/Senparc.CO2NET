@@ -1,12 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-		<Version>1.1.0-beta1</Version>
-		<LangVersion>9.0</LangVersion>
-		<AssemblyName>Senparc.CO2NET.MagicObject</AssemblyName>
-		<RootNamespace>Senparc.CO2NET.MagicObject</RootNamespace>
-		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-		<Description>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <Version>1.1.0</Version>
+    <LangVersion>9.0</LangVersion>
+    <AssemblyName>Senparc.CO2NET.MagicObject</AssemblyName>
+    <RootNamespace>Senparc.CO2NET.MagicObject</RootNamespace>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+    <Description>
 			Senparc.CO2NET.MagicObject library
 			
 			This is a lightweight library that is ready to use out of the box, allowing you to easily manage the state of operation objects. For example, you can restore property operations on the current object or set snapshots to restore it after modifying object values.
@@ -14,59 +14,59 @@
 			Senparc.CO2NET open source project:
 			https://github.com/Senparc/Senparc.CO2NET
 		</Description>
-		<Copyright>Senparc Copyright © 2004~2024</Copyright>
-		<PackageTags>MagicObject,.NET Core,.NET Framework,Public,Base Library,CO2NET,盛派</PackageTags>
-		<Authors>Senparc</Authors>
-		<Owners>Senparc</Owners>
-		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
-		<Title>Senparc.CO2NET.dll</Title>
-		<Summary>Senparc.CO2NET.MagicObject library</Summary>
-		<PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
-		<PackageIcon>icon.jpg</PackageIcon>
-		<PackageReleaseNotes>
+    <Copyright>Senparc Copyright © 2004~2024</Copyright>
+    <PackageTags>MagicObject,.NET Core,.NET Framework,Public,Base Library,CO2NET,盛派</PackageTags>
+    <Authors>Senparc</Authors>
+    <Owners>Senparc</Owners>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
+    <Title>Senparc.CO2NET.dll</Title>
+    <Summary>Senparc.CO2NET.MagicObject library</Summary>
+    <PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
+    <PackageIcon>icon.jpg</PackageIcon>
+    <PackageReleaseNotes>
 			v0.0.1 Genesis
 			v0.1.0 Set MO.OriginalObject and MO.Object properties to public
 			[2024-09-11] v0.1.3 Update Cache, remove InsertToCache(), add Count(prefix)
 			[2024-11-28] v1.0.1-beta1 Add UseLowerCaseApiName property for SenparcSetting
 			[2024-12-04] v1.1.0-beta1 update Start() method, set SenparcSetting in Config when AddSenparcGlobalService() run
 </PackageReleaseNotes>
-		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
-		<Configurations>Debug;Release;Test</Configurations>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<OutputPath>..\BuildOutPut</OutputPath>
-		<DefineConstants>TRACE;RELEASE</DefineConstants>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-		<OutputPath>..\BuildOutPut</OutputPath>
-		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-		<DocumentationFile>..\BuildOutPut\Senparc.CO2NET.MagicObject.xml</DocumentationFile>
-		<Optimize>true</Optimize>
-		<DebugType>pdbonly</DebugType>
-		<ErrorReport>prompt</ErrorReport>
-		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
-		<OutputPath>..\BuildOutPut\</OutputPath>
-		<DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.MagicObject..xml</DocumentationFile>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-		<OutputPath>..\BuildOutPut\</OutputPath>
-		<DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.MagicObject.xml</DocumentationFile>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
-		<OutputPath>..\BuildOutPut\</OutputPath>
-		<DocumentationFile>..\BuildOutPut\netstandard2.1\Senparc.CO2NET.MagicObject.xml</DocumentationFile>
-	</PropertyGroup>
-	<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
+    <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
+    <Configurations>Debug;Release;Test</Configurations>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\BuildOutPut</OutputPath>
+    <DefineConstants>TRACE;RELEASE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\BuildOutPut</OutputPath>
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.MagicObject.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.MagicObject..xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.MagicObject.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netstandard2.1\Senparc.CO2NET.MagicObject.xml</DocumentationFile>
+  </PropertyGroup>
+  <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
 		<OutputPath>..\BuildOutPut\</OutputPath>
 		<DocumentationFile>..\BuildOutPut\net8.0\Senparc.CO2NET.MagicObject.xml</DocumentationFile>
 	</PropertyGroup>-->
-	<ItemGroup>
-		<None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+  </ItemGroup>
 </Project>

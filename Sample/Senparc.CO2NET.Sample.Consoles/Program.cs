@@ -57,7 +57,6 @@ Console.WriteLine("完成 ServiceCollection 和 ConfigurationBuilder 初始化")
 var senparcSetting = new SenparcSetting();
 config.GetSection("SenparcSetting").Bind(senparcSetting);
 
-
 var services = new ServiceCollection();
 services.AddMemoryCache();//使用本地缓存必须添加
 
