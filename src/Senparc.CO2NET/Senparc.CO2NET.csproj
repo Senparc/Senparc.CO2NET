@@ -1,27 +1,27 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-		<Version>3.1.0-beta3</Version>
-		<LangVersion>10.0</LangVersion>
-		<AssemblyName>Senparc.CO2NET</AssemblyName>
-		<RootNamespace>Senparc.CO2NET</RootNamespace>
-		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-		<Description>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <Version>3.1.0</Version>
+    <LangVersion>10.0</LangVersion>
+    <AssemblyName>Senparc.CO2NET</AssemblyName>
+    <RootNamespace>Senparc.CO2NET</RootNamespace>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+    <Description>
 			Senparc.CO2NET Public Base Library
 			Senparc.CO2NET Open Source Project:
 			https://github.com/Senparc/Senparc.CO2NET
 		</Description>
-		<Copyright>Senparc Copyright © 2004~2024</Copyright>
-		<PackageTags>.NET Core,.NET Framework,Public,Base Library,CO2NET,Senparc</PackageTags>
-		<Authors>Senparc</Authors>
-		<Owners>Senparc</Owners>
-		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
-		<Title>Senparc.CO2NET.dll</Title>
-		<Summary>Senparc.CO2NET Public Base Library</Summary>
-		<PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
-		<PackageIcon>icon.jpg</PackageIcon>
-		<PackageReleaseNotes>
+    <Copyright>Senparc Copyright © 2004~2024</Copyright>
+    <PackageTags>.NET Core,.NET Framework,Public,Base Library,CO2NET,Senparc</PackageTags>
+    <Authors>Senparc</Authors>
+    <Owners>Senparc</Owners>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
+    <Title>Senparc.CO2NET.dll</Title>
+    <Summary>Senparc.CO2NET Public Base Library</Summary>
+    <PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
+    <PackageIcon>icon.jpg</PackageIcon>
+    <PackageReleaseNotes>
 			v0.1.0 Build basic code, separate public code from Senparc.Weixin
 			v0.1.1 Optimize code, unit tests nearly 100% coverage
 			v0.1.2 Add IDomainExtensionCacheStrategy.RegisterCacheStrategyDomain() method
@@ -144,80 +144,80 @@
 			[2024-10-24] v3.0.0-beta3 Add ApiClient and ApiClientHelper
 			[2024-11-28] v3.0.1-beta3 Add UseLowerCaseApiName property for SenparcSetting
 			[2024-12-04] v3.1.0-beta3 update Start() method, set SenparcSetting in Config when AddSenparcGlobalService() run
-		</PackageReleaseNotes>
-		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
-		<Configurations>Debug;Release;Test</Configurations>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<OutputPath>..\BuildOutPut</OutputPath>
-		<DefineConstants>TRACE;RELEASE</DefineConstants>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-		<OutputPath>..\BuildOutPut</OutputPath>
-		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-		<DocumentationFile>..\BuildOutPut\Senparc.CO2NET.xml</DocumentationFile>
-		<Optimize>true</Optimize>
-		<DebugType>pdbonly</DebugType>
-		<ErrorReport>prompt</ErrorReport>
-		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
-		<OutputPath>..\BuildOutPut\</OutputPath>
-		<DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.xml</DocumentationFile>
-	</PropertyGroup>
-	<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">  
+</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
+    <Configurations>Debug;Release;Test</Configurations>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\BuildOutPut</OutputPath>
+    <DefineConstants>TRACE;RELEASE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\BuildOutPut</OutputPath>
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.xml</DocumentationFile>
+  </PropertyGroup>
+  <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">  
         <OutputPath>..\BuildOutPut\</OutputPath>  
         <DocumentationFile>..\BuildOutPut\netstandard1.6\Senparc.CO2NET.xml</DocumentationFile>  
     </PropertyGroup>-->
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-		<OutputPath>..\BuildOutPut\</OutputPath>
-		<DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.xml</DocumentationFile>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
-		<OutputPath>..\BuildOutPut\</OutputPath>
-		<DocumentationFile>..\BuildOutPut\netstandard2.1\Senparc.CO2NET.xml</DocumentationFile>
-	</PropertyGroup>
-	<ItemGroup>
-		<None Include=".\icon.jpg" Pack="true" Visible="false" PackagePath="" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Remove="Utilities\Cache\**" />
-		<EmbeddedResource Remove="Utilities\Cache\**" />
-		<None Remove="Utilities\Cache\**" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Remove="Cache\Lock\CacheLockWrapper.cs" />
-		<Compile Remove="Cache\Lock\CacheLockWrapperExtension.cs" />
-		<Compile Remove="Trace\SenparcTrace.v0.2.18.cs" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-	</ItemGroup>
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-		<Reference Include="System.Core" />
-		<Reference Include="System.Data" />
-		<Reference Include="System.Data.DataSetExtensions" />
-		<Reference Include="System.Net.Http" />
-		<Reference Include="System.Runtime.Serialization" />
-		<Reference Include="System.Web" />
-		<Reference Include="System.Web.Extensions" />
-		<Reference Include="System.Xml" />
-		<Reference Include="System.Xml.Linq" />
-		<Reference Include="System.Configuration" />
-	</ItemGroup>
-	<ItemGroup Condition=" '$(TargetFramework)' != 'net462'">
-		<!--<FrameworkReference Include="Microsoft.AspNetCore.App" />-->
-		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Net.Http.Headers" Version="8.0.0" Condition=" '$(TargetFramework)' == 'net8.0'" />
-		<PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.0" Condition=" '$(TargetFramework)' != 'net8.0'" />
-	</ItemGroup>
-	<ItemGroup>
-		<Folder Include="Utilities\HttpUtility\HttpPut\" />
-	</ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netstandard2.1\Senparc.CO2NET.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include=".\icon.jpg" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Utilities\Cache\**" />
+    <EmbeddedResource Remove="Utilities\Cache\**" />
+    <None Remove="Utilities\Cache\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Cache\Lock\CacheLockWrapper.cs" />
+    <Compile Remove="Cache\Lock\CacheLockWrapperExtension.cs" />
+    <Compile Remove="Trace\SenparcTrace.v0.2.18.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net462'">
+    <!--<FrameworkReference Include="Microsoft.AspNetCore.App" />-->
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Net.Http.Headers" Version="8.0.0" Condition=" '$(TargetFramework)' == 'net8.0'" />
+    <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.0" Condition=" '$(TargetFramework)' != 'net8.0'" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\HttpUtility\HttpPut\" />
+  </ItemGroup>
 </Project>

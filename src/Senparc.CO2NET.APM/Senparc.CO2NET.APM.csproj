@@ -1,26 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
-		<Version>2.1.0-beta1</Version>
-		<AssemblyName>Senparc.CO2NET.APM</AssemblyName>
-		<RootNamespace>Senparc.CO2NET.APM</RootNamespace>
-		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-		<Description>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
+    <Version>2.1.0</Version>
+    <AssemblyName>Senparc.CO2NET.APM</AssemblyName>
+    <RootNamespace>Senparc.CO2NET.APM</RootNamespace>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+    <Description>
 			Senparc.CO2NET.APM Application Performance Management
 		</Description>
-		<Copyright>Senparc Copyright © 2004~2024</Copyright>
-		<PackageTags>APM,.NET Core,.NET Framework,Public,Base Library,CO2NET,盛派</PackageTags>
-		<Authors>Senparc</Authors>
-		<Owners>Senparc</Owners>
-		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
-		<Title>Senparc.CO2NET.APM.dll</Title>
-		<Summary>Senparc.CO2NET.APM</Summary>
-		<PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
-		<PackageIcon>icon.jpg</PackageIcon>
-		<RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
-		<Configurations>Debug;Release;Test</Configurations>
-		<PackageReleaseNotes>
+    <Copyright>Senparc Copyright © 2004~2024</Copyright>
+    <PackageTags>APM,.NET Core,.NET Framework,Public,Base Library,CO2NET,盛派</PackageTags>
+    <Authors>Senparc</Authors>
+    <Owners>Senparc</Owners>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <ProjectUrl>https://github.com/Senparc/Senparc.CO2NET</ProjectUrl>
+    <Title>Senparc.CO2NET.APM.dll</Title>
+    <Summary>Senparc.CO2NET.APM</Summary>
+    <PackageProjectUrl>https://github.com/Senparc/Senparc.CO2NET</PackageProjectUrl>
+    <PackageIcon>icon.jpg</PackageIcon>
+    <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
+    <Configurations>Debug;Release;Test</Configurations>
+    <PackageReleaseNotes>
 			v0.1.1 Supports basic monitoring data recording, retrieval, and organization/cleanup operations
 			v0.1.2 DataItem provides TempStorage property; DataOperation supports global mode without domain distinction
 			v0.1.3 Supports Senparc.CO2NET v0.3.0
@@ -39,32 +39,32 @@
 			[2024-11-28] v2.0.1-beta1 Add UseLowerCaseApiName property for SenparcSetting
 			[2024-12-04] v2.1.0-beta1 update Start() method, set SenparcSetting in Config when AddSenparcGlobalService() run
 </PackageReleaseNotes>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<OutputPath>..\BuildOutPut</OutputPath>
-		<DefineConstants>TRACE;RELEASE</DefineConstants>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-		<OutputPath>..\BuildOutPut</OutputPath>
-		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
-		<DocumentationFile>..\BuildOutPut\Senparc.CO2NET.APM.xml</DocumentationFile>
-		<Optimize>true</Optimize>
-		<DebugType>pdbonly</DebugType>
-		<ErrorReport>prompt</ErrorReport>
-		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
-		<OutputPath>..\BuildOutPut\</OutputPath>
-		<DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.APM.xml</DocumentationFile>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-		<OutputPath>..\BuildOutPut\</OutputPath>
-		<DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.APM.xml</DocumentationFile>
-	</PropertyGroup>
-	<ItemGroup>
-		<None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
-	</ItemGroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\BuildOutPut</OutputPath>
+    <DefineConstants>TRACE;RELEASE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\BuildOutPut</OutputPath>
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <DocumentationFile>..\BuildOutPut\Senparc.CO2NET.APM.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\net462\Senparc.CO2NET.APM.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <OutputPath>..\BuildOutPut\</OutputPath>
+    <DocumentationFile>..\BuildOutPut\netstandard2.0\Senparc.CO2NET.APM.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\Senparc.CO2NET\icon.jpg" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+  </ItemGroup>
 </Project>

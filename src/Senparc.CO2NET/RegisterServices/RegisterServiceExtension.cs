@@ -93,6 +93,7 @@ namespace Senparc.CO2NET.RegisterServices
             IConfiguration configuration)
         {
             SenparcDI.GlobalServiceCollection = serviceCollection;
+
             serviceCollection.Configure<SenparcSetting>(configuration.GetSection("SenparcSetting"));
 
             //Senparc.CO2NET SDK configuration
