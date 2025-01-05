@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>1.1.0</Version>
+    <Version>1.1.0.1</Version>
     <LangVersion>9.0</LangVersion>
     <AssemblyName>Senparc.CO2NET.MagicObject</AssemblyName>
     <RootNamespace>Senparc.CO2NET.MagicObject</RootNamespace>

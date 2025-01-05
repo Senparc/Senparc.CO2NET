@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2024 Senparc
+    Copyright (C) 2025 Senparc
 
     File Name: SenparcSetting.cs
     File Function Description: CO2NET Global Settings

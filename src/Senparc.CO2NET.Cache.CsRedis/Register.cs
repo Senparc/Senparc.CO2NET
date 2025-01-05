@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2020 Senparc
+    Copyright (C) 2025 Senparc
 
     File Name: Register.cs
     File Function Description: Senparc.CO2NET.Cache.Redis Quick Registration Process

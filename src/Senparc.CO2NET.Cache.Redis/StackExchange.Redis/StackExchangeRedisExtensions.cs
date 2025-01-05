@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2024 Senparc
+    Copyright (C) 2025 Senparc
 
     FileName：StackExchangeRedisExtensions.cs
     File Function Description：StackExchange.Redis extension.

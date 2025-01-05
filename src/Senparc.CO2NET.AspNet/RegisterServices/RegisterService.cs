@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2024 Senparc
+    Copyright (C) 2025 Senparc
 
     FileName：RegisterService.cs
     File Function Description： Senparc.CO2NET Quick Registration Process

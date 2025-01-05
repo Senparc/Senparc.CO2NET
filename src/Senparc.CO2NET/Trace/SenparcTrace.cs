@@ -1,7 +1,7 @@
 ﻿#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
-Copyright 2024 Suzhou Senparc Network Technology Co.,Ltd.
+Copyright 2025 Suzhou Senparc Network Technology Co.,Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the License at
@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2024 Senparc
+    Copyright (C) 2025 Senparc
   
     FileName：SenparcTrace.cs
     File Function Description：Senparc.CO2NET Logging
@@ -42,6 +42,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier：Senparc - 20181227
     Modification Description：v0.8.9 Provided AutoUnlockLogFile parameter, and attempted to auto-unlock in case the log file is occupied
 
+    Modification Identifier：Senparc - 20250105
+    Modification Description：v3.1.1 update Encoding.UTF-8 for SenparcTrace log store
+
 ----------------------------------------------------------------*/
 
 
@@ -51,6 +54,7 @@ using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.MessageQueue;
 using System;
 using System.IO;
+using System.Text;
 using System.Threading;
 
 namespace Senparc.CO2NET.Trace
@@ -163,7 +167,7 @@ namespace Senparc.CO2NET.Trace
                 {
                     using (var fs = new FileStream(logFile, FileMode.OpenOrCreate))
                     {
-                        using (var sw = new StreamWriter(fs))
+                        using (var sw = new StreamWriter(fs, Encoding.UTF8))
                         {
                             fs.Seek(0, SeekOrigin.End);
                             await sw.WriteAsync(logStr);

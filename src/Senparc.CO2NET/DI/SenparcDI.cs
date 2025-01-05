@@ -1,6 +1,6 @@
 ﻿
 /*----------------------------------------------------------------
-    Copyright (C) 2024 Senparc
+    Copyright (C) 2025 Senparc
 
     FileName: SenparcDI.cs
     File Function Description: Dependency injection extension class for .NET Core

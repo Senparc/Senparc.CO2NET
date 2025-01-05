@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2020 Senparc
+    Copyright (C) 2025 Senparc
 
     FileName：RedisObjectCacheStrategy.cs
     File Function Description：Redis Object type container cache (Key is String type).

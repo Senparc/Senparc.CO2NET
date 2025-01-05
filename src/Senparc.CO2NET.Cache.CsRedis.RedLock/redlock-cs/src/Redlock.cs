@@ -18,7 +18,7 @@
 #endregion
 
 /*----------------------------------------------------------------
-    Copyright (C) 2020 Senparc
+    Copyright (C) 2025 Senparc
 
     FileName：Redlock.cs
     File Function Description：Redis Lock
