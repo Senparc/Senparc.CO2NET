@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2023 Senparc
+    Copyright (C) 2025 Senparc
 
     FileName: Register.cs
     File Function Description: WebApi Registration

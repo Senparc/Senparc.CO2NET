@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2020 Senparc COCONET
+    Copyright (C) 2025 Senparc COCONET
 
     FileName：HttpExtensions.cs
     File Function Description：A series of Http extensions in ASP.NET Core
