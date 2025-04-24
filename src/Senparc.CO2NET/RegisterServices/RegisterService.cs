@@ -74,7 +74,7 @@ namespace Senparc.CO2NET.RegisterServices
         private RegisterService(SenparcSetting senparcSetting = null)
         {
             //Senparc.CO2NET SDK configuration
-            if (senparcSetting!=null)
+            if (senparcSetting != null)
             {
                 Senparc.CO2NET.Config.SenparcSetting = senparcSetting;
             }
@@ -107,16 +107,16 @@ namespace Senparc.CO2NET.RegisterServices
         /// Start Senparc.CO2NET SDK initialization parameter process
         /// </summary>
         /// <returns></returns>
-        public static RegisterService Start(/*SenparcSetting senparcSetting*/)
+        public static RegisterService Start(SenparcSetting senparcSetting = null)
         {
-            var register = new RegisterService(/*senparcSetting*/);
+            var register = new RegisterService(senparcSetting);
 
             //Provide website root directory
             Senparc.CO2NET.Config.RootDirectoryPath = AppDomain.CurrentDomain.BaseDirectory;
 
             //If this thread is not registered, AccessToken, JsTicket, etc. cannot use the SDK for automatic storage and management.
             register.RegisterThreads();//Register the thread by default
-            
+
             return register;
         }
 #endif
