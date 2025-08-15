@@ -31,20 +31,36 @@ namespace Senparc.CO2NET.Cache.CsRedis
     /// </summary>
     public abstract class BaseRedisObjectCacheStrategy : BaseCacheStrategy, IBaseObjectCacheStrategy
     {
-        public CSRedis.CSRedisClient Client { get; set; }
+        public CSRedis.CSRedisClient _client;
+        public CSRedis.CSRedisClient Client
+        {
+            get
+            {
+                if (_client == null && CanUseRedis())
+                {
+                    _client = new CSRedis.CSRedisClient(Config.SenparcSetting.Cache_Redis_Configuration);
+                }
+                return _client;
+            }
+        }
 
         protected BaseRedisObjectCacheStrategy()
         {
-            Client = new CSRedis.CSRedisClient(Config.SenparcSetting.Cache_Redis_Configuration);
+            //Client = new CSRedis.CSRedisClient(Config.SenparcSetting.Cache_Redis_Configuration);
+        }
+
+        static bool CanUseRedis()
+        {
+            return string.IsNullOrEmpty(RedisManager.ConfigurationOption) &&
+                    !string.IsNullOrEmpty(Config.SenparcSetting.Cache_Redis_Configuration) &&
+                    Config.SenparcSetting.Cache_Redis_Configuration != "Redis配置" &&
+                    Config.SenparcSetting.Cache_Redis_Configuration != "#{Cache_Redis_Configuration}#";
         }
 
         static BaseRedisObjectCacheStrategy()
         {
             //Automatically register connection string information
-            if (string.IsNullOrEmpty(RedisManager.ConfigurationOption) &&
-                !string.IsNullOrEmpty(Config.SenparcSetting.Cache_Redis_Configuration) &&
-                Config.SenparcSetting.Cache_Redis_Configuration != "Redis配置" &&
-                Config.SenparcSetting.Cache_Redis_Configuration != "#{Cache_Redis_Configuration}#")
+            if (CanUseRedis())
             {
                 RedisManager.ConfigurationOption = Config.SenparcSetting.Cache_Redis_Configuration;
             }

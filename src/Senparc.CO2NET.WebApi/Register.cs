@@ -11,7 +11,9 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.CO2NET.ApiBind;
+using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.Trace;
+using Senparc.CO2NET.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,8 +84,12 @@ namespace Senparc.CO2NET.WebApi
                     {
                         return Assembly.Load(new AssemblyName(z.Name));
                     }
-                    catch
+                    catch (Exception ex) 
                     {
+                        if (z.Name.Contains("Senparc"))
+                        {
+                            SenparcTrace.BaseExceptionLog(ex);
+                        }
                         return null;
                     }
                 });
@@ -325,5 +331,7 @@ namespace Senparc.CO2NET.WebApi
 
             return AdditionalMethods.TryGetValue(methodInfo, out cagetory);
         }
+
+
     }
 }
