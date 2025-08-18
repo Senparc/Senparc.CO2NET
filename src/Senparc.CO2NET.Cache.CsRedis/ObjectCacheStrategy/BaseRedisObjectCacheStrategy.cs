@@ -51,10 +51,10 @@ namespace Senparc.CO2NET.Cache.CsRedis
 
         static bool CanUseRedis()
         {
-            return string.IsNullOrEmpty(RedisManager.ConfigurationOption) &&
-                    !string.IsNullOrEmpty(Config.SenparcSetting.Cache_Redis_Configuration) &&
+            return !string.IsNullOrEmpty(RedisManager.ConfigurationOption) ||
+                    (!string.IsNullOrEmpty(Config.SenparcSetting.Cache_Redis_Configuration) &&
                     Config.SenparcSetting.Cache_Redis_Configuration != "Redis配置" &&
-                    Config.SenparcSetting.Cache_Redis_Configuration != "#{Cache_Redis_Configuration}#";
+                    Config.SenparcSetting.Cache_Redis_Configuration != "#{Cache_Redis_Configuration}#");
         }
 
         static BaseRedisObjectCacheStrategy()

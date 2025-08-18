@@ -97,13 +97,13 @@ if (useRedis)//这里为了方便不同环境的开发者进行配置，做成�
      * 1、Redis 的连接字符串信息会从 Config.SenparcSetting.Cache_Redis_Configuration 自动获取并注册，如不需要修改，下方方法可以忽略
     /* 2、如需手动修改，可以通过下方 SetConfigurationOption 方法手动设置 Redis 链接信息（仅修改配置，不立即启用）
      */
-    Senparc.CO2NET.Cache.Redis.Register.SetConfigurationOption(redisConfigurationStr);
-    Console.WriteLine("完成 Redis 设置");
+    Senparc.CO2NET.Cache.CsRedis.Register.SetConfigurationOption(redisConfigurationStr);
+    Console.WriteLine("完成 CsRedis 设置");
 
 
     //以下会立即将全局缓存设置为 Redis
-    Senparc.CO2NET.Cache.Redis.Register.UseKeyValueRedisNow();//键值对缓存策略（推荐）
-    Console.WriteLine("启用 Redis UseKeyValue 策略");
+    Senparc.CO2NET.Cache.CsRedis.Register.UseKeyValueRedisNow();//键值对缓存策略（推荐）
+    Console.WriteLine("启用 CsRedis UseKeyValue 策略");
 
     //Senparc.CO2NET.Cache.Redis.Register.UseHashRedisNow();//HashSet储存格式的缓存策略
 
