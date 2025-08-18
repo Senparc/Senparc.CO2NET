@@ -36,7 +36,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         /// <param name="redisConfigurationString">Redis connection string</param>
         /// <param name="redisObjectCacheStrategyInstance">Cache strategy delegate, the first parameter is redisConfigurationString</param>
         /// <returns></returns>
-        [Obsolete("The registration process has been automated. Please use the Register.SetConfigurationOption() method to modify the connection string.")]
+        [Obsolete("The registration process has been automated. Please use the Register.SetConfigurationOption() method to modify the connection string.", true)]
         public static IRegisterService RegisterCacheRedis(this IRegisterService registerService,
             string redisConfigurationString,
             Func<string, IBaseObjectCacheStrategy> redisObjectCacheStrategyInstance)

@@ -51,11 +51,8 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
                  .UseSenparcGlobal();
             Assert.AreEqual(null, RedisManager.ConfigurationOption);// Not registered yet
 
-            registerService.RegisterCacheRedis(
-                     redisServer,
-                     redisConfiguration => RedisObjectCacheStrategy.Instance// Will automatically register on the first call
-                        );
-            Assert.AreEqual(redisServer, RedisManager.ConfigurationOption);
+            Register.SetConfigurationOption(redisServer);
+\            Assert.AreEqual(redisServer, RedisManager.ConfigurationOption);
 
             var currentCache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             Assert.IsInstanceOfType(currentCache, typeof(RedisObjectCacheStrategy));
