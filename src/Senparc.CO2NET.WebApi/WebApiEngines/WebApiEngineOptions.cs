@@ -14,6 +14,9 @@
     Modification Identifier：Senparc - 20241128
     Modification Description：v2.0.2-beta3 Add UseLowerCaseApiName property for SenparcSetting
 
+    Modification Identifier：Senparc - 20250820
+    Modification Description：v2.1.2 feat: Add default value GET to DefaultRequestMethod proprety
+
 ----------------------------------------------------------------*/
 
 
@@ -64,7 +67,7 @@ namespace Senparc.CO2NET.WebApi
         /// <summary>
         /// Default request method (global default is Post)
         /// </summary>
-        public ApiRequestMethod DefaultRequestMethod { get; set; }
+        public ApiRequestMethod DefaultRequestMethod { get; set; } = ApiRequestMethod.Post;
         /// <summary>
         /// Global ApiController base class, default is ControllerBase
         /// </summary>
