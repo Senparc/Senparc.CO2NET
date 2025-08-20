@@ -70,7 +70,11 @@ namespace Senparc.CO2NET.WebApi
             var result = regexForDoc.Match(nameAttr.Value);
             if (result.Success && result.Groups["docName"] != null && result.Groups["paramsPart"] != null)
             {
-                return new DocMethodInfo(result.Groups["docName"].Value, result.Groups["paramsPart"].Value);
+                var docName = result.Groups["docName"].Value;
+                var paramsPart = result.Groups["paramsPart"].Value;
+                 //paramsPart = result.Groups["paramsPart"].Value;
+
+                return new DocMethodInfo(docName, paramsPart);
             }
 
             return new DocMethodInfo(null, null);

@@ -52,7 +52,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             Assert.AreEqual(null, RedisManager.ConfigurationOption);// Not registered yet
 
             Register.SetConfigurationOption(redisServer);
-\            Assert.AreEqual(redisServer, RedisManager.ConfigurationOption);
+            Assert.AreEqual(redisServer, RedisManager.ConfigurationOption);
 
             var currentCache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             Assert.IsInstanceOfType(currentCache, typeof(RedisObjectCacheStrategy));
