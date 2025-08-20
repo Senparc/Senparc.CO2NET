@@ -66,13 +66,34 @@ namespace Senparc.CO2NET.WebApi
         /// <returns></returns>
         public DocMethodInfo GetDocMethodInfo(XAttribute nameAttr)
         {
-            //var pattern = @"(M\:)(?<docName>[^(]+)(?<paramsPart>\({1}.+\){1})";
             var result = regexForDoc.Match(nameAttr.Value);
             if (result.Success && result.Groups["docName"] != null && result.Groups["paramsPart"] != null)
             {
                 var docName = result.Groups["docName"].Value;
                 var paramsPart = result.Groups["paramsPart"].Value;
-                 //paramsPart = result.Groups["paramsPart"].Value;
+
+                // Get parent element to access summary, params and returns
+                var memberElement = nameAttr.Parent;
+                if (memberElement != null)
+                {
+                    var summary = memberElement.Element("summary")?.Value?.Trim();
+                    var returns = memberElement.Element("returns")?.Value?.Trim();
+                    var parameters = new Dictionary<string, string>();
+
+                    // Extract all param elements
+                    var paramElements = memberElement.Elements("param");
+                    foreach (var paramElement in paramElements)
+                    {
+                        var paramName = paramElement.Attribute("name")?.Value;
+                        var paramDescription = paramElement.Value?.Trim();
+                        if (!string.IsNullOrEmpty(paramName))
+                        {
+                            parameters[paramName] = paramDescription;
+                        }
+                    }
+
+                    return new DocMethodInfo(docName, paramsPart, summary, parameters, returns);
+                }
 
                 return new DocMethodInfo(docName, paramsPart);
             }
