@@ -247,8 +247,8 @@ namespace Senparc.CO2NET.WebApi
                                         //Console.WriteLine("record docMembersCollection:" + docMethodInfo.MethodName);
 
                                         //Record interface information for search
-                                        var isAsync = docMethodInfo.MethodName.EndsWith("Async", StringComparison.OrdinalIgnoreCase) ||
-                                                        docMethodInfo.MethodName.Contains("Async``", StringComparison.OrdinalIgnoreCase);//Is it an asynchronous method
+                                        //var isAsync = docMethodInfo.MethodName.EndsWith("Async", StringComparison.OrdinalIgnoreCase) ||
+                                        //                docMethodInfo.MethodName.Contains("Async``", StringComparison.OrdinalIgnoreCase);//Is it an asynchronous method
 
                                         var docMethodParams = docMethodInfo.GetMergedParameters();
                                         _findWeixinApiService.Value.RecordApiItem(category, docMethodInfo.MethodName, docMethodParams,

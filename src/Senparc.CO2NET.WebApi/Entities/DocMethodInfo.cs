@@ -24,7 +24,7 @@ namespace Senparc.CO2NET.WebApi
             Returns = returns?.Trim();
 
             // 初始化其他属性
-            IsAsync = MethodName?.EndsWith("Async", StringComparison.OrdinalIgnoreCase) ?? false;
+            IsAsync = CheckIsAsyncMethod(MethodName, ParamsPart);
             HasParameters = !string.IsNullOrEmpty(ParamsPart) && ParamsPart != "()";
             HasReturnValue = !string.IsNullOrEmpty(Returns);
             ParameterCount = Parameters?.Count ?? 0;
@@ -137,6 +137,60 @@ namespace Senparc.CO2NET.WebApi
             sb.Append(')');
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// 检查方法是否为异步方法
+        /// </summary>
+        /// <param name="methodName">方法名</param>
+        /// <param name="paramsPart">参数部分</param>
+        /// <returns></returns>
+        private bool CheckIsAsyncMethod(string methodName, string paramsPart)
+        {
+            if (string.IsNullOrEmpty(methodName))
+            {
+                return false;
+            }
+
+            // 1. 检查方法名是否以Async结尾
+            bool isAsyncByName = methodName.EndsWith("Async", StringComparison.OrdinalIgnoreCase);
+
+            // 2. 检查方法名是否包含泛型异步标记
+            bool isAsyncByGeneric = methodName.Contains("Async``", StringComparison.OrdinalIgnoreCase);
+
+            // 3. 检查返回值类型是否为异步类型
+            bool isAsyncByReturnType = false;
+            if (!string.IsNullOrEmpty(Returns))
+            {
+                var asyncTypes = new[]
+                {
+                    "Task",
+                    "Task<",
+                    "ValueTask",
+                    "ValueTask<",
+                    "IAsyncEnumerable",
+                    "IAsyncEnumerable<",
+                    "System.Threading.Tasks.Task",
+                    "System.Threading.Tasks.Task<",
+                    "System.Threading.Tasks.ValueTask",
+                    "System.Threading.Tasks.ValueTask<",
+                    "System.Collections.Generic.IAsyncEnumerable",
+                    "System.Collections.Generic.IAsyncEnumerable<"
+                };
+
+                isAsyncByReturnType = asyncTypes.Any(t => Returns.Contains(t, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // 4. 检查参数中是否包含 CancellationToken（通常异步方法会有这个参数）
+            bool hasCancellationToken = false;
+            if (!string.IsNullOrEmpty(paramsPart))
+            {
+                hasCancellationToken = paramsPart.Contains("CancellationToken", StringComparison.OrdinalIgnoreCase) ||
+                                     paramsPart.Contains("System.Threading.CancellationToken", StringComparison.OrdinalIgnoreCase);
+            }
+
+            // 返回综合判断结果
+            return isAsyncByName || isAsyncByGeneric || isAsyncByReturnType || hasCancellationToken;
         }
 
         public override string ToString()
