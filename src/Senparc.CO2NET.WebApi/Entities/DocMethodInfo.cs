@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Senparc.CO2NET.WebApi
@@ -78,6 +79,66 @@ namespace Senparc.CO2NET.WebApi
         /// 获取格式化后的方法签名
         /// </summary>
         /// <returns></returns>
+        /// <summary>
+        /// 获取合并后的参数信息字符串
+        /// </summary>
+        /// <param name="includeParamsPart">是否包含参数类型信息</param>
+        /// <param name="includeDescription">是否包含参数描述</param>
+        /// <returns>格式化后的参数信息</returns>
+        public string GetMergedParameters(bool includeParamsPart = true, bool includeDescription = true)
+        {
+            if (!HasParameters)
+            {
+                return "()";
+            }
+
+            var sb = new StringBuilder();
+
+            // 解析 ParamsPart，移除开头的 ( 和结尾的 )
+            var paramTypes = ParamsPart.Trim('(', ')').Split(',')
+                                     .Select(p => p.Trim())
+                                     .ToList();
+
+            // 获取参数名列表
+            var paramNames = Parameters.Keys.ToList();
+
+            // 确保参数数量匹配
+            if (paramTypes.Count != paramNames.Count)
+            {
+                return ParamsPart; // 如果不匹配，返回原始的 ParamsPart
+            }
+
+            sb.Append('(');
+            for (int i = 0; i < paramNames.Count; i++)
+            {
+                if (i > 0)
+                {
+                    sb.Append(", ");
+                }
+
+                var paramName = paramNames[i];
+                var paramType = paramTypes[i];
+
+                // 添加参数类型（如果需要）
+                if (includeParamsPart)
+                {
+                    sb.Append(paramType).Append(' ');
+                }
+
+                // 添加参数名
+                sb.Append(paramName);
+
+                // 添加参数描述（如果需要）
+                if (includeDescription && Parameters.ContainsKey(paramName))
+                {
+                    sb.Append(" /* ").Append(Parameters[paramName]).Append(" */");
+                }
+            }
+            sb.Append(')');
+
+            return sb.ToString();
+        }
+
         public override string ToString()
         {
             var sb = new StringBuilder();
