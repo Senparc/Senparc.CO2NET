@@ -103,7 +103,7 @@ namespace Senparc.CO2NET.Tests.Utilities
                     Assert.AreEqual("666", xdoc.Root.Element("Id").Value);
                     Assert.AreEqual("Jeffrey", xdoc.Root.Element("Name").Value);
 
-                    //Test wether sw didn't closed
+                    //Test whether sw didn't closed
                     ms.Seek(0, SeekOrigin.End);
                     await sw.WriteAsync("<END></END>");
                     await sw.FlushAsync();
