@@ -199,6 +199,7 @@ namespace Senparc.CO2NET.APM
             {
                 var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
                 var finalKey = BuildFinalKey(kindName);
+
                 var list = await cacheStragety.GetAsync<List<DataItem>>(finalKey, true).ConfigureAwait(false);
 
                 if (list != null)
