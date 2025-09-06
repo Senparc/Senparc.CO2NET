@@ -243,13 +243,10 @@ namespace Senparc.CO2NET.Utilities
             {
                 stream.Seek(0, SeekOrigin.Begin);//Force adjust pointer position
             }
-            return await Task.Run(async () =>
+            using (XmlReader xr = XmlReader.Create(stream, settings: new XmlReaderSettings() { CloseInput = closeInput, Async = true }))
             {
-                using (XmlReader xr = XmlReader.Create(stream, settings: new XmlReaderSettings() { CloseInput = closeInput, Async = true }))
-                {
-                    return await XDocument.LoadAsync(xr, LoadOptions.None, cancellationToken);
-                }
-            });
+                return await XDocument.LoadAsync(xr, LoadOptions.None, cancellationToken);
+            }
         }
 #endif
         #endregion
