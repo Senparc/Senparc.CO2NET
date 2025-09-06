@@ -12,6 +12,17 @@ namespace Senparc.CO2NET.Cache.Lock
     [TestClass]
     public class CacheLockTest
     {
+        private void SetRedis()
+        {
+
+            var redisServer = "10.37.129.2:6379";
+
+            Senparc.CO2NET.Config.SenparcSetting.IsDebug = true;
+            Senparc.CO2NET.Config.SenparcSetting.Cache_Redis_Configuration = redisServer;
+            Redis.Register.SetConfigurationOption(redisServer);
+            Redis.Register.UseKeyValueRedisNow();
+        }
+
         /// <summary>
         /// Test the parallel quantity of Parallel and Thread
         /// </summary>
@@ -80,9 +91,7 @@ namespace Senparc.CO2NET.Cache.Lock
 
             if (useRedis)
             {
-                var redisConfiguration = "localhost:6379";
-                RedisManager.ConfigurationOption = redisConfiguration;
-                CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//Redis
+                SetRedis();
             }
 
             Console.WriteLine($"Using Cache Strategy: {CacheStrategyFactory.GetObjectCacheStrategyInstance()}");
@@ -104,7 +113,7 @@ namespace Senparc.CO2NET.Cache.Lock
             Console.WriteLine("hopedTotalTime:{0}ms", hopedTotalTime);
             Console.WriteLine("randomRetryDelay:{0}ms", randomRetryDelay);
             Console.WriteLine("retryTimes:{0}", retryTimes);
-            Console.WriteLine("randomLockTime (possible Lock timeout): {0}ms", randomRetryDelay * retryTimes); 
+            Console.WriteLine("randomLockTime (possible Lock timeout): {0}ms", randomRetryDelay * retryTimes);
             Console.WriteLine("=====================");
 
             List<Thread> list = new List<Thread>();
@@ -205,9 +214,7 @@ namespace Senparc.CO2NET.Cache.Lock
 
             if (useRedis)
             {
-                var redisConfiguration = "localhost:6379";
-                RedisManager.ConfigurationOption = redisConfiguration;
-                CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//Redis
+                SetRedis();
             }
 
             Console.WriteLine("Asynchronous Method Test");

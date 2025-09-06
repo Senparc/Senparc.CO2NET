@@ -5,6 +5,7 @@ using System;
 using Moq;
 using System.Threading;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Senparc.CO2NET.APM.Tests
 {
@@ -18,37 +19,40 @@ namespace Senparc.CO2NET.APM.Tests
             Senparc.CO2NET.APM.Config.EnableAPM = true;
         }
 
-        private void BuildTestData(DataOperation dataOperation)
+        private async Task BuildTestDataAsync(DataOperation dataOperation)
         {
-            dataOperation.SetAsync("Memory", 4567, dateTime: SystemTime.Now.AddDays(-1)).Wait();//A simple example
-            dataOperation.SetAsync("Memory", 6789, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
+            await dataOperation.SetAsync("Memory", 4567, dateTime: SystemTime.Now.AddDays(-1));//A simple example
+            await dataOperation.SetAsync("Memory", 6789, dateTime: SystemTime.Now.AddMinutes(-2));
 
-            dataOperation.SetAsync("CPU", .65, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
-            dataOperation.SetAsync("CPU", .78, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
-            dataOperation.SetAsync("CPU", .75, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
-            dataOperation.SetAsync("CPU", .92, dateTime: SystemTime.Now.AddMinutes(-1)).Wait();
-            dataOperation.SetAsync("CPU", .48, dateTime: SystemTime.Now.AddMinutes(-1)).Wait();
+            await dataOperation.SetAsync("CPU", .65, dateTime: SystemTime.Now.AddMinutes(-2));
+            await dataOperation.SetAsync("CPU", .78, dateTime: SystemTime.Now.AddMinutes(-2));
+            await dataOperation.SetAsync("CPU", .75, dateTime: SystemTime.Now.AddMinutes(-2));
+            await dataOperation.SetAsync("CPU", .92, dateTime: SystemTime.Now.AddMinutes(-1));
+            await dataOperation.SetAsync("CPU", .48, dateTime: SystemTime.Now.AddMinutes(-1));
 
-            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-3)).Wait();
-            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-3)).Wait();
-            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
-            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-2)).Wait();
-            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-1)).Wait();
-            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-1)).Wait();
+            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-3));
+            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-3));
+            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-2));
+            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-2));
+            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-1));
+            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-1));
 
-            dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now).Wait();
+            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now);
         }
 
         [TestMethod]
-        public void SetAndGetTest()
+        public async Task SetAndGetTest()
         {
             DataOperation dataOperation = new DataOperation(domainPrefix + "SetAndGetTest");
-            BuildTestData(dataOperation);
+            await BuildTestDataAsync(dataOperation);
 
-            var memoryData = dataOperation.GetDataItemListAsync("Memory").Result;
+            var memoryData = await dataOperation.GetDataItemListAsync("Memory");
             Assert.AreEqual(2, memoryData.Count);
 
-            var cpuData = dataOperation.GetDataItemListAsync("CPU").Result;
+            var cache = CO2NET.Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
+            Console.WriteLine("CACHE:" + cache.GetAll().ToJson(true));
+
+            var cpuData = await dataOperation.GetDataItemListAsync("CPU");
             Assert.AreEqual(5, cpuData.Count);
 
             //var viewData = dataOperation.GetDataItemListAsync("Visitor Volume").Result;
@@ -57,11 +61,11 @@ namespace Senparc.CO2NET.APM.Tests
 
 
         [TestMethod]
-        public void ReadAndCleanDataItemsTest()
+        public async Task ReadAndCleanDataItemsTest()
         {
             DataOperation dataOperation = new DataOperation(domainPrefix + "ReadAndCleanDataItemsTest");
-            BuildTestData(dataOperation);
-            var result = dataOperation.ReadAndCleanDataItemsAsync(true, false).Result;//Processing the current task before the previous task
+            await BuildTestDataAsync(dataOperation);
+            var result = await dataOperation.ReadAndCleanDataItemsAsync(true, false);//Processing the current task before the previous task
 
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.Count);//Memory and CPU resources, limited to 3 units
@@ -69,10 +73,10 @@ namespace Senparc.CO2NET.APM.Tests
             Console.WriteLine("===============");
 
             //Check if the current task has received the previous task
-            var memoryData = dataOperation.GetDataItemListAsync("内存").Result;
+            var memoryData = await dataOperation.GetDataItemListAsync("内存");
             Assert.AreEqual(0, memoryData.Count);
 
-            var cpuData = dataOperation.GetDataItemListAsync("CPU").Result;
+            var cpuData = await dataOperation.GetDataItemListAsync("CPU");
             Assert.AreEqual(0, cpuData.Count);
 
             //var viewData = dataOperation.GetDataItemListAsync("Visitor Volume").Result;
@@ -83,11 +87,11 @@ namespace Senparc.CO2NET.APM.Tests
         }
 
         [TestMethod]
-        public void ReadAndCleanDataItems_KeepTodayDataTest()
+        public async Task ReadAndCleanDataItems_KeepTodayDataTest()
         {
             DataOperation dataOperation = new DataOperation(domainPrefix + "ReadAndCleanDataItems_KeepTodayDataTest");
-            BuildTestData(dataOperation);
-            var result = dataOperation.ReadAndCleanDataItemsAsync(true, true).Result;//Only record before the previous task
+            await BuildTestDataAsync(dataOperation);
+            var result = await dataOperation.ReadAndCleanDataItemsAsync(true, true);//Only record before the previous task
 
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.Count);//Memory and CPU resources, limited to 3 units

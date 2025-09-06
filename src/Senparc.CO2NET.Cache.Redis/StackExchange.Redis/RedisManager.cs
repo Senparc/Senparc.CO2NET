@@ -75,6 +75,8 @@ namespace Senparc.CO2NET.Cache.Redis
         /// </summary>
         public static string ConfigurationOption { get; set; }
 
+        public static string DefaultDomain { get; set; } = "localhost";
+
 
         /// <summary>
         /// ConnectionMultiplexer
@@ -90,7 +92,7 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <returns></returns>
         private static string GetDefaultConnectionString()
         {
-            return "localhost";
+            return DefaultDomain;
         }
 
         private static ConnectionMultiplexer GetManager(string connectionString = null)

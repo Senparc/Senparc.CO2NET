@@ -33,10 +33,6 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
 
             RedisManager.ConfigurationOption = null;// Clear before testing
 
-            var redisServer = "localhost:6379";
-
-            Senparc.CO2NET.Config.SenparcSetting.IsDebug = true;
-            Senparc.CO2NET.Config.SenparcSetting.Cache_Redis_Configuration = redisServer;
 
 
             //var senparcSetting = new SenparcSetting()
@@ -48,12 +44,18 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
             var registerService = Senparc.CO2NET.AspNet.RegisterServices.
                                     RegisterService.Start(mockEnv.Object/*, senparcSetting*/)
                  .UseSenparcGlobal();
+
             Assert.AreEqual(null, RedisManager.ConfigurationOption);// Not registered yet
 
-            registerService.RegisterCacheRedis(
-                     redisServer,
-                     redisConfiguration => RedisObjectCacheStrategy.Instance// Will automatically register on the first call
-                        );
+
+
+            var redisServer = "10.37.129.2:6379";
+
+            Senparc.CO2NET.Config.SenparcSetting.IsDebug = true;
+            Senparc.CO2NET.Config.SenparcSetting.Cache_Redis_Configuration = redisServer;
+            Redis.Register.SetConfigurationOption(redisServer);
+            Redis.Register.UseKeyValueRedisNow();
+
             Assert.AreEqual(redisServer, RedisManager.ConfigurationOption);
 
             var currentCache = CacheStrategyFactory.GetObjectCacheStrategyInstance();

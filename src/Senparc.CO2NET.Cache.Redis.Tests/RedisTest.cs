@@ -23,10 +23,19 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
     [TestClass]
     public class RedisTest
     {
+        private void SetRedis()
+        {
+            var server = "10.37.129.2:6379";
+            Senparc.CO2NET.Config.SenparcSetting.Cache_Redis_Configuration = server;
+            Register.SetConfigurationOption(server);
+            Register.UseKeyValueRedisNow();
+        }
+
         [TestMethod]
         public void SetTest()
         {
-            RedisManager.ConfigurationOption = "localhost:6379";
+            SetRedis();
+
             CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
             var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var dt = SystemTime.Now;
@@ -52,7 +61,8 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
         [TestMethod]
         public void SetAsyncTest()
         {
-            RedisManager.ConfigurationOption = "localhost:6379";
+            SetRedis();
+
             CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
             var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var dt = SystemTime.Now;
@@ -78,7 +88,8 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
         [TestMethod]
         public void ExpiryTest()
         {
-            RedisManager.ConfigurationOption = "localhost:6379";
+            SetRedis();
+
             CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
             var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var dt = SystemTime.Now;
@@ -111,7 +122,8 @@ namespace Senparc.CO2NET.Cache.Redis.Tests
         [TestMethod]
         public void ExpiryAsyncTest()
         {
-            RedisManager.ConfigurationOption = "localhost:6379";
+            SetRedis();
+
             CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
             var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var dt = SystemTime.Now;
