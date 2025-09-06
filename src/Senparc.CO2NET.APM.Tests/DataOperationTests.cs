@@ -21,23 +21,25 @@ namespace Senparc.CO2NET.APM.Tests
 
         private async Task BuildTestDataAsync(DataOperation dataOperation)
         {
-            await dataOperation.SetAsync("Memory", 4567, dateTime: SystemTime.Now.AddDays(-1));//A simple example
-            await dataOperation.SetAsync("Memory", 6789, dateTime: SystemTime.Now.AddMinutes(-2));
-
-            await dataOperation.SetAsync("CPU", .65, dateTime: SystemTime.Now.AddMinutes(-2));
-            await dataOperation.SetAsync("CPU", .78, dateTime: SystemTime.Now.AddMinutes(-2));
-            await dataOperation.SetAsync("CPU", .75, dateTime: SystemTime.Now.AddMinutes(-2));
-            await dataOperation.SetAsync("CPU", .92, dateTime: SystemTime.Now.AddMinutes(-1));
-            await dataOperation.SetAsync("CPU", .48, dateTime: SystemTime.Now.AddMinutes(-1));
-
-            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-3));
-            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-3));
-            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-2));
-            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-2));
-            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-1));
-            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-1));
-
-            await dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now);
+           _= dataOperation.SetAsync("Memory", 4567, dateTime: SystemTime.Now.AddDays(-1));//A simple example
+           _= dataOperation.SetAsync("Memory", 6789, dateTime: SystemTime.Now.AddMinutes(-2));
+          
+           _= dataOperation.SetAsync("CPU", .65, dateTime: SystemTime.Now.AddMinutes(-2));
+           _= dataOperation.SetAsync("CPU", .78, dateTime: SystemTime.Now.AddMinutes(-2));
+           _= dataOperation.SetAsync("CPU", .75, dateTime: SystemTime.Now.AddMinutes(-2));
+           _= dataOperation.SetAsync("CPU", .92, dateTime: SystemTime.Now.AddMinutes(-1));
+           _= dataOperation.SetAsync("CPU", .48, dateTime: SystemTime.Now.AddMinutes(-1));
+        
+           _= dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-3));
+           _= dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-3));
+           _= dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-2));
+           _= dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-2));
+           _= dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-1));
+           _= dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now.AddMinutes(-1));
+          
+           _= dataOperation.SetAsync("Accessor", 1, dateTime: SystemTime.Now);
+          
+            Thread.Sleep(1000); // wait for all items be cached
         }
 
         [TestMethod]
@@ -48,9 +50,6 @@ namespace Senparc.CO2NET.APM.Tests
 
             var memoryData = await dataOperation.GetDataItemListAsync("Memory");
             Assert.AreEqual(2, memoryData.Count);
-
-            var cache = CO2NET.Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
-            Console.WriteLine("CACHE:" + cache.GetAll().ToJson(true));
 
             var cpuData = await dataOperation.GetDataItemListAsync("CPU");
             Assert.AreEqual(5, cpuData.Count);
