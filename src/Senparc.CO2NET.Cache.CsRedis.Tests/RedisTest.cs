@@ -27,7 +27,10 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
         [TestMethod]
         public void SetTest()
         {
-            RedisManager.ConfigurationOption = "localhost:6379";
+            Config.SenparcSetting.Cache_Redis_Configuration = "10.37.129.2:6379";
+            CsRedis.Register.SetConfigurationOption(Config.SenparcSetting.Cache_Redis_Configuration);
+            CsRedis.Register.UseKeyValueRedisNow();
+
             CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
             var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
 

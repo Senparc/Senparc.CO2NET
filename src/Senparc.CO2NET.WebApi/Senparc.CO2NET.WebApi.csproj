@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
-		<Version>2.1.2.1</Version>
+		<Version>2.1.3</Version>
 		<LangVersion>latest</LangVersion>
 		<AssemblyName>Senparc.CO2NET.WebApi</AssemblyName>
 		<RootNamespace>Senparc.CO2NET.WebApi</RootNamespace>
@@ -50,6 +50,7 @@
 			[2024-12-04] v2.1.0-beta3 update Start() method, set SenparcSetting in Config when AddSenparcGlobalService() run
 			[2025-08-20] v2.1.2 feat: Add default value GET to DefaultRequestMethod proprety
 			[2025-08-20] v2.1.2.1 Update async detection logic in DocMethodInfo and increment project version
+			[2025-09-06] v2.1.3 base module update
 		</PackageReleaseNotes>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

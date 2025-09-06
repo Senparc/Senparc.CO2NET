@@ -38,7 +38,6 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             Senparc.CO2NET.Config.SenparcSetting.IsDebug = true;
             Senparc.CO2NET.Config.SenparcSetting.Cache_Redis_Configuration = redisServer;
 
-
             //var senparcSetting = new SenparcSetting()
             //{
             //    IsDebug = true,
@@ -51,8 +50,12 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
                  .UseSenparcGlobal();
             Assert.AreEqual(null, RedisManager.ConfigurationOption);// Not registered yet
 
+
             Register.SetConfigurationOption(redisServer);
             Assert.AreEqual(redisServer, RedisManager.ConfigurationOption);
+
+            //以下会立即将全局缓存设置为 Redis
+            Register.UseKeyValueRedisNow();//键值对缓存策略（推荐）
 
             var currentCache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             Assert.IsInstanceOfType(currentCache, typeof(RedisObjectCacheStrategy));

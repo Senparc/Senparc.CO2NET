@@ -36,7 +36,7 @@ namespace Senparc.CO2NET.Cache.CsRedis
         {
             get
             {
-                if (_client == null && CanUseRedis())
+                if (_client == null && RedisManager.CanUseRedis())
                 {
                     _client = new CSRedis.CSRedisClient(Config.SenparcSetting.Cache_Redis_Configuration);
                 }
@@ -49,18 +49,10 @@ namespace Senparc.CO2NET.Cache.CsRedis
             //Client = new CSRedis.CSRedisClient(Config.SenparcSetting.Cache_Redis_Configuration);
         }
 
-        static bool CanUseRedis()
-        {
-            return !string.IsNullOrEmpty(RedisManager.ConfigurationOption) ||
-                    (!string.IsNullOrEmpty(Config.SenparcSetting.Cache_Redis_Configuration) &&
-                    Config.SenparcSetting.Cache_Redis_Configuration != "Redis配置" &&
-                    Config.SenparcSetting.Cache_Redis_Configuration != "#{Cache_Redis_Configuration}#");
-        }
-
         static BaseRedisObjectCacheStrategy()
         {
             //Automatically register connection string information
-            if (CanUseRedis())
+            if (RedisManager.CanUseRedis())
             {
                 RedisManager.ConfigurationOption = Config.SenparcSetting.Cache_Redis_Configuration;
             }

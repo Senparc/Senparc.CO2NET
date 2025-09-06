@@ -47,6 +47,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 
 using Senparc.CO2NET.APM.Exceptions;
+using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Trace;
 using System;
 using System.Collections.Concurrent;
@@ -72,6 +73,8 @@ namespace Senparc.CO2NET.APM
         //TODO: Consider distributed scenarios, preferably stored in cache
         private static ConcurrentDictionary<string, ConcurrentDictionary<string, DateTimeOffset>> KindNameStore { get; set; } //= new Dictionary<string, Dictionary<string, DateTimeOffset>>();
 
+        private IBaseObjectCacheStrategy _cacheStragety;
+
         private string BuildFinalKey(string kindName)
         {
             return $"{_domainKey}:{kindName}";
@@ -88,13 +91,12 @@ namespace Senparc.CO2NET.APM
                 return;
             }
 
-            var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var kindNameKey = $"{_domainKey}:_KindNameStore";
-            var keyList = await cacheStragety.GetAsync<List<string>>(kindNameKey, true).ConfigureAwait(false) ?? new List<string>();
+            var keyList = await _cacheStragety.GetAsync<List<string>>(kindNameKey, true).ConfigureAwait(false) ?? new List<string>();
             if (!keyList.Contains(kindName))
             {
                 keyList.Add(kindName);
-                await cacheStragety.SetAsync(kindNameKey, keyList, isFullKey: true).ConfigureAwait(false);//Permanent storage
+                await _cacheStragety.SetAsync(kindNameKey, keyList, isFullKey: true).ConfigureAwait(false);//Permanent storage
             }
 
             KindNameStore[_domain][kindName] = SystemTime.Now;
@@ -104,10 +106,20 @@ namespace Senparc.CO2NET.APM
         /// DataOperation constructor
         /// </summary>
         /// <param name="domain">Domain, the smallest unit of statistics, can be a website or a module</param>
-        public DataOperation(string domain)
+        public DataOperation(string domain) : this(domain, null)
+        {
+
+        }
+
+        /// <summary>
+        /// DataOperation constructor
+        /// </summary>
+        /// <param name="domain">Domain, the smallest unit of statistics, can be a website or a module</param>
+        public DataOperation(string domain, IBaseObjectCacheStrategy cacheStrategy)
         {
             _domain = domain ?? "GLOBAL";//If not provided, it defaults to GLOBAL, shared globally
             _domainKey = $"{CACHE_NAMESPACE}:{_domain}";
+            this._cacheStragety = cacheStrategy ?? CO2NET.Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
 
             if (!KindNameStore.ContainsKey(_domain))
             {
@@ -157,16 +169,16 @@ namespace Senparc.CO2NET.APM
                 try
                 {
                     var dt1 = SystemTime.Now;
-                    var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
+
                     var finalKey = BuildFinalKey(kindName);
                     //Use sync lock to determine write order
-                    using (await cacheStragety.BeginCacheLockAsync("SenparcAPM", finalKey).ConfigureAwait(false))
+                    using (await _cacheStragety.BeginCacheLockAsync("SenparcAPM", finalKey).ConfigureAwait(false))
                     {
 
 
                         var list = await GetDataItemListAsync(kindName).ConfigureAwait(false);
                         list.Add(dataItem);
-                        await cacheStragety.SetAsync(finalKey, list, Config.DataExpire, true).ConfigureAwait(false);
+                        await _cacheStragety.SetAsync(finalKey, list, Config.DataExpire, true).ConfigureAwait(false);
 
                         await RegisterFinalKeyAsync(kindName).ConfigureAwait(false);//Register Key
 
@@ -197,9 +209,10 @@ namespace Senparc.CO2NET.APM
         {
             try
             {
-                var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
+
                 var finalKey = BuildFinalKey(kindName);
-                var list = await cacheStragety.GetAsync<List<DataItem>>(finalKey, true).ConfigureAwait(false);
+
+                var list = await _cacheStragety.GetAsync<List<DataItem>>(finalKey, true).ConfigureAwait(false);
 
                 if (list != null)
                 {
@@ -227,7 +240,7 @@ namespace Senparc.CO2NET.APM
             {
                 var dt1 = SystemTime.Now;
 
-                var cacheStragety = Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
+
                 Dictionary<string, List<DataItem>> tempDataItems = new Dictionary<string, List<DataItem>>();
 
                 var systemNow = SystemTime.Now.UtcDateTime;//Unified UTC time
@@ -238,7 +251,7 @@ namespace Senparc.CO2NET.APM
                 {
                     var kindName = item.Key;
                     var finalKey = BuildFinalKey(kindName);
-                    using (await cacheStragety.BeginCacheLockAsync("SenparcAPM", finalKey).ConfigureAwait(false))
+                    using (await _cacheStragety.BeginCacheLockAsync("SenparcAPM", finalKey).ConfigureAwait(false))
                     {
                         var list = await GetDataItemListAsync(item.Key).ConfigureAwait(false);//Get list
                         var completedStatData = list.Where(z => z.DateTime < nowMinuteTime).ToList();//All data within the statistical range
@@ -254,13 +267,13 @@ namespace Senparc.CO2NET.APM
                             if (tobeRemove.Count() == list.Count())
                             {
                                 //All deleted
-                                await cacheStragety.RemoveFromCacheAsync(finalKey, true).ConfigureAwait(false);//Delete
+                                await _cacheStragety.RemoveFromCacheAsync(finalKey, true).ConfigureAwait(false);//Delete
                             }
                             else
                             {
                                 //Partially deleted
                                 var newList = list.Except(tobeRemove).ToList();
-                                await cacheStragety.SetAsync(finalKey, newList, Config.DataExpire, true).ConfigureAwait(false);
+                                await _cacheStragety.SetAsync(finalKey, newList, Config.DataExpire, true).ConfigureAwait(false);
                             }
                         }
                     }
