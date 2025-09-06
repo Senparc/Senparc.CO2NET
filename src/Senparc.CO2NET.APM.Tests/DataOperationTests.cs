@@ -72,7 +72,7 @@ namespace Senparc.CO2NET.APM.Tests
             Console.WriteLine("===============");
 
             //Check if the current task has received the previous task
-            var memoryData = await dataOperation.GetDataItemListAsync("内存");
+            var memoryData = await dataOperation.GetDataItemListAsync("Memory");
             Assert.AreEqual(0, memoryData.Count);
 
             var cpuData = await dataOperation.GetDataItemListAsync("CPU");
