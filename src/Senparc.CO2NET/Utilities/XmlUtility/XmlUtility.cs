@@ -50,6 +50,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -61,6 +63,8 @@ namespace Senparc.CO2NET.Utilities
     /// </summary>
     public static class XmlUtility
     {
+        #region Sync Methods
+
 
         #region Deserialization
 
@@ -79,7 +83,7 @@ namespace Senparc.CO2NET.Utilities
                     XmlSerializer xmldes;
                     if (rootNodeName != null)
                     {
-                        xmldes=new XmlSerializer(type, new XmlRootAttribute(rootNodeName));
+                        xmldes = new XmlSerializer(type, new XmlRootAttribute(rootNodeName));
                     }
                     else
                     {
@@ -103,7 +107,7 @@ namespace Senparc.CO2NET.Utilities
         /// <returns></returns>
         public static object Deserialize<T>(string xml, string rootNodeName = null)
         {
-            return Deserialize(typeof(T), xml,rootNodeName);
+            return Deserialize(typeof(T), xml, rootNodeName);
         }
 
         /// <summary>
@@ -156,15 +160,17 @@ namespace Senparc.CO2NET.Utilities
         /// <summary>
         /// Serialize stream to XML string
         /// </summary>
-        /// <param name="stream"></param>
+        /// <param name="stream">inputStream</param>
+        /// <param name="closeInput">true to close the underlying stream or System.IO.TextReader when the reader is
+        /// closed; otherwise false. The default is false.</param>
         /// <returns></returns>
-        public static XDocument Convert(Stream stream)
+        public static XDocument Convert(Stream stream, bool closeInput = false)
         {
             if (stream.CanSeek)
             {
                 stream.Seek(0, SeekOrigin.Begin);//Force adjust pointer position
             }
-            using (XmlReader xr = XmlReader.Create(stream))
+            using (XmlReader xr = XmlReader.Create(stream, settings: new XmlReaderSettings() { CloseInput = closeInput }))
             {
                 return XDocument.Load(xr);
             }
@@ -181,6 +187,73 @@ namespace Senparc.CO2NET.Utilities
             //            }
             //#endif
         }
+
+        #endregion
+
+        #region Async Methods
+
+
+        #region Serialization
+
+        /// <summary>
+        /// Serialize asynchronously
+        /// Note: This method serializes complex classes. If XmlInclude and other attributes are not declared, it may cause the error "Use the XmlInclude or SoapInclude attribute to specify types that are not known statically."
+        /// </summary>
+        /// <typeparam name="T">Type to serialize</typeparam>
+        /// <param name="obj">Object to serialize</param>
+        /// <returns>Serialized XML string</returns>
+        public static async Task<string> SerializerAsync<T>(T obj)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                XmlSerializer xml = new XmlSerializer(typeof(T));
+                try
+                {
+                    //Serialize object
+                    await Task.Run(() => xml.Serialize(stream, obj));
+                }
+                catch (InvalidOperationException)
+                {
+                    throw;
+                }
+
+                stream.Position = 0;
+                using (StreamReader sr = new StreamReader(stream))
+                {
+                    return await sr.ReadToEndAsync();
+                }
+            }
+        }
+
+        #endregion
+
+#if NETSTANDARD2_1_OR_GREATER
+
+        /// <summary>
+        /// Serialize stream to XML string asynchronously
+        /// </summary>
+        /// <param name="stream">inputStream</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <param name="closeInput">true to close the underlying stream or System.IO.TextReader when the reader is
+        /// closed; otherwise false. The default is false.</param>
+        /// <returns>XDocument object</returns>
+        public static async Task<XDocument> ConvertAsync(Stream stream, CancellationToken cancellationToken, bool closeInput = false)
+        {
+            if (stream.CanSeek)
+            {
+                stream.Seek(0, SeekOrigin.Begin);//Force adjust pointer position
+            }
+            return await Task.Run(async () =>
+            {
+                using (XmlReader xr = XmlReader.Create(stream, settings: new XmlReaderSettings() { CloseInput = closeInput, Async = true }))
+                {
+                    return await XDocument.LoadAsync(xr, LoadOptions.None, cancellationToken);
+                }
+            });
+        }
+#endif
+        #endregion
+
 
     }
 }
