@@ -219,7 +219,7 @@
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="8.0.0" Condition=" '$(TargetFramework)' == 'net8.0'" />
-    <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.0" Condition=" '$(TargetFramework)' != 'net8.0'" />
+    <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.3.4" Condition=" '$(TargetFramework)' != 'net8.0'" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilities\HttpUtility\HttpPut\" />
