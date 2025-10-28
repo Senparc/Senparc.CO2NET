@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>1.1.0.1</Version>
+    <Version>1.1.1</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Dapr</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Dapr</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>

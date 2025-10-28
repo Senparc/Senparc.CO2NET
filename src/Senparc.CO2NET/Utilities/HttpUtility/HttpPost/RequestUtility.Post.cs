@@ -89,7 +89,7 @@ using System.Linq;
 #endif
 
 namespace Senparc.CO2NET.HttpUtility
-{
+{ 
     /// <summary>
     /// HTTP 请求工具类
     /// </summary>
@@ -388,6 +388,8 @@ namespace Senparc.CO2NET.HttpUtility
             }
             else
             {
+                postStream.Seek(0, SeekOrigin.Begin);
+                
                 if (postStream.Length > 0)
                 {
                     if (hasFormData)
@@ -403,8 +405,6 @@ namespace Senparc.CO2NET.HttpUtility
 
                     //contentType = "application/x-www-form-urlencoded";
                 }
-
-                postStream.Seek(0, SeekOrigin.Begin);
 
                 hc = new StreamContent(postStream);
 
