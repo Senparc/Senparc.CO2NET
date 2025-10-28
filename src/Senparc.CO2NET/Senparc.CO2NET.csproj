@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>3.1.4</Version>
+    <Version>3.1.5</Version>
     <LangVersion>10.0</LangVersion>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
     <RootNamespace>Senparc.CO2NET</RootNamespace>
@@ -148,7 +148,7 @@
 		[2025-01-28] v3.1.2 add ValidationHelper.CheckNull
 		[2025-04-24] v3.1.3 restore configuration for RegisterServices.Start(senparcSetting) parameter for .NET Framework
 		[2025-09-06] v3.1.4 Update XML Serialization and Cache module
-	</PackageReleaseNotes>
+</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
