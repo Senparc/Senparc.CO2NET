@@ -27,9 +27,9 @@
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.WebApi\Senparc.CO2NET.WebApi.csproj" />
 		<ProjectReference Include="..\..\src\Senparc.CO2NET\Senparc.CO2NET.csproj" />
 
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.4.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.0.0" />
 	</ItemGroup>
 
 </Project>
