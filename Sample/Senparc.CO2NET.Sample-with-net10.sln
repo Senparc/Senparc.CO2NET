@@ -32,7 +32,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.APM", "..\sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.APM.Tests.net8", "..\src\Senparc.CO2NET.APM.Tests\Senparc.CO2NET.APM.Tests.net8.csproj", "{4FA6F2C4-54B5-469D-8ECF-0040120D3344}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Sample.Consoles.Net8", "Senparc.CO2NET.Sample.Consoles\Senparc.CO2NET.Sample.Consoles.Net8.csproj", "{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Sample.Consoles.Net10", "Senparc.CO2NET.Sample.Consoles\Senparc.CO2NET.Sample.Consoles.Net10.csproj", "{EF7278DE-7E6E-4F4F-AF19-BF7C6BA58F87}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.CO2NET.Sample.net10", "Senparc.CO2NET.Sample.net10\Senparc.CO2NET.Sample.net10.csproj", "{3CEE7584-D273-4DF7-AD5A-E5385F34DDE2}"
 EndProject
