@@ -27,7 +27,10 @@ Senparc.CO2NET 已经作为 [Senparc.Weixin SDK](https://github.com/JeffreySu/We
 | MagicObject（新） | Senparc.CO2NET.MagicObject   | [![Senparc.CO2NET.MagicObject][6.1]][6.2]    [![Senparc.CO2NET.MagicObject][nuget-img-base-magic-object]][nuget-url-base-magic-object]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.6.2][net462Y]    ![.NET Core 2.0][core20Y]
 
 
-![.NET Core 2.0][core20Y] : 同时支持 .NET Standard 2.0+ 及 .NET Core 2.1/3.1、.NET 5.0/6.0/7.0/8.0+
+![.NET Core 2.0][core20Y] : 同时支持 .NET Standard 2.0+ 及 .NET Core 2.1/3.1、.NET 5.0/6.0/7.0/8.0/10.0+
+
+> [!NOTE]
+> **.NET 10.0 是新项目的推荐版本**，它提供了最新的功能、性能改进和长期支持。
 
 > [!NOTE]
 > CO2NET 将逐步停止对 .NET Framework 4.0 及以下版本的支持。
