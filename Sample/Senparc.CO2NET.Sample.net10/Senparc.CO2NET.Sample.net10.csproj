@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>Senparc.CO2NET.Sample</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup>
+		<DocumentationFile>App_Data\ApiDocXml\Senparc.CO2NET.Sample.xml</DocumentationFile>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Net.Http.Headers" Version="10.0.0" />
+
+		<PackageReference Include="Senparc.Weixin.MP" Version="16.23.6" />
+
+		<ProjectReference Include="..\..\src\Senparc.CO2NET.APM\Senparc.CO2NET.APM.csproj" />
+		<ProjectReference Include="..\..\src\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
+		<ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.CsRedis\Senparc.CO2NET.Cache.CsRedis.csproj" />
+		<ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.Memcached\Senparc.CO2NET.Cache.Memcached.csproj" />
+		<ProjectReference Include="..\..\src\Senparc.CO2NET.Cache.Redis\Senparc.CO2NET.Cache.Redis.csproj" />
+		<ProjectReference Include="..\..\src\Senparc.CO2NET.WebApi\Senparc.CO2NET.WebApi.csproj" />
+		<ProjectReference Include="..\..\src\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.0.0" />
+	</ItemGroup>
+
+</Project>

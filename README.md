@@ -25,7 +25,10 @@ Senparc.CO2NET is already relied upon as the foundational library for Senparc se
 | MagicObject (New) | Senparc.CO2NET.MagicObject   | [![Senparc.CO2NET.MagicObject][6.1]][6.2]    [![Senparc.CO2NET.MagicObject][nuget-img-base-magic-object]][nuget-url-base-magic-object]  |  ![.NET 3.5][net35N]    ![.NET 4.0][net40N]   ![.NET 4.6.2][net462Y]    ![.NET Core 2.0][core20Y]
 
 
-![.NET Core 2.0][core20Y] : Supports .NET Standard 2.0+ and .NET Core 2.1/3.1, .NET 5.0/6.0/7.0/8.0+  
+![.NET Core 2.0][core20Y] : Supports .NET Standard 2.0+ and .NET Core 2.1/3.1, .NET 5.0/6.0/7.0/8.0/10.0+
+
+> [!NOTE]
+> **.NET 10.0 is the recommended version** for new projects. It provides the latest features, performance improvements, and long-term support.  
 
 > [!NOTE]
 > CO2NET will gradually stop supporting .NET Framework 4.0 and earlier versions. Because the official update has stopped. 
