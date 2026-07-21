@@ -143,16 +143,16 @@ namespace Senparc.CO2NET.Tests.Cache
                 //Simulate the additional workload of CacheWrapper's Type, compare efficiency, the main efficiency loss is in the reflection type  
                 //testClass.Type = testClass.GetType();  
                 var dtx = SystemTime.Now.DateTime;
-                var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(testClass);
+                var serializedObj = CacheSerializeExtension.SerializeToCache(testClass);
                 //Console.WriteLine($"StackExchangeRedisExtensions.Serialize took: {SystemTime.DiffTotalMS(dtx)}ms");  
                 dtx = SystemTime.Now.DateTime;
-                var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<TestClass>(serializedObj);//11ms  
+                var containerBag = CacheSerializeExtension.DeserializeFromCache<TestClass>(serializedObj);//11ms
                 //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize took: {SystemTime.DiffTotalMS(dtx)}ms");  
                 Assert.AreEqual(containerBag.AddTime.Ticks, testClass.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), testClass.GetHashCode());
             }
             dt2 = SystemTime.Now.DateTime;
-            Console.WriteLine($"Newtonsoft serialization (without reflection) {count} times, time: {(dt2 - dt1).TotalMilliseconds}ms");
+            Console.WriteLine($"System.Text.Json serialization (without reflection) {count} times, time: {(dt2 - dt1).TotalMilliseconds}ms");
 
             dt1 = SystemTime.Now.DateTime;
             for (int i = 0; i < count; i++)
@@ -167,16 +167,16 @@ namespace Senparc.CO2NET.Tests.Cache
                 //Simulate the additional workload of CacheWrapper's Type, compare efficiency, the main efficiency loss is in the reflection type  
                 testClass.Type = testClass.GetType();
                 var dtx = SystemTime.Now.DateTime;
-                var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(testClass);
+                var serializedObj = CacheSerializeExtension.SerializeToCache(testClass);
                 //Console.WriteLine($"StackExchangeRedisExtensions.Serialize took: {SystemTime.DiffTotalMS(dtx)}ms");  
                 dtx = SystemTime.Now.DateTime;
-                var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<TestClass>(serializedObj);//11ms  
+                var containerBag = CacheSerializeExtension.DeserializeFromCache<TestClass>(serializedObj);//11ms
                 //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize took: {SystemTime.DiffTotalMS(dtx)}ms");  
                 Assert.AreEqual(containerBag.AddTime.Ticks, testClass.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), testClass.GetHashCode());
             }
             dt2 = SystemTime.Now.DateTime;
-            Console.WriteLine($"Newtonsoft serialization + reflection {count} times, time: {(dt2 - dt1).TotalMilliseconds}ms");
+            Console.WriteLine($"System.Text.Json serialization + reflection {count} times, time: {(dt2 - dt1).TotalMilliseconds}ms");
 
             dt1 = SystemTime.Now.DateTime;
             for (int i = 0; i < count; i++)
@@ -193,17 +193,17 @@ namespace Senparc.CO2NET.Tests.Cache
                 //Console.WriteLine(fun.Body.Type);  
                 testClass.Type = fun.Body.Type;
                 var dtx = SystemTime.Now.DateTime;
-                var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(testClass);
+                var serializedObj = CacheSerializeExtension.SerializeToCache(testClass);
                 //Console.WriteLine($"StackExchangeRedisExtensions.Serialize took: {SystemTime.DiffTotalMS(dtx)}ms");  
                 dtx = SystemTime.Now.DateTime;
-                var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<TestClass>(serializedObj);//11ms  
+                var containerBag = CacheSerializeExtension.DeserializeFromCache<TestClass>(serializedObj);//11ms
                 //Console.WriteLine($"StackExchangeRedisExtensions.Deserialize took: {SystemTime.DiffTotalMS(dtx)}ms");  
                 Assert.AreEqual(typeof(TestClass), containerBag.Type);
                 Assert.AreEqual(containerBag.AddTime.Ticks, testClass.AddTime.Ticks);
                 Assert.AreNotEqual(containerBag.GetHashCode(), testClass.GetHashCode());
             }
             dt2 = SystemTime.Now.DateTime;
-            Console.WriteLine($"Newtonsoft serialization (Lambda) {count} times, time: {(dt2 - dt1).TotalMilliseconds}ms");
+            Console.WriteLine($"System.Text.Json serialization (Lambda) {count} times, time: {(dt2 - dt1).TotalMilliseconds}ms");
         }
     }
 }

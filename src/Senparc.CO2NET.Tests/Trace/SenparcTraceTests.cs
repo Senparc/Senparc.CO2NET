@@ -116,7 +116,7 @@ namespace Senparc.CO2NET.Tests.Trace
         public void BaseExceptionLogTest()
         {
             var keyword = Guid.NewGuid().ToString();//Test string
-            var ex = new BaseException("Test Excepption" + keyword);
+            var ex = new BaseException("Test Exception" + keyword);
             //Log recording method, call this method when initializing a BaseException
             SenparcTrace.BaseExceptionLog(ex);
 
@@ -125,6 +125,8 @@ namespace Senparc.CO2NET.Tests.Trace
             {
                 //Wait for execution
             }
+
+            Console.WriteLine($"LogFilePath: {LogFilePath}");
 
             Assert.IsTrue(UnitTestHelper.CheckKeywordsExist(LogFilePath, "Test Exception", keyword));
         }

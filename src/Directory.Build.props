@@ -1,6 +1,10 @@
 ﻿<Project>
 
   <PropertyGroup>
+    <!-- Keep NuGet assets and generated files isolated per project and host OS in shared workspaces. -->
+    <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)\$(OS)\</BaseIntermediateOutputPath>
+    <DefaultItemExcludes>$(DefaultItemExcludes);obj\**</DefaultItemExcludes>
+
     <DebugType Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">full</DebugType>
     <DebugType Condition="'$(TargetFrameworkIdentifier)' != '.NETFramework'">portable</DebugType>
     <IncludeSymbols>True</IncludeSymbols>

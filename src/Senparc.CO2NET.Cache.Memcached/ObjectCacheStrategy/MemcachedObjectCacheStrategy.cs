@@ -28,6 +28,9 @@
     Modification Identifier：Senparc - 20230527
     Modification Description：v4.1.3 MemcachedObjectCacheStrategy.Get() method added pure string check
 
+    修改标识：Senparc - 20260721
+    修改描述：v5.1.2 移除 Newtonsoft.Json 遗留引用并适配 System.Text.Json 依赖链
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -39,7 +42,6 @@ using Enyim.Caching;
 using Enyim.Caching.Configuration;
 using Enyim.Caching.Memcached;
 using Senparc.CO2NET.Exceptions;
-using Newtonsoft.Json.Linq;
 
 #if !NET462
 using Microsoft.Extensions.Logging;

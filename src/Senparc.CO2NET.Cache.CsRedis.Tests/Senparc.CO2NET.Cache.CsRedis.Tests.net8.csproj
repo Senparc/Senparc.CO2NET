@@ -2,6 +2,11 @@
 
   <PropertyGroup>
 	  <TargetFramework>net8.0</TargetFramework>
+	  <Version>1.0.1</Version>
+	  <PackageReleaseNotes>
+	    [2026-07-21] v1.0.1 更新 JSON 序列化兼容测试
+	    1、将 Redis 测试中的 Newtonsoft.Json 调用迁移到 System.Text.Json。
+	  </PackageReleaseNotes>
 
 	  <IsPackable>false</IsPackable>
 
@@ -24,12 +29,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="Moq" Version="4.20.69" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
-	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
   </ItemGroup>
 
   <ItemGroup>

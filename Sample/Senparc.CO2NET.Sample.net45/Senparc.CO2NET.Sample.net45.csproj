@@ -16,6 +16,8 @@
     <RootNamespace>Senparc.CO2NET.Sample.net45</RootNamespace>
     <AssemblyName>Senparc.CO2NET.Sample.net45</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <Version>1.0.1</Version>
+    <PackageReleaseNotes>[2026-07-21] v1.0.1 Dependency update from Senparc.CO2NET to 4.0.0</PackageReleaseNotes>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />

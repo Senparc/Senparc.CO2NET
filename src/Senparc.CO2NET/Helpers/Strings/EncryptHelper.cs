@@ -52,6 +52,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier: Senparc - 20240511
     Modification Description: v2.4.1 Added refresh parameter to SenparcDI.GetServiceProvider() method
 
+    修改标识：Senparc - 20260721
+    修改描述：v4.0.0 在 net8.0 目标中保留 AesGcmDecrypt 公共方法
+
 ----------------------------------------------------------------*/
 
 
@@ -573,7 +576,7 @@ namespace Senparc.CO2NET.Helpers
 
         #endregion
 
-#if NETSTANDARD2_1_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
         #region AES - GCM
         //TODO: Unit test
 
