@@ -6,12 +6,13 @@ trigger:
   - master
 
 pool:
-  name: 'SenparcWeixinSDK'
+  name: 'SenparcOpenSource'
   demands:
     - Agent.OS -equals Windows_NT
 
+# NUGET_API_KEY is configured as a secret variable on this pipeline. Variable
+# groups are scoped to an Azure DevOps Project and cannot be shared across Projects.
 variables:
-  - group: Nuget_Key
   - name: buildConfiguration
     value: 'Release'
   - name: NUGET_PACKAGES
@@ -23,11 +24,11 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  displayName: 'Use .NET SDK 8'
+  displayName: 'Use .NET SDK 8.x'
   inputs:
     version: '8.0.x'
     packageType: 'sdk'
-    performMultiLevelLookup: true
+    performMultiLevelLookup: false
 
 - powershell: |
     Write-Host '=== Installed SDKs ==='
@@ -110,8 +111,8 @@ steps:
     $source = "$(NuGetPushSource)"
     $apiKey = $env:NUGET_API_KEY
 
-    if ([string]::IsNullOrWhiteSpace($apiKey)) {
-      Write-Host '##[error]Missing secret variable NUGET_API_KEY. Add it to the Nuget_Key variable group and mark it secret.'
+    if ([string]::IsNullOrWhiteSpace($apiKey) -or $apiKey -match '^\$\(.+\)$') {
+      Write-Host '##[error]Missing pipeline secret NUGET_API_KEY. Add it in Pipeline > Edit > Variables and select Keep this value secret.'
       exit 2
     }
 

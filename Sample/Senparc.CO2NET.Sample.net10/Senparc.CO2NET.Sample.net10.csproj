@@ -2,11 +2,14 @@
 
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 		<PackageReleaseNotes>
 			[2026-07-21] v1.0.1 修复 net10 示例中文注释并升级 CO2NET 依赖
 			1、恢复 Program.cs 中因编码异常损坏的中文配置说明。
 			2、Dependency update from Senparc.CO2NET to 4.0.0。
+			[2026-07-22] v1.0.2 对齐 .NET 10 示例与 System.Text.Json
+			1、更新页面标题并使用 ReferenceHandler.IgnoreCycles 替代 Newtonsoft.Json 设置。
+			2、Dependency update from Senparc.CO2NET to 4.1.0。
 		</PackageReleaseNotes>
 		<AssemblyName>Senparc.CO2NET.Sample</AssemblyName>
 	</PropertyGroup>

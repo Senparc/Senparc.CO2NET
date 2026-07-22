@@ -25,7 +25,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     File Function Description：unicode decoding
     
     
-    Creation Identifier：Senparc - 20150211
+    Creation Identifier：Senparc - 20180602
     
     Modification Identifier：Senparc - 20150303
     Modification Description：Organize interface
@@ -45,6 +45,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20260721
     修改描述：v4.0.0 将 GetJsonString 和 GetObject 迁移至 System.Text.Json 并新增源生成重载
 
+    修改标识：Senparc - 20260722
+    修改描述：v4.1.0 新增非泛型源生成及 JsonNode/JsonDocument API 并标注反射路径
+
 ----------------------------------------------------------------*/
 
 
@@ -55,7 +58,12 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization.Metadata;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 #if NET462
 using System.Web.Script.Serialization;
 #endif
@@ -76,6 +84,10 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="data">Data to generate JSON string</param>
         /// <param name="jsonSetting">JSON output settings</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use GetJsonString(JsonTypeInfo<T>, T) for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use GetJsonString(JsonTypeInfo<T>, T) for Native AOT.")]
+#endif
         public static string GetJsonString(object data, JsonSetting jsonSetting = null)
         {
             return SystemTextJsonSerializer.Serialize(data, settings: jsonSetting);
@@ -99,11 +111,23 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
+        /// Convert an object to JSON using non-generic source-generated metadata. This overload is Native AOT safe.
+        /// </summary>
+        public static string GetJsonString(JsonTypeInfo jsonTypeInfo, object data)
+        {
+            return SystemTextJsonSerializer.Serialize(data, jsonTypeInfo);
+        }
+
+        /// <summary>
         /// Deserialize to object
         /// </summary>
         /// <typeparam name="T">Type of deserialized object</typeparam>
         /// <param name="jsonString">JSON string</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use GetObject(JsonTypeInfo<T>, string) for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use GetObject(JsonTypeInfo<T>, string) for Native AOT.")]
+#endif
         public static T GetObject<T>(this string jsonString)
         {
             return SystemTextJsonSerializer.Deserialize<T>(jsonString);
@@ -122,6 +146,10 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="jsonString">JSON string</param>
         /// <param name="settings">JsonSerializerOptions, JsonSetting, or a legacy Newtonsoft settings object.</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use GetObject(JsonTypeInfo<T>, string) for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use GetObject(JsonTypeInfo<T>, string) for Native AOT.")]
+#endif
         public static T GetObject<T>(this string jsonString, object settings = null)
         {
             return SystemTextJsonSerializer.Deserialize<T>(jsonString, settings);
@@ -137,6 +165,14 @@ namespace Senparc.CO2NET.Helpers
         /// Deserialize JSON using source-generated metadata. This overload is Native AOT safe.
         /// </summary>
         public static T GetObject<T>(JsonTypeInfo<T> jsonTypeInfo, string jsonString)
+        {
+            return SystemTextJsonSerializer.Deserialize(jsonString, jsonTypeInfo);
+        }
+
+        /// <summary>
+        /// Deserialize JSON using non-generic source-generated metadata. This overload is Native AOT safe.
+        /// </summary>
+        public static object GetObject(JsonTypeInfo jsonTypeInfo, string jsonString)
         {
             return SystemTextJsonSerializer.Deserialize(jsonString, jsonTypeInfo);
         }
@@ -165,12 +201,33 @@ namespace Senparc.CO2NET.Helpers
         }
 
         /// <summary>
+        /// Parse JSON into the official mutable System.Text.Json DOM without runtime type metadata.
+        /// </summary>
+        public static JsonNode GetJsonNode(this string jsonString, JsonNodeOptions? nodeOptions = null, JsonDocumentOptions documentOptions = default)
+        {
+            return JsonNode.Parse(jsonString, nodeOptions, documentOptions);
+        }
+
+        /// <summary>
+        /// Parse JSON into the official read-only System.Text.Json DOM without runtime type metadata.
+        /// The caller owns the returned document and must dispose it.
+        /// </summary>
+        public static JsonDocument GetJsonDocument(this string jsonString, JsonDocumentOptions documentOptions = default)
+        {
+            return JsonDocument.Parse(jsonString, documentOptions);
+        }
+
+        /// <summary>
         /// Deserialize to object
         /// </summary>
         /// <param name="jsonString">JSON string</param>
         /// <param name="type">Deserialization type</param>
         /// <param name="settings">JsonSerializerOptions, JsonSetting, or a legacy Newtonsoft settings object.</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use GetObject(JsonTypeInfo, string) for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use GetObject(JsonTypeInfo, string) for Native AOT.")]
+#endif
         public static object GetObject(this string jsonString, Type type, object settings = null)
         {
             return SystemTextJsonSerializer.Deserialize(jsonString, type, settings);

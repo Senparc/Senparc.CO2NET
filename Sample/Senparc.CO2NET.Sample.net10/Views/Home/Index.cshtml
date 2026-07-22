@@ -51,7 +51,7 @@
             <table>
                 <tr><td>IsDebug</td><td>@Senparc.CO2NET.Config.IsDebug</td></tr>
                 <tr><td>RootDictionaryPath</td><td>@Senparc.CO2NET.Config.RootDirectoryPath</td></tr>
-                <tr><td>SenparcSetting</td><td>@Senparc.CO2NET.Extensions.ObjectExtensions.ToJson(Senparc.CO2NET.Config.SenparcSetting,true, new Newtonsoft.Json.JsonSerializerSettings(){ ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore})</td></tr>
+                <tr><td>SenparcSetting</td><td>@Senparc.CO2NET.Extensions.ObjectExtensions.ToJson(Senparc.CO2NET.Config.SenparcSetting, new System.Text.Json.JsonSerializerOptions(){ ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles }, true)</td></tr>
                 <tr><td>DefaultCacheNamespace</td><td>@Senparc.CO2NET.Config.DefaultCacheNamespace</td></tr>
             </table>
         </div>

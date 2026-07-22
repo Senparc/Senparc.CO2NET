@@ -2,8 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>1.0.1</Version>
-    <PackageReleaseNotes>[2026-07-21] v1.0.1 Dependency update from Senparc.CO2NET.MagicObject to 1.1.2</PackageReleaseNotes>
+    <Version>1.0.2</Version>
+    <PackageReleaseNotes>
+      [2026-07-21] v1.0.1 Dependency update from Senparc.CO2NET.MagicObject to 1.1.2
+      [2026-07-22] v1.0.2 Dependency update from Senparc.CO2NET.MagicObject to 1.1.3
+    </PackageReleaseNotes>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
