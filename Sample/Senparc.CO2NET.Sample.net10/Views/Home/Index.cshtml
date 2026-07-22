@@ -1,8 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "CO2NET Sample for .NET 6.0";
+    ViewData["Title"] = "CO2NET Sample for .NET 10.0";
 }
 <div class="text-center" id="homeArea">
-    <h1 class="display-4">CO2NET Sample for .NET 6.0</h1>
+    <h1 class="display-4">CO2NET Sample for .NET 10.0</h1>
 
 
     <p>Demo 正在完善中，系统启动设置请看 startup.cs</p>
@@ -51,7 +51,7 @@
             <table>
                 <tr><td>IsDebug</td><td>@Senparc.CO2NET.Config.IsDebug</td></tr>
                 <tr><td>RootDictionaryPath</td><td>@Senparc.CO2NET.Config.RootDirectoryPath</td></tr>
-                <tr><td>SenparcSetting</td><td>@Senparc.CO2NET.Extensions.ObjectExtensions.ToJson(Senparc.CO2NET.Config.SenparcSetting,true, new Newtonsoft.Json.JsonSerializerSettings(){ ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore})</td></tr>
+                <tr><td>SenparcSetting</td><td>@Senparc.CO2NET.Extensions.ObjectExtensions.ToJson(Senparc.CO2NET.Config.SenparcSetting, new System.Text.Json.JsonSerializerOptions(){ ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles }, true)</td></tr>
                 <tr><td>DefaultCacheNamespace</td><td>@Senparc.CO2NET.Config.DefaultCacheNamespace</td></tr>
             </table>
         </div>

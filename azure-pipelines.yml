@@ -1,0 +1,341 @@
+# Senparc.CO2NET NuGet CI/CD
+# Validates the .NET 10 sample, builds every package project into one staging
+# directory, then publishes the generated packages in one batch.
+
+trigger:
+  - master
+
+pool:
+  name: 'SenparcOpenSource'
+  demands:
+    - Agent.OS -equals Windows_NT
+
+# NUGET_API_KEY is configured as a secret variable on this pipeline. Variable
+# groups are scoped to an Azure DevOps Project and cannot be shared across Projects.
+variables:
+  - name: net10Solution
+    value: 'Sample/Senparc.CO2NET.Sample-with-net10.sln'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: NUGET_PACKAGES
+    value: '$(Agent.ToolsDirectory)/nuget/packages'
+  - name: NuGetPushSource
+    value: 'https://api.nuget.org/v3/index.json'
+  - name: PackageStagingDirectory
+    value: '$(Build.ArtifactStagingDirectory)/nuget/$(Build.BuildId)'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK 10.x'
+  inputs:
+    version: '10.0.x'
+    packageType: 'sdk'
+    performMultiLevelLookup: false
+
+- powershell: |
+    Write-Host '=== Installed SDKs ==='
+    dotnet --list-sdks
+    Write-Host '=== Active .NET 10 SDK ==='
+    dotnet --version
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+  displayName: 'Verify .NET SDK'
+
+- task: Cache@2
+  displayName: 'Cache NuGet packages'
+  inputs:
+    key: 'nuget | "$(Agent.OS)" | **/*.csproj'
+    path: '$(NUGET_PACKAGES)'
+    restoreKeys: 'nuget | "$(Agent.OS)"'
+
+- powershell: |
+    $ErrorActionPreference = 'Stop'
+    $sourceRoot = "$(Build.SourcesDirectory)"
+    $packageProjects = @(
+      Get-ChildItem -Path (Join-Path $sourceRoot 'src') -Recurse -File -Filter '*.csproj' |
+        Where-Object {
+          Select-String -LiteralPath $_.FullName `
+            -Pattern '<GeneratePackageOnBuild\b[^>]*>\s*true\s*</GeneratePackageOnBuild>' `
+            -CaseSensitive:$false -Quiet
+        } |
+        Sort-Object FullName
+    )
+
+    if ($packageProjects.Count -eq 0) {
+      Write-Host '##[error]No project with GeneratePackageOnBuild=true was found under src.'
+      exit 2
+    }
+
+    $solutions = @([pscustomobject]@{ Label = '.NET 10'; RelativePath = "$(net10Solution)" })
+    $coverageFailed = $false
+
+    Write-Host '##[group]NuGet package project matrix'
+    foreach ($project in $packageProjects) {
+      $text = Get-Content -LiteralPath $project.FullName -Raw
+      $targetMatch = [regex]::Match($text, '<TargetFrameworks?>([^<]+)</TargetFrameworks?>', 'IgnoreCase')
+      $targets = if ($targetMatch.Success) { $targetMatch.Groups[1].Value } else { '(unknown)' }
+      $relative = $project.FullName.Substring($sourceRoot.Length + 1)
+      Write-Host ('| {0} | {1} |' -f $relative, $targets)
+    }
+    Write-Host ("Total package projects: {0}" -f $packageProjects.Count)
+    Write-Host '##[endgroup]'
+    Write-Host ("##vso[task.setvariable variable=ExpectedPackageCount]{0}" -f $packageProjects.Count)
+
+    foreach ($solution in $solutions) {
+      $solutionPath = Join-Path $sourceRoot $solution.RelativePath
+      if (-not (Test-Path -LiteralPath $solutionPath)) {
+        Write-Host ("##[error]{0} solution was not found: {1}" -f $solution.Label, $solution.RelativePath)
+        $coverageFailed = $true
+        continue
+      }
+
+      $solutionDirectory = Split-Path -Parent $solutionPath
+      $solutionProjects = @{}
+      $listOutput = @(dotnet sln $solutionPath list)
+      if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      foreach ($line in $listOutput) {
+        $candidate = ([string]$line).Trim()
+        if ($candidate.EndsWith('.csproj', [System.StringComparison]::OrdinalIgnoreCase)) {
+          $fullPath = [System.IO.Path]::GetFullPath((Join-Path $solutionDirectory $candidate))
+          $solutionProjects[$fullPath] = $true
+        }
+      }
+
+      $missing = @($packageProjects | Where-Object { -not $solutionProjects.ContainsKey($_.FullName) })
+      if ($missing.Count -eq 0) {
+        Write-Host ("##[section]{0} solution covers all {1} package projects." -f $solution.Label, $packageProjects.Count)
+      } else {
+        $coverageFailed = $true
+        foreach ($project in $missing) {
+          Write-Host ("##[error]{0} solution is missing package project: {1}" -f $solution.Label, $project.FullName.Substring($sourceRoot.Length + 1))
+        }
+      }
+    }
+
+    if ($coverageFailed) { exit 3 }
+  displayName: 'Verify package project coverage'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore CO2NET .NET 10 sample solution'
+  inputs:
+    command: restore
+    projects: '$(net10Solution)'
+    feedsToUse: select
+    includeNuGetOrg: true
+    verbosityRestore: Normal
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build sample and pack all NuGet projects'
+  inputs:
+    command: build
+    projects: '$(net10Solution)'
+    arguments: >-
+      --configuration $(buildConfiguration)
+      --no-restore
+      --property:ContinuousIntegrationBuild=true
+      --property:PackageOutputPath="$(PackageStagingDirectory)"
+
+# One wildcard push publishes all primary packages. NuGet automatically finds
+# and uploads the matching .snupkg files from the same directory.
+- powershell: |
+    $ErrorActionPreference = 'Stop'
+    $packageRoot = "$(PackageStagingDirectory)"
+    $source = "$(NuGetPushSource)"
+    $apiKey = $env:NUGET_API_KEY
+
+    if ([string]::IsNullOrWhiteSpace($apiKey) -or $apiKey -match '^\$\(.+\)$') {
+      Write-Host '##[error]Missing pipeline secret NUGET_API_KEY. Add it in Pipeline > Edit > Variables and select Keep this value secret.'
+      exit 2
+    }
+
+    $packages = @(
+      Get-ChildItem -LiteralPath $packageRoot -File -Filter '*.nupkg' -ErrorAction SilentlyContinue |
+        Where-Object { -not $_.Name.EndsWith('.symbols.nupkg', [System.StringComparison]::OrdinalIgnoreCase) } |
+        Sort-Object Name
+    )
+
+    if ($packages.Count -eq 0) {
+      Write-Host ("##[error]No .nupkg files were found in {0}." -f $packageRoot)
+      exit 3
+    }
+
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+    function Get-PackageMetadata {
+      param([string]$PackagePath)
+
+      $archive = [System.IO.Compression.ZipFile]::OpenRead($PackagePath)
+      try {
+        $entry = $archive.Entries |
+          Where-Object { $_.FullName -match '(?i)\.nuspec$' } |
+          Select-Object -First 1
+        if (-not $entry) {
+          throw "No .nuspec was found in $PackagePath"
+        }
+
+        $reader = New-Object System.IO.StreamReader($entry.Open())
+        try {
+          [xml]$nuspec = $reader.ReadToEnd()
+        } finally {
+          $reader.Dispose()
+        }
+
+        $namespace = New-Object System.Xml.XmlNamespaceManager($nuspec.NameTable)
+        $namespace.AddNamespace('n', $nuspec.DocumentElement.NamespaceURI)
+        $metadata = if ([string]::IsNullOrEmpty($nuspec.DocumentElement.NamespaceURI)) {
+          $nuspec.SelectSingleNode('/package/metadata')
+        } else {
+          $nuspec.SelectSingleNode('/n:package/n:metadata', $namespace)
+        }
+
+        return [pscustomobject]@{
+          Id = [string]$metadata.id
+          Version = [string]$metadata.version
+        }
+      } finally {
+        $archive.Dispose()
+      }
+    }
+
+    $expectedPackageCount = 0
+    if (-not [int]::TryParse("$(ExpectedPackageCount)", [ref]$expectedPackageCount)) {
+      Write-Host '##[error]ExpectedPackageCount was not set by the package coverage task.'
+      exit 4
+    }
+    if ($packages.Count -ne $expectedPackageCount) {
+      Write-Host ("##[error]Expected {0} primary packages but found {1} in {2}." -f $expectedPackageCount, $packages.Count, $packageRoot)
+      exit 5
+    }
+
+    $rows = New-Object System.Collections.Generic.List[object]
+    $manifestFailed = $false
+
+    Write-Host '##[group]NuGet batch publish manifest'
+    foreach ($package in $packages) {
+      $metadata = Get-PackageMetadata -PackagePath $package.FullName
+      if (-not $metadata.Id.StartsWith('Senparc.CO2NET', [System.StringComparison]::Ordinal)) {
+        Write-Host ("##[error]Unexpected package id '{0}' in {1}." -f $metadata.Id, $package.Name)
+        $manifestFailed = $true
+      }
+
+      $symbolPath = [System.IO.Path]::ChangeExtension($package.FullName, '.snupkg')
+      $symbolStatus = if (Test-Path -LiteralPath $symbolPath) { 'yes' } else { 'no' }
+      if ($symbolStatus -eq 'no') {
+        Write-Host ("##[error]Missing symbol package for {0}." -f $package.Name)
+        $manifestFailed = $true
+      }
+      Write-Host ('| {0} | {1} | symbol: {2} | {3} |' -f $metadata.Id, $metadata.Version, $symbolStatus, $package.Name)
+
+      $rows.Add([pscustomobject]@{
+          PackageId = $metadata.Id
+          Version   = $metadata.Version
+          FileName  = $package.Name
+          Path      = $package.FullName
+          Symbol    = $symbolStatus
+          Result    = 'Pending'
+          Detail    = ''
+        })
+    }
+    Write-Host ("Total primary packages: {0}" -f $packages.Count)
+    Write-Host '##[endgroup]'
+    if ($manifestFailed) { exit 6 }
+
+    $packagePattern = Join-Path $packageRoot '*.nupkg'
+    Write-Host ("##[section]Batch publishing {0} packages to {1}" -f $packages.Count, $source)
+    Write-Host ('##[command]dotnet nuget push "{0}" --source "{1}" --api-key *** --skip-duplicate --timeout 3600 --force-english-output' -f $packagePattern, $source)
+
+    $previousErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    $pushOutput = @(
+      dotnet nuget push $packagePattern `
+        --source $source `
+        --api-key $apiKey `
+        --skip-duplicate `
+        --timeout 3600 `
+        --force-english-output 2>&1 |
+        ForEach-Object {
+          $line = $_.ToString()
+          Write-Host $line
+          $line
+        }
+    )
+    $pushExitCode = $LASTEXITCODE
+    $ErrorActionPreference = $previousErrorActionPreference
+    $combinedOutput = $pushOutput -join "`n"
+
+    function Get-PackagePushSegment {
+      param(
+        [string]$Output,
+        [string]$FileName
+      )
+
+      $escapedName = [regex]::Escape($FileName)
+      $match = [regex]::Match(
+        $Output,
+        ('(?ims)^Pushing[^\r\n]*{0}\s+to[^\r\n]*(?:\r?\n|$).*?(?=^Pushing\s+|\z)' -f $escapedName)
+      )
+      if ($match.Success) { return $match.Value }
+      return ''
+    }
+
+    function Get-LogDetail {
+      param([string]$Text)
+      if ([string]::IsNullOrWhiteSpace($Text)) { return '' }
+      $detail = $Text.Trim() -replace '\s+', ' '
+      if ($detail.Length -gt 300) { return $detail.Substring(0, 300) + '...' }
+      return $detail
+    }
+
+    $anyUnexpectedFailure = $false
+    foreach ($row in $rows) {
+      $segment = Get-PackagePushSegment -Output $combinedOutput -FileName $row.FileName
+      $lower = $segment.ToLowerInvariant()
+
+      if ($lower -match 'already exists|status code[^\r\n]*409|409[^\r\n]*conflict|package[^\r\n]*exists') {
+        $row.Result = 'Skipped (exists)'
+        $row.Detail = Get-LogDetail $segment
+      } elseif ($lower -match 'your package was pushed|successfully published|response status code does not indicate success') {
+        if ($lower -match 'response status code does not indicate success') {
+          $row.Result = 'Failed'
+          $row.Detail = Get-LogDetail $segment
+          $anyUnexpectedFailure = $true
+        } else {
+          $row.Result = 'Published'
+        }
+      } elseif (-not [string]::IsNullOrWhiteSpace($segment) -and $pushExitCode -eq 0) {
+        $row.Result = 'Published'
+      } else {
+        $row.Result = 'Failed'
+        $row.Detail = if ($segment) { Get-LogDetail $segment } else { 'No push output was found for this package; it may not have been attempted.' }
+        $anyUnexpectedFailure = $true
+      }
+    }
+
+    Write-Host ''
+    Write-Host 'Legend: Published | Failed | Skipped (exists)'
+    Write-Host '========== NuGet batch push summary (Result | PackageId | Version | Symbol | Path) =========='
+    foreach ($row in $rows) {
+      $pathDisplay = $row.Path
+      if ($pathDisplay.Length -gt 120) {
+        $pathDisplay = '...' + $pathDisplay.Substring([Math]::Max(0, $pathDisplay.Length - 117))
+      }
+      Write-Host ('| {0} | {1} | {2} | {3} | {4} |' -f $row.Result, $row.PackageId, $row.Version, $row.Symbol, $pathDisplay)
+      if ($row.Detail) { Write-Host ('  Reason: {0}' -f $row.Detail) }
+    }
+    Write-Host '============================================================================================='
+
+    $published = @($rows | Where-Object { $_.Result -eq 'Published' }).Count
+    $skipped = @($rows | Where-Object { $_.Result -eq 'Skipped (exists)' }).Count
+    $failed = @($rows | Where-Object { $_.Result -eq 'Failed' }).Count
+    Write-Host ("Total: {0} | Published: {1} | Skipped: {2} | Failed: {3} | Batch exit code: {4}" -f $rows.Count, $published, $skipped, $failed, $pushExitCode)
+
+    if ($pushExitCode -ne 0 -or $anyUnexpectedFailure) {
+      Write-Host '##[error]NuGet batch publish failed. See the native output and summary above.'
+      if ($pushExitCode -ne 0) { exit $pushExitCode }
+      exit 1
+    }
+    exit 0
+  displayName: 'Batch publish Senparc.CO2NET NuGet packages'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  env:
+    NUGET_API_KEY: $(NUGET_API_KEY)

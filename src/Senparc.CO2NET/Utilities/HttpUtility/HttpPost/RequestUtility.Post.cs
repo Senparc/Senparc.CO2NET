@@ -19,13 +19,13 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2025 Senparc
+    Copyright (C) 2026 Senparc
 
     Filename: RequestUtility.Post.cs
 
     Description: Retrieve request result (Post)
 
-    Creation Identifier: Senparc - 20171006
+    Creation Identifier: Senparc - 20180602
 
     Modification Description: Ported the Post method
     Modification Identifier: Senparc - 20180516
@@ -63,7 +63,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Description: v2.2.1 Optimized Http request, promptly closed resources
 
     Modification Identifier: Senparc - 20241119
-    Modification Description: v3.0.0-beta3 Added ApiClient parameter    
+    Modification Description: v3.0.0-beta3 Added ApiClient parameter
+
+    修改标识：Senparc - 20260722
+    修改描述：v4.1.0 .NET 8+ 无 Cookie 请求不再创建不可复用的 CookieContainer
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -517,10 +521,12 @@ namespace Senparc.CO2NET.HttpUtility
             bool useAjax = false, Dictionary<string, string> headerAddition = null, int timeOut = Config.TIME_OUT, bool checkValidationResult = false, bool hasFormData = false,
             string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
         {
+#if !NET8_0_OR_GREATER
             if (cookieContainer == null)
             {
                 cookieContainer = new CookieContainer();
             }
+#endif
 
             var senparcResponse = HttpResponsePost(
                 serviceProvider,
@@ -643,10 +649,12 @@ namespace Senparc.CO2NET.HttpUtility
             bool hasFormData = false,
             string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
         {
+#if !NET8_0_OR_GREATER
             if (cookieContainer == null)
             {
                 cookieContainer = new CookieContainer();
             }
+#endif
 
             var postStreamIsDefaultNull = postStream == null;
             if (postStreamIsDefaultNull)
@@ -809,10 +817,12 @@ namespace Senparc.CO2NET.HttpUtility
             int timeOut = Config.TIME_OUT, bool checkValidationResult = false,
             string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
         {
+#if !NET8_0_OR_GREATER
             if (cookieContainer == null)
             {
                 cookieContainer = new CookieContainer();
             }
+#endif
 
             var postStreamIsDefaultNull = postStream == null;
             if (postStreamIsDefaultNull)
@@ -963,10 +973,12 @@ namespace Senparc.CO2NET.HttpUtility
             bool checkValidationResult = false,
             string contentType = HttpClientHelper.DEFAULT_CONTENT_TYPE)
         {
+#if !NET8_0_OR_GREATER
             if (cookieContainer == null)
             {
                 cookieContainer = new CookieContainer();
             }
+#endif
 
             var postStreamIsDefaultNull = postStream == null;
             if (postStreamIsDefaultNull)

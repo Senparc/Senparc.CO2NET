@@ -1,4 +1,4 @@
-﻿#region Apache License Version 2.0
+#region Apache License Version 2.0
 /*----------------------------------------------------------------
 
 Copyright 2025 Suzhou Senparc Network Technology Co.,Ltd.
@@ -19,444 +19,560 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2025 Senparc
-    
-    FileName：JsonSetting.cs
-    File Function Description：JSON string definition
-    
-    
-    Creation Identifier：Senparc - 20150930
-    
-    Modification Identifier：Senparc - 20160722
-    Modification Description：Added features to control the output content of json format, such as outputting enum type strings, not outputting default values, and exception properties, such as CodeType in membership cards
-             Modified content in foreach in IDictionary
+    Copyright (C) 2026 Senparc
 
-    Modification Identifier：Senparc - 20160722
-    Modification Description：v4.11.5 Fixed error in WeixinJsonConventer.Serialize. Thanks to @jiehanlin
-    
-    Modification Identifier：Senparc - 20180526
-    Modification Description：v4.22.0-rc1 JsonSetting inherits JsonSerializerSettings, using Newtonsoft.Json for serialization
-    
+    文件名：JsonSetting.cs
+    文件功能描述：定义 Senparc JSON 配置、契约解析和兼容转换规则
 
-    ----  CO2NET   ----
-    ----  split from Senparc.Weixin/Helpers/Conventers/WeixinJsonConventer.cs.cs  ----
 
-    Modification Identifier：Senparc - 20180602
-    Modification Description：v0.1.0 1. Ported JsonSetting
-                     2. Renamed WeixinJsonContractResolver to JsonContractResolver
-                     3. Renamed WeiXinJsonSetting to JsonSettingWrap
+    创建标识：Senparc - 20180602
 
-    Modification Identifier：Senparc - 20180721
-    Modification Description：v0.2.1 Optimized serialization feature recognition
+    修改标识：Senparc - 20260721
+    修改描述：v4.0.0 使用 System.Text.Json 重构 JSON 配置并兼容既有 Senparc 特性
+
+    修改标识：Senparc - 20260722
+    修改描述：v4.1.0 扩展 Newtonsoft 属性、公开字段、私有成员和 System.Type AOT 兼容
 
 ----------------------------------------------------------------*/
 
 using System;
-using System.Linq;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reflection;
-//#if NET462
-//using System.Web.Script.Serialization;
-//#endif
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace Senparc.CO2NET.Helpers.Serializers
 {
     /// <summary>
-    /// JSON output settings
+    /// Senparc JSON output settings. The type name and constructors are retained for compatibility;
+    /// serialization is implemented by <see cref="System.Text.Json"/>.
     /// </summary>
-    public class JsonSetting : JsonSerializerSettings
+    public class JsonSetting
     {
         /// <summary>
-        /// Whether to ignore properties of the current type and those with the IJsonIgnoreNull interface that are null. If true, such properties will not appear in the Json string
+        /// Whether null properties should be omitted.
         /// </summary>
         public bool IgnoreNulls { get; set; }
+
         /// <summary>
-        /// Properties that need special null value ignoring
+        /// Property names whose null values should be omitted.
         /// </summary>
         public List<string> PropertiesToIgnoreNull { get; set; }
+
         /// <summary>
-        /// Null properties under the specified type (Class, not Interface) will not be generated in Json
+        /// Property types whose null values should be omitted.
         /// </summary>
         public List<Type> TypesToIgnoreNull { get; set; }
-
-        #region Add
-
 
         public class IgnoreValueAttribute : System.ComponentModel.DefaultValueAttribute
         {
             public IgnoreValueAttribute(object value) : base(value)
             {
-                //Value = value;
             }
         }
+
         public class IgnoreNullAttribute : Attribute
         {
-
         }
+
         /// <summary>
-        /// Exception properties, i.e., properties that are not excluded
+        /// Exception property marker retained for compatibility.
         /// </summary>
         public class ExcludedAttribute : Attribute
         {
-
         }
 
         /// <summary>
-        /// Enum type displays as string
+        /// Serialize the enum property as a string.
         /// </summary>
         public class EnumStringAttribute : Attribute
         {
-
         }
 
-        #endregion
         /// <summary>
-        /// JSON output settings constructor
+        /// JSON output settings constructor.
         /// </summary>
-        /// <param name="ignoreNulls">Whether to ignore properties of the current type and those with the IJsonIgnoreNull interface that are null. If true, such properties will not appear in the Json string</param>
-        /// <param name="propertiesToIgnoreNull">Properties that need special null value ignoring</param>
-        /// <param name="typesToIgnoreNull">Null properties under the specified type (Class, not Interface) will not be generated in Json</param>
         public JsonSetting(bool ignoreNulls = false, List<string> propertiesToIgnoreNull = null, List<Type> typesToIgnoreNull = null)
         {
             IgnoreNulls = ignoreNulls;
             PropertiesToIgnoreNull = propertiesToIgnoreNull ?? new List<string>();
             TypesToIgnoreNull = typesToIgnoreNull ?? new List<Type>();
         }
+
+        /// <summary>
+        /// Creates equivalent <see cref="JsonSerializerOptions"/>.
+        /// </summary>
+        public JsonSerializerOptions ToJsonSerializerOptions()
+        {
+            return JsonSerializerOptionsFactory.Create(this);
+        }
+
+        public static implicit operator JsonSerializerOptions(JsonSetting jsonSetting)
+        {
+            return JsonSerializerOptionsFactory.Create(jsonSetting);
+        }
     }
 
-    //#if NET462
-
-    //    /// <summary>
-    //    /// WeChat JSON converter
-    //    /// </summary>
-    //    public class WeixinJsonConventer : JavaScriptConverter
-    //    {
-    //        private readonly JsonSetting _jsonSetting;
-    //        private readonly Type _type;
-
-    //        public WeixinJsonConventer(Type type, JsonSetting jsonSetting = null)
-    //        {
-    //            this._jsonSetting = jsonSetting ?? new JsonSetting();
-    //            this._type = type;
-    //        }
-
-    //        public override IEnumerable<Type> SupportedTypes
-    //        {
-    //            get
-    //            {
-    //                var typeList = new List<Type>(new[] { typeof(IJsonIgnoreNull), typeof(IJsonEnumString)/*,typeof(JsonIgnoreNull)*/ });
-
-    //                if (_jsonSetting.TypesToIgnoreNull.Count > 0)
-    //                {
-    //                    typeList.AddRange(_jsonSetting.TypesToIgnoreNull);
-    //                }
-
-    //                if (_jsonSetting.IgnoreNulls)
-    //                {
-    //                    typeList.Add(_type);
-    //                }
-
-    //                return new ReadOnlyCollection<Type>(typeList);
-    //            }
-    //        }
-
-    //        public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
-    //        {
-    //            var result = new Dictionary<string, object>();
-    //            if (obj == null)
-    //            {
-    //                return result;
-    //            }
-
-    //            var properties = obj.GetType().GetProperties();
-    //            foreach (var propertyInfo in properties)
-    //            {
-    //                //continue;
-    //                //Excluded properties
-    //                bool excludedProp = propertyInfo.IsDefined(typeof(JsonSetting.ExcludedAttribute), true);
-    //                if (excludedProp)
-    //                {
-    //                    result.Add(propertyInfo.Name, propertyInfo.GetValue(obj, null));
-    //                }
-    //                else
-    //                {
-    //                    if (!this._jsonSetting.PropertiesToIgnoreNull.Contains(propertyInfo.Name))
-    //                    {
-    //                        bool ignoreProp = propertyInfo.IsDefined(typeof(ScriptIgnoreAttribute), true);
-    //                        if ((this._jsonSetting.IgnoreNulls || ignoreProp) && propertyInfo.GetValue(obj, null) == null)
-    //                        {
-    //                            continue;
-    //                        }
-
-
-    //                        //Properties to ignore when value matches
-
-    //#if NET35 || NET40
-    //                        JsonSetting.IgnoreValueAttribute attri = propertyInfo.GetCustomAttributes(typeof(JsonSetting.IgnoreValueAttribute), false).FirstOrDefault() as JsonSetting.IgnoreValueAttribute;
-    //                        if (attri != null && attri.Value.Equals(propertyInfo.GetValue(obj, null)))
-    //                        {
-    //                            continue;
-    //                        }
-
-    //                        JsonSetting.EnumStringAttribute enumStringAttri = propertyInfo.GetCustomAttributes(typeof(JsonSetting.EnumStringAttribute), false).FirstOrDefault() as JsonSetting.EnumStringAttribute;
-    //                        if (enumStringAttri != null)
-    //                        {
-    //                            //Enum type displays as string
-    //                            result.Add(propertyInfo.Name, propertyInfo.GetValue(obj, null).ToString());
-    //                        }
-    //                        else
-    //                        {
-    //                            result.Add(propertyInfo.Name, propertyInfo.GetValue(obj, null));
-    //                        }
-    //#else
-    //                        JsonSetting.IgnoreValueAttribute attri = propertyInfo.GetCustomAttribute<JsonSetting.IgnoreValueAttribute>();
-    //                        if (attri != null && attri.Value.Equals(propertyInfo.GetValue(obj)))
-    //                        {
-    //                            continue;
-    //                        }
-
-    //                        JsonSetting.EnumStringAttribute enumStringAttri = propertyInfo.GetCustomAttribute<JsonSetting.EnumStringAttribute>();
-    //                        if (enumStringAttri != null)
-    //                        {
-    //                            //Enum type displays as string
-    //                            result.Add(propertyInfo.Name, propertyInfo.GetValue(obj).ToString());
-    //                        }
-    //                        else
-    //                        {
-    //                            result.Add(propertyInfo.Name, propertyInfo.GetValue(obj, null));
-    //                        }
-    //#endif
-    //                    }
-    //                }
-    //            }
-    //            return result;
-    //        }
-
-    //        public override object Deserialize(IDictionary<string, object> dictionary, Type type, JavaScriptSerializer serializer)
-    //        {
-    //            throw new NotImplementedException(); //Converter is currently only used for ignoring properties on serialization
-    //        }
-    //    }
-
-    public class JsonSettingWrap : JsonSerializerSettings
+    /// <summary>
+    /// Compatibility wrapper for the historical Senparc JSON settings type.
+    /// </summary>
+    public class JsonSettingWrap
     {
-        public JsonSettingWrap() : this(null)
-        {
+        public JsonSerializerOptions Options { get; }
 
+        public JsonContractResolver ContractResolver { get; }
+
+        public JsonSettingWrap() : this((JsonSetting)null)
+        {
         }
 
         public JsonSettingWrap(JsonSetting jsonSetting)
         {
-            if (jsonSetting != null)
-            {
-                //If null, no special handling
-                ContractResolver = new JsonContractResolver(jsonSetting.IgnoreNulls, jsonSetting.PropertiesToIgnoreNull, jsonSetting.TypesToIgnoreNull);
-            }
-            //else
-            //{
-            //    jsonSetting = new JsonSetting();
-            //}
+            ContractResolver = new JsonContractResolver(
+                jsonSetting?.IgnoreNulls ?? false,
+                jsonSetting?.PropertiesToIgnoreNull,
+                jsonSetting?.TypesToIgnoreNull,
+                jsonSetting != null);
+            Options = JsonSerializerOptionsFactory.Create(jsonSetting, ContractResolver);
         }
 
         /// <summary>
-        /// JSON output settings constructor Priority: ignoreNulls < propertiesToIgnoreNull < typesToIgnoreNull
+        /// JSON output settings constructor. Priority: ignoreNulls &lt; propertiesToIgnoreNull &lt; typesToIgnoreNull.
         /// </summary>
-        /// <param name="ignoreNulls">Whether to ignore properties with the IJsonIgnoreNull interface that are null. If true, such properties will not appear in the Json string</param>
-        /// <param name="propertiesToIgnoreNull">Properties that need special null value ignoring</param>
-        /// <param name="typesToIgnoreNull">Null properties under the specified type (Class, not Interface) will not be generated in Json</param>
         public JsonSettingWrap(bool ignoreNulls = false, List<string> propertiesToIgnoreNull = null, List<Type> typesToIgnoreNull = null)
+            : this(new JsonSetting(ignoreNulls, propertiesToIgnoreNull, typesToIgnoreNull))
         {
-            ContractResolver = new JsonContractResolver(ignoreNulls, propertiesToIgnoreNull, typesToIgnoreNull);
         }
 
+        public static implicit operator JsonSerializerOptions(JsonSettingWrap jsonSettingWrap)
+        {
+            return jsonSettingWrap?.Options;
+        }
     }
-    public class JsonContractResolver : DefaultContractResolver
+
+    /// <summary>
+    /// System.Text.Json contract resolver that preserves Senparc's historical filtering behavior
+    /// and recognizes Newtonsoft attributes on existing DTOs without taking a Newtonsoft dependency.
+    /// </summary>
+    public class JsonContractResolver : IJsonTypeInfoResolver
     {
-        /// <summary>
-        /// Whether to ignore properties of the current type and those with the IJsonIgnoreNull interface that are null. If true, such properties will not appear in the Json string
-        /// </summary>
-        bool IgnoreNulls;
-        /// <summary>
-        /// Properties that need special null value ignoring
-        /// </summary>
+        private readonly DefaultJsonTypeInfoResolver _defaultResolver = new DefaultJsonTypeInfoResolver();
+        private readonly bool _applySenparcAttributes;
+
+        public bool IgnoreNulls { get; }
+
         public List<string> PropertiesToIgnoreNull { get; set; }
-        /// <summary>
-        /// Null properties under the specified type (Class, not Interface) will not be generated in Json
-        /// </summary>
+
         public List<Type> TypesToIgnoreNull { get; set; }
-        /// <summary>
-        /// JSON output settings constructor Priority: ignoreNulls < propertiesToIgnoreNull < typesToIgnoreNull
-        /// </summary>
-        /// <param name="ignoreNulls">Whether to ignore properties of the current type and those with the IJsonIgnoreNull interface that are null. If true, such properties will not appear in the Json string</param>
-        /// <param name="propertiesToIgnoreNull">Properties that need special null value ignoring</param>
-        /// <param name="typesToIgnoreNull">Null properties under the specified type (Class, not Interface) will not be generated in Json</param>
+
         public JsonContractResolver(bool ignoreNulls = false, List<string> propertiesToIgnoreNull = null, List<Type> typesToIgnoreNull = null)
+            : this(ignoreNulls, propertiesToIgnoreNull, typesToIgnoreNull, true)
+        {
+        }
+
+        internal JsonContractResolver(bool ignoreNulls, List<string> propertiesToIgnoreNull, List<Type> typesToIgnoreNull, bool applySenparcAttributes)
         {
             IgnoreNulls = ignoreNulls;
-            PropertiesToIgnoreNull = propertiesToIgnoreNull;
-            TypesToIgnoreNull = typesToIgnoreNull;
+            PropertiesToIgnoreNull = propertiesToIgnoreNull ?? new List<string>();
+            TypesToIgnoreNull = typesToIgnoreNull ?? new List<Type>();
+            _applySenparcAttributes = applySenparcAttributes;
         }
 
-        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+        public JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
         {
-            //TypesToIgnoreNull null properties under the specified type (Class, not Interface) will not be generated in Json
-            if (TypesToIgnoreNull.Contains(type))
+            var typeInfo = _defaultResolver.GetTypeInfo(type, options);
+            if (typeInfo?.Kind == JsonTypeInfoKind.Object)
             {
-                type.IsDefined(typeof(JsonSetting.IgnoreNullAttribute), false);
+                ModifyTypeInfo(typeInfo);
             }
-            return base.CreateProperties(type, memberSerialization);
+
+            return typeInfo;
         }
 
-        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        private void ModifyTypeInfo(JsonTypeInfo typeInfo)
         {
-            var property = base.CreateProperty(member, memberSerialization);
+            AddNewtonsoftAttributedMembers(typeInfo);
+            ApplyNewtonsoftConstructorCompatibility(typeInfo);
 
-#if NET462
-            //IgnoreNull fields marked with IgnoreNulls are serialized based on the IgnoreNulls setting
-            var ignoreNull = member.GetCustomAttribute<JsonSetting.IgnoreNullAttribute>();
-            if (ignoreNull != null || IgnoreNulls)
+            var memberSerializationOptIn = UsesNewtonsoftOptIn(typeInfo.Type);
+            for (var index = typeInfo.Properties.Count - 1; index >= 0; index--)
             {
-                property.NullValueHandling = NullValueHandling.Ignore;
+                var property = typeInfo.Properties[index];
+                var attributes = property.AttributeProvider?.GetCustomAttributes(false) ?? Array.Empty<object>();
+                var memberName = (property.AttributeProvider as MemberInfo)?.Name ?? property.Name;
+                var ignoreNull = IgnoreNulls || PropertiesToIgnoreNull.Contains(memberName) || TypesToIgnoreNull.Contains(property.PropertyType);
+                object ignoredValue = null;
+                var hasIgnoredValue = false;
+                var ignoreProperty = false;
+                var includedByNewtonsoft = false;
+
+                foreach (var attribute in attributes)
+                {
+                    if (_applySenparcAttributes)
+                    {
+                        if (attribute is JsonSetting.IgnoreNullAttribute)
+                        {
+                            ignoreNull = true;
+                        }
+                        else if (attribute is JsonSetting.IgnoreValueAttribute ignoreValueAttribute)
+                        {
+                            ignoredValue = ignoreValueAttribute.Value;
+                            hasIgnoredValue = true;
+                        }
+                        else if (attribute is JsonSetting.EnumStringAttribute)
+                        {
+                            property.CustomConverter = new JsonStringEnumConverter();
+                        }
+                    }
+
+                    ApplyNewtonsoftAttributeCompatibility(
+                        property,
+                        attribute,
+                        ref ignoreNull,
+                        ref ignoreProperty,
+                        ref ignoredValue,
+                        ref hasIgnoredValue,
+                        ref includedByNewtonsoft);
+                }
+
+                if (memberSerializationOptIn && !includedByNewtonsoft)
+                {
+                    ignoreProperty = true;
+                }
+
+                if (hasIgnoredValue)
+                {
+                    foreach (var attribute in attributes)
+                    {
+                        if (attribute is DefaultValueAttribute defaultValueAttribute)
+                        {
+                            ignoredValue = defaultValueAttribute.Value;
+                            break;
+                        }
+                    }
+                }
+
+                if (ignoreProperty)
+                {
+                    typeInfo.Properties.RemoveAt(index);
+                    continue;
+                }
+
+                if (ignoreNull || hasIgnoredValue)
+                {
+                    var existingShouldSerialize = property.ShouldSerialize;
+                    property.ShouldSerialize = (obj, value) =>
+                        (!ignoreNull || value != null) &&
+                        (!hasIgnoredValue || !Equals(value, ignoredValue)) &&
+                        (existingShouldSerialize == null || existingShouldSerialize(obj, value));
+                }
+            }
+        }
+
+        private static void AddNewtonsoftAttributedMembers(JsonTypeInfo typeInfo)
+        {
+            for (var currentType = typeInfo.Type; currentType != null && currentType != typeof(object); currentType = currentType.BaseType)
+            {
+                const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
+                foreach (var member in currentType.GetMembers(flags))
+                {
+                    if (!(member is PropertyInfo) && !(member is FieldInfo))
+                    {
+                        continue;
+                    }
+
+                    var includedByNewtonsoft =
+                        HasAttribute(member, "Newtonsoft.Json.JsonPropertyAttribute") ||
+                        HasAttribute(member, "Newtonsoft.Json.JsonRequiredAttribute") ||
+                        HasAttribute(member, "Newtonsoft.Json.JsonExtensionDataAttribute");
+                    if (!includedByNewtonsoft || ContainsMember(typeInfo, member))
+                    {
+                        continue;
+                    }
+
+                    var property = CreateJsonPropertyInfo(typeInfo, member);
+                    if (property != null)
+                    {
+                        typeInfo.Properties.Add(property);
+                    }
+                }
+            }
+        }
+
+        private static JsonPropertyInfo CreateJsonPropertyInfo(JsonTypeInfo typeInfo, MemberInfo member)
+        {
+            Type memberType;
+            Func<object, object> getter = null;
+            Action<object, object> setter = null;
+
+            if (member is PropertyInfo propertyInfo)
+            {
+                if (propertyInfo.GetIndexParameters().Length != 0)
+                {
+                    return null;
+                }
+
+                memberType = propertyInfo.PropertyType;
+                if (propertyInfo.GetMethod != null)
+                {
+                    getter = instance => propertyInfo.GetValue(instance);
+                }
+                if (propertyInfo.SetMethod != null)
+                {
+                    setter = (instance, value) => propertyInfo.SetValue(instance, value);
+                }
             }
             else
             {
-                property.NullValueHandling = NullValueHandling.Include;
-            }
-
-            //propertiesToIgnoreNull fields specified as null are not serialized
-            if (PropertiesToIgnoreNull.Contains(member.Name))
-            {
-                property.NullValueHandling = NullValueHandling.Ignore;
-            }
-
-            ////Fields that match IgnoreValue marked values are not serialized
-            //var ignoreValue = member.GetCustomAttribute<JsonSetting.IgnoreValueAttribute>();
-            //if (ignoreValue != null)
-            //{
-            //    property.DefaultValueHandling = DefaultValueHandling.Ignore;
-            //    var t = member.DeclaringType;
-            //    property.ShouldSerialize = instance =>
-            //    {
-            //        var obj = Convert.ChangeType(instance, t);
-            //        var value = (member as PropertyInfo).GetValue(obj, null);
-            //        return value != ignoreValue.Value;
-            //    };
-            //}
-
-            //Enum serialization
-            var enumString = member.GetCustomAttribute<JsonSetting.EnumStringAttribute>();
-            if (enumString != null)
-            {
-                property.Converter = new StringEnumConverter();
-                //property = base.CreateProperty(member, memberSerialization);
-            }
-#else
-            var customAttributes = member.GetCustomAttributes(false);
-            var ignoreNullAttribute = typeof(JsonSetting.IgnoreNullAttribute);
-            //IgnoreNull fields marked with IgnoreNulls are serialized based on the IgnoreNulls setting
-            if (IgnoreNulls || customAttributes.Count(o => o.GetType() == ignoreNullAttribute) == 1)
-            {
-                property.NullValueHandling = NullValueHandling.Ignore;
-            }
-            else
-            {
-                property.NullValueHandling = NullValueHandling.Include;
-            }
-
-            //TODO: Once IgnoreNulls is executed, some special judgments may no longer be needed
-
-            //PropertiesToIgnoreNull fields specified as null are not serialized
-            if (PropertiesToIgnoreNull.Contains(member.Name))
-            {
-                property.NullValueHandling = NullValueHandling.Ignore;
-            }
-
-            //TypesToIgnoreNull specific type fields specified as null are not serialized
-            if (TypesToIgnoreNull.Contains(property.PropertyType))
-            {
-                //Console.WriteLine("Ignore null values: " + property.PropertyType);
-                property.NullValueHandling = NullValueHandling.Ignore;//This setting is invalid
-
-                var t = member.DeclaringType;
-
-                property.ShouldSerialize = instance =>
+                var fieldInfo = (FieldInfo)member;
+                memberType = fieldInfo.FieldType;
+                getter = instance => fieldInfo.GetValue(instance);
+                if (!fieldInfo.IsInitOnly)
                 {
-                    try
-                    {
-                        //var obj = Convert.ChangeType(instance, t);
-                        var value = (member as PropertyInfo).GetValue(instance, null);
-
-                        //Tracking test
-                        //Console.WriteLine("Object Value:" + value);
-                        //Console.WriteLine("Setting Value:" + (ignoreValue as JsonSetting.IgnoreValueAttribute).Value);
-                        //Console.WriteLine("ShouldSerialize Result:" + (!value.Equals((ignoreValue as JsonSetting.IgnoreValueAttribute).Value)));
-
-                        //return value != (ignoreValue as JsonSetting.IgnoreValueAttribute).Value;
-
-                        //Console.WriteLine("TypesToIgnoreNull Value: " + value);
-                        //Console.WriteLine("TypesToIgnoreNull Value is null: " + (value == null));
-
-                        return value != null;
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.SenparcTrace.BaseExceptionLog(new Exceptions.BaseException(ex.Message, ex));
-                        return true;
-                    }
-
-                };
+                    setter = (instance, value) => fieldInfo.SetValue(instance, value);
+                }
             }
 
-
-            //Fields that match IgnoreValue marked values are not serialized
-            var ignoreValueAttribute = typeof(JsonSetting.IgnoreValueAttribute);
-            var ignoreValue = customAttributes.FirstOrDefault(o => o.GetType() == ignoreValueAttribute);
-            if (ignoreValue != null)
-            {
-                //property.DefaultValueHandling = DefaultValueHandling.Ignore;
-                var t = member.DeclaringType;
-
-                property.ShouldSerialize = instance =>
-                {
-                    //var obj = Convert.ChangeType(instance, t);
-                    var value = (member as PropertyInfo).GetValue(instance, null);
-
-                    //Tracking test
-                    //Console.WriteLine("Object Value:" + value);
-                    //Console.WriteLine("Setting Value:" + (ignoreValue as JsonSetting.IgnoreValueAttribute).Value);
-                    //Console.WriteLine("ShouldSerialize Result:" + (!value.Equals((ignoreValue as JsonSetting.IgnoreValueAttribute).Value)));
-
-                    //return value != (ignoreValue as JsonSetting.IgnoreValueAttribute).Value;
-                    return !value.Equals((ignoreValue as JsonSetting.IgnoreValueAttribute).Value);
-                };
-            }
-
-            //Enum serialization
-            var enumStringAttribute = typeof(JsonSetting.EnumStringAttribute);
-            if (customAttributes.Count(o => o.GetType() == enumStringAttribute) == 1)
-            {
-                property.Converter = new StringEnumConverter();
-            }
-#endif
-
-            //var defaultIgnore = member.GetCustomAttribute<DefaultIgnoreAttribute>();
-            //if (defaultIgnore != null)
-            //{
-            //    //defaultIgnore.Value == member.
-            //}
-            return property;
+            var jsonProperty = typeInfo.CreateJsonPropertyInfo(memberType, member.Name);
+            jsonProperty.AttributeProvider = member;
+            jsonProperty.Get = getter;
+            jsonProperty.Set = setter;
+            return jsonProperty;
         }
 
-        protected override JsonContract CreateContract(Type objectType)
+        private static bool ContainsMember(JsonTypeInfo typeInfo, MemberInfo member)
         {
-            return base.CreateContract(objectType);
+            foreach (var property in typeInfo.Properties)
+            {
+                if (Equals(property.AttributeProvider, member))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool UsesNewtonsoftOptIn(Type type)
+        {
+            foreach (var attribute in type.GetCustomAttributes(true))
+            {
+                var attributeType = attribute.GetType();
+                if (attributeType.FullName == "Newtonsoft.Json.JsonObjectAttribute" &&
+                    string.Equals(attributeType.GetProperty("MemberSerialization")?.GetValue(attribute)?.ToString(), "OptIn", StringComparison.Ordinal))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static void ApplyNewtonsoftConstructorCompatibility(JsonTypeInfo typeInfo)
+        {
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            foreach (var constructor in typeInfo.Type.GetConstructors(flags))
+            {
+                if (constructor.GetParameters().Length == 0 && HasAttribute(constructor, "Newtonsoft.Json.JsonConstructorAttribute"))
+                {
+                    typeInfo.CreateObject = () => constructor.Invoke(null);
+                    return;
+                }
+            }
+        }
+
+        private static bool HasAttribute(MemberInfo member, string attributeFullName)
+        {
+            foreach (var attribute in member.GetCustomAttributes(false))
+            {
+                if (attribute.GetType().FullName == attributeFullName)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static void ApplyNewtonsoftAttributeCompatibility(
+            JsonPropertyInfo property,
+            object attribute,
+            ref bool ignoreNull,
+            ref bool ignoreProperty,
+            ref object ignoredValue,
+            ref bool hasIgnoredValue,
+            ref bool includedByNewtonsoft)
+        {
+            var attributeType = attribute.GetType();
+            switch (attributeType.FullName)
+            {
+                case "Newtonsoft.Json.JsonIgnoreAttribute":
+                    ignoreProperty = true;
+                    break;
+                case "Newtonsoft.Json.JsonPropertyAttribute":
+                    includedByNewtonsoft = true;
+                    var propertyName = attributeType.GetProperty("PropertyName")?.GetValue(attribute) as string;
+                    if (!string.IsNullOrEmpty(propertyName))
+                    {
+                        property.Name = propertyName;
+                    }
+
+                    if (string.Equals(attributeType.GetProperty("NullValueHandling")?.GetValue(attribute)?.ToString(), "Ignore", StringComparison.Ordinal))
+                    {
+                        ignoreNull = true;
+                    }
+
+                    var defaultValueHandling = attributeType.GetProperty("DefaultValueHandling")?.GetValue(attribute)?.ToString();
+                    if (!string.IsNullOrEmpty(defaultValueHandling) && defaultValueHandling.Contains("Ignore"))
+                    {
+                        ignoredValue = property.PropertyType.IsValueType ? Activator.CreateInstance(property.PropertyType) : null;
+                        hasIgnoredValue = true;
+                    }
+
+                    var order = attributeType.GetProperty("Order")?.GetValue(attribute);
+                    if (order is int orderValue)
+                    {
+                        property.Order = orderValue;
+                    }
+
+                    var required = attributeType.GetProperty("Required")?.GetValue(attribute)?.ToString();
+                    if (string.Equals(required, "Always", StringComparison.Ordinal) ||
+                        string.Equals(required, "AllowNull", StringComparison.Ordinal))
+                    {
+                        property.IsRequired = true;
+                    }
+                    break;
+                case "Newtonsoft.Json.JsonRequiredAttribute":
+                    includedByNewtonsoft = true;
+                    property.IsRequired = true;
+                    break;
+                case "Newtonsoft.Json.JsonExtensionDataAttribute":
+                    includedByNewtonsoft = true;
+                    property.IsExtensionData = SupportsSystemTextJsonExtensionData(property.PropertyType);
+                    break;
+            }
+        }
+
+        private static bool SupportsSystemTextJsonExtensionData(Type type)
+        {
+            if (type == typeof(IDictionary<string, object>) || type == typeof(IDictionary<string, JsonElement>))
+            {
+                return true;
+            }
+
+            foreach (var interfaceType in type.GetInterfaces())
+            {
+                if (!interfaceType.IsGenericType || interfaceType.GetGenericTypeDefinition() != typeof(IDictionary<,>))
+                {
+                    continue;
+                }
+
+                var arguments = interfaceType.GetGenericArguments();
+                if (arguments[0] == typeof(string) && (arguments[1] == typeof(object) || arguments[1] == typeof(JsonElement)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
-    //#endif
+    internal static class JsonSerializerOptionsFactory
+    {
+        internal static JsonSerializerOptions Create(JsonSetting jsonSetting = null, JsonContractResolver resolver = null)
+        {
+            resolver ??= new JsonContractResolver(
+                jsonSetting?.IgnoreNulls ?? false,
+                jsonSetting?.PropertiesToIgnoreNull,
+                jsonSetting?.TypesToIgnoreNull,
+                jsonSetting != null);
+
+            var options = new JsonSerializerOptions
+            {
+                AllowTrailingCommas = true,
+                DefaultIgnoreCondition = jsonSetting?.IgnoreNulls == true
+                    ? JsonIgnoreCondition.WhenWritingNull
+                    : JsonIgnoreCondition.Never,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                PropertyNameCaseInsensitive = true,
+                ReadCommentHandling = JsonCommentHandling.Skip,
+                IncludeFields = true,
+                TypeInfoResolver = resolver
+            };
+
+            options.Converters.Add(new SystemTypeJsonConverter());
+            return options;
+        }
+    }
+
+    /// <summary>
+    /// Serializes <see cref="Type"/> values by assembly-qualified name. Source-generated
+    /// contexts can register this converter to keep existing cache payloads AOT-compatible.
+    /// </summary>
+    public sealed class SystemTypeJsonConverter : JsonConverter<Type>
+    {
+        private static readonly ConcurrentDictionary<string, Type> KnownTypes = new ConcurrentDictionary<string, Type>(StringComparer.Ordinal);
+
+        /// <summary>
+        /// Register a type that may appear in cached JSON. Generic registration keeps the type visible to Native AOT trimming.
+        /// </summary>
+        public static void RegisterType<T>()
+        {
+            RegisterType(typeof(T));
+        }
+
+        /// <summary>
+        /// Register a type that may appear in cached JSON.
+        /// </summary>
+        public static void RegisterType(Type type)
+        {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            if (!string.IsNullOrEmpty(type.AssemblyQualifiedName))
+            {
+                KnownTypes[type.AssemblyQualifiedName] = type;
+            }
+            if (!string.IsNullOrEmpty(type.FullName))
+            {
+                KnownTypes[type.FullName] = type;
+            }
+        }
+
+#if NET8_0_OR_GREATER
+        [UnconditionalSuppressMessage("Trimming", "IL2057", Justification = "Native AOT callers can register preserved types with RegisterType<T>(); Type.GetType remains as the backward-compatible fallback for existing cache values.")]
+#endif
+        public override Type Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var typeName = reader.GetString();
+            if (string.IsNullOrEmpty(typeName))
+            {
+                return null;
+            }
+
+            return KnownTypes.TryGetValue(typeName, out var knownType)
+                ? knownType
+                : Type.GetType(typeName, throwOnError: false);
+        }
+
+        public override void Write(Utf8JsonWriter writer, Type value, JsonSerializerOptions options)
+        {
+            if (value != null)
+            {
+                RegisterType(value);
+            }
+            writer.WriteStringValue(value?.AssemblyQualifiedName);
+        }
+    }
 }

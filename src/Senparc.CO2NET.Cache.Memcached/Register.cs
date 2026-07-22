@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2025 Senparc
+    Copyright (C) 2026 Senparc
 
     FileName: Register.cs
     File Function Description: Senparc.CO2NET.Memcached.Redis quick registration process

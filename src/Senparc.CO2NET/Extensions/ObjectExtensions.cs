@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2025 Senparc
+    Copyright (C) 2026 Senparc
     
     FileName：ObjectExtensions.cs
     File Function Description：Object extension class
@@ -51,9 +51,20 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier：Senparc - 20190108
     Modification Description：v0.5.1 Added jsonSerializerSettings parameter to ToJson() method
 
+    修改标识：Senparc - 20260721
+    修改描述：v4.0.0 将 ToJson 迁移至 System.Text.Json 并新增 JsonTypeInfo Native AOT 重载
+
+    修改标识：Senparc - 20260722
+    修改描述：v4.1.0 为反射 ToJson 路径添加 Native AOT 诊断并保留既有调用方式
+
 ----------------------------------------------------------------*/
 
-using Newtonsoft.Json;
+using Senparc.CO2NET.Helpers.Serializers;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace Senparc.CO2NET.Extensions
 {
@@ -63,16 +74,47 @@ namespace Senparc.CO2NET.Extensions
     public static class ObjectExtensions
     {
         /// <summary>
-        /// Convert data to Json format (using Newtonsoft.Json.dll)
+        /// Convert data to JSON using System.Text.Json.
         /// </summary>
         /// <param name="data">Data</param>
         /// <param name="indented">Whether to use indented format</param>
-        /// <param name="jsonSerializerSettings">Serialization settings (default is null)</param>
+        /// <param name="jsonSerializerSettings">Serialization settings. Supports JsonSerializerOptions and the legacy Newtonsoft settings object.</param>
         /// <returns></returns>
-        public static string ToJson(this object data, bool indented = false, JsonSerializerSettings jsonSerializerSettings = null)
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the JsonTypeInfo overload for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use the JsonTypeInfo overload for Native AOT.")]
+#endif
+        public static string ToJson(this object data, bool indented = false, object jsonSerializerSettings = null)
         {
-            var formatting = indented ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None;
-            return Newtonsoft.Json.JsonConvert.SerializeObject(data, formatting, jsonSerializerSettings);
+            return SystemTextJsonSerializer.Serialize(data, indented, jsonSerializerSettings);
+        }
+
+        /// <summary>
+        /// Convert data to JSON using explicit System.Text.Json options.
+        /// </summary>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the JsonTypeInfo overload for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use the JsonTypeInfo overload for Native AOT.")]
+#endif
+        public static string ToJson(this object data, JsonSerializerOptions jsonSerializerOptions, bool indented = false)
+        {
+            return SystemTextJsonSerializer.Serialize(data, indented, jsonSerializerOptions);
+        }
+
+        /// <summary>
+        /// Convert data to JSON using source-generated metadata. This overload is Native AOT safe.
+        /// </summary>
+        public static string ToJson<T>(this T data, JsonTypeInfo<T> jsonTypeInfo)
+        {
+            return SystemTextJsonSerializer.Serialize(data, jsonTypeInfo);
+        }
+
+        /// <summary>
+        /// Convert data to JSON using non-generic source-generated metadata. This overload is Native AOT safe.
+        /// </summary>
+        public static string ToJson(this object data, JsonTypeInfo jsonTypeInfo)
+        {
+            return SystemTextJsonSerializer.Serialize(data, jsonTypeInfo);
         }
 
         /// <summary>

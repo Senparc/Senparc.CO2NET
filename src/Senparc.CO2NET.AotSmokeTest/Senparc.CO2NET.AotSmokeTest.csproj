@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Version>1.1.0</Version>
+    <PackageReleaseNotes>
+      [2026-07-21] v1.0.0 新增 System.Text.Json Native AOT 冒烟验证
+      1、验证 ToJson、GetObject 和缓存序列化的 JsonTypeInfo 源生成路径。
+      2、验证 osx-arm64 Native AOT 原生编译、链接及运行结果。
+      [2026-07-22] v1.1.0 扩展 Native AOT 运行时覆盖
+      1、覆盖 System.Type 注册转换、JSON DOM、缓存和源生成 GET/POST 请求路径。
+      2、将 IL2026 与 IL3050 设为错误并验证 osx-arm64 原生二进制运行。
+    </PackageReleaseNotes>
+    <PublishAot>true</PublishAot>
+    <SelfContained>true</SelfContained>
+    <IsAotCompatible>true</IsAotCompatible>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <WarningsAsErrors>$(WarningsAsErrors);IL2026;IL3050</WarningsAsErrors>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Senparc.CO2NET\Senparc.CO2NET.csproj" />
+  </ItemGroup>
+</Project>

@@ -19,13 +19,13 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2025 Senparc
+    Copyright (C) 2026 Senparc
 
     Filename: Post.cs  
   
     Description: Post  
   
-    Creation Identifier: Senparc - 20150211  
+    Creation Identifier: Senparc - 20180602
   
     Modification Identifier: Senparc - 20150303  
     Modification Description: Organized interfaces  
@@ -58,7 +58,12 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Description: v2.1.7 HttpUtility.Post methods provide contentType parameter  
   
     Modification Identifier: Senparc - 20241119  
-    Modification Description: v3.0.0-beta3 Added ApiClient parameter  ----------------------------------------------------------------*/
+    Modification Description: v3.0.0-beta3 Added ApiClient parameter
+
+    修改标识：Senparc - 20260722
+    修改描述：v4.1.0 新增 JsonTypeInfo 文件、流及表单 POST Native AOT 重载
+
+----------------------------------------------------------------*/
 
 
 
@@ -68,8 +73,12 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization.Metadata;
 using Senparc.CO2NET.Helpers;
 using System.Net.Http;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 #if NET462
 using System.Web.Script.Serialization;
@@ -105,6 +114,10 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the PostFileGetJson overload with JsonTypeInfo<T> for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use the PostFileGetJson overload with JsonTypeInfo<T> for Native AOT.")]
+#endif
         public static T PostFileGetJson<T>(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null,
@@ -143,6 +156,46 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
+        /// 发起 Post 文件请求，并使用源生成元数据反序列化响应。此重载支持 Native AOT。
+        /// </summary>
+        public static T PostFileGetJson<T>(
+            JsonTypeInfo<T> jsonTypeInfo,
+            IServiceProvider serviceProvider,
+            string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null,
+            Dictionary<string, string> postDataDictionary = null,
+            Encoding encoding = null,
+#if !NET462
+            ApiClient apiClient = null,
+            string certName = null,
+#else
+            X509Certificate2 cer = null,
+#endif
+            bool useAjax = false,
+            string contentType = null,
+            Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                postDataDictionary.FillFormDataStream(ms);
+
+                string returnText = RequestUtility.HttpPost(
+                    serviceProvider,
+                    url, cookieContainer, ms, fileDictionary, null, encoding,
+#if !NET462
+                    apiClient,
+                    certName,
+#else
+                    cer,
+#endif
+                    useAjax, null, timeOut, contentType: contentType);
+
+                afterReturnText?.Invoke(url, returnText);
+
+                return SerializerHelper.GetObject(jsonTypeInfo, returnText);
+            }
+        }
+
+        /// <summary>
         /// 发起Post请求，可包含文件流
         /// </summary>
         /// <typeparam name="T">返回数据类型（Json对应的实体）</typeparam>
@@ -159,6 +212,10 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the PostGetJson overload with JsonTypeInfo<T> for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use the PostGetJson overload with JsonTypeInfo<T> for Native AOT.")]
+#endif
         public static T PostGetJson<T>(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null,
@@ -192,6 +249,40 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
+        /// 发起 Post 流请求，并使用源生成元数据反序列化响应。此重载支持 Native AOT。
+        /// </summary>
+        public static T PostGetJson<T>(
+            JsonTypeInfo<T> jsonTypeInfo,
+            IServiceProvider serviceProvider,
+            string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null,
+#if !NET462
+            ApiClient apiClient = null,
+            string certName = null,
+#else
+            X509Certificate2 cer = null,
+#endif
+            bool useAjax = false,
+            string contentType = null,
+            bool checkValidationResult = false, Action<string, string> afterReturnText = null,
+            int timeOut = Config.TIME_OUT)
+        {
+            string returnText = RequestUtility.HttpPost(
+                serviceProvider,
+                url, cookieContainer, fileStream, null, null, encoding,
+#if !NET462
+                apiClient,
+                certName,
+#else
+                cer,
+#endif
+                useAjax, null, timeOut, checkValidationResult, contentType: contentType);
+
+            afterReturnText?.Invoke(url, returnText);
+
+            return SerializerHelper.GetObject(jsonTypeInfo, returnText);
+        }
+
+        /// <summary>
         /// Form表单Post数据，获取JSON
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -207,6 +298,10 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the PostGetJson overload with JsonTypeInfo<T> for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use the PostGetJson overload with JsonTypeInfo<T> for Native AOT.")]
+#endif
         public static T PostGetJson<T>(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
@@ -236,6 +331,39 @@ namespace Senparc.CO2NET.HttpUtility
 
             var result = SerializerHelper.GetObject<T>(returnText);
             return result;
+        }
+
+        /// <summary>
+        /// 发送 Post 表单，并使用源生成元数据反序列化响应。此重载支持 Native AOT。
+        /// </summary>
+        public static T PostGetJson<T>(
+            JsonTypeInfo<T> jsonTypeInfo,
+            IServiceProvider serviceProvider,
+            string url, CookieContainer cookieContainer = null, Dictionary<string, string> formData = null, Encoding encoding = null,
+#if !NET462
+            ApiClient apiClient = null,
+            string certName = null,
+#else
+            X509Certificate2 cer = null,
+#endif
+            bool useAjax = false,
+            string contentType = null,
+            Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
+        {
+            string returnText = RequestUtility.HttpPost(
+                serviceProvider,
+                url, cookieContainer, formData, encoding,
+#if !NET462
+                apiClient,
+                certName,
+#else
+                cer,
+#endif
+                useAjax, null, timeOut);
+
+            afterReturnText?.Invoke(url, returnText);
+
+            return SerializerHelper.GetObject(jsonTypeInfo, returnText);
         }
 
         /// <summary>
@@ -292,6 +420,10 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the PostFileGetJsonAsync overload with JsonTypeInfo<T> for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use the PostFileGetJsonAsync overload with JsonTypeInfo<T> for Native AOT.")]
+#endif
         public static async Task<T> PostFileGetJsonAsync<T>(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null, Dictionary<string, string> postDataDictionary = null,
@@ -330,6 +462,47 @@ namespace Senparc.CO2NET.HttpUtility
             }
         }
 
+        /// <summary>
+        /// 异步发起 Post 文件请求，并使用源生成元数据反序列化响应。此重载支持 Native AOT。
+        /// </summary>
+        public static async Task<T> PostFileGetJsonAsync<T>(
+            JsonTypeInfo<T> jsonTypeInfo,
+            IServiceProvider serviceProvider,
+            string url, CookieContainer cookieContainer = null, Dictionary<string, string> fileDictionary = null, Dictionary<string, string> postDataDictionary = null,
+            Encoding encoding = null,
+#if !NET462
+            ApiClient apiClient = null,
+            string certName = null,
+#else
+            X509Certificate2 cer = null,
+#endif
+            bool useAjax = false,
+            string contentType = null,
+            Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
+        {
+            var hasFormData = postDataDictionary != null;
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                postDataDictionary.FillFormDataStream(ms);
+
+                string returnText = await RequestUtility.HttpPostAsync(
+                    serviceProvider,
+                    url, cookieContainer, ms, fileDictionary, null, encoding,
+#if !NET462
+                    apiClient,
+                    certName,
+#else
+                    cer,
+#endif
+                    useAjax, null, hasFormData, timeOut, contentType: contentType).ConfigureAwait(false);
+
+                afterReturnText?.Invoke(url, returnText);
+
+                return SerializerHelper.GetObject(jsonTypeInfo, returnText);
+            }
+        }
+
 
         /// <summary>
         /// 【异步方法】发起Post请求，可包含文件流
@@ -348,6 +521,10 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the PostGetJsonAsync overload with JsonTypeInfo<T> for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use the PostGetJsonAsync overload with JsonTypeInfo<T> for Native AOT.")]
+#endif
         public static async Task<T> PostGetJsonAsync<T>(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null,
@@ -380,6 +557,40 @@ namespace Senparc.CO2NET.HttpUtility
             return result;
         }
 
+        /// <summary>
+        /// 异步发起 Post 流请求，并使用源生成元数据反序列化响应。此重载支持 Native AOT。
+        /// </summary>
+        public static async Task<T> PostGetJsonAsync<T>(
+            JsonTypeInfo<T> jsonTypeInfo,
+            IServiceProvider serviceProvider,
+            string url, CookieContainer cookieContainer = null, Stream fileStream = null, Encoding encoding = null,
+#if !NET462
+            ApiClient apiClient = null,
+            string certName = null,
+#else
+            X509Certificate2 cer = null,
+#endif
+            bool useAjax = false, bool checkValidationResult = false,
+            string contentType = null,
+            Action<string, string> afterReturnText = null,
+            int timeOut = Config.TIME_OUT)
+        {
+            string returnText = await RequestUtility.HttpPostAsync(
+                serviceProvider,
+                url, cookieContainer, fileStream, null, null, encoding,
+#if !NET462
+                apiClient,
+                certName,
+#else
+                cer,
+#endif
+                useAjax, null, false, timeOut, checkValidationResult, contentType).ConfigureAwait(false);
+
+            afterReturnText?.Invoke(url, returnText);
+
+            return SerializerHelper.GetObject(jsonTypeInfo, returnText);
+        }
+
 
         /// <summary>
         /// 【异步方法】Form表单Post数据，获取JSON
@@ -397,6 +608,10 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the PostGetJsonAsync overload with JsonTypeInfo<T> for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use the PostGetJsonAsync overload with JsonTypeInfo<T> for Native AOT.")]
+#endif
         public static async Task<T> PostGetJsonAsync<T>(
             IServiceProvider serviceProvider,
             string url, CookieContainer cookieContainer = null,
@@ -428,6 +643,40 @@ namespace Senparc.CO2NET.HttpUtility
 
             var result = SerializerHelper.GetObject<T>(returnText);
             return result;
+        }
+
+        /// <summary>
+        /// 异步发送 Post 表单，并使用源生成元数据反序列化响应。此重载支持 Native AOT。
+        /// </summary>
+        public static async Task<T> PostGetJsonAsync<T>(
+            JsonTypeInfo<T> jsonTypeInfo,
+            IServiceProvider serviceProvider,
+            string url, CookieContainer cookieContainer = null,
+            Dictionary<string, string> formData = null, Encoding encoding = null,
+#if !NET462
+            ApiClient apiClient = null,
+            string certName = null,
+#else
+            X509Certificate2 cer = null,
+#endif
+            bool useAjax = false,
+            string contentType = null,
+            Action<string, string> afterReturnText = null, int timeOut = Config.TIME_OUT)
+        {
+            string returnText = await RequestUtility.HttpPostAsync(
+                serviceProvider,
+                url, cookieContainer, formData, encoding,
+#if !NET462
+                apiClient,
+                certName,
+#else
+                cer,
+#endif
+                useAjax, null, timeOut).ConfigureAwait(false);
+
+            afterReturnText?.Invoke(url, returnText);
+
+            return SerializerHelper.GetObject(jsonTypeInfo, returnText);
         }
 
         /// <summary>

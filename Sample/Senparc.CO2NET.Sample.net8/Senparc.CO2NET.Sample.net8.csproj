@@ -2,6 +2,13 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+		<Version>1.0.2</Version>
+		<PackageReleaseNotes>
+			[2026-07-21] v1.0.1 Dependency update from Senparc.CO2NET to 4.0.0
+			[2026-07-22] v1.0.2 使用 System.Text.Json 循环引用配置
+			1、示例页面移除 Newtonsoft.Json 设置对象并改用 ReferenceHandler.IgnoreCycles。
+			2、Dependency update from Senparc.CO2NET to 4.1.0。
+		</PackageReleaseNotes>
 		<AssemblyName>Senparc.CO2NET.Sample</AssemblyName>
 	</PropertyGroup>
 	<PropertyGroup>
