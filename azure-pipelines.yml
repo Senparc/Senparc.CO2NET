@@ -1,0 +1,202 @@
+# Senparc.CO2NET NuGet CI/CD
+# Automatically discovers every project that enables GeneratePackageOnBuild,
+# builds all packages into one staging directory, and publishes them in one batch.
+
+trigger:
+  - master
+
+pool:
+  name: 'SenparcWeixinSDK'
+  demands:
+    - Agent.OS -equals Windows_NT
+
+variables:
+  - group: Nuget_Key
+  - name: buildConfiguration
+    value: 'Release'
+  - name: NUGET_PACKAGES
+    value: '$(Agent.ToolsDirectory)/nuget/packages'
+  - name: NuGetPushSource
+    value: 'https://api.nuget.org/v3/index.json'
+  - name: PackageStagingDirectory
+    value: '$(Build.ArtifactStagingDirectory)/nuget/$(Build.BuildId)'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK 8'
+  inputs:
+    version: '8.0.x'
+    packageType: 'sdk'
+    performMultiLevelLookup: true
+
+- powershell: |
+    Write-Host '=== Installed SDKs ==='
+    dotnet --list-sdks
+    Write-Host '=== Active SDK ==='
+    dotnet --version
+  displayName: 'Verify .NET SDK'
+
+- task: Cache@2
+  displayName: 'Cache NuGet packages'
+  inputs:
+    key: 'nuget | "$(Agent.OS)" | **/*.csproj'
+    path: '$(NUGET_PACKAGES)'
+    restoreKeys: 'nuget | "$(Agent.OS)"'
+
+# Build a temporary solution from package-producing projects. This keeps the
+# pipeline in sync when a new Senparc.CO2NET package project is added.
+- powershell: |
+    $ErrorActionPreference = 'Stop'
+    $sourceRoot = "$(Build.SourcesDirectory)"
+    $solutionDirectory = Join-Path $sourceRoot '.pipeline-temp'
+    $solutionPath = Join-Path $solutionDirectory 'Senparc.CO2NET.Packages.sln'
+
+    $packageProjects = @(
+      Get-ChildItem -Path (Join-Path $sourceRoot 'src') -Recurse -File -Filter '*.csproj' |
+        Where-Object {
+          Select-String -LiteralPath $_.FullName `
+            -Pattern '<GeneratePackageOnBuild\b[^>]*>\s*true\s*</GeneratePackageOnBuild>' `
+            -CaseSensitive:$false -Quiet
+        } |
+        Sort-Object FullName
+    )
+
+    if ($packageProjects.Count -eq 0) {
+      Write-Host '##[error]No project with GeneratePackageOnBuild=true was found under src.'
+      exit 2
+    }
+
+    New-Item -ItemType Directory -Path $solutionDirectory -Force | Out-Null
+    dotnet new sln --name 'Senparc.CO2NET.Packages' --output $solutionDirectory --force
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+    dotnet sln $solutionPath add $packageProjects.FullName
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+    Write-Host '##[group]Discovered NuGet package projects'
+    foreach ($project in $packageProjects) {
+      Write-Host ('- {0}' -f $project.FullName.Substring($sourceRoot.Length + 1))
+    }
+    Write-Host ("Total package projects: {0}" -f $packageProjects.Count)
+    Write-Host '##[endgroup]'
+    Write-Host '##vso[task.setvariable variable=PackageSolution].pipeline-temp/Senparc.CO2NET.Packages.sln'
+  displayName: 'Discover NuGet package projects'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore package projects'
+  inputs:
+    command: restore
+    projects: '$(PackageSolution)'
+    feedsToUse: select
+    includeNuGetOrg: true
+    verbosityRestore: Normal
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build and pack all NuGet projects'
+  inputs:
+    command: build
+    projects: '$(PackageSolution)'
+    arguments: >-
+      --configuration $(buildConfiguration)
+      --no-restore
+      --property:ContinuousIntegrationBuild=true
+      --property:PackageOutputPath="$(PackageStagingDirectory)"
+
+# One wildcard push publishes all primary packages. NuGet automatically finds
+# and uploads the matching .snupkg files from the same directory.
+- powershell: |
+    $ErrorActionPreference = 'Stop'
+    $packageRoot = "$(PackageStagingDirectory)"
+    $source = "$(NuGetPushSource)"
+    $apiKey = $env:NUGET_API_KEY
+
+    if ([string]::IsNullOrWhiteSpace($apiKey)) {
+      Write-Host '##[error]Missing secret variable NUGET_API_KEY. Add it to the Nuget_Key variable group and mark it secret.'
+      exit 2
+    }
+
+    $packages = @(
+      Get-ChildItem -LiteralPath $packageRoot -File -Filter '*.nupkg' -ErrorAction SilentlyContinue |
+        Where-Object { -not $_.Name.EndsWith('.symbols.nupkg', [System.StringComparison]::OrdinalIgnoreCase) } |
+        Sort-Object Name
+    )
+
+    if ($packages.Count -eq 0) {
+      Write-Host ("##[error]No .nupkg files were found in {0}." -f $packageRoot)
+      exit 3
+    }
+
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+    function Get-PackageMetadata {
+      param([string]$PackagePath)
+
+      $archive = [System.IO.Compression.ZipFile]::OpenRead($PackagePath)
+      try {
+        $entry = $archive.Entries |
+          Where-Object { $_.FullName -match '(?i)\.nuspec$' } |
+          Select-Object -First 1
+        if (-not $entry) {
+          throw "No .nuspec was found in $PackagePath"
+        }
+
+        $reader = New-Object System.IO.StreamReader($entry.Open())
+        try {
+          [xml]$nuspec = $reader.ReadToEnd()
+        } finally {
+          $reader.Dispose()
+        }
+
+        $namespace = New-Object System.Xml.XmlNamespaceManager($nuspec.NameTable)
+        $namespace.AddNamespace('n', $nuspec.DocumentElement.NamespaceURI)
+        $metadata = if ([string]::IsNullOrEmpty($nuspec.DocumentElement.NamespaceURI)) {
+          $nuspec.SelectSingleNode('/package/metadata')
+        } else {
+          $nuspec.SelectSingleNode('/n:package/n:metadata', $namespace)
+        }
+
+        return [pscustomobject]@{
+          Id = [string]$metadata.id
+          Version = [string]$metadata.version
+        }
+      } finally {
+        $archive.Dispose()
+      }
+    }
+
+    Write-Host '##[group]NuGet batch publish manifest'
+    foreach ($package in $packages) {
+      $metadata = Get-PackageMetadata -PackagePath $package.FullName
+      if (-not $metadata.Id.StartsWith('Senparc.CO2NET', [System.StringComparison]::Ordinal)) {
+        Write-Host ("##[error]Unexpected package id '{0}' in {1}. Batch publish was cancelled." -f $metadata.Id, $package.Name)
+        exit 4
+      }
+
+      $symbolPath = [System.IO.Path]::ChangeExtension($package.FullName, '.snupkg')
+      $symbolStatus = if (Test-Path -LiteralPath $symbolPath) { 'yes' } else { 'no' }
+      Write-Host ('| {0} | {1} | symbol: {2} | {3} |' -f $metadata.Id, $metadata.Version, $symbolStatus, $package.Name)
+    }
+    Write-Host ("Total primary packages: {0}" -f $packages.Count)
+    Write-Host '##[endgroup]'
+
+    $packagePattern = Join-Path $packageRoot '*.nupkg'
+    Write-Host ("##[section]Batch publishing {0} packages to {1}" -f $packages.Count, $source)
+    Write-Host ('##[command]dotnet nuget push "{0}" --source "{1}" --api-key *** --skip-duplicate --timeout 3600 --force-english-output' -f $packagePattern, $source)
+
+    dotnet nuget push $packagePattern `
+      --source $source `
+      --api-key $apiKey `
+      --skip-duplicate `
+      --timeout 3600 `
+      --force-english-output
+    $pushExitCode = $LASTEXITCODE
+
+    Write-Host ("##[section]NuGet batch publish finished: packages={0}, exitCode={1}" -f $packages.Count, $pushExitCode)
+    if ($pushExitCode -ne 0) {
+      Write-Host '##[error]NuGet batch publish failed. See the native dotnet nuget push output above.'
+      exit $pushExitCode
+    }
+  displayName: 'Batch publish Senparc.CO2NET NuGet packages'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  env:
+    NUGET_API_KEY: $(NUGET_API_KEY)
