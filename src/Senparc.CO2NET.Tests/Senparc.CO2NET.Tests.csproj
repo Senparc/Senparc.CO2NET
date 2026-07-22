@@ -2,11 +2,14 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<Version>1.0.1</Version>
+		<Version>1.1.0</Version>
 		<PackageReleaseNotes>
 			[2026-07-21] v1.0.1 增强 System.Text.Json 兼容性验证
 			1、覆盖 ToJson、GetObject、JsonSetting、动态对象和 System.Type 的向下兼容行为。
 			2、覆盖 JsonTypeInfo 源生成路径与 CO2NET 程序集无 Newtonsoft.Json 引用验证。
+			[2026-07-22] v1.1.0 建立 Newtonsoft 与 System.Text.Json 双向兼容验证
+			1、覆盖旧设置、属性、私有成员、公开字段、动态日期及新旧缓存数据互读。
+			2、升级 .NET 8 测试运行器，并将 Newtonsoft 固定为 PrivateAssets 测试专用依赖。
 		</PackageReleaseNotes>
 
 		<IsPackable>false</IsPackable>
@@ -25,13 +28,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
 		<PackageReference Include="Moq" Version="4.8.3" />
-		<PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
-		<PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
+		<PackageReference Include="MSTest.TestAdapter" Version="4.3.2" />
+		<PackageReference Include="MSTest.TestFramework" Version="4.3.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" PrivateAssets="all" />
 
 		<PackageReference Include="Microsoft.Net.Http.Headers">
-			<Version>2.2.8</Version>
+			<Version>8.0.0</Version>
 		</PackageReference>
 
 	</ItemGroup>

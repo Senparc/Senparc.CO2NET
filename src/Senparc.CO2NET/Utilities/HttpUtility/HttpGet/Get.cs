@@ -25,7 +25,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     File Function Description：Get
 
 
-    Creation Identifier：Senparc - 20150211
+    Creation Identifier：Senparc - 20180602
 
     Modification Identifier：Senparc - 20150303
     Modification Description：Organize interface
@@ -61,6 +61,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier：554393109 - 20220208
     Modification Description：v2.0.3 Modify HttpClient request timeout implementation
 
+    修改标识：Senparc - 20260722
+    修改描述：v4.1.0 新增 JsonTypeInfo 同步及异步 GET Native AOT 重载
+
 ----------------------------------------------------------------*/
 
 
@@ -70,7 +73,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
+using System.Text.Json.Serialization.Metadata;
 using Senparc.CO2NET.Helpers;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 #if NET462
 using System.Web.Script.Serialization;
 #else
@@ -109,6 +116,10 @@ namespace Senparc.CO2NET.HttpUtility
         /// <param name="encoding"></param>
         /// <param name="afterReturnText">Return JSON text and trigger before serialization, parameters are: url, returnText</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the GetJson overload with JsonTypeInfo<T> for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use the GetJson overload with JsonTypeInfo<T> for Native AOT.")]
+#endif
         public static T GetJson<T>(
             IServiceProvider serviceProvider,
             string url, Encoding encoding = null, Action<string, string> afterReturnText = null)
@@ -122,6 +133,23 @@ namespace Senparc.CO2NET.HttpUtility
             T result = SerializerHelper.GetObject<T>(returnText);
 
             return result;
+        }
+
+        /// <summary>
+        /// GET request URL and deserialize the response using source-generated metadata. This overload is Native AOT safe.
+        /// </summary>
+        public static T GetJson<T>(
+            JsonTypeInfo<T> jsonTypeInfo,
+            IServiceProvider serviceProvider,
+            string url, Encoding encoding = null, Action<string, string> afterReturnText = null)
+        {
+            string returnText = RequestUtility.HttpGet(
+                 serviceProvider,
+                 url, encoding);
+
+            afterReturnText?.Invoke(url, returnText);
+
+            return SerializerHelper.GetObject(jsonTypeInfo, returnText);
         }
 
         /// <summary>
@@ -262,6 +290,10 @@ namespace Senparc.CO2NET.HttpUtility
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="ErrorJsonResultException"></exception>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the GetJsonAsync overload with JsonTypeInfo<T> for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use the GetJsonAsync overload with JsonTypeInfo<T> for Native AOT.")]
+#endif
         public static async Task<T> GetJsonAsync<T>(
             IServiceProvider serviceProvider,
             string url, Encoding encoding = null, Action<string, string> afterReturnText = null)
@@ -275,6 +307,23 @@ namespace Senparc.CO2NET.HttpUtility
             T result = SerializerHelper.GetObject<T>(returnText);
 
             return result;
+        }
+
+        /// <summary>
+        /// Asynchronously GET a URL and deserialize the response using source-generated metadata. This overload is Native AOT safe.
+        /// </summary>
+        public static async Task<T> GetJsonAsync<T>(
+            JsonTypeInfo<T> jsonTypeInfo,
+            IServiceProvider serviceProvider,
+            string url, Encoding encoding = null, Action<string, string> afterReturnText = null)
+        {
+            string returnText = await RequestUtility.HttpGetAsync(
+                 serviceProvider,
+                 url, encoding).ConfigureAwait(false);
+
+            afterReturnText?.Invoke(url, returnText);
+
+            return SerializerHelper.GetObject(jsonTypeInfo, returnText);
         }
 
         /// <summary>

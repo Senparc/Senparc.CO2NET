@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
-    <Version>4.0.0</Version>
+    <Version>4.1.0</Version>
     <LangVersion>10.0</LangVersion>
     <LangVersion Condition="'$(TargetFramework)' == 'net8.0'">12.0</LangVersion>
     <AssemblyName>Senparc.CO2NET</AssemblyName>
@@ -155,6 +155,11 @@
 		3、新增 JsonTypeInfo 源生成重载、动态 JSON 兼容转换和 Native AOT 原生发布验证。
 		4、新增 net8.0 目标资产，并保持 XmlUtility.ConvertAsync 与 EncryptHelper.AesGcmDecrypt 公共方法可用。
 		5、按项目和操作系统隔离 NuGet 中间资产，修复共享工作区切换目标框架时的 NETSDK1005/NETSDK1064 错误。
+		[2026-07-22] v4.1.0 增强 System.Text.Json 向下兼容与 .NET 8+ Native AOT 支持
+		1、扩展旧 JsonSerializerSettings、Newtonsoft 属性、动态日期、公开字段和双向缓存 JSON 兼容行为。
+		2、保留既有 ToJson、GetObject、GetJsonString、缓存及 HTTP 方法，并新增 JsonTypeInfo GET/POST 与官方 JSON DOM 重载。
+		3、为反射路径添加裁剪与动态代码诊断，新增 AOT 可注册 System.Type 转换器，并避免 .NET 8+ 无 Cookie 请求创建无效容器。
+		4、新增 System.Text.Json 与 Native AOT 迁移文档，说明源码兼容、二进制边界及第三方缓存依赖限制。
 </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>

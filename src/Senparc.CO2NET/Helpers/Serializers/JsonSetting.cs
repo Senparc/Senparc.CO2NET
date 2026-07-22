@@ -30,15 +30,23 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20260721
     修改描述：v4.0.0 使用 System.Text.Json 重构 JSON 配置并兼容既有 Senparc 特性
 
+    修改标识：Senparc - 20260722
+    修改描述：v4.1.0 扩展 Newtonsoft 属性、公开字段、私有成员和 System.Type AOT 兼容
+
 ----------------------------------------------------------------*/
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace Senparc.CO2NET.Helpers.Serializers
 {
@@ -190,14 +198,20 @@ namespace Senparc.CO2NET.Helpers.Serializers
 
         private void ModifyTypeInfo(JsonTypeInfo typeInfo)
         {
-            foreach (var property in typeInfo.Properties)
+            AddNewtonsoftAttributedMembers(typeInfo);
+            ApplyNewtonsoftConstructorCompatibility(typeInfo);
+
+            var memberSerializationOptIn = UsesNewtonsoftOptIn(typeInfo.Type);
+            for (var index = typeInfo.Properties.Count - 1; index >= 0; index--)
             {
+                var property = typeInfo.Properties[index];
                 var attributes = property.AttributeProvider?.GetCustomAttributes(false) ?? Array.Empty<object>();
                 var memberName = (property.AttributeProvider as MemberInfo)?.Name ?? property.Name;
                 var ignoreNull = IgnoreNulls || PropertiesToIgnoreNull.Contains(memberName) || TypesToIgnoreNull.Contains(property.PropertyType);
                 object ignoredValue = null;
                 var hasIgnoredValue = false;
                 var ignoreProperty = false;
+                var includedByNewtonsoft = false;
 
                 foreach (var attribute in attributes)
                 {
@@ -218,19 +232,173 @@ namespace Senparc.CO2NET.Helpers.Serializers
                         }
                     }
 
-                    ApplyNewtonsoftAttributeCompatibility(property, attribute, ref ignoreNull, ref ignoreProperty, ref ignoredValue, ref hasIgnoredValue);
+                    ApplyNewtonsoftAttributeCompatibility(
+                        property,
+                        attribute,
+                        ref ignoreNull,
+                        ref ignoreProperty,
+                        ref ignoredValue,
+                        ref hasIgnoredValue,
+                        ref includedByNewtonsoft);
                 }
 
-                if (ignoreNull || hasIgnoredValue || ignoreProperty)
+                if (memberSerializationOptIn && !includedByNewtonsoft)
+                {
+                    ignoreProperty = true;
+                }
+
+                if (hasIgnoredValue)
+                {
+                    foreach (var attribute in attributes)
+                    {
+                        if (attribute is DefaultValueAttribute defaultValueAttribute)
+                        {
+                            ignoredValue = defaultValueAttribute.Value;
+                            break;
+                        }
+                    }
+                }
+
+                if (ignoreProperty)
+                {
+                    typeInfo.Properties.RemoveAt(index);
+                    continue;
+                }
+
+                if (ignoreNull || hasIgnoredValue)
                 {
                     var existingShouldSerialize = property.ShouldSerialize;
                     property.ShouldSerialize = (obj, value) =>
-                        !ignoreProperty &&
                         (!ignoreNull || value != null) &&
                         (!hasIgnoredValue || !Equals(value, ignoredValue)) &&
                         (existingShouldSerialize == null || existingShouldSerialize(obj, value));
                 }
             }
+        }
+
+        private static void AddNewtonsoftAttributedMembers(JsonTypeInfo typeInfo)
+        {
+            for (var currentType = typeInfo.Type; currentType != null && currentType != typeof(object); currentType = currentType.BaseType)
+            {
+                const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
+                foreach (var member in currentType.GetMembers(flags))
+                {
+                    if (!(member is PropertyInfo) && !(member is FieldInfo))
+                    {
+                        continue;
+                    }
+
+                    var includedByNewtonsoft =
+                        HasAttribute(member, "Newtonsoft.Json.JsonPropertyAttribute") ||
+                        HasAttribute(member, "Newtonsoft.Json.JsonRequiredAttribute") ||
+                        HasAttribute(member, "Newtonsoft.Json.JsonExtensionDataAttribute");
+                    if (!includedByNewtonsoft || ContainsMember(typeInfo, member))
+                    {
+                        continue;
+                    }
+
+                    var property = CreateJsonPropertyInfo(typeInfo, member);
+                    if (property != null)
+                    {
+                        typeInfo.Properties.Add(property);
+                    }
+                }
+            }
+        }
+
+        private static JsonPropertyInfo CreateJsonPropertyInfo(JsonTypeInfo typeInfo, MemberInfo member)
+        {
+            Type memberType;
+            Func<object, object> getter = null;
+            Action<object, object> setter = null;
+
+            if (member is PropertyInfo propertyInfo)
+            {
+                if (propertyInfo.GetIndexParameters().Length != 0)
+                {
+                    return null;
+                }
+
+                memberType = propertyInfo.PropertyType;
+                if (propertyInfo.GetMethod != null)
+                {
+                    getter = instance => propertyInfo.GetValue(instance);
+                }
+                if (propertyInfo.SetMethod != null)
+                {
+                    setter = (instance, value) => propertyInfo.SetValue(instance, value);
+                }
+            }
+            else
+            {
+                var fieldInfo = (FieldInfo)member;
+                memberType = fieldInfo.FieldType;
+                getter = instance => fieldInfo.GetValue(instance);
+                if (!fieldInfo.IsInitOnly)
+                {
+                    setter = (instance, value) => fieldInfo.SetValue(instance, value);
+                }
+            }
+
+            var jsonProperty = typeInfo.CreateJsonPropertyInfo(memberType, member.Name);
+            jsonProperty.AttributeProvider = member;
+            jsonProperty.Get = getter;
+            jsonProperty.Set = setter;
+            return jsonProperty;
+        }
+
+        private static bool ContainsMember(JsonTypeInfo typeInfo, MemberInfo member)
+        {
+            foreach (var property in typeInfo.Properties)
+            {
+                if (Equals(property.AttributeProvider, member))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool UsesNewtonsoftOptIn(Type type)
+        {
+            foreach (var attribute in type.GetCustomAttributes(true))
+            {
+                var attributeType = attribute.GetType();
+                if (attributeType.FullName == "Newtonsoft.Json.JsonObjectAttribute" &&
+                    string.Equals(attributeType.GetProperty("MemberSerialization")?.GetValue(attribute)?.ToString(), "OptIn", StringComparison.Ordinal))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static void ApplyNewtonsoftConstructorCompatibility(JsonTypeInfo typeInfo)
+        {
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            foreach (var constructor in typeInfo.Type.GetConstructors(flags))
+            {
+                if (constructor.GetParameters().Length == 0 && HasAttribute(constructor, "Newtonsoft.Json.JsonConstructorAttribute"))
+                {
+                    typeInfo.CreateObject = () => constructor.Invoke(null);
+                    return;
+                }
+            }
+        }
+
+        private static bool HasAttribute(MemberInfo member, string attributeFullName)
+        {
+            foreach (var attribute in member.GetCustomAttributes(false))
+            {
+                if (attribute.GetType().FullName == attributeFullName)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static void ApplyNewtonsoftAttributeCompatibility(
@@ -239,7 +407,8 @@ namespace Senparc.CO2NET.Helpers.Serializers
             ref bool ignoreNull,
             ref bool ignoreProperty,
             ref object ignoredValue,
-            ref bool hasIgnoredValue)
+            ref bool hasIgnoredValue,
+            ref bool includedByNewtonsoft)
         {
             var attributeType = attribute.GetType();
             switch (attributeType.FullName)
@@ -248,6 +417,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
                     ignoreProperty = true;
                     break;
                 case "Newtonsoft.Json.JsonPropertyAttribute":
+                    includedByNewtonsoft = true;
                     var propertyName = attributeType.GetProperty("PropertyName")?.GetValue(attribute) as string;
                     if (!string.IsNullOrEmpty(propertyName))
                     {
@@ -271,8 +441,47 @@ namespace Senparc.CO2NET.Helpers.Serializers
                     {
                         property.Order = orderValue;
                     }
+
+                    var required = attributeType.GetProperty("Required")?.GetValue(attribute)?.ToString();
+                    if (string.Equals(required, "Always", StringComparison.Ordinal) ||
+                        string.Equals(required, "AllowNull", StringComparison.Ordinal))
+                    {
+                        property.IsRequired = true;
+                    }
+                    break;
+                case "Newtonsoft.Json.JsonRequiredAttribute":
+                    includedByNewtonsoft = true;
+                    property.IsRequired = true;
+                    break;
+                case "Newtonsoft.Json.JsonExtensionDataAttribute":
+                    includedByNewtonsoft = true;
+                    property.IsExtensionData = SupportsSystemTextJsonExtensionData(property.PropertyType);
                     break;
             }
+        }
+
+        private static bool SupportsSystemTextJsonExtensionData(Type type)
+        {
+            if (type == typeof(IDictionary<string, object>) || type == typeof(IDictionary<string, JsonElement>))
+            {
+                return true;
+            }
+
+            foreach (var interfaceType in type.GetInterfaces())
+            {
+                if (!interfaceType.IsGenericType || interfaceType.GetGenericTypeDefinition() != typeof(IDictionary<,>))
+                {
+                    continue;
+                }
+
+                var arguments = interfaceType.GetGenericArguments();
+                if (arguments[0] == typeof(string) && (arguments[1] == typeof(object) || arguments[1] == typeof(JsonElement)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
@@ -296,6 +505,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
                 NumberHandling = JsonNumberHandling.AllowReadingFromString,
                 PropertyNameCaseInsensitive = true,
                 ReadCommentHandling = JsonCommentHandling.Skip,
+                IncludeFields = true,
                 TypeInfoResolver = resolver
             };
 
@@ -304,16 +514,64 @@ namespace Senparc.CO2NET.Helpers.Serializers
         }
     }
 
-    internal sealed class SystemTypeJsonConverter : JsonConverter<Type>
+    /// <summary>
+    /// Serializes <see cref="Type"/> values by assembly-qualified name. Source-generated
+    /// contexts can register this converter to keep existing cache payloads AOT-compatible.
+    /// </summary>
+    public sealed class SystemTypeJsonConverter : JsonConverter<Type>
     {
+        private static readonly ConcurrentDictionary<string, Type> KnownTypes = new ConcurrentDictionary<string, Type>(StringComparer.Ordinal);
+
+        /// <summary>
+        /// Register a type that may appear in cached JSON. Generic registration keeps the type visible to Native AOT trimming.
+        /// </summary>
+        public static void RegisterType<T>()
+        {
+            RegisterType(typeof(T));
+        }
+
+        /// <summary>
+        /// Register a type that may appear in cached JSON.
+        /// </summary>
+        public static void RegisterType(Type type)
+        {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            if (!string.IsNullOrEmpty(type.AssemblyQualifiedName))
+            {
+                KnownTypes[type.AssemblyQualifiedName] = type;
+            }
+            if (!string.IsNullOrEmpty(type.FullName))
+            {
+                KnownTypes[type.FullName] = type;
+            }
+        }
+
+#if NET8_0_OR_GREATER
+        [UnconditionalSuppressMessage("Trimming", "IL2057", Justification = "Native AOT callers can register preserved types with RegisterType<T>(); Type.GetType remains as the backward-compatible fallback for existing cache values.")]
+#endif
         public override Type Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var typeName = reader.GetString();
-            return string.IsNullOrEmpty(typeName) ? null : Type.GetType(typeName, throwOnError: false);
+            if (string.IsNullOrEmpty(typeName))
+            {
+                return null;
+            }
+
+            return KnownTypes.TryGetValue(typeName, out var knownType)
+                ? knownType
+                : Type.GetType(typeName, throwOnError: false);
         }
 
         public override void Write(Utf8JsonWriter writer, Type value, JsonSerializerOptions options)
         {
+            if (value != null)
+            {
+                RegisterType(value);
+            }
             writer.WriteStringValue(value?.AssemblyQualifiedName);
         }
     }

@@ -5,10 +5,13 @@
     文件功能描述：封装 System.Text.Json 序列化、旧配置适配和动态 JSON 转换
 
 
-    创建标识：Senparc - 20260721
+    创建标识：Senparc - 20260722
 
     修改标识：Senparc - 20260721
     修改描述：v4.0.0 新增 System.Text.Json 兼容实现和 JsonTypeInfo Native AOT 安全路径
+
+    修改标识：Senparc - 20260722
+    修改描述：v4.1.0 扩展旧设置映射与动态日期兼容行为
 
 ----------------------------------------------------------------*/
 
@@ -56,7 +59,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
         {
             if (typeof(T) == typeof(object))
             {
-                return (T)DeserializeDynamic(json);
+                return (T)DeserializeDynamic(json, settings);
             }
 
             return JsonSerializer.Deserialize<T>(json, CreateOptions(settings));
@@ -66,7 +69,7 @@ namespace Senparc.CO2NET.Helpers.Serializers
         {
             if (type == null || type == typeof(object))
             {
-                return DeserializeDynamic(json);
+                return DeserializeDynamic(json, settings);
             }
 
             return JsonSerializer.Deserialize(json, type, CreateOptions(settings));
@@ -136,20 +139,34 @@ namespace Senparc.CO2NET.Helpers.Serializers
             var nullValueHandling = GetPropertyValue(settings, "NullValueHandling")?.ToString();
             var defaultValueHandling = GetPropertyValue(settings, "DefaultValueHandling")?.ToString();
             var referenceLoopHandling = GetPropertyValue(settings, "ReferenceLoopHandling")?.ToString();
+            var preserveReferencesHandling = GetPropertyValue(settings, "PreserveReferencesHandling")?.ToString();
+            var missingMemberHandling = GetPropertyValue(settings, "MissingMemberHandling")?.ToString();
 
-            if (string.Equals(nullValueHandling, "Ignore", StringComparison.Ordinal))
-            {
-                options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-            }
-            else if (!string.IsNullOrEmpty(defaultValueHandling) && defaultValueHandling.Contains("Ignore"))
+            if (!string.IsNullOrEmpty(defaultValueHandling) && defaultValueHandling.Contains("Ignore"))
             {
                 options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
+            }
+            else if (string.Equals(nullValueHandling, "Ignore", StringComparison.Ordinal))
+            {
+                options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             }
 
             if (string.Equals(referenceLoopHandling, "Ignore", StringComparison.Ordinal))
             {
                 options.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             }
+            else if (!string.IsNullOrEmpty(preserveReferencesHandling) &&
+                     !string.Equals(preserveReferencesHandling, "None", StringComparison.Ordinal))
+            {
+                options.ReferenceHandler = ReferenceHandler.Preserve;
+            }
+
+#if NET8_0_OR_GREATER
+            if (string.Equals(missingMemberHandling, "Error", StringComparison.Ordinal))
+            {
+                options.UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow;
+            }
+#endif
 
             if (GetPropertyValue(settings, "MaxDepth") is int maxDepth && maxDepth > 0)
             {
@@ -157,12 +174,12 @@ namespace Senparc.CO2NET.Helpers.Serializers
             }
 
             var contractResolver = GetPropertyValue(settings, "ContractResolver");
-            if (contractResolver != null &&
-                (contractResolver.GetType().FullName?.Contains("CamelCase") == true ||
-                 GetPropertyValue(contractResolver, "NamingStrategy")?.GetType().FullName?.Contains("CamelCase") == true))
+            var namingStrategy = contractResolver == null ? null : GetPropertyValue(contractResolver, "NamingStrategy");
+            var namingPolicy = GetNamingPolicy(namingStrategy?.GetType() ?? contractResolver?.GetType());
+            if (namingPolicy != null)
             {
-                options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-                options.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                options.PropertyNamingPolicy = namingPolicy;
+                options.DictionaryKeyPolicy = namingPolicy;
             }
 
             if (GetPropertyValue(settings, "Converters") is System.Collections.IEnumerable converters)
@@ -171,12 +188,43 @@ namespace Senparc.CO2NET.Helpers.Serializers
                 {
                     if (converter?.GetType().FullName == "Newtonsoft.Json.Converters.StringEnumConverter")
                     {
-                        options.Converters.Add(new JsonStringEnumConverter());
+                        var converterNamingStrategy = GetPropertyValue(converter, "NamingStrategy");
+                        var converterNamingPolicy = GetNamingPolicy(converterNamingStrategy?.GetType());
+                        var allowIntegerValues = GetPropertyValue(converter, "AllowIntegerValues") as bool? ?? true;
+                        options.Converters.Add(new JsonStringEnumConverter(converterNamingPolicy, allowIntegerValues));
                     }
                 }
             }
 
             return options;
+        }
+
+        private static JsonNamingPolicy GetNamingPolicy(Type namingStrategyType)
+        {
+            var fullName = namingStrategyType?.FullName;
+            if (string.IsNullOrEmpty(fullName))
+            {
+                return null;
+            }
+
+            if (fullName.Contains("CamelCase"))
+            {
+                return JsonNamingPolicy.CamelCase;
+            }
+
+#if NET8_0_OR_GREATER
+            if (fullName.Contains("SnakeCase"))
+            {
+                return JsonNamingPolicy.SnakeCaseLower;
+            }
+
+            if (fullName.Contains("KebabCase"))
+            {
+                return JsonNamingPolicy.KebabCaseLower;
+            }
+#endif
+
+            return null;
         }
 
         private static bool IsNewtonsoftSettings(Type type)
@@ -199,19 +247,39 @@ namespace Senparc.CO2NET.Helpers.Serializers
             return instance.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public)?.GetValue(instance);
         }
 
-        private static object DeserializeDynamic(string json)
+        private static object DeserializeDynamic(string json, object settings = null)
         {
+            var dateParseHandling = GetDynamicDateParseHandling(settings);
             using (var document = JsonDocument.Parse(json, new JsonDocumentOptions
             {
                 AllowTrailingCommas = true,
                 CommentHandling = JsonCommentHandling.Skip
             }))
             {
-                return ConvertElement(document.RootElement);
+                return ConvertElement(document.RootElement, dateParseHandling);
             }
         }
 
-        private static object ConvertElement(JsonElement element)
+        private static DynamicDateParseHandling GetDynamicDateParseHandling(object settings)
+        {
+            if (settings != null && IsNewtonsoftSettings(settings.GetType()))
+            {
+                var value = GetPropertyValue(settings, "DateParseHandling")?.ToString();
+                if (string.Equals(value, "None", StringComparison.Ordinal))
+                {
+                    return DynamicDateParseHandling.None;
+                }
+
+                if (string.Equals(value, "DateTimeOffset", StringComparison.Ordinal))
+                {
+                    return DynamicDateParseHandling.DateTimeOffset;
+                }
+            }
+
+            return DynamicDateParseHandling.DateTime;
+        }
+
+        private static object ConvertElement(JsonElement element, DynamicDateParseHandling dateParseHandling)
         {
             switch (element.ValueKind)
             {
@@ -219,17 +287,25 @@ namespace Senparc.CO2NET.Helpers.Serializers
                     IDictionary<string, object> expando = new ExpandoObject();
                     foreach (var property in element.EnumerateObject())
                     {
-                        expando[property.Name] = ConvertElement(property.Value);
+                        expando[property.Name] = ConvertElement(property.Value, dateParseHandling);
                     }
                     return expando;
                 case JsonValueKind.Array:
                     var list = new List<object>();
                     foreach (var item in element.EnumerateArray())
                     {
-                        list.Add(ConvertElement(item));
+                        list.Add(ConvertElement(item, dateParseHandling));
                     }
                     return list;
                 case JsonValueKind.String:
+                    if (dateParseHandling == DynamicDateParseHandling.DateTimeOffset && element.TryGetDateTimeOffset(out var dateTimeOffset))
+                    {
+                        return dateTimeOffset;
+                    }
+                    if (dateParseHandling == DynamicDateParseHandling.DateTime && element.TryGetDateTime(out var dateTime))
+                    {
+                        return dateTime;
+                    }
                     return element.GetString();
                 case JsonValueKind.Number:
                     if (element.TryGetInt64(out var integer))
@@ -251,6 +327,13 @@ namespace Senparc.CO2NET.Helpers.Serializers
                 default:
                     throw new JsonException($"Unsupported JSON token: {element.ValueKind}");
             }
+        }
+
+        private enum DynamicDateParseHandling
+        {
+            None,
+            DateTime,
+            DateTimeOffset
         }
     }
 }

@@ -54,11 +54,17 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     修改标识：Senparc - 20260721
     修改描述：v4.0.0 将 ToJson 迁移至 System.Text.Json 并新增 JsonTypeInfo Native AOT 重载
 
+    修改标识：Senparc - 20260722
+    修改描述：v4.1.0 为反射 ToJson 路径添加 Native AOT 诊断并保留既有调用方式
+
 ----------------------------------------------------------------*/
 
 using Senparc.CO2NET.Helpers.Serializers;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace Senparc.CO2NET.Extensions
 {
@@ -74,6 +80,10 @@ namespace Senparc.CO2NET.Extensions
         /// <param name="indented">Whether to use indented format</param>
         /// <param name="jsonSerializerSettings">Serialization settings. Supports JsonSerializerOptions and the legacy Newtonsoft settings object.</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the JsonTypeInfo overload for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use the JsonTypeInfo overload for Native AOT.")]
+#endif
         public static string ToJson(this object data, bool indented = false, object jsonSerializerSettings = null)
         {
             return SystemTextJsonSerializer.Serialize(data, indented, jsonSerializerSettings);
@@ -82,6 +92,10 @@ namespace Senparc.CO2NET.Extensions
         /// <summary>
         /// Convert data to JSON using explicit System.Text.Json options.
         /// </summary>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the JsonTypeInfo overload for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use the JsonTypeInfo overload for Native AOT.")]
+#endif
         public static string ToJson(this object data, JsonSerializerOptions jsonSerializerOptions, bool indented = false)
         {
             return SystemTextJsonSerializer.Serialize(data, indented, jsonSerializerOptions);

@@ -3,8 +3,11 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net10.0</TargetFramework>
-		<Version>1.0.1</Version>
-		<PackageReleaseNotes>[2026-07-21] v1.0.1 Dependency update from Senparc.CO2NET to 4.0.0</PackageReleaseNotes>
+		<Version>1.0.2</Version>
+		<PackageReleaseNotes>
+			[2026-07-21] v1.0.1 Dependency update from Senparc.CO2NET to 4.0.0
+			[2026-07-22] v1.0.2 Dependency update from Senparc.CO2NET to 4.1.0
+		</PackageReleaseNotes>
 		<Configurations>Debug;Release;Test</Configurations>
 	</PropertyGroup>
 

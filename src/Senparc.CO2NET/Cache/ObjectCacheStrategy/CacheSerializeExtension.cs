@@ -10,11 +10,17 @@
     修改标识：Senparc - 20260721
     修改描述：v4.0.0 使用 System.Text.Json 实现缓存序列化并新增 JsonTypeInfo Native AOT 重载
 
+    修改标识：Senparc - 20260722
+    修改描述：v4.1.0 标注反射缓存方法并强化 JsonTypeInfo Native AOT 使用指引
+
 ----------------------------------------------------------------*/
 
 using Senparc.CO2NET.Helpers.Serializers;
 using System;
 using System.Text.Json.Serialization.Metadata;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace Senparc.CO2NET.Cache
 {
@@ -93,6 +99,10 @@ namespace Senparc.CO2NET.Cache
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use SerializeToCache with JsonTypeInfo<T> for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use SerializeToCache with JsonTypeInfo<T> for Native AOT.")]
+#endif
         public static string SerializeToCache<T>(this T obj)
         {
             return SystemTextJsonSerializer.Serialize(obj);
@@ -111,6 +121,10 @@ namespace Senparc.CO2NET.Cache
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use DeserializeFromCache with JsonTypeInfo<T> for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use DeserializeFromCache with JsonTypeInfo<T> for Native AOT.")]
+#endif
         public static object DeserializeFromCache(this string value, Type type = null)
         {
             return SystemTextJsonSerializer.Deserialize(value, type);
@@ -122,6 +136,10 @@ namespace Senparc.CO2NET.Cache
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use DeserializeFromCache with JsonTypeInfo<T> for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Use DeserializeFromCache with JsonTypeInfo<T> for Native AOT.")]
+#endif
         public static T DeserializeFromCache<T>(this string value)
         {
             return SystemTextJsonSerializer.Deserialize<T>(value);
