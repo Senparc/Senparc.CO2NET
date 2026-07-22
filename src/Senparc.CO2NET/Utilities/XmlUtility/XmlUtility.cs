@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2025 Senparc
+    Copyright (C) 2026 Senparc
 
     FileName：BrowserUtility.cs
     File Function Description：Browser utility class
@@ -45,6 +45,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 
     Modification Identifier：Senparc - 20220208
     Modification Description：v2.0.2 Added XmlUtility.Deserialize() override method
+
+    修改标识：Senparc - 20260721
+    修改描述：v4.0.0 在 net8.0 目标中保留 ConvertAsync 公共方法
 
 ----------------------------------------------------------------*/
 
@@ -227,7 +230,7 @@ namespace Senparc.CO2NET.Utilities
 
         #endregion
 
-#if NETSTANDARD2_1_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
 
         /// <summary>
         /// Serialize stream to XML string asynchronously

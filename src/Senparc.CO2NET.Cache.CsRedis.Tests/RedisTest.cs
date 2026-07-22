@@ -219,7 +219,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
                         var newObj = new ContainerBag()
                         {
                             Key = Guid.NewGuid().ToString(),
-                            Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                            Name = System.Text.Json.JsonSerializer.Serialize(this),
                             AddTime = SystemTime.Now
                         };
                         var dtx = SystemTime.Now;
@@ -254,7 +254,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
                 var newObj = new ContainerBag()
                 {
                     Key = Guid.NewGuid().ToString(),
-                    Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                    Name = System.Text.Json.JsonSerializer.Serialize(this),
                     AddTime = SystemTime.Now
                 };
 
@@ -306,7 +306,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
                     var newObj = new ContainerBag()
                     {
                         Key = Guid.NewGuid().ToString(),
-                        Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                        Name = System.Text.Json.JsonSerializer.Serialize(this),
                         AddTime = SystemTime.Now.ToUniversalTime()
                     };
 
@@ -336,7 +336,7 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
 
 
         [TestMethod]
-        public void NewtonsoftTest()
+        public void SystemTextJsonTest()
         {
             //    CompositeResolver.RegisterAndSetAsDefault(
             //new[] { TypelessFormatter.Instance },
@@ -361,16 +361,16 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
                     var newObj = new ContainerBag()
                     {
                         Key = Guid.NewGuid().ToString(),
-                        Name = Newtonsoft.Json.JsonConvert.SerializeObject(this),
+                        Name = System.Text.Json.JsonSerializer.Serialize(this),
                         AddTime = SystemTime.Now.ToUniversalTime()
                     };
 
                     var dtx = SystemTime.Now;
-                    var serializedObj = Newtonsoft.Json.JsonConvert.SerializeObject(newObj);
-                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.SerializeObject elapsed time: {SystemTime.DiffTotalMS(dtx)}ms");
+                    var serializedObj = System.Text.Json.JsonSerializer.Serialize(newObj);
+                    Console.WriteLine($"System.Text.Json.JsonSerializer.Serialize elapsed time: {SystemTime.DiffTotalMS(dtx)}ms");
                     dtx = SystemTime.Now;
-                    var containerBag = Newtonsoft.Json.JsonConvert.DeserializeObject<ContainerBag>(serializedObj); // 11ms  
-                    Console.WriteLine($"Newtonsoft.Json.JsonConvert.DeserializeObject elapsed time: {SystemTime.DiffTotalMS(dtx)}ms");
+                    var containerBag = System.Text.Json.JsonSerializer.Deserialize<ContainerBag>(serializedObj); // 11ms
+                    Console.WriteLine($"System.Text.Json.JsonSerializer.Deserialize elapsed time: {SystemTime.DiffTotalMS(dtx)}ms");
                     Console.WriteLine(containerBag.AddTime.ToUniversalTime());
 
                     //Assert.AreEqual(containerBag.AddTime.Ticks, newObj.AddTime.Ticks);

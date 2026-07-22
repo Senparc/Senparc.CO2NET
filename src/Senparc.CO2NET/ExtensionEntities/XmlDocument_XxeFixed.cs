@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2025 Senparc
+    Copyright (C) 2026 Senparc
 
     FileName：XmlDocument_XxeFixed.cs
     File Function Description：Resolve XXE vulnerability, inherit from XmlDocument object, automatically set XmlResolver to null

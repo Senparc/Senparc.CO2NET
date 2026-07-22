@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
-    <Version>4.1.1</Version>
+    <Version>4.1.2</Version>
     <AssemblyName>Senparc.CO2NET.Cache.Redis.RedLock</AssemblyName>
     <RootNamespace>Senparc.CO2NET.Cache.Redis.RedLock</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -26,29 +26,19 @@
     <PackageReleaseNotes>
 			v0.0.1
 			Rewritten constructor to provide more flexible parameter configuration.
-
 			v0.0.2
 			Adjusted reference framework
-
 			v0.0.3
 			Provided .net core support
-
 			v0.0.4
 			Provided .net framework 4.6.1 support
-
 			v0.1.0
 			Provided .NET Core support
-
 			v1.0.1-beta1 Supported .NET Core 2.0
-
 			v1.1.0 Stopped generating separate version for .net core 1.1
-
 			v1.2.0-rc1 Supported .NET Core 2.1.0-rc1-final
-
 			v1.2.5 Released official version supporting .net core 2.1
-
 			======== CO2NET Migration ========
-
 			v1.0.0 Migrated from Senparc.Weixin.Cache.REdis.Redlock
 			v2.0.0 Unified support for .NET Core using .NETStandard2.0, abandoned separate adaptation for .NET Core 1.x
 			v2.1.1 Upgraded StackExchange.Redis to the latest version
@@ -57,6 +47,7 @@
 			v2.2.4 Provided signed nuget package (.snupkg)
 			[2024-11-28] v4.0.1-beta1 Add UseLowerCaseApiName property for SenparcSetting
 			[2024-12-04] v4.1.0-beta1 update Start() method, set SenparcSetting in Config when AddSenparcGlobalService() run
+			[2026-07-21] v4.1.2 Dependency update from Senparc.CO2NET to 4.0.0
 </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Senparc/Senparc.CO2NET</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>

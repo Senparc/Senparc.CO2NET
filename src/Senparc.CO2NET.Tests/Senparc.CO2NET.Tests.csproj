@@ -2,6 +2,12 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+		<Version>1.0.1</Version>
+		<PackageReleaseNotes>
+			[2026-07-21] v1.0.1 增强 System.Text.Json 兼容性验证
+			1、覆盖 ToJson、GetObject、JsonSetting、动态对象和 System.Type 的向下兼容行为。
+			2、覆盖 JsonTypeInfo 源生成路径与 CO2NET 程序集无 Newtonsoft.Json 引用验证。
+		</PackageReleaseNotes>
 
 		<IsPackable>false</IsPackable>
 

@@ -2,6 +2,11 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+		<Version>1.0.1</Version>
+		<PackageReleaseNotes>
+			[2026-07-21] v1.0.1 更新 JSON 序列化兼容测试
+			1、将 Redis 性能测试中的 Newtonsoft.Json 调用迁移到 System.Text.Json。
+		</PackageReleaseNotes>
 
 		<IsPackable>false</IsPackable>
 
@@ -19,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MessagePack" Version="1.9.11" />
+		<PackageReference Include="MessagePack" Version="2.5.187" />
 		<PackageReference Include="MessagePackAnalyzer" Version="1.6.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
 		<PackageReference Include="Moq" Version="4.9.0" />

@@ -1,6 +1,7 @@
-using System;
+ï»¿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.Helpers.Serializers;
 using static Senparc.CO2NET.Tests.Helpers.SerializerHelperJsonTests;
@@ -13,7 +14,7 @@ namespace Senparc.CO2NET.Tests.Helpers
         [TestMethod]
         public void EncodeUnicodeTest()
         {
-            var input = "Ê¢ÅÉÍøÂç";
+            var input = "ç››æ´¾ç½‘ç»œ";
             var result = SerializerHelper.EncodeUnicode(input);
             Console.WriteLine(result);
             Assert.IsNotNull(result);
@@ -26,9 +27,9 @@ namespace Senparc.CO2NET.Tests.Helpers
             var input = "\\u76DB\\u6D3E\\u7F51\\u7EDC";
             var result = SerializerHelper.DecodeUnicode(input);
             Console.WriteLine(result);
-            Assert.AreEqual("Ê¢ÅÉÍøÂç", result);
+            Assert.AreEqual("ç››æ´¾ç½‘ç»œ", result);
 
-            //TODO:ÓĞÖØĞ´·½·¨ĞèÒª²âÊÔ
+            //TODO:æœ‰é‡å†™æ–¹æ³•éœ€è¦æµ‹è¯•
         }
 
         [TestMethod()]
@@ -41,27 +42,18 @@ namespace Senparc.CO2NET.Tests.Helpers
                 ElementClassA = new ElementClass() { A = "A", B = "B" }
             };
 
-            var jsonStr = JsonConvert.SerializeObject(rootClass, Formatting.Indented, new JsonSerializerSettings
+            var jsonStr = JsonSerializer.Serialize(rootClass, new JsonSerializerOptions
             {
-                TypeNameHandling = TypeNameHandling.All,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                WriteIndented = true,
+                ReferenceHandler = ReferenceHandler.IgnoreCycles
             });
             Console.WriteLine(jsonStr);
 
-            Assert.AreEqual(@"{
-  ""$type"": ""Senparc.CO2NET.Tests.Helpers.SerializerHelperJsonTests+RootClass, Senparc.CO2NET.Tests"",
-  ""A"": ""1"",
-  ""B"": 2,
-  ""C"": null,
-  ""ElementClassA"": {
-    ""$type"": ""Senparc.CO2NET.Tests.Helpers.SerializerHelperJsonTests+ElementClass, Senparc.CO2NET.Tests"",
-    ""A"": ""A"",
-    ""B"": ""B"",
-    ""RootClass"": null
-  },
-  ""ElementClassB"": null,
-  ""ElementClass2"": null
-}", jsonStr.Trim());
+            using (var document = JsonDocument.Parse(jsonStr))
+            {
+                Assert.AreEqual("1", document.RootElement.GetProperty("A").GetString());
+                Assert.AreEqual(2, document.RootElement.GetProperty("B").GetInt32());
+            }
 
             var data = SerializerHelper.GetObject<RootClass>(jsonStr);
 

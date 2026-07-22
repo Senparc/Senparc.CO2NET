@@ -19,7 +19,7 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 #endregion Apache License Version 2.0
 
 /*----------------------------------------------------------------
-    Copyright (C) 2025 Senparc
+    Copyright (C) 2026 Senparc
 
     FileName：SenparcHttpResponse.cs
     File Function Description：Unified encapsulation of HttpResonse requests, providing debugging, tracking, and other extended capabilities during the Http request process
