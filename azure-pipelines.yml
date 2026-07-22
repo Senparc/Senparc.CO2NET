@@ -1,6 +1,6 @@
 # Senparc.CO2NET NuGet CI/CD
-# Validates the .NET 8 and .NET 10 samples, builds every package project into
-# one staging directory, then publishes the generated packages in one batch.
+# Validates the .NET 10 sample, builds every package project into one staging
+# directory, then publishes the generated packages in one batch.
 
 trigger:
   - master
@@ -15,8 +15,6 @@ pool:
 variables:
   - name: net10Solution
     value: 'Sample/Senparc.CO2NET.Sample-with-net10.sln'
-  - name: DotNet8Root
-    value: '$(Agent.ToolsDirectory)/dotnet8'
   - name: buildConfiguration
     value: 'Release'
   - name: NUGET_PACKAGES
@@ -27,14 +25,6 @@ variables:
     value: '$(Build.ArtifactStagingDirectory)/nuget/$(Build.BuildId)'
 
 steps:
-# - task: UseDotNet@2
-#   displayName: 'Install .NET SDK 8.x'
-#   inputs:
-#     version: '8.0.x'
-#     packageType: 'sdk'
-#     performMultiLevelLookup: false
-#     installationPath: '$(DotNet8Root)'
-
 - task: UseDotNet@2
   displayName: 'Use .NET SDK 10.x'
   inputs:
@@ -45,9 +35,6 @@ steps:
 - powershell: |
     Write-Host '=== Installed SDKs ==='
     dotnet --list-sdks
-    Write-Host '=== .NET 8 compatibility SDK ==='
-    & "$(DotNet8Root)\dotnet.exe" --version
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     Write-Host '=== Active .NET 10 SDK ==='
     dotnet --version
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
@@ -78,9 +65,7 @@ steps:
       exit 2
     }
 
-    $solutions = @(
-      [pscustomobject]@{ Label = '.NET 10'; RelativePath = "$(net10Solution)" }
-    )
+    $solutions = @([pscustomobject]@{ Label = '.NET 10'; RelativePath = "$(net10Solution)" })
     $coverageFailed = $false
 
     Write-Host '##[group]NuGet package project matrix'
@@ -129,22 +114,6 @@ steps:
 
     if ($coverageFailed) { exit 3 }
   displayName: 'Verify package project coverage'
-
-- powershell: |
-    $dotnet8 = "$(DotNet8Root)\dotnet.exe"
-    & $dotnet8 restore "$(net8Solution)" --source "$(NuGetPushSource)" --verbosity normal
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-  displayName: 'Restore CO2NET .NET 8 sample solution'
-
-- powershell: |
-    $dotnet8 = "$(DotNet8Root)\dotnet.exe"
-    & $dotnet8 build "$(net8Solution)" `
-      --configuration "$(buildConfiguration)" `
-      --no-restore `
-      --property:ContinuousIntegrationBuild=true `
-      --property:GeneratePackageOnBuild=false
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-  displayName: 'Build .NET 8 sample compatibility'
 
 - task: DotNetCoreCLI@2
   displayName: 'Restore CO2NET .NET 10 sample solution'
