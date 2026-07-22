@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2025 Senparc
+    Copyright (C) 2026 Senparc
 
     FileName: ApiBindAttribute.cs
     File Function Description: ApiBindAttribute Attribute

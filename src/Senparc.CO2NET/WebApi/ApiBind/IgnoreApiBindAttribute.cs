@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2025 Senparc
+    Copyright (C) 2026 Senparc
 
     FileName: IgnoreApiBindAttribute.cs
     File Function Description: Ignore ApiBindAttribute

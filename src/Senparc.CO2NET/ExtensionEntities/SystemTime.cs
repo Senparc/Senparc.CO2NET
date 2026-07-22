@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2025 Senparc
+    Copyright (C) 2026 Senparc
 
     FileName：SystemTime.cs
     File Function Description：Extension from DateTimeOffset for easier unit testing

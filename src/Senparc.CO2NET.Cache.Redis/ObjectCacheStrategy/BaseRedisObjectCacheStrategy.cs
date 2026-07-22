@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2025 Senparc
+    Copyright (C) 2026 Senparc
 
     FileName：BaseRedisObjectCacheStrategy.cs
     File Function Description：Base class for all Redis basic cache strategies
