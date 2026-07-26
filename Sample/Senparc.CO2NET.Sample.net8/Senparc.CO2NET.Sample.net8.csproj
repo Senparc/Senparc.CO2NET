@@ -21,7 +21,7 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
 		<PackageReference Include="Microsoft.Net.Http.Headers" Version="8.0.0" />
 
-		<PackageReference Include="Senparc.Weixin.MP" Version="16.23.6" />
+		<PackageReference Include="Senparc.Weixin.MP" Version="16.25.1" />
 
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.APM\Senparc.CO2NET.APM.csproj" />
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />
