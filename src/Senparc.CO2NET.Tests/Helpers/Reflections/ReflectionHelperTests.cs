@@ -10,7 +10,7 @@ namespace Senparc.CO2NET.Tests.Helpers
     public class ReflectionHelperTests
     {
         public ReflectionHelperTests() {
-            //注册本地缓存注入等
+            // Register local cache DI, etc.
             BaseTest.RegisterServiceCollection();
             BaseTest.RegisterServiceStart();
         }
@@ -37,7 +37,7 @@ namespace Senparc.CO2NET.Tests.Helpers
         [TestMethod]
         public void CreateStaticMemberTest()
         {
-            //需要注册本地缓存注入
+            // Local cache DI registration is required
             var obj = ReflectionHelper.GetStaticMember("Senparc.CO2NET", "Senparc.CO2NET.Cache", "LocalObjectCacheStrategy", "Instance");
             Assert.IsNotNull(obj);
             Assert.IsInstanceOfType(obj, typeof(LocalObjectCacheStrategy));
@@ -53,7 +53,7 @@ namespace Senparc.CO2NET.Tests.Helpers
         [TestMethod]
         public void CreateStaticMemberByTypeTest()
         {
-            //需要注册本地缓存注入
+            // Local cache DI registration is required
 
             var type = typeof(LocalObjectCacheStrategy);
             var obj = ReflectionHelper.GetStaticMember(type, "Instance");

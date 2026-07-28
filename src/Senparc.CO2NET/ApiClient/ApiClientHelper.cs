@@ -21,11 +21,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
 
-    文件名：ApiClient.cs
-    文件功能描述：ApiClient, used to provide APiClient Container, work for such as Aspire.
+    Filename: ApiClient.cs
+    File description: ApiClient, used to provide APiClient Container, work for such as Aspire.
 
 
-    创建标识：Senparc - 20241118
+    Creation Identifier: Senparc - 20241118
 
 ----------------------------------------------------------------*/
 

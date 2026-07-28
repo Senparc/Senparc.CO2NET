@@ -4,8 +4,8 @@
 	  <TargetFramework>net8.0</TargetFramework>
 	  <Version>1.0.2</Version>
 	  <PackageReleaseNotes>
-	    [2026-07-21] v1.0.1 更新 JSON 序列化兼容测试
-	    1、将 Redis 测试中的 Newtonsoft.Json 调用迁移到 System.Text.Json。
+	    [2026-07-21] v1.0.1 Update JSON serialization compatibility tests
+	    1. Migrate Newtonsoft.Json calls in Redis tests to System.Text.Json.
 	    [2026-07-22] v1.0.2 Dependency update from Senparc.CO2NET.Cache.CsRedis to 2.3.3
 	  </PackageReleaseNotes>
 

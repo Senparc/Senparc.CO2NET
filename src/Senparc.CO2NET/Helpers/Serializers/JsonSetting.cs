@@ -21,17 +21,17 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
 
-    文件名：JsonSetting.cs
-    文件功能描述：定义 Senparc JSON 配置、契约解析和兼容转换规则
+    Filename: JsonSetting.cs
+    File description: Defines Senparc JSON settings, contract resolution, and compatibility conversion rules
 
 
-    创建标识：Senparc - 20180602
+    Creation Identifier: Senparc - 20180602
 
-    修改标识：Senparc - 20260721
-    修改描述：v4.0.0 使用 System.Text.Json 重构 JSON 配置并兼容既有 Senparc 特性
+    Modification Identifier: Senparc - 20260721
+    Modification Description: v4.0.0 Refactored JSON settings with System.Text.Json and preserved existing Senparc attributes
 
-    修改标识：Senparc - 20260722
-    修改描述：v4.1.0 扩展 Newtonsoft 属性、公开字段、私有成员和 System.Type AOT 兼容
+    Modification Identifier: Senparc - 20260722
+    Modification Description: v4.1.0 Extended Newtonsoft attributes, public fields, private members, and System.Type AOT compatibility
 
 ----------------------------------------------------------------*/
 

@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using StackExchange.Redis;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace Senparc.CO2NET.Cache.Redis
 {
@@ -18,6 +18,9 @@ namespace Senparc.CO2NET.Cache.Redis
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresUnreferencedCode("Uses property reflection; prefer typed JSON cache APIs for Native AOT.")]
+#endif
         public static HashEntry[] ToHashEntries(this object obj)
         {
             PropertyInfo[] properties = obj.GetType().GetProperties();
@@ -33,6 +36,10 @@ namespace Senparc.CO2NET.Cache.Redis
         /// <typeparam name="T"></typeparam>
         /// <param name="hashEntries"></param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresUnreferencedCode("Uses Activator.CreateInstance and property reflection; prefer typed JSON cache APIs for Native AOT.")]
+        [RequiresDynamicCode("Uses Activator.CreateInstance; prefer typed JSON cache APIs for Native AOT.")]
+#endif
         public static T ConvertFromRedis<T>(this HashEntry[] hashEntries)
         {
             PropertyInfo[] properties = typeof(T).GetProperties();

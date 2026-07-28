@@ -2,14 +2,15 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <PackageReleaseNotes>
-      [2026-07-21] v1.0.0 新增 System.Text.Json Native AOT 冒烟验证
-      1、验证 ToJson、GetObject 和缓存序列化的 JsonTypeInfo 源生成路径。
-      2、验证 osx-arm64 Native AOT 原生编译、链接及运行结果。
-      [2026-07-22] v1.1.0 扩展 Native AOT 运行时覆盖
-      1、覆盖 System.Type 注册转换、JSON DOM、缓存和源生成 GET/POST 请求路径。
-      2、将 IL2026 与 IL3050 设为错误并验证 osx-arm64 原生二进制运行。
+      [2026-07-21] v1.0.0 Add System.Text.Json Native AOT smoke verification
+      1. Verify JsonTypeInfo source-generation paths for ToJson, GetObject, and cache serialization.
+      2. Verify osx-arm64 Native AOT native compile, link, and run results.
+      [2026-07-22] v1.1.0 Expand Native AOT runtime coverage
+      1. Cover System.Type registration conversion, JSON DOM, cache, and source-generated GET/POST request paths.
+      2. Treat IL2026 and IL3050 as errors and verify osx-arm64 native binary execution.
+      [2026-07-26] v1.2.0 Include in solution and CI; align with Senparc.CO2NET 4.2.0 IsAotCompatible core library
     </PackageReleaseNotes>
     <PublishAot>true</PublishAot>
     <SelfContained>true</SelfContained>

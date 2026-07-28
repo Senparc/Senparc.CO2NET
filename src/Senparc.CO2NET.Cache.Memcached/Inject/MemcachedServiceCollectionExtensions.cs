@@ -1,11 +1,11 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
 
-    文件名：MemcachedServiceCollectionExtensions.cs
-    文件功能描述：Memcached 依赖注入设置。
+    FileName: MemcachedServiceCollectionExtensions.cs
+    File Function Description: Memcached dependency injection setup.
 
 
-    创建标识：Senparc - 20180222
+    Creation Identifier: Senparc - 20180222
 
 ----------------------------------------------------------------*/
 
@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class MemcachedServiceCollectionExtensions
     {
         /// <summary>
-        /// .NET Core下设置依赖注入
+        /// Configure dependency injection under .NET Core
         /// </summary>
         /// <param name="services"></param>
         /// <param name="setupAction"></param>

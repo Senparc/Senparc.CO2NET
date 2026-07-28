@@ -16,6 +16,9 @@
     Modification Identifier: Senparc - 20180707
     Modification Description: v0.1.9 Remove senparcSetting parameter from UseSenparcGlobal() method, as it is already provided in RegisterService.Start
 
+    Modification Identifier: Senparc - 20260726
+    Modification Description: v4.2.0 Document and annotate AutoScan paths for Native AOT
+
 ----------------------------------------------------------------*/
 
 
@@ -79,10 +82,10 @@ namespace Senparc.CO2NET
         /// Start Senparc.CO2NET initialization parameter process
         /// </summary>
         /// <param name="registerService"></param>
-        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time)</param>
+        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time). Native AOT hosts must keep this <c>false</c> and register strategies via <paramref name="extensionCacheStrategiesFunc"/>.</param>
         /// <param name="extensionCacheStrategiesFunc"><para>Extension cache strategies that need to be manually registered</para>
         /// <para>(LocalContainerCacheStrategy, RedisContainerCacheStrategy, MemcacheContainerCacheStrategy are already automatically registered),</para>
-        /// <para>If set to null (note: not delegate returning null, but the entire delegate parameter is null), it will automatically use reflection to scan all possible extension cache strategies</para></param>
+        /// <para>Native AOT hosts should provide this delegate instead of enabling assembly scanning.</para></param>
         /// <returns></returns>
         public static IRegisterService UseSenparcGlobal(this IRegisterService registerService, bool autoScanExtensionCacheStrategies = false, Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
         {
@@ -101,10 +104,10 @@ namespace Senparc.CO2NET
         /// </summary>
         /// <param name="senparcSetting">SenparcSetting object</param>
         /// <param name="registerConfigure">RegisterService settings</param>
-        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time)</param>
+        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time). Native AOT hosts must keep this <c>false</c>.</param>
         /// <param name="extensionCacheStrategiesFunc"><para>Extension cache strategies that need to be manually registered</para>
         /// <para>(LocalContainerCacheStrategy, RedisContainerCacheStrategy, MemcacheContainerCacheStrategy are already automatically registered),</para>
-        /// <para>If set to null (note: not delegate returning null, but the entire delegate parameter is null), it will automatically use reflection to scan all possible extension cache strategies</para></param>
+        /// <para>Native AOT hosts should provide this delegate instead of enabling assembly scanning.</para></param>
         /// <returns></returns>
         public static IRegisterService UseSenparcGlobal(
             SenparcSetting senparcSetting,
@@ -128,10 +131,10 @@ namespace Senparc.CO2NET
         /// <param name="app">configuration source</param>
         /// <param name="senparcSetting">SenparcSetting object</param>
         /// <param name="registerConfigure">RegisterService settings</param>
-        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time)</param>
+        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time). Native AOT hosts must keep this <c>false</c>.</param>
         /// <param name="extensionCacheStrategiesFunc"><para>Extension cache strategies that need to be manually registered</para>
         /// <para>(LocalContainerCacheStrategy, RedisContainerCacheStrategy, MemcacheContainerCacheStrategy are already automatically registered),</para>
-        /// <para>If set to null (note: not delegate returning null, but the entire delegate parameter is null), it will automatically use reflection to scan all possible extension cache strategies</para></param>
+        /// <para>Native AOT hosts should provide this delegate instead of enabling assembly scanning.</para></param>
         /// <returns></returns>
         public static (IConfigurationRoot app, IRegisterService registerService) UseSenparcGlobal(
             this IConfigurationRoot app,

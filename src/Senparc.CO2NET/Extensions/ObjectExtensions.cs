@@ -51,11 +51,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier：Senparc - 20190108
     Modification Description：v0.5.1 Added jsonSerializerSettings parameter to ToJson() method
 
-    修改标识：Senparc - 20260721
-    修改描述：v4.0.0 将 ToJson 迁移至 System.Text.Json 并新增 JsonTypeInfo Native AOT 重载
+    Modification Identifier: Senparc - 20260721
+    Modification Description: v4.0.0 Migrated ToJson to System.Text.Json and added JsonTypeInfo Native AOT overloads
 
-    修改标识：Senparc - 20260722
-    修改描述：v4.1.0 为反射 ToJson 路径添加 Native AOT 诊断并保留既有调用方式
+    Modification Identifier: Senparc - 20260722
+    Modification Description: v4.1.0 Added Native AOT diagnostics for reflection-based ToJson paths while preserving existing call patterns
 
 ----------------------------------------------------------------*/
 

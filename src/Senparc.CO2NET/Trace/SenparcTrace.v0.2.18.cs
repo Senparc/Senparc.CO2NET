@@ -21,14 +21,14 @@
 ///*----------------------------------------------------------------
 //    Copyright (C) 2018 Senparc
   
-//    文件名：SenparcTrace.cs
-//    文件功能描述：Senparc.CO2NET 日志记录
+//    Filename: SenparcTrace.cs
+//    File description: Senparc.CO2NET logging
     
     
-//    创建标识：Senparc - 20180602
+//    Creation Identifier: Senparc - 20180602
  
-//    修改标识：Senparc - 20180721
-//    修改描述：v0.2.1 增加 SenparcTrace.BaseExceptionLog(Exception ex) 重写方法
+//    Modification Identifier: Senparc - 20180721
+//    Modification Description: v0.2.1 Added SenparcTrace.BaseExceptionLog(Exception ex) override method
 //----------------------------------------------------------------*/
 
 
@@ -45,7 +45,7 @@
 //namespace Senparc.CO2NET.Trace
 //{
 //    /// <summary>
-//    /// Senparc.CO2NET 日志记录
+//    /// Senparc.CO2NET logging
 //    /// </summary>
 //    public class SenparcTrace
 //    {
@@ -59,34 +59,34 @@
 //#endif
 
 //        /// <summary>
-//        /// 统一日志锁名称
+//        /// Unified log lock name
 //        /// </summary>
 //        const string LockName = "SenparcTraceLock";
 
 //        /// <summary>
-//        /// Senparc.Weixin全局统一的缓存策略
+//        /// Globally unified cache strategy for Senparc.Weixin
 //        /// </summary>
 //        private static IBaseObjectCacheStrategy Cache
 //        {
 //            get
 //            {
-//                //使用工厂模式或者配置进行动态加载
+//                //Dynamically load via factory pattern or configuration
 //                return CacheStrategyFactory.GetObjectCacheStrategyInstance();
 //            }
 //        }
 
 //        /// <summary>
-//        /// 记录BaseException日志时需要执行的任务
+//        /// Task to execute when logging BaseException
 //        /// </summary>
 //        public static Action<BaseException> OnBaseExceptionFunc;
 
 //        /// <summary>
-//        /// 执行所有日志记录操作时执行的任务（发生在记录日志之后）
+//        /// Task executed after all logging operations complete
 //        /// </summary>
 //        public static Action OnLogFunc;
 
 //        /// <summary>
-//        /// 打开日志开始记录
+//        /// Open logging and start recording
 //        /// </summary>
 //        internal static void Open()
 //        {
@@ -127,7 +127,7 @@
 //                System.Diagnostics.Trace.Listeners.Add(_traceListener);
 //                System.Diagnostics.Trace.AutoFlush = true;
 //#elif NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1
-//                //TODO:如果这里不开通，netstandard1.6将无法使用日志记录功能
+//                //TODO: if not enabled here, netstandard1.6 cannot use logging
 //                //ILoggerFactory loggerFactory = new LoggerFactory();
 
 //                _traceListener = new TextWriterTraceListener(logWriter);
@@ -139,7 +139,7 @@
 //        }
 
 //        /// <summary>
-//        /// 关闭日志记录
+//        /// Close logging
 //        /// </summary>
 //        internal static void Close()
 //        {
@@ -162,10 +162,10 @@
 //            }
 //        }
 
-//        #region 私有方法
+//        #region Private Methods
 
 //        /// <summary>
-//        /// 统一时间格式
+//        /// Unified time format
 //        /// </summary>
 //        private static void TimeLog()
 //        {
@@ -173,16 +173,16 @@
 //        }
 
 //        /// <summary>
-//        /// 当前线程记录
+//        /// Current thread log
 //        /// </summary>
 //        private static void ThreadLog()
 //        {
-//            Log("[线程：{0}]", Thread.CurrentThread.GetHashCode());
+//            Log("[Thread:{0}]", Thread.CurrentThread.GetHashCode());
 //        }
 
 
 //        /// <summary>
-//        /// 退回一次缩进
+//        /// Unindent once
 //        /// </summary>
 //        private static void Unindent()
 //        {
@@ -197,7 +197,7 @@
 //        }
 
 //        /// <summary>
-//        /// 缩进一次
+//        /// Indent once
 //        /// </summary>
 //        private static void Indent()
 //        {
@@ -212,7 +212,7 @@
 //        }
 
 //        /// <summary>
-//        /// 写入缓存到系统Trace
+//        /// Flush cache to system Trace
 //        /// </summary>
 //        private static void Flush()
 //        {
@@ -227,7 +227,7 @@
 //        }
 
 //        /// <summary>
-//        /// 开始记录日志
+//        /// Begin logging
 //        /// </summary>
 //        /// <param name="title"></param>
 //        protected static void LogBegin(string title = null)
@@ -238,16 +238,16 @@
 //            {
 //                Log("[{0}]", title);
 //            }
-//            TimeLog();//记录时间
-//            ThreadLog();//记录线程
+//            TimeLog();//Record time
+//            ThreadLog();//Record thread
 //            Indent();
 //        }
 
 //        /// <summary>
-//        /// 记录日志
+//        /// Log message
 //        /// </summary>
-//        /// <param name="messageFormat">日志内容格式</param>
-//        /// <param name="args">日志内容参数</param>
+//        /// <param name="messageFormat">Log message format</param>
+//        /// <param name="args">Log message arguments</param>
 //        public static void Log(string messageFormat, params object[] args)
 //        {
 //            using (Cache.BeginCacheLock(LockName, ""))
@@ -261,7 +261,7 @@
 //        }
 
 //        /// <summary>
-//        /// 结束日志记录
+//        /// End logging
 //        /// </summary>
 //        protected static void LogEnd()
 //        {
@@ -283,13 +283,13 @@
 
 //        #endregion
 
-//        #region 日志记录
+//        #region Logging
 
 //        /// <summary>
-//        /// <para>记录日志（建议使用SendXXLog()方法，以符合统一的记录规则）</para>
-//        /// <para>注意：直接调用此方法不会记录到log文件中，而是输出到系统日志中</para>
+//        /// <para>Log message (SendXXLog() methods are recommended for unified logging rules)</para>
+//        /// <para>Note: calling this method directly writes to system trace, not the log file</para>
 //        /// </summary>
-//        /// <param name="message">日志内容</param>
+//        /// <param name="message">Log message</param>
 //        public static void Log(string message)
 //        {
 //            using (Cache.BeginCacheLock(LockName, ""))
@@ -304,10 +304,10 @@
 
 
 //        /// <summary>
-//        /// 自定义日志
+//        /// Custom log
 //        /// </summary>
-//        /// <param name="typeName">日志类型</param>
-//        /// <param name="content">日志内容</param>
+//        /// <param name="typeName">Log type</param>
+//        /// <param name="content">Log content</param>
 //        public static void SendCustomLog(string typeName, string content)
 //        {
 //            if (!Config.IsDebug)
@@ -321,7 +321,7 @@
 //        }
 
 //        /// <summary>
-//        /// API请求日志（接收结果）
+//        /// API request log (response received)
 //        /// </summary>
 //        /// <param name="url"></param>
 //        /// <param name="returnText"></param>
@@ -332,15 +332,15 @@
 //                return;
 //            }
 
-//            LogBegin("[[接口调用]]");
-//            //TODO:从源头加入AppId
+//            LogBegin("[[API Call]]");
+//            //TODO: add AppId at source
 //            Log("URL：{0}", url);
 //            Log("Result：\r\n{0}", returnText);
 //            LogEnd();
 //        }
 
 //        /// <summary>
-//        /// API请求日志（Post发送消息）
+//        /// API request log (Post message sent)
 //        /// </summary>
 //        /// <param name="url"></param>
 //        /// <param name="data"></param>
@@ -351,7 +351,7 @@
 //                return;
 //            }
 
-//            LogBegin("[[接口调用]]");
+//            LogBegin("[[API Call]]");
 //            Log("URL：{0}", url);
 //            Log("Post Data：\r\n{0}", data);
 //            LogEnd();
@@ -364,7 +364,7 @@
 
 
 //        /// <summary>
-//        /// BaseException 日志
+//        /// BaseException log
 //        /// </summary>
 //        /// <param name="ex"></param>
 //        public static void BaseExceptionLog(Exception ex)
@@ -373,7 +373,7 @@
 //        }
 
 //        /// <summary>
-//        /// BaseException 日志
+//        /// BaseException log
 //        /// </summary>
 //        /// <param name="ex"></param>
 //        public static void BaseExceptionLog(BaseException ex)

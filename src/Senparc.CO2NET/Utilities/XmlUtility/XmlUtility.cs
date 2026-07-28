@@ -46,8 +46,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier：Senparc - 20220208
     Modification Description：v2.0.2 Added XmlUtility.Deserialize() override method
 
-    修改标识：Senparc - 20260721
-    修改描述：v4.0.0 在 net8.0 目标中保留 ConvertAsync 公共方法
+    Modification Identifier: Senparc - 20260721
+    Modification Description: v4.0.0 Retained the public ConvertAsync method in the net8.0 target
 
 ----------------------------------------------------------------*/
 

@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Senparc.CO2NET.Tests.Helpers
 {
-    //ÔÝÎÞ·½·¨
+    // No methods yet
 
     //[TestClass]
     //public class EntityHelperTests

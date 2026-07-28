@@ -9,20 +9,16 @@
     Modification Identifier：Senparc - 20170204
     Modification Description：v1.2.0 Serialization method changed to JSON
 
+    Modification Identifier：Senparc - 20260726
+    Modification Description：v5.3.0 Remove BinaryFormatter; serialize with UTF-8 JSON for Native AOT readiness
+
 ----------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-//using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Threading.Tasks;
-using Senparc.CO2NET.Helpers;
-
-//#if !NETSTANDARD1_6
-//using System.Runtime.Serialization.Formatters.Binary;
-//#endif
+using Senparc.CO2NET.Cache;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace Senparc.CO2NET.Cache.Redis
 {
@@ -31,39 +27,15 @@ namespace Senparc.CO2NET.Cache.Redis
     /// </summary>
     public static class StackExchangeRedisExtensions
     {
-
-        //public static T Get<T>(string key)
-        //{
-        //    var connect = AzureredisDb.Cache;
-        //    var r = AzureredisDb.Cache.StringGet(key);
-        //    return Deserialize<T>(r);
-        //}
-
-        //public static List<T> GetList<T>(string key)
-        //{
-        //    return (List<T>)Get(key);
-        //}
-
-        //public static void SetList<T>(string key, List<T> list)
-        //{
-        //    Set(key, list);
-        //}
-
-        //public static object Get(string key)
-        //{
-        //    return Deserialize<object>(AzureredisDb.Cache.StringGet(key));
-        //}
-
-        //public static void Set(string key, object value)
-        //{
-        //    AzureredisDb.Cache.StringSet(key, Serialize(value));
-        //}
-
         /// <summary>
-        /// Serialize object
+        /// Serialize object to UTF-8 JSON bytes (same payload family as <see cref="CacheSerializeExtension.SerializeToCache"/>).
         /// </summary>
         /// <param name="o"></param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Prefer SerializeToCache with JsonTypeInfo for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Prefer SerializeToCache with JsonTypeInfo for Native AOT.")]
+#endif
         public static byte[] Serialize(this object o)
         {
             if (o == null)
@@ -71,49 +43,19 @@ namespace Senparc.CO2NET.Cache.Redis
                 return null;
             }
 
-            var dtx = SystemTime.Now;
-
-#if !NET462
-            ////Binary serialization scheme
-            //using (MemoryStream memoryStream = new MemoryStream())
-            //{
-
-            //    ProtoBuf.Serializer.Serialize(memoryStream, o);
-            //    byte[] objectDataAsStream = memoryStream.ToArray();
-            //    return objectDataAsStream;
-            //}
-
-            BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
-            return binaryConverter.Serialize(o);
-#else
-            #region .net 4.5 and .net core 2.0 both support BinaryFormatter, but .net core 2.0 does not support delegate serialization
-            //Binary serialization scheme
-            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                binaryFormatter.Serialize(memoryStream, o);
-                byte[] objectDataAsStream = memoryStream.ToArray();
-                return objectDataAsStream;
-            }
-            #endregion
-#endif
-
-            //Console.WriteLine($"StackExchangeRedisExtensions.Serialize time taken：{SystemTime.DiffTotalMS(dtx)}ms");
-
-
-            //Using JSON serialization, there will be an error in deserializing to IContainerBag in the Get() method
-            //JSON serialization scheme
-            //SerializerHelper serializerHelper = new SerializerHelper();
-            //var jsonSetting = serializerHelper.GetJsonString(o);
-            //return Encoding.UTF8.GetBytes(jsonSetting);
+            return Encoding.UTF8.GetBytes(o.SerializeToCache());
         }
 
         /// <summary>
-        /// Deserialize object
+        /// Deserialize object from UTF-8 JSON bytes.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="stream"></param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Prefer DeserializeFromCache with JsonTypeInfo for Native AOT.")]
+        [RequiresUnreferencedCode("Runtime JSON metadata may be removed by trimming. Prefer DeserializeFromCache with JsonTypeInfo for Native AOT.")]
+#endif
         public static T Deserialize<T>(this byte[] stream)
         {
             if (stream == null)
@@ -121,34 +63,7 @@ namespace Senparc.CO2NET.Cache.Redis
                 return default(T);
             }
 
-#if !NET462
-            ////Binary serialization scheme
-            //using (MemoryStream memoryStream = new MemoryStream(stream))
-            //{
-            //    T result = ProtoBuf.Serializer.Deserialize<T>(memoryStream);
-            //    return result;
-            //}
-
-            BinaryFormatter.BinaryConverter binaryConverter = new BinaryFormatter.BinaryConverter();
-            return binaryConverter.Deserialize<T>(stream);
-
-#else
-            #region .net 4.5 and .net core 2.0 both support BinaryFormatter, but .net core 2.0 does not support delegate serialization
-            //Binary serialization scheme
-            var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            using (MemoryStream memoryStream = new MemoryStream(stream))
-            {
-                T result = (T)binaryFormatter.Deserialize(memoryStream);
-                return result;
-            }
-            #endregion
-#endif
-
-
-            //JSON serialization scheme
-            //SerializerHelper serializerHelper = new SerializerHelper();
-            //T result = serializerHelper.GetObject<T>(Encoding.UTF8.GetString(stream));
-            //return result;
+            return Encoding.UTF8.GetString(stream).DeserializeFromCache<T>();
         }
     }
 }

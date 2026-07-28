@@ -1,17 +1,17 @@
 /*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
 
-    文件名：Program.cs
-    文件功能描述：验证 CO2NET System.Text.Json 源生成路径的 Native AOT 发布与运行
+    FileName: Program.cs
+    File Function Description: Verify Native AOT publish and run for the CO2NET System.Text.Json source-generation path
 
 
-    创建标识：Senparc - 20260722
+    Creation Identifier: Senparc - 20260722
 
-    修改标识：Senparc - 20260721
-    修改描述：v1.0.0 新增 ToJson、GetObject 和缓存序列化 Native AOT 冒烟验证
+    Modification Identifier: Senparc - 20260721
+    Modification Description: v1.0.0 Add Native AOT smoke tests for ToJson, GetObject, and cache serialization
 
-    修改标识：Senparc - 20260722
-    修改描述：v1.1.0 覆盖类型转换、JSON DOM、缓存和源生成 HTTP Native AOT 路径
+    Modification Identifier: Senparc - 20260722
+    Modification Description: v1.1.0 Cover type conversion, JSON DOM, cache, and source-generated HTTP Native AOT paths
 
 ----------------------------------------------------------------*/
 

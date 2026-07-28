@@ -21,11 +21,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
 /*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
 
-    文件名：FormFileData.cs
-    文件功能描述：模拟 Form 提交时， RequestUtility.Post 中 fileDictionary 的 Value 值在提供 base64 文件流信息状态下的解析信息
+    Filename: FormFileData.cs
+    File description: Parsing information for fileDictionary Value in RequestUtility.Post when simulating Form submission with base64 file stream data
 
 
-    创建标识：Senparc - 20190811
+    Creation Identifier: Senparc - 20190811
     
 ----------------------------------------------------------------*/
 
@@ -40,21 +40,21 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
 {
     /// <summary>
-    /// Form 提交
+    /// Form submission
     /// </summary>
     public class FormFileData
     {
         /// <summary>
-        /// Post 方法中 fileDictionary 参数的 Value 可以提供 base64 编码后的数据流，需要符合此格式
+        /// In Post, the fileDictionary Value may provide a base64-encoded data stream and must match this format
         /// </summary>
         public const string FILE_DICTIONARY_STREAM_FORMAT = "{0}||{1}";
 
         /// <summary>
-        /// Form 提交用于标记的文件名
+        /// File name marker used for Form submission
         /// </summary>
         public string FileName { get; set; }
         /// <summary>
-        /// 文件 base64 编码
+        /// Base64-encoded file content
         /// </summary>
         public string FileBase64 { get; set; }
 
@@ -74,7 +74,7 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
 
 
         /// <summary>
-        /// 从文件流获取适用于 RequestUtility.Post 中 FileDictionary 的 Base64值
+        /// Get the Base64 value for FileDictionary in RequestUtility.Post from a file stream
         /// </summary>
         /// <param name="fileStream"></param>
         /// <returns></returns>
@@ -87,22 +87,22 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
 
             fileStream.Seek(0, SeekOrigin.Begin);
 
-            //方法一
+            //Method 1
             byte[] fileBytes = new byte[fileStream.Length];
             fileStream.Read(fileBytes, 0, fileBytes.Length);
 
-            //方法二
+            //Method 2
             //BinaryReader r = new BinaryReader(fileStream);
             //r.BaseStream.Seek(0, SeekOrigin.Begin);
-            //var fileBytes = r.ReadBytes((int)r.BaseStream.Length);//TODO: 不使用 int 限制 long 的长度
+            //var fileBytes = r.ReadBytes((int)r.BaseStream.Length);//TODO: do not use int to limit long length
 
             FileBase64 = Convert.ToBase64String(fileBytes);
         }
 
         /// <summary>
-        /// 从 FileValue 获取 FileName、Base64 等参数
+        /// Get FileName, Base64, and other parameters from FileValue
         /// </summary>
-        /// <param name="fileValue">FileDictionary 的 Value</param>
+        /// <param name="fileValue">Value of FileDictionary</param>
         public void FillFromFileValue(string fileValue)
         {
             if (string.IsNullOrWhiteSpace(fileValue))
@@ -121,11 +121,11 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
                 FileBase64 = values[0];
             }
 
-            //TODO:可以加入校验
+            //TODO: validation can be added
         }
 
         /// <summary>
-        /// 尝试将 Base64 加载到 stream 中，会进行 Base64 检测，如果失败则返回 false
+        /// Try to load Base64 into stream; performs Base64 validation and returns false on failure
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
@@ -143,7 +143,7 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
 
             try
             {
-                byte[] bytes = Convert.FromBase64String(FileBase64);//如果不是有效的 Base64 编码，则会进入异常
+                byte[] bytes = Convert.FromBase64String(FileBase64);//If not valid Base64 encoding, an exception is thrown
                 stream.Seek(0, SeekOrigin.Begin);
                 await stream.WriteAsync(bytes, 0, bytes.Length);
                 stream.Seek(0, SeekOrigin.Begin);
@@ -156,9 +156,9 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
         }
 
         /// <summary>
-        /// 获取可用的文件名
+        /// Get an available file name
         /// </summary>
-        /// <param name="backupName">备用名称（当前FileName为空时使用）</param>
+        /// <param name="backupName">Fallback name used when FileName is empty</param>
         /// <returns></returns>
         public string GetAvaliableFileName(string backupName)
         {
@@ -166,7 +166,7 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
         }
 
         /// <summary>
-        /// 获取整合之后的给 fileDictionary 使用的 Value
+        /// Get the combined Value for use in fileDictionary
         /// </summary>
         public string GetFileValue()
         {
@@ -179,9 +179,9 @@ namespace Senparc.CO2NET.Utilities.HttpUtility.HttpPost
         }
 
         ///// <summary>
-        ///// 获取整合之后的给 fileDictionary 使用的 K-V 对象
+        ///// Get the combined key-value object for use in fileDictionary
         ///// </summary>
-        ///// <param name="formName">表单提交时的 name，即 fileDictionary 中的 Key 值</param>
+        ///// <param name="formName">Form submission name, i.e. the Key in fileDictionary</param>
         ///// <returns></returns>
         //public KeyValuePair<string, string> GetFileDictionaryKV(string formName)
         //{

@@ -1,17 +1,17 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
 
-    文件名：CacheSerializeExtension.cs
-    文件功能描述：提供缓存对象统一 JSON 序列化与反序列化扩展方法
+    Filename: CacheSerializeExtension.cs
+    File description: Provides unified JSON serialization and deserialization extension methods for cache objects
 
 
-    创建标识：Senparc - 20180613
+    Creation Identifier: Senparc - 20180613
 
-    修改标识：Senparc - 20260721
-    修改描述：v4.0.0 使用 System.Text.Json 实现缓存序列化并新增 JsonTypeInfo Native AOT 重载
+    Modification Identifier: Senparc - 20260721
+    Modification Description: v4.0.0 Implemented cache serialization with System.Text.Json and added JsonTypeInfo Native AOT overloads
 
-    修改标识：Senparc - 20260722
-    修改描述：v4.1.0 标注反射缓存方法并强化 JsonTypeInfo Native AOT 使用指引
+    Modification Identifier: Senparc - 20260722
+    Modification Description: v4.1.0 Annotated reflection-based cache methods and strengthened JsonTypeInfo Native AOT guidance
 
 ----------------------------------------------------------------*/
 

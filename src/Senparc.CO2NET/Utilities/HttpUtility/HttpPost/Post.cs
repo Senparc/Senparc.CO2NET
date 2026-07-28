@@ -60,8 +60,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier: Senparc - 20241119  
     Modification Description: v3.0.0-beta3 Added ApiClient parameter
 
-    修改标识：Senparc - 20260722
-    修改描述：v4.1.0 新增 JsonTypeInfo 文件、流及表单 POST Native AOT 重载
+    Modification Identifier: Senparc - 20260722
+    Modification Description: v4.1.0 Added JsonTypeInfo file, stream, and form POST Native AOT overloads
 
 ----------------------------------------------------------------*/
 
@@ -91,28 +91,28 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Senparc.CO2NET.HttpUtility
 {
     /// <summary>
-    /// Post 请求处理
+    /// Post request processing
     /// </summary>
     public static class Post
     {
-        #region 同步方法
+        #region Synchronous Methods
 
         /// <summary>
-        /// 发起Post请求，可上传文件
+        /// Send a Post request with optional file upload
         /// </summary>
-        /// <typeparam name="T">返回数据类型（Json对应的实体）</typeparam>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
-        /// <param name="url">请求Url</param>
-        /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
+        /// <typeparam name="T">Return data type (JSON entity type)</typeparam>
+        /// <param name="serviceProvider">Server provider under .NET Core; keep null for .NET Framework</param>
+        /// <param name="url">Request URL</param>
+        /// <param name="cookieContainer">CookieContainer; set to null if not needed</param>
         /// <param name="encoding"></param>
-        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
-        /// <param name="cer">证书，如果不需要则保留null</param>
+        /// <param name="certName">Unique certificate name; keep null if not needed</param>
+        /// <param name="cer">Certificate; keep null if not needed</param>
         /// <param name="useAjax"></param>
-        /// <param name="timeOut">代理请求超时时间（毫秒）</param>
-        /// <param name="fileDictionary">需要Post的文件（Dictionary 的 Key=name，Value=绝对路径）</param>
-        /// <param name="postDataDictionary">需要Post的键值对（name,value）</param>
-        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
-        /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
+        /// <param name="timeOut">Proxy request timeout in milliseconds</param>
+        /// <param name="fileDictionary">Files to Post (Dictionary Key=name, Value=absolute path)</param>
+        /// <param name="postDataDictionary">Key-value pairs to Post (name, value)</param>
+        /// <param name="contentType">Content-Type in the request header; defaults to <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
+        /// <param name="afterReturnText">Return JSON text and trigger before deserialization; parameters are url and returnText</param>
         /// <returns></returns>
 #if NET8_0_OR_GREATER
         [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the PostFileGetJson overload with JsonTypeInfo<T> for Native AOT.")]
@@ -135,7 +135,7 @@ namespace Senparc.CO2NET.HttpUtility
         {
             using (MemoryStream ms = new MemoryStream())
             {
-                postDataDictionary.FillFormDataStream(ms); //填充formData
+                postDataDictionary.FillFormDataStream(ms); //Fill formData
 
                 string returnText = RequestUtility.HttpPost(
                     serviceProvider,
@@ -156,7 +156,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 发起 Post 文件请求，并使用源生成元数据反序列化响应。此重载支持 Native AOT。
+        /// Send a Post file request and deserialize the response using source-generated metadata. This overload supports Native AOT.
         /// </summary>
         public static T PostFileGetJson<T>(
             JsonTypeInfo<T> jsonTypeInfo,
@@ -196,21 +196,21 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 发起Post请求，可包含文件流
+        /// Send a Post request that may include a file stream
         /// </summary>
-        /// <typeparam name="T">返回数据类型（Json对应的实体）</typeparam>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
-        /// <param name="url">请求Url</param>
-        /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
-        /// <param name="fileStream">文件流</param>
+        /// <typeparam name="T">Return data type (JSON entity type)</typeparam>
+        /// <param name="serviceProvider">Server provider under .NET Core; keep null for .NET Framework</param>
+        /// <param name="url">Request URL</param>
+        /// <param name="cookieContainer">CookieContainer; set to null if not needed</param>
+        /// <param name="fileStream">File stream</param>
         /// <param name="encoding"></param>
-        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
-        /// <param name="cer">证书，如果不需要则保留null</param>
-        /// <param name="useAjax">是否使用Ajax请求</param>
-        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
-        /// <param name="timeOut">代理请求超时时间（毫秒）</param>
-        /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
-        /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
+        /// <param name="certName">Unique certificate name; keep null if not needed</param>
+        /// <param name="cer">Certificate; keep null if not needed</param>
+        /// <param name="useAjax">Whether to use an Ajax request</param>
+        /// <param name="contentType">Content-Type in the request header; defaults to <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
+        /// <param name="timeOut">Proxy request timeout in milliseconds</param>
+        /// <param name="checkValidationResult">Automatically validate server certificate callback</param>
+        /// <param name="afterReturnText">Return JSON text and trigger before deserialization; parameters are url and returnText</param>
         /// <returns></returns>
 #if NET8_0_OR_GREATER
         [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the PostGetJson overload with JsonTypeInfo<T> for Native AOT.")]
@@ -249,7 +249,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 发起 Post 流请求，并使用源生成元数据反序列化响应。此重载支持 Native AOT。
+        /// Send a Post stream request and deserialize the response using source-generated metadata. This overload supports Native AOT.
         /// </summary>
         public static T PostGetJson<T>(
             JsonTypeInfo<T> jsonTypeInfo,
@@ -283,20 +283,20 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// Form表单Post数据，获取JSON
+        /// Post form data and get JSON
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <param name="serviceProvider">Server provider under .NET Core; keep null for .NET Framework</param>
         /// <param name="url"></param>
-        /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
-        /// <param name="formData">表单数据，Key对应name，Value对应value</param>
+        /// <param name="cookieContainer">CookieContainer; set to null if not needed</param>
+        /// <param name="formData">Form data; Key maps to name, Value maps to value</param>
         /// <param name="encoding"></param>
-        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
-        /// <param name="cer">证书，如果不需要则保留null</param>
-        /// <param name="useAjax">是否使用Ajax请求</param>
-        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
-        /// <param name="timeOut">代理请求超时时间（毫秒）</param>
-        /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
+        /// <param name="certName">Unique certificate name; keep null if not needed</param>
+        /// <param name="cer">Certificate; keep null if not needed</param>
+        /// <param name="useAjax">Whether to use an Ajax request</param>
+        /// <param name="contentType">Content-Type in the request header; defaults to <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
+        /// <param name="timeOut">Proxy request timeout in milliseconds</param>
+        /// <param name="afterReturnText">Return JSON text and trigger before deserialization; parameters are url and returnText</param>
         /// <returns></returns>
 #if NET8_0_OR_GREATER
         [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the PostGetJson overload with JsonTypeInfo<T> for Native AOT.")]
@@ -334,7 +334,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 发送 Post 表单，并使用源生成元数据反序列化响应。此重载支持 Native AOT。
+        /// Send a Post form and deserialize the response using source-generated metadata. This overload supports Native AOT.
         /// </summary>
         public static T PostGetJson<T>(
             JsonTypeInfo<T> jsonTypeInfo,
@@ -367,9 +367,9 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 使用Post方法上传数据并下载文件或结果
+        /// Upload data using Post and download the file or result
         /// </summary>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <param name="serviceProvider">Server provider under .NET Core; keep null for .NET Framework</param>
         /// <param name="url"></param>
         /// <param name="data"></param>
         /// <param name="stream"></param>
@@ -401,24 +401,24 @@ namespace Senparc.CO2NET.HttpUtility
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         /// <summary>
-        /// 【异步方法】发起Post请求，可上传文件
+        /// [Async Method] Send a Post request with optional file upload
         /// </summary>
-        /// <typeparam name="T">返回数据类型（Json对应的实体）</typeparam>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
-        /// <param name="url">请求Url</param>
-        /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
+        /// <typeparam name="T">Return data type (JSON entity type)</typeparam>
+        /// <param name="serviceProvider">Server provider under .NET Core; keep null for .NET Framework</param>
+        /// <param name="url">Request URL</param>
+        /// <param name="cookieContainer">CookieContainer; set to null if not needed</param>
         /// <param name="encoding"></param>
-        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
-        /// <param name="cer">证书，如果不需要则保留null</param>
+        /// <param name="certName">Unique certificate name; keep null if not needed</param>
+        /// <param name="cer">Certificate; keep null if not needed</param>
         /// <param name="useAjax"></param>
-        /// <param name="timeOut">代理请求超时时间（毫秒）</param>
-        /// <param name="fileDictionary">需要Post的文件（Dictionary 的 Key=name，Value=绝对路径）</param>
-        /// <param name="postDataDictionary">需要Post的键值对（name,value）</param>
-        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
-        /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
+        /// <param name="timeOut">Proxy request timeout in milliseconds</param>
+        /// <param name="fileDictionary">Files to Post (Dictionary Key=name, Value=absolute path)</param>
+        /// <param name="postDataDictionary">Key-value pairs to Post (name, value)</param>
+        /// <param name="contentType">Content-Type in the request header; defaults to <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
+        /// <param name="afterReturnText">Return JSON text and trigger before deserialization; parameters are url and returnText</param>
         /// <returns></returns>
 #if NET8_0_OR_GREATER
         [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the PostFileGetJsonAsync overload with JsonTypeInfo<T> for Native AOT.")]
@@ -442,7 +442,7 @@ namespace Senparc.CO2NET.HttpUtility
 
             using (MemoryStream ms = new MemoryStream())
             {
-                postDataDictionary.FillFormDataStream(ms); //填充formData
+                postDataDictionary.FillFormDataStream(ms); //Fill formData
 
                 string returnText = await RequestUtility.HttpPostAsync(
                     serviceProvider,
@@ -463,7 +463,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 异步发起 Post 文件请求，并使用源生成元数据反序列化响应。此重载支持 Native AOT。
+        /// Asynchronously send a Post file request and deserialize the response using source-generated metadata. This overload supports Native AOT.
         /// </summary>
         public static async Task<T> PostFileGetJsonAsync<T>(
             JsonTypeInfo<T> jsonTypeInfo,
@@ -505,21 +505,21 @@ namespace Senparc.CO2NET.HttpUtility
 
 
         /// <summary>
-        /// 【异步方法】发起Post请求，可包含文件流
+        /// [Async Method] Send a Post request that may include a file stream
         /// </summary>
-        /// <typeparam name="T">返回数据类型（Json对应的实体）</typeparam>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
-        /// <param name="url">请求Url</param>
-        /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
-        /// <param name="fileStream">文件流</param>
+        /// <typeparam name="T">Return data type (JSON entity type)</typeparam>
+        /// <param name="serviceProvider">Server provider under .NET Core; keep null for .NET Framework</param>
+        /// <param name="url">Request URL</param>
+        /// <param name="cookieContainer">CookieContainer; set to null if not needed</param>
+        /// <param name="fileStream">File stream</param>
         /// <param name="encoding"></param>
-        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
-        /// <param name="cer">证书，如果不需要则保留null</param>
-        /// <param name="useAjax">是否使用Ajax请求</param>
-        /// <param name="timeOut">代理请求超时时间（毫秒）</param>
-        /// <param name="checkValidationResult">验证服务器证书回调自动验证</param>
-        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
-        /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
+        /// <param name="certName">Unique certificate name; keep null if not needed</param>
+        /// <param name="cer">Certificate; keep null if not needed</param>
+        /// <param name="useAjax">Whether to use an Ajax request</param>
+        /// <param name="timeOut">Proxy request timeout in milliseconds</param>
+        /// <param name="checkValidationResult">Automatically validate server certificate callback</param>
+        /// <param name="contentType">Content-Type in the request header; defaults to <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
+        /// <param name="afterReturnText">Return JSON text and trigger before deserialization; parameters are url and returnText</param>
         /// <returns></returns>
 #if NET8_0_OR_GREATER
         [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the PostGetJsonAsync overload with JsonTypeInfo<T> for Native AOT.")]
@@ -558,7 +558,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 异步发起 Post 流请求，并使用源生成元数据反序列化响应。此重载支持 Native AOT。
+        /// Asynchronously send a Post stream request and deserialize the response using source-generated metadata. This overload supports Native AOT.
         /// </summary>
         public static async Task<T> PostGetJsonAsync<T>(
             JsonTypeInfo<T> jsonTypeInfo,
@@ -593,20 +593,20 @@ namespace Senparc.CO2NET.HttpUtility
 
 
         /// <summary>
-        /// 【异步方法】Form表单Post数据，获取JSON
+        /// [Async Method] Post form data and get JSON
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <param name="serviceProvider">Server provider under .NET Core; keep null for .NET Framework</param>
         /// <param name="url"></param>
-        /// <param name="cookieContainer">CookieContainer，如果不需要则设为null</param>
-        /// <param name="formData">表单数据，Key对应name，Value对应value</param>
+        /// <param name="cookieContainer">CookieContainer; set to null if not needed</param>
+        /// <param name="formData">Form data; Key maps to name, Value maps to value</param>
         /// <param name="encoding"></param>
-        /// <param name="certName">证书唯一名称，如果不需要则保留null</param>
-        /// <param name="cer">证书，如果不需要则保留null</param>
-        /// <param name="useAjax">是否使用Ajax请求</param>
-        /// <param name="contentType">请求 Header 中的 Content-Type，默认为 <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
-        /// <param name="afterReturnText">返回JSON本文，并在进行序列化之前触发，参数分别为：url、returnText</param>
-        /// <param name="timeOut">代理请求超时时间（毫秒）</param>
+        /// <param name="certName">Unique certificate name; keep null if not needed</param>
+        /// <param name="cer">Certificate; keep null if not needed</param>
+        /// <param name="useAjax">Whether to use an Ajax request</param>
+        /// <param name="contentType">Content-Type in the request header; defaults to <see cref="HttpClientHelper.DEFAULT_CONTENT_TYPE"/></param>
+        /// <param name="afterReturnText">Return JSON text and trigger before deserialization; parameters are url and returnText</param>
+        /// <param name="timeOut">Proxy request timeout in milliseconds</param>
         /// <returns></returns>
 #if NET8_0_OR_GREATER
         [RequiresDynamicCode("Runtime JSON metadata may require dynamic code. Use the PostGetJsonAsync overload with JsonTypeInfo<T> for Native AOT.")]
@@ -646,7 +646,7 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 异步发送 Post 表单，并使用源生成元数据反序列化响应。此重载支持 Native AOT。
+        /// Asynchronously send a Post form and deserialize the response using source-generated metadata. This overload supports Native AOT.
         /// </summary>
         public static async Task<T> PostGetJsonAsync<T>(
             JsonTypeInfo<T> jsonTypeInfo,
@@ -680,9 +680,9 @@ namespace Senparc.CO2NET.HttpUtility
         }
 
         /// <summary>
-        /// 【异步方法】使用Post方法上传数据并下载文件或结果
+        /// [Async Method] Upload data using Post and download the file or result
         /// </summary>
-        /// <param name="serviceProvider">.NetCore 下的服务器提供程序，如果 .NET Framework 则保留 null</param>
+        /// <param name="serviceProvider">Server provider under .NET Core; keep null for .NET Framework</param>
         /// <param name="url"></param>
         /// <param name="data"></param>
         /// <param name="stream"></param>
@@ -694,13 +694,13 @@ namespace Senparc.CO2NET.HttpUtility
             WebClient wc = new WebClient();
 
             var fileBytes = await wc.UploadDataTaskAsync(url, "POST", Encoding.UTF8.GetBytes(string.IsNullOrEmpty(data) ? "" : data)).ConfigureAwait(false);
-            await stream.WriteAsync(fileBytes, 0, fileBytes.Length).ConfigureAwait(false);//也可以分段写入
+            await stream.WriteAsync(fileBytes, 0, fileBytes.Length).ConfigureAwait(false);//Can also write in segments
 #else
             HttpClient httpClient = serviceProvider.GetRequiredService<SenparcHttpClient>().Client;
             HttpContent hc = new StringContent(data);
             var ht = await httpClient.PostAsync(url, hc).ConfigureAwait(false);
             var fileBytes = await ht.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            await stream.WriteAsync(fileBytes, 0, fileBytes.Length).ConfigureAwait(false);//也可以分段写入
+            await stream.WriteAsync(fileBytes, 0, fileBytes.Length).ConfigureAwait(false);//Can also write in segments
 #endif
 
         }

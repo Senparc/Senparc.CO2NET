@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.WebApi.WebApiEngines
 {
     /// <summary>
-    /// WebApiEngine 扩展方法
+    /// WebApiEngine extension methods
     /// </summary>
     public static class WebApiEngineExtensions
     {
@@ -22,12 +22,12 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
 
 
         /// <summary>
-        /// 初始化动态API
+        /// Initializes dynamic APIs
         /// </summary>
-        /// <param name="docXmlPath">XML 文档文件夹路径，如果传入 null，则不自动生成 XML 说明文件</param>
+        /// <param name="docXmlPath">XML documentation folder path; if null is passed, XML documentation files are not generated automatically</param>
         /// <param name="builder"></param>
         /// <param name="services"></param>
-        /// <param name="options"> WebApiEngine 配置</param>
+        /// <param name="options">WebApiEngine configuration</param>
         public static void AddAndInitDynamicApi(this IServiceCollection services, IMvcCoreBuilder builder, Action<WebApiEngineOptions> options = null)
         {
             AddAndInitDynamicApi(services, (builder, null), options);
@@ -35,24 +35,24 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
 
 
         /// <summary>
-        /// 初始化动态API
+        /// Initializes dynamic APIs
         /// </summary>
-        /// <param name="docXmlPath">App_Data 文件夹路径</param>
+        /// <param name="docXmlPath">App_Data folder path</param>
         /// <param name="builder"></param>
         /// <param name="services"></param>
-        /// <param name="options"> WebApiEngine 配置</param>
+        /// <param name="options">WebApiEngine configuration</param>
         public static void AddAndInitDynamicApi(this IServiceCollection services, IMvcBuilder builder, Action<WebApiEngineOptions> options = null)
         {
             AddAndInitDynamicApi(services, (null, builder), options);
         }
 
         /// <summary>
-        /// 初始化动态API
+        /// Initializes dynamic APIs
         /// </summary>
-        /// <param name="docXmlPath">App_Data 文件夹路径</param>
+        /// <param name="docXmlPath">App_Data folder path</param>
         /// <param name="builder"></param>
         /// <param name="services"></param>
-        /// <param name="options"> WebApiEngine 配置</param>
+        /// <param name="options">WebApiEngine configuration</param>
         private static void AddAndInitDynamicApi(this IServiceCollection services,
                                                       (IMvcCoreBuilder coreBuilder, IMvcBuilder builder) builder,
                                                       Action<WebApiEngineOptions> options = null)
@@ -74,10 +74,10 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
 
                     bool preLoad = true;
 
-                    //确保 ApiBind 已经执行扫描和注册过程
-                    services.AddApiBind(preLoad);//参数为 true，确保重试绑定成功
+                    // Ensure ApiBind has completed scanning and registration
+                    services.AddApiBind(preLoad);// Pass true to ensure retry binding succeeds
 
-                    //确保目录存在
+                    // Ensure directory exists
                     if (webApiEngine.BuildXml)
                     {
                         webApiEngine.TryCreateDir(webApiEngine.DocXmlPath);
@@ -92,7 +92,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
 
                     List<Task> taskList = new List<Task>();
 
-                    //因为模块数量比较少，这里使用异步反而会开销略大
+                    // Because the number of modules is relatively small, using async here would add slightly more overhead
                     //WeixinApiAssemblyNames.Keys.AsParallel().ForAll(async category =>
                     //WeixinApiAssemblyNames.Keys.ToList().ForEach(category =>
                     var keys = WebApiEngine.ApiAssemblyNames.Keys.ToList();
@@ -105,7 +105,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
                             try
                             {
 
-                                //此处使用 Task 效率并不比 Keys.ToList() 方法快
+                                // Using Task here is not faster than Keys.ToList()
                                 webApiEngine.WriteLog($"Get API Groups: {threadIndex + 1}/{apiGouupsCount}, now dealing with: {category}");
                                 var dtStart = SystemTime.Now;
                                 var apiBindGroup = apiGroups.FirstOrDefault(z => z.Key == category);
@@ -113,7 +113,7 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
                                 var apiCount = await webApiEngine.BuildWebApi(apiBindGroup).ConfigureAwait(false);
                                 var apiAssembly = webApiEngine.GetApiAssembly(category);
 
-                                //程序部件：https://docs.microsoft.com/zh-cn/aspnet/core/mvc/advanced/app-parts?view=aspnetcore-2.2
+                                // Application parts: https://docs.microsoft.com/zh-cn/aspnet/core/mvc/advanced/app-parts?view=aspnetcore-2.2
                                 if (builder.coreBuilder != null)
                                 {
                                     builder.coreBuilder.AddApplicationPart(apiAssembly);
@@ -139,10 +139,10 @@ namespace Senparc.CO2NET.WebApi.WebApiEngines
 
                     Task.WaitAll(taskList.ToArray());
 
-                    //保存 XML文件
+                    // Save XML files
                     webApiEngine.SaveDynamicApiXml();
 
-                    #region 统计数据
+                    #region Statistics
                     var totalCost = SystemTime.DiffTotalMS(dt1);
 
                     //Func<object, int, string> outputResult = (text, length) => string.Format($"{{0,{length}}}", text);

@@ -84,7 +84,7 @@ namespace Redlock.CSharp
 
         protected Dictionary<String, ConnectionMultiplexer> redisMasterDictionary = new Dictionary<string, ConnectionMultiplexer>();
 
-        #region 同步方法
+        #region Synchronous methods
 
         //TODO: Refactor passing a ConnectionMultiplexer
         protected bool LockInstance(string redisServer, string resource, byte[] val, TimeSpan ttl)
@@ -207,7 +207,7 @@ namespace Redlock.CSharp
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous methods
 
         //TODO: Refactor passing a ConnectionMultiplexer
         protected async Task<bool> LockInstanceAsync(string redisServer, string resource, byte[] val, TimeSpan ttl)

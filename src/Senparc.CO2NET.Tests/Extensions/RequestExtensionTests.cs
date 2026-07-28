@@ -37,7 +37,7 @@ namespace Senparc.CO2NET.Tests.Extensions
 
             Console.WriteLine(mockRequest.Object.QueryString);
             mockRequest.Object.QueryString.Add("g", "7");
-            Console.WriteLine(mockRequest.Object.QueryString);//测试中无法输出QueryString，真实环境可以
+            Console.WriteLine(mockRequest.Object.QueryString);// QueryString cannot be output in tests; it works in a real environment
 
             mockRequest.Setup(r => r.Scheme).Returns("http");
             mockRequest.Setup(r => r.Host).Returns(new HostString("www.senparc.com", 80));

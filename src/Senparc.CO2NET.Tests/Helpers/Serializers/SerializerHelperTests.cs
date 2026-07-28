@@ -29,7 +29,7 @@ namespace Senparc.CO2NET.Tests.Helpers
             Console.WriteLine(result);
             Assert.AreEqual("盛派网络", result);
 
-            //TODO:有重写方法需要测试
+            //TODO: Override methods need testing
         }
 
         [TestMethod()]

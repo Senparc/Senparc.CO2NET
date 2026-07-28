@@ -42,11 +42,11 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier：Senparc - 20220530
     Modification Description：v2.1.1 Add more overloads for GetObject() method
 
-    修改标识：Senparc - 20260721
-    修改描述：v4.0.0 将 GetJsonString 和 GetObject 迁移至 System.Text.Json 并新增源生成重载
+    Modification Identifier: Senparc - 20260721
+    Modification Description: v4.0.0 Migrated GetJsonString and GetObject to System.Text.Json and added source-generated overloads
 
-    修改标识：Senparc - 20260722
-    修改描述：v4.1.0 新增非泛型源生成及 JsonNode/JsonDocument API 并标注反射路径
+    Modification Identifier: Senparc - 20260722
+    Modification Description: v4.1.0 Added non-generic source-generated and JsonNode/JsonDocument APIs and annotated reflection paths
 
 ----------------------------------------------------------------*/
 
@@ -179,10 +179,14 @@ namespace Senparc.CO2NET.Helpers
 
 
         /// <summary>
-        /// Deserialize to object
+        /// Deserialize to object (dynamic / Expando-compatible path). Not Native AOT safe; prefer <see cref="GetObject{T}(string)"/> or JsonTypeInfo overloads.
         /// </summary>
         /// <param name="jsonString">JSON string</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Deserializes without compile-time type metadata; use JsonTypeInfo overloads for Native AOT.")]
+        [RequiresUnreferencedCode("Deserializes without compile-time type metadata; use JsonTypeInfo overloads for Native AOT.")]
+#endif
         public static object GetObject(this string jsonString)
         {
             return SystemTextJsonSerializer.Deserialize(jsonString);
@@ -190,11 +194,15 @@ namespace Senparc.CO2NET.Helpers
 
 
         /// <summary>
-        /// Deserialize to object
+        /// Deserialize to object (dynamic / Expando-compatible path). Not Native AOT safe; prefer typed or JsonTypeInfo overloads.
         /// </summary>
         /// <param name="jsonString">JSON string</param>
         /// <param name="settings">JsonSerializerOptions, JsonSetting, or a legacy Newtonsoft settings object.</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Deserializes without compile-time type metadata; use JsonTypeInfo overloads for Native AOT.")]
+        [RequiresUnreferencedCode("Deserializes without compile-time type metadata; use JsonTypeInfo overloads for Native AOT.")]
+#endif
         public static object GetObject(this string jsonString, object settings)
         {
             return SystemTextJsonSerializer.Deserialize(jsonString, settings: settings);

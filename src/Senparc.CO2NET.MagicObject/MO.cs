@@ -30,19 +30,28 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier: Senparc - 20240731
     Modification Description: v0.0.2 Set MO.OriginObject and MO.Object properties to public
 
+    Modification Identifier: Senparc - 20260726
+    Modification Description: v1.2.0 Annotate reflection clone/revert for Native AOT diagnostics
+
 ----------------------------------------------------------------*/
 
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace Senparc.CO2NET.MagicObject
 {
     /// <summary>
-    /// MagicObject object
+    /// MagicObject object. Clone/revert uses reflection and is not fully Native AOT safe.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+#if NET8_0_OR_GREATER
+    [RequiresUnreferencedCode("MO uses reflection for MemberwiseClone and property revert; not fully Native AOT safe.")]
+#endif
     public class MO<T>
         //where T:class
     {
@@ -53,6 +62,9 @@ namespace Senparc.CO2NET.MagicObject
 
         public event EventHandler<string> PropertyChanged;
 
+#if NET8_0_OR_GREATER
+        [RequiresUnreferencedCode("Uses reflection-based Clone.")]
+#endif
         public MO(T obj)
         {
             OriginalObject = Clone(obj);
@@ -226,12 +238,18 @@ namespace Senparc.CO2NET.MagicObject
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresUnreferencedCode("Uses MemberwiseClone via reflection.")]
+#endif
         private T Clone(T source)
         {
             var cloneMethod = source.GetType().GetMethod("MemberwiseClone", BindingFlags.Instance | BindingFlags.NonPublic);
             return (T)cloneMethod.Invoke(source, null);
         }
 
+#if NET8_0_OR_GREATER
+        [RequiresUnreferencedCode("Uses property reflection to copy values.")]
+#endif
         private void RevertProperties(T target,T originalObject)
         {
             var properties = typeof(T).GetProperties();

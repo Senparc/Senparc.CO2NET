@@ -52,7 +52,7 @@ namespace Senparc.CO2NET.ApiBind
     /// </summary>
     public class ApiBindInfoCollection : Dictionary<string, ApiBindInfo>
     {
-        #region 单例
+        #region Singleton
 
         //Static SearchCache
         public static ApiBindInfoCollection Instance

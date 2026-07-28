@@ -1,17 +1,17 @@
 /*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
 
-    文件名：SystemTextJsonSerializer.cs
-    文件功能描述：封装 System.Text.Json 序列化、旧配置适配和动态 JSON 转换
+    Filename: SystemTextJsonSerializer.cs
+    File description: Wraps System.Text.Json serialization, legacy settings adaptation, and dynamic JSON conversion
 
 
-    创建标识：Senparc - 20260722
+    Creation Identifier: Senparc - 20260722
 
-    修改标识：Senparc - 20260721
-    修改描述：v4.0.0 新增 System.Text.Json 兼容实现和 JsonTypeInfo Native AOT 安全路径
+    Modification Identifier: Senparc - 20260721
+    Modification Description: v4.0.0 Added System.Text.Json compatibility and JsonTypeInfo Native AOT-safe paths
 
-    修改标识：Senparc - 20260722
-    修改描述：v4.1.0 扩展旧设置映射与动态日期兼容行为
+    Modification Identifier: Senparc - 20260722
+    Modification Description: v4.1.0 Extended legacy settings mapping and dynamic date compatibility behavior
 
 ----------------------------------------------------------------*/
 

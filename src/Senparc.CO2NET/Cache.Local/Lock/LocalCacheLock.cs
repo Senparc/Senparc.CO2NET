@@ -80,7 +80,7 @@ namespace Senparc.CO2NET.Cache
         private static object lookPoolLock = new object();
 
 
-        #region 同步方法
+        #region Synchronous Methods
 
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Senparc.CO2NET.Cache
             int maxRetryDelay = (int)_retryDelay.TotalMilliseconds;
             while (currentRetry++ < _retryCount)
             {
-                #region 尝试获得锁
+                #region Try to acquire lock
 
                 var getLock = false;
                 try
@@ -157,7 +157,7 @@ namespace Senparc.CO2NET.Cache
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
 
         /// <summary>
         /// [Async method] Create a LocalCacheLock instance and immediately try to acquire the lock

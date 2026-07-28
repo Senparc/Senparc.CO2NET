@@ -18,14 +18,14 @@ namespace Senparc.CO2NET.Sample.FW.Controllers
             return RedirectToAction("PostFile");
         }
 
-        #region Post 文件
+        #region Post file
 
         public async Task<ActionResult> PostFile()
         {
-            var filePath =Server.MapPath("~/App_Data/cover.png");//也可以上传其他任意文件
+            var filePath =Server.MapPath("~/App_Data/cover.png");// Can upload any other file as well
             var file = new Dictionary<string, string>() { { "image", filePath } };
             var url = "https://localhost:44344//Home/PostFile";
-            var result = await RequestUtility.HttpPostAsync(url, fileDictionary: file);//获取图片的base64编码
+            var result = await RequestUtility.HttpPostAsync(url, fileDictionary: file);// Get base64-encoded image
             var html = $@"<html>
 <head>
 <meta http-equiv=Content-Type content=""text/html;charset=utf-8"">

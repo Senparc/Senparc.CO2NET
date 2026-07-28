@@ -4,11 +4,11 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<Version>1.0.2</Version>
 		<PackageReleaseNotes>
-			[2026-07-21] v1.0.1 修复 net10 示例中文注释并升级 CO2NET 依赖
-			1、恢复 Program.cs 中因编码异常损坏的中文配置说明。
+			[2026-07-21] v1.0.1 Fix net10 sample Chinese comments and upgrade CO2NET dependencies
+			1. Restore Chinese configuration comments in Program.cs that were corrupted by encoding issues.
 			2、Dependency update from Senparc.CO2NET to 4.0.0。
-			[2026-07-22] v1.0.2 对齐 .NET 10 示例与 System.Text.Json
-			1、更新页面标题并使用 ReferenceHandler.IgnoreCycles 替代 Newtonsoft.Json 设置。
+			[2026-07-22] v1.0.2 Align .NET 10 sample with System.Text.Json
+			1、Update page title and replace Newtonsoft.Json settings with ReferenceHandler.IgnoreCycles.
 			2、Dependency update from Senparc.CO2NET to 4.1.0。
 		</PackageReleaseNotes>
 		<AssemblyName>Senparc.CO2NET.Sample</AssemblyName>
@@ -23,7 +23,7 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Net.Http.Headers" Version="10.0.0" />
 
-		<PackageReference Include="Senparc.Weixin.MP" Version="16.23.6" />
+		<PackageReference Include="Senparc.Weixin.MP" Version="16.25.1" />
 
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.APM\Senparc.CO2NET.APM.csproj" />
 		<ProjectReference Include="..\..\src\Senparc.CO2NET.AspNet\Senparc.CO2NET.AspNet.csproj" />

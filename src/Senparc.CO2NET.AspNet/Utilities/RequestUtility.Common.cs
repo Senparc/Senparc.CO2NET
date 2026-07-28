@@ -106,7 +106,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
     /// </summary>
     public static partial class RequestUtility
     {
-        #region 代理
+        #region Proxy
 
 #if NET462
         private static System.Net.WebProxy _webproxy = null;
@@ -191,7 +191,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
 
         #endregion
 
-        #region 私有方法
+        #region Private methods
 
 
         /// <summary>
@@ -340,7 +340,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
 
         #endregion
 
-        #region 同步方法
+        #region Synchronous methods
 
         /// <summary>
         /// Fill form information Stream
@@ -357,7 +357,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous methods
 
         /// <summary>
         /// Fill form information Stream
@@ -397,7 +397,7 @@ namespace Senparc.CO2NET.AspNet.HttpUtility
 #endif
         #endregion
 
-        #region 只需要使用同步的方法
+        #region Methods that only need synchronous usage
 
         /// <summary>
         /// Method to assemble QueryString
