@@ -4,12 +4,12 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Version>1.1.0</Version>
 		<PackageReleaseNotes>
-			[2026-07-21] v1.0.1 增强 System.Text.Json 兼容性验证
-			1、覆盖 ToJson、GetObject、JsonSetting、动态对象和 System.Type 的向下兼容行为。
-			2、覆盖 JsonTypeInfo 源生成路径与 CO2NET 程序集无 Newtonsoft.Json 引用验证。
-			[2026-07-22] v1.1.0 建立 Newtonsoft 与 System.Text.Json 双向兼容验证
-			1、覆盖旧设置、属性、私有成员、公开字段、动态日期及新旧缓存数据互读。
-			2、升级 .NET 8 测试运行器，并将 Newtonsoft 固定为 PrivateAssets 测试专用依赖。
+			[2026-07-21] v1.0.1 Enhance System.Text.Json compatibility verification
+			1. Cover backward-compatible behavior for ToJson, GetObject, JsonSetting, dynamic objects, and System.Type.
+			2. Cover JsonTypeInfo source-generation paths and verify CO2NET assemblies have no Newtonsoft.Json reference.
+			[2026-07-22] v1.1.0 Establish bidirectional Newtonsoft and System.Text.Json compatibility verification
+			1. Cover legacy settings, attributes, private members, public fields, dynamic dates, and cross-read of old and new cache data.
+			2. Upgrade .NET 8 test runner and pin Newtonsoft as a PrivateAssets test-only dependency.
 		</PackageReleaseNotes>
 
 		<IsPackable>false</IsPackable>

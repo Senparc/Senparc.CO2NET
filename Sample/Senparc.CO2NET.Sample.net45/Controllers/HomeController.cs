@@ -13,7 +13,7 @@ namespace Senparc.CO2NET.Sample.net45.Controllers
     {
         public ActionResult Index()
         {
-            //如需立即改用某种缓存策略，只需要这样做（注意：是全局立即生效）：
+            // To switch cache strategy immediately (global effect), use:
             //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);
 
             var cache = CacheStrategyFactory.GetObjectCacheStrategyInstance();

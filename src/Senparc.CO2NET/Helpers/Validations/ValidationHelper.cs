@@ -42,19 +42,19 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Helpers.Validations
 {
     /// <summary>
-    /// 验证帮助类
+    /// Validation helper class
     /// </summary>
     public static class ValidationHelper
     {
         /// <summary>
-        /// 检查对象是否为 null，如果是 null，则抛出异常并包含调用者信息。
+        /// Check whether the object is null; if so, log/throw with caller information.
         /// </summary>
-        /// <param name="obj">要检查的对象</param>
-        /// <param name="memberName">调用者的成员名称（自动填充）</param>
-        /// <param name="filePath">调用者的文件路径（自动填充）</param>
-        /// <param name="lineNumber">调用者的行号（自动填充）</param>
-        /// <param name="throwException">是否抛出异常</param>
-        /// <exception cref="ArgumentNullException">当对象为 null 时抛出</exception>
+        /// <param name="obj">Object to check</param>
+        /// <param name="memberName">Caller member name (auto-filled)</param>
+        /// <param name="filePath">Caller file path (auto-filled)</param>
+        /// <param name="lineNumber">Caller line number (auto-filled)</param>
+        /// <param name="throwException">Whether to throw an exception</param>
+        /// <exception cref="ArgumentNullException">Thrown when the object is null</exception>
         public static void CheckNull(this object obj,
             [CallerMemberName] string memberName = "",
             [CallerFilePath] string filePath = "",

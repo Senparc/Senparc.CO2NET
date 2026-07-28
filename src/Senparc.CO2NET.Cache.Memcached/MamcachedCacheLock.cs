@@ -41,7 +41,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             return string.Format("{0}:{1}", "Lock", resourceName);
         }
 
-        #region 同步方法
+        #region Synchronous methods
 
         /// <summary>
         /// Create an instance of MemcachedCacheLock and immediately attempt to acquire the lock
@@ -121,7 +121,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous methods
 
         /// <summary>
         /// [Async method] Create an instance of MemcachedCacheLock and immediately attempt to acquire the lock

@@ -16,7 +16,7 @@ namespace Senparc.CO2NET.Tests.Helpers
             Assert.IsNotNull(stream);
             Assert.IsTrue(stream.Length > 0);
             Console.WriteLine(stream.Length);
-            Assert.AreEqual(117025, stream.Length);//只对当前Logo.jpg有效
+            Assert.AreEqual(117025, stream.Length);// Only valid for the current Logo.jpg
         }
 
         [TestMethod]
@@ -29,7 +29,7 @@ namespace Senparc.CO2NET.Tests.Helpers
 
             Assert.IsTrue(File.Exists(savePath));
 
-            //删除文件
+            // Delete file
             File.Delete(savePath);
         }
     }

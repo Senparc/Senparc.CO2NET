@@ -15,10 +15,10 @@ namespace Senparc.CO2NET.Tests.Helpers
             {
                 var timeTicks = "1545888011";
                 var result = DateTimeHelper.GetDateTimeFromXml(timeTicks);
-                var timeStr = "12/27/2018 13:20:11";//直接打印出来的结果
+                var timeStr = "12/27/2018 13:20:11";// Result when printed directly
                 Console.WriteLine(result);
 
-                var timeStrToString = "2018/12/27 13:20:11";//ToString 之后结果会不一样
+                var timeStrToString = "2018/12/27 13:20:11";// Result differs after ToString()
                 Console.WriteLine(result.ToString("yyyy/MM/dd HH:mm:ss"));
                 Assert.AreEqual(timeStrToString, result.ToString("yyyy/MM/dd HH:mm:ss"));
             }
@@ -30,14 +30,14 @@ namespace Senparc.CO2NET.Tests.Helpers
             {
                 var timeTicks = "1545888011";
                 var result = DateTimeHelper.GetDateTimeOffsetFromXml(timeTicks);
-                var timeStr = "12/27/2018 13:20:11 +08:00";//直接打印出来的结果
+                var timeStr = "12/27/2018 13:20:11 +08:00";// Result when printed directly
                 Console.WriteLine(result);
                 Console.WriteLine(result + "");
                 Console.WriteLine(result.ToString());
                 Console.WriteLine(result.Date.ToString());
                 Console.WriteLine(result.DateTime.ToString());
                 Console.WriteLine(result.LocalDateTime.ToString());
-                var timeStrTostring = "2018/12/27 13:20:11 +08:00";//不是用ToString()返回结果不一致
+                var timeStrTostring = "2018/12/27 13:20:11 +08:00";// Without ToString(), the returned result is inconsistent
                 Assert.AreEqual(timeStrTostring, result.ToString("yyyy/MM/dd HH:mm:ss zzz"));
 
                 Console.WriteLine("==============");
@@ -53,8 +53,8 @@ namespace Senparc.CO2NET.Tests.Helpers
         public void GetDateTimeOffsetFromXml_ShouldReturnCorrectDateTime()
         {
             // Arrange  
-            long unixTimeStamp = 1545888011; // Unix 时间戳  
-            DateTimeOffset expectedDateTime = new DateTimeOffset(2018, 12, 27, 13, 20, 11, TimeSpan.FromHours(8)); // 预期的中国标准时间  
+            long unixTimeStamp = 1545888011; // Unix timestamp
+            DateTimeOffset expectedDateTime = new DateTimeOffset(2018, 12, 27, 13, 20, 11, TimeSpan.FromHours(8)); // Expected China Standard Time
 
             // Act  
             DateTimeOffset actualDateTime = DateTimeHelper.GetDateTimeOffsetFromXml(unixTimeStamp);
@@ -68,7 +68,7 @@ namespace Senparc.CO2NET.Tests.Helpers
         {
             // Arrange  
             long unixTimeStamp = 0;
-            DateTimeOffset expectedDateTime = new DateTimeOffset(1970, 1, 1, 8, 0, 0, TimeSpan.FromHours(8)); // +8时区  
+            DateTimeOffset expectedDateTime = new DateTimeOffset(1970, 1, 1, 8, 0, 0, TimeSpan.FromHours(8)); // +8 time zone
 
             // Act  
             DateTimeOffset actualDateTime = DateTimeHelper.GetDateTimeOffsetFromXml(unixTimeStamp);

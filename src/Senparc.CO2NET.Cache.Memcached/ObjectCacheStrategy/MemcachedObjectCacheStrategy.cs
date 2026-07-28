@@ -28,8 +28,8 @@
     Modification Identifier：Senparc - 20230527
     Modification Description：v4.1.3 MemcachedObjectCacheStrategy.Get() method added pure string check
 
-    修改标识：Senparc - 20260721
-    修改描述：v5.1.2 移除 Newtonsoft.Json 遗留引用并适配 System.Text.Json 依赖链
+    Modification Identifier: Senparc - 20260721
+    Modification Description: v5.1.2 Remove legacy Newtonsoft.Json references and adapt to System.Text.Json dependency chain
 
 ----------------------------------------------------------------*/
 
@@ -117,7 +117,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             }
         }
 
-        #region 单例
+        #region Singleton
 
         static MemcachedObjectCacheStrategy()
         {
@@ -154,7 +154,7 @@ namespace Senparc.CO2NET.Cache.Memcached
             //cache = new MemcachedClient();
             //cache.EnableCompression = false;
 
-            #region 内部为测试代码，因为调用RegisterServerList()静态方法前会先执行此静态构造函数，此时_serverlist还没有被初始化，故会出错
+            #region Internal test code; RegisterServerList() is invoked before this static constructor runs, so _serverlist is not initialized yet and will fail
 
             //            try
             //            {
@@ -231,7 +231,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         #endregion
 
-        #region 配置
+        #region Configuration
 
 #if NET462
         private static MemcachedClientConfiguration GetMemcachedClientConfiguration()
@@ -273,9 +273,9 @@ namespace Senparc.CO2NET.Cache.Memcached
             return keyStoreFinalKey;
         }
 
-        #region IContainerCacheStrategy 成员
+        #region IContainerCacheStrategy members
 
-        #region 同步方法
+        #region Synchronous methods
 
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法", true)]
         public void InsertToCache(string key, object value, TimeSpan? expiry = null)
@@ -443,7 +443,7 @@ namespace Senparc.CO2NET.Cache.Memcached
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous methods
 
 #if NET462
 

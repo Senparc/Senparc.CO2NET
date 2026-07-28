@@ -40,7 +40,7 @@ namespace Senparc.CO2NET.Sample.netcore3.Controllers
         }
 
         /// <summary>
-        /// 测试日志记录
+        /// Test log recording
         /// </summary>
         /// <returns></returns>
         public IActionResult LogTest()
@@ -51,12 +51,12 @@ namespace Senparc.CO2NET.Sample.netcore3.Controllers
         }
 
 
-        #region Post 方法测试
+        #region Post method tests
 
-        #region Post 参数
+        #region Post parameters
 
         /// <summary>
-        /// Post方法测试
+        /// Post method test
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -75,10 +75,10 @@ namespace Senparc.CO2NET.Sample.netcore3.Controllers
 
         #endregion
 
-        #region Post 文件
+        #region Post file
 
         /// <summary>
-        /// 记录耗时，并返回平均时间
+        /// Record elapsed time and return the average
         /// </summary>
         /// <param name="byStream"></param>
         /// <param name="cost"></param>
@@ -92,15 +92,15 @@ namespace Senparc.CO2NET.Sample.netcore3.Controllers
             {
                 record = await cache.GetAsync<dynamic>(cacheKey);
                 record = new { ViewCount = record.ViewCount + 1, TotalCost = ((TimeSpan)record.TotalCost).Add(cost) };
-                //record.ViewCount++;//增加访问量
-                //record.TotalCost = ((TimeSpan)record.TotalCost).Add(cost);//增加总耗时
+                //record.ViewCount++;// Increment view count
+                //record.TotalCost = ((TimeSpan)record.TotalCost).Add(cost);// Add to total elapsed time
             }
             else
             {
                 record = new { ViewCount = 1, TotalCost = cost };
             }
 
-            await cache.SetAsync(cacheKey, record, TimeSpan.FromMinutes(10));//更新信息
+            await cache.SetAsync(cacheKey, record, TimeSpan.FromMinutes(10));// Update cache entry
 
             return ((TimeSpan)record.TotalCost).TotalMilliseconds / (int)record.ViewCount;
         }
@@ -108,16 +108,16 @@ namespace Senparc.CO2NET.Sample.netcore3.Controllers
         public async Task<IActionResult> PostFile(string byStream = null)
         {
             var dt1 = SystemTime.Now;
-            var filePath = Path.GetFullPath("App_Data/cover.png");//也可以上传其他任意文件
+            var filePath = Path.GetFullPath("App_Data/cover.png");// Can upload any other file as well
             var fileDictionary = new Dictionary<string, string>();
             if (byStream != null)
             {
-                //使用Stream传入，而不是文件名
+                // Pass via Stream instead of file name
                 SenparcTrace.SendCustomLog("Post 文件信息", $"使用文件流放入 fileDictionary 中，并将修改文件名。");
                 using (var fs = System.IO.File.OpenRead(filePath))
                 {
                     var formFileData = new FormFileData(Path.GetFileName(filePath), fs);
-                    formFileData.FileName = $"changed-{formFileData.FileName}";//修改文件名
+                    formFileData.FileName = $"changed-{formFileData.FileName}";// Change file name
                     fileDictionary["image"] = formFileData.GetFileValue();
                 }
             }
@@ -128,7 +128,7 @@ namespace Senparc.CO2NET.Sample.netcore3.Controllers
             }
 
             var url = "https://localhost:44351/Home/PostFile";
-            var result = await RequestUtility.HttpPostAsync(_serviceProvider, url, fileDictionary: fileDictionary);//获取图片的base64编码
+            var result = await RequestUtility.HttpPostAsync(_serviceProvider, url, fileDictionary: fileDictionary);// Get base64-encoded image
             var note = byStream != null ? "使用文件流" : "使用文件名";
             var timeCost = SystemTime.NowDiff(dt1);
             var averageCost = await RecordTimeCost(byStream, timeCost);

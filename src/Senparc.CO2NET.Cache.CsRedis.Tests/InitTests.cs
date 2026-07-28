@@ -54,8 +54,8 @@ namespace Senparc.CO2NET.Cache.CsRedis.Tests
             Register.SetConfigurationOption(redisServer);
             Assert.AreEqual(redisServer, RedisManager.ConfigurationOption);
 
-            //以下会立即将全局缓存设置为 Redis
-            Register.UseKeyValueRedisNow();//键值对缓存策略（推荐）
+            // The following immediately sets the global cache to Redis
+            Register.UseKeyValueRedisNow();// Key-value cache strategy (recommended)
 
             var currentCache = CacheStrategyFactory.GetObjectCacheStrategyInstance();
             Assert.IsInstanceOfType(currentCache, typeof(RedisObjectCacheStrategy));

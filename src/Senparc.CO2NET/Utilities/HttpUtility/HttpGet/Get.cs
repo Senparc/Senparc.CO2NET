@@ -61,8 +61,8 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier：554393109 - 20220208
     Modification Description：v2.0.3 Modify HttpClient request timeout implementation
 
-    修改标识：Senparc - 20260722
-    修改描述：v4.1.0 新增 JsonTypeInfo 同步及异步 GET Native AOT 重载
+    Modification Identifier: Senparc - 20260722
+    Modification Description: v4.1.0 Added JsonTypeInfo synchronous and asynchronous GET Native AOT overloads
 
 ----------------------------------------------------------------*/
 

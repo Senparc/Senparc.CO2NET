@@ -8,13 +8,13 @@ namespace Senparc.CO2NET.WebApi
     public class DocMethodInfo
     {
         /// <summary>
-        /// 初始化 DocMethodInfo
+        /// Initializes DocMethodInfo
         /// </summary>
-        /// <param name="methodName">方法名称</param>
-        /// <param name="paramsPart">参数部分的完整字符串</param>
-        /// <param name="summary">方法概要说明</param>
-        /// <param name="parameters">参数字典，key: 参数名，value: 参数说明</param>
-        /// <param name="returns">返回值说明</param>
+        /// <param name="methodName">Method name</param>
+        /// <param name="paramsPart">Complete string of the parameter section</param>
+        /// <param name="summary">Method summary description</param>
+        /// <param name="parameters">Parameter dictionary, key: parameter name, value: parameter description</param>
+        /// <param name="returns">Return value description</param>
         public DocMethodInfo(string methodName, string paramsPart, string summary = null, Dictionary<string, string> parameters = null, string returns = null)
         {
             MethodName = methodName?.Trim();
@@ -23,7 +23,7 @@ namespace Senparc.CO2NET.WebApi
             Parameters = parameters ?? new Dictionary<string, string>();
             Returns = returns?.Trim();
 
-            // 初始化其他属性
+            // Initialize other properties
             IsAsync = CheckIsAsyncMethod(MethodName, ParamsPart);
             HasParameters = !string.IsNullOrEmpty(ParamsPart) && ParamsPart != "()";
             HasReturnValue = !string.IsNullOrEmpty(Returns);
@@ -31,60 +31,60 @@ namespace Senparc.CO2NET.WebApi
         }
 
         /// <summary>
-        /// 方法名称
+        /// Method name
         /// </summary>
         public string MethodName { get; }
 
         /// <summary>
-        /// 参数部分的完整字符串
+        /// Complete string of the parameter section
         /// </summary>
         public string ParamsPart { get; }
 
         /// <summary>
-        /// 方法概要说明
+        /// Method summary description
         /// </summary>
         public string Summary { get; }
 
         /// <summary>
-        /// 参数字典，key: 参数名，value: 参数说明
+        /// Parameter dictionary, key: parameter name, value: parameter description
         /// </summary>
         public Dictionary<string, string> Parameters { get; }
 
         /// <summary>
-        /// 返回值说明
+        /// Return value description
         /// </summary>
         public string Returns { get; }
 
         /// <summary>
-        /// 是否为异步方法
+        /// Whether the method is asynchronous
         /// </summary>
         public bool IsAsync { get; }
 
         /// <summary>
-        /// 是否包含参数
+        /// Whether parameters are included
         /// </summary>
         public bool HasParameters { get; }
 
         /// <summary>
-        /// 是否有返回值说明
+        /// Whether a return value description exists
         /// </summary>
         public bool HasReturnValue { get; }
 
         /// <summary>
-        /// 参数数量
+        /// Parameter count
         /// </summary>
         public int ParameterCount { get; }
 
         /// <summary>
-        /// 获取格式化后的方法签名
+        /// Gets the formatted method signature
         /// </summary>
         /// <returns></returns>
         /// <summary>
-        /// 获取合并后的参数信息字符串
+        /// Gets the merged parameter information string
         /// </summary>
-        /// <param name="includeParamsPart">是否包含参数类型信息</param>
-        /// <param name="includeDescription">是否包含参数描述</param>
-        /// <returns>格式化后的参数信息</returns>
+        /// <param name="includeParamsPart">Whether to include parameter type information</param>
+        /// <param name="includeDescription">Whether to include parameter descriptions</param>
+        /// <returns>Formatted parameter information</returns>
         public string GetMergedParameters(bool includeParamsPart = true, bool includeDescription = true)
         {
             if (!HasParameters)
@@ -94,18 +94,18 @@ namespace Senparc.CO2NET.WebApi
 
             var sb = new StringBuilder();
 
-            // 解析 ParamsPart，移除开头的 ( 和结尾的 )
+            // Parse ParamsPart, remove leading ( and trailing )
             var paramTypes = ParamsPart.Trim('(', ')').Split(',')
                                      .Select(p => p.Trim())
                                      .ToList();
 
-            // 获取参数名列表
+            // Get parameter name list
             var paramNames = Parameters.Keys.ToList();
 
-            // 确保参数数量匹配
+            // Ensure parameter counts match
             if (paramTypes.Count != paramNames.Count)
             {
-                return ParamsPart; // 如果不匹配，返回原始的 ParamsPart
+                return ParamsPart; // If they do not match, return the original ParamsPart
             }
 
             sb.Append('(');
@@ -119,16 +119,16 @@ namespace Senparc.CO2NET.WebApi
                 var paramName = paramNames[i];
                 var paramType = paramTypes[i];
 
-                // 添加参数类型（如果需要）
+                // Add parameter type (if needed)
                 if (includeParamsPart)
                 {
                     sb.Append(paramType).Append(' ');
                 }
 
-                // 添加参数名
+                // Add parameter name
                 sb.Append(paramName);
 
-                // 添加参数描述（如果需要）
+                // Add parameter description (if needed)
                 if (includeDescription && Parameters.ContainsKey(paramName))
                 {
                     sb.Append(" /* ").Append(Parameters[paramName]).Append(" */");
@@ -140,10 +140,10 @@ namespace Senparc.CO2NET.WebApi
         }
 
         /// <summary>
-        /// 检查方法是否为异步方法
+        /// Checks whether the method is asynchronous
         /// </summary>
-        /// <param name="methodName">方法名</param>
-        /// <param name="paramsPart">参数部分</param>
+        /// <param name="methodName">Method name</param>
+        /// <param name="paramsPart">Parameter section</param>
         /// <returns></returns>
         private bool CheckIsAsyncMethod(string methodName, string paramsPart)
         {
@@ -152,13 +152,13 @@ namespace Senparc.CO2NET.WebApi
                 return false;
             }
 
-            // 1. 检查方法名是否以Async结尾
+            // 1. Check whether the method name ends with Async
             bool isAsyncByName = methodName.EndsWith("Async", StringComparison.OrdinalIgnoreCase);
 
-            // 2. 检查方法名是否包含泛型异步标记
+            // 2. Check whether the method name contains a generic async marker
             bool isAsyncByGeneric = methodName.Contains("Async``", StringComparison.OrdinalIgnoreCase);
 
-            // 3. 检查返回值类型是否为异步类型
+            // 3. Check whether the return type is an async type
             bool isAsyncByReturnType = false;
             if (!string.IsNullOrEmpty(Returns))
             {
@@ -181,7 +181,7 @@ namespace Senparc.CO2NET.WebApi
                 isAsyncByReturnType = asyncTypes.Any(t => Returns.Contains(t, StringComparison.OrdinalIgnoreCase));
             }
 
-            // 4. 检查参数中是否包含 CancellationToken（通常异步方法会有这个参数）
+            // 4. Check whether parameters include CancellationToken (async methods usually have this parameter)
             bool hasCancellationToken = false;
             if (!string.IsNullOrEmpty(paramsPart))
             {
@@ -189,7 +189,7 @@ namespace Senparc.CO2NET.WebApi
                                      paramsPart.Contains("System.Threading.CancellationToken", StringComparison.OrdinalIgnoreCase);
             }
 
-            // 返回综合判断结果
+            // Return combined judgment result
             return isAsyncByName || isAsyncByGeneric || isAsyncByReturnType || hasCancellationToken;
         }
 
@@ -197,22 +197,22 @@ namespace Senparc.CO2NET.WebApi
         {
             var sb = new StringBuilder();
             
-            // 添加方法签名
+            // Add method signature
             sb.AppendLine($"Method: {MethodName}{ParamsPart}");
             
-            // 添加异步标记
+            // Add async marker
             if (IsAsync)
             {
                 sb.AppendLine("Type: Async");
             }
 
-            // 添加概要信息
+            // Add summary information
             if (!string.IsNullOrEmpty(Summary))
             {
                 sb.AppendLine($"Summary: {Summary}");
             }
 
-            // 添加参数信息
+            // Add parameter information
             if (HasParameters)
             {
                 sb.AppendLine($"Parameters ({ParameterCount}):");
@@ -226,7 +226,7 @@ namespace Senparc.CO2NET.WebApi
                 sb.AppendLine("Parameters: None");
             }
 
-            // 添加返回值信息
+            // Add return value information
             if (HasReturnValue)
             {
                 sb.AppendLine($"Returns: {Returns}");

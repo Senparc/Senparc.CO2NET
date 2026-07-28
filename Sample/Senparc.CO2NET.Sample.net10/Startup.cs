@@ -40,18 +40,18 @@
 //        {
 //            services.AddControllersWithViews();
 
-//            services.AddMemoryCache();//ʹ�ñ��ػ���Ҫ����
-//            services.Add(ServiceDescriptor.Singleton(typeof(ILogger<>), typeof(Logger<>)));//ʹ�� Memcached �� Logger ��Ҫ����
+//            services.AddMemoryCache();// Required when using local cache
+//            services.Add(ServiceDescriptor.Singleton(typeof(ILogger<>), typeof(Logger<>)));// Required when using Memcached or Logger
 //            var builder = services.AddMvcCore();
-//            //Senparc.CO2NET ȫ��ע�ᣨ���룩
+//            // Senparc.CO2NET global registration (required)
 //            services.AddSenparcGlobalServices(Configuration);
 
 //            #region WebApiEngine
 
-//            //���Բ��ԣ�ע�͵����´���󣬿ɿ���΢�Ź��ں�SDK�ӿڼ�ע����Ϣ
+//            // Ignore for testing; comment out the code below to see WeChat Official Account SDK APIs and comments
 //            WebApi.Register.OmitCategoryList.Add(NeuChar.PlatformType.WeChat_OfficialAccount.ToString());
 
-//            //�������Ӳ���
+//            // Additional test entries
 //            WebApi.Register.AdditionalClasses.Add(typeof(AdditionalType), "Additional");
 //            WebApi.Register.AdditionalMethods.Add(typeof(AdditionalMethod).GetMethod("TestApi"), "Additional");
 //            WebApi.Register.AdditionalMethods.Add(typeof(EncryptHelper).GetMethod("GetMD5", new[] { typeof(string), typeof(string) }), "Additional");
@@ -71,7 +71,7 @@
 
 //            #endregion
 
-//            #region ��������
+//            #region Standalone tests
 //            services.AddScoped(typeof(ApiBindTestService));
 //            services.AddScoped(typeof(EntityApiBindTestService));
 //            var apiBindTestService = new ApiBindTestService();
@@ -82,10 +82,10 @@
 
 //            //.NET Core 3.0 for Swagger https://www.thecodebuzz.com/swagger-api-documentation-in-net-core-3-0/
 
-//            //����Swagger
+//            // Add Swagger
 //            services.AddSwaggerGen(c =>
 //            {
-//                //Ϊÿ�����򼯴����ĵ�
+//                // Create documentation for each assembly
 //                foreach (var apiAssembly in WebApiEngine.ApiAssemblyCollection)
 //                {
 //                    var version = WebApiEngine.ApiAssemblyVersions[apiAssembly.Key]; //neucharApiDocAssembly.Value.ImageRuntimeVersion;
@@ -94,7 +94,7 @@
 //                    {
 //                        Title = $"CO2NET Dynamic WebApi Engine : {apiAssembly.Key}",
 //                        //Version = $"v{version}",//"v16.5.4"
-//                        Description = $"Senparc CO2NET WebApi ��̬���棨{apiAssembly.Key} - v{version}��",
+//                        Description = $"Senparc CO2NET WebApi dynamic engine ({apiAssembly.Key} - v{version})",
 //                        //License = new OpenApiLicense()
 //                        //{
 //                        //    Name = "Apache License Version 2.0",
@@ -118,7 +118,7 @@
 //                    }
 //                }
 
-//                //������ʾ  https://www.cnblogs.com/toiv/archive/2018/07/28/9379249.html
+//                // Group display https://www.cnblogs.com/toiv/archive/2018/07/28/9379249.html
 //                c.DocInclusionPredicate((docName, apiDesc) =>
 //                {
 //                    if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo))
@@ -126,14 +126,14 @@
 //                        return false;
 //                    }
 
-//                    //��ȡ�����ϵ�����
+//                    // Get attributes on the method
 //                    var catalogNames = methodInfo.GetCustomAttributes(true)
 //                                              .OfType<SwaggerOperationAttribute>()
 //                                              .Select(z => z.Tags[0].Split(':')[0]);
 
 //                    if (catalogNames?.Count() == 0)
 //                    {
-//                        //��ȡ���ϵ�����
+//                        // Get attributes on the class
 //                        catalogNames = methodInfo.DeclaringType.GetCustomAttributes(true)
 //                        .OfType<SwaggerOperationAttribute>()
 //                          .Select(z => z.Tags[0].Split(':')[0]);
@@ -141,7 +141,7 @@
 
 //                    if (catalogNames?.Count() == 0)
 //                    {
-//                        return false;//������Ҫ��Ķ�����ʾ
+//                        return false;// Hide entries that do not match
 //                    }
 
 
@@ -150,27 +150,27 @@
 //                });
 
 //                c.OrderActionsBy(z => z.RelativePath);
-//                //c.DescribeAllEnumsAsStrings();//ö����ʾ�ַ���
+//                //c.DescribeAllEnumsAsStrings();// Display enums as strings
 //                c.EnableAnnotations();
 //                c.DocumentFilter<RemoveVerbsFilter>();
-//                c.CustomSchemaIds(x => x.FullName);//��ܴ���InvalidOperationException: Can't use schemaId "$JsApiTicketResult" for type "$Senparc.Weixin.Open.Entities.JsApiTicketResult". The same schemaId was already used for type "$Senparc.Weixin.MP.Entities.JsApiTicketResult"
+//                c.CustomSchemaIds(x => x.FullName);// Avoid error:InvalidOperationException: Can't use schemaId "$JsApiTicketResult" for type "$Senparc.Weixin.Open.Entities.JsApiTicketResult". The same schemaId was already used for type "$Senparc.Weixin.MP.Entities.JsApiTicketResult"
 
-//                /* ��Ҫ��½���ݲ�����    ���� Jeffrey Su 2021.06.17
+//                /* Login required; not considered for now — Jeffrey Su 2021.06.17
 //                var oAuthDocName = "oauth2";// WeixinApiService.GetDocName(PlatformType.WeChat_OfficialAccount);
 
-//                //������Ȩ
+//                // Add authorization
 //                var authorizationUrl = NeuChar.App.AppStore.Config.IsDebug
-//                                               //������ appPurachase �� Id��ʵ��Ӧ���� appId
+//                                               // Below is appPurchase Id; should be appId in production
 //                                               //? "http://localhost:12222/App/LoginOAuth/Authorize/1002/"
 //                                               //: "https://www.neuchar.com/App/LoginOAuth/Authorize/4664/";
-//                                               //��������ȷ�� appId
+//                                               // Correct appId below
 //                                               ? "http://localhost:12222/App/LoginOAuth/Authorize?appId=xxx"
 //                                               : "https://www.neuchar.com/App/LoginOAuth/Authorize?appId=3035";
 
 //                c.AddSecurityDefinition(oAuthDocName,//"Bearer" 
 //                    new OpenApiSecurityScheme
 //                    {
-//                        Description = "���������Bearer��ͷ��Token",
+//                        Description = "Please enter a Token starting with Bearer",
 //                        Name = oAuthDocName,// "Authorization",
 //                        In = ParameterLocation.Header,
 //                        Type = SecuritySchemeType.OAuth2,
@@ -185,7 +185,7 @@
 //                        }
 //                    });
 
-//                //��֤��ʽ���˷�ʽΪȫ������
+//                // Authentication; applied globally
 //                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
 //                {
 //                    { new OpenApiSecurityScheme(){ Name =oAuthDocName//"Bearer"
@@ -193,7 +193,7 @@
 //                    //{ "Bearer", Enumerable.Empty<string>() }
 //                });
 
-//                //c.OperationFilter<AuthResponsesOperationFilter>();//AuthorizeAttribute����
+//                //c.OperationFilter<AuthResponsesOperationFilter>();// AuthorizeAttribute filter
 
 //                */
 
@@ -221,61 +221,61 @@
 
 //            app.UseAuthorization();
 
-//            // ���� CO2NET ȫ��ע�ᣬ���룡
+//            // Start CO2NET global registration (required)
 //            app.UseSenparcGlobal(env, senparcSetting.Value, register =>
 //                {
-//                    #region CO2NET ȫ������
+//                    #region CO2NET global configuration
 
-//                    #region ȫ�ֻ������ã����裩
+//                    #region Global cache configuration (as needed)
 
-//                    //��ͬһ���ֲ�ʽ����ͬʱ�����ڶ����վ��Ӧ�ó���أ�ʱ������ʹ�������ռ佫����루�Ǳ��룩
+//                    // When one distributed cache serves multiple sites (app pools), use a namespace to isolate them (optional)
 //                    register.ChangeDefaultCacheNamespace("CO2NETCache.net10.0");
 
-//                    #region ���ú�ʹ�� Redis
+//                    #region Configure and use Redis
 
-//                    //����ȫ��ʹ��Redis���棨���裬������
+//                    // Configure global Redis cache (optional, independent)
 //                    var redisConfigurationStr = senparcSetting.Value.Cache_Redis_Configuration;
-//                    var useRedis = !string.IsNullOrEmpty(redisConfigurationStr) && redisConfigurationStr != "Redis����";
-//                    if (useRedis)//����Ϊ�˷��㲻ͬ�����Ŀ����߽������ã��������жϵķ�ʽ��ʵ�ʿ�������һ����ȷ���ģ������if�������Ժ���
+//                    var useRedis = !string.IsNullOrEmpty(redisConfigurationStr) && redisConfigurationStr != "Redis configuration";
+//                    if (useRedis)// For convenience across environments this is conditional; in production the if can usually be ignored
 //                    {
-//                        /* ˵����
-//                         * 1��Redis �������ַ�����Ϣ��� Config.SenparcSetting.Cache_Redis_Configuration �Զ���ȡ��ע�ᣬ�粻��Ҫ�޸ģ��·��������Ժ���
-//                        /* 2�������ֶ��޸ģ�����ͨ���·� SetConfigurationOption �����ֶ����� Redis ������Ϣ�����޸����ã����������ã�
+//                        /* Notes:
+//                         * 1. Redis connection string is read from Config.SenparcSetting.Cache_Redis_Configuration automatically; skip SetConfigurationOption if unchanged
+//                        /* 2. To override manually, use SetConfigurationOption below (config only, does not enable immediately)
 //                         */
 //                        Senparc.CO2NET.Cache.CsRedis.Register.SetConfigurationOption(redisConfigurationStr);
 
-//                        //���»�������ȫ�ֻ�������Ϊ Redis
-//                        Senparc.CO2NET.Cache.CsRedis.Register.UseKeyValueRedisNow();//��ֵ�Ի�����ԣ��Ƽ���
-//                        //Senparc.CO2NET.Cache.Redis.Register.UseHashRedisNow();//HashSet�����ʽ�Ļ������
+//                        // Immediately switch global cache to Redis
+//                        Senparc.CO2NET.Cache.CsRedis.Register.UseKeyValueRedisNow();// Key-value cache strategy (recommended)
+//                        //Senparc.CO2NET.Cache.Redis.Register.UseHashRedisNow();// HashSet storage cache strategy
 
-//                        //Ҳ����ͨ�����·�ʽ�Զ��嵱ǰ��Ҫ���õĻ������
-//                        //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//��ֵ��
+//                        // Or register a custom cache strategy explicitly
+//                        //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);// Key-value
 //                        //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisHashSetObjectCacheStrategy.Instance);//HashSet
 //                    }
-//                    //������ﲻ����Redis�������ã���Ŀǰ����Ĭ��ʹ���ڴ滺�� 
+//                    // If Redis is not enabled here, in-memory cache remains the default 
 
 //                    #endregion
 
-//                    #region ���ú�ʹ�� Memcached
+//                    #region Configure and use Memcached
 
-//                    //����Memcached���棨���裬������
+//                    // Configure Memcached cache (optional, independent)
 //                    var memcachedConfigurationStr = senparcSetting.Value.Cache_Memcached_Configuration;
-//                    var useMemcached = !string.IsNullOrEmpty(memcachedConfigurationStr) && memcachedConfigurationStr != "Memcached����";
+//                    var useMemcached = !string.IsNullOrEmpty(memcachedConfigurationStr) && memcachedConfigurationStr != "Memcached configuration";
 
-//                    if (useMemcached) //����Ϊ�˷��㲻ͬ�����Ŀ����߽������ã��������жϵķ�ʽ��ʵ�ʿ�������һ����ȷ���ģ������if�������Ժ���
+//                    if (useMemcached) // For convenience across environments this is conditional; in production the if can usually be ignored
 //                    {
 //                        app.UseEnyimMemcached();
 
-//                        /* ˵����
-//                        * 1��Memcached �������ַ�����Ϣ��� Config.SenparcSetting.Cache_Memcached_Configuration �Զ���ȡ��ע�ᣬ�粻��Ҫ�޸ģ��·��������Ժ���
-//                       /* 2�������ֶ��޸ģ�����ͨ���·� SetConfigurationOption �����ֶ����� Memcached ������Ϣ�����޸����ã����������ã�
+//                        /* Notes:
+//                        * 1. Memcached connection string is read from Config.SenparcSetting.Cache_Memcached_Configuration automatically; skip SetConfigurationOption if unchanged
+//                       /* 2. To override manually, use SetConfigurationOption below (config only, does not enable immediately)
 //                        */
 //                        Senparc.CO2NET.Cache.Memcached.Register.SetConfigurationOption(redisConfigurationStr);
 
-//                        //���»�������ȫ�ֻ�������Ϊ Memcached
+//                        // Immediately switch global cache to Memcached
 //                        Senparc.CO2NET.Cache.Memcached.Register.UseMemcachedNow();
 
-//                        //Ҳ����ͨ�����·�ʽ�Զ��嵱ǰ��Ҫ���õĻ������
+//                        // Or register a custom cache strategy explicitly
 //                        CacheStrategyFactory.RegisterObjectCacheStrategy(() => MemcachedObjectCacheStrategy.Instance);
 //                    }
 
@@ -283,20 +283,20 @@
 
 //                    #endregion
 
-//                    #region ע����־�����裬���飩
+//                    #region Register trace log (optional, recommended)
 
-//                    register.RegisterTraceLog(ConfigTraceLog);//����TraceLog
+//                    register.RegisterTraceLog(ConfigTraceLog);// Configure TraceLog
 
 //                    #endregion
 
 //                    #endregion
 //                },
 
-//            #region ɨ���Զ�����չ����
+//            #region Scan custom extension cache
 
-//                //�Զ�ɨ���Զ�����չ���棨��ѡһ��
-//                autoScanExtensionCacheStrategies: true //Ĭ��Ϊ true�����Բ�����
-//                                                       //ָ���Զ�����չ���棨��ѡһ��
+//                // Auto-scan custom extension cache (choose one)
+//                autoScanExtensionCacheStrategies: true // Default true; can be omitted
+//                                                       // Specify custom extension cache (choose one)
 //                                                       //autoScanExtensionCacheStrategies: false, extensionCacheStrategiesFunc: () => GetExCacheStrategies(senparcSetting.Value)
 
 //            #endregion
@@ -313,7 +313,7 @@
 
 //                foreach (var co2netApiDocAssembly in WebApiEngine.ApiAssemblyCollection)
 //                {
-//                    //TODO:��ʵ�Ķ�̬�汾��
+//                    // TODO: actual dynamic version number
 //                    var version = WebApiEngine.ApiAssemblyVersions[co2netApiDocAssembly.Key]; //neucharApiDocAssembly.Value.ImageRuntimeVersion;
 //                    var docName = WebApiEngine.GetDocName(co2netApiDocAssembly.Key);
 
@@ -322,9 +322,9 @@
 //                    c.SwaggerEndpoint($"/swagger/{docName}/swagger.json", $"{co2netApiDocAssembly.Key}");
 //                }
 
-//                //OAuth     https://www.cnblogs.com/miskis/p/10083985.html
-//                c.OAuthClientId("e65ea785b96b442a919965ccf857aba3");//�ͷ�������
-//                c.OAuthAppName("΢�� API Swagger �ĵ� "); // ����
+//                // OAuth https://www.cnblogs.com/miskis/p/10083985.html
+//                c.OAuthClientId("e65ea785b96b442a919965ccf857aba3");// Client name
+//                c.OAuthAppName("WeChat API Swagger Docs "); // Description
 //            });
 
 
@@ -338,29 +338,29 @@
 //        }
 
 //        /// <summary>
-//        /// ����ȫ�ָ�����־
+//        /// Configure global trace log
 //        /// </summary>
 //        private void ConfigTraceLog()
 //        {
-//            //������ΪDebug״̬ʱ��/App_Data/SenparcTraceLog/Ŀ¼�»�������־�ļ���¼���е�API������־����ʽ�����汾����ر�
+//            // When Debug is enabled, logs are written under /App_Data/SenparcTraceLog/; disable in production
 
-//            //���ȫ�ֵ�IsDebug��Senparc.CO2NET.Config.IsDebug��Ϊfalse���˴����Ե�������true�������Զ�Ϊtrue
-//            CO2NET.Trace.SenparcTrace.SendCustomLog("ϵͳ��־", "ϵͳ����");//ֻ��Senparc.CO2NET.Config.IsDebug = true���������Ч
+//            // If global IsDebug (Senparc.CO2NET.Config.IsDebug) is false, set true here; otherwise it stays true
+//            CO2NET.Trace.SenparcTrace.SendCustomLog("System log", "System started");// Only effective when Senparc.CO2NET.Config.IsDebug = true
 
-//            //ȫ���Զ�����־��¼�ص�
+//            // Global custom log callback
 //            CO2NET.Trace.SenparcTrace.OnLogFunc = () =>
 //            {
-//                //����ÿ�δ���Log����Ҫִ�еĴ���
+//                // Code to run after each log event
 //            };
 
 //            CO2NET.Trace.SenparcTrace.OnBaseExceptionFunc = ex =>
 //            {
-//                //����ÿ�δ���BaseException����Ҫִ�еĴ���
+//                // Code to run after each BaseException
 //            };
 //        }
 
 //        /// <summary>
-//        /// ��ȡ��չ�������
+//        /// Get extension cache strategies
 //        /// </summary>
 //        /// <returns></returns>
 //        private IList<IDomainExtensionCacheStrategy> GetExCacheStrategies(SenparcSetting senparcSetting)
@@ -368,30 +368,30 @@
 //            var exContainerCacheStrategies = new List<IDomainExtensionCacheStrategy>();
 //            senparcSetting = senparcSetting ?? new SenparcSetting();
 
-//            //ע�⣺�������� if �жϽ���Ϊ��ʾ�������������Զ������չ������ԣ�
+//            // Note: the two if blocks below are demos for adding custom extension cache strategies,
 
-//            #region ��ʾ��չ����ע�᷽��
+//            #region Demo extension cache registration
 
 //            /*
 
-//            //�ж�Redis�Ƿ����
+//            // Check whether Redis is available
 //            var redisConfiguration = senparcSetting.Cache_Redis_Configuration;
-//            if ((!string.IsNullOrEmpty(redisConfiguration) && redisConfiguration != "Redis����"))
+//            if ((!string.IsNullOrEmpty(redisConfiguration) && redisConfiguration != "Redis configuration"))
 //            {
-//                exContainerCacheStrategies.Add(RedisContainerCacheStrategy.Instance);//�Զ������չ����
+//                exContainerCacheStrategies.Add(RedisContainerCacheStrategy.Instance);// Custom extension cache
 //            }
 
-//            //�ж�Memcached�Ƿ����
+//            // Check whether Memcached is available
 //            var memcachedConfiguration = senparcSetting.Cache_Memcached_Configuration;
-//            if ((!string.IsNullOrEmpty(memcachedConfiguration) && memcachedConfiguration != "Memcached����"))
+//            if ((!string.IsNullOrEmpty(memcachedConfiguration) && memcachedConfiguration != "Memcached configuration"))
 //            {
-//                exContainerCacheStrategies.Add(MemcachedContainerCacheStrategy.Instance);//TODO:���û�н������û�����쳣
+//                exContainerCacheStrategies.Add(MemcachedContainerCacheStrategy.Instance);// TODO: throws if not configured
 //            }
 //            */
 
 //            #endregion
 
-//            //��չ�Զ���Ļ������
+//            // Extend with custom cache strategies
 
 //            return exContainerCacheStrategies;
 //        }
@@ -415,7 +415,7 @@
 
 //            public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
 //            {
-//                //ÿ���л����壬����Ҫ�����Ƚϳ���ʱ��ŵ�������
+//                // Each definition switch takes a long time to reach here
 //                return;
 //                string platformType;
 //                var title = swaggerDoc.Info.Title;
@@ -442,7 +442,7 @@
 //                ////}
 //                //else
 //                //{
-//                //    throw new NotImplementedException($"δ�ṩ�� PlatformType ���ͣ�Title��{title}");
+//                //    throw new NotImplementedException($"Unsupported PlatformType, Title: {title}");
 //                //}
 
 //                //var pathList = swaggerDoc.Paths.Keys.ToList();
@@ -451,14 +451,14 @@
 //                //{
 //                //    if (!path.Contains(platformType))
 //                //    {
-//                //        //�Ƴ��ǵ�ǰģ���API����
+//                //        // Remove API entries outside the current module
 //                //        swaggerDoc.Paths.Remove(path);
 //                //    }
 //                //}
 
 //                //SwaggerOperationAttribute
-//                //�Ƴ�Schema����
-//                //var toRemoveSchema = context.SchemaRepository.Schemas.Where(z => !z.Key.Contains(platformType)).ToList();//���Ϊȫ��ɾ����������
+//                // Remove Schema entries
+//                //var toRemoveSchema = context.SchemaRepository.Schemas.Where(z => !z.Key.Contains(platformType)).ToList();// Result is full deletion; test only
 //                //foreach (var schema in toRemoveSchema)
 //                //{
 //                //    context.SchemaRepository.Schemas.Remove(schema.Key);
@@ -470,15 +470,15 @@
 //        //{
 //        //    public void Apply(OpenApiOperation operation, OperationFilterContext context)
 //        //    {
-//        //        //��ȡ�Ƿ����ӵ�¼����
+//        //        // Check whether login attribute is present
 //        //        var authAttributes = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
 //        //         .Union(context.MethodInfo.GetCustomAttributes(true))
 //        //         .OfType<AuthorizeAttribute>().Any();
 
 //        //        if (authAttributes)
 //        //        {
-//        //            operation.Responses.Add("401", new OpenApiResponse { Description = "���޷���Ȩ��" });
-//        //            operation.Responses.Add("403", new OpenApiResponse { Description = "��ֹ����" });
+//        //            operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
+//        //            operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
 //        //            operation.Security = new List<OpenApiSecurityRequirement>
 //        //            {
 //        //                new OpenApiSecurityRequirement { { new OpenApiSecurityScheme() {  Name= "oauth2" }, new[] { "swagger_api" } }}

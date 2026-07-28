@@ -1,11 +1,11 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
 
-    文件名：MemcachedApplicationBuilderExtensions.cs
-    文件功能描述：Memcached 依赖注入设置。
+    FileName: MemcachedApplicationBuilderExtensions.cs
+    File Function Description: Memcached dependency injection setup.
 
 
-    创建标识：Senparc - 20180222
+    Creation Identifier: Senparc - 20180222
 
 ----------------------------------------------------------------*/
 

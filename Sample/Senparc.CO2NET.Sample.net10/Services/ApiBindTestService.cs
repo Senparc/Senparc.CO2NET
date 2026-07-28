@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Senparc.CO2NET.Sample.net10.Services
 {
     /// <summary>
-    /// 用于测试动态生成 API 的 Service
+    /// Service for testing dynamically generated APIs
     /// </summary>
     public class ApiBindTestService
     {
@@ -23,7 +23,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 测试方法转接口
+        /// Test converting method to API
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -37,7 +37,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 测试异步方法转接口
+        /// Test converting async method to API
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -52,10 +52,10 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 模拟加入 WeChat_OfficialAccount 的接口
+        /// Simulates adding WeChat_OfficialAccount API
         /// </summary>
-        /// <param name="name">这里填写名称</param>
-        /// <param name="value">这里填写值</param>
+        /// <param name="name">Enter name here</param>
+        /// <param name="value">Enter value here</param>
         /// <returns></returns>
         [ApiBind("WeChat_OfficialAccount", "A-WexinApi", WebApi.ApiRequestMethod.Post)]
         public static async Task<string> WexinApi(string name, int value)
@@ -67,7 +67,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 动态构建API代码，部分核心代码测试
+        /// Dynamically build API code; partial core code test
         /// </summary>
         public void DynamicBuild(IServiceCollection services, IMvcCoreBuilder builder)
         {
@@ -81,17 +81,17 @@ namespace Senparc.CO2NET.Sample.net10.Services
             Console.WriteLine($"invokeMethodName: {invokeMethodName}");
             Console.WriteLine($"invokeMethod ReturnType: {invokeMethodInfo.ReturnType.Name}");
 
-            #region 构造程序集
+            #region Build assembly
 
 
             AssemblyName dynamicApiAssembly = new AssemblyName("DynamicTests");
             //AppDomain currentDomain = Thread.GetDomain();
             AssemblyBuilder dynamicAssemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(dynamicApiAssembly, AssemblyBuilderAccess.RunAndCollect);
 
-            //动态创建模块
+            // Dynamically create module
             ModuleBuilder mb = dynamicAssemblyBuilder.DefineDynamicModule(dynamicApiAssembly.Name);
 
-            //动态创建类 XXController
+            // Dynamically create XXController class
             var controllerClassName = $"DynamicTestController";
             TypeBuilder tb = mb.DefineType(controllerClassName, TypeAttributes.Public, typeof(ControllerBase) /*typeof(Controller)*/);
 
@@ -101,20 +101,20 @@ namespace Senparc.CO2NET.Sample.net10.Services
             var t2 = typeof(RouteAttribute);
             tb.SetCustomAttribute(new CustomAttributeBuilder(t2.GetConstructor(new Type[] { typeof(string) }), new object[] { $"myapi/[controller]" }));
 
-            //私有变量
+            // Private field
             var fbServiceProvider = tb.DefineField("_serviceProvider", typeof(IServiceProvider), FieldAttributes.Private | FieldAttributes.InitOnly);
 
             #endregion
 
-            #region 设置构造函数
+            #region Configure constructor
 
-            //设置构造函数
+            // Configure constructor
             var ctorBuilder = tb.DefineConstructor(MethodAttributes.Public, CallingConventions.HasThis, new[] { typeof(IServiceProvider) });
             var ctorIl = ctorBuilder.GetILGenerator();
             ctorIl.Emit(OpCodes.Ldarg, 0);
             //Define the reflection ConstructorInfor for System.Object
             ConstructorInfo conObj = typeof(object).GetConstructor(new Type[0]);
-            ctorIl.Emit(OpCodes.Call, conObj);//调用base的默认ctor
+            ctorIl.Emit(OpCodes.Call, conObj);// Call base default ctor
             ctorIl.Emit(OpCodes.Nop);
             ctorIl.Emit(OpCodes.Nop);
             ctorIl.Emit(OpCodes.Ldarg, 0);
@@ -124,16 +124,16 @@ namespace Senparc.CO2NET.Sample.net10.Services
 
             #endregion
 
-            #region 设置方法
+            #region Configure method
 
-            //设置方法
+            // Configure method
             MethodBuilder setPropMthdBldr =
                       tb.DefineMethod("Tests", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,
-                      invokeMethodInfo.ReturnType, //返回类型
-                      new[] { typeof(string), typeof(int) }//输入参数
+                      invokeMethodInfo.ReturnType, // Return type
+                      new[] { typeof(string), typeof(int) }// Input parameters
                       );
 
-            //添加标签
+            // Add tags
             var t2_3 = typeof(SwaggerOperationAttribute);
             var tagName = new[] { $"DynamicTest:Test" };
             var tagAttrBuilder = new CustomAttributeBuilder(t2_3.GetConstructor(new Type[] { typeof(string), typeof(string) }),
@@ -160,7 +160,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
 
 
 
-            //复制特性
+            // Copy attributes
             var customAttrs = CustomAttributeData.GetCustomAttributes(invokeMethodInfo);
 
             foreach (var item in customAttrs)
@@ -176,9 +176,9 @@ namespace Senparc.CO2NET.Sample.net10.Services
 
             #endregion
 
-            #region 设置方法体（Body）
+            #region Configure method body
 
-            //执行具体方法
+            // Invoke target method
             var il = setPropMthdBldr.GetILGenerator();
             LocalBuilder local = il.DeclareLocal(invokeMethodInfo.ReturnType); // create a local variable
 
@@ -186,7 +186,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
             {
                 //Label lblEnd = il.DefineLabel();
 
-                /* 最简洁方法（独立使用）
+                /* Simplest approach (standalone)
                 il.Emit(OpCodes.Nop);
                 //il.Emit(OpCodes.Ldarg, 0);
                 il.Emit(OpCodes.Ldarg, 1);
@@ -195,7 +195,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
                 il.Emit(OpCodes.Ret);
                 */
 
-                //实例方法
+                // Instance method
                 il.Emit(OpCodes.Nop);
                 il.Emit(OpCodes.Ldarg, 0);
                 il.Emit(OpCodes.Ldfld, fbServiceProvider);
@@ -216,7 +216,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
             }
             else
             {
-                //静态方法调用
+                // Static method call
 
                 il.Emit(OpCodes.Nop); // the first one in arguments list
                 il.Emit(OpCodes.Ldarg, 1); // the first one in arguments list
@@ -257,7 +257,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
     }
 
     /// <summary>
-    /// 用于测试自动生成的 WebApi 方法内调用非静态方法，并且包含 IServiceProvider，使用 DI 自动注入
+    /// For testing non-static method calls in auto-generated WebApi methods with IServiceProvider and DI auto-injection
     /// </summary>
     public class EntityApiBindTestService
     {
@@ -269,8 +269,8 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 用于测试自动生成的 WebApi 方法内调用非静态方法（同步方法），并且包含 IServiceProvider，使用 DI 自动注入。
-        /// <para>同时测试自定义 Attribute</para>
+        /// For testing non-static method calls (sync) in auto-generated WebApi methods with IServiceProvider and DI auto-injection.
+        /// <para>Also tests custom Attribute</para>
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -288,8 +288,8 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 用于测试自动生成的 WebApi 方法内调用非静态方法（异步方法），并且包含 IServiceProvider，使用 DI 自动注入。
-        /// <para>同时测试自定义 Attribute</para>
+        /// For testing non-static method calls (async) in auto-generated WebApi methods with IServiceProvider and DI auto-injection.
+        /// <para>Also tests custom Attribute</para>
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -305,16 +305,16 @@ namespace Senparc.CO2NET.Sample.net10.Services
     }
 
     /// <summary>
-    /// 类上进行 ApiBind 绑定的测试
+    /// Test ApiBind binding at class level
     /// </summary>
     [ApiBind("ClassCover")]
     public class ApiBindCoverService2
     {
         /// <summary>
-        /// 从 class 继承 ApiBind
+        /// Inherit ApiBind from class
         /// </summary>
-        /// <param name="name">默认值：Senparc</param>
-        /// <param name="value">默认值：900</param>
+        /// <param name="name">Default: Senparc</param>
+        /// <param name="value">Default: 900</param>
         /// <returns></returns>
         public string TestApiWithoutAttr(string name = "Senparc", int value = 900)
         {
@@ -322,7 +322,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 忽略，不会出现在 API 列表中
+        /// Ignored; will not appear in API list
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -334,7 +334,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 忽略，不会出现在 API 列表中
+        /// Ignored; will not appear in API list
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -346,7 +346,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 重写 ApiBind，使用 GET 方法
+        /// Override ApiBind using GET method
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -358,7 +358,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 重写 ApiBind，自定义 Catetory 参数，使其和其他定义同名，将被自动改名，使用 GET 方法
+        /// Override ApiBind with custom Category parameter so it shares a name with other definitions and gets auto-renamed; uses GET method
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -371,7 +371,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
 
 
         /// <summary>
-        /// 重写 ApiBind，name 设置后，可以融入和同类自动生成的 API，看上去无差别
+        /// Override ApiBind; after name is set it blends with auto-generated APIs of the same class and appears identical
         /// </summary>
         /// <returns></returns>
         [ApiBind("ClassCover", "ApiBindCoverService2.RewriteApiBind", ApiRequestMethod = WebApi.ApiRequestMethod.Post)]
@@ -381,7 +381,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 静态类，自动继承 class 配置
+        /// Static method; automatically inherits class configuration
         /// </summary>
         /// <returns></returns>
         public static string StaticMethod()
@@ -391,13 +391,13 @@ namespace Senparc.CO2NET.Sample.net10.Services
     }
 
     /// <summary>
-    /// 用于测试自动生成的 WebApi 方法内调用静态方法
+    /// For testing static method calls in auto-generated WebApi methods
     /// </summary>
     public static class StaticApiBindTestService
     {
         //[ApiBind("CO2NETStatic", "StaticApiBindTest.TestApi")]
         /// <summary>
-        /// 用于测试自动生成的 WebApi 方法内调用静态方法
+        /// For testing static method calls in auto-generated WebApi methods
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -408,7 +408,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 用于测试自动生成的 WebApi 方法内调用静态方法 + 自定义 Attribute
+        /// For testing static method calls in auto-generated WebApi methods with custom Attribute
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -424,12 +424,12 @@ namespace Senparc.CO2NET.Sample.net10.Services
     }
 
     /// <summary>
-    /// 通过代码额外增加的类
+    /// Class added extra via code
     /// </summary>
     public class AdditionalType
     {
         /// <summary>
-        /// 这个方法将通过“额外类”被注入
+        /// This method will be injected via "additional class"
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -440,7 +440,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
         }
 
         /// <summary>
-        /// 这个方法也将通过“额外类”被注入
+        /// This method will also be injected via "additional class"
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -453,12 +453,12 @@ namespace Senparc.CO2NET.Sample.net10.Services
 
 
     /// <summary>
-    /// 通过代码额外增加的方法
+    /// Methods added extra via code
     /// </summary>
     public class AdditionalMethod
     {
         /// <summary>
-        /// 这个方法将通过“额外方法”被注入
+        /// This method will be injected via "additional method"
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -478,7 +478,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
             Name = name;
             StackTrace st = new StackTrace(true);
             var fromName = st.GetFrame(1);
-            //输出 TypeId，用于确认当前特性是非被复制到动态 API，并被调用
+            // Output TypeId to verify the attribute is copied to the dynamic API and invoked
             //Console.WriteLine("-------------");
             Console.WriteLine($"MyTestAttribute [{Name}] TypeId Hash:{this.TypeId.GetHashCode()}  Caller ：{fromName?.GetMethod()?.Name}");
             //foreach (var item in st.GetFrames())
@@ -492,13 +492,13 @@ namespace Senparc.CO2NET.Sample.net10.Services
 
 
     /// <summary>
-    /// 参数带 Attribute
+    /// Parameters with Attribute
     /// </summary>
     [ApiController]
     public class ParameterAttribute
     {
         /// <summary>
-        /// 参数带 Attribute 测试
+        /// Parameter with Attribute test
         /// </summary>
         /// <param name="requestData"></param>
         /// <returns></returns>
@@ -506,7 +506,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
         public static string ParameterAttributeTest([FromBody]RequestData requestData1)
         {
             /* 
-             * 可用 PostMan 等工具测试：
+             * Test with PostMan or similar tools:
              * curl --location --request POST 'https://localhost:44351/api/Senparc.CO2NET.Sample/ParameterAttribute/CO2NET.Sample_ParameterAttribute.ParameterAttributeTest' \
                --header 'Content-Type: application/json' \
                --data-raw '{
@@ -514,7 +514,7 @@ namespace Senparc.CO2NET.Sample.net10.Services
                    "Password": "743e815e2"
                 }'
              *
-             *  结果:SenparcCoreAdmin96:743e815e2 -- 2021/11/22 21:11:14 +08:00
+             *  Result: SenparcCoreAdmin96:743e815e2 -- 2021/11/22 21:11:14 +08:00
              */
 
             return $"{requestData1.UserName}:{requestData1.Password} -- {SystemTime.Now}";

@@ -278,8 +278,8 @@ namespace Senparc.CO2NET.WebApi
                     //Ensure the name is not duplicated
                     while (apiMethodName.ContainsKey(methodName))
                     {
-                        //开发过程中可能会因为接口增加，导致重复名称的后缀改变，因此使用相对差异更大的方式增加后缀（将所有参数名、类型的字符串长度相加）
-                        //TODO：这种做法仍然无法解决第一个名称的命名问题（需要转回去修改）
+                        // During development, duplicate name suffixes may change as APIs are added, so use a more distinct suffix (sum of parameter name and type string lengths)
+                        // TODO: This still cannot resolve the first-name naming issue (needs to be changed upstream)
                         methodName += "_" + getMethodUniqueNo;
                         apiName += "_" + getMethodUniqueNo;
                     }
@@ -310,7 +310,7 @@ namespace Senparc.CO2NET.WebApi
                     //var routeName = apiBindInfo.Value.ApiBindAttribute.Name.Split('.')[0];
                     string apiPath = GetApiPath(apiBindInfo, showStaticApiState);
 
-                    //强制所有名称小写
+                    // Force all names to lowercase
                     if (_useLowerCaseApiName)
                     {
                         apiPath = apiPath.ToLower();

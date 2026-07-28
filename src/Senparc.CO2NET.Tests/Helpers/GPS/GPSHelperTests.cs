@@ -12,7 +12,7 @@ namespace Senparc.CO2NET.Tests.Helpers
         {
             var result = GpsHelper.Distance2(38.50225, 118.1186, 38.66333, 118.457);
             Console.WriteLine(result);
-            Assert.AreEqual(34440, (int)result);//近似算到证书
+            Assert.AreEqual(34440, (int)result);// Approximate result to certificate precision
         }
 
         [TestMethod]
@@ -20,7 +20,7 @@ namespace Senparc.CO2NET.Tests.Helpers
         {
             var result = GpsHelper.Distance(38.50225, 118.1186, 38.66333, 118.457);
             Console.WriteLine(result);
-            Assert.AreEqual(34477, (int)result);//近似算到证书
+            Assert.AreEqual(34477, (int)result);// Approximate result to certificate precision
         }
 
 

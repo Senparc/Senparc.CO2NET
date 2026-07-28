@@ -63,7 +63,7 @@ namespace Senparc.CO2NET.Cache
     /// </summary>
     public class LocalObjectCacheStrategy : BaseCacheStrategy, IBaseObjectCacheStrategy
     {
-        #region 数据源
+        #region Data Source
 
 #if NET462
         private System.Web.Caching.Cache _cache = LocalObjectCacheHelper.LocalObjectCache;
@@ -73,7 +73,7 @@ namespace Senparc.CO2NET.Cache
 
         #endregion
 
-        #region 单例
+        #region Singleton
 
         ///<summary>
         /// Constructor of LocalCacheStrategy
@@ -104,14 +104,14 @@ namespace Senparc.CO2NET.Cache
 
         #endregion
 
-        #region IObjectCacheStrategy 成员
+        #region IObjectCacheStrategy Members
 
         //public IContainerCacheStrategy ContainerCacheStrategy
         //{
         //    get { return LocalContainerCacheStrategy.Instance; }
         //}
 
-        #region 同步方法
+        #region Synchronous Methods
 
         [Obsolete("此方法已过期，请使用 Set(TKey key, TValue value) 方法", true)]
         public void InsertToCache(string key, object value, TimeSpan? expiry = null)
@@ -293,7 +293,7 @@ namespace Senparc.CO2NET.Cache
 
         #endregion
 
-        #region 异步方法
+        #region Asynchronous Methods
         public async Task SetAsync(string key, object value, TimeSpan? expiry = null, bool isFullKey = false)
         {
             await Task.Factory.StartNew(() => Set(key, value, expiry, isFullKey)).ConfigureAwait(false);

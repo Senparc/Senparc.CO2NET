@@ -20,42 +20,42 @@ namespace Senparc.CO2NET.Tests.MessageQueue
             for (int i = 0; i < 3; i++)
             {
                 var key = keyPrefix + i;
-                //²âÊÔAdd
+                // Test Add
                 smq.Add(key, () =>
                   {
-                      Console.WriteLine("Ö´ÐÐ¶ÓÁÐ£º" + SystemTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffffff"));
+                      Console.WriteLine("æ‰§è¡Œé˜Ÿåˆ—ï¼š" + SystemTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffffff"));
                   });
 
 
-                Console.WriteLine("Ìí¼Ó¶ÓÁÐÏî£º" + key);
-                Console.WriteLine("µ±Ç°ÊýÁ¿£º" + smq.GetCount());
-                Console.WriteLine("CurrentKey£º" + smq.GetCurrentKey());
+                Console.WriteLine("æ·»åŠ é˜Ÿåˆ—é¡¹ï¼š" + key);
+                Console.WriteLine("å½“å‰æ•°é‡ï¼š" + smq.GetCount());
+                Console.WriteLine("CurrentKeyï¼š" + smq.GetCurrentKey());
                 Assert.AreEqual(count + 1, smq.GetCount());
                 count = smq.GetCount();
 
-                //²âÊÔGetItem
+                // Test GetItem
                 var item = smq.GetItem(key);
-                Console.WriteLine("item.AddTime£º" + item.AddTime);
+                Console.WriteLine("item.AddTimeï¼š" + item.AddTime);
                 Assert.AreEqual(key, item.Key);
 
             }
 
-            //²âÊÔRemove
+            // Test Remove
             smq.Add("ToRemove", () =>
             {
-                Console.WriteLine("Èç¹û¿´µ½ÕâÒ»Ìõ£¬ËµÃ÷Ã»ÓÐÇå³þ³É¹¦");
+                Console.WriteLine("å¦‚æžœçœ‹åˆ°è¿™ä¸€æ¡ï¼Œè¯´æ˜Žæ²¡æœ‰æ¸…æ¥šæˆåŠŸ");
             });
             smq.Remove("ToRemove",out SenparcMessageQueueItem value);
 
-            //Æô¶¯Ïß³Ì
+            // Start thread
             ThreadUtility.Register();
 
             while (smq.GetCount() > 0)
             {
-                //µÈ´ý¶ÓÁÐ´¦ÀíÍê
+                // Wait until the queue is processed
             }
 
-            Console.WriteLine("¶ÓÁÐ´¦ÀíÍê±Ï£¬µ±Ç°¶ÓÁÐÊýÁ¿£º" + smq.GetCount());
+            Console.WriteLine("é˜Ÿåˆ—å¤„ç†å®Œæ¯•ï¼Œå½“å‰é˜Ÿåˆ—æ•°é‡ï¼š" + smq.GetCount());
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@ namespace Senparc.CO2NET.Tests.MessageQueue
             var key = SystemTime.Now.Ticks.ToString();
 
             //Test Add()
-            var item = mq.Add(key, () => Console.WriteLine("²âÊÔSenparcMessageQueueÐ´ÈëKey=A"));
+            var item = mq.Add(key, () => Console.WriteLine("æµ‹è¯•SenparcMessageQueueå†™å…¥Key=A"));
             Assert.AreEqual(count + 1, mq.GetCount());
             //var hashCode = item.GetHashCode();
 
