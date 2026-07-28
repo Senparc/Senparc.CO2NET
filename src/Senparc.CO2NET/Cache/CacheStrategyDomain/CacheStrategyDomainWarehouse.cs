@@ -13,6 +13,9 @@
     Modification Identifier：Senparc - 20221219
     Modification Description：v2.1.4 _extensionCacheStrategyInstance parameter changed to ConcurrentDictionary type
 
+    Modification Identifier：Senparc - 20260726
+    Modification Description：v4.2.0 Annotate AutoScan assembly scanning for Native AOT / trimming
+
 ----------------------------------------------------------------*/
 
 using Senparc.CO2NET.Extensions;
@@ -22,6 +25,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace Senparc.CO2NET.Cache
 {
@@ -147,10 +153,10 @@ namespace Senparc.CO2NET.Cache
         /// <summary>
         /// Automatically register domain cache
         /// </summary>
-        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time)</param>
+        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time). Native AOT hosts must keep this <c>false</c> and register strategies via <paramref name="extensionCacheStrategiesFunc"/>.</param>
         /// <param name="extensionCacheStrategiesFunc"><para>Extension cache strategies that need to be manually registered</para>
         /// <para>(LocalContainerCacheStrategy, RedisContainerCacheStrategy, MemcacheContainerCacheStrategy are already automatically registered),</para>
-        /// <para>If set to null (note: not delegate return null, but the entire delegate parameter is null), it will automatically use reflection to scan all possible extension cache strategies</para></param>
+        /// <para>Native AOT hosts should always provide this delegate instead of enabling assembly scanning.</para></param>
         ///<returns>Returns all added types</returns>
         public static List<Type> AutoScanDomainCacheStrategy(bool autoScanExtensionCacheStrategies = false, Func<IList<IDomainExtensionCacheStrategy>> extensionCacheStrategiesFunc = null)
         {
@@ -178,44 +184,13 @@ namespace Senparc.CO2NET.Cache
             var scanTypesCount = 0;
             if (autoScanExtensionCacheStrategies)
             {
-                //Find all extension caches  TODO: The scanning program can be centralized in a Helper or Utility
-                var types = AppDomain.CurrentDomain.GetAssemblies()
-                            .SelectMany(a =>
-                            {
-                                try
-                                {
-                                    scanTypesCount++;
-                                    var aTypes = a.GetTypes();
-                                    return aTypes.Where(t => !t.IsAbstract &&/* !officialTypes.Contains(t) &&*/ t.GetInterfaces().Contains(typeof(IDomainExtensionCacheStrategy)));
-                                }
-                                catch (Exception ex)
-                                {
-                                    Trace.SenparcTrace.SendCustomLog("UseSenparcGlobal() 自动扫描程序集异常：" + a.FullName, ex.ToString());
-                                    return new List<Type>();//Cannot return null
-                                }
-                            });
-
-                if (types != null)
-                {
-                    foreach (var type in types)
-                    {
-                        if (type == null)
-                        {
-                            continue;
-                        }
-                        try
-                        {
-                            var exCache = ReflectionHelper.GetStaticMember(type, "Instance");
-
-                            cacheTypes += "\r\n" + type;//Since the number is small, use String instead of StringBuilder
-                            addedTypes.Add(type);
-                        }
-                        catch (Exception ex)
-                        {
-                            Trace.SenparcTrace.BaseExceptionLog(new Exceptions.BaseException(ex.Message, ex));
-                        }
-                    }
-                }
+#if NET8_0_OR_GREATER
+#pragma warning disable IL2026, IL3050 // Opt-in assembly scan path; Native AOT hosts must keep autoScan=false.
+#endif
+                scanTypesCount = ScanAndRegisterExtensionCacheStrategies(addedTypes, ref cacheTypes);
+#if NET8_0_OR_GREATER
+#pragma warning restore IL2026, IL3050
+#endif
             }
 
             var dt2 = SystemTime.Now;
@@ -223,6 +198,58 @@ namespace Senparc.CO2NET.Cache
             Trace.SenparcTrace.SendCustomLog("自动注册扩展缓存完成", exCacheLog);
 
             return addedTypes;
+        }
+
+        /// <summary>
+        /// Opt-in assembly scan for <see cref="IDomainExtensionCacheStrategy"/> implementations. Not Native AOT safe.
+        /// </summary>
+#if NET8_0_OR_GREATER
+        [RequiresUnreferencedCode("Uses AppDomain.GetAssemblies().GetTypes() and is not Native AOT safe.")]
+        [RequiresDynamicCode("Assembly scanning may require dynamic code and is not Native AOT safe.")]
+#endif
+        private static int ScanAndRegisterExtensionCacheStrategies(List<Type> addedTypes, ref string cacheTypes)
+        {
+            var scanTypesCount = 0;
+            //Find all extension caches  TODO: The scanning program can be centralized in a Helper or Utility
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                        .SelectMany(a =>
+                        {
+                            try
+                            {
+                                scanTypesCount++;
+                                var aTypes = a.GetTypes();
+                                return aTypes.Where(t => !t.IsAbstract &&/* !officialTypes.Contains(t) &&*/ t.GetInterfaces().Contains(typeof(IDomainExtensionCacheStrategy)));
+                            }
+                            catch (Exception ex)
+                            {
+                                Trace.SenparcTrace.SendCustomLog("UseSenparcGlobal() 自动扫描程序集异常：" + a.FullName, ex.ToString());
+                                return new List<Type>();//Cannot return null
+                            }
+                        });
+
+            if (types != null)
+            {
+                foreach (var type in types)
+                {
+                    if (type == null)
+                    {
+                        continue;
+                    }
+                    try
+                    {
+                        var exCache = ReflectionHelper.GetStaticMember(type, "Instance");
+
+                        cacheTypes += "\r\n" + type;//Since the number is small, use String instead of StringBuilder
+                        addedTypes.Add(type);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.SenparcTrace.BaseExceptionLog(new Exceptions.BaseException(ex.Message, ex));
+                    }
+                }
+            }
+
+            return scanTypesCount;
         }
     }
 }

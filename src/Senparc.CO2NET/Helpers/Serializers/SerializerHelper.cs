@@ -179,10 +179,14 @@ namespace Senparc.CO2NET.Helpers
 
 
         /// <summary>
-        /// Deserialize to object
+        /// Deserialize to object (dynamic / Expando-compatible path). Not Native AOT safe; prefer <see cref="GetObject{T}(string)"/> or JsonTypeInfo overloads.
         /// </summary>
         /// <param name="jsonString">JSON string</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Deserializes without compile-time type metadata; use JsonTypeInfo overloads for Native AOT.")]
+        [RequiresUnreferencedCode("Deserializes without compile-time type metadata; use JsonTypeInfo overloads for Native AOT.")]
+#endif
         public static object GetObject(this string jsonString)
         {
             return SystemTextJsonSerializer.Deserialize(jsonString);
@@ -190,11 +194,15 @@ namespace Senparc.CO2NET.Helpers
 
 
         /// <summary>
-        /// Deserialize to object
+        /// Deserialize to object (dynamic / Expando-compatible path). Not Native AOT safe; prefer typed or JsonTypeInfo overloads.
         /// </summary>
         /// <param name="jsonString">JSON string</param>
         /// <param name="settings">JsonSerializerOptions, JsonSetting, or a legacy Newtonsoft settings object.</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresDynamicCode("Deserializes without compile-time type metadata; use JsonTypeInfo overloads for Native AOT.")]
+        [RequiresUnreferencedCode("Deserializes without compile-time type metadata; use JsonTypeInfo overloads for Native AOT.")]
+#endif
         public static object GetObject(this string jsonString, object settings)
         {
             return SystemTextJsonSerializer.Deserialize(jsonString, settings: settings);

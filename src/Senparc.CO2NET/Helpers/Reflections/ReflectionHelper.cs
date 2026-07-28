@@ -43,6 +43,9 @@ Detail: https://github.com/Senparc/Senparc.CO2NET/blob/master/LICENSE
     Modification Identifier: Senparc - 20230110
     Modification Description: v2.1.6 Add null check for target object not found in ReflectionHelper.GetStaticMember() method, no longer throw exception
 
+    Modification Identifier: Senparc - 20260726
+    Modification Description: v4.2.0 Annotate reflection APIs for Native AOT / trimming
+
 ----------------------------------------------------------------*/
 
 using Senparc.CO2NET.Trace;
@@ -51,11 +54,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace Senparc.CO2NET.Helpers
 {
     /// <summary>
-    /// Reflection helper class
+    /// Reflection helper class. These APIs rely on runtime type metadata and are not Native AOT safe.
     /// </summary>
     public static class ReflectionHelper
     {
@@ -66,6 +72,10 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="fullName">Namespace.TypeName</param>
         /// <param name="assemblyName">Assembly</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresUnreferencedCode("Uses Type.GetType and Activator.CreateInstance; not Native AOT safe.")]
+        [RequiresDynamicCode("Uses Activator.CreateInstance; not Native AOT safe.")]
+#endif
         public static T CreateInstance<T>(string fullName, string assemblyName)
         {
             string path = fullName + "," + assemblyName;//Namespace.TypeName, Assembly
@@ -83,6 +93,10 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="className">Type name</param>
         /// <param name="recordLog">Whether to log</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresUnreferencedCode("Uses Assembly.Load and CreateInstance; not Native AOT safe.")]
+        [RequiresDynamicCode("Uses Assembly.Load and CreateInstance; not Native AOT safe.")]
+#endif
         public static T CreateInstance<T>(string assemblyName, string nameSpace, string className, bool recordLog = false)
         {
             try
@@ -123,6 +137,9 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="memberName">Property name (case insensitive)</param>
         /// <param name="recordLog">Whether to log</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresUnreferencedCode("Uses Type.GetType and property reflection; not Native AOT safe.")]
+#endif
         public static object GetStaticMember(string assemblyName, string nameSpace, string className, string memberName, bool recordLog = false)
         {
             try
@@ -163,6 +180,9 @@ namespace Senparc.CO2NET.Helpers
         /// <param name="memberName">Property name (case insensitive)</param>
         /// <param name="recordLog">Whether to log</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresUnreferencedCode("Uses property reflection; not Native AOT safe.")]
+#endif
         public static object GetStaticMember(Type type, string memberName, bool recordLog = false)
         {
             try
@@ -192,6 +212,9 @@ namespace Senparc.CO2NET.Helpers
         /// </summary>
         /// <param name="type">Type to check</param>
         /// <returns></returns>
+#if NET8_0_OR_GREATER
+        [RequiresUnreferencedCode("Uses constructor reflection; not Native AOT safe.")]
+#endif
         public static bool HasParameterlessConstructor(Type type)
         {
             // Get all public and non-public constructors  

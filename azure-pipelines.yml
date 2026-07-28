@@ -135,6 +135,36 @@ steps:
       --property:ContinuousIntegrationBuild=true
       --property:PackageOutputPath="$(PackageStagingDirectory)"
 
+- powershell: |
+    $ErrorActionPreference = 'Stop'
+    $project = Join-Path "$(Build.SourcesDirectory)" 'src/Senparc.CO2NET.AotSmokeTest/Senparc.CO2NET.AotSmokeTest.csproj'
+    $publishDir = Join-Path "$(Build.ArtifactStagingDirectory)" 'aot-smoke'
+    $rid = 'win-x64'
+
+    Write-Host "Publishing Native AOT smoke test ($rid)..."
+    dotnet publish $project `
+      --configuration $(buildConfiguration) `
+      --runtime $rid `
+      --self-contained true `
+      --output $publishDir `
+      /p:PublishAot=true
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+    $exe = Join-Path $publishDir 'Senparc.CO2NET.AotSmokeTest.exe'
+    if (-not (Test-Path -LiteralPath $exe)) {
+      Write-Host ("##[error]AOT smoke executable was not found: {0}" -f $exe)
+      exit 2
+    }
+
+    Write-Host "Running Native AOT smoke test..."
+    & $exe
+    if ($LASTEXITCODE -ne 0) {
+      Write-Host ("##[error]AOT smoke test exited with code {0}." -f $LASTEXITCODE)
+      exit $LASTEXITCODE
+    }
+    Write-Host '##[section]Native AOT smoke test passed.'
+  displayName: 'Publish and run Native AOT smoke test'
+
 # One wildcard push publishes all primary packages. NuGet automatically finds
 # and uploads the matching .snupkg files from the same directory.
 - powershell: |

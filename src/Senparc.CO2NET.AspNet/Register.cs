@@ -42,10 +42,10 @@ namespace Senparc.CO2NET.AspNet
         /// <param name="env">IHostingEnvironment (.NET Core 2.0) or IWebHostEnvironment (.NET Core 3.0+)</param>
         /// <param name="senparcSetting">SenparcSetting object</param>
         /// <param name="registerConfigure">RegisterService settings</param>
-        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time)</param>
+        /// <param name="autoScanExtensionCacheStrategies">Whether to automatically scan global extension caches (will increase system startup time). Native AOT hosts must keep this <c>false</c>.</param>
         /// <param name="extensionCacheStrategiesFunc"><para>Extension cache strategies that need to be manually registered</para>
         /// <para>(LocalContainerCacheStrategy, RedisContainerCacheStrategy, MemcacheContainerCacheStrategy are already automatically registered),</para>
-        /// <para>If set to null (note: not delegate returns null, but the entire delegate parameter is null), it will automatically use reflection to scan all possible extension cache strategies</para></param>
+        /// <para>Native AOT hosts should provide this delegate instead of enabling assembly scanning.</para></param>
         /// <returns></returns>
         public static IRegisterService UseSenparcGlobal(this IApplicationBuilder registerService,
             Microsoft.Extensions.Hosting.IHostEnvironment/*IHostingEnvironment*/ env,
