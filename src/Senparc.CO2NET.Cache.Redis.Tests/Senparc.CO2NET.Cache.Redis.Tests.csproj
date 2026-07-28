@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MessagePack" Version="2.5.187" />
+		<PackageReference Include="MessagePack" Version="2.5.301" />
 		<PackageReference Include="MessagePackAnalyzer" Version="1.6.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
 		<PackageReference Include="Moq" Version="4.9.0" />
