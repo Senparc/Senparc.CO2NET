@@ -2,11 +2,13 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
 		<PackageReleaseNotes>
 			[2026-07-21] v1.0.1 Update JSON serialization compatibility tests
 			1. Migrate Newtonsoft.Json calls in Redis performance tests to System.Text.Json.
 			[2026-07-22] v1.0.2 Dependency update from Senparc.CO2NET.Cache.Redis to 5.2.3
+			[2026-07-31] v1.0.3 Update MessagePack test dependency compatibility
+			1、Upgrade MessagePack from 2.5.187 to 2.5.301 for Redis cache compatibility tests.
 		</PackageReleaseNotes>
 
 		<IsPackable>false</IsPackable>
